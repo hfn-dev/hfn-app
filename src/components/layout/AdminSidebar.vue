@@ -1,0 +1,111 @@
+<script setup>
+import { ref } from 'vue';
+
+const DARK_GREEN = '#004d33';
+const LIGHT_GREEN = '#f2f9f3';
+
+const currentPath = ref('/admin/messages');
+
+const navLinks = [
+  {
+    title: 'Dashboard',
+    path: '/admin/dashboard',
+    icon: 'M3 3v18h18V3H3zm16 16H5V5h14v14zM9 8h6v2H9V8zm0 4h6v2H9v-2zm0 4h4v2H9v-2z',
+  },
+  {
+    title: 'My Learning',
+    path: '/admin/mylearning',
+    icon: 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20zm-1-8V7h2v5h4l-5 5-5-5h4z',
+  },
+  {
+    title: 'Messages',
+    path: '/admin/messages',
+    icon: 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z',
+  },
+  {
+    title: 'My Account',
+    path: '/admin/account',
+    icon: 'M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2',
+  },
+  {
+    title: 'Support',
+    path: '/admin/support',
+    icon: 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20zm0-13a1 1 0 0 0-1 1v4a1 1 0 0 0 2 0V8a1 1 0 0 0-1-1zm0 8a1 1 0 1 0 0 2 1 1 0 0 0 0-2z',
+  },
+];
+
+const bottomLink = {
+  title: 'Logout',
+  path: '/logout',
+  icon: 'M10 3H6a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h4M16 17l5-5-5-5M21 12H9',
+};
+
+const isLinkActive = (path) => path === currentPath.value;
+</script>
+
+<template>
+  <div
+    :style="{ backgroundColor: DARK_GREEN }"
+    class="w-64 min-h-screen flex flex-col justify-between border-r sticky top-0 left-0 pt-8 text-white shadow-xl"
+  >
+    <nav class="space-y-1 px-4 flex-grow">
+      <RouterLink
+        v-for="link in navLinks"
+        :key="link.title"
+        :to="link.path"
+        @click="currentPath = link.path"
+        class="flex items-center p-3 text-lg font-medium rounded-xl transition-all duration-200 cursor-pointer"
+        :class="
+          isLinkActive(link.path)
+            ? 'font-bold shadow-md'
+            : 'text-gray-200 hover:bg-green-700/50 hover:text-white'
+        "
+        :style="
+          isLinkActive(link.path)
+            ? { backgroundColor: LIGHT_GREEN, color: DARK_GREEN }
+            : {}
+        "
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-6 h-6 mr-3"
+        >
+          <path :d="link.icon" />
+        </svg>
+        {{ link.title }}
+      </RouterLink>
+    </nav>
+
+    <div class="p-4 border-t border-green-700">
+      <RouterLink
+        :to="bottomLink.path"
+        @click="currentPath = bottomLink.path"
+        class="flex items-center p-3 text-lg font-medium rounded-xl transition-all duration-200 text-gray-200 hover:bg-red-700/50 hover:text-white"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-6 h-6 mr-3"
+        >
+          <path :d="bottomLink.icon" />
+        </svg>
+        {{ bottomLink.title }}
+      </RouterLink>
+    </div>
+  </div>
+</template>
