@@ -1,5 +1,5 @@
 <script setup>
-import aboutImage from '@/assets/aboutus.png';
+import aboutImage from '@/assets/about-us.png';
 import ayodele from '@/assets/ayodele.png';
 import babarinde from '@/assets/babarinde.png';
 import chinyere from '@/assets/chinyere.png';
@@ -18,8 +18,8 @@ import reagan from '@/assets/reagan.png';
             <h1
               class="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 leading-tight"
             >
-              <span class="text-orange-600">Championing </span> <span class="text-green-700">Healthcare in
-              Nigeria.</span>
+              <span class="text-orange-600">Championing </span>
+              <span class="text-green-700">Healthcare in Nigeria.</span>
             </h1>
 
             <p class="mt-6 text-lg text-gray-700">
