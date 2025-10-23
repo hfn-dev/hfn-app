@@ -7,7 +7,6 @@ import { computed, ref } from 'vue';
 const DARK_GREEN = '#004d33';
 const LIGHT_GREEN = '#f2f9f3';
 
-// Mock Data for courses
 const activeCourses = ref([
   {
     id: 1,
@@ -15,7 +14,7 @@ const activeCourses = ref([
     title: 'Naturopathy',
     lessonsCompleted: 2,
     totalLessons: 54,
-    progress: 2, // percentage
+    progress: 2, 
     image: courses,
   },
   {
@@ -24,7 +23,7 @@ const activeCourses = ref([
     title: 'Naturopathy',
     lessonsCompleted: 30,
     totalLessons: 60,
-    progress: 50, // percentage
+    progress: 50, 
     image: courses,
   },
   {
@@ -33,7 +32,7 @@ const activeCourses = ref([
     title: 'Naturopathy',
     lessonsCompleted: 50,
     totalLessons: 99,
-    progress: 50, // percentage
+    progress: 50, 
     image: courses,
   },
   {
@@ -77,7 +76,6 @@ const completedCourses = ref([
   },
 ]);
 
-// Pagination states
 const activePage = ref(1);
 const activePerPage = 5; 
 const totalActivePages = computed(() =>
@@ -114,15 +112,12 @@ const goToCompletedPage = (page) => {
   }
 };
 
-// Removed CourseCard functional component to prevent JSX/TSX compilation errors
-// Its logic is now inline in the template (see below)
+
 </script>
 
 <template>
   <div class="min-h-screen bg-gray-50 flex flex-col">
-    <!-- <AdminHeader /> -->
     <div class="flex flex-grow">
-      <!-- Sidebar Placeholder -->
       <AdminSidebar class="hidden md:flex" />
 
       <main class="flex-grow p-4 md:p-8 lg:p-12">
@@ -148,7 +143,7 @@ const goToCompletedPage = (page) => {
           <div
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl"
           >
-            <!-- Course Card Logic Inline -->
+            <!-- Course Card -->
             <div
               v-for="course in paginatedActiveCourses"
               :key="course.id"
@@ -161,7 +156,6 @@ const goToCompletedPage = (page) => {
                   alt="Course Thumbnail"
                   class="w-full h-full object-cover"
                 />
-                <!-- Mock Instructor Image -->
                 <div
                   class="absolute bottom-0 left-4 transform translate-y-1/2 p-1 bg-white rounded-full shadow-lg"
                 >
@@ -233,7 +227,7 @@ const goToCompletedPage = (page) => {
                 </button>
               </div>
             </div>
-            <!-- End Course Card Logic Inline -->
+            <!-- End Course Card -->
           </div>
 
           <!-- Pagination for Active Courses -->
@@ -292,7 +286,7 @@ const goToCompletedPage = (page) => {
           <div
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl"
           >
-            <!-- Course Card Logic Inline -->
+            <!-- Course Card -->
             <div
               v-for="course in paginatedCompletedCourses"
               :key="course.id"
@@ -305,7 +299,6 @@ const goToCompletedPage = (page) => {
                   alt="Course Thumbnail"
                   class="w-full h-full object-cover"
                 />
-                <!-- Mock Instructor Image -->
                 <div
                   class="absolute bottom-0 left-4 transform translate-y-1/2 p-1 bg-white rounded-full shadow-lg"
                 >
@@ -378,7 +371,7 @@ const goToCompletedPage = (page) => {
                 </button>
               </div>
             </div>
-            <!-- End Course Card Logic Inline -->
+            <!-- End Course Card -->
           </div>
 
           <!-- Pagination for Completed Courses -->

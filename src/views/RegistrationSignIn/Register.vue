@@ -1,37 +1,40 @@
 <script setup>
-import registerImage from '@/assets/register.jpg';
-import { computed, ref } from 'vue';
+import registerImage from "@/assets/register.jpg";
+import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const form = ref({
-  firstName: '',
-  otherName: '',
-  lastName: '',
-  phone: '',
-  alternatePhone: '',
-  email: '',
-  confirmEmail: '',
-  password: '',
-  confirmPassword: '',
-  oragnizationName: '',
+  firstName: "",
+  otherName: "",
+  lastName: "",
+  phone: "",
+  alternatePhone: "",
+  email: "",
+  confirmEmail: "",
+  password: "",
+  confirmPassword: "",
+  oragnizationName: "",
 });
 
-const activeTab = ref('individual');
+const activeTab = ref("individual");
 
 const passwordRules = computed(() => {
   const p = form.value.password;
   return [
-    { text: 'Must be at least 8 characters', valid: p.length >= 8 },
+    { text: "Must be at least 8 characters", valid: p.length >= 8 },
     {
-      text: 'Must contain at least 1 Uppercase letter',
+      text: "Must contain at least 1 Uppercase letter",
       valid: /[A-Z]/.test(p),
     },
     {
-      text: 'Must contain at least 1 Lowercase letter',
+      text: "Must contain at least 1 Lowercase letter",
       valid: /[a-z]/.test(p),
     },
-    { text: 'Must contain at least 1 number', valid: /[0-9]/.test(p) },
+    { text: "Must contain at least 1 number", valid: /[0-9]/.test(p) },
     {
-      text: 'Must contain at least 1 special character',
+      text: "Must contain at least 1 special character",
       valid: /[^A-Za-z0-9]/.test(p),
     },
   ];
@@ -44,25 +47,28 @@ const isPasswordValid = computed(() => {
 const handleRegistration = () => {
   if (
     isPasswordValid.value &&
-    form.value.password === form.value.confirmPassword
+    form.value.password === form.value.confirmPassword &&
+    form.value.email === form.value.confirmEmail
   ) {
-    console.log('Registration data:', form.value);
-    alert('Registration simulated! Check console for data.');
+    console.log("Registration data:", form.value);
+    alert("Registration successful! Redirecting to verification...");
+    setTimeout(() => {
+      router.push("/signinverification");
+    }, 1500);
   } else {
-    alert('Please ensure all fields and password requirements are met.');
+    alert("Please ensure all fields and password requirements are met.");
   }
 };
-
 const changeTab = (tab) => {
   activeTab.value = tab;
 };
 
 const alert = (message) => {
-  const alertBox = document.getElementById('custom-alert');
+  const alertBox = document.getElementById("custom-alert");
   alertBox.textContent = message;
-  alertBox.classList.remove('hidden');
+  alertBox.classList.remove("hidden");
   setTimeout(() => {
-    alertBox.classList.add('hidden');
+    alertBox.classList.add("hidden");
   }, 3000);
 };
 </script>
@@ -85,10 +91,6 @@ const alert = (message) => {
     <div
       class="max-w-8xl mx-auto grid lg:grid-cols-5 shadow-lg min-h-[800px] bg-white rounded-xl overflow-hidden mb-20"
     >
-      <!-- <div
-        class="hidden lg:block lg:col-span-2 relative bg-cover bg-center rounded-r-[300px]"
-        :style="{ backgroundImage: `url(${registerImage})` }"
-      ></div> -->
       <div
         class="hidden lg:block lg:col-span-2 relative bg-cover bg-center rounded-r-[300px] overflow-hidden"
         :style="{ backgroundImage: `url(${registerImage})` }"
@@ -552,7 +554,7 @@ const alert = (message) => {
 
 <style scoped>
 .font-inter {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .min-h-screen {
@@ -568,10 +570,10 @@ input:focus {
   box-shadow: 0 0 0 2px #15803d33;
 }
 
-button[type='submit'] {
+button[type="submit"] {
   transition: transform 0.2s ease;
 }
-button[type='submit']:hover {
+button[type="submit"]:hover {
   transform: scale(1.02);
 }
 </style>

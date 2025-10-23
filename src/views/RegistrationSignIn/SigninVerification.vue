@@ -92,8 +92,20 @@ const alert = (message) => {
 
 const handleSignupVerification = () => {
   login();
-  router.push('/admin/dashboard');
+  router.push('/signin');
 };
+
+// const handleVerification = () => {
+//   if (fullCode.value.length === 6) {
+//     console.log('Verifying code:', fullCode.value);
+//     alert('Verification successful!');
+//     setTimeout(() => {
+//       router.push('/signin'); 
+//     }, 1000);
+//   } else {
+//     alert('Please enter the full 6-digit code.');
+//   }
+// };
 </script>
 
 <template>

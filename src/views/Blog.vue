@@ -45,7 +45,7 @@ import latest from '@/assets/latest.png';
         <div class="lg:col-span-8">
           <div class="mb-10">
             <h2
-              class="text-3xl text-center sm:text-4xl px-4 py-4 font-extrabold text-gray-900 mb-6 rounded-2xl border-2 border-green-100 bg-white shadow-md"
+              class="text-3xl text-center sm:text-4xl px-4 py-4 font-extrabold text-gray-900 mb-6 rounded-2xl border-2 border-green-50 bg-white shadow-md"
             >
               Upcoming Events
             </h2>
@@ -64,7 +64,7 @@ import latest from '@/assets/latest.png';
               class="relative overflow-hidden shadow-lg pb-4"
               style="
                 border-radius: 2rem;
-                border: 1px solid #e0f2e0; /* Light green border to match the subtle glow */
+                border: 1px solid #e0f2e0; 
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
               "
             >
@@ -167,7 +167,7 @@ import latest from '@/assets/latest.png';
               class="relative overflow-hidden shadow-lg pb-4"
               style="
                 border-radius: 2rem;
-                border: 1px solid #e0f2e0; /* Light green border to match the subtle glow */
+                border: 1px solid #e0f2e0; 
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
               "
             >
@@ -269,7 +269,7 @@ import latest from '@/assets/latest.png';
               class="relative overflow-hidden shadow-lg pb-4"
               style="
                 border-radius: 2rem;
-                border: 1px solid #e0f2e0; /* Light green border to match the subtle glow */
+                border: 1px solid #e0f2e0; 
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
               "
             >
@@ -660,7 +660,7 @@ import latest from '@/assets/latest.png';
             <div class="mt-16 sm:mt-24 w-full">
               <div class="text-center mb-10">
                 <h2
-                  class="text-3xl sm:text-4xl px-4 py-4 font-extrabold text-gray-900 rounded-2xl border-2 border-green-100 bg-white shadow-md"
+                  class="text-3xl sm:text-4xl px-4 py-4 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md"
                 >
                   Programs and Initiatives
                 </h2>

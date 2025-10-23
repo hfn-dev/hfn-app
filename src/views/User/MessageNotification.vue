@@ -142,7 +142,6 @@ const selectGroup = (name) => {
 
 <template>
   <div class="min-h-screen bg-gray-50 flex flex-col">
-    <!-- <AdminHeader /> -->
     <div class="flex flex-grow">
       <AdminSidebar class="hidden md:flex" />
 

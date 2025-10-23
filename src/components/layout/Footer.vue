@@ -1,5 +1,5 @@
 <script setup>
-import hfn_logo from '@/assets/hfn_logo.png';
+import logo from '@/assets/logo.png';
 </script>
 
 <template>
@@ -11,7 +11,7 @@ import hfn_logo from '@/assets/hfn_logo.png';
         <div class="grid grid-cols-1 md:grid-cols-12 gap-y-10">
           <div class="md:col-span-4 lg:col-span-3 flex flex-col space-y-4 pr-4">
             <div class="mb-4">
-              <img :src="hfn_logo" alt="HFN Logo" class="h-16 w-auto" />
+              <img :src="logo" alt="HFN Logo" class="h-19 w-auto" />
             </div>
 
             <div class="flex items-start space-x-2 text-base text-gray-700">

@@ -239,7 +239,7 @@ onMounted(() => {
   <section class="bg-white py-16 px-6 md:px-12 lg:px-24">
     <div class="text-center mb-10">
       <h2
-        class="text-3xl md:text-4xl font-bold text-gray-900 rounded-2xl border-2 border-green-100 bg-white shadow-md px-4 py-4"
+        class="text-3xl md:text-4xl font-bold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
       >
         Our HFN Story
       </h2>
@@ -308,7 +308,7 @@ onMounted(() => {
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
       <div
-        class="flex justify-center items-center h-20 relative rounded-2xl border-2 border-green-200 bg-white shadow-sm"
+        class="flex justify-center items-center h-20 relative rounded-2xl border-2 border-green-50 bg-white shadow-sm"
       >
         <select
           v-model="selectedMonth"
@@ -417,7 +417,7 @@ onMounted(() => {
   <section class="py-16 bg-white">
     <div class="container mx-auto px-6 text-center">
       <h2
-        class="text-3xl md:text-4xl font-serif mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-100 bg-white shadow-md px-4 py-4"
+        class="text-3xl md:text-4xl font-serif mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
       >
         HFN Executives
       </h2>
@@ -457,7 +457,7 @@ onMounted(() => {
   <section class="py-20 lg:py-28 bg-white">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2
-        class="text-3xl text-center md:text-4xl font-serif mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-100 bg-white shadow-md px-4 py-4"
+        class="text-3xl text-center md:text-4xl font-serif mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
       >
         Frequently Asked Questions (F.A.Q)
       </h2>

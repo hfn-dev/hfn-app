@@ -10,31 +10,55 @@ const rememberMe = ref(false);
 const router = useRouter();
 const { login } = useAuth();
 
-// const authStore = useAuthStore();
 
 // const handleLogin = () => {
-//   console.log('Attempting to log in with:', {
-//     username: username.value,
-//     password: password.value,
-//     rememberMe: rememberMe.value,
-//   });
-//   alert('Login attempted! (See console for details)');
+//   login();
+//   router.push('/admin/dashboard');
 // };
 
+
 // const handleLogin = () => {
-//   if (username.value && password.value) {
-//     authStore.login();
+//   const user = username.value.trim().toLowerCase();
+
+//   if (user === 'editor') {
+//     localStorage.setItem('role', 'editor');
+//     router.push('/editor/dashboard');
+//   } else if (user === 'superadmin') {
+//     localStorage.setItem('role', 'superadmin');
+//     router.push('/superadmin/dashboard');
+//   } else if (user === 'admin') {
+//     localStorage.setItem('role', 'admin');
 //     router.push('/admin/dashboard');
-//     window.scrollTo({ top: 0, behavior: 'smooth' });
 //   } else {
-//     console.error('Login failed: Missing email or password.');
+//     alert('Invalid username. Use "superadmin", "editor", or "admin" for now.');
 //   }
 // };
 
-const handleLogin = () => {
-  login();
-  router.push('/admin/dashboard');
+const handleSignIn = () => {
+  const user = username.value.trim().toLowerCase();
+
+  if (user === 'editor') {
+    localStorage.setItem('role', 'editor');
+    router.push('/editor/dashboard');
+  } else if (user === 'superadmin') {
+    localStorage.setItem('role', 'superadmin');
+    router.push('/superadmin/dashboard');
+  } else if (user === 'admin') {
+    localStorage.setItem('role', 'admin');
+
+    const hasSelectedInterests = localStorage.getItem('hasSelectedInterests');
+
+    if (hasSelectedInterests) {
+      router.push('/admin/dashboard');
+    } else {
+      router.push('/admin/interests'); 
+    }
+  } else {
+    alert('Invalid username. Use "superadmin", "editor", or "admin" for now.');
+  }
 };
+
+
 
 const handleGoogleSignIn = () => {
   console.log('Google Sign-in initiated');
@@ -104,7 +128,7 @@ const alert = (message) => {
           </div>
         </div>
 
-        <form @submit.prevent="handleLogin" class="space-y-6">
+        <form @submit.prevent="handleSignIn" class="space-y-6">
           <div>
             <label for="username" class="sr-only">Username</label>
             <input

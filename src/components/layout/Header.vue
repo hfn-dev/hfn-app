@@ -1,5 +1,5 @@
 <script setup>
-import hfn_logo from '@/assets/hfn_logo.png';
+import hfn_logo from '@/assets/hfn2.png';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -88,7 +88,7 @@ const navLinks = [
           <img
             :src="hfn_logo"
             alt="HFN Logo"
-            class="w-26 h-auto mr-3 flex-shrink-0"
+            class="w-36 h-auto mr-3 flex-shrink-0"
           />
         </RouterLink>
       </div>
@@ -172,7 +172,7 @@ const navLinks = [
       </div>
 
       <div class="hidden lg:flex items-center space-x-4">
-        <div class="relative w-64">
+        <div class="relative w-44">
           <input
             type="text"
             placeholder="Search"

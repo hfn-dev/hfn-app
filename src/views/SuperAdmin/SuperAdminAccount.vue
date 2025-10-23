@@ -1,47 +1,43 @@
 <script setup>
-import AdminSidebar from '@/components/layout/AdminSidebar.vue';
-import { computed, reactive, ref } from 'vue';
-import { useRouter } from "vue-router";
-
-const router = useRouter();
+import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
+import { computed, reactive, ref } from "vue";
 
 const subscription = reactive({
-  expiryDate: '31st December 2025',
+  expiryDate: "31st December 2025",
   invoices: [
     {
       id: 1,
-      invoiceNo: '001',
-      invoiceDate: 'Monday, December 19 2024',
-      dueDate: 'Monday, December 31 2025',
-      total: '₦200,000.00',
-      status: 'Paid',
+      invoiceNo: "001",
+      invoiceDate: "Monday, December 19 2024",
+      dueDate: "Monday, December 31 2025",
+      total: "₦200,000.00",
+      status: "Paid",
     },
     {
       id: 2,
-      invoiceNo: '001',
-      invoiceDate: 'Monday, December 29 2023',
-      dueDate: 'Monday, December 31 2024',
-      total: '₦200,000.00',
-      status: 'Paid',
+      invoiceNo: "001",
+      invoiceDate: "Monday, December 29 2023",
+      dueDate: "Monday, December 31 2024",
+      total: "₦200,000.00",
+      status: "Paid",
     },
     {
       id: 3,
-      invoiceNo: '001',
-      invoiceDate: 'Monday, December 01 2022',
-      dueDate: 'Monday, December 31 2023',
-      total: '₦200,000.00',
-      status: 'Paid',
+      invoiceNo: "001",
+      invoiceDate: "Monday, December 01 2022",
+      dueDate: "Monday, December 31 2023",
+      total: "₦200,000.00",
+      status: "Paid",
     },
   ],
   currentPage: 1,
-  totalPages: 2, 
+  totalPages: 2,
   totalEntries: 10,
 });
 
-
-
 const makePayment = () => {
-  router.push({ name: "UserSubscription" });
+  console.log("Initiating payment process...");
+  alert("Redirecting to payment gateway...");
 };
 
 const goToPage = (page) => {
@@ -51,82 +47,53 @@ const goToPage = (page) => {
   }
 };
 
-
-
-const isOrganization = ref(true); 
-const currentView = ref('My Account');
-const activeTab = ref('Subscription'); 
-
-const navLinks = [
-  {
-    name: 'Dashboard',
-    icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
-  }, 
-  {
-    name: 'My Learning',
-    icon: 'M12 6.253v13M3.475 12h17.052M18.82 8.16l-1.397 1.5M5.18 8.16l1.397 1.5',
-  }, 
-  {
-    name: 'Messages',
-    icon: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z',
-  }, 
-  {
-    name: 'My Account',
-    icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
-  }, 
-  {
-    name: 'Support',
-    icon: 'M18.364 5.636l-1.414 1.414M16 12a4 4 0 10-8 0 4 4 0 008 0zM12 1v2M12 19v2M5.636 18.364l1.414-1.414M19 12h2M3 12h2M5.636 5.636l1.414 1.414M18.364 18.364l-1.414-1.414',
-  }, 
-  {
-    name: 'Logout',
-    icon: 'M11 16l-4-4m0 0l4-4m-4 4h14M3 12h2a2 2 0 002-2V6a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H9a2 2 0 00-2 2v-4',
-  }, 
-];
+const isOrganization = ref(true);
+const currentView = ref("My Account");
+const activeTab = ref("Subscription");
 
 const isOrgEditing = ref(false);
 const orgDetails = reactive({
-  name: 'Ruthie & Co Nigeria Limited',
-  email: 'peterpan@gmail.com.us',
-  phone: '+234 123 456 78',
-  password: '********',
+  name: "Ruthie & Co Nigeria Limited",
+  email: "peterpan@gmail.com.us",
+  phone: "+234 123 456 78",
+  password: "********",
 });
 const orgDetailsKeys = [
-  { key: 'name', label: 'Name' },
-  { key: 'email', label: 'Email Address' },
-  { key: 'phone', label: 'Phone Number' },
-  { key: 'password', label: 'Password' },
+  { key: "name", label: "Name" },
+  { key: "email", label: "Email Address" },
+  { key: "phone", label: "Phone Number" },
+  { key: "password", label: "Password" },
 ];
 
 const isIndividualEditing = ref(false);
 const individualDetails = reactive({
-  firstName: 'John',
-  lastName: 'Doe',
-  email: 'john.doe@example.com',
-  phone: '+1 555 123 4567',
-  password: '********',
+  firstName: "John",
+  lastName: "Doe",
+  email: "john.doe@example.com",
+  phone: "+1 555 123 4567",
+  password: "********",
 });
 const individualDetailsKeys = [
-  { key: 'firstName', label: 'First Name' },
-  { key: 'lastName', label: 'Last Name' },
-  { key: 'email', label: 'Email Address' },
-  { key: 'phone', label: 'Phone Number' },
-  { key: 'password', label: 'Password' },
+  { key: "firstName", label: "First Name" },
+  { key: "lastName", label: "Last Name" },
+  { key: "email", label: "Email Address" },
+  { key: "phone", label: "Phone Number" },
+  { key: "password", label: "Password" },
 ];
 
 const isOtherDetailsEditing = ref(false);
 const otherDetails = reactive({
-  addressLine1: 'Address Line 1',
-  addressLine2: 'Address Line 2',
-  state: 'Mock State',
-  country: 'Mock Country',
-  description: 'Sample Text',
+  addressLine1: "Address Line 1",
+  addressLine2: "Address Line 2",
+  state: "Mock State",
+  country: "Mock Country",
+  description: "Sample Text",
 });
 
 const invitations = reactive([
-  { id: 1, email: 'peterpan@gmail.com', sent: true },
-  { id: 2, email: '', sent: false },
-  { id: 3, email: '', sent: false },
+  { id: 1, email: "peterpan@gmail.com", sent: true },
+  { id: 2, email: "", sent: false },
+  { id: 3, email: "", sent: false },
 ]);
 
 const sentInvitesCount = computed(
@@ -134,16 +101,16 @@ const sentInvitesCount = computed(
 );
 
 const interests = reactive([
-  { id: 10, name: 'Mother', selected: true, isMainCategory: true },
-  { id: 11, name: 'Child', selected: true, isMainCategory: true },
-  { id: 12, name: 'Baby', selected: true, isMainCategory: true },
-  { id: 13, name: 'Pregnancy', selected: true, isMainCategory: true },
-  { id: 1, name: 'Marketing', selected: true, isMainCategory: false },
-  { id: 2, name: 'Gynaecology', selected: true, isMainCategory: false },
-  { id: 3, name: 'Paediatrics', selected: true, isMainCategory: false },
-  { id: 4, name: 'General Health', selected: false, isMainCategory: false },
-  { id: 5, name: 'Insurance', selected: false, isMainCategory: false },
-  { id: 6, name: 'Dentistry', selected: false, isMainCategory: false },
+  { id: 10, name: "Mother", selected: true, isMainCategory: true },
+  { id: 11, name: "Child", selected: true, isMainCategory: true },
+  { id: 12, name: "Baby", selected: true, isMainCategory: true },
+  { id: 13, name: "Pregnancy", selected: true, isMainCategory: true },
+  { id: 1, name: "Marketing", selected: true, isMainCategory: false },
+  { id: 2, name: "Gynaecology", selected: true, isMainCategory: false },
+  { id: 3, name: "Paediatrics", selected: true, isMainCategory: false },
+  { id: 4, name: "General Health", selected: false, isMainCategory: false },
+  { id: 5, name: "Insurance", selected: false, isMainCategory: false },
+  { id: 6, name: "Dentistry", selected: false, isMainCategory: false },
 ]);
 
 const selectedInterestsCount = computed(
@@ -153,7 +120,7 @@ const selectedInterestsCount = computed(
 const toggleOrgEdit = () => {
   if (isOrgEditing.value) {
     console.log(
-      'Saving Organization Details:',
+      "Saving Organization Details:",
       JSON.parse(JSON.stringify(orgDetails))
     );
   }
@@ -163,7 +130,7 @@ const toggleOrgEdit = () => {
 const toggleIndividualEdit = () => {
   if (isIndividualEditing.value) {
     console.log(
-      'Saving Individual Details:',
+      "Saving Individual Details:",
       JSON.parse(JSON.stringify(individualDetails))
     );
   }
@@ -173,7 +140,7 @@ const toggleIndividualEdit = () => {
 const toggleOtherDetailsEdit = () => {
   if (isOtherDetailsEditing.value) {
     console.log(
-      'Saving Other Details:',
+      "Saving Other Details:",
       JSON.parse(JSON.stringify(otherDetails))
     );
   }
@@ -182,7 +149,7 @@ const toggleOtherDetailsEdit = () => {
 
 const sendInvitation = (id) => {
   const invite = invitations.find((i) => i.id === id);
-  if (invite && invite.email !== '') {
+  if (invite && invite.email !== "") {
     console.log(`Sending invite to: ${invite.email}`);
     invite.sent = true;
   }
@@ -191,7 +158,7 @@ const sendInvitation = (id) => {
 const removeInvitation = (id) => {
   const invite = invitations.find((i) => i.id === id);
   if (invite) {
-    invite.email = '';
+    invite.email = "";
     invite.sent = false;
   }
 };
@@ -203,7 +170,7 @@ const toggleInterest = (id) => {
     const willBeSelected = !item.selected;
 
     if (willBeSelected && selectedInterestsCount.value >= 4) {
-      console.log('Cannot select more than 4 secondary interests.');
+      console.log("Cannot select more than 4 secondary interests.");
       return;
     }
 
@@ -214,15 +181,12 @@ const toggleInterest = (id) => {
 
 <template>
   <div class="flex flex-col lg:flex-row min-h-screen font-inter">
-    <AdminSidebar
-      class="hidden md:flex"
-      :navLinks="navLinks"
-      @update:view="currentView = $event"
-      :currentView="currentView"
-    />
+    <SuperAdminSidebar />
 
     <main class="flex-1 p-4 sm:p-8 lg:p-10 max-w-7xl mx-auto w-full">
-      <span class="text-sm text-gray-500">Home / My Account / {{ activeTab }}</span>
+      <span class="text-sm text-gray-500"
+        >Home / My Account / {{ activeTab }}</span
+      >
 
       <header class="mb-8 text-center">
         <h1 class="text-3xl font-bold mt-2 text-gray-800">{{ currentView }}</h1>
@@ -252,19 +216,8 @@ const toggleInterest = (id) => {
                 : 'border-transparent text-gray-500 hover:text-gray-700',
             ]"
           >
-            Subscription
+            Signatures
           </button>
-          <!-- <button
-            @click="activeTab = 'Settings'"
-            :class="[
-              'py-2 px-1 border-b-2 transition duration-150 font-medium',
-              activeTab === 'Settings'
-                ? 'border-green-600 text-green-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700',
-            ]"
-          >
-            Settings
-          </button> -->
         </div>
 
         <div v-if="activeTab === 'My Profile'" class="space-y-10">
@@ -355,42 +308,10 @@ const toggleInterest = (id) => {
                     "
                     class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150"
                   >
-                    {{ isOrgEditing ? 'Save Changes' : 'Edit' }}
+                    {{ isOrgEditing ? "Save Changes" : "Edit" }}
                   </button>
                 </div>
               </div>
-            </div>
-
-            <div class="text-center mt-8 pt-6 border-t border-gray-200">
-              <h3 class="text-xl font-bold mb-2 text-gray-800">
-                Your Account is:
-                <span class="text-green-600 bg-green-50 p-3 rounded-md"
-                  >ACTIVE</span
-                >
-              </h3>
-              <p class="text-gray-600">
-                Your Exclusive Discount Code is:
-                <span
-                  class="font-mono font-bold text-lg text-gray-800 tracking-wider"
-                  >INDISI2345</span
-                >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="inline-block align-text-bottom text-gray-400 ml-1 cursor-pointer"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M12 16v-4" />
-                  <path d="M12 8h.01" />
-                </svg>
-              </p>
             </div>
           </div>
 
@@ -406,7 +327,7 @@ const toggleInterest = (id) => {
                 "
                 class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150"
               >
-                {{ isIndividualEditing ? 'Save Changes' : 'Edit' }}
+                {{ isIndividualEditing ? "Save Changes" : "Edit" }}
               </button>
             </div>
 
@@ -491,7 +412,7 @@ const toggleInterest = (id) => {
                     "
                     class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150"
                   >
-                    {{ isIndividualEditing ? 'Save Changes' : 'Edit' }}
+                    {{ isIndividualEditing ? "Save Changes" : "Edit" }}
                   </button>
                 </div>
               </div>
@@ -501,91 +422,6 @@ const toggleInterest = (id) => {
               <h3 class="text-xl font-bold mb-2 text-gray-800">
                 Account Status: <span class="text-green-600">VERIFIED</span>
               </h3>
-            </div>
-          </div>
-
-          <div class="p-6 bg-white rounded-xl shadow-lg">
-            <div class="flex justify-between items-center mb-6">
-              <h2 class="text-xl font-semibold">Other Details</h2>
-              <button
-                @click="toggleOtherDetailsEdit"
-                :class="
-                  isOtherDetailsEditing
-                    ? 'bg-red-600 hover:bg-red-700'
-                    : 'bg-[#0c6b39] hover:bg-[#09572d]'
-                "
-                class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150"
-              >
-                {{ isOtherDetailsEditing ? 'Save Changes' : 'Edit' }}
-              </button>
-            </div>
-            <div class="space-y-4">
-              <input
-                type="text"
-                placeholder="Address Line 1"
-                v-model="otherDetails.addressLine1"
-                :disabled="!isOtherDetailsEditing"
-                :class="
-                  isOtherDetailsEditing
-                    ? 'bg-white border-gray-400'
-                    : 'bg-gray-50 border-gray-300'
-                "
-                class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150"
-              />
-              <input
-                type="text"
-                placeholder="Address Line 2"
-                v-model="otherDetails.addressLine2"
-                :disabled="!isOtherDetailsEditing"
-                :class="
-                  isOtherDetailsEditing
-                    ? 'bg-white border-gray-400'
-                    : 'bg-gray-50 border-gray-300'
-                "
-                class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150"
-              />
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <select
-                  v-model="otherDetails.state"
-                  :disabled="!isOtherDetailsEditing"
-                  :class="
-                    isOtherDetailsEditing
-                      ? 'bg-white border-gray-400'
-                      : 'bg-gray-50 border-gray-300'
-                  "
-                  class="w-full p-3 border rounded-lg appearance-none focus:ring-primary-green focus:border-primary-green transition duration-150"
-                >
-                  <option value="">Select Option (State)</option>
-                  <option value="Mock State">Mock State</option>
-                </select>
-                <select
-                  v-model="otherDetails.country"
-                  :disabled="!isOtherDetailsEditing"
-                  :class="
-                    isOtherDetailsEditing
-                      ? 'bg-white border-gray-400'
-                      : 'bg-gray-50 border-gray-300'
-                  "
-                  class="w-full p-3 border rounded-lg appearance-none focus:ring-primary-green focus:border-primary-green transition duration-150"
-                >
-                  <option value="">Select Option (Country)</option>
-                  <option value="Mock Country">Mock Country</option>
-                </select>
-              </div>
-
-              <textarea
-                rows="3"
-                placeholder="Brief Description"
-                v-model="otherDetails.description"
-                :disabled="!isOtherDetailsEditing"
-                :class="
-                  isOtherDetailsEditing
-                    ? 'bg-white border-gray-400'
-                    : 'bg-gray-50 border-gray-300'
-                "
-                class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green resize-none transition duration-150"
-              ></textarea>
             </div>
           </div>
 
@@ -634,84 +470,6 @@ const toggleInterest = (id) => {
                   Invite
                 </button>
               </div>
-            </div>
-          </div>
-
-          <div class="p-6 bg-white rounded-xl shadow-lg">
-            <h2 class="text-xl font-semibold mb-4">My Interests</h2>
-            <p class="text-sm text-gray-600 mb-6">
-              Select up to four categories you're into. We'll help you find
-              great things to learn. (Selected: {{ selectedInterestsCount }}/4)
-            </p>
-
-            <div class="flex flex-wrap gap-3">
-              <button
-                v-for="interest in interests"
-                :key="interest.id"
-                @click="toggleInterest(interest.id)"
-                :disabled="
-                  !interest.selected &&
-                  selectedInterestsCount >= 4 &&
-                  !interest.isMainCategory
-                "
-                :class="{
-                  'bg-green-100 text-green-700': interest.isMainCategory,
-                  'bg-orange-100 text-orange-700 hover:bg-orange-200':
-                    interest.selected && !interest.isMainCategory,
-                  'bg-gray-100 text-gray-700 hover:bg-gray-200':
-                    !interest.selected && !interest.isMainCategory,
-                }"
-                class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-full cursor-pointer transition duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                {{ interest.name }}
-                <svg
-                  v-if="interest.isMainCategory"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="w-4 h-4 ml-2"
-                >
-                  <path d="M20 6 9 17l-5-5" />
-                </svg>
-                <svg
-                  v-else-if="interest.selected"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="w-4 h-4 ml-2"
-                >
-                  <path d="M18 6 6 18" />
-                  <path d="m6 6 12 12" />
-                </svg>
-                <svg
-                  v-else
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="w-4 h-4 ml-2"
-                >
-                  <path d="M5 12h14" />
-                  <path d="M12 5v14" />
-                </svg>
-              </button>
             </div>
           </div>
         </div>
@@ -769,7 +527,9 @@ const toggleInterest = (id) => {
               </div>
             </div>
 
-            <div class="overflow-x-auto bg-white border border-gray-200 shadow-lg rounded-b-lg">
+            <div
+              class="overflow-x-auto bg-white border border-gray-200 shadow-lg rounded-b-lg"
+            >
               <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                   <tr>
@@ -806,14 +566,23 @@ const toggleInterest = (id) => {
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                  <tr v-for="invoice in subscription.invoices" :key="invoice.id">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <tr
+                    v-for="invoice in subscription.invoices"
+                    :key="invoice.id"
+                  >
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                    >
                       {{ invoice.invoiceNo }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
                       {{ invoice.invoiceDate }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
                       {{ invoice.dueDate }}
                     </td>
                     <td
@@ -827,7 +596,10 @@ const toggleInterest = (id) => {
                       >
                         {{ invoice.status }}
                       </span>
-                      <a href="#" class="ml-4 text-green-600 hover:text-green-900 flex items-center inline-block">
+                      <a
+                        href="#"
+                        class="ml-4 text-green-600 hover:text-green-900 flex items-center inline-block"
+                      >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="16"
@@ -855,7 +627,10 @@ const toggleInterest = (id) => {
             <div
               class="flex justify-end items-center mt-4 text-sm text-gray-600"
             >
-              <p class="mr-4">Page {{ subscription.currentPage }} of {{ subscription.totalPages }}</p>
+              <p class="mr-4">
+                Page {{ subscription.currentPage }} of
+                {{ subscription.totalPages }}
+              </p>
               <button
                 @click="goToPage(subscription.currentPage - 1)"
                 :disabled="subscription.currentPage === 1"
@@ -932,7 +707,7 @@ const toggleInterest = (id) => {
 
 <style scoped>
 :root {
-  --primary-green: #0c6b39; 
+  --primary-green: #0c6b39;
   --sidebar-green: #104037;
   --sidebar-green-dark: #09572d;
   --light-green-bg: #f2f9f3;
@@ -940,7 +715,7 @@ const toggleInterest = (id) => {
 }
 
 .font-inter {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .main-button {

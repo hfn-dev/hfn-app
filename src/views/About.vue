@@ -80,7 +80,7 @@ import reagan from '@/assets/reagan.png';
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-16">
           <div
-            class="w-full px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md text-center"
+            class="w-full px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-50 bg-white shadow-md text-center"
           >
             <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">
               About Us
@@ -159,7 +159,7 @@ import reagan from '@/assets/reagan.png';
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-16">
           <div
-            class="w-full px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md text-center"
+            class="w-full px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-50 bg-white shadow-md text-center"
           >
             <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">
               Why join HNF?
@@ -183,7 +183,7 @@ import reagan from '@/assets/reagan.png';
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-16">
           <div
-            class="w-full px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md text-center"
+            class="w-full px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-50 bg-white shadow-md text-center"
           >
             <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">
               Our Leadership

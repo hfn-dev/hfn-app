@@ -7,8 +7,8 @@ import { ref } from 'vue';
 const DARK_GREEN = '#004d33';
 const LIGHT_GREEN = '#f2f9f3';
 
-const activeTab = ref('courseInfo'); // 'courseInfo', 'resources', 'certificate'
-const activeModule = ref(null); // To control accordion expansion
+const activeTab = ref('courseInfo'); 
+const activeModule = ref(null); 
 
 const courseContentModules = ref([
   {
@@ -70,9 +70,7 @@ const toggleModule = (moduleId) => {
           <h1 class="text-4xl font-semibold text-gray-800">Naturopathy</h1>
         </div>
 
-        <!-- Main Course Content Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          <!-- Left Column: Video, Tabs, Course Info -->
           <div class="lg:col-span-2 space-y-8">
             <!-- Video Player Section -->
             <div
@@ -173,7 +171,6 @@ const toggleModule = (moduleId) => {
               </div>
             </div>
 
-            <!-- Tabs for Course Info, Resources, Certificate -->
             <div class="border-b border-gray-200 mb-6">
               <div class="flex text-lg font-medium">
                 <button
@@ -322,20 +319,16 @@ const toggleModule = (moduleId) => {
               </div>
             </div>
 
-            <!-- Resources Tab Content -->
             <div v-else-if="activeTab === 'resources'" class="space-y-4">
               <p class="text-gray-700">
                 Content for Resources tab will go here.
               </p>
-              <!-- Add your resources list here -->
             </div>
 
-            <!-- Certificate Tab Content -->
             <div v-else-if="activeTab === 'certificate'" class="space-y-4">
               <p class="text-gray-700">
                 Content for Certificate tab will go here.
               </p>
-              <!-- Add certificate information here -->
             </div>
           </div>
 
@@ -659,5 +652,4 @@ const toggleModule = (moduleId) => {
 </template>
 
 <style scoped>
-/* Any specific styles for this page can go here if needed */
 </style>

@@ -1,117 +1,116 @@
 <script setup>
-import course from '@/assets/courses.jpg';
-import user from '@/assets/user.png';
-import user1 from '@/assets/user1.png';
-import user2 from '@/assets/user2.png';
-import { useRouter } from 'vue-router';
+import course from "@/assets/courses.jpg";
+import user from "@/assets/user.png";
+import user1 from "@/assets/user1.png";
+import user2 from "@/assets/user2.png";
+import { useRouter } from "vue-router";
 
-import AdminSidebar from '@/components/layout/AdminSidebar.vue';
+import AdminSidebar from "@/components/layout/AdminSidebar.vue";
 
-import { ref } from 'vue';
+import { ref } from "vue";
 const router = useRouter();
 
-const DARK_GREEN = '#004d33';
-const LIGHT_GREEN = '#f2f9f3';
-const ACCENT_GRAY = '#f9fafb';
-const ACCENT_ORANGE = '#ff6600'; // Custom orange color based on feedback
-const LIGHT_PINKISH_GRAY = '#fcf3f6'; // Custom light pink/gray for the learning hub section
+const DARK_GREEN = "#004d33";
+const LIGHT_GREEN = "#f2f9f3";
+const ACCENT_GRAY = "#f9fafb";
+const ACCENT_ORANGE = "#ff6600";
+const LIGHT_PINKISH_GRAY = "#fcf3f6";
 
-const userName = 'Ruthie';
-const activeSidebarItem = ref('Dashboard');
-const activeCourseTrack = ref('Care'); // Matches the default tab in the image
+const userName = "Ruthie";
+const activeSidebarItem = ref("Dashboard");
+const activeCourseTrack = ref("Care");
 
 const goToCourseDetails = () => {
-  router.push({ name: 'CourseDetails', params: { id: 1 } });
+  router.push({ name: "CourseDetails", params: { id: 1 } });
 };
-// Mock Course Data (Repeating for layout demonstration)
+
 const courses = [
   {
-    title: 'Naturopathy',
-    instructor: 'Kanu Nwankwo',
+    title: "Naturopathy",
+    instructor: "Kanu Nwankwo",
     rating: 4.5,
     reviews: 78,
-    price: 'Free',
+    price: "Free",
     image: course,
   },
   {
-    title: 'Naturopathy',
-    instructor: 'Kanu Nwankwo',
+    title: "Naturopathy",
+    instructor: "Kanu Nwankwo",
     rating: 4.5,
     reviews: 78,
-    price: 'Free',
+    price: "Free",
     image: course,
   },
   {
-    title: 'Naturopathy',
-    instructor: 'Kanu Nwankwo',
+    title: "Naturopathy",
+    instructor: "Kanu Nwankwo",
     rating: 4.5,
     reviews: 78,
-    price: 'Free',
+    price: "Free",
     image: course,
   },
   {
-    title: 'Naturopathy',
-    instructor: 'Kanu Nwankwo',
+    title: "Naturopathy",
+    instructor: "Kanu Nwankwo",
     rating: 4.5,
     reviews: 78,
-    price: 'Free',
+    price: "Free",
     image: course,
   },
   {
-    title: 'Naturopathy',
-    instructor: 'Kanu Nwankwo',
+    title: "Naturopathy",
+    instructor: "Kanu Nwankwo",
     rating: 4.5,
     reviews: 78,
-    price: 'Free',
+    price: "Free",
     image: course,
   },
   {
-    title: 'Naturopathy',
-    instructor: 'Kanu Nwankwo',
+    title: "Naturopathy",
+    instructor: "Kanu Nwankwo",
     rating: 4.5,
     reviews: 78,
-    price: 'Free',
+    price: "Free",
     image: course,
   },
 ];
 
 const latestCourses = [
   {
-    title: 'Naturopathy',
-    instructor: 'Kanu Nwankwo',
+    title: "Naturopathy",
+    instructor: "Kanu Nwankwo",
     rating: 4.5,
     reviews: 78,
-    price: 'Free',
+    price: "Free",
     image: course,
   },
   {
-    title: 'Naturopathy',
-    instructor: 'Kanu Nwankwo',
+    title: "Naturopathy",
+    instructor: "Kanu Nwankwo",
     rating: 4.5,
     reviews: 78,
-    price: 'Free',
+    price: "Free",
     image: course,
   },
   {
-    title: 'Naturopathy',
-    instructor: 'Kanu Nwankwo',
+    title: "Naturopathy",
+    instructor: "Kanu Nwankwo",
     rating: 4.5,
     reviews: 78,
-    price: 'Free',
+    price: "Free",
     image: course,
   },
 ];
 
 const courseTracks = [
-  'Business',
-  'Care',
-  'Insurance',
-  'Entrepreneurship',
-  'Nursing',
-  'Dentistry',
+  "Business",
+  "Care",
+  "Insurance",
+  "Entrepreneurship",
+  "Nursing",
+  "Dentistry",
 ];
 
-// Helper for dynamic SVG paths (for Sidebar/Header)
 const getIconPaths = (name) => {
   const icons = {
     dashboard:
@@ -129,28 +128,25 @@ const getIconPaths = (name) => {
     search:
       '<circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/>',
     bell: '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',
-    'chevron-down': '<polyline points="6 9 12 15 18 9"/>',
-    'star-fill':
+    "chevron-down": '<polyline points="6 9 12 15 18 9"/>',
+    "star-fill":
       '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
     next: '<polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/>',
     prev: '<polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/>',
   };
-  return icons[name] || '';
+  return icons[name] || "";
 };
 </script>
 
 <template>
   <div class="min-h-screen flex flex-col font-sans">
     <div class="flex flex-grow overflow-hidden">
-      <!-- Sidebar Navigation -->
       <AdminSidebar class="hidden md:flex" />
-      <!-- Main Content Area -->
       <main
         class="flex-grow overflow-y-auto pb-12"
         :style="{ backgroundColor: WHITE }"
       >
         <div class="max-w-6xl mx-auto p-4 sm:p-8">
-          <!-- Welcome Header & Acceleration -->
           <div class="mb-10 pt-4">
             <h1 class="text-3xl font-bold" style="color: #e87a18">
               Welcome {{ userName }},
@@ -160,7 +156,6 @@ const getIconPaths = (name) => {
             </p>
           </div>
 
-          <!-- HFN Learning Hub Works Section (With light pink background) -->
           <div
             class="w-screen mb-12 py-16 shadow-inner relative left-1/2 right-1/2 -mx-[50vw]"
             :style="{ backgroundColor: LIGHT_PINKISH_GRAY }"
@@ -172,7 +167,6 @@ const getIconPaths = (name) => {
                 How HFN Learning hub works...
               </h2>
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Card 1: Complete your Profile -->
                 <div
                   class="bg-[#F2F9F3] rounded-xl shadow-lg p-6 text-center hover:shadow-xl transition duration-300"
                 >
@@ -194,7 +188,6 @@ const getIconPaths = (name) => {
                   </p>
                 </div>
 
-                <!-- Card 2: Search for Courses -->
                 <div
                   class="bg-[#F2F9F3] rounded-xl shadow-lg p-6 text-center hover:shadow-xl transition duration-300"
                 >
@@ -216,7 +209,6 @@ const getIconPaths = (name) => {
                   </p>
                 </div>
 
-                <!-- Card 3: Make a Connection -->
                 <div
                   class="bg-[#F2F9F3] rounded-xl shadow-lg p-6 text-center hover:shadow-xl transition duration-300"
                 >
@@ -241,12 +233,10 @@ const getIconPaths = (name) => {
             </div>
           </div>
 
-          <!-- Course Tracks Section -->
           <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">
             Our Course Tracks
           </h2>
 
-          <!-- Course Track Tabs -->
           <div
             class="flex flex-wrap justify-center gap-2 mb-8 bg-white p-2 rounded-xl shadow-md"
           >
@@ -270,7 +260,6 @@ const getIconPaths = (name) => {
             </button>
           </div>
 
-          <!-- Course Grid -->
           <div
             class="bg-[#F2F9F3] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
           >
@@ -329,7 +318,6 @@ const getIconPaths = (name) => {
             </div>
           </div>
 
-          <!-- Pagination -->
           <div
             class="flex justify-center items-center mt-10 space-x-4 text-gray-600"
           >
@@ -370,12 +358,10 @@ const getIconPaths = (name) => {
             </a>
           </div>
 
-          <!-- Our Latest Courses Section -->
           <h2 class="text-2xl font-bold text-gray-800 mt-12 mb-6">
             Our Latest Courses
           </h2>
 
-          <!-- Latest Course Grid -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <div
               v-for="(course, index) in latestCourses"
@@ -437,5 +423,4 @@ const getIconPaths = (name) => {
 </template>
 
 <style scoped>
-/* Scoped styles are minimal, relying on Tailwind CSS and custom properties */
 </style>
