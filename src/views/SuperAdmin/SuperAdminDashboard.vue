@@ -348,66 +348,7 @@ const lineOptions = {
         </div>
       </div>
       <div class="p-6 bg-white rounded-xl">
-        <!-- <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div
-            v-for="card in summaryData"
-            :key="card.title"
-            class="summary-card"
-          >
-            <div class="relative pt-6 px-4 pb-4 flex flex-col items-center">
-              <div
-                class="absolute top-0 left-0 right-0 h-8 rounded-t-[50px_25px] border-t-4 border-l-4 border-r-4 border-green-300"
-              ></div>
-
-              <h3 class="text-sm font-medium text-gray-500 absolute top-2">
-                {{ card.title }}
-              </h3>
-
-              <p class="text-3xl font-bold text-gray-800 mt-4 mb-4">
-                {{ card.value }}
-              </p>
-
-              <div
-                :class="[
-                  'trend-pill',
-                  card.trendType === 'up'
-                    ? 'text-green-600 border-green-600'
-                    : 'text-red-600 border-red-600',
-                ]"
-              >
-                {{ card.trendValue }}
-              </div>
-            </div>
-          </div>
-        </div> -->
-        <!-- <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div
-            v-for="card in summaryData"
-            :key="card.title"
-            class="summary-card-corrected"
-          >
-            <div class="p-4 flex flex-col items-center">
-              <h3 class="text-base font-bold text-gray-800 mb-2">
-                {{ card.title }}
-              </h3>
-
-              <p class="text-3xl font-bold text-gray-800 mb-4">
-                {{ card.value }}
-              </p>
-
-              <div
-                :class="[
-                  'trend-pill-corrected',
-                  card.trendType === 'up'
-                    ? 'text-orange-500 shadow-orange-100' // Using orange for 'Up' as seen in the first original image.
-                    : 'text-red-500 shadow-red-100', // Assuming red for 'Down'
-                ]"
-              >
-                {{ card.trendValue }}
-              </div>
-            </div>
-          </div>
-        </div> -->
+        
         <div class="flex justify-between items-stretch mb-8 space-x-6">
           <div
             v-for="card in summaryData"
@@ -428,7 +369,6 @@ const lineOptions = {
 
             <p
               :class="[
-                // Use dynamic color based on trendType (up/down)
                 card.trendType === 'up' ? 'text-[#00cc66]' : 'text-red-500',
                 'text-sm font-medium',
               ]"

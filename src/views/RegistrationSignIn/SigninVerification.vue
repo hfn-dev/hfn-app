@@ -95,17 +95,6 @@ const handleSignupVerification = () => {
   router.push('/signin');
 };
 
-// const handleVerification = () => {
-//   if (fullCode.value.length === 6) {
-//     console.log('Verifying code:', fullCode.value);
-//     alert('Verification successful!');
-//     setTimeout(() => {
-//       router.push('/signin'); 
-//     }, 1000);
-//   } else {
-//     alert('Please enter the full 6-digit code.');
-//   }
-// };
 </script>
 
 <template>
@@ -180,19 +169,7 @@ const handleSignupVerification = () => {
           </div>
 
           <div>
-            <!-- <router-link
-              to="/admin/dashboard"
-              type="submit"
-              :disabled="fullCode.length !== 6 || !isTimerRunning"
-              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0c6b39] transition-all duration-150 ease-in-out"
-              :class="
-                fullCode.length === 6 && isTimerRunning
-                  ? 'bg-[#0c6b39] hover:bg-[#09572d]'
-                  : 'bg-gray-400 cursor-not-allowed'
-              "
-            >
-              Sign Up
-            </router-link> -->
+            
             <button
               @click="handleSignupVerification"
               :disabled="fullCode.length !== 6 || !isTimerRunning"

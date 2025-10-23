@@ -1,6 +1,5 @@
 <script setup>
 import registerImage from '@/assets/register.jpg';
-// import { useAuthStore } from '@/store/authStore';
 import { useAuth } from '@/store/authStore';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -10,29 +9,6 @@ const rememberMe = ref(false);
 const router = useRouter();
 const { login } = useAuth();
 
-
-// const handleLogin = () => {
-//   login();
-//   router.push('/admin/dashboard');
-// };
-
-
-// const handleLogin = () => {
-//   const user = username.value.trim().toLowerCase();
-
-//   if (user === 'editor') {
-//     localStorage.setItem('role', 'editor');
-//     router.push('/editor/dashboard');
-//   } else if (user === 'superadmin') {
-//     localStorage.setItem('role', 'superadmin');
-//     router.push('/superadmin/dashboard');
-//   } else if (user === 'admin') {
-//     localStorage.setItem('role', 'admin');
-//     router.push('/admin/dashboard');
-//   } else {
-//     alert('Invalid username. Use "superadmin", "editor", or "admin" for now.');
-//   }
-// };
 
 const handleSignIn = () => {
   const user = username.value.trim().toLowerCase();
@@ -180,12 +156,7 @@ const alert = (message) => {
           </div>
 
           <div>
-            <!-- <router-link
-              to="/signinverification"
-              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-[#0c6b39] hover:bg-[#09572d] shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0c6b39] transition-all duration-150 ease-in-out"
-            >
-              Login
-            </router-link> -->
+            
             <button
               @click="handleSignIn"
               class="w-full flex justify-center py-3 px-4 rounded-lg bg-[#0c6b39] text-white font-medium hover:bg-[#09572d] transition"
