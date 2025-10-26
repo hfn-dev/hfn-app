@@ -1,10 +1,19 @@
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
-export const isAuthenticated = ref(false);
+const role = ref(localStorage.getItem('role') || null);
 
-export const useAuth = () => {
-  const login = () => (isAuthenticated.value = true);
-  const logout = () => (isAuthenticated.value = false);
+export function useAuth() {
+  const isAuthenticated = computed(() => !!role.value);
 
-  return { isAuthenticated, login, logout };
-};
+  const login = (userRole) => {
+    role.value = userRole;
+    localStorage.setItem('role', userRole);
+  };
+
+  const logout = () => {
+    role.value = null;
+    localStorage.removeItem('role');
+  };
+
+  return { role, isAuthenticated, login, logout };
+}

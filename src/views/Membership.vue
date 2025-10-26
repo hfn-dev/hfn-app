@@ -1,5 +1,144 @@
 <script setup>
-import handsJoining from '@/assets/handsJoining.jpg';
+import handsJoining from "@/assets/handsJoining.jpg";
+import { ref } from "vue";
+
+
+const categories = ref([
+  {
+    name: "Corporate",
+    description: "Ideal for private and insurance companies",
+    plans: [
+      {
+        title: "Corporate 1",
+        price: "₦200,000 per month",
+        audience: "Ideal for private companies",
+        benefits: [
+          "Ideal",
+          "Unlimited Pages",
+          "No Ads",
+          "Site Search",
+          "Password Protection",
+          "Classes",
+          "HD Video & Audio",
+          "Up to 100 Members",
+          "Membership Registration",
+        ],
+      },
+      {
+        title: "Corporate 2",
+        price: "₦200,000 per month",
+        audience: "Ideal for insurance companies",
+        benefits: [
+          "Ideal",
+          "Unlimited Pages",
+          "No Ads",
+          "Site Search",
+          "Password Protection",
+          "Classes",
+          "HD Video & Audio",
+          "Up to 100 Members",
+          "Membership Registration",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Multinational",
+    description: "Designed for international and cross-border organizations",
+    plans: [
+      {
+        title: "Global Partner 1",
+        price: "₦500,000 per month",
+        audience: "Ideal for international firms",
+        benefits: [
+          "Access to cross-border collaborations",
+          "International policy influence",
+          "Brand visibility across regions",
+          "Premium networking events",
+          "Priority partnership slots",
+          "Dedicated liaison support",
+        ],
+      },
+      {
+        title: "Global Partner 2",
+        price: "₦600,000 per month",
+        audience: "Ideal for multinational subsidiaries",
+        benefits: [
+          "Access to international markets",
+          "Executive-level visibility",
+          "Strategic business partnerships",
+          "Exclusive event sponsorships",
+          "Policy roundtable invitations",
+          "24/7 concierge support",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Association",
+    description: "For registered professional or trade associations",
+    plans: [
+      {
+        title: "Association Member 1",
+        price: "₦150,000 per month",
+        audience: "Ideal for professional bodies",
+        benefits: [
+          "Shared research access",
+          "Joint advocacy opportunities",
+          "Discounted event sponsorships",
+          "Directory listing for all member firms",
+          "Dedicated community platform",
+        ],
+      },
+      {
+        title: "Association Member 2",
+        price: "₦180,000 per month",
+        audience: "Ideal for trade associations",
+        benefits: [
+          "Representation in policy dialogues",
+          "Industry benchmarking data",
+          "Exclusive training discounts",
+          "Joint marketing campaigns",
+          "Access to HFN expert panels",
+        ],
+      },
+    ],
+  },
+  {
+    name: "Diaspora",
+    description:
+      "For professionals or organizations abroad supporting local development",
+    plans: [
+      {
+        title: "Diaspora Partner 1",
+        price: "₦100,000 per month",
+        audience: "Ideal for Nigerians in diaspora",
+        benefits: [
+          "Participation in home-country initiatives",
+          "Diaspora business network access",
+          "Discounted investment opportunities",
+          "Recognition at annual HFN summits",
+          "Digital collaboration tools",
+        ],
+      },
+      {
+        title: "Diaspora Partner 2",
+        price: "₦120,000 per month",
+        audience: "Ideal for global development partners",
+        benefits: [
+          "Inclusion in diaspora economic programs",
+          "Access to private investment circles",
+          "Cross-border mentorship opportunities",
+          "Recognition in global newsletters",
+          "Priority access to summit panels",
+        ],
+      },
+    ],
+  },
+]);
+
+const activeCategory = ref(categories.value[0]);
+
 </script>
 
 <template>
@@ -46,7 +185,7 @@ import handsJoining from '@/assets/handsJoining.jpg';
         Membership Categories
       </h2>
 
-      <div class="max-w-4xl mx-auto">
+      <!-- <div class="max-w-4xl mx-auto">
         <div class="flex flex-wrap justify-center space-x-2 sm:space-x-4 mb-8">
           <button
             class="px-5 py-2 text-white bg-green-700 rounded-lg shadow-md font-medium"
@@ -408,6 +547,102 @@ import handsJoining from '@/assets/handsJoining.jpg';
                   ></path>
                 </svg>
               </a>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div class="max-w-4xl mx-auto">
+        <div class="flex flex-wrap justify-center space-x-2 sm:space-x-4 mb-8">
+          <button
+            v-for="category in categories"
+            :key="category.name"
+            @click="activeCategory = category"
+            :class="[
+              'px-5 py-2 rounded-lg font-medium transition',
+              activeCategory.name === category.name
+                ? 'bg-green-700 text-white shadow-md'
+                : 'bg-white text-gray-700 border border-gray-300 hover:border-green-700',
+            ]"
+          >
+            {{ category.name }}
+          </button>
+        </div>
+
+        <!-- Dynamic Membership Content -->
+        <div
+          class="p-6 sm:p-10 rounded-[30px] border-2 border-green-200 bg-white shadow-xl flex flex-col gap-8"
+        >
+          <h3 class="text-2xl font-bold text-gray-900">
+            {{ activeCategory.name }} Membership
+          </h3>
+          <p class="text-gray-600 text-sm mb-6">
+            {{ activeCategory.description }}
+          </p>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div
+              v-for="plan in activeCategory.plans"
+              :key="plan.title"
+              class="flex-1 rounded-xl border border-gray-200 overflow-hidden"
+            >
+              <div class="p-6">
+                <h4 class="text-xl font-bold text-gray-900 mb-1">
+                  {{ plan.title }}
+                </h4>
+                <p class="text-sm text-gray-500 mb-6">{{ plan.audience }}</p>
+
+                <div class="bg-orange-50/70 p-4 rounded-lg">
+                  <h5 class="text-sm font-semibold text-gray-700 mb-3">
+                    Member Benefits
+                  </h5>
+                  <ul class="space-y-2 text-gray-700 text-sm">
+                    <li
+                      v-for="(benefit, i) in plan.benefits"
+                      :key="i"
+                      class="flex items-start"
+                    >
+                      <svg
+                        class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                      {{ benefit }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="p-6 pt-0 text-center">
+                <p class="text-3xl font-extrabold text-green-700 mb-4">
+                  {{ plan.price }}
+                </p>
+                <a
+                  href="#"
+                  class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition"
+                >
+                  Join Now
+                  <svg
+                    class="w-5 h-5 ml-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M14 5l7 7m0 0l-7 7m7-7H3"
+                    />
+                  </svg>
+                </a>
+              </div>
             </div>
           </div>
         </div>

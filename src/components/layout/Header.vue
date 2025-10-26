@@ -1,14 +1,14 @@
 <script setup>
-import hfn_logo from '@/assets/hfn2.png';
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import hfn_logo from "@/assets/hfn2.png";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-const DARK_GREEN = '#004d33';
-const ACTIVE_BG_COLOR = '#F2F9F3';
+const DARK_GREEN = "#004d33";
+const ACTIVE_BG_COLOR = "#F2F9F3";
 
-const currentPath = ref('/');
+const currentPath = ref("/");
 
 const isMobileMenuOpen = ref(false);
 
@@ -18,8 +18,8 @@ const handleLinkClick = (path) => {
 };
 
 const goToRegistration = () => {
-  router.push('/register');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  router.push("/register");
+  window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
 const isLinkActive = (path) => {
@@ -27,24 +27,23 @@ const isLinkActive = (path) => {
 };
 
 const navLinks = [
-  { title: 'Home', path: '/', hasDropdown: false },
-  { title: 'About Us', path: '/about', hasDropdown: false },
+  { title: "Home", path: "/", hasDropdown: false },
+  { title: "About Us", path: "/about", hasDropdown: false },
   {
-    title: 'Latest Updates',
-    path: '/blog',
+    title: "Latest Updates",
+    path: "/blog",
     hasDropdown: true,
   },
   {
-    title: 'Membership',
-    path: '/membership',
+    title: "Membership",
+    path: "/membership",
     hasDropdown: true,
   },
-  { title: 'Contact Us', path: '/contact', hasDropdown: false },
+  { title: "Contact Us", path: "/contact", hasDropdown: false },
 ];
 </script>
 
 <template>
-  
   <header class="w-full bg-white font-sans shadow-md">
     <div
       :style="{ backgroundColor: DARK_GREEN }"
@@ -176,7 +175,7 @@ const navLinks = [
           <input
             type="text"
             placeholder="Search"
-            class="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition shadow-inner text-sm"
+            class="w-full pl-4 pr-10 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition shadow-inner text-sm"
           />
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -278,7 +277,7 @@ const navLinks = [
             <input
               type="text"
               placeholder="Search..."
-              class="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 shadow-sm"
+              class="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 shadow-sm"
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -297,6 +296,7 @@ const navLinks = [
             </svg>
           </div>
           <button
+            @click="goToRegistration"
             :style="{ backgroundColor: DARK_GREEN }"
             class="w-full px-6 py-3 font-bold text-white rounded-lg shadow-lg hover:opacity-90 transition-all duration-200"
           >

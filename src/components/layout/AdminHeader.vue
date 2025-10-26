@@ -1,12 +1,40 @@
 <script setup>
-import hfn_logo from '@/assets/hfn_logo.png';
-const DARK_GREEN = '#004d33';
+import hfn_logo from "@/assets/hfn_logo.png";
+import { useAuth } from "@/store/authStore";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const { logout } = useAuth();
+const DARK_GREEN = "#004d33";
+const ACTIVE_BG_COLOR = "#f2f9f3";
+const currentPath = ref("/");
+const isMobileMenuOpen = ref(false);
+
+const handleLinkClick = (path) => {
+  currentPath.value = path;
+  isMobileMenuOpen.value = false;
+};
+
+const isLinkActive = (path) => path === currentPath.value;
+
+const navLinks = [
+  { title: "Home", path: "/", hasDropdown: false },
+  { title: "About Us", path: "/about", hasDropdown: false },
+  { title: "Latest Updates", path: "/blog", hasDropdown: true },
+  { title: "Membership", path: "/membership", hasDropdown: true },
+  { title: "Contact Us", path: "/contact", hasDropdown: false },
+];
+
+const handleLogout = () => {
+  logout();
+  router.push("/");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
 </script>
 
 <template>
-  <header
-    class="w-full bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10"
-  >
+  <header class="w-full bg-white shadow-sm top-0 z-10">
     <div
       :style="{ backgroundColor: DARK_GREEN }"
       class="text-white text-sm flex justify-end px-4 sm:px-8 py-2 rounded-b-xl"
@@ -40,52 +68,115 @@ const DARK_GREEN = '#004d33';
         </div>
       </div>
     </div>
-
-    <div class="flex items-center justify-between p-4 lg:px-6">
-      <div class="flex items-center space-x-6">
-        <div class="flex items-center flex-shrink-0">
-          <RouterLink to="/admin/dashboard" class="cursor-pointer">
-            <img
-              :src="hfn_logo"
-              alt="HFN Logo"
-              class="w-26 h-auto flex-shrink-0"
-              style="width: 100px"
-            />
-          </RouterLink>
-        </div>
-
-        <div class="relative hidden sm:block w-96">
-          <input
-            type="text"
-            placeholder="Search for courses"
-            class="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition shadow-inner text-sm"
+    <nav
+      class="flex items-center justify-between lg:px-8 max-w-7xl mx-auto"
+    >
+      <div class="flex items-center flex-shrink-0">
+        <RouterLink
+          to="/admin/dashboard"
+          @click="handleLinkClick('/')"
+          class="cursor-pointer"
+        >
+          <img
+            :src="hfn_logo"
+            alt="HFN Logo"
+            class="w-36 h-auto mr-3 flex-shrink-0"
           />
+        </RouterLink>
+      </div>
+
+      <div class="flex items-center lg:hidden">
+        <button
+          @click="isMobileMenuOpen = !isMobileMenuOpen"
+          class="p-2 text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-600"
+        >
           <svg
+            v-if="isMobileMenuOpen"
             xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
+            width="24"
+            height="24"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 cursor-pointer"
+            class="w-6 h-6"
           >
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.3-4.3" />
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
           </svg>
-        </div>
+          <svg
+            v-else
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-6 h-6"
+          >
+            <line x1="4" x2="20" y1="12" y2="12" />
+            <line x1="4" x2="20" y1="6" y2="6" />
+            <line x1="4" x2="20" y1="18" y2="18" />
+          </svg>
+        </button>
       </div>
 
-      <div class="flex items-center space-x-4">
-        <div
-          class="relative group cursor-pointer text-sm hidden sm:block"
-        ></div>
+      <div class="hidden lg:flex items-center space-x-4">
+        <RouterLink
+          v-for="link in navLinks"
+          :key="link.title"
+          :to="link.path"
+          @click="handleLinkClick(link.path)"
+          class="flex items-center px-4 py-3 font-semibold transition-all duration-200 rounded-lg whitespace-nowrap"
+          :style="
+            isLinkActive(link.path)
+              ? {
+                  backgroundColor: ACTIVE_BG_COLOR,
+                  color: DARK_GREEN,
+                  boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+                }
+              : {}
+          "
+          :class="[
+            !isLinkActive(link.path)
+              ? 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              : '',
+          ]"
+        >
+          {{ link.title }}
+          <svg
+            v-if="link.hasDropdown"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            :class="[
+              'w-4 h-4 ml-1 transition-transform',
+              isLinkActive(link.path)
+                ? `text-[${DARK_GREEN}]`
+                : 'text-gray-500',
+            ]"
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </RouterLink>
+      </div>
 
+      <div class="hidden lg:flex items-center space-x-4">
         <button
           class="p-2 text-gray-500 hover:text-gray-900 rounded-full hover:bg-gray-100 transition"
         >
+          <!-- Bell Icon -->
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -105,7 +196,11 @@ const DARK_GREEN = '#004d33';
 
         <div class="relative group cursor-pointer">
           <div
-            class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center border-2 border-gray-300 hover:border-green-600 transition"
+            :style="{
+              backgroundColor: ACTIVE_BG_COLOR,
+              borderColor: DARK_GREEN,
+            }"
+            class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center border-2 border-green-400 hover:border-green-600 transition"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -117,14 +212,35 @@ const DARK_GREEN = '#004d33';
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              class="w-6 h-6 text-gray-600"
+              :style="{ color: DARK_GREEN }"
+              class="w-6 h-6"
             >
               <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
               <circle cx="12" cy="7" r="4" />
             </svg>
           </div>
+
+          <div
+            class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300 z-50 overflow-hidden ring-1 ring-gray-200"
+          >
+            <div class="p-3 border-b">
+              <p class="font-semibold text-sm">Admin User</p>
+              <p class="text-xs text-gray-500">admin@app.com</p>
+            </div>
+            <a
+              href="/admin/settings"
+              class="block px-4 py-2 hover:bg-gray-100 transition duration-150"
+              >Settings</a
+            >
+            <a
+              href="#"
+              @click.prevent="handleLogout"
+              class="block px-4 py-2 hover:bg-gray-100 transition duration-150 text-red-600 font-medium"
+              >Logout</a
+            >
+          </div>
         </div>
       </div>
-    </div>
+    </nav>
   </header>
 </template>

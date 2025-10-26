@@ -1,5 +1,8 @@
 <script setup>
-import logo from '@/assets/logo.png';
+import logo from "@/assets/logo.png";
+
+const currentYear = new Date().getFullYear();
+
 </script>
 
 <template>
@@ -183,37 +186,39 @@ import logo from '@/assets/logo.png';
 
               <div class="flex space-x-4 text-green-700">
                 <a
-                  href="#"
-                  class="hover:text-green-600 transition"
+                  href="https://www.facebook.com/hfnigeria"
+                  target="_blank"
                   aria-label="Facebook"
-                >
-                  <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                      d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.656 9.126 8.432 9.873V15.45H8.214V12h2.218V9.456c0-2.195 1.343-3.39 3.297-3.39.948 0 1.849.17 2.102.247v2.324h-1.385c-1.105 0-1.32.525-1.32 1.3v1.71h2.585l-.417 3.45H13.111v6.425C17.944 21.126 22 16.991 22 12c0-5.523-4.477-10-10-10z"
-                    />
-                  </svg>
-                </a>
-                <a
-                  href="#"
                   class="hover:text-green-600 transition"
+                >
+                  <i class="fab fa-facebook-f text-2xl"></i>
+                </a>
+
+                <a
+                  href="https://www.instagram.com/hfnigeria"
+                  target="_blank"
                   aria-label="Instagram"
-                >
-                  <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                      d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4c0 3.2-2.6 5.8-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8C2 4.6 4.6 2 7.8 2zm-.2 2.7a.8.8 0 00-.8.8v8.9a.8.8 0 00.8.8h8.9a.8.8 0 00.8-.8V5.5a.8.8 0 00-.8-.8H7.6zm8.8 3.7c0-2.4-2.1-4.4-4.4-4.4s-4.4 2-4.4 4.4 2.1 4.4 4.4 4.4 4.4-2 4.4-4.4zm-4.4 2.8c-1.6 0-2.8-1.3-2.8-2.8s1.3-2.8 2.8-2.8 2.8 1.3 2.8 2.8-1.3 2.8-2.8 2.8zm5.6-7c0-.5-.4-.9-.9-.9h-.9c-.5 0-.9.4-.9.9s.4.9.9.9h.9c.5 0 .9-.4.9-.9z"
-                    />
-                  </svg>
-                </a>
-                <a
-                  href="#"
                   class="hover:text-green-600 transition"
-                  aria-label="LinkedIn"
                 >
-                  <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                      d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.75c-.828 0-1.5-.672-1.5-1.5s.672-1.5 1.5-1.5 1.5.672 1.5 1.5-.672 1.5-1.5 1.5zm13.5 12.75h-3v-5.604c0-3.366-4-3.266-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
-                    />
-                  </svg>
+                  <i class="fab fa-instagram text-2xl"></i>
+                </a>
+
+                <a
+                  href="https://www.linkedin.com/company/hfnigeria"
+                  target="_blank"
+                  aria-label="LinkedIn"
+                  class="hover:text-green-600 transition"
+                >
+                  <i class="fab fa-linkedin-in text-2xl"></i>
+                </a>
+
+                <a
+                  href="https://x.com/hfnigeria"
+                  target="_blank"
+                  aria-label="Twitter"
+                  class="hover:text-green-600 transition"
+                >
+                  <i class="fab fa-x-twitter text-2xl"></i>
                 </a>
               </div>
 
@@ -238,7 +243,7 @@ import logo from '@/assets/logo.png';
     </div>
 
     <div class="bg-green-900 text-white text-center py-4 text-sm">
-      &copy; 2021. Healthcare Federation of Nigeria. All Rights Reserved.
+      &copy; {{ currentYear }}. Healthcare Federation of Nigeria. All Rights Reserved.
     </div>
   </footer>
 </template>

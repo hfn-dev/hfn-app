@@ -1,5 +1,10 @@
 <script setup>
+import { useAuth } from '@/store/authStore';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
+const { logout } = useAuth()
 
 const DARK_GREEN = '#004d33';
 const LIGHT_GREEN = '#f2f9f3';
@@ -34,13 +39,15 @@ const navLinks = [
   },
 ];
 
-const bottomLink = {
-  title: 'Logout',
-  path: '/',
-  icon: 'M10 3H6a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h4M16 17l5-5-5-5M21 12H9',
-};
 
 const isLinkActive = (path) => path === currentPath.value;
+
+const handleLogout = () => {
+  logout() 
+  router.push('/') 
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+}
 </script>
 
 <template>
@@ -85,10 +92,9 @@ const isLinkActive = (path) => path === currentPath.value;
     </nav>
 
     <div class="p-4 border-t border-green-700">
-      <RouterLink
-        :to="bottomLink.path"
-        @click="currentPath = bottomLink.path"
-        class="flex items-center p-3 text-lg font-medium rounded-xl transition-all duration-200 text-gray-200 hover:bg-red-700/50 hover:text-white"
+      <button
+        @click="handleLogout"
+        class="flex items-center p-3 text-lg font-medium rounded-xl transition-all duration-200 text-gray-200 hover:bg-red-700/50 hover:text-white w-full text-left"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -102,10 +108,10 @@ const isLinkActive = (path) => path === currentPath.value;
           stroke-linejoin="round"
           class="w-6 h-6 mr-3"
         >
-          <path :d="bottomLink.icon" />
+          <path d="M10 3H6a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h4M16 17l5-5-5-5M21 12H9" />
         </svg>
-        {{ bottomLink.title }}
-      </RouterLink>
+        Logout
+      </button>
     </div>
   </div>
 </template>

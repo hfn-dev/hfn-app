@@ -140,7 +140,7 @@ const alert = (message) => {
           </button>
         </div>
 
-        <button
+        <!-- <button
           class="flex items-center justify-center w-full py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition duration-150 mb-6 shadow-sm"
         >
           <svg
@@ -167,9 +167,9 @@ const alert = (message) => {
             />
           </svg>
           Sign up with Google
-        </button>
+        </button> -->
 
-        <div class="text-center text-gray-400 mb-6">OR</div>
+        <!-- <div class="text-center text-gray-400 mb-6">OR</div> -->
 
         <form @submit.prevent="handleRegistration" class="space-y-4">
           <template v-if="activeTab === 'individual'">

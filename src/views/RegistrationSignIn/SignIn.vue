@@ -9,37 +9,27 @@ const rememberMe = ref(false);
 const router = useRouter();
 const { login } = useAuth();
 
-
 const handleSignIn = () => {
-  const user = username.value.trim().toLowerCase();
+  const user = username.value.trim().toLowerCase()
 
   if (user === 'editor') {
-    localStorage.setItem('role', 'editor');
-    router.push('/editor/dashboard');
+    login('editor')
+    router.push('/editor/dashboard')
   } else if (user === 'superadmin') {
-    localStorage.setItem('role', 'superadmin');
-    router.push('/superadmin/dashboard');
+    login('superadmin')
+    router.push('/superadmin/dashboard')
   } else if (user === 'admin') {
-    localStorage.setItem('role', 'admin');
-
-    const hasSelectedInterests = localStorage.getItem('hasSelectedInterests');
-
-    if (hasSelectedInterests) {
-      router.push('/admin/dashboard');
+    login('admin')
+    const hasSelectedInterests = localStorage.getItem('hasSelectedInterests')
+    if (!hasSelectedInterests) {
+      router.push('/admin/interests')
     } else {
-      router.push('/admin/interests'); 
+      router.push('/admin/dashboard')
     }
   } else {
-    alert('Invalid username. Use "superadmin", "editor", or "admin" for now.');
+    alert('Invalid username. Use "superadmin", "editor", or "admin" for now.')
   }
-};
-
-
-
-const handleGoogleSignIn = () => {
-  console.log('Google Sign-in initiated');
-  alert('Google Sign-in is not implemented in this demo.');
-};
+}
 
 const alert = (message) => {
   console.log(message);
@@ -67,7 +57,7 @@ const alert = (message) => {
           </div>
         </div>
 
-        <button
+        <!-- <button
           @click="handleGoogleSignIn"
           class="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-150 ease-in-out"
         >
@@ -95,14 +85,14 @@ const alert = (message) => {
             />
           </svg>
           Sign in with Google
-        </button>
+        </button> -->
 
-        <div class="relative flex justify-center text-xs uppercase">
+        <!-- <div class="relative flex justify-center text-xs uppercase">
           <span class="bg-white px-2 text-gray-500"> OR </span>
           <div class="absolute inset-0 flex items-center" aria-hidden="true">
             <div class="w-full border-t border-gray-300"></div>
           </div>
-        </div>
+        </div> -->
 
         <form @submit.prevent="handleSignIn" class="space-y-6">
           <div>

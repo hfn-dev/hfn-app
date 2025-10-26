@@ -1,5 +1,6 @@
 <script setup>
-import globe from '@/assets/globe.png';
+import globe from "@/assets/globe.png";
+
 </script>
 
 <template>
@@ -202,6 +203,66 @@ import globe from '@/assets/globe.png';
               ></path>
             </svg>
             <p class="text-gray-700 text-base">+234 703 056 7554</p>
+          </div>
+          <div class="pt-4 border-t border-green-100 space-y-4">
+            <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="mr-2 text-green-700"
+              >
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+              </svg>
+              Connect With Us
+            </h3>
+            
+          </div>
+
+          <div
+            class="flex items-center space-x-5 pt-4 border-t border-green-100"
+          >
+            <a
+              href="https://www.facebook.com/hfnigeria"
+              target="_blank"
+              aria-label="Facebook"
+              class="text-green-700 hover:text-green-900 transition"
+            >
+              <i class="fab fa-facebook-f text-2xl"></i>
+            </a>
+
+            <a
+              href="https://www.instagram.com/hfnigeria"
+              target="_blank"
+              aria-label="Instagram"
+              class="text-green-700 hover:text-green-900 transition"
+            >
+              <i class="fab fa-instagram text-2xl"></i>
+            </a>
+
+            <a
+              href="https://www.linkedin.com/company/hfnigeria"
+              target="_blank"
+              aria-label="LinkedIn"
+              class="text-green-700 hover:text-green-900 transition"
+            >
+              <i class="fab fa-linkedin-in text-2xl"></i>
+            </a>
+
+            <a
+              href="https://x.com/hfnigeria"
+              target="_blank"
+              aria-label="Twitter"
+              class="text-green-700 hover:text-green-900 transition"
+            >
+              <i class="fab fa-x-twitter text-2xl"></i>
+            </a>
           </div>
         </div>
       </div>
