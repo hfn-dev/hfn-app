@@ -296,7 +296,6 @@ const navLinks = [
             </svg>
           </div>
           <button
-            @click="goToRegistration"
             :style="{ backgroundColor: DARK_GREEN }"
             class="w-full px-6 py-3 font-bold text-white rounded-lg shadow-lg hover:opacity-90 transition-all duration-200"
           >
