@@ -53,7 +53,7 @@ const handleLogout = () => {
 <template>
   <div
     :style="{ backgroundColor: DARK_GREEN }"
-    class="w-64 min-h-screen flex flex-col justify-between border-r sticky top-0 left-0 pt-8 text-white shadow-xl"
+    class="w-64 min-h-screen flex flex-col justify-between border-r sticky top-0 left-0 pt-8 text-white shadow-xl transform transition-transform duration-300"
   >
     <nav class="space-y-1 px-4 flex-grow">
       <RouterLink
