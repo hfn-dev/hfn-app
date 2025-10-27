@@ -137,12 +137,12 @@ onMounted(() => {
             unlock exclusive resources and connect with the sector’s most
             influential network.
           </p>
-          <a
-            href="#"
+          <RouterLink
+            to="/register"
             class="inline-block py-3 px-8 bg-primary text-white font-semibold rounded-lg shadow-lg hover:bg-opacity-90 transition duration-300 transform hover:scale-[1.02]"
           >
             Join the Coalition ->
-          </a>
+          </RouterLink>
         </div>
 
         <div
