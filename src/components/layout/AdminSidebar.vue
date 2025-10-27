@@ -1,59 +1,62 @@
 <script setup>
-import { useAuth } from '@/store/authStore';
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useAuth } from "@/store/authStore";
+import { defineProps, ref } from "vue";
+import { useRouter } from "vue-router";
 
-const router = useRouter()
-const { logout } = useAuth()
+const router = useRouter();
+const { logout } = useAuth();
 
-const DARK_GREEN = '#004d33';
-const LIGHT_GREEN = '#f2f9f3';
+const props = defineProps({
+  isOpen: { type: Boolean, default: false },
+});
 
-const currentPath = ref('/admin/dashboard');
+const DARK_GREEN = "#004d33";
+const LIGHT_GREEN = "#f2f9f3";
+
+const currentPath = ref("/admin/dashboard");
 
 const navLinks = [
   {
-    title: 'Dashboard',
-    path: '/admin/dashboard',
-    icon: 'M3 3v18h18V3H3zm16 16H5V5h14v14zM9 8h6v2H9V8zm0 4h6v2H9v-2zm0 4h4v2H9v-2z',
+    title: "Dashboard",
+    path: "/admin/dashboard",
+    icon: "M3 3v18h18V3H3zm16 16H5V5h14v14zM9 8h6v2H9V8zm0 4h6v2H9v-2zm0 4h4v2H9v-2z",
   },
   {
-    title: 'My Learning',
-    path: '/admin/mylearning',
-    icon: 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20zm-1-8V7h2v5h4l-5 5-5-5h4z',
+    title: "My Learning",
+    path: "/admin/mylearning",
+    icon: "M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20zm-1-8V7h2v5h4l-5 5-5-5h4z",
   },
   {
-    title: 'Messages',
-    path: '/admin/messages',
-    icon: 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z',
+    title: "Messages",
+    path: "/admin/messages",
+    icon: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z",
   },
   {
-    title: 'My Account',
-    path: '/admin/account',
-    icon: 'M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2',
+    title: "My Account",
+    path: "/admin/account",
+    icon: "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2",
   },
   {
-    title: 'Support',
-    path: '/admin/support',
-    icon: 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20zm0-13a1 1 0 0 0-1 1v4a1 1 0 0 0 2 0V8a1 1 0 0 0-1-1zm0 8a1 1 0 1 0 0 2 1 1 0 0 0 0-2z',
+    title: "Support",
+    path: "/admin/support",
+    icon: "M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20zm0-13a1 1 0 0 0-1 1v4a1 1 0 0 0 2 0V8a1 1 0 0 0-1-1zm0 8a1 1 0 1 0 0 2 1 1 0 0 0 0-2z",
   },
 ];
-
 
 const isLinkActive = (path) => path === currentPath.value;
 
 const handleLogout = () => {
-  logout() 
-  router.push('/') 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-}
+  logout();
+  router.push("/");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
 </script>
 
 <template>
   <div
     :style="{ backgroundColor: DARK_GREEN }"
-    class="w-64 min-h-screen flex flex-col justify-between border-r sticky top-0 left-0 pt-8 text-white shadow-xl transform transition-transform duration-300"
+    class="w-64 min-h-screen flex flex-col justify-between border-r pt-8 text-white shadow-xl"
+
   >
     <nav class="space-y-1 px-4 flex-grow">
       <RouterLink
@@ -108,7 +111,9 @@ const handleLogout = () => {
           stroke-linejoin="round"
           class="w-6 h-6 mr-3"
         >
-          <path d="M10 3H6a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h4M16 17l5-5-5-5M21 12H9" />
+          <path
+            d="M10 3H6a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h4M16 17l5-5-5-5M21 12H9"
+          />
         </svg>
         Logout
       </button>

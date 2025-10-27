@@ -1,5 +1,5 @@
 <script setup>
-import hfn_logo from "@/assets/hfn2.png";
+import hfn_logo from "@/assets/hfn-health.png";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 

@@ -1,13 +1,13 @@
 <script setup>
-import aboutImage from '@/assets/about-us.png';
-import ayodele from '@/assets/ayodele.png';
-import babarinde from '@/assets/babarinde.png';
-import chinyere from '@/assets/chinyere.png';
-import jennifer from '@/assets/jennifer.png';
-import map from '@/assets/map.jpg';
-import njide from '@/assets/njide.png';
-import partnership from '@/assets/partnership.png';
-import reagan from '@/assets/reagan.png';
+import aboutImage from "@/assets/about-us.png";
+import ayodele from "@/assets/ayodele.png";
+import babarinde from "@/assets/babarinde.png";
+import chinyere from "@/assets/chinyere.png";
+import jennifer from "@/assets/jennifer.png";
+import map from "@/assets/map.jpg";
+import njide from "@/assets/njide.png";
+import partnership from "@/assets/partnership.png";
+import reagan from "@/assets/reagan.png";
 </script>
 <template>
   <div>
@@ -29,7 +29,7 @@ import reagan from '@/assets/reagan.png';
               is uniting healthcare providers, insurers, and tech leaders to
               drive transformation.
             </p>
-            <p class="mt-4 text-gray-600">
+            <p class="mt-4 text-gray-700 text-lg">
               HFN advocates for changes in policy and policy reform that will
               support the growth and development of the private health sector.
             </p>
@@ -121,13 +121,13 @@ import reagan from '@/assets/reagan.png';
             <div>
               <h3 class="font-bold text-xl text-green-700 mb-2">
                 Our mission
-                <span class="text-gray-900 text-base font-normal"
+                <span class="text-gray-700 text-lg font-normal"
                   >is centered on advocacy, capacity building, and improving
                   access to finance for the private sector, all in collaboration
                   with the public sector.</span
                 >
               </h3>
-              <p class="text-base text-gray-600">
+              <p class="text-lg text-gray-700">
                 Healthcare Federation of Nigeria is independent of any
                 governmental/political ideology, economic interest, religious
                 affiliation; and is mainly funded by our membership and
@@ -138,12 +138,12 @@ import reagan from '@/assets/reagan.png';
             <div>
               <h3 class="font-bold text-xl text-green-700 mb-2">
                 Our vision
-                <span class="text-gray-900 text-base font-normal"
+                <span class="text-gray-700 text-lg font-normal"
                   >is anchored on a “patient-centric” approach to policy
                   advocacy which is our driving force.</span
                 >
               </h3>
-              <p class="text-base text-gray-600">
+              <p class="text-lg text-gray-700">
                 This is anchored on the simple conclusion that, if life is basic
                 and healthcare caters to life, then the Healthcare Federation of
                 Nigeria should have no overarching motive for advocating better
@@ -223,23 +223,26 @@ import reagan from '@/assets/reagan.png';
                     Biography
                   </h4>
                   <p class="mb-6 text-lg">
-                    Euismod magna id purus eget nunc ligula suspendisse dui
-                    netus. Condimentum blandit rutrum at mauris enim. Euismod
-                    magna id purus eget nunc ligula suspendisse dui netus.
-                    Condimentum blandit rutrum at mauris enim. Euismod magna id
-                    purus eget nunc ligula suspendisse dui netus. Condimentum
-                    blandit rutrum at mauris enim. Euismod magna id purus eget
-                    nunc ligula suspendisse dui netus. Condimentum blandit
-                    rutrum at mauris enim. Euismod magna id purus eget nunc
-                    ligula suspendisse dui netus.
+                    Mrs. Njide Ndili is a seasoned healthcare leader with over
+                    two decades of experience in hospital administration,
+                    healthcare policy, and organizational development. Her
+                    passion for strengthening healthcare systems has driven her
+                    to lead several transformational initiatives focused on
+                    patient care, operational efficiency, and workforce
+                    training. A graduate of Business Administration with
+                    advanced studies in Healthcare Management, Mrs. Ndili has
+                    worked with both public and private health institutions to
+                    improve service delivery standards. She is deeply committed
+                    to mentoring young healthcare professionals and fostering
+                    collaborations that advance sustainable healthcare practices
+                    in Nigeria and beyond.
                   </p>
                   <h4 class="font-bold text-xl mb-2 text-gray-900">
                     Words on Marble...
                   </h4>
                   <p class="italic text-lg text-gray-800">
-                    "Euismod magna id purus eget nunc ligula suspendisse dui
-                    netus. Condimentum blandit rutrum at mauris enim. Euismod
-                    magna id purus eget nunc ligula suspendisse."
+                    "True leadership in healthcare is measured not by titles,
+                    but by the lives we touch and the systems we transform."
                   </p>
                 </div>
               </div>
@@ -250,23 +253,25 @@ import reagan from '@/assets/reagan.png';
                     Biography
                   </h4>
                   <p class="mb-6 text-lg">
-                    Euismod magna id purus eget nunc ligula suspendisse dui
-                    netus. Condimentum blandit rutrum at mauris enim. Euismod
-                    magna id purus eget nunc ligula suspendisse dui netus.
-                    Condimentum blandit rutrum at mauris enim. Euismod magna id
-                    purus eget nunc ligula suspendisse dui netus. Condimentum
-                    blandit rutrum at mauris enim. Euismod magna id purus eget
-                    nunc ligula suspendisse dui netus. Condimentum blandit
-                    rutrum at mauris enim. Euismod magna id purus eget nunc
-                    ligula suspendisse dui netus.
+                    Dr. Ayodele Benson-Cole is a respected physician and
+                    healthcare strategist with over 18 years of clinical and
+                    administrative experience. He has built a reputation for
+                    promoting quality healthcare standards and patient-centered
+                    innovations in both urban and underserved communities. Dr.
+                    Benson-Cole earned his medical degree from the University of
+                    Ibadan and holds certifications in Healthcare Leadership and
+                    Quality Improvement. He has served as a consultant to
+                    various public health projects and continues to advocate for
+                    accessible healthcare systems that prioritize prevention,
+                    education, and technology integration.
                   </p>
                   <h4 class="font-bold text-xl mb-2 text-gray-900">
                     Words on Marble...
                   </h4>
                   <p class="italic text-lg text-gray-800">
-                    "Euismod magna id purus eget nunc ligula suspendisse dui
-                    netus. Condimentum blandit rutrum at mauris enim. Euismod
-                    magna id purus eget nunc ligula suspendisse."
+                    "Medicine is not just about curing the sick; it is about
+                    inspiring hope, preserving dignity, and leading with
+                    compassion."
                   </p>
                 </div>
 
@@ -330,23 +335,23 @@ import reagan from '@/assets/reagan.png';
                     Biography
                   </h4>
                   <p class="mb-6 text-lg">
-                    Euismod magna id purus eget nunc ligula suspendisse dui
-                    netus. Condimentum blandit rutrum at mauris enim. Euismod
-                    magna id purus eget nunc ligula suspendisse dui netus.
-                    Condimentum blandit rutrum at mauris enim. Euismod magna id
-                    purus eget nunc ligula suspendisse dui netus. Condimentum
-                    blandit rutrum at mauris enim. Euismod magna id purus eget
-                    nunc ligula suspendisse dui netus. Condimentum blandit
-                    rutrum at mauris enim. Euismod magna id purus eget nunc
-                    ligula suspendisse dui netus.
+                    Dr. Jennifer Anyati is a dynamic public health professional
+                    and advocate for equitable healthcare delivery. With a
+                    strong background in epidemiology and healthcare planning,
+                    she has led numerous community health programs aimed at
+                    improving maternal and child health outcomes. Her work
+                    emphasizes the power of data-driven decision-making and
+                    collaboration between government, private, and non-profit
+                    sectors. Dr. Anyati has also served as a mentor to emerging
+                    healthcare practitioners, encouraging innovation and ethical
+                    practice in all aspects of healthcare delivery.
                   </p>
                   <h4 class="font-bold text-xl mb-2 text-gray-900">
                     Words on Marble...
                   </h4>
                   <p class="italic text-lg text-gray-800">
-                    "Euismod magna id purus eget nunc ligula suspendisse dui
-                    netus. Condimentum blandit rutrum at mauris enim. Euismod
-                    magna id purus eget nunc ligula suspendisse."
+                    "When we uplift communities through healthcare, we heal not
+                    just individuals but the future of our nation."
                   </p>
                 </div>
               </div>
@@ -357,23 +362,24 @@ import reagan from '@/assets/reagan.png';
                     Biography
                   </h4>
                   <p class="mb-6 text-lg">
-                    Euismod magna id purus eget nunc ligula suspendisse dui
-                    netus. Condimentum blandit rutrum at mauris enim. Euismod
-                    magna id purus eget nunc ligula suspendisse dui netus.
-                    Condimentum blandit rutrum at mauris enim. Euismod magna id
-                    purus eget nunc ligula suspendisse dui netus. Condimentum
-                    blandit rutrum at mauris enim. Euismod magna id purus eget
-                    nunc ligula suspendisse dui netus. Condimentum blandit
-                    rutrum at mauris enim. Euismod magna id purus eget nunc
-                    ligula suspendisse dui netus.
+                    Mrs. Chinyere Okorocha is an accomplished communications
+                    professional with over 15 years of experience in healthcare
+                    public relations and stakeholder engagement. She has
+                    successfully managed campaigns that increased public
+                    awareness about preventive health, vaccination, and patient
+                    rights. Her expertise lies in crafting clear and empathetic
+                    messages that bridge the gap between healthcare providers
+                    and the public. Mrs. Okorocha believes that effective
+                    communication is vital to trust, transparency, and health
+                    system strengthening.
                   </p>
                   <h4 class="font-bold text-xl mb-2 text-gray-900">
                     Words on Marble...
                   </h4>
                   <p class="italic text-lg text-gray-800">
-                    "Euismod magna id purus eget nunc ligula suspendisse dui
-                    netus. Condimentum blandit rutrum at mauris enim. Euismod
-                    magna id purus eget nunc ligula suspendisse."
+                    "When people understand healthcare, they make choices that
+                    transform lives — communication is the heartbeat of
+                    progress."
                   </p>
                 </div>
 
@@ -439,23 +445,23 @@ import reagan from '@/assets/reagan.png';
                     Biography
                   </h4>
                   <p class="mb-6 text-lg">
-                    Euismod magna id purus eget nunc ligula suspendisse dui
-                    netus. Condimentum blandit rutrum at mauris enim. Euismod
-                    magna id purus eget nunc ligula suspendisse dui netus.
-                    Condimentum blandit rutrum at mauris enim. Euismod magna id
-                    purus eget nunc ligula suspendisse dui netus. Condimentum
-                    blandit rutrum at mauris enim. Euismod magna id purus eget
-                    nunc ligula suspendisse dui netus. Condimentum blandit
-                    rutrum at mauris enim. Euismod magna id purus eget nunc
-                    ligula suspendisse dui netus.
+                    Mr. Babarinde Olayode is a certified finance professional
+                    with over 12 years of experience managing budgets,
+                    investments, and financial systems within the healthcare
+                    sector. His strategic financial planning has enabled
+                    organizations to allocate resources efficiently while
+                    maintaining accountability and transparency. With a
+                    background in Accounting and an MBA in Health Economics, Mr.
+                    Olayode is passionate about improving financial
+                    sustainability in healthcare institutions and driving
+                    innovations in health financing.
                   </p>
                   <h4 class="font-bold text-xl mb-2 text-gray-900">
                     Words on Marble...
                   </h4>
                   <p class="italic text-lg text-gray-800">
-                    "Euismod magna id purus eget nunc ligula suspendisse dui
-                    netus. Condimentum blandit rutrum at mauris enim. Euismod
-                    magna id purus eget nunc ligula suspendisse."
+                    "Financial integrity in healthcare is not just about numbers
+                    — it’s about ensuring every naira spent saves a life."
                   </p>
                 </div>
               </div>
@@ -466,23 +472,23 @@ import reagan from '@/assets/reagan.png';
                     Biography
                   </h4>
                   <p class="mb-6 text-lg">
-                    Euismod magna id purus eget nunc ligula suspendisse dui
-                    netus. Condimentum blandit rutrum at mauris enim. Euismod
-                    magna id purus eget nunc ligula suspendisse dui netus.
-                    Condimentum blandit rutrum at mauris enim. Euismod magna id
-                    purus eget nunc ligula suspendisse dui netus. Condimentum
-                    blandit rutrum at mauris enim. Euismod magna id purus eget
-                    nunc ligula suspendisse dui netus. Condimentum blandit
-                    rutrum at mauris enim. Euismod magna id purus eget nunc
-                    ligula suspendisse dui netus.
+                    Mr. Reagan Rowland is a results-oriented finance
+                    administrator dedicated to promoting accountability and
+                    fiscal discipline in the healthcare industry. With over a
+                    decade of experience in financial management and audit
+                    processes, he has supported several healthcare organizations
+                    in achieving operational excellence through strategic cost
+                    control and transparent reporting. He is known for his
+                    collaborative leadership and ability to translate financial
+                    insights into actionable growth strategies that strengthen
+                    healthcare systems.
                   </p>
                   <h4 class="font-bold text-xl mb-2 text-gray-900">
                     Words on Marble...
                   </h4>
                   <p class="italic text-lg text-gray-800">
-                    "Euismod magna id purus eget nunc ligula suspendisse dui
-                    netus. Condimentum blandit rutrum at mauris enim. Euismod
-                    magna id purus eget nunc ligula suspendisse."
+                    "Transparency is the foundation upon which trust and
+                    progress in healthcare are built."
                   </p>
                 </div>
 

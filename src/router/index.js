@@ -1,5 +1,6 @@
 import DashboardLayout from '@/components/layout/DashboardLayout.vue';
 import Blog from '@/views/Blog.vue';
+import BlogDetails from '@/views/BlogDetails.vue';
 import Contact from '@/views/Contact.vue';
 import EditorCourseList from '@/views/Editor/EditorCourseList.vue';
 import EditorCreateCourse from '@/views/Editor/EditorCreateCourse.vue';
@@ -7,6 +8,7 @@ import EditorDashboard from '@/views/Editor/EditorDashboard.vue';
 import EditorReviews from '@/views/Editor/EditorReviews.vue';
 import Signin from '@/views/Editor/Signin.vue';
 import Membership from '@/views/Membership.vue';
+import Interests from '@/views/RegistrationSignIn/Interests.vue';
 import Register from '@/views/RegistrationSignIn/Register.vue';
 import SignIn from '@/views/RegistrationSignIn/SignIn.vue';
 import SigninVerification from '@/views/RegistrationSignIn/SigninVerification.vue';
@@ -22,11 +24,10 @@ import MyAccount from '@/views/User/MyAccount.vue';
 import MyLearning from '@/views/User/MyLearning.vue';
 import Support from '@/views/User/Support.vue';
 import UserDashboard from '@/views/User/UserDashboard.vue';
+import UserSubscription from '@/views/User/UserSubscription.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import About from '../views/About.vue';
 import Homepage from '../views/Homepage.vue';
-import UserSubscription from '@/views/User/UserSubscription.vue';
-import Interests from '@/views/RegistrationSignIn/Interests.vue';
 
 const routes = [
   {
@@ -49,6 +50,12 @@ const routes = [
   { path: '/contact', name: 'Contact', component: Contact },
   { path: '/register', name: 'Register', component: Register },
   { path: '/signin', name: 'Signin', component: SignIn },
+  {
+    path: '/blog/:id',
+    name: 'BlogDetails',
+    component: BlogDetails,
+    props: true,
+  },
   {
     path: '/signinverification',
     name: 'SigninVerification',

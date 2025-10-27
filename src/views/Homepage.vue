@@ -1,113 +1,204 @@
 <script setup>
-import bridge from '@/assets/bridge.png';
-import emzor from '@/assets/emzor.png';
-import group from '@/assets/group.png';
-import group1 from '@/assets/group1.png';
-import hba from '@/assets/hba.png';
-import Image from '@/assets/image.jpg';
-import oando from '@/assets/oando_logo.png';
-import pharm from '@/assets/pharm.png';
-import society from '@/assets/society.png';
+import bridge from "@/assets/bridge.png";
+import emzor from "@/assets/emzor.png";
+import event from "@/assets/event.png";
+import group from "@/assets/group.png";
+import health from "@/assets/health.png";
+import hfn_partner from "@/assets/hfn_partner.png";
+import wef from "@/assets/wef.jpg";
 
-import { onMounted, ref } from 'vue';
+import group1 from "@/assets/group1.png";
+import hba from "@/assets/hba.png";
+import Image from "@/assets/image.jpg";
+import oando from "@/assets/oando_logo.png";
+import pharm from "@/assets/pharm.png";
+import society from "@/assets/society.png";
 
-const selectedMonth = ref('October 2025');
+import { onMounted, ref, watch } from "vue";
 
-const featured = {
-  image: group,
-  tag: 'Programs & Initiatives',
-  date: 'October 10, 2025',
-  comments: 0,
-  description:
-    'Euismod magna id purus eget nunc ligula suspendisse dui netus. Condimentum blandit rutrum at mauris enim pulvinar dui etiam duis.',
+const selectedMonth = ref("October 2025");
+
+const allNews = {
+  "October 2025": {
+    featured: {
+      image: hfn_partner,
+      tag: "Programs & Initiatives",
+      date: "October 10, 2025",
+      comments: 0,
+      description:
+        "Healthcare Federation of Nigeria (HFN) hosted a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria with the World Bank Group and NEPAD.",
+    },
+    newsList: [
+      {
+        image: health,
+        tag: "Programs & Initiatives",
+        date: "October 10, 2025",
+        comments: 12,
+        description:
+          "Nigeria continues to push boundaries in healthcare innovation through HFN-led collaborations.",
+      },
+      {
+        image: wef,
+        tag: "Health Alert",
+        date: "October 9, 2025",
+        comments: 5,
+        description:
+          "HFN President joins global health leaders at the WEF in Dubai to discuss investments in healthcare.",
+      },
+      {
+        image: event,
+        tag: "Public Health Stories",
+        date: "October 8, 2025",
+        comments: 10,
+        description:
+          "HFN participated in the Eko Health Convention, focusing on driving innovation in Lagos healthcare.",
+      },
+    ],
+  },
+
+  "September 2025": {
+    featured: {
+      image: group,
+      tag: "Health Policy",
+      date: "September 18, 2025",
+      comments: 7,
+      description:
+        "HFN met with the Federal Ministry of Health to discuss strengthening healthcare policy frameworks.",
+    },
+    newsList: [
+      {
+        image: pharm,
+        tag: "Programs & Initiatives",
+        date: "September 15, 2025",
+        comments: 4,
+        description:
+          "HFN continues its collaboration with pharmaceutical partners to ensure access to quality medicines.",
+      },
+      {
+        image: oando,
+        tag: "Health Alert",
+        date: "September 10, 2025",
+        comments: 6,
+        description:
+          "Oando Foundation and HFN partner to improve workplace health and wellness programs.",
+      },
+      {
+        image: hba,
+        tag: "Public Health Stories",
+        date: "September 2, 2025",
+        comments: 3,
+        description:
+          "HFN hosted a national workshop on healthcare business sustainability strategies.",
+      },
+    ],
+  },
+
+  "August 2025": {
+    featured: {
+      image: emzor,
+      tag: "Programs & Initiatives",
+      date: "August 20, 2025",
+      comments: 3,
+      description:
+        "HFN collaborated with Emzor Pharmaceuticals to discuss the future of local drug production.",
+    },
+    newsList: [
+      {
+        image: society,
+        tag: "Health Alert",
+        date: "August 18, 2025",
+        comments: 2,
+        description:
+          "Society for Family Health and HFN partner to improve primary care delivery systems.",
+      },
+      {
+        image: bridge,
+        tag: "Public Health Stories",
+        date: "August 12, 2025",
+        comments: 1,
+        description:
+          "Bridge Clinic joins HFN network to promote advanced fertility care across Nigeria.",
+      },
+      {
+        image: health,
+        tag: "Programs & Initiatives",
+        date: "August 5, 2025",
+        comments: 4,
+        description:
+          "HFN launched its Healthcare Innovation Accelerator to support health-tech startups.",
+      },
+    ],
+  },
 };
 
-const newsList = [
-  {
-    image: group,
-    tag: 'Programs & Initiatives',
-    date: 'October 10, 2025',
-    comments: 0,
-    description:
-      'Euismod magna id purus eget nunc ligula suspendisse dui netus. Condimentum blandit rutrum at mauris enim.',
-  },
-  {
-    image: group,
-    tag: 'Health Alert',
-    date: 'October 10, 2025',
-    comments: 0,
-    description:
-      'Euismod magna id purus eget nunc ligula suspendisse dui netus. Condimentum blandit rutrum at mauris enim.',
-  },
-  {
-    image: group,
-    tag: 'Public Health Stories',
-    date: 'October 10, 2025',
-    comments: 0,
-    description:
-      'Euismod magna id purus eget nunc ligula suspendisse dui netus. Condimentum blandit rutrum at mauris enim.',
-  },
-];
+const featured = ref(allNews[selectedMonth.value].featured);
+const newsList = ref(allNews[selectedMonth.value].newsList);
 
-import ayodele from '@/assets/ayodele.png';
-import babarinde from '@/assets/babarinde.png';
-import chinyere from '@/assets/chinyere.png';
-import jennifer from '@/assets/jennifer.png';
-import njide from '@/assets/njide.png';
-import reagan from '@/assets/reagan.png';
+watch(selectedMonth, (newMonth) => {
+  featured.value = allNews[newMonth].featured;
+  newsList.value = allNews[newMonth].newsList;
+});
+
+
+import ayodele from "@/assets/ayodele.png";
+import babarinde from "@/assets/babarinde.png";
+import chinyere from "@/assets/chinyere.png";
+import jennifer from "@/assets/jennifer.png";
+import njide from "@/assets/njide.png";
+import reagan from "@/assets/reagan.png";
 
 const executives = [
-  { name: 'Mrs. Njide Ndili', position: 'President', image: njide },
+  { name: "Mrs. Njide Ndili", position: "President", image: njide },
   {
-    name: 'Dr. Ayodele Benson-Cole',
-    position: '1st Vice President',
+    name: "Dr. Ayodele Benson-Cole",
+    position: "1st Vice President",
     image: ayodele,
   },
   {
-    name: 'Dr. Jennifer Anyanti',
-    position: '2nd Vice President',
+    name: "Dr. Jennifer Anyanti",
+    position: "2nd Vice President",
     image: jennifer,
   },
   {
-    name: 'Mrs. Chinyere Okorocha',
-    position: 'Public Relations Secretary',
+    name: "Mrs. Chinyere Okorocha",
+    position: "Public Relations Secretary",
     image: chinyere,
   },
   {
-    name: 'Mr. Babarinde Olayode',
-    position: 'Financial Secretary',
+    name: "Mr. Babarinde Olayode",
+    position: "Financial Secretary",
     image: babarinde,
   },
-  { name: 'Mr. Reagan Rowland', position: 'Treasurer', image: reagan },
+  { name: "Mr. Reagan Rowland", position: "Treasurer", image: reagan },
 ];
 
 onMounted(() => {
-  const toggles = document.querySelectorAll('.faq-toggle');
+  const toggles = document.querySelectorAll(".faq-toggle");
   toggles.forEach((toggle) => {
-    toggle.addEventListener('click', () => {
-      const targetId = toggle.getAttribute('data-target');
+    toggle.addEventListener("click", () => {
+      const targetId = toggle.getAttribute("data-target");
       const content = document.getElementById(targetId);
-      const icon = toggle.querySelector('.faq-icon');
-      const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+      const icon = toggle.querySelector(".faq-icon");
+      const isExpanded = toggle.getAttribute("aria-expanded") === "true";
 
       toggles.forEach((t) => {
         if (t !== toggle) {
-          t.setAttribute('aria-expanded', 'false');
+          t.setAttribute("aria-expanded", "false");
           document.getElementById(
-            t.getAttribute('data-target')
-          ).style.maxHeight = '0';
-          t.querySelector('.faq-icon').classList.remove('rotate-45');
+            t.getAttribute("data-target")
+          ).style.maxHeight = "0";
+          t.querySelector(".faq-icon").classList.remove("rotate-45");
         }
       });
 
       if (isExpanded) {
-        toggle.setAttribute('aria-expanded', 'false');
-        content.style.maxHeight = '0';
-        icon.classList.remove('rotate-45');
+        toggle.setAttribute("aria-expanded", "false");
+        content.style.maxHeight = "0";
+        icon.classList.remove("rotate-45");
       } else {
-        toggle.setAttribute('aria-expanded', 'true');
-        content.style.maxHeight = content.scrollHeight + 'px';
-        icon.classList.add('rotate-45');
+        toggle.setAttribute("aria-expanded", "true");
+        content.style.maxHeight = content.scrollHeight + "px";
+        icon.classList.add("rotate-45");
       }
     });
   });
@@ -266,11 +357,13 @@ onMounted(() => {
 
       <div class="text-gray-700 leading-relaxed">
         <p class="mb-8">
-          Magna id purus eget nunc ligula suspendisse dui netus. Condimentum
-          blandit rutrum at mauris enim. Euismod magna id purus eget nunc ligula
-          suspendisse. Euismod magna id purus eget nunc ligula suspendisse dui
-          netus. Condimentum blandit rutrum at mauris enim. Euismod magna id
-          purus eget nunc ligula suspendisse.
+          The Healthcare Federation of Nigeria (HFN) is the umbrella body for
+          private healthcare stakeholders in Nigeria, representing the interests
+          of health professionals, companies, investors, associations, and
+          institutions. HFN provides members with access to advocacy platforms,
+          strategic collaborations, knowledge-sharing, and investment
+          opportunities aimed at building a stronger, more resilient health
+          system.
         </p>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 text-center mt-10">
@@ -340,14 +433,14 @@ onMounted(() => {
             class="w-full h-72 object-cover"
           />
           <span
-            class="absolute bottom-4 right-4 bg-green-700 text-white text-xs font-semibold px-3 py-1 rounded-full"
+            class="absolute bottom-4 left-4 bg-green-700 text-white text-xs font-semibold px-3 py-1 rounded-full"
           >
             {{ featured.tag }}
           </span>
         </div>
 
         <div class="p-6">
-          <div class="flex items-center text-sm text-gray-500 mb-3 space-x-4">
+          <div class="flex items-center text-sm text-orange-600 mb-3 space-x-4">
             <span class="flex items-center gap-1">
               <i class="fa-regular fa-calendar"></i> {{ featured.date }}
             </span>
@@ -374,40 +467,65 @@ onMounted(() => {
         <div
           v-for="(news, index) in newsList"
           :key="index"
-          class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100 flex gap-4"
+          class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200 flex flex-col sm:flex-row transition hover:shadow-md"
         >
-          <img
-            :src="news.image"
-            alt="News image"
-            class="w-32 h-32 object-cover rounded-l-xl"
-          />
-          <div class="flex flex-col justify-between py-4 pr-4">
-            <div>
-              <div
-                class="flex items-center text-xs text-gray-500 mb-2 space-x-3"
-              >
-                <span class="flex items-center gap-1">
-                  <i class="fa-regular fa-calendar"></i> {{ news.date }}
-                </span>
-                <span class="flex items-center gap-1">
-                  <i class="fa-regular fa-comments"></i>
-                  {{ news.comments }} Comments
-                </span>
-              </div>
-              <p class="text-gray-700 text-sm leading-snug line-clamp-3">
-                {{ news.description }}
-              </p>
-            </div>
+          <!-- Left: Image -->
+          <div class="relative w-full sm:w-48">
+            <img
+              :src="news.image"
+              alt="News image"
+              class="w-full h-40 sm:h-full object-cover"
+            />
+
+            <!-- Tag on image -->
             <span
-              class="self-start bg-green-100 text-green-900 text-xs font-semibold px-3 py-1 rounded-full"
+              class="absolute bottom-3 left-3 bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full"
               :class="{
-                'bg-red-100 text-red-700': news.tag === 'Health Alert',
-                'bg-orange-100 text-orange-700':
+                'bg-red-700 text-white': news.tag === 'Health Alert',
+                'bg-orange-600 text-white':
                   news.tag === 'Public Health Stories',
               }"
             >
               {{ news.tag }}
             </span>
+          </div>
+
+          <!-- Right: Text content -->
+          <div class="flex flex-col justify-between p-4 flex-1">
+            <div>
+              <!-- Date and comments -->
+              <div
+                class="flex items-center text-xs text-orange-600 mb-2 space-x-6"
+              >
+                <span class="flex items-center gap-1">
+                  <i class="fa-regular fa-calendar text-orange-600"></i>
+                  {{ news.date }}
+                </span>
+                <span class="flex items-center gap-1">
+                  <i class="fa-regular fa-comments text-orange-600"></i>
+                  {{ news.comments }} Comments
+                </span>
+              </div>
+
+              <!-- Description -->
+              <p class="text-gray-700 text-sm leading-relaxed line-clamp-3">
+                {{ news.description }}
+              </p>
+            </div>
+
+            <!-- Bottom Tag -->
+            <div class="mt-3">
+              <span
+                class="inline-block bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full"
+                :class="{
+                  'bg-red-700 text-white': news.tag === 'Health Alert',
+                  'bg-orange-600 text-white':
+                    news.tag === 'Public Health Stories',
+                }"
+              >
+                {{ news.tag }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -559,10 +677,11 @@ onMounted(() => {
             class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out"
           >
             <p class="px-6 pb-6 pt-0 text-gray-600">
-              Benefits include policy advocacy, networking opportunities with
-              key industry leaders, access to exclusive research and reports,
-              training programs, and a platform to influence the future of
-              healthcare policy in Nigeria.
+              Healthcare Federation Of Nigeria is independent of any
+              governmental/political ideology, economic interest, religious
+              affiliation; and is mission is centered on advocacy, capacity
+              building, and improving access to finance for the private sector,
+              all in collaboration with the public sector.
             </p>
           </div>
         </div>

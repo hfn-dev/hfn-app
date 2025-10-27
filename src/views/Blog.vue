@@ -1,7 +1,7 @@
 <script setup>
-import awards from '@/assets/awards.png';
-import hands from '@/assets/hands.png';
-import latest from '@/assets/latest.png';
+import awards from "@/assets/awards.png";
+import hands from "@/assets/hands.png";
+import latest from "@/assets/latest_news.png";
 </script>
 
 <template>
@@ -17,16 +17,14 @@ import latest from '@/assets/latest.png';
           </h1>
 
           <p class="mt-6 max-w-lg text-lg text-gray-700">
-            Euismod magna id purus eget nunc ligula suspendisse dui netus.
-            Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis.
-            Euismod magna id purus eget nunc ligula suspendisse.
+            We strive to enhance healthcare metrics and foster an environment
+            for affordable, high-quality healthcare access for all Nigerians.
           </p>
         </div>
 
         <div class="lg:col-span-6 flex justify-center lg:justify-end">
           <div
-            class="relative w-full max-w-xl aspect-[16/9] overflow-hidden rounded-3xl p-3 shadow-2xl"
-            style="background-color: #f0f7f5; border: 4px solid #38a169"
+            class="relative w-full max-w-4xl aspect-[16/9] overflow-hidden rounded-3xl p-3 shadow-2xl"
           >
             <img
               :src="latest"
@@ -64,7 +62,7 @@ import latest from '@/assets/latest.png';
               class="relative overflow-hidden shadow-lg pb-4"
               style="
                 border-radius: 2rem;
-                border: 1px solid #e0f2e0; 
+                border: 1px solid #e0f2e0;
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
               "
             >
@@ -84,9 +82,11 @@ import latest from '@/assets/latest.png';
 
               <div class="p-5 pt-0">
                 <p class="text-sm text-gray-700 mb-4 leading-relaxed">
-                  Euismod magna id purus eget nunc ligula suspendisse dui netus.
-                  Condimentum blandit rutrum at mauris enim pulvinar duis etiam
-                  duis. Euismod magna id purus eget nunc
+                  Join our “Community Health Awareness Week,” where medical
+                  professionals and volunteers offer free health screenings,
+                  wellness talks, and preventive care education. This program
+                  aims to improve early detection of lifestyle diseases such as
+                  hypertension and diabetes across local communities.
                 </p>
 
                 <div class="space-y-2 mb-6">
@@ -167,7 +167,7 @@ import latest from '@/assets/latest.png';
               class="relative overflow-hidden shadow-lg pb-4"
               style="
                 border-radius: 2rem;
-                border: 1px solid #e0f2e0; 
+                border: 1px solid #e0f2e0;
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
               "
             >
@@ -187,9 +187,11 @@ import latest from '@/assets/latest.png';
 
               <div class="p-5 pt-0">
                 <p class="text-sm text-gray-700 mb-4 leading-relaxed">
-                  Euismod magna id purus eget nunc ligula suspendisse dui netus.
-                  Condimentum blandit rutrum at mauris enim pulvinar duis etiam
-                  duis. Euismod magna id purus eget nunc
+                  Our “Healthy Mothers, Healthy Nation” initiative focuses on
+                  maternal and child healthcare through accessible antenatal
+                  services, nutrition education, and support for safe deliveries
+                  in underserved areas. Be part of the movement to reduce
+                  maternal mortality in Nigeria.
                 </p>
 
                 <div class="space-y-2 mb-6">
@@ -269,7 +271,7 @@ import latest from '@/assets/latest.png';
               class="relative overflow-hidden shadow-lg pb-4"
               style="
                 border-radius: 2rem;
-                border: 1px solid #e0f2e0; 
+                border: 1px solid #e0f2e0;
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
               "
             >
@@ -316,16 +318,17 @@ import latest from '@/assets/latest.png';
                 </p>
 
                 <p class="text-sm text-gray-700 mb-20 leading-relaxed">
-                  Euismod magna id purus eget nunc ligula suspendisse dui netus.
-                  Condimentum blandit rutrum at mauris enim pulvinar duis etiam
-                  duis. Euismod magna id purus eget nunc
+                  Public health experts have reported a rise in seasonal flu
+                  cases. We advise all residents to get vaccinated, maintain
+                  proper hygiene, and avoid self-medication. Stay informed and
+                  contact your healthcare provider for any flu-like symptoms.
                 </p>
-                <a
-                  href="#"
+                <RouterLink
+                  :to="{ name: 'BlogDetails', params: { id: 1 } }"
                   class="inline-flex items-center justify-center px-9 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition"
                 >
                   Read More ->
-                </a>
+                </RouterLink>
               </div>
             </div>
           </div>
@@ -428,9 +431,10 @@ import latest from '@/assets/latest.png';
                   </span>
                 </p>
                 <p class="text-sm text-gray-700 mb-1 leading-tight">
-                  Euismod magna id purus eget nunc ligula suspendisse dui netus.
-                  Condimentum blandit rutrum at mauris enim pulvinar duis etiam
-                  duis.
+                  Our telemedicine platform now connects patients with certified
+                  doctors 24/7. Consultations can be booked online, and
+                  prescriptions are delivered directly to your preferred
+                  pharmacy for convenience and safety.
                 </p>
                 <a
                   href="#"
@@ -499,8 +503,10 @@ import latest from '@/assets/latest.png';
                   </span>
                 </p>
                 <p class="text-sm text-gray-700 mb-1 leading-tight">
-                  Euismod magna id purus eget nunc ligula suspendisse dui netus.
-                  Condimentum blandit rutrum at mauris enim.
+                  In collaboration with local NGOs, we’ve launched a vaccination
+                  outreach program to ensure every child has access to essential
+                  immunizations. Let’s work together to protect our future
+                  generations.
                 </p>
                 <a
                   href="#"
@@ -568,8 +574,10 @@ import latest from '@/assets/latest.png';
                   </span>
                 </p>
                 <p class="text-sm text-gray-700 mb-1 leading-tight">
-                  Euismod magna id purus eget nunc ligula suspendisse dui netus.
-                  Condimentum blandit rutrum at mauris enim.
+                  We’re expanding our digital health training program to equip
+                  community health workers with tools for real-time patient data
+                  tracking and remote diagnostics. Applications for the 2025
+                  cohort are now open.
                 </p>
                 <a
                   href="#"
@@ -637,8 +645,10 @@ import latest from '@/assets/latest.png';
                   </span>
                 </p>
                 <p class="text-sm text-gray-700 mb-1 leading-tight">
-                  Euismod magna id purus eget nunc ligula suspendisse dui netus.
-                  Condimentum blandit rutrum at mauris enim.
+                  A new study on non-communicable diseases shows that physical
+                  activity and proper diet reduce the risk of heart disease by
+                  45%. Explore our upcoming fitness and nutrition workshops to
+                  learn more.
                 </p>
                 <a
                   href="#"
@@ -692,18 +702,22 @@ import latest from '@/assets/latest.png';
                   <div class="p-5 pt-0">
                     <div class="flex justify-between items-center mb-2">
                       <h3 class="text-xl font-bold text-gray-900">
-                        HFN Walk for Life
+                        Tackling Hypertension: The Silent Killer Among Young
+                        Adults
                       </h3>
                       <span
-                        class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full"
+                        class="text-sm text-orange-500 bg-orange-100 px-3 py-1 rounded-full"
                         >Annually</span
                       >
                     </div>
 
                     <p class="text-sm text-gray-700 mb-4 leading-relaxed">
-                      Euismod magna id purus eget nunc ligula suspendisse dui
-                      netus. Condimentum blandit rutrum at mauris enim pulvinar
-                      duis etiam duis. Euismod magna id purus eget nunc
+                      Recent studies show a worrying rise in hypertension cases
+                      among people aged 25–40, driven by stress, poor diet, and
+                      sedentary lifestyles. The Healthcare Federation of Nigeria
+                      is partnering with local health centers to promote regular
+                      blood pressure checks and educate the public on preventive
+                      measures.
                     </p>
 
                     <div class="space-y-2 mb-6">
@@ -756,7 +770,7 @@ import latest from '@/assets/latest.png';
                             clip-rule="evenodd"
                           ></path>
                         </svg>
-                        <span class="text-gray-700"
+                        <span class="text-orange-600"
                           >No 12 Ifeanyi str, Ikeja Lagos</span
                         >
                       </p>
@@ -809,18 +823,21 @@ import latest from '@/assets/latest.png';
                   <div class="p-5 pt-0">
                     <div class="flex justify-between items-center mb-2">
                       <h3 class="text-xl font-bold text-gray-900">
-                        HFN Walk for Life
+                        Digital Health Innovations Transforming Patient Care in
+                        Nigeria
                       </h3>
                       <span
-                        class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full"
+                        class="text-sm text-orange-500 bg-orange-100 px-3 py-1 rounded-full"
                         >Annually</span
                       >
                     </div>
 
                     <p class="text-sm text-gray-700 mb-4 leading-relaxed">
-                      Euismod magna id purus eget nunc ligula suspendisse dui
-                      netus. Condimentum blandit rutrum at mauris enim pulvinar
-                      duis etiam duis. Euismod magna id purus eget nunc
+                      As technology advances, healthcare delivery in Nigeria is
+                      experiencing a major shift. From telemedicine and
+                      AI-assisted diagnostics to electronic health records,
+                      digital innovation is improving access and efficiency
+                      across hospitals and clinics.
                     </p>
 
                     <div class="space-y-2 mb-6">
@@ -873,7 +890,7 @@ import latest from '@/assets/latest.png';
                             clip-rule="evenodd"
                           ></path>
                         </svg>
-                        <span class="text-gray-700"
+                        <span class="text-orange-600"
                           >No 12 Ifeanyi str, Ikeja Lagos</span
                         >
                       </p>

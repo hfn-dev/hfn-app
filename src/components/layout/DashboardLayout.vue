@@ -1,9 +1,10 @@
 <script setup>
 import { computed } from "vue";
+import AdminHeader from "./AdminHeader.vue";
 
-import AdminSidebar from "@/components/layout/AdminSidebar.vue";
 import EditorSidebar from "@/views/Editor/EditorSidebar.vue";
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
+import AdminSidebar from "./AdminSidebar.vue";
 
 const userRole = localStorage.getItem("role") || "user";
 
@@ -32,9 +33,9 @@ const toggleSidebar = () => {
       <component
         :is="sidebarComponent"
         :class="[
-          'fixed lg:static top-0 left-0 z-40 transform transition-transform duration-300',
+          'fixed lg:static top-0 left-0 z-40 h-full transform transition-transform duration-300',
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full',
-          'lg:translate-x-0'
+          'lg:translate-x-0 lg:w-64 w-72'
         ]"
       />
       

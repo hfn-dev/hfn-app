@@ -1,16 +1,17 @@
 <script setup>
 import handsJoining from "@/assets/handsJoining.jpg";
-import { ref } from "vue";
+import logo from "@/assets/logo.png";
 
+import { ref } from "vue";
 
 const categories = ref([
   {
-    name: "Corporate",
+    name: "Individual",
     description: "Ideal for private and insurance companies",
     plans: [
       {
-        title: "Corporate 1",
-        price: "₦200,000 per month",
+        title: "Individual ",
+        price: "₦50,000 per month",
         audience: "Ideal for private companies",
         benefits: [
           "Ideal",
@@ -24,10 +25,16 @@ const categories = ref([
           "Membership Registration",
         ],
       },
+    ],
+  },
+  {
+    name: "Corporate",
+    description: "Ideal for private and insurance companies",
+    plans: [
       {
-        title: "Corporate 2",
+        title: "Corporate ",
         price: "₦200,000 per month",
-        audience: "Ideal for insurance companies",
+        audience: "Ideal for private companies",
         benefits: [
           "Ideal",
           "Unlimited Pages",
@@ -47,7 +54,7 @@ const categories = ref([
     description: "Designed for international and cross-border organizations",
     plans: [
       {
-        title: "Global Partner 1",
+        title: "Global Partner ",
         price: "₦500,000 per month",
         audience: "Ideal for international firms",
         benefits: [
@@ -59,19 +66,6 @@ const categories = ref([
           "Dedicated liaison support",
         ],
       },
-      {
-        title: "Global Partner 2",
-        price: "₦600,000 per month",
-        audience: "Ideal for multinational subsidiaries",
-        benefits: [
-          "Access to international markets",
-          "Executive-level visibility",
-          "Strategic business partnerships",
-          "Exclusive event sponsorships",
-          "Policy roundtable invitations",
-          "24/7 concierge support",
-        ],
-      },
     ],
   },
   {
@@ -79,7 +73,7 @@ const categories = ref([
     description: "For registered professional or trade associations",
     plans: [
       {
-        title: "Association Member 1",
+        title: "Association Member",
         price: "₦150,000 per month",
         audience: "Ideal for professional bodies",
         benefits: [
@@ -90,18 +84,6 @@ const categories = ref([
           "Dedicated community platform",
         ],
       },
-      {
-        title: "Association Member 2",
-        price: "₦180,000 per month",
-        audience: "Ideal for trade associations",
-        benefits: [
-          "Representation in policy dialogues",
-          "Industry benchmarking data",
-          "Exclusive training discounts",
-          "Joint marketing campaigns",
-          "Access to HFN expert panels",
-        ],
-      },
     ],
   },
   {
@@ -110,7 +92,7 @@ const categories = ref([
       "For professionals or organizations abroad supporting local development",
     plans: [
       {
-        title: "Diaspora Partner 1",
+        title: "Diaspora Partner",
         price: "₦100,000 per month",
         audience: "Ideal for Nigerians in diaspora",
         benefits: [
@@ -121,24 +103,11 @@ const categories = ref([
           "Digital collaboration tools",
         ],
       },
-      {
-        title: "Diaspora Partner 2",
-        price: "₦120,000 per month",
-        audience: "Ideal for global development partners",
-        benefits: [
-          "Inclusion in diaspora economic programs",
-          "Access to private investment circles",
-          "Cross-border mentorship opportunities",
-          "Recognition in global newsletters",
-          "Priority access to summit panels",
-        ],
-      },
     ],
   },
 ]);
 
 const activeCategory = ref(categories.value[0]);
-
 </script>
 
 <template>
@@ -185,372 +154,6 @@ const activeCategory = ref(categories.value[0]);
         Membership Categories
       </h2>
 
-      <!-- <div class="max-w-4xl mx-auto">
-        <div class="flex flex-wrap justify-center space-x-2 sm:space-x-4 mb-8">
-          <button
-            class="px-5 py-2 text-white bg-green-700 rounded-lg shadow-md font-medium"
-          >
-            Corporate
-          </button>
-          <button
-            class="px-5 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg font-medium hover:border-green-700"
-          >
-            Multinational
-          </button>
-          <button
-            class="px-5 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg font-medium hover:border-green-700"
-          >
-            Association
-          </button>
-          <button
-            class="px-5 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg font-medium hover:border-green-700"
-          >
-            Diaspora
-          </button>
-        </div>
-
-        <div
-          class="p-6 sm:p-10 rounded-[30px] border-2 border-green-200 bg-white shadow-xl flex flex-col lg:flex-row lg:justify-between gap-8"
-        >
-          <div class="flex-1 rounded-xl border border-gray-200 overflow-hidden">
-            <div class="p-6">
-              <h3 class="text-2xl font-bold text-gray-900 mb-1">Corporate 1</h3>
-              <p class="text-sm text-gray-500 mb-6">
-                Ideal for private companies
-              </p>
-
-              <div class="bg-orange-50/70 p-4 rounded-lg">
-                <h4 class="text-sm font-semibold text-gray-700 mb-3">
-                  Member Benefits
-                </h4>
-                <ul class="space-y-2 text-gray-700 text-sm">
-                  <li class="flex items-start">
-                    <svg
-                      class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    Ideal
-                  </li>
-                  <li class="flex items-start">
-                    <svg
-                      class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    Unlimited Pages
-                  </li>
-                  <li class="flex items-start">
-                    <svg
-                      class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    No Ads
-                  </li>
-                  <li class="flex items-start">
-                    <svg
-                      class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    Site Search
-                  </li>
-                  <li class="flex items-start">
-                    <svg
-                      class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    Password Protection
-                  </li>
-                  <li class="flex items-start">
-                    <svg
-                      class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    Classes
-                  </li>
-                  <li class="flex items-start">
-                    <svg
-                      class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    HD Video & Audio
-                  </li>
-                  <li class="flex items-start">
-                    <svg
-                      class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    Up to 100 Members
-                  </li>
-                  <li class="flex items-start">
-                    <svg
-                      class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    Membership Registration
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="p-6 pt-0 text-center">
-              <p class="text-3xl font-extrabold text-green-700 mb-4">
-                ₦200,000 per month
-              </p>
-              <a
-                href="#"
-                class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition"
-              >
-                Join Now
-                <svg
-                  class="w-5 h-5 ml-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M14 5l7 7m0 0l-7 7m7-7H3"
-                  ></path>
-                </svg>
-              </a>
-            </div>
-          </div>
-
-          <div class="flex-1 rounded-xl border border-gray-200 overflow-hidden">
-            <div class="p-6">
-              <h3 class="text-2xl font-bold text-gray-900 mb-1">Corporate 2</h3>
-              <p class="text-sm text-gray-500 mb-6">
-                Ideal for insurance companies
-              </p>
-
-              <div class="bg-orange-50/70 p-4 rounded-lg">
-                <h4 class="text-sm font-semibold text-gray-700 mb-3">
-                  Member Benefits
-                </h4>
-                <ul class="space-y-2 text-gray-700 text-sm">
-                  <li class="flex items-start">
-                    <svg
-                      class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    Ideal
-                  </li>
-                  <li class="flex items-start">
-                    <svg
-                      class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    Unlimited Pages
-                  </li>
-                  <li class="flex items-start">
-                    <svg
-                      class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    No Ads
-                  </li>
-                  <li class="flex items-start">
-                    <svg
-                      class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    Site Search
-                  </li>
-                  <li class="flex items-start">
-                    <svg
-                      class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    Password Protection
-                  </li>
-                  <li class="flex items-start">
-                    <svg
-                      class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    Classes
-                  </li>
-                  <li class="flex items-start">
-                    <svg
-                      class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    HD Video & Audio
-                  </li>
-                  <li class="flex items-start">
-                    <svg
-                      class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    Up to 100 Members
-                  </li>
-                  <li class="flex items-start">
-                    <svg
-                      class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    Membership Registration
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="p-6 pt-0 text-center">
-              <p class="text-3xl font-extrabold text-green-700 mb-4">
-                ₦200,000.00 per month
-              </p>
-              <a
-                href="#"
-                class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition"
-              >
-                Join Now
-                <svg
-                  class="w-5 h-5 ml-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M14 5l7 7m0 0l-7 7m7-7H3"
-                  ></path>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div> -->
       <div class="max-w-4xl mx-auto">
         <div class="flex flex-wrap justify-center space-x-2 sm:space-x-4 mb-8">
           <button
@@ -568,18 +171,17 @@ const activeCategory = ref(categories.value[0]);
           </button>
         </div>
 
-        <!-- Dynamic Membership Content -->
         <div
           class="p-6 sm:p-10 rounded-[30px] border-2 border-green-200 bg-white shadow-xl flex flex-col gap-8"
         >
-          <h3 class="text-2xl font-bold text-gray-900">
+          <h3 class="text-2xl font-bold text-center text-gray-900">
             {{ activeCategory.name }} Membership
           </h3>
-          <p class="text-gray-600 text-sm mb-6">
+          <p class="text-gray-600 text-sm mb-6 text-center">
             {{ activeCategory.description }}
           </p>
 
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="grid grid-cols-1 place-items-center">
             <div
               v-for="plan in activeCategory.plans"
               :key="plan.title"
@@ -647,6 +249,236 @@ const activeCategory = ref(categories.value[0]);
           </div>
         </div>
       </div>
+      <section class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+          <h2 class="text-2xl font-semibold text-gray-800 mb-10">
+            HFN Members enjoy…
+          </h2>
+
+          <div class="flex flex-col md:flex-row items-start gap-6 mb-10">
+            <div
+              class="relative w-[200px] h-[200px] bg-green-50 rounded-tr-[30px] rounded-bl-[30px] p-3 shadow-sm overflow-hidden flex flex-col justify-center flex-shrink-0"
+            >
+              <div
+                class="absolute top-0 right-0 w-1 bg-green-700 h-full rounded-tr-[30px] rounded-br-none"
+              ></div>
+
+              <div class="relative z-10 pr-2">
+                <div class="mb-0.5">
+                  <img
+                    :src="logo"
+                    alt="Logo Icon"
+                    class="inline-block w-5 h-5 object-contain"
+                  />
+                </div>
+
+                <h3 class="text-green-800 font-semibold text-md leading-tight">
+                  Policy Influence <br />and Advocacy.
+                </h3>
+              </div>
+            </div>
+
+            <div
+              class="text-gray-700 text-sm leading-relaxed space-y-4 md:flex-grow"
+            >
+              <p>
+                <strong>Representation in Policy and Decision-Making:</strong>
+                Members are represented in high-level national health policy
+                discussions through HFN’s recognized advocacy platforms.
+              </p>
+              <p>
+                <strong>Policy Advocacy:</strong> As the officially recognized
+                body for the private health sector, HFN maintains close rapport
+                with government policymakers while ensuring constant feedback on
+                critical health matters.
+              </p>
+              <p>
+                <strong>Improvement of the Operating Environment:</strong> HFN
+                actively engages in lobbying and advocacy to create a more
+                enabling and sustainable environment for healthcare operations.
+              </p>
+              <p>
+                <strong>Opportunity to Shape the Future:</strong> Members enjoy
+                ongoing opportunity to contribute to shaping the policies and
+                frameworks that determine the fortunes of Nigeria’s healthcare
+                sector.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-col md:flex-row items-start gap-6">
+            <div
+              class="relative w-[200px] h-[200px] bg-orange-50 rounded-tr-[30px] rounded-bl-[30px] p-3 shadow-sm overflow-hidden flex flex-col justify-center flex-shrink-0"
+            >
+              <div
+                class="absolute top-0 right-0 w-1 bg-orange-700 h-full rounded-tr-[30px] rounded-br-none"
+              ></div>
+
+              <div class="relative z-10 pr-2">
+                <div class="mb-0.5">
+                  <img
+                    :src="logo"
+                    alt="Logo Icon"
+                    class="inline-block w-5 h-5 object-contain"
+                  />
+                </div>
+
+                <h3 class="text-orange-800 font-semibold text-md leading-tight">
+                  Collaboration, <br />Networking, <br />and Exposure.
+                </h3>
+              </div>
+            </div>
+
+            <div
+              class="text-gray-700 text-sm leading-relaxed space-y-4 md:flex-grow"
+            >
+              <p>
+                <strong>Opportunities for Collaboration:</strong> Through its
+                diverse membership base, HFN promotes sectoral, inter-sectoral,
+                and multi-stakeholder collaboration across the healthcare value
+                chain.
+              </p>
+              <p>
+                <strong>Networking with Industry Leaders:</strong> Members enjoy
+                access to exclusive networking events such as dinners,
+                luncheons, and business forums with public and private industry
+                policymakers, and international partners.
+              </p>
+              <p>
+                <strong>Linkages and Business Development:</strong> Members gain
+                access to both local and international partnerships, with
+                referrals through business/private sector groups such as LCCI,
+                NASIMA, and the Nigeria-South Africa Chamber of Commerce.
+              </p>
+              <p>
+                <strong>Enhanced Access to Investment Opportunities:</strong>
+                Members benefit from linkages to funding and investment
+                institutions for health innovation and expansion.
+              </p>
+              <p>
+                <strong
+                  >Invitation to Field Trips and International Programs:</strong
+                >
+                Participate in study tours, exchange programs, and global health
+                forums.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+          <div class="flex flex-col md:flex-row items-start gap-6 mb-10">
+            <div
+              class="relative w-[200px] h-[200px] bg-green-50 rounded-tr-[30px] rounded-bl-[30px] p-3 shadow-sm overflow-hidden flex flex-col justify-center flex-shrink-0"
+            >
+              <div
+                class="absolute top-0 right-0 w-1 bg-green-700 h-full rounded-tr-[30px] rounded-br-none"
+              ></div>
+
+              <div class="relative z-10 pr-2">
+                <div class="mb-0.5">
+                  <img
+                    :src="logo"
+                    alt="Logo Icon"
+                    class="inline-block w-5 h-5 object-contain"
+                  />
+                </div>
+
+                <h3 class="text-green-800 font-semibold text-md leading-tight">
+                  Policy Influence <br />and Advocacy.
+                </h3>
+              </div>
+            </div>
+
+            <div
+              class="text-gray-700 text-sm leading-relaxed space-y-4 md:flex-grow"
+            >
+              <p>
+                <strong>Representation in Policy and Decision-Making:</strong>
+                Members are represented in high-level national health policy
+                discussions through HFN’s recognized advocacy platforms.
+              </p>
+              <p>
+                <strong>Policy Advocacy:</strong> As the officially recognized
+                body for the private health sector, HFN maintains close rapport
+                with government policymakers while ensuring constant feedback on
+                critical health matters.
+              </p>
+              <p>
+                <strong>Improvement of the Operating Environment:</strong> HFN
+                actively engages in lobbying and advocacy to create a more
+                enabling and sustainable environment for healthcare operations.
+              </p>
+              <p>
+                <strong>Opportunity to Shape the Future:</strong> Members enjoy
+                ongoing opportunity to contribute to shaping the policies and
+                frameworks that determine the fortunes of Nigeria’s healthcare
+                sector.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-col md:flex-row items-start gap-6">
+            <div
+              class="relative w-[200px] h-[200px] bg-orange-50 rounded-tr-[30px] rounded-bl-[30px] p-3 shadow-sm overflow-hidden flex flex-col justify-center flex-shrink-0"
+            >
+              <div
+                class="absolute top-0 right-0 w-1 bg-orange-700 h-full rounded-tr-[30px] rounded-br-none"
+              ></div>
+
+              <div class="relative z-10 pr-2">
+                <div class="mb-0.5">
+                  <img
+                    :src="logo"
+                    alt="Logo Icon"
+                    class="inline-block w-5 h-5 object-contain"
+                  />
+                </div>
+
+                <h3 class="text-orange-800 font-semibold text-md leading-tight">
+                  Collaboration, <br />Networking, <br />and Exposure.
+                </h3>
+              </div>
+            </div>
+
+            <div
+              class="text-gray-700 text-sm leading-relaxed space-y-4 md:flex-grow"
+            >
+              <p>
+                <strong>Opportunities for Collaboration:</strong> Through its
+                diverse membership base, HFN promotes sectoral, inter-sectoral,
+                and multi-stakeholder collaboration across the healthcare value
+                chain.
+              </p>
+              <p>
+                <strong>Networking with Industry Leaders:</strong> Members enjoy
+                access to exclusive networking events such as dinners,
+                luncheons, and business forums with public and private industry
+                policymakers, and international partners.
+              </p>
+              <p>
+                <strong>Linkages and Business Development:</strong> Members gain
+                access to both local and international partnerships, with
+                referrals through business/private sector groups such as LCCI,
+                NASIMA, and the Nigeria-South Africa Chamber of Commerce.
+              </p>
+              <p>
+                <strong>Enhanced Access to Investment Opportunities:</strong>
+                Members benefit from linkages to funding and investment
+                institutions for health innovation and expansion.
+              </p>
+              <p>
+                <strong
+                  >Invitation to Field Trips and International Programs:</strong
+                >
+                Participate in study tours, exchange programs, and global health
+                forums.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </section>
   <section class="py-10 sm:py-24 bg-white">

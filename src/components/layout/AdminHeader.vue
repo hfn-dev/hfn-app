@@ -1,7 +1,7 @@
 <script setup>
 import hfn_logo from "@/assets/hfn_logo.png";
 import { useAuth } from "@/store/authStore";
-import { ref } from "vue";
+import { defineEmits, ref } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -31,6 +31,8 @@ const handleLogout = () => {
   router.push("/");
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
+
+const emit = defineEmits(["toggle-sidebar"]);
 </script>
 
 <template>
