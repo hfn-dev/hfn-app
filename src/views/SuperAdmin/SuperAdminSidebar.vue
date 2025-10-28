@@ -63,7 +63,7 @@ const isLinkActive = (path) => path === currentPath.value;
     :style="{ backgroundColor: DARK_GREEN }"
     class="w-64 min-h-screen flex flex-col justify-between border-r sticky top-0 left-0 pt-8 text-white shadow-xl"
   >
-    <nav class="space-y-1 px-4 flex-grow">
+    <nav class="space-y-1 px-4 flex flex-col">
       <RouterLink
         v-for="link in navLinks"
         :key="link.title"
@@ -97,9 +97,7 @@ const isLinkActive = (path) => path === currentPath.value;
         </svg>
         {{ link.title }}
       </RouterLink>
-    </nav>
-
-    <div class="p-4 border-t border-green-700">
+      <div class="p-4 border-t border-green-700">
       <button
         @click="handleLogout"
         class="flex items-center p-3 text-lg font-medium rounded-xl transition-all duration-200 text-gray-200 hover:bg-red-700/50 hover:text-white w-full text-left"
@@ -121,6 +119,9 @@ const isLinkActive = (path) => path === currentPath.value;
         Logout
       </button>
     </div>
+    </nav>
+
+    
   </div>
 </template>
 
