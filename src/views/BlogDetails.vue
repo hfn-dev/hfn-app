@@ -68,20 +68,24 @@
         </div>
 
         <!-- Share Buttons -->
-        <div class="flex items-center space-x-3 mt-8">
-          <span class="text-sm font-medium text-gray-700">Share:</span>
+        <div class="flex items-center justify-center space-x-3 mt-8">
           <button
             class="bg-green-700 text-white text-xs font-semibold px-3 py-2 rounded-lg hover:bg-green-800 transition"
+          >
+            <i class="fa-brands fa-whatsapp-f mr-1"></i> Share
+          </button>
+          <button
+            class="bg-blue-700 text-white text-xs font-semibold px-3 py-2 rounded-lg hover:bg-blue-800 transition"
           >
             <i class="fa-brands fa-facebook-f mr-1"></i> Share
           </button>
           <button
-            class="bg-green-700 text-white text-xs font-semibold px-3 py-2 rounded-lg hover:bg-green-800 transition"
+            class="bg-black-700 text-white text-xs font-semibold px-3 py-2 rounded-lg hover:bg-black-800 transition"
           >
             <i class="fa-brands fa-x-twitter mr-1"></i> Tweet
           </button>
           <button
-            class="bg-green-700 text-white text-xs font-semibold px-3 py-2 rounded-lg hover:bg-green-800 transition"
+            class="bg-gray-700 text-white text-xs font-semibold px-3 py-2 rounded-lg hover:bg-gray-800 transition"
           >
             <i class="fa-brands fa-linkedin-in mr-1"></i> Post
           </button>
