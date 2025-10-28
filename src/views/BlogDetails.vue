@@ -80,12 +80,12 @@
             <i class="fa-brands fa-facebook-f mr-1"></i> Share
           </button>
           <button
-            class="bg-black-700 text-white text-xs font-semibold px-3 py-2 rounded-lg hover:bg-black-800 transition"
+            class="bg-gray-700 text-white text-xs font-semibold px-3 py-2 rounded-lg hover:bg-gray-800 transition"
           >
             <i class="fa-brands fa-x-twitter mr-1"></i> Tweet
           </button>
           <button
-            class="bg-gray-700 text-white text-xs font-semibold px-3 py-2 rounded-lg hover:bg-gray-800 transition"
+            class="bg-blue-500 text-white text-xs font-semibold px-3 py-2 rounded-lg hover:bg-blue-600 transition"
           >
             <i class="fa-brands fa-linkedin-in mr-1"></i> Post
           </button>
