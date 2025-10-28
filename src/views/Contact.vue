@@ -252,7 +252,7 @@ import globe from "@/assets/globe.png";
               aria-label="LinkedIn"
               class="text-green-700 hover:text-green-900 transition"
             >
-              <i class="fab fa-square-linkedin text-2xl"></i>
+              <i class="fab fa-square-linkedin-in text-2xl"></i>
             </a>
 
             <a
