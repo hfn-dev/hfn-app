@@ -209,7 +209,7 @@ const currentYear = new Date().getFullYear();
                   aria-label="LinkedIn"
                   class="hover:text-green-600 transition"
                 >
-                  <i class="fa-brands fa-square-linkedin-in text-2xl"></i>
+                  <i class="fa-brands fa-square-linkedin text-2xl"></i>
                 </a>
 
                 <a
