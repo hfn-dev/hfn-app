@@ -91,7 +91,7 @@
       <!-- Sidebar -->
       <div class="lg:col-span-4 space-y-6">
         <!-- Other News -->
-        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
+        <div class="bg-green-50 rounded-2xl border border-gray-200 shadow-sm p-5">
           <h2 class="text-lg font-semibold text-gray-900 mb-4">Other News</h2>
 
           <div
@@ -108,9 +108,9 @@
               <h3 class="text-sm font-medium text-gray-800 leading-snug hover:text-green-700 cursor-pointer">
                 {{ item.title }}
               </h3>
-              <div class="flex items-center text-xs text-gray-500 mt-2 gap-3">
-                <span><i class="fa-regular fa-calendar text-green-700"></i> {{ item.date }}</span>
-                <span><i class="fa-regular fa-comments text-green-700"></i> {{ item.comments }}</span>
+              <div class="flex items-center text-xs text-orange-600 mt-2 gap-3">
+                <span><i class="fa-regular fa-calendar text-orange-600"></i> {{ item.date }}</span>
+                <span><i class="fa-regular fa-comments text-orange-600"></i> {{ item.comments }}</span>
               </div>
             </div>
           </div>
