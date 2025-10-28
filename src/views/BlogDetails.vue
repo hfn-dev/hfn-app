@@ -95,7 +95,7 @@
       <!-- Sidebar -->
       <div class="lg:col-span-4 space-y-6">
         <!-- Other News -->
-        <div class="bg-green-50 rounded-2xl border border-gray-200 shadow-sm p-5">
+        <div class="bg-[#f0fdf499] rounded-2xl border border-gray-200 shadow-sm p-5">
           <h2 class="text-lg font-semibold text-gray-900 mb-4">Other News</h2>
 
           <div
