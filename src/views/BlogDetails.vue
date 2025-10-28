@@ -16,13 +16,13 @@
         </h1>
 
         <!-- Meta Info -->
-        <div class="flex items-center text-sm text-gray-500 mb-6 space-x-4">
+        <div class="flex items-center text-sm text-orange-500 mb-6 space-x-4">
           <span class="flex items-center gap-1">
-            <i class="fa-regular fa-calendar text-green-700"></i>
+            <i class="fa-regular fa-calendar text-orange-700"></i>
             Published on {{ blog.date }}
           </span>
           <span class="flex items-center gap-1">
-            <i class="fa-regular fa-eye text-green-700"></i>
+            <i class="fa-regular fa-eye text-orange-700"></i>
             {{ blog.views }} Views
           </span>
         </div>
