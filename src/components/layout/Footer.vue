@@ -191,7 +191,7 @@ const currentYear = new Date().getFullYear();
                   aria-label="Facebook"
                   class="hover:text-green-600 transition"
                 >
-                  <i class="fab fa-facebook-f text-2xl"></i>
+                  <i class="fab fa-square-facebook-f text-2xl"></i>
                 </a>
 
                 <a
@@ -200,7 +200,7 @@ const currentYear = new Date().getFullYear();
                   aria-label="Instagram"
                   class="hover:text-green-600 transition"
                 >
-                  <i class="fab fa-instagram text-2xl"></i>
+                  <i class="fab fa-square-instagram text-2xl"></i>
                 </a>
 
                 <a
@@ -209,7 +209,7 @@ const currentYear = new Date().getFullYear();
                   aria-label="LinkedIn"
                   class="hover:text-green-600 transition"
                 >
-                  <i class="fab fa-linkedin-in text-2xl"></i>
+                  <i class="fab fa-square-linkedin-in text-2xl"></i>
                 </a>
 
                 <a
@@ -218,7 +218,7 @@ const currentYear = new Date().getFullYear();
                   aria-label="Twitter"
                   class="hover:text-green-600 transition"
                 >
-                  <i class="fab fa-x-twitter text-2xl"></i>
+                  <i class="fab fa-square-x-twitter text-2xl"></i>
                 </a>
               </div>
 
