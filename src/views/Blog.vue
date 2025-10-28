@@ -24,7 +24,7 @@ import latest from "@/assets/latest_news.png";
 
         <div class="lg:col-span-6 flex justify-center lg:justify-end">
           <div
-            class="relative w-full max-w-4xl aspect-[16/9] overflow-hidden rounded-3xl p-3 shadow-2xl"
+            class="relative w-full max-w-5xl overflow-hidden rounded-3xl p-3"
           >
             <img
               :src="latest"
