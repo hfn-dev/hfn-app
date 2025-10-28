@@ -413,7 +413,7 @@ const activeCategory = ref(categories.value[0]);
             </div>
           </div>
 
-          <div class="flex flex-col md:flex-row items-start gap-6">
+          <div class="flex flex-col md:flex-row items-start gap-6 mb-10">
             <div
               class="relative w-[200px] h-[200px] bg-orange-50 rounded-tr-[30px] rounded-bl-[30px] p-3 shadow-sm overflow-hidden flex flex-col justify-center flex-shrink-0"
             >
