@@ -514,18 +514,19 @@ onMounted(() => {
             </div>
 
             <!-- Bottom Tag -->
-            <div class="mt-3">
-              <span
-                class="inline-block bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full"
-                :class="{
-                  'bg-red-700 text-white': news.tag === 'Health Alert',
-                  'bg-orange-600 text-white':
-                    news.tag === 'Public Health Stories',
-                }"
-              >
-                {{ news.tag }}
-              </span>
-            </div>
+            <!-- Bottom Tag -->
+<div class="relative mt-6">
+  <span
+    class="absolute left-1/2 -translate-x-1/2 translate-y-1/2 bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full"
+    :class="{
+      'bg-red-700 text-white': news.tag === 'Health Alert',
+      'bg-orange-600 text-white': news.tag === 'Public Health Stories',
+    }"
+  >
+    {{ news.tag }}
+  </span>
+</div>
+
           </div>
         </div>
       </div>
