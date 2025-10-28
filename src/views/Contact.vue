@@ -69,7 +69,7 @@ import globe from "@/assets/globe.png";
                 <input
                   type="text"
                   id="name"
-                  placeholder="Peter Pan"
+                  placeholder="Enter name"
                   class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm py-3 px-4 focus:ring-green-500 focus:border-green-500"
                 />
               </div>
@@ -82,7 +82,7 @@ import globe from "@/assets/globe.png";
                 <input
                   type="email"
                   id="email"
-                  placeholder="p.pan@yahoo.co.us"
+                  placeholder="Enter email"
                   class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm py-3 px-4 focus:ring-green-500 focus:border-green-500"
                 />
               </div>
