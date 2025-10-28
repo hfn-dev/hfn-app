@@ -234,7 +234,7 @@ import globe from "@/assets/globe.png";
               aria-label="Facebook"
               class="text-green-700 hover:text-green-900 transition"
             >
-              <i class="fab fa-facebook-f text-2xl"></i>
+              <i class="fab fa-square-facebook text-2xl"></i>
             </a>
 
             <a
@@ -243,7 +243,7 @@ import globe from "@/assets/globe.png";
               aria-label="Instagram"
               class="text-green-700 hover:text-green-900 transition"
             >
-              <i class="fab fa-instagram text-2xl"></i>
+              <i class="fab fa-square-instagram text-2xl"></i>
             </a>
 
             <a
@@ -252,7 +252,7 @@ import globe from "@/assets/globe.png";
               aria-label="LinkedIn"
               class="text-green-700 hover:text-green-900 transition"
             >
-              <i class="fab fa-linkedin-in text-2xl"></i>
+              <i class="fab fa-square-linkedin text-2xl"></i>
             </a>
 
             <a
@@ -261,7 +261,7 @@ import globe from "@/assets/globe.png";
               aria-label="Twitter"
               class="text-green-700 hover:text-green-900 transition"
             >
-              <i class="fab fa-x-twitter text-2xl"></i>
+              <i class="fab fa-square-x-twitter text-2xl"></i>
             </a>
           </div>
         </div>
