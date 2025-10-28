@@ -317,7 +317,7 @@ import latest from "@/assets/latest_news.png";
                   </span>
                 </p>
 
-                <p class="text-sm text-gray-700 mb-20 leading-relaxed">
+                <p class="text-sm text-gray-700 mb-16 leading-relaxed">
                   Public health experts have reported a rise in seasonal flu
                   cases. We advise all residents to get vaccinated, maintain
                   proper hygiene, and avoid self-medication. Stay informed and
