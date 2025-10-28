@@ -322,7 +322,7 @@ import latest from "@/assets/latest_news.png";
                   cases. We advise all residents to get vaccinated, maintain
                   proper hygiene, and avoid self-medication. Stay informed and
                   contact your healthcare provider for any flu-like symptoms.
-                  HFN extends heartfelt appreciation to its Health Guardians, partners, and sponsors whose unwavering support made this dialogue a success. Your commitment continues to power our collective vision of a resilient, secure, and competitive pharmaceutical ecosystem, for Nigeria and beyond.
+                  HFN extends heartfelt appreciation to its Health Guardians, partners, and sponsors whose unwavering support made this dialogue a success.
 
 
                 </p>
