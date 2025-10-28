@@ -360,7 +360,7 @@ import latest from "@/assets/latest_news.png";
         </div>
 
         <div
-          class="lg:col-span-4 mt-12 lg:mt-0 bg-gray-100 border-white rounded-2xl p-3"
+          class="lg:col-span-4 mt-12 lg:mt-0 bg-green-50 border-white rounded-2xl p-3"
         >
           <h2
             class="text-3xl sm:text-4xl font-extrabold text-gray-600 mb-8 pt-5"
