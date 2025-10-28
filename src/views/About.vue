@@ -11,7 +11,7 @@ import reagan from "@/assets/reagan.png";
 </script>
 <template>
   <div>
-    <section class="relative bg-white pb-16 pt-16 sm:pb-24 overflow-hidden">
+    <section class="relative bg-green-50 pb-16 pt-16 sm:pb-24 overflow-hidden">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="lg:grid lg:grid-cols-12 lg:gap-12 items-center">
           <div class="lg:col-span-6 xl:col-span-5 mb-10 lg:mb-0">
