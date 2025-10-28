@@ -364,10 +364,6 @@ const activeCategory = ref(categories.value[0]);
               </p>
             </div>
           </div>
-        </div>
-      </section>
-      <section class="py-8 bg-white">
-        <div class="max-w-6xl mx-auto px-6">
           <div class="flex flex-col md:flex-row items-start gap-6 mb-10">
             <div
               class="relative w-[200px] h-[200px] bg-green-50 rounded-tr-[30px] rounded-bl-[30px] p-3 shadow-sm overflow-hidden flex flex-col justify-center flex-shrink-0"
@@ -502,9 +498,9 @@ const activeCategory = ref(categories.value[0]);
               </p>
             </div>
           </div>
-
         </div>
       </section>
+      
     </div>
   </section>
   <section class="py-10 sm:py-24 bg-white">
