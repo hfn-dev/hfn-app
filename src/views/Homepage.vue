@@ -401,23 +401,24 @@ onMounted(() => {
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
       <div
-        class="flex justify-center items-center h-20 relative rounded-2xl border-2 border-green-50 bg-white shadow-sm"
-      >
-        <select
-          v-model="selectedMonth"
-          class="absolute left-6 border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-700 appearance-none bg-white pr-8"
-        >
-          <option>October 2025</option>
-          <option>September 2025</option>
-          <option>August 2025</option>
-        </select>
+  class="flex flex-col sm:flex-row justify-center items-center h-auto sm:h-20 relative rounded-2xl border-2 border-green-50 bg-white shadow-sm px-4 py-3 space-y-3 sm:space-y-0 sm:space-x-6"
+>
+  <select
+    v-model="selectedMonth"
+    class="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-700 appearance-none bg-white pr-8 w-full sm:w-auto"
+  >
+    <option>October 2025</option>
+    <option>September 2025</option>
+    <option>August 2025</option>
+  </select>
 
-        <h2
-          class="text-3xl md:text-4xl font-serif font-extrabold text-gray-900 tracking-tight"
-        >
-          HFN News
-        </h2>
-      </div>
+  <h2
+    class="text-2xl sm:text-3xl md:text-4xl font-serif font-extrabold text-gray-900 tracking-tight text-center sm:text-left"
+  >
+    HFN News
+  </h2>
+</div>
+
     </div>
   </section>
 
