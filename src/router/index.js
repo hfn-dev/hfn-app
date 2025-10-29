@@ -2,10 +2,7 @@ import DashboardLayout from '@/components/layout/DashboardLayout.vue';
 import Blog from '@/views/Blog.vue';
 import BlogDetails from '@/views/BlogDetails.vue';
 import Contact from '@/views/Contact.vue';
-import EditorCourseList from '@/views/Editor/EditorCourseList.vue';
-import EditorCreateCourse from '@/views/Editor/EditorCreateCourse.vue';
 import EditorDashboard from '@/views/Editor/EditorDashboard.vue';
-import EditorReviews from '@/views/Editor/EditorReviews.vue';
 import Signin from '@/views/Editor/Signin.vue';
 import Membership from '@/views/Membership.vue';
 import Interests from '@/views/RegistrationSignIn/Interests.vue';
@@ -18,6 +15,10 @@ import SuperAdminCreateCourse from '@/views/SuperAdmin/SuperAdminCreateCourse.vu
 import SuperAdminDashboard from '@/views/SuperAdmin/SuperAdminDashboard.vue';
 import SuperAdminMembers from '@/views/SuperAdmin/SuperAdminMembers.vue';
 import SuperAdminPayments from '@/views/SuperAdmin/SuperAdminPayments.vue';
+import TutorCourseList from '@/views/Tutor/TutorCourseList.vue';
+import TutorCreateCourse from '@/views/Tutor/TutorCreateCourse.vue';
+import TutorDashboard from '@/views/Tutor/TutorDashboard.vue';
+import TutorReviews from '@/views/Tutor/TutorReviews.vue';
 import CourseDetails from '@/views/User/CourseDetails.vue';
 import MessageNotification from '@/views/User/MessageNotification.vue';
 import MyAccount from '@/views/User/MyAccount.vue';
@@ -37,6 +38,7 @@ const routes = [
       { path: 'editor', component: EditorDashboard },
       { path: 'admin', component: UserDashboard },
       { path: 'superadmin', component: SuperAdminDashboard },
+      { path: 'tutor', component: TutorDashboard },
     ],
   },
   {
@@ -112,19 +114,19 @@ const routes = [
     component: EditorDashboard,
   },
   {
-    path: '/editor/mycourses',
-    name: 'EditorCourseList',
-    component: EditorCourseList,
+    path: '/tutor/mycourses',
+    name: 'TutorCourseList',
+    component: TutorCourseList,
   },
   {
-    path: '/editor/create-course',
-    name: 'EditorCreateCourse',
-    component: EditorCreateCourse,
+    path: '/tutor/create-course',
+    name: 'TutorCreateCourse',
+    component: TutorCreateCourse,
   },
   {
-    path: '/editor/reviews',
-    name: 'EditorReviews',
-    component: EditorReviews,
+    path: '/tutor/reviews',
+    name: 'TutorReviews',
+    component: TutorReviews,
   },
   {
     path: '/superadmin/dashboard',
@@ -162,7 +164,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior(to, from, savedPosition) {
-    return { top: 0 }
+    return { top: 0 };
   },
 });
 

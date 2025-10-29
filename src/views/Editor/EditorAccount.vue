@@ -223,7 +223,7 @@ const toggleInterest = (id) => {
         <div v-if="activeTab === 'My Profile'" class="space-y-10">
           <div v-if="isOrganization" class="p-6 bg-white shadow-lg space-y-8">
             <h2 class="text-xl font-semibold text-gray-800">
-              Profile
+              Organization Profile
             </h2>
 
             <div class="grid md:grid-cols-2 gap-8">

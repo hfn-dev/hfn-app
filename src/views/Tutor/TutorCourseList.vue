@@ -1,5 +1,5 @@
 <script setup>
-import EditorSidebar from "@/views/Editor/EditorSidebar.vue";
+import TutorSidebar from "@/views/Tutor/TutorSidebar.vue";
 import { computed } from "vue";
 
 import {
@@ -92,7 +92,7 @@ const goToPage = (page) => {
 
 <template>
   <div class="flex min-h-screen font-sans">
-    <EditorSidebar />
+    <TutorSidebar />
     <main class="flex-1 p-8 overflow-auto bg-white">
       <!-- Breadcrumbs -->
       <div class="text-sm text-gray-500 mb-6">
@@ -124,7 +124,7 @@ const goToPage = (page) => {
           </div>
 
           <router-link
-            to="/editor/create-course"
+            to="/tutor/create-course"
             class="absolute right-0 flex items-center px-4 py-2 bg-[#006633] text-white rounded-lg shadow-md hover:bg-[#00994d] transition-colors font-medium"
           >
             <Plus class="w-5 h-5 mr-2" />

@@ -139,13 +139,13 @@ watch(selectedMonth, (newMonth) => {
   newsList.value = allNews[newMonth].newsList;
 });
 
-
 import ayodele from "@/assets/ayodele.png";
 import babarinde from "@/assets/babarinde.png";
 import chinyere from "@/assets/chinyere.png";
 import jennifer from "@/assets/jennifer.png";
 import njide from "@/assets/njide.png";
 import reagan from "@/assets/reagan.png";
+import HfnCalender from "@/components/layout/HfnCalender.vue";
 
 const executives = [
   { name: "Mrs. Njide Ndili", position: "President", image: njide },
@@ -215,8 +215,8 @@ onMounted(() => {
           <h1
             class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-gray-900"
           >
-            <span class="text-orange-600">Accelerate</span>
-            <span class="text-primary"> Your Healthcare Leadership.</span>
+            <span class="text-orange-600">Healthcare Advocacy</span>
+            <span class="text-primary"> Partnership, Leadership.</span>
           </h1>
           <p class="text-lg text-gray-600 mb-8 max-w-lg">
             <span class="text-green-600">Healthcare Federation of Nigeria</span>
@@ -401,27 +401,25 @@ onMounted(() => {
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
       <div
-  class="flex flex-col sm:flex-row justify-center items-center h-auto sm:h-20 relative rounded-2xl border-2 border-green-50 bg-white shadow-sm px-4 py-3"
->
-  <!-- Month Selector -->
-  <select
-    v-model="selectedMonth"
-    class="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-700 appearance-none bg-white pr-8 w-full sm:w-auto sm:absolute sm:left-6"
-  >
-    <option>October 2025</option>
-    <option>September 2025</option>
-    <option>August 2025</option>
-  </select>
+        class="flex flex-col sm:flex-row justify-center items-center h-auto sm:h-20 relative rounded-2xl border-2 border-green-50 bg-white shadow-sm px-4 py-3"
+      >
+        <!-- Month Selector -->
+        <select
+          v-model="selectedMonth"
+          class="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-700 appearance-none bg-white pr-8 w-full sm:w-auto sm:absolute sm:left-6"
+        >
+          <option>October 2025</option>
+          <option>September 2025</option>
+          <option>August 2025</option>
+        </select>
 
-  <!-- Title -->
-  <h2
-    class="text-2xl sm:text-3xl md:text-4xl font-serif font-extrabold text-gray-900 tracking-tight text-center sm:text-left mt-3 sm:mt-0"
-  >
-    HFN News
-  </h2>
-</div>
-
-
+        <!-- Title -->
+        <h2
+          class="text-2xl sm:text-3xl md:text-4xl font-serif font-extrabold text-gray-900 tracking-tight text-center sm:text-left mt-3 sm:mt-0"
+        >
+          HFN News
+        </h2>
+      </div>
     </div>
   </section>
 
@@ -494,7 +492,6 @@ onMounted(() => {
             </span>
           </div>
 
-          <!-- Right: Text content -->
           <div class="flex flex-col justify-between p-4 flex-1">
             <div>
               <!-- Date and comments -->
@@ -511,7 +508,6 @@ onMounted(() => {
                 </span>
               </div>
 
-              <!-- Description -->
               <p class="text-gray-700 text-sm leading-relaxed line-clamp-3">
                 {{ news.description }}
               </p>
@@ -530,12 +526,13 @@ onMounted(() => {
                 {{ news.tag }}
               </span>
             </div>
-
           </div>
         </div>
       </div>
     </div>
   </section>
+
+  <HfnCalender />
 
   <section class="py-16 bg-white">
     <div class="container mx-auto px-6 text-center">

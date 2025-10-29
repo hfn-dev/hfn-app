@@ -18,7 +18,7 @@ import {
   User,
 } from "lucide-vue-next";
 import { computed, ref } from "vue";
-import EditorSidebar from "./EditorSidebar.vue";
+import TutorSidebar from "./TutorSidebar.vue";
 
 const currentStep = ref(4);
 
@@ -205,7 +205,7 @@ const goBack = () => {
 
 <template>
   <div class="flex min-h-screen font-sans">
-    <EditorSidebar />
+    <TutorSidebar />
     <main class="flex-1 p-8 overflow-auto bg-white">
       <!-- Breadcrumbs -->
       <div class="text-sm text-gray-500 mb-6">

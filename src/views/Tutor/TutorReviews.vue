@@ -12,7 +12,7 @@ import {
   User,
 } from "lucide-vue-next";
 import { computed, ref } from "vue";
-import EditorSidebar from "./EditorSidebar.vue";
+import TutorSidebar from "./TutorSidebar.vue";
 
 const reviews = ref([
   {
@@ -222,7 +222,7 @@ const prevPage = () => {
 
 <template>
   <div class="flex min-h-screen font-sans">
-    <EditorSidebar />
+    <TutorSidebar />
     <!-- Main Content Area -->
     <main class="flex-1 p-8 overflow-auto bg-white">
       <!-- Breadcrumbs & Header -->
