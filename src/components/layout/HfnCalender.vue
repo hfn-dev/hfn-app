@@ -174,7 +174,7 @@ function isToday(date) {
             <option value="Webinar">Webinar</option>
           </select>
 
-          <button
+          <!-- <button
             class="inline-flex items-center gap-2 bg-green-700 text-white px-3 py-1 rounded"
           >
             <svg
@@ -191,7 +191,7 @@ function isToday(date) {
               ></path>
             </svg>
             Add Event
-          </button>
+          </button> -->
         </div>
       </div>
 

@@ -5,6 +5,7 @@ import AdminHeader from "./AdminHeader.vue";
 import EditorSidebar from "@/views/Editor/EditorSidebar.vue";
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import AdminSidebar from "./AdminSidebar.vue";
+import TutorSidebar from "@/views/Tutor/TutorSidebar.vue";
 
 const userRole = localStorage.getItem("role") || "user";
 
@@ -12,6 +13,8 @@ const sidebarComponent = computed(() => {
   switch (userRole) {
     case "editor":
       return EditorSidebar;
+    case "tutor":
+      return TutorSidebar;  
     case "superadmin":
       return SuperAdminSidebar;
     default:

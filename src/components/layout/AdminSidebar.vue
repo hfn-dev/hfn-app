@@ -1,10 +1,23 @@
 <script setup>
 import { useAuth } from "@/store/authStore";
-import { defineProps, ref } from "vue";
-import { useRouter } from "vue-router";
+import { defineProps, ref, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
 
 const router = useRouter();
+const route = useRoute();
+
 const { logout } = useAuth();
+
+
+const currentPath = ref(route.path);
+
+watch(
+  () => route.path,
+  (newPath) => {
+    currentPath.value = newPath;
+  },
+  { immediate: true }
+);
 
 const props = defineProps({
   isOpen: { type: Boolean, default: false },
@@ -13,7 +26,6 @@ const props = defineProps({
 const DARK_GREEN = "#004d33";
 const LIGHT_GREEN = "#f2f9f3";
 
-const currentPath = ref("/admin/dashboard");
 
 const navLinks = [
   {

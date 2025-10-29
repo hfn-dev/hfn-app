@@ -1,6 +1,5 @@
 <script setup>
 import assets from "@/assets/assets.png";
-import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -18,6 +17,7 @@ import {
   Tooltip,
 } from "chart.js";
 import { Bar, Line, Pie } from "vue-chartjs";
+import EditorSidebar from "./EditorSidebar.vue";
 
 ChartJS.register(
   Title,
@@ -279,12 +279,12 @@ const lineOptions = {
 
 <template>
   <div class="flex min-h-screen font-sans">
-    <SuperAdminSidebar />
+    <EditorSidebar />
     <main class="flex-1 p-8 overflow-auto bg-white">
       <div class="mb-8">
-        <h1 class="text-4xl font-extrabold text-[#E87A18]">Welcome HBC!</h1>
+        <h1 class="text-4xl font-extrabold text-[#E87A18]">Welcome Editor!</h1>
         <p class="text-gray-700 mt-2">
-          Here is how your courses are performing today.
+          Here is how your pages are performing today.
         </p>
       </div>
 

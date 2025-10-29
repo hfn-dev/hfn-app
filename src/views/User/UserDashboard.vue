@@ -20,85 +20,120 @@ const userName = "Ruthie";
 const activeSidebarItem = ref("Dashboard");
 const activeCourseTrack = ref("Care");
 
-const goToCourseDetails = () => {
-  router.push({ name: "CourseDetails", params: { id: 1 } });
-};
+// const goToCourseDetails = () => {
+//   router.push({ name: "CourseDetails", params: { id: 1 } });
+// };
 
 const courses = [
   {
-    title: "Naturopathy",
-    instructor: "Kanu Nwankwo",
+    title: "The Power of Natural Healing in Modern Wellness",
+    instructor: "Mrs Njide Ndili",
     rating: 4.5,
     reviews: 78,
+    date: "October 10, 2025",
     price: "Free",
     image: course,
+    excerpt:
+      "Discover how natural healing methods are reshaping modern health practices — from nutrition to mindfulness and herbal care.",
   },
   {
-    title: "Naturopathy",
-    instructor: "Kanu Nwankwo",
+    title: "Building a Sustainable Lifestyle Through Herbal Nutrition",
+    instructor: "Mrs Chinyere",
     rating: 4.5,
     reviews: 78,
+    date: "September 22, 2025",
+
     price: "Free",
     image: course,
+    excerpt:
+      "Learn practical ways to integrate herbal foods and plant-based meals into your daily life for long-term vitality.",
   },
   {
-    title: "Naturopathy",
-    instructor: "Kanu Nwankwo",
+    title: "How to Strengthen Your Immune System Naturally",
+    instructor: "HFN Editorial team",
     rating: 4.5,
     reviews: 78,
+    date: "August 30, 2025",
+
     price: "Free",
     image: course,
+    excerpt:
+      "Your immune system is your best defense. Explore science-backed natural methods to boost and protect it year-round.",
   },
   {
-    title: "Naturopathy",
-    instructor: "Kanu Nwankwo",
+    title: "Mindful Living: The Key to Inner Balance and Healing",
+    instructor: "Mrs Njide Ndili",
     rating: 4.5,
     reviews: 78,
+    date: "August 5, 2025",
+
     price: "Free",
     image: course,
+    excerpt:
+      "Embrace mindfulness as a healing tool. Discover daily practices that can transform your stress levels and mindset.",
   },
   {
-    title: "Naturopathy",
-    instructor: "Kanu Nwankwo",
+    title: "The Future of Holistic Medicine in Africa",
+    instructor: "Mrs Njide Ndili",
     rating: 4.5,
     reviews: 78,
+    date: "July 15, 2025",
+
     price: "Free",
     image: course,
+    excerpt:
+      "From research to real-world application, see how holistic medicine is finding its place in Africa’s healthcare evolution.",
   },
   {
-    title: "Naturopathy",
-    instructor: "Kanu Nwankwo",
+    title: "Healthy Living Through Nature: A Beginner’s Guide",
+    instructor: "Mrs Chinyere",
     rating: 4.5,
     reviews: 78,
+    date: "June 20, 2025",
+
     price: "Free",
     image: course,
+    excerpt:
+      "If you’re new to holistic health, this guide will help you understand the foundations of living close to nature.",
   },
 ];
 
 const latestCourses = [
   {
-    title: "Naturopathy",
-    instructor: "Kanu Nwankwo",
+    title: "HFN Wellness Conference 2025",
+    instructor: "HFN Editorial team",
     rating: 4.5,
     reviews: 78,
+    date: "December 14, 2025",
+
     price: "Free",
     image: course,
+    excerpt:
+      "Join experts and enthusiasts for a 2-day event focused on holistic health, nutrition, and natural therapies.",
   },
   {
-    title: "Naturopathy",
-    instructor: "Kanu Nwankwo",
+    title: "Virtual Herbal Therapy Masterclass",
+    instructor: "HFN Editorial team",
     rating: 4.5,
     reviews: 78,
+    date: "November 25, 2025",
+
     price: "Free",
     image: course,
+    excerpt:
+      "A live masterclass exploring the fundamentals of herbal therapy — how to prepare, use, and benefit from natural remedies.",
   },
   {
-    title: "Naturopathy",
-    instructor: "Kanu Nwankwo",
+    title: "HFN Community Wellness Walk",
+    instructor: "HFN Editorial team",
     rating: 4.5,
     reviews: 78,
+    date: "November 5, 2025",
+
     price: "Free",
     image: course,
+    excerpt:
+      "An energizing outdoor walk to promote physical activity, mindfulness, and connection with the HFN community.",
   },
 ];
 
@@ -164,7 +199,7 @@ const getIconPaths = (name) => {
               <h2
                 class="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-10"
               >
-                How HFN Learning hub works...
+                How HFN Community hub works...
               </h2>
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div
@@ -182,9 +217,8 @@ const getIconPaths = (name) => {
                     Complete your Profile
                   </h3>
                   <p class="text-sm text-gray-600">
-                    Euismod magna id purus eget nunc ligula suspendisse dui
-                    metus. Condimentum blandit rutrum at mauris enim pulvinar
-                    duis etiam.
+                    Tell us about your wellness interests and goals so we can
+                    personalize your experience.
                   </p>
                 </div>
 
@@ -203,9 +237,8 @@ const getIconPaths = (name) => {
                     Search for Courses
                   </h3>
                   <p class="text-sm text-gray-600">
-                    Euismod magna id purus eget nunc ligula suspendisse dui
-                    metus. Condimentum blandit rutrum at mauris enim pulvinar
-                    duis etiam.
+                    Find health tips, natural living guides, and upcoming events
+                    that align with your interests.
                   </p>
                 </div>
 
@@ -224,9 +257,8 @@ const getIconPaths = (name) => {
                     Make a Connection
                   </h3>
                   <p class="text-sm text-gray-600">
-                    Euismod magna id purus eget nunc ligula suspendisse dui
-                    metus. Condimentum blandit rutrum at mauris enim pulvinar
-                    duis etiam.
+                    Join a growing community of health enthusiasts and
+                    professionals sharing their experiences.
                   </p>
                 </div>
               </div>
@@ -234,7 +266,7 @@ const getIconPaths = (name) => {
           </div>
 
           <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">
-            Our Course Tracks
+            Our Latest Post
           </h2>
 
           <div
@@ -276,7 +308,7 @@ const getIconPaths = (name) => {
 
               <div class="p-4">
                 <p class="text-xs text-gray-500 font-semibold uppercase">
-                  Naturopathy
+                  {{ course.date }}
                 </p>
                 <h3 class="text-lg font-bold text-gray-800 mt-1 line-clamp-2">
                   {{ course.title }}
@@ -303,16 +335,14 @@ const getIconPaths = (name) => {
                 </div>
 
                 <p class="text-sm text-gray-500 line-clamp-3">
-                  Euismod magna id purus eget nunc ligula suspendisse dui metus.
-                  Condimentum blandit rutrum at mauris enim.
+                  {{ course.excerpt }}
                 </p>
 
                 <button
-                  @click="goToCourseDetails"
                   class="mt-4 w-full py-2 rounded-lg font-semibold text-white transition duration-200 hover:opacity-90"
                   :style="{ backgroundColor: DARK_GREEN }"
                 >
-                  Start Course
+                  Read More
                 </button>
               </div>
             </div>
@@ -359,7 +389,7 @@ const getIconPaths = (name) => {
           </div>
 
           <h2 class="text-2xl font-bold text-gray-800 mt-12 mb-6">
-            Our Latest Courses
+            Our Events
           </h2>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -376,7 +406,7 @@ const getIconPaths = (name) => {
 
               <div class="p-4">
                 <p class="text-xs text-gray-500 font-semibold uppercase">
-                  Naturopathy
+                  {{ course.date }}
                 </p>
                 <h3 class="text-lg font-bold text-gray-800 mt-1 line-clamp-2">
                   {{ course.title }}
@@ -403,15 +433,14 @@ const getIconPaths = (name) => {
                 </div>
 
                 <p class="text-sm text-gray-500 line-clamp-3">
-                  Euismod magna id purus eget nunc ligula suspendisse dui metus.
-                  Condimentum blandit rutrum at mauris enim.
+                  {{ course.excerpt }}
                 </p>
 
                 <button
                   class="mt-4 w-full py-2 rounded-lg font-semibold text-white transition duration-200 hover:opacity-90"
                   :style="{ backgroundColor: DARK_GREEN }"
                 >
-                  Start Course
+                  Join Event
                 </button>
               </div>
             </div>

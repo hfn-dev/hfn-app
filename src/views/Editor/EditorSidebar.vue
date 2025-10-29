@@ -1,35 +1,42 @@
 <script setup>
 import { useAuth } from '@/store/authStore';
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter()
+const route = useRoute();
 const { logout } = useAuth()
 
 const DARK_GREEN = '#004d33';
 const LIGHT_GREEN = '#f2f9f3';
 
-const currentPath = ref('/tutor/dashboard');
+
+const currentPath = ref(route.path);
+
+watch(
+  () => route.path,
+  (newPath) => {
+    currentPath.value = newPath;
+  },
+  { immediate: true }
+);
 
 const navLinks = [
   {
     title: 'Dashboard',
-    path: '/tutor/dashboard',
+    path: '/editor/dashboard',
     icon: 'M3 3v18h18V3H3zm16 16H5V5h14v14zM9 8h6v2H9V8zm0 4h6v2H9v-2zm0 4h4v2H9v-2z',
   },
+
   {
-    title: 'My Courses',
-    path: '/tutor/mycourses',
+    title: 'Page Manager',
+    path: '/editor/pages',
     icon: 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20zm-1-8V7h2v5h4l-5 5-5-5h4z',
   },
-  {
-    title: 'Review',
-    path: '/tutor/reviews',
-    icon: 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z',
-  },
+    
   {
     title: 'My Account',
-    path: '#',
+    path: '/editor/account',
     icon: 'M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2',
   },
   {

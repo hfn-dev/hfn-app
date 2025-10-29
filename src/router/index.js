@@ -2,7 +2,9 @@ import DashboardLayout from '@/components/layout/DashboardLayout.vue';
 import Blog from '@/views/Blog.vue';
 import BlogDetails from '@/views/BlogDetails.vue';
 import Contact from '@/views/Contact.vue';
+import EditorAccount from '@/views/Editor/EditorAccount.vue';
 import EditorDashboard from '@/views/Editor/EditorDashboard.vue';
+import EditorPages from '@/views/Editor/EditorPages.vue';
 import Signin from '@/views/Editor/Signin.vue';
 import Membership from '@/views/Membership.vue';
 import Interests from '@/views/RegistrationSignIn/Interests.vue';
@@ -14,6 +16,7 @@ import SuperAdminCourseList from '@/views/SuperAdmin/SuperAdminCourseList.vue';
 import SuperAdminCreateCourse from '@/views/SuperAdmin/SuperAdminCreateCourse.vue';
 import SuperAdminDashboard from '@/views/SuperAdmin/SuperAdminDashboard.vue';
 import SuperAdminMembers from '@/views/SuperAdmin/SuperAdminMembers.vue';
+import SuperAdminMessages from '@/views/SuperAdmin/SuperAdminMessages.vue';
 import SuperAdminPayments from '@/views/SuperAdmin/SuperAdminPayments.vue';
 import TutorCourseList from '@/views/Tutor/TutorCourseList.vue';
 import TutorCreateCourse from '@/views/Tutor/TutorCreateCourse.vue';
@@ -114,6 +117,16 @@ const routes = [
     component: EditorDashboard,
   },
   {
+    path: '/editor/pages',
+    name: 'EditorPages',
+    component: EditorPages,
+  },
+  {
+    path: '/editor/account',
+    name: 'EditorAccount',
+    component: EditorAccount,
+  },
+  {
     path: '/tutor/mycourses',
     name: 'TutorCourseList',
     component: TutorCourseList,
@@ -122,6 +135,11 @@ const routes = [
     path: '/tutor/create-course',
     name: 'TutorCreateCourse',
     component: TutorCreateCourse,
+  },
+  {
+    path: '/tutor/dashboard',
+    name: 'TutorDashboard',
+    component: TutorDashboard,
   },
   {
     path: '/tutor/reviews',
@@ -157,6 +175,11 @@ const routes = [
     path: '/superadmin/payments',
     name: 'SuperAdminPayments',
     component: SuperAdminPayments,
+  },
+  {
+    path: '/superadmin/messages',
+    name: 'SuperAdminMessages',
+    component: SuperAdminMessages,
   },
 ];
 

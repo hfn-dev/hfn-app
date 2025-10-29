@@ -35,8 +35,8 @@ import reagan from "@/assets/reagan.png";
             </p>
 
             <div class="mt-10">
-              <a
-                href="#"
+              <RouterLink
+                to="/register"
                 class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-lg text-white bg-green-700 hover:bg-green-800 transition transform hover:scale-[1.02]"
               >
                 Join the Coalition
@@ -54,7 +54,7 @@ import reagan from "@/assets/reagan.png";
                     d="M17 8l4 4m0 0l-4 4m4-4H3"
                   ></path>
                 </svg>
-              </a>
+              </RouterLink>
             </div>
           </div>
 
@@ -167,16 +167,14 @@ import reagan from "@/assets/reagan.png";
           </div>
         </div>
         <div class="mb-10 lg:mb-0">
-  <div class="relative w-full overflow-hidden h-60 sm:h-72 md:h-80">
-    <img
-      :src="partnership"
-      alt="HFN partnership"
-      class="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-    />
-  </div>
-</div>
-
-
+          <div class="relative w-full overflow-hidden h-60 sm:h-72 md:h-80">
+            <img
+              :src="partnership"
+              alt="HFN partnership"
+              class="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+            />
+          </div>
+        </div>
       </div>
     </section>
 
