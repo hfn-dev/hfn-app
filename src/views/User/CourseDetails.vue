@@ -61,7 +61,7 @@ const toggleModule = (moduleId) => {
 <template>
   <div class="min-h-screen bg-gray-50 flex flex-col">
     <div class="flex flex-grow">
-      <AdminSidebar class="hidden md:flex" />
+      <AdminSidebar />
 
       <main class="flex-grow p-4 md:p-8 lg:p-12">
         <!-- Header & Breadcrumbs -->
