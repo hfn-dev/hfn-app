@@ -31,8 +31,7 @@ const pages = ref([
         imagePlaceholder:
           "https://placehold.co/400x250/F0FDF4/1e4040?text=Image+Uploaded",
         backgroundColor: "#F2E9F3",
-        previewUrl: "https://res.cloudinary.com/djoacytdk/image/upload/v1761825555/map-DalHobDl_lrlx11.png
-",
+        previewUrl: "https://res.cloudinary.com/djoacytdk/image/upload/v1761825555/map-DalHobDl_lrlx11.png",
       },
       section1: {
         name: "Section 1",
@@ -69,8 +68,7 @@ const pages = ref([
             src: "https://placehold.co/80x40/E5E7EB/4B5563?text=PharmAccess",
           },
         ],
-        previewUrl: "https://res.cloudinary.com/djoacytdk/image/upload/v1761825555/map-DalHobDl_lrlx11.png
-",
+        previewUrl: "https://res.cloudinary.com/djoacytdk/image/upload/v1761825555/map-DalHobDl_lrlx11.png",
       },
       section2: {
         name: "Section 2",
@@ -107,8 +105,7 @@ const pages = ref([
             text: "Networking events and knowledge exchange programs.",
           },
         ],
-        previewUrl: "https://res.cloudinary.com/djoacytdk/image/upload/v1761825555/map-DalHobDl_lrlx11.png
-",
+        previewUrl: "https://res.cloudinary.com/djoacytdk/image/upload/v1761825555/map-DalHobDl_lrlx11.png",
       },
       section3: {
         name: "Section 3",
@@ -143,8 +140,7 @@ const pages = ref([
               "HFN extends heartfelt appreciation to its Health Guardians.",
           },
         ],
-        previewUrl: "https://res.cloudinary.com/djoacytdk/image/upload/v1761825555/map-DalHobDl_lrlx11.png
-",
+        previewUrl: "https://res.cloudinary.com/djoacytdk/image/upload/v1761825555/map-DalHobDl_lrlx11.png",
       },
       section4: {
         name: "Section 4",
@@ -155,8 +151,7 @@ const pages = ref([
           imagePlaceholder:
             "https://placehold.co/200x250/E0F2F7/0284C7?text=Team+Photo",
         },
-        previewUrl: "https://res.cloudinary.com/djoacytdk/image/upload/v1761825555/map-DalHobDl_lrlx11.png
-",
+        previewUrl: "https://res.cloudinary.com/djoacytdk/image/upload/v1761825555/map-DalHobDl_lrlx11.png",
       },
       section5: {
         name: "Section 5",
@@ -190,8 +185,7 @@ const pages = ref([
               "Benefits include access to advocacy platforms, strategic partnerships, knowledge sharing, networking events, and investment opportunities aimed at building a stronger, more resilient health system.",
           },
         ],
-        previewUrl: "https://res.cloudinary.com/djoacytdk/image/upload/v1761825555/map-DalHobDl_lrlx11.png
-",
+        previewUrl: "https://res.cloudinary.com/djoacytdk/image/upload/v1761825555/map-DalHobDl_lrlx11.png",
       },
     },
   },
