@@ -1,6 +1,8 @@
 <script setup>
 import hfn_logo from "@/assets/hfn-health.png";
 import { useAuth } from "@/store/authStore";
+  import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
+
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
