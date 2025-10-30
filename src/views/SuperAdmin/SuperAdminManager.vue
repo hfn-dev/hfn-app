@@ -1,20 +1,24 @@
 <template>
     <div id="app" class="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8 font-sans">
-        <!-- Main Content Container - Centered --><div class="mx-auto max-w-7xl">
+        
+        <!-- Main Content Container - Centered -->
+        <div class="mx-auto max-w-7xl">
 
-            <!-- Header and Action Button (removed "Invite User" button as it's replaced by the Invitations tab functionality) --><div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+            <!-- Header and Tabs -->
+            <div class="flex flex-col sm:flex-row justify-center items-center mb-8">
                 <h1 class="text-3xl font-bold text-gray-900 mb-4 sm:mb-0">Access Management</h1>
             </div>
 
-            <!-- Centered Tabs Container --><div class="flex justify-center w-full">
-                <div class="border-b border-gray-200 mb-6 w-full max-w-4xl">
+            <!-- Centered Tabs Container -->
+            <div class="flex justify-center w-full mb-6">
+                <div class="border-b border-gray-200 w-full max-w-lg">
                     <div class="flex text-lg font-medium justify-center">
                         <button
                             v-for="tab in tabs"
                             :key="tab"
                             @click="changeTab(tab)"
                             :class="[
-                                'py-2 px-6 transition border-b-2 mx-1 rounded-t-lg focus:outline-none',
+                                'py-2 px-6 transition border-b-2 mx-1 focus:outline-none',
                                 currentTab === tab
                                     ? 'font-semibold border-emerald-600 text-emerald-600'
                                     : 'text-gray-500 hover:text-gray-900 border-transparent hover:border-gray-300'
@@ -26,96 +30,120 @@
                 </div>
             </div>
 
-            <!-- Search and Filters (removed from Invitations tab as per image) --><div v-if="currentTab === 'Users'" class="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0 md:space-x-4">
-                <!-- Search Input --><div class="relative w-full md:w-1/3">
-                    <input
-                        type="text"
-                        v-model="searchTerm"
-                        :placeholder="`Search ${currentTab}...`"
-                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 shadow-sm transition"
-                    />
-                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                    </svg>
-                </div>
-
-                <!-- Role Filter --><div class="w-full md:w-auto">
-                    <label for="role-filter" class="sr-only">Filter by Role</label>
-                    <select
-                        id="role-filter"
-                        v-model="selectedRoleFilter"
-                        class="block w-full rounded-lg border border-gray-300 shadow-sm py-2 px-3 text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 transition"
-                    >
-                        <option v-for="role in roleOptions" :key="role" :value="role">{{ role }}</option>
-                    </select>
-                </div>
-            </div>
-
-
-            <!-- Dynamic Content Area --><div class="mt-4">
-                <!-- Users Table --><div v-if="currentTab === 'Users'">
-                    <div class="mt-8 overflow-x-auto rounded-lg shadow-sm">
+            <!-- Dynamic Content Area -->
+            <div class="mt-4">
+                
+                <!-- OVERVIEW TAB CONTENT (Table View from first image) -->
+                <div v-if="currentTab === 'Overview'">
+                    
+                    <!-- Search Input -->
+                    <div class="flex justify-center mb-6">
+                        <div class="relative w-full max-w-2xl">
+                            <input
+                                type="text"
+                                v-model="searchTerm"
+                                placeholder="Search..."
+                                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 shadow-sm transition"
+                            />
+                            <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 overflow-x-auto rounded-lg shadow-lg max-w-4xl mx-auto border border-gray-200">
                         <table class="min-w-full divide-y divide-gray-200 bg-white">
-                            <thead class="bg-gray-50">
+                            <thead class="bg-emerald-50/50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Seen</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    <th scope="col" class="px-6 py-3 text-left w-12">
+                                        <input type="checkbox" @change="toggleSelectAll" :checked="allSelected" class="rounded text-emerald-600 focus:ring-emerald-500">
+                                    </th>
+                                    <th v-for="header in overviewHeaders" :key="header" scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                        <div class="flex items-center">
+                                            <span>{{ header }}</span>
+                                            <svg class="w-4 h-4 ml-2 text-gray-400 cursor-pointer hover:text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M5 10c0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2-2 .9-2 2zm10 0c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200">
-                                <tr v-for="user in filteredUsers" :key="user.id" class="hover:bg-gray-50 transition duration-150 ease-in-out">
+                                <tr v-for="user in paginatedUsers" :key="user.id" class="hover:bg-gray-50 transition duration-150 ease-in-out">
+                                    <td class="px-6 py-4 whitespace-nowrap w-12">
+                                        <input type="checkbox" v-model="user.isSelected" class="rounded text-emerald-600 focus:ring-emerald-500">
+                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-medium text-gray-900">{{ user.name }}</div>
-                                        <div class="text-sm text-gray-500">{{ user.email }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <span :class="getRoleBadgeClass(user.role)" class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium leading-none">
                                             {{ user.role }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ user.lastSeen }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ user.invitedOn }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <span :class="getStatusBadgeClass(user.status)" class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium leading-none">
                                             {{ user.status }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <div class="relative action-menu-container">
-                                            <button
-                                                @click="toggleActionMenu(user.id)"
-                                                class="text-gray-500 hover:text-gray-700 p-2 rounded-full hover:bg-gray-100 transition"
-                                                :aria-expanded="activeActionMenuId === user.id"
-                                                aria-label="User actions menu"
-                                            >
-                                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                                                    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                                                </svg>
-                                            </button>
-                                            <div v-if="activeActionMenuId === user.id" class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20">
-                                                <div class="py-1">
-                                                    <button @click="handleAction('editRole', user)" class="block w-full text-left px-4 py-2 text-sm transition hover:bg-gray-100 text-gray-700">Edit Role</button>
-                                                    <button @click="handleAction('suspend', user)" class="block w-full text-left px-4 py-2 text-sm transition hover:bg-gray-100 text-gray-700">Suspend Account</button>
-                                                    <button @click="handleAction('remove', user)" class="block w-full text-left px-4 py-2 text-sm transition hover:bg-gray-100 text-red-600">Remove User</button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <button 
+                                            @click="handleAction(user.status === 'Removed' ? 'view' : 'delete', user)"
+                                            :class="[
+                                                'p-1 rounded-full transition',
+                                                user.status === 'Removed' ? 'text-gray-500 hover:text-indigo-600' : 'text-red-500 hover:text-red-700'
+                                            ]"
+                                        >
+                                            <!-- Icon based on status -->
+                                            <svg v-if="user.status === 'Removed' || user.status === 'Pending'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                            </svg>
+                                            <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr v-if="filteredUsers.length === 0">
-                                    <td colspan="5" class="px-6 py-10 text-center text-gray-500 text-lg">
+                                    <td colspan="6" class="px-6 py-10 text-center text-gray-500 text-lg">
                                         No users match your criteria.
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
+                    
+                    <!-- Pagination Controls -->
+                    <div class="flex justify-end items-center mt-4 max-w-4xl mx-auto text-sm">
+                        <span class="text-gray-600 mr-4">Page {{ currentPage }} of {{ totalPages }}</span>
+                        <div class="flex space-x-2">
+                            <button 
+                                @click="goToPage(currentPage - 1)" 
+                                :disabled="currentPage === 1"
+                                class="p-2 rounded-lg transition"
+                                :class="{'text-gray-400 cursor-not-allowed': currentPage === 1, 'text-emerald-600 hover:bg-emerald-50': currentPage > 1}"
+                            >
+                                <svg class="w-5 h-5 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
+                            <button 
+                                @click="goToPage(currentPage + 1)" 
+                                :disabled="currentPage === totalPages"
+                                class="p-2 rounded-lg transition"
+                                :class="{'text-gray-400 cursor-not-allowed': currentPage === totalPages, 'text-emerald-600 hover:bg-emerald-50': currentPage < totalPages}"
+                            >
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
 
-                <!-- Invitations Forms Tab Content --><div v-else-if="currentTab === 'Invitations'" class="max-w-4xl mx-auto space-y-8 mt-8">
-                    <div v-for="(invitationsForRole, roleKey) in invitationsByRole" :key="roleKey" class="bg-white p-6 rounded-lg shadow-sm">
+                <!-- INVITATIONS TAB CONTENT (Form View from second image) -->
+                <div v-else-if="currentTab === 'Invitations'" class="max-w-4xl mx-auto space-y-8 mt-8">
+                    <div v-for="(invitationsForRole, roleKey) in invitationsByRole" :key="roleKey" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                         <div class="flex justify-between items-center mb-4 border-b pb-3">
                             <h3 class="text-xl font-semibold text-gray-800">
                                 Invitations to {{ capitalize(roleKey) }}
@@ -127,37 +155,37 @@
                             </button>
                         </div>
                         <div class="space-y-4">
-                            <div v-for="(invite, index) in invitationsForRole" :key="index" class="grid grid-cols-1 md:grid-cols-5 gap-3 items-center">
-                                <div class="text-gray-600 font-medium text-sm">{{ index + 1 }}.</div>
+                            <div v-for="(invite, index) in invitationsForRole" :key="index" class="grid grid-cols-6 gap-3 items-center">
+                                <div class="text-gray-600 font-medium text-sm col-span-1 md:col-span-1">{{ index + 1 }}.</div>
                                 <input
                                     type="text"
                                     v-model="invite.firstName"
                                     placeholder="First Name"
-                                    class="col-span-1 md:col-span-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                                    class="col-span-2 md:col-span-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 text-sm"
                                 />
                                 <input
                                     type="text"
                                     v-model="invite.surname"
                                     placeholder="Surname"
-                                    class="col-span-1 md:col-span-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                                    class="col-span-2 md:col-span-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 text-sm"
                                 />
                                 <input
                                     type="email"
                                     v-model="invite.email"
                                     placeholder="Email Address"
-                                    class="col-span-1 md:col-span-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                                    class="col-span-3 md:col-span-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 text-sm"
                                 />
                                 <input
                                     type="text"
                                     v-model="invite.organization"
                                     placeholder="Organization"
-                                    class="col-span-1 md:col-span-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                                    class="col-span-3 md:col-span-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 text-sm"
                                 />
                                 <button
                                     @click="sendInvitation(invite, roleKey, index)"
                                     :disabled="invite.status === 'Sent'"
                                     :class="[
-                                        'px-4 py-2 rounded-md font-medium text-sm transition',
+                                        'px-4 py-2 rounded-md font-medium text-sm transition w-full',
                                         invite.status === 'Sent'
                                             ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
                                             : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
@@ -179,22 +207,27 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed } from 'vue';
 
 // --- MOCK DATA ---
-const TABS = ['Overview', 'Invitations']; // Renamed "Users" to "Overview" as per image
-const ROLE_OPTIONS = ['All Roles', 'Admin', 'Editor', 'Viewer'];
+const TABS = ['Overview', 'Invitations']; 
+const overviewHeaders = ['Name', 'Role', 'Invited On', 'Status'];
 
-// Existing Users data (now for "Overview" tab)
-const USERS = ref([ // Made ref to allow future modifications if needed
-    { id: 1, name: "Alice Johnson", email: "alice.j@corp.com", role: "Admin", lastSeen: "2 days ago", status: "Active" },
-    { id: 2, name: "Bob Smith", email: "bob.s@corp.com", role: "Editor", lastSeen: "3 hours ago", status: "Active" },
-    { id: 3, name: "Charlie Brown", email: "charlie.b@corp.com", role: "Viewer", lastSeen: "1 week ago", status: "Inactive" },
-    { id: 4, name: "Diana Prince", email: "diana.p@corp.com", role: "Editor", lastSeen: "Just now", status: "Active" },
-    { id: 5, name: "Eve Harrington", email: "eve.h@corp.com", role: "Viewer", lastSeen: "2 months ago", status: "Suspended" },
+// Data for the 'Overview' tab, matching the screenshot
+const USERS = ref([
+    { id: 1, name: "Ruthie Sanusi", role: "Editor", invitedOn: "December 28 2024", status: "Accepted", isSelected: false },
+    { id: 2, name: "Ruthie Sanusi", role: "Admin", invitedOn: "December 28 2024", status: "Accepted", isSelected: false },
+    { id: 3, name: "Ruthie Sanusi", role: "Tutor - HBA", invitedOn: "December 28 2024", status: "Accepted", isSelected: false },
+    { id: 4, name: "Ruthie Sanusi", role: "Tutor - HFN", invitedOn: "December 28 2024", status: "Accepted", isSelected: false },
+    { id: 5, name: "Ruthie Sanusi", role: "Diaspora", invitedOn: "December 28 2024", status: "Pending", isSelected: false },
+    { id: 6, name: "Ruthie Sanusi", role: "Tutor - HBA", invitedOn: "December 28 2024", status: "Removed", isSelected: false },
+    { id: 7, name: "Ruthie Sanusi", role: "Tutor - HBA", invitedOn: "December 28 2024", status: "Accepted", isSelected: false },
+    { id: 8, name: "Ruthie Sanusi", role: "Admin", invitedOn: "December 28 2024", status: "Pending", isSelected: false },
+    { id: 9, name: "Ruthie Sanusi", role: "Admin", invitedOn: "December 28 2024", status: "Removed", isSelected: false },
+    { id: 10, name: "Ruthie Sanusi", role: "Tutor - HFN", invitedOn: "December 28 2024", status: "Pending", isSelected: false },
 ]);
 
-// New Invitations data structure, categorized by role
+// Data for the 'Invitations' tab (Form-based)
 const INVITATIONS_DATA = ref({
     administrators: [
         { id: 1, firstName: "Peter", surname: "Pan", email: "peterpan@gmail.com", organization: "HFN", status: "Sent" },
@@ -207,7 +240,7 @@ const INVITATIONS_DATA = ref({
         { id: 101, firstName: "Peter", surname: "Pan", email: "peterpan@gmail.com", organization: "HFN", status: "Sent" },
         { id: 102, firstName: "Sample Text", surname: "Sample Text", email: "sample@email.com", organization: "Sample Text", status: "Send" },
     ],
-    tutors: [ // Renamed "Viewer" to "Tutor" based on the image's "Invitations to Tutors"
+    tutors: [
         { id: 201, firstName: "Peter", surname: "Pan", email: "peterpan@gmail.com", organization: "UNTH", status: "Sent" },
         { id: 202, firstName: "Peter", surname: "Pan", email: "peterpan@gmail.com", organization: "HBA", status: "Sent" },
         { id: 203, firstName: "Peter", surname: "Pan", email: "peterpan@gmail.com", organization: "HBA", status: "Sent" },
@@ -216,32 +249,30 @@ const INVITATIONS_DATA = ref({
     ],
 });
 
-
 // --- STATE ---
 const currentTab = ref('Overview');
 const searchTerm = ref('');
-const selectedRoleFilter = ref('All Roles');
-const activeActionMenuId = ref(null);
+const currentPage = ref(1);
+const itemsPerPage = 8; // Display 8 rows per page for mock pagination
+
 
 // Expose constants to the template
 const tabs = TABS;
-const roleOptions = ROLE_OPTIONS;
 
 // --- UTILITY FUNCTIONS ---
 const getRoleBadgeClass = (role) => {
-    switch (role) {
-        case 'Admin': return 'bg-red-100 text-red-800';
-        case 'Editor': return 'bg-blue-100 text-blue-800';
-        case 'Viewer': return 'bg-gray-100 text-gray-800';
-        default: return 'bg-gray-100 text-gray-800';
-    }
+    // Colors based on common role types or just use a standard one for now
+    if (role.includes('Tutor')) return 'bg-purple-100 text-purple-700';
+    if (role === 'Admin') return 'bg-pink-100 text-pink-700';
+    if (role === 'Editor') return 'bg-blue-100 text-blue-700';
+    return 'bg-gray-100 text-gray-700';
 };
 
 const getStatusBadgeClass = (status) => {
     switch (status) {
-        case 'Active': return 'bg-emerald-100 text-emerald-800'; // Changed to emerald for active
-        case 'Inactive': return 'bg-yellow-100 text-yellow-800';
-        case 'Suspended': return 'bg-red-100 text-red-800';
+        case 'Accepted': return 'bg-green-100 text-green-700';
+        case 'Pending': return 'bg-orange-100 text-orange-700';
+        case 'Removed': return 'bg-red-100 text-red-700';
         default: return 'bg-gray-100 text-gray-800';
     }
 };
@@ -251,50 +282,72 @@ const capitalize = (str) => {
 };
 
 
-// --- COMPUTED PROPERTIES ---
+// --- COMPUTED PROPERTIES (OVERVIEW TAB) ---
 
 const filteredUsers = computed(() => {
-    let filtered = USERS.value;
+    if (!searchTerm.value) return USERS.value;
 
-    if (selectedRoleFilter.value !== 'All Roles') {
-        filtered = filtered.filter(user => user.role === selectedRoleFilter.value);
-    }
-
-    if (searchTerm.value) {
-        const lowerSearch = searchTerm.value.toLowerCase();
-        filtered = filtered.filter(user =>
-            user.name.toLowerCase().includes(lowerSearch) ||
-            user.email.toLowerCase().includes(lowerSearch)
-        );
-    }
-    return filtered;
+    const lowerSearch = searchTerm.value.toLowerCase();
+    return USERS.value.filter(user =>
+        user.name.toLowerCase().includes(lowerSearch) ||
+        user.role.toLowerCase().includes(lowerSearch) ||
+        user.invitedOn.toLowerCase().includes(lowerSearch)
+    );
 });
 
+const paginatedUsers = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return filteredUsers.value.slice(start, end);
+});
+
+const totalPages = computed(() => {
+    return Math.ceil(filteredUsers.value.length / itemsPerPage);
+});
+
+const allSelected = computed(() => {
+    return filteredUsers.value.length > 0 && filteredUsers.value.every(user => user.isSelected);
+});
+
+// --- COMPUTED PROPERTIES (INVITATIONS TAB) ---
+
 const invitationsByRole = computed(() => {
-    // Return the reactive object directly
     return INVITATIONS_DATA.value;
 });
 
-
 // --- METHODS ---
-const toggleActionMenu = (id) => {
-    activeActionMenuId.value = activeActionMenuId.value === id ? null : id;
+const toggleSelectAll = (event) => {
+    const isChecked = event.target.checked;
+    filteredUsers.value.forEach(user => {
+        user.isSelected = isChecked;
+    });
 };
 
-const closeActionMenu = (event) => {
-    if (activeActionMenuId.value !== null && !event.target.closest('.action-menu-container')) {
-        activeActionMenuId.value = null;
+const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages.value) {
+        currentPage.value = page;
     }
 };
 
 const changeTab = (tab) => {
     currentTab.value = tab;
     searchTerm.value = ''; // Reset search on tab switch
-    selectedRoleFilter.value = 'All Roles'; // Reset role filter
+    currentPage.value = 1; // Reset pagination
+};
+
+const handleAction = (action, item) => {
+    // NOTE: In a real app, this would trigger a modal or an API call.
+    if (action === 'delete') {
+        console.log(`Action: Deleting access for ${item.name} (${item.role})`);
+        // Example logic: USERS.value = USERS.value.filter(u => u.id !== item.id);
+    } else if (action === 'view') {
+        console.log(`Action: Viewing/Managing removed status for ${item.name} (${item.role})`);
+    }
 };
 
 const addNewInvitation = (roleKey) => {
-    const newId = Math.max(...INVITATIONS_DATA.value[roleKey].map(inv => inv.id), 0) + 1;
+    // Generate a simple unique ID for mock data purposes
+    const newId = Date.now();
     INVITATIONS_DATA.value[roleKey].push({
         id: newId,
         firstName: '',
@@ -308,29 +361,15 @@ const addNewInvitation = (roleKey) => {
 const sendInvitation = (invite, roleKey, index) => {
     // Basic validation
     if (!invite.firstName || !invite.surname || !invite.email || !invite.organization) {
-        alert('Please fill in all fields before sending the invitation.');
+        // Use console.error instead of alert()
+        console.error('Validation Error: Please fill in all fields before sending the invitation.');
         return;
     }
     // Simulate sending invitation
     console.log(`Sending invitation for ${invite.firstName} ${invite.surname} (${invite.email}) as ${roleKey}...`);
     INVITATIONS_DATA.value[roleKey][index].status = 'Sent';
-    // In a real application, you'd send this data to an API
 };
 
-
-const handleAction = (action, item) => {
-    console.log(`Action: ${action} on ${item.email || item.name}`);
-    activeActionMenuId.value = null;
-};
-
-// --- LIFECYCLE HOOKS ---
-onMounted(() => {
-    window.addEventListener('click', closeActionMenu);
-});
-
-onBeforeUnmount(() => {
-    window.removeEventListener('click', closeActionMenu);
-});
 </script>
 
 <style scoped>
