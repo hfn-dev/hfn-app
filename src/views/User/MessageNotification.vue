@@ -168,7 +168,7 @@ const connectionRequests = [
 <template>
   <div class="min-h-screen bg-gray-50 flex flex-col">
     <div class="flex flex-grow">
-      <AdminSidebar class="hidden md:flex" />
+      <AdminSidebar />
 
       <main class="flex-grow p-4 md:p-8 lg:p-12">
         <!-- <h1 class="text-4xl font-semibold text-gray-800 mb-8">Messages</h1> -->
