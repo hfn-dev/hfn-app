@@ -12,6 +12,8 @@ import Register from '@/views/RegistrationSignIn/Register.vue';
 import SignIn from '@/views/RegistrationSignIn/SignIn.vue';
 import SigninVerification from '@/views/RegistrationSignIn/SigninVerification.vue';
 import SuperAdminAccount from '@/views/SuperAdmin/SuperAdminAccount.vue';
+import SuperAdminManager from '@/views/SuperAdmin/SuperAdminManager.vue';
+
 import SuperAdminCourseList from '@/views/SuperAdmin/SuperAdminCourseList.vue';
 import SuperAdminCreateCourse from '@/views/SuperAdmin/SuperAdminCreateCourse.vue';
 import SuperAdminDashboard from '@/views/SuperAdmin/SuperAdminDashboard.vue';
@@ -170,6 +172,11 @@ const routes = [
     path: '/superadmin/account',
     name: 'SuperAdminAccount',
     component: SuperAdminAccount,
+  },
+  {
+    path: '/superadmin/access',
+    name: 'SuperAdminManager',
+    component: SuperAdminManager,
   },
   {
     path: '/superadmin/payments',
