@@ -179,8 +179,8 @@ const statCards = [
   },
   {
     title: "Bounce Rate",
-    value: "4.5",
-    stars: true,
+    value: "4.5%",
+    stars: false,
     change: "0% Increase",
     changeColor: "text-gray-500",
   },
@@ -363,7 +363,7 @@ const lineOptions = {
 
             <p class="text-gray-600 text-sm mb-1">{{ card.title }}</p>
 
-            <div class="text-4xl font-bold text-gray-800 mb-1">
+            <div class="text-2xl font-bold text-gray-800 mb-1">
               <span>{{ card.value }}</span>
             </div>
 
