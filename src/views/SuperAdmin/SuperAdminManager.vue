@@ -1,9 +1,7 @@
 <template>
     <div id="app" class="min-h-screen bg-gray-50 font-sans flex flex-col sm:flex-row">
         <SuperAdminSidebar />
-        <aside class="w-full sm:w-64 bg-white border-r border-gray-200 shadow-sm">
-      <SuperAdminSidebar />
-    </aside>
+        
             <main class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
 
         <!-- Main Content Container - Centered -->
