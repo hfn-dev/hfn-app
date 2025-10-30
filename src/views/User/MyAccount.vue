@@ -222,7 +222,7 @@ const toggleInterest = (id) => {
     />
 
     <main class="flex-1 p-4 sm:p-8 lg:p-10 max-w-7xl mx-auto w-full">
-      <span class="text-sm text-gray-500">Home / My Account / {{ activeTab }}</span>
+      <span class="text-sm text-gray-500">Home > My Account > {{ activeTab }}</span>
 
       <header class="mb-8 text-center">
         <h1 class="text-3xl font-bold mt-2 text-gray-800">{{ currentView }}</h1>
