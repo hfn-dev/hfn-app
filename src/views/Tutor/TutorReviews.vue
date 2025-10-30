@@ -226,7 +226,7 @@ const prevPage = () => {
     <!-- Main Content Area -->
     <main class="flex-1 p-8 overflow-auto bg-white">
       <!-- Breadcrumbs & Header -->
-      <div class="text-sm text-gray-500 mb-6">
+      <div class="text-sm text-gray-500 mb-6 flex items-center space-x-1">
         <span class="text-[#006633]">Home</span> >
         <span v-if="currentView === 'list'" class="text-gray-700 font-medium"
           >Reviews</span
