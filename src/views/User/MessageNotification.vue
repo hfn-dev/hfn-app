@@ -8,12 +8,12 @@ import { computed, ref } from 'vue';
 const DARK_GREEN = '#004d33';
 const LIGHT_GREEN = '#f2f9f3';
 
-const currentTab = ref('Direct Messages');
+const currentTab = ref('Directory');
 const currentGroup = ref('General');
 const currentDMUser = ref('Ade John');
 const messageInput = ref('');
 
-const tabs = ['Direct Messages', 'Groups', 'Notifications'];
+const tabs = ['Directory', 'Direct Messages', 'Groups', 'Notifications', 'Connections'];
 
 const directMessages = [
   {
@@ -138,6 +138,24 @@ const selectGroup = (name) => {
     currentTab.value = 'Groups';
   }
 };
+
+ const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+const directoryUsers = [
+  { name: 'ABIOLA MORUF TAJUDEEN', status: 'connect', initial: 'AM' },
+  { name: 'ANIEBE SOMTO EMELDA', status: 'connect', initial: 'AS' },
+  { name: 'AROGUNDADE IFEOLUWAN THEOPHILUS', status: 'connected', initial: 'AI' },
+  { name: 'ATAGUBA FRANKLIN', status: 'connect', initial: 'AF' },
+  // Adding more dummy data to fill the list
+  { name: 'Blessing Victor', status: 'connected', initial: 'BV' },
+  { name: 'Chukwuma David', status: 'connect', initial: 'CD' },
+  { name: 'Esther Kanu', status: 'connected', initial: 'EK' },
+];
+
+const connectionRequests = [
+  { name: 'Request from John Doe', time: '1 hour ago' },
+  { name: 'Request from Jane Smith', time: '5 hours ago' },
+]; 
 </script>
 
 <template>
@@ -181,6 +199,60 @@ const selectGroup = (name) => {
               {{ tab }}
             </button>
           </div>
+        </div>
+
+        <div v-if="currentTab === 'Directory'" class="max-w-7xl bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+            <div class="flex justify-between items-center mb-6">
+                <div class="relative w-full max-w-sm mr-4">
+                    <input type="text" placeholder="Search" class="w-full p-2 pl-10 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                        <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-sm font-medium text-gray-700 mr-2">Sort By</span>
+                    <select class="p-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500">
+                        <option>Name (A-Z)</option>
+                        <option>Status</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap justify-start gap-1 p-2 bg-gray-50 rounded-lg mb-6 border border-gray-200">
+                <button
+                    v-for="letter in alphabet"
+                    :key="letter"
+                    class="w-8 h-8 flex items-center justify-center text-sm font-semibold rounded-lg transition-all"
+                    :class="{
+                        'bg-green-100 text-gray-800 border border-green-300': letter === 'A',
+                        'text-gray-500 hover:bg-gray-100': letter !== 'A',
+                    }"
+                    :style="letter === 'A' ? { borderColor: DARK_GREEN, backgroundColor: LIGHT_GREEN, color: DARK_GREEN } : {}"
+                >
+                    {{ letter }}
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-6 h-[50vh] overflow-y-auto">
+                <div 
+                    v-for="(user, index) in directoryUsers" 
+                    :key="index" 
+                    class="py-2 px-3 border-l-4 border-green-500 flex flex-col justify-center"
+                >
+                    <p class="text-sm font-semibold text-gray-800">{{ user.name }}</p>
+                    <button 
+                        v-if="user.status === 'connect'"
+                        class="mt-1 text-xs px-2 py-1 border border-green-600 text-green-600 rounded-full w-fit hover:bg-green-50 transition"
+                    >
+                        Request to Connect
+                    </button>
+                    <span v-else class="mt-1 text-xs text-gray-500">Connected</span>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <span class="text-sm text-gray-500">Page 1 of 10</span>
+            </div>
         </div>
 
         <div v-if="currentTab === 'Notifications'" class="space-y-6 max-w-4xl">
@@ -234,6 +306,31 @@ const selectGroup = (name) => {
               {{ message.body }}
             </p>
           </div>
+        </div>
+
+        <div v-else-if="currentTab === 'Connections'" class="max-w-7xl bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Connection Requests ({{ connectionRequests.length }})</h3>
+            <div v-if="connectionRequests.length > 0" class="space-y-3">
+                <div v-for="(request, index) in connectionRequests" :key="index" class="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-purple-200 flex items-center justify-center text-sm font-bold text-purple-700">
+                            {{ request.name.match(/\b(\w)/g).join('') }}
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-800">{{ request.name }}</p>
+                            <span class="text-xs text-gray-500">{{ request.time }}</span>
+                        </div>
+                    </div>
+                    <div class="space-x-2">
+                        <button class="px-3 py-1 text-sm rounded-lg text-white" :style="{ backgroundColor: DARK_GREEN }">Accept</button>
+                        <button class="px-3 py-1 text-sm rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">Decline</button>
+                    </div>
+                </div>
+            </div>
+            <p v-else class="text-gray-500">You have no pending connection requests.</p>
+            
+            <h3 class="text-xl font-bold text-gray-800 mt-8 mb-4">Your Connections</h3>
+            <p class="text-gray-500">List of your established connections will go here.</p>
         </div>
 
         <div
