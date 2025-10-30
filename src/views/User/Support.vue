@@ -148,10 +148,10 @@ const closeTicketDetails = () => {
     <div class="flex-1 flex flex-col overflow-hidden relative">
       <header class="p-6 bg-white">
         <div class="text-sm text-gray-500">
-          <span class="hover:underline cursor-pointer">Home</span> /
+          <span class="hover:underline cursor-pointer">Home</span> >
           <span class=" text-gray-800">Support</span>
           <span v-if="activeTab === 'tickets'" class="text-gray-500">
-            /
+            >
             <span v-if="!selectedTicketId" class=" text-gray-800"
               >Tickets</span
             >
