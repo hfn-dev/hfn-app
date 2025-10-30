@@ -41,6 +41,11 @@ watch(
   { immediate: true }
 );
 
+  
+const showSidebar = ref(false);
+const toggleSidebar = () => (showSidebar.value = !showSidebar.value);
+const closeSidebar = () => (showSidebar.value = false);
+
 </script>
 
 <template>
@@ -81,26 +86,38 @@ watch(
     <nav class="flex items-center justify-between lg:px-8 py-4 max-w-7xl mx-auto">
       <div class="flex items-center flex-shrink-0">
         <button
-        @click="$emit('toggleSidebar')"
-          class="lg:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-6 h-6"
-          >
-            <line x1="4" x2="20" y1="12" y2="12" />
-            <line x1="4" x2="20" y1="6" y2="6" />
-            <line x1="4" x2="20" y1="18" y2="18" />
-          </svg>
-        </button>
+      @click="toggleSidebar"
+      class="lg:hidden fixed top-15 left-0 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        />
+      </svg>
+    </button>
 
+    <!-- SIDEBAR -->
+    <div
+      class="fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:translate-x-0"
+      :class="showSidebar ? 'translate-x-0' : '-translate-x-full'"
+    >
+      <SuperAdminSidebar @closeSidebar="closeSidebar" />
+    </div>
+
+    <div
+      v-if="showSidebar"
+      class="fixed inset-0 bg-gray bg-opacity-10 z-30 lg:hidden"
+      @click="closeSidebar"
+    ></div>
         <RouterLink
           to="/"
           @click="handleLinkClick('/')"
