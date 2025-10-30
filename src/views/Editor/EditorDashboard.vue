@@ -125,26 +125,26 @@ const mostViewedCourses = reactive([
 
 const summaryData = reactive([
   {
-    title: "Total Visits",
-    value: "12,456",
+    title: "Highest bounced page",
+    value: "About Us",
     trendValue: "Up 12%",
     trendType: "up",
   },
   {
-    title: "Unique Visits",
-    value: "456",
+    title: "Highest clicked page",
+    value: "Latest Update",
     trendValue: "Down 29%",
     trendType: "down",
   },
   {
-    title: "Bounce Rate",
-    value: "12,456",
+    title: "Highest clicked CTA",
+    value: "Join Now",
     trendValue: "Up 12%",
     trendType: "up",
   },
   {
-    title: "Time spent on Courses",
-    value: "36,090 hrs",
+    title: "Average Time spent on pages",
+    value: "20 hrs",
     trendValue: "Up 12%",
     trendType: "up",
   },
@@ -160,25 +160,25 @@ const courseData = reactive([
 // --- STATS DATA ---
 const statCards = [
   {
-    title: "Total Courses",
-    value: "13",
+    title: "Total Visits",
+    value: "13,456",
     change: "13% Increase",
     changeColor: "text-[#00cc66]",
   },
   {
-    title: "Active Courses",
-    value: "7",
+    title: "Unique Visits",
+    value: "700",
     change: "13% Increase",
     changeColor: "text-[#00cc66]",
   },
   {
-    title: "Average Enrollment",
-    value: "13",
+    title: "Time Spent on website",
+    value: "13hrs",
     change: "–5% Decrease",
     changeColor: "text-red-500",
   },
   {
-    title: "Average Rating",
+    title: "Bounce Rate",
     value: "4.5",
     stars: true,
     change: "0% Increase",
@@ -322,7 +322,7 @@ const lineOptions = {
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div class="bg-white p-6 rounded-xl shadow-lg lg:col-span-3">
           <h2 class="text-xl font-semibold mb-4 text-[#006633]">
-            Student Monthly Enrollment
+            Website Visit
           </h2>
           <div class="h-[300px] w-full">
             <Bar :data="engagementData" :options="barOptions" />
@@ -331,7 +331,7 @@ const lineOptions = {
 
         <div class="bg-white p-6 rounded-xl shadow-lg w-full">
           <h2 class="text-xl font-semibold mb-4 text-[#006633]">
-            Course Completion
+            Page Visits
           </h2>
           <div class="h-[300px] w-full">
             <Pie :data="completionData" :options="pieOptions" />
@@ -340,7 +340,7 @@ const lineOptions = {
 
         <div class="bg-white p-6 rounded-xl shadow-lg w-full">
           <h2 class="text-xl font-semibold mb-4 text-[#006633]">
-            Subscriptions
+            Number of visitors per page
           </h2>
           <div class="h-[300px] w-full">
             <Line :data="growthData" :options="lineOptions" />
