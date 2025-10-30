@@ -1,5 +1,6 @@
 <template>
     <div id="app" class="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8 font-sans">
+        <SuperAdminSidebar />
         <!-- Main Content Container - Centered -->
         <div class="mx-auto max-w-7xl">
 
@@ -231,12 +232,11 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 
-// --- MOCK DATA ---
 const TABS = ['Users', 'Invitations'];
 const ROLE_OPTIONS = ['All Roles', 'Admin', 'Editor', 'Viewer'];
 
-// NOTE: In a real app, these would be managed by Firebase Firestore
 const USERS = [
     { id: 1, name: "Alice Johnson", email: "alice.j@corp.com", role: "Admin", lastSeen: "2 days ago", status: "Active" },
     { id: 2, name: "Bob Smith", email: "bob.s@corp.com", role: "Editor", lastSeen: "3 hours ago", status: "Active" },
@@ -251,7 +251,6 @@ const INVITATIONS = [
     { id: 103, email: "marketing@corp.com", role: "Admin", invitedBy: "Diana Prince", dateSent: "2025-10-28" },
 ];
 
-// --- STATE ---
 const currentTab = ref('Users');
 const searchTerm = ref('');
 const selectedRoleFilter = ref('All Roles');
