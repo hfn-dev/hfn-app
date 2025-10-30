@@ -1,7 +1,6 @@
 <script setup>
 import hfn_logo from "@/assets/hfn-health.png";
 import { useAuth } from "@/store/authStore";
-  import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -43,10 +42,7 @@ watch(
   { immediate: true }
 );
 
-  
-const showSidebar = ref(false);
-const toggleSidebar = () => (showSidebar.value = !showSidebar.value);
-const closeSidebar = () => (showSidebar.value = false);
+
 
 </script>
 
@@ -87,39 +83,8 @@ const closeSidebar = () => (showSidebar.value = false);
     </div>
     <nav class="flex items-center justify-between lg:px-8 py-4 max-w-7xl mx-auto">
       <div class="flex items-center flex-shrink-0">
-        <button
-      @click="toggleSidebar"
-      class="lg:hidden fixed top-15 left-0 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"
-        />
-      </svg>
-    </button>
-
-    <!-- SIDEBAR -->
-    <div
-      class="fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:translate-x-0"
-      :class="showSidebar ? 'translate-x-0' : '-translate-x-full'"
-    >
-      <SuperAdminSidebar @closeSidebar="closeSidebar" />
-    </div>
-
-    <div
-      v-if="showSidebar"
-      class="fixed inset-0 bg-gray bg-opacity-10 z-30 lg:hidden"
-      @click="closeSidebar"
-    ></div>
+        
+    
         <RouterLink
           to="/"
           @click="handleLinkClick('/')"
