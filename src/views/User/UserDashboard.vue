@@ -177,7 +177,7 @@ const getIconPaths = (name) => {
 <template>
   <div class="min-h-screen flex flex-col bg-white border-0 font-sans">
     <div class="flex flex-grow overflow-hidden">
-      <AdminSidebar class="hidden md:flex" />
+      <AdminSidebar />
       <main
         class="flex-grow overflow-y-auto pb-12"
         :style="{ backgroundColor: WHITE }"
