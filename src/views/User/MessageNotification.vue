@@ -178,8 +178,9 @@ const connectionRequests = [
             </div>
           </div>
         </div>
-        <div class="border-b border-gray-200 mb-6 max-w-7xl justify-center">
-          <div class="flex text-lg font-medium">
+        <div class="flex justify-center w-full">
+        <div class="border-b border-gray-200 mb-6 max-w-7xl w-full ">
+          <div class="flex text-lg font-medium justify-center">
             <button
               v-for="tab in tabs"
               :key="tab"
@@ -200,7 +201,7 @@ const connectionRequests = [
             </button>
           </div>
         </div>
-
+        </div>
         <div v-if="currentTab === 'Directory'" class="max-w-7xl bg-white p-6 rounded-xl shadow-lg border border-gray-100">
             <div class="flex justify-between items-center mb-6">
                 <div class="relative w-full max-w-sm mr-4">
