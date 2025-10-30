@@ -14,7 +14,7 @@ import {
 import { ref } from "vue";
 
 const courseTabs = ref(["Registration", "Purchases"]);
-const currentTab = ref("Published");
+const currentTab = ref("Registration");
 
 const statCards = [
   {

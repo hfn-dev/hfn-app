@@ -18,6 +18,9 @@ const handleSignIn = () => {
   } else if (user === 'superadmin') {
     login('superadmin')
     router.push('/superadmin/dashboard')
+  } else if (user === 'tutor') {
+    login('tutor')
+    router.push('/tutor/dashboard')  
   } else if (user === 'admin') {
     login('admin')
     const hasSelectedInterests = localStorage.getItem('hasSelectedInterests')

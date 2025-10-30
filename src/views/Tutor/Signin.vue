@@ -41,6 +41,9 @@ const handleSignIn = () => {
   } else if (activeTab.value === 'super admin') {
     console.log('Super admin logged in successfully!');
     router.push('/admin/dashboard'); 
+  } else if (activeTab.value === 'tutor') {
+    console.log('Tutor logged in successfully!');
+    router.push('/tutor/dashboard');  
   } else {
     alert('Unknown role selected.');
   }

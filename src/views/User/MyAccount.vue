@@ -54,8 +54,8 @@ const goToPage = (page) => {
 
 
 const isOrganization = ref(true); 
-const currentView = ref('My Account');
-const activeTab = ref('Subscription'); 
+const currentView = ref('My Profile');
+const activeTab = ref('My Profile'); 
 
 const navLinks = [
   {
@@ -118,8 +118,8 @@ const isOtherDetailsEditing = ref(false);
 const otherDetails = reactive({
   addressLine1: 'Address Line 1',
   addressLine2: 'Address Line 2',
-  state: 'Mock State',
-  country: 'Mock Country',
+  state: 'State',
+  country: 'Country',
   description: 'Sample Text',
 });
 
@@ -213,7 +213,7 @@ const toggleInterest = (id) => {
 </script>
 
 <template>
-  <div class="flex flex-col lg:flex-row min-h-screen font-inter">
+  <div class="flex flex-col lg:flex-row min-h-screen font-sans bg-white border-0">
     <AdminSidebar
       class="hidden md:flex"
       :navLinks="navLinks"
@@ -228,7 +228,7 @@ const toggleInterest = (id) => {
         <h1 class="text-3xl font-bold mt-2 text-gray-800">{{ currentView }}</h1>
       </header>
 
-      <div v-if="currentView === 'My Account'">
+      <div v-if="currentView === 'My Profile'">
         <div
           class="flex justify-center border-b border-gray-200 mb-8 space-x-6"
         >
@@ -270,7 +270,7 @@ const toggleInterest = (id) => {
         <div v-if="activeTab === 'My Profile'" class="space-y-10">
           <div v-if="isOrganization" class="p-6 bg-white shadow-lg space-y-8">
             <h2 class="text-xl font-semibold text-gray-800">
-              Organization Profile
+              Profile
             </h2>
 
             <div class="grid md:grid-cols-2 gap-8">

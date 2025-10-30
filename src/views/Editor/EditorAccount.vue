@@ -1,44 +1,44 @@
 <script setup>
-import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import { computed, reactive, ref } from "vue";
+import EditorSidebar from "./EditorSidebar.vue";
 
-const subscription = reactive({
-  expiryDate: "31st December 2025",
-  invoices: [
-    {
-      id: 1,
-      invoiceNo: "001",
-      invoiceDate: "Monday, December 19 2024",
-      dueDate: "Monday, December 31 2025",
-      total: "₦200,000.00",
-      status: "Paid",
-    },
-    {
-      id: 2,
-      invoiceNo: "001",
-      invoiceDate: "Monday, December 29 2023",
-      dueDate: "Monday, December 31 2024",
-      total: "₦200,000.00",
-      status: "Paid",
-    },
-    {
-      id: 3,
-      invoiceNo: "001",
-      invoiceDate: "Monday, December 01 2022",
-      dueDate: "Monday, December 31 2023",
-      total: "₦200,000.00",
-      status: "Paid",
-    },
-  ],
-  currentPage: 1,
-  totalPages: 2,
-  totalEntries: 10,
-});
+// const subscription = reactive({
+//   expiryDate: "31st December 2025",
+//   invoices: [
+//     {
+//       id: 1,
+//       invoiceNo: "001",
+//       invoiceDate: "Monday, December 19 2024",
+//       dueDate: "Monday, December 31 2025",
+//       total: "₦200,000.00",
+//       status: "Paid",
+//     },
+//     {
+//       id: 2,
+//       invoiceNo: "001",
+//       invoiceDate: "Monday, December 29 2023",
+//       dueDate: "Monday, December 31 2024",
+//       total: "₦200,000.00",
+//       status: "Paid",
+//     },
+//     {
+//       id: 3,
+//       invoiceNo: "001",
+//       invoiceDate: "Monday, December 01 2022",
+//       dueDate: "Monday, December 31 2023",
+//       total: "₦200,000.00",
+//       status: "Paid",
+//     },
+//   ],
+//   currentPage: 1,
+//   totalPages: 2,
+//   totalEntries: 10,
+// });
 
-const makePayment = () => {
-  console.log("Initiating payment process...");
-  alert("Redirecting to payment gateway...");
-};
+// const makePayment = () => {
+//   console.log("Initiating payment process...");
+//   alert("Redirecting to payment gateway...");
+// };
 
 const goToPage = (page) => {
   if (page >= 1 && page <= subscription.totalPages) {
@@ -49,8 +49,7 @@ const goToPage = (page) => {
 
 const isOrganization = ref(true);
 const currentView = ref("My Account");
-const activeTab = ref("Subscription");
-
+const activeTab = ref("My Profile"); 
 const isOrgEditing = ref(false);
 const orgDetails = reactive({
   name: "Ruthie & Co Nigeria Limited",
@@ -137,55 +136,55 @@ const toggleIndividualEdit = () => {
   isIndividualEditing.value = !isIndividualEditing.value;
 };
 
-const toggleOtherDetailsEdit = () => {
-  if (isOtherDetailsEditing.value) {
-    console.log(
-      "Saving Other Details:",
-      JSON.parse(JSON.stringify(otherDetails))
-    );
-  }
-  isOtherDetailsEditing.value = !isOtherDetailsEditing.value;
-};
+// const toggleOtherDetailsEdit = () => {
+//   if (isOtherDetailsEditing.value) {
+//     console.log(
+//       "Saving Other Details:",
+//       JSON.parse(JSON.stringify(otherDetails))
+//     );
+//   }
+//   isOtherDetailsEditing.value = !isOtherDetailsEditing.value;
+// };
 
-const sendInvitation = (id) => {
-  const invite = invitations.find((i) => i.id === id);
-  if (invite && invite.email !== "") {
-    console.log(`Sending invite to: ${invite.email}`);
-    invite.sent = true;
-  }
-};
+// const sendInvitation = (id) => {
+//   const invite = invitations.find((i) => i.id === id);
+//   if (invite && invite.email !== "") {
+//     console.log(`Sending invite to: ${invite.email}`);
+//     invite.sent = true;
+//   }
+// };
 
-const removeInvitation = (id) => {
-  const invite = invitations.find((i) => i.id === id);
-  if (invite) {
-    invite.email = "";
-    invite.sent = false;
-  }
-};
+// const removeInvitation = (id) => {
+//   const invite = invitations.find((i) => i.id === id);
+//   if (invite) {
+//     invite.email = "";
+//     invite.sent = false;
+//   }
+// };
 
-const toggleInterest = (id) => {
-  const item = interests.find((i) => i.id === id);
+// const toggleInterest = (id) => {
+//   const item = interests.find((i) => i.id === id);
 
-  if (item && !item.isMainCategory) {
-    const willBeSelected = !item.selected;
+//   if (item && !item.isMainCategory) {
+//     const willBeSelected = !item.selected;
 
-    if (willBeSelected && selectedInterestsCount.value >= 4) {
-      console.log("Cannot select more than 4 secondary interests.");
-      return;
-    }
+//     if (willBeSelected && selectedInterestsCount.value >= 4) {
+//       console.log("Cannot select more than 4 secondary interests.");
+//       return;
+//     }
 
-    item.selected = willBeSelected;
-  }
-};
+//     item.selected = willBeSelected;
+//   }
+// };
 </script>
 
 <template>
-  <div class="flex flex-col lg:flex-row min-h-screen font-inter">
-    <SuperAdminSidebar />
+  <div class="flex flex-col lg:flex-row min-h-screen bg-white border-0 font-inter">
+    <EditorSidebar />
 
     <main class="flex-1 p-4 sm:p-8 lg:p-10 max-w-7xl mx-auto w-full">
       <span class="text-sm text-gray-500"
-        >Home / My Account / {{ activeTab }}</span
+        >Home > My Account > {{ activeTab }}</span
       >
 
       <header class="mb-8 text-center">
@@ -207,7 +206,7 @@ const toggleInterest = (id) => {
           >
             My Profile
           </button>
-          <button
+          <!-- <button
             @click="activeTab = 'Subscription'"
             :class="[
               'py-2 px-1 border-b-2 transition duration-150 font-medium',
@@ -217,13 +216,13 @@ const toggleInterest = (id) => {
             ]"
           >
             Signatures
-          </button>
+          </button> -->
         </div>
 
         <div v-if="activeTab === 'My Profile'" class="space-y-10">
           <div v-if="isOrganization" class="p-6 bg-white shadow-lg space-y-8">
             <h2 class="text-xl font-semibold text-gray-800">
-              Organization Profile
+             Profile
             </h2>
 
             <div class="grid md:grid-cols-2 gap-8">
@@ -298,7 +297,7 @@ const toggleInterest = (id) => {
                   </div>
                 </div>
 
-                <div class="flex justify-end mt-6">
+                <!-- <div class="flex justify-end mt-6">
                   <button
                     @click="toggleOrgEdit"
                     :class="
@@ -310,122 +309,13 @@ const toggleInterest = (id) => {
                   >
                     {{ isOrgEditing ? "Save Changes" : "Edit" }}
                   </button>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
 
-          <div v-else class="p-6 bg-white rounded-xl shadow-lg space-y-8">
-            <div class="flex justify-between items-center mb-6">
-              <h2 class="text-xl font-semibold">My Personal Profile</h2>
-              <button
-                @click="toggleIndividualEdit"
-                :class="
-                  isIndividualEditing
-                    ? 'bg-red-600 hover:bg-red-700'
-                    : 'bg-[#0c6b39] hover:bg-[#09572d]'
-                "
-                class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150"
-              >
-                {{ isIndividualEditing ? "Save Changes" : "Edit" }}
-              </button>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-8">
-              <div
-                class="flex flex-col items-center p-6 border border-gray-200 rounded-xl bg-gray-50"
-              >
-                <div
-                  class="w-24 h-24 bg-white border border-gray-300 rounded-full flex items-center justify-center mb-3 shadow-inner"
-                >
-                  <svg
-                    class="w-8 h-8 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    />
-                  </svg>
-                </div>
-
-                <span class="text-xs text-gray-500 mb-4">
-                  Allowed file types: JPG, PNG, JPEG
-                </span>
-
-                <div class="flex space-x-3">
-                  <button
-                    class="px-4 py-2 text-sm text-green-800 bg-white hover:bg-gray-100 border border-gray-300 rounded-lg shadow-sm transition duration-150"
-                  >
-                    Save
-                  </button>
-                  <label
-                    for="profilePicUpload"
-                    class="px-4 py-2 text-sm text-white bg-[#0c6b39] hover:bg-[#09572d] rounded-lg shadow-md cursor-pointer transition duration-150"
-                  >
-                    Upload
-                  </label>
-                  <input
-                    type="file"
-                    id="profilePicUpload"
-                    class="hidden"
-                    accept=".jpg,.png,.jpeg"
-                  />
-                </div>
-              </div>
-
-              <div class="p-6 rounded-xl shadow-md bg-[#F2F9F3] relative">
-                <div class="space-y-4 text-sm text-gray-700">
-                  <div
-                    v-for="detail in individualDetailsKeys"
-                    :key="detail.key"
-                    class="flex justify-between items-center"
-                  >
-                    <span class="font-semibold text-gray-600"
-                      >{{ detail.label }}:</span
-                    >
-                    <input
-                      :type="detail.key === 'password' ? 'password' : 'text'"
-                      v-model="individualDetails[detail.key]"
-                      :disabled="!isIndividualEditing"
-                      :class="
-                        isIndividualEditing
-                          ? 'bg-white border border-gray-400 rounded-md p-1.5'
-                          : 'bg-transparent border-none'
-                      "
-                      class="text-right w-2/3 transition duration-150"
-                    />
-                  </div>
-                </div>
-                <div class="flex justify-end mt-6">
-                  <button
-                    @click="toggleIndividualEdit"
-                    :class="
-                      isIndividualEditing
-                        ? 'bg-red-600 hover:bg-red-700'
-                        : 'bg-[#0c6b39] hover:bg-[#09572d]'
-                    "
-                    class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150"
-                  >
-                    {{ isIndividualEditing ? "Save Changes" : "Edit" }}
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div class="text-center mt-8 pt-6 border-t border-gray-200">
-              <h3 class="text-xl font-bold mb-2 text-gray-800">
-                Account Status: <span class="text-green-600">VERIFIED</span>
-              </h3>
-            </div>
-          </div>
-
-          <div v-if="isOrganization" class="p-6 bg-white shadow-lg">
+          
+          <!-- <div v-if="isOrganization" class="p-6 bg-white shadow-lg">
             <h2 class="text-xl font-semibold mb-6">Invitations</h2>
             <p class="text-gray-600 mb-4">
               You have sent
@@ -471,10 +361,10 @@ const toggleInterest = (id) => {
                 </button>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
 
-        <div v-else-if="activeTab === 'Subscription'" class="space-y-10">
+        <!-- <div v-else-if="activeTab === 'Subscription'" class="space-y-10">
           <div
             class="p-10 bg-[#F2F9F3] rounded-xl shadow-lg text-center border-2 border-green-300"
           >
@@ -673,34 +563,10 @@ const toggleInterest = (id) => {
               </button>
             </div>
           </div>
-        </div>
+        </div> -->
 
-        <div
-          v-else
-          class="p-10 text-center bg-white rounded-xl shadow-lg text-gray-500"
-        >
-          <h2 class="text-2xl font-semibold mb-3">
-            Content for {{ activeTab }}
-          </h2>
-          <p>
-            This section will contain details related to your
-            {{ activeTab }} preferences or status.
-          </p>
-        </div>
       </div>
 
-      <div
-        v-else
-        class="p-10 text-center bg-white rounded-xl shadow-lg text-gray-500"
-      >
-        <h2 class="text-2xl font-semibold mb-3">
-          Welcome to the {{ currentView }} Page
-        </h2>
-        <p>
-          This is where the content for the primary {{ currentView }} view would
-          be rendered. The sidebar controls the major page view.
-        </p>
-      </div>
     </main>
   </div>
 </template>

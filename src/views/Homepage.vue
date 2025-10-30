@@ -215,7 +215,7 @@ onMounted(() => {
           <h1
             class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-gray-900"
           >
-            <span class="text-orange-600">Healthcare Advocacy</span>
+            <span class="text-orange-600">Health Advocacy</span>
             <span class="text-primary"> Partnership, Leadership.</span>
           </h1>
           <p class="text-lg text-gray-600 mb-8 max-w-lg">

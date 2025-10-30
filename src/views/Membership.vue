@@ -2,7 +2,7 @@
 import handsJoining from "@/assets/handsJoining.jpg";
 import logo from "@/assets/logo.png";
 
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const categories = ref([
   {
@@ -108,6 +108,7 @@ const categories = ref([
 ]);
 
 const activeCategory = ref(categories.value[0]);
+const activePlan = computed(() => activeCategory.value.plans[0]);
 </script>
 
 <template>
@@ -154,17 +155,17 @@ const activeCategory = ref(categories.value[0]);
         Membership Categories
       </h2>
 
-      <div class="max-w-4xl mx-auto">
+      <div class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
         <div class="flex flex-wrap justify-center space-x-2 sm:space-x-4 mb-8">
           <button
             v-for="category in categories"
             :key="category.name"
             @click="activeCategory = category"
             :class="[
-              'px-5 py-2 rounded-lg font-medium transition',
+              'px-5 py-2 rounded-lg font-medium transition duration-200 ease-in-out whitespace-nowrap',
               activeCategory.name === category.name
                 ? 'bg-green-700 text-white shadow-md'
-                : 'bg-white text-gray-700 border border-gray-300 hover:border-green-700',
+                : 'bg-white text-gray-700 border border-gray-300 hover:border-green-700 hover:text-green-700',
             ]"
           >
             {{ category.name }}
@@ -172,80 +173,61 @@ const activeCategory = ref(categories.value[0]);
         </div>
 
         <div
-          class="p-6 sm:p-10 rounded-[30px] border-2 border-green-200 bg-white shadow-xl flex flex-col gap-8"
+          class="p-6 sm:p-10 rounded-[30px] border-2 border-green-200 bg-white shadow-xl flex flex-col gap-6"
         >
-          <h3 class="text-2xl font-bold text-center text-gray-900">
+          <div class="text-center mb-6">
+            <p class="text-3xl font-extrabold text-green-700">
+              {{ activePlan.price }}
+            </p>
+          </div>
+
+          <h3 class="text-2xl font-bold text-center text-gray-900 -mt-4">
             {{ activeCategory.name }} Membership
           </h3>
-          <p class="text-gray-600 text-sm mb-6 text-center">
-            {{ activeCategory.description }}
-          </p>
 
-          <div class="grid grid-cols-1 place-items-center">
-            <div
-              v-for="plan in activeCategory.plans"
-              :key="plan.title"
-              class="flex-1 rounded-xl border border-gray-200 overflow-hidden"
+          <div class="benefits-section p-6 rounded-xl">
+            <h5
+              class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2 border-gray-300"
             >
-              <div class="p-6">
-                <h4 class="text-xl font-bold text-gray-900 mb-1">
-                  {{ plan.title }}
-                </h4>
-                <p class="text-sm text-gray-500 mb-6">{{ plan.audience }}</p>
-
-                <div class="bg-orange-50/70 p-4 rounded-lg">
-                  <h5 class="text-sm font-semibold text-gray-700 mb-3">
-                    Member Benefits
-                  </h5>
-                  <ul class="space-y-2 text-gray-700 text-sm">
-                    <li
-                      v-for="(benefit, i) in plan.benefits"
-                      :key="i"
-                      class="flex items-start"
-                    >
-                      <svg
-                        class="w-5 h-5 mr-2 text-green-700 flex-shrink-0"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                      {{ benefit }}
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div class="p-6 pt-0 text-center">
-                <p class="text-3xl font-extrabold text-green-700 mb-4">
-                  {{ plan.price }}
-                </p>
-                <a
-                  href="#"
-                  class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition"
+              Benefits to Members
+            </h5>
+            <ul class="space-y-3 text-gray-700 text-base">
+              <li
+                v-for="(benefit, i) in activePlan.benefits"
+                :key="i"
+                class="flex items-start"
+              >
+                <svg
+                  class="w-5 h-5 mr-3 text-green-700 flex-shrink-0 mt-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  Join Now
-                  <svg
-                    class="w-5 h-5 ml-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M14 5l7 7m0 0l-7 7m7-7H3"
-                    />
-                  </svg>
-                </a>
-              </div>
-            </div>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2.5"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+                <span class="text-gray-700">{{ benefit }}</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="text-center mt-4">
+            <a
+              href="#"
+              class="inline-flex items-center justify-center px-10 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-green-800 hover:bg-green-900 transition transform hover:scale-[1.02]"
+              style="
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                  0 2px 4px -2px rgba(0, 0, 0, 0.06),
+                  0 5px 15px rgba(0, 0, 0, 0.2);
+              "
+            >
+              Join Now
+            </a>
           </div>
         </div>
       </div>
@@ -306,7 +288,7 @@ const activeCategory = ref(categories.value[0]);
             </div>
           </div>
 
-          <div class="flex flex-col md:flex-row items-start gap-6">
+          <div class="flex flex-col md:flex-row items-start gap-6 mb-10">
             <div
               class="relative w-[200px] h-[200px] bg-orange-50 rounded-tr-[30px] rounded-bl-[30px] p-3 shadow-sm overflow-hidden flex flex-col justify-center flex-shrink-0"
             >
@@ -382,7 +364,8 @@ const activeCategory = ref(categories.value[0]);
                 </div>
 
                 <h3 class="text-green-800 font-semibold text-md leading-tight">
-                  Information, Knowledge, <br /> and Capacity Development.
+                  Information, Knowledge, <br />
+                  and Capacity Development.
                 </h3>
               </div>
             </div>
@@ -391,20 +374,24 @@ const activeCategory = ref(categories.value[0]);
               class="text-gray-700 text-sm leading-relaxed space-y-4 md:flex-grow"
             >
               <p>
-                
-                <strong>Access to Data and Sector Information:</strong> Members have exclusive access to research data, policy briefs, and insights on healthcare trends and opportunities.
+                <strong>Access to Data and Sector Information:</strong> Members
+                have exclusive access to research data, policy briefs, and
+                insights on healthcare trends and opportunities.
               </p>
               <p>
-                
-                <strong>Information on Policies and Regulations:</strong> Receive timely updates on emerging policies and how they impact members’ businesses.
+                <strong>Information on Policies and Regulations:</strong>
+                Receive timely updates on emerging policies and how they impact
+                members’ businesses.
               </p>
               <p>
-                
-                <strong>Subsidized Training and Conferences:</strong> Members enjoy discounted participation in HFN conferences, training programs, and workshops.
+                <strong>Subsidized Training and Conferences:</strong> Members
+                enjoy discounted participation in HFN conferences, training
+                programs, and workshops.
               </p>
               <p>
-                
-                <strong>Right of First Refusal:</strong> Members receive priority consideration for opportunities and initiatives within the Federation.
+                <strong>Right of First Refusal:</strong> Members receive
+                priority consideration for opportunities and initiatives within
+                the Federation.
               </p>
             </div>
           </div>
@@ -436,22 +423,26 @@ const activeCategory = ref(categories.value[0]);
               class="text-gray-700 text-sm leading-relaxed space-y-4 md:flex-grow"
             >
               <p>
-                
-                <strong>Membership Access to Website:</strong> Fully-subscribed members have unlimited access to restricted sections of the HFN website, containing premium content and opportunities.
+                <strong>Membership Access to Website:</strong> Fully-subscribed
+                members have unlimited access to restricted sections of the HFN
+                website, containing premium content and opportunities.
               </p>
               <p>
-                
-                <strong>Increased Publicity:</strong> Registered members’ profiles are published on the HFN website, providing visibility to potential partners and clients.
+                <strong>Increased Publicity:</strong> Registered members’
+                profiles are published on the HFN website, providing visibility
+                to potential partners and clients.
               </p>
               <p>
-                
-                <strong>Advertisement Opportunities:</strong> Members can advertise products and services on the HFN website and through HFN communication channels.
+                <strong>Advertisement Opportunities:</strong> Members can
+                advertise products and services on the HFN website and through
+                HFN communication channels.
               </p>
               <p>
-                
-                 <strong>International Exposure:</strong> Through HFN’s partnerships with international bodies such as the IFC and other development agencies, members gain global recognition and visibility.
+                <strong>International Exposure:</strong> Through HFN’s
+                partnerships with international bodies such as the IFC and other
+                development agencies, members gain global recognition and
+                visibility.
               </p>
-              
             </div>
           </div>
           <div class="flex flex-col md:flex-row items-start gap-6 mb-10">
@@ -472,7 +463,8 @@ const activeCategory = ref(categories.value[0]);
                 </div>
 
                 <h3 class="text-green-800 font-semibold text-md leading-tight">
-                  Member Support, Benefits, <br /> and Privileges.
+                  Member Support, Benefits, <br />
+                  and Privileges.
                 </h3>
               </div>
             </div>
@@ -481,26 +473,29 @@ const activeCategory = ref(categories.value[0]);
               class="text-gray-700 text-sm leading-relaxed space-y-4 md:flex-grow"
             >
               <p>
-                
-                <strong>HFN Support and Endorsement:</strong> Members benefit from the Federation’s credibility, brand recognition, and endorsements.
+                <strong>HFN Support and Endorsement:</strong> Members benefit
+                from the Federation’s credibility, brand recognition, and
+                endorsements.
               </p>
               <p>
-                
-                <strong>Access to Discounted Services:</strong> Enjoy exclusive discounts on products and services offered by fellow members and partner organizations.
+                <strong>Access to Discounted Services:</strong> Enjoy exclusive
+                discounts on products and services offered by fellow members and
+                partner organizations.
               </p>
               <p>
-           
-                <strong>Membership Card:</strong> Members receive an official HFN Membership Card which grants access to discounts and benefits.
+                <strong>Membership Card:</strong> Members receive an official
+                HFN Membership Card which grants access to discounts and
+                benefits.
               </p>
               <p>
-                
-                <strong>Job Offers and Recruitment Support:</strong> Members can access job postings, recruitment adverts, and downloadable resumes from the HFN database.
+                <strong>Job Offers and Recruitment Support:</strong> Members can
+                access job postings, recruitment adverts, and downloadable
+                resumes from the HFN database.
               </p>
             </div>
           </div>
         </div>
       </section>
-      
     </div>
   </section>
   <section class="py-10 sm:py-24 bg-white">
@@ -737,3 +732,10 @@ const activeCategory = ref(categories.value[0]);
     </div>
   </section>
 </template>
+
+<style scoped>
+.benefits-section {
+  background-color: #fcf8f3; 
+  border-radius: 0.75rem; 
+}
+</style>

@@ -1,57 +1,19 @@
 <script setup>
+import cert from "@/assets/cert.png";
+import sign from "@/assets/sign.png";
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import { computed, reactive, ref } from "vue";
 
-const subscription = reactive({
-  expiryDate: "31st December 2025",
-  invoices: [
-    {
-      id: 1,
-      invoiceNo: "001",
-      invoiceDate: "Monday, December 19 2024",
-      dueDate: "Monday, December 31 2025",
-      total: "₦200,000.00",
-      status: "Paid",
-    },
-    {
-      id: 2,
-      invoiceNo: "001",
-      invoiceDate: "Monday, December 29 2023",
-      dueDate: "Monday, December 31 2024",
-      total: "₦200,000.00",
-      status: "Paid",
-    },
-    {
-      id: 3,
-      invoiceNo: "001",
-      invoiceDate: "Monday, December 01 2022",
-      dueDate: "Monday, December 31 2023",
-      total: "₦200,000.00",
-      status: "Paid",
-    },
-  ],
-  currentPage: 1,
-  totalPages: 2,
-  totalEntries: 10,
-});
-
-const makePayment = () => {
-  console.log("Initiating payment process...");
-  alert("Redirecting to payment gateway...");
-};
-
-const goToPage = (page) => {
-  if (page >= 1 && page <= subscription.totalPages) {
-    subscription.currentPage = page;
-    console.log(`Navigating to page ${page}`);
-  }
-};
-
 const isOrganization = ref(true);
-const currentView = ref("My Account");
-const activeTab = ref("Subscription");
+const currentView = ref("My Profile");
+const activeTab = ref("My Profile");
+const previewImageUrl = ref(null);
+const uploadedFileName = ref(null);
+const uploadStatus = ref("Awaiting Upload");
+const fileInput = ref(null);
+const profileImageUrl = ref(null);
 
-const isOrgEditing = ref(false);
+let nextSignatureId = 3;
 const orgDetails = reactive({
   name: "Ruthie & Co Nigeria Limited",
   email: "peterpan@gmail.com.us",
@@ -65,7 +27,6 @@ const orgDetailsKeys = [
   { key: "password", label: "Password" },
 ];
 
-const isIndividualEditing = ref(false);
 const individualDetails = reactive({
   firstName: "John",
   lastName: "Doe",
@@ -80,15 +41,6 @@ const individualDetailsKeys = [
   { key: "phone", label: "Phone Number" },
   { key: "password", label: "Password" },
 ];
-
-const isOtherDetailsEditing = ref(false);
-const otherDetails = reactive({
-  addressLine1: "Address Line 1",
-  addressLine2: "Address Line 2",
-  state: "Mock State",
-  country: "Mock Country",
-  description: "Sample Text",
-});
 
 const invitations = reactive([
   { id: 1, email: "peterpan@gmail.com", sent: true },
@@ -113,38 +65,85 @@ const interests = reactive([
   { id: 6, name: "Dentistry", selected: false, isMainCategory: false },
 ]);
 
-const selectedInterestsCount = computed(
-  () => interests.filter((i) => i.selected && !i.isMainCategory).length
-);
+const handleProfilePicUpload = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
 
-const toggleOrgEdit = () => {
-  if (isOrgEditing.value) {
-    console.log(
-      "Saving Organization Details:",
-      JSON.parse(JSON.stringify(orgDetails))
-    );
+  if (!["image/jpeg", "image/png", "image/jpg"].includes(file.type)) {
+    alert("Please upload a valid JPG or PNG image.");
+    return;
   }
-  isOrgEditing.value = !isOrgEditing.value;
+
+  if (file.size > 1024 * 1024) {
+    alert("File size exceeds 1MB limit.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    profileImageUrl.value = e.target.result;
+  };
+  reader.readAsDataURL(file);
 };
 
-const toggleIndividualEdit = () => {
-  if (isIndividualEditing.value) {
-    console.log(
-      "Saving Individual Details:",
-      JSON.parse(JSON.stringify(individualDetails))
-    );
+const handleFileUpload = (event) => {
+  const file = event.target.files[0];
+  uploadedFileName.value = file ? file.name : null;
+
+  if (!file) {
+    clearPreview();
+    uploadStatus.value = "No file selected";
+    return;
   }
-  isIndividualEditing.value = !isIndividualEditing.value;
+
+  if (
+    ![
+      "application/zip",
+      "application/x-rar-compressed",
+      "image/jpeg",
+      "image/png",
+    ].includes(file.type) &&
+    file.type !== ""
+  ) {
+    alert("Invalid file type. Please upload a zip, rar, jpg, or png file.");
+    clearPreview();
+    uploadStatus.value = "Invalid file type";
+    return;
+  }
+
+  if (file.size > 1024 * 1024) {
+    alert("File size exceeds 1MB limit.");
+    clearPreview();
+    uploadStatus.value = "File too large (Max 1Mb)";
+    return;
+  }
+
+  if (file.type.startsWith("image/")) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      previewImageUrl.value = e.target.result;
+    };
+    reader.readAsDataURL(file);
+    uploadStatus.value = `File ready: ${file.name}`;
+  } else {
+    previewImageUrl.value = null;
+    uploadStatus.value = `File ready: ${file.name}`;
+  }
 };
 
-const toggleOtherDetailsEdit = () => {
-  if (isOtherDetailsEditing.value) {
-    console.log(
-      "Saving Other Details:",
-      JSON.parse(JSON.stringify(otherDetails))
-    );
+const triggerFileInput = () => {
+  if (fileInput.value) {
+    fileInput.value.click();
   }
-  isOtherDetailsEditing.value = !isOtherDetailsEditing.value;
+};
+
+const clearPreview = () => {
+  previewImageUrl.value = null;
+  uploadedFileName.value = null;
+  uploadStatus.value = "Awaiting Upload";
+  if (fileInput.value) {
+    fileInput.value.value = "";
+  }
 };
 
 const sendInvitation = (id) => {
@@ -163,24 +162,67 @@ const removeInvitation = (id) => {
   }
 };
 
-const toggleInterest = (id) => {
-  const item = interests.find((i) => i.id === id);
+const signatures = reactive([
+  {
+    id: 1,
+    name: "Signature 1",
+    date: "Created on October 25, 2025",
+    imageUrl: sign,
+  },
+  {
+    id: 2,
+    name: "Signature 2",
+    date: "Created on October 25, 2025",
+    imageUrl: sign,
+  },
+]);
 
-  if (item && !item.isMainCategory) {
-    const willBeSelected = !item.selected;
-
-    if (willBeSelected && selectedInterestsCount.value >= 4) {
-      console.log("Cannot select more than 4 secondary interests.");
-      return;
-    }
-
-    item.selected = willBeSelected;
+const addSignature = () => {
+  if (!previewImageUrl.value) {
+    alert("Please upload a valid image file first to add a signature.");
+    return;
   }
+
+  const newSignature = {
+    id: nextSignatureId++,
+    name: uploadedFileName.value
+      ? uploadedFileName.value.split(".")[0]
+      : `New Signature ${nextSignatureId - 1}`,
+    date: `Uploaded on ${new Date().toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    })}`,
+    imageUrl: previewImageUrl.value,
+  };
+
+  signatures.push(newSignature);
+  clearPreview();
+  alert(`Signature "${newSignature.name}" added successfully!`);
+};
+
+const deleteSignature = (id) => {
+  const index = signatures.findIndex((sig) => sig.id === id);
+  if (index !== -1) {
+    const deletedName = signatures[index].name;
+    signatures.splice(index, 1);
+    alert(`Signature "${deletedName}" deleted successfully.`);
+  }
+};
+
+const downloadSignature = (imageUrl, fileName) => {
+  const link = document.createElement("a");
+  link.href = imageUrl;
+  link.download = `${fileName || "signature"}.png`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  console.log(`Signature "${fileName}" downloaded.`);
 };
 </script>
 
 <template>
-  <div class="flex flex-col lg:flex-row min-h-screen font-inter">
+  <div class="flex flex-col lg:flex-row min-h-screen font-sans">
     <SuperAdminSidebar />
 
     <main class="flex-1 p-4 sm:p-8 lg:p-10 max-w-7xl mx-auto w-full">
@@ -192,7 +234,7 @@ const toggleInterest = (id) => {
         <h1 class="text-3xl font-bold mt-2 text-gray-800">{{ currentView }}</h1>
       </header>
 
-      <div v-if="currentView === 'My Account'">
+      <div v-if="currentView === 'My Profile'">
         <div
           class="flex justify-center border-b border-gray-200 mb-8 space-x-6"
         >
@@ -208,10 +250,10 @@ const toggleInterest = (id) => {
             My Profile
           </button>
           <button
-            @click="activeTab = 'Subscription'"
+            @click="activeTab = 'Signatures'"
             :class="[
               'py-2 px-1 border-b-2 transition duration-150 font-medium',
-              activeTab === 'Subscription'
+              activeTab === 'Signatures'
                 ? 'border-green-600 text-green-600'
                 : 'border-transparent text-gray-500 hover:text-gray-700',
             ]"
@@ -222,9 +264,7 @@ const toggleInterest = (id) => {
 
         <div v-if="activeTab === 'My Profile'" class="space-y-10">
           <div v-if="isOrganization" class="p-6 bg-white shadow-lg space-y-8">
-            <h2 class="text-xl font-semibold text-gray-800">
-              Profile
-            </h2>
+            <h2 class="text-xl font-semibold text-gray-800">Profile</h2>
 
             <div class="grid md:grid-cols-2 gap-8">
               <div
@@ -233,7 +273,14 @@ const toggleInterest = (id) => {
                 <div
                   class="w-24 h-24 bg-white border border-gray-300 rounded-lg flex items-center justify-center mb-3 shadow-inner"
                 >
+                  <img
+                    v-if="profileImageUrl"
+                    :src="profileImageUrl"
+                    alt="Profile Picture"
+                    class="w-full h-full object-cover"
+                  />
                   <svg
+                    v-else
                     class="w-8 h-8 text-gray-400"
                     fill="none"
                     stroke="currentColor"
@@ -270,6 +317,7 @@ const toggleInterest = (id) => {
                     id="logoUpload"
                     class="hidden"
                     accept=".jpg,.png,.jpeg"
+                    @change="handleProfilePicUpload"
                   />
                 </div>
               </div>
@@ -297,20 +345,6 @@ const toggleInterest = (id) => {
                     />
                   </div>
                 </div>
-
-                <div class="flex justify-end mt-6">
-                  <button
-                    @click="toggleOrgEdit"
-                    :class="
-                      isOrgEditing
-                        ? 'bg-red-600 hover:bg-red-700'
-                        : 'bg-[#0c6b39] hover:bg-[#09572d]'
-                    "
-                    class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150"
-                  >
-                    {{ isOrgEditing ? "Save Changes" : "Edit" }}
-                  </button>
-                </div>
               </div>
             </div>
           </div>
@@ -336,9 +370,16 @@ const toggleInterest = (id) => {
                 class="flex flex-col items-center p-6 border border-gray-200 rounded-xl bg-gray-50"
               >
                 <div
-                  class="w-24 h-24 bg-white border border-gray-300 rounded-full flex items-center justify-center mb-3 shadow-inner"
+                  class="w-24 h-24 bg-white border border-gray-300 rounded-full flex items-center justify-center mb-3 shadow-inner overflow-hidden"
                 >
+                  <img
+                    v-if="profileImageUrl"
+                    :src="profileImageUrl"
+                    alt="Profile Picture"
+                    class="w-full h-full object-cover"
+                  />
                   <svg
+                    v-else
                     class="w-8 h-8 text-gray-400"
                     fill="none"
                     stroke="currentColor"
@@ -375,6 +416,7 @@ const toggleInterest = (id) => {
                     id="profilePicUpload"
                     class="hidden"
                     accept=".jpg,.png,.jpeg"
+                    @change="handleProfilePicUpload"
                   />
                 </div>
               </div>
@@ -401,19 +443,6 @@ const toggleInterest = (id) => {
                       class="text-right w-2/3 transition duration-150"
                     />
                   </div>
-                </div>
-                <div class="flex justify-end mt-6">
-                  <button
-                    @click="toggleIndividualEdit"
-                    :class="
-                      isIndividualEditing
-                        ? 'bg-red-600 hover:bg-red-700'
-                        : 'bg-[#0c6b39] hover:bg-[#09572d]'
-                    "
-                    class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150"
-                  >
-                    {{ isIndividualEditing ? "Save Changes" : "Edit" }}
-                  </button>
                 </div>
               </div>
             </div>
@@ -474,44 +503,53 @@ const toggleInterest = (id) => {
           </div>
         </div>
 
-        <div v-else-if="activeTab === 'Subscription'" class="space-y-10">
-          <div
-            class="p-10 bg-[#F2F9F3] rounded-xl shadow-lg text-center border-2 border-green-300"
-          >
-            <h2 class="text-2xl font-semibold mb-3 text-gray-800">
-              Your subscription expires on:
+        <div v-else-if="activeTab === 'Signatures'" class="space-y-10">
+          <div class="p-6 bg-white shadow-lg space-y-6">
+            <h2 class="text-xl font-semibold text-gray-800">
+              Certificate Template
             </h2>
-            <p class="text-4xl font-bold text-orange-600 mb-6">
-              {{ subscription.expiryDate }}
-            </p>
-            <button
-              @click="makePayment"
-              class="px-8 py-3 text-lg text-white bg-[#0c6b39] hover:bg-[#09572d] rounded-lg shadow-md transition duration-150 font-semibold"
-            >
-              Make Payment
-            </button>
+            <div class="flex justify-center">
+              <img
+                :src="cert"
+                alt="Certificate Template Preview"
+                class="w-full max-w-lg border border-gray-300 rounded-lg shadow-xl"
+              />
+            </div>
           </div>
 
-          <div>
-            <h2 class="text-2xl font-semibold mb-6 text-gray-800">
-              My Invoices
+          <div class="p-6 bg-white shadow-lg space-y-6">
+            <h2 class="text-xl font-semibold text-gray-800">
+              Upload Signature
             </h2>
 
+            <input
+              type="file"
+              ref="fileInput"
+              @change="handleFileUpload"
+              class="hidden"
+              accept=".zip,.rar,.jpg,.png,.jpeg"
+            />
+
             <div
-              class="flex justify-between items-center mb-4 p-4 bg-gray-50 rounded-t-lg"
+              class="flex justify-center items-center p-12 border-2 border-dashed rounded-xl transition duration-150 cursor-pointer"
+              :class="[
+                previewImageUrl || uploadStatus.includes('File ready')
+                  ? 'border-green-500 bg-green-50'
+                  : 'border-gray-300 bg-gray-50 hover:bg-gray-100',
+              ]"
+              @click="triggerFileInput"
             >
-              <p class="text-sm text-gray-700">
-                Showing 1 to {{ subscription.invoices.length }} of
-                {{ subscription.totalEntries }} entries
-              </p>
-              <div class="relative">
-                <input
-                  type="text"
-                  placeholder="Search"
-                  class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+              <div class="text-center">
+                <img
+                  v-if="previewImageUrl"
+                  :src="previewImageUrl"
+                  alt="Signature Preview"
+                  class="mx-auto max-h-40 max-w-full mb-3 border border-gray-200 shadow-md"
                 />
+
                 <svg
-                  class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"
+                  v-else
+                  class="w-10 h-10 mx-auto mb-2 text-gray-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -521,171 +559,109 @@ const toggleInterest = (id) => {
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    d="M7 16a4 4 0 01-.885-7.734L6 8m6 4a4 4 0 01-3.615 2.152L12 14.5l-3.615 2.152A4 4 0 017 16m0 0l-1 1m7 0l1 1m-2-2l2-2m-2 2l-2-2m4 4h.01M6 18h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v10a2 2 0 002 2z"
                   ></path>
                 </svg>
+
+                <p
+                  :class="[
+                    previewImageUrl || uploadStatus.includes('File ready')
+                      ? 'text-green-700'
+                      : 'text-gray-600',
+                  ]"
+                  class="text-sm font-medium"
+                >
+                  {{
+                    uploadStatus === "Awaiting Upload"
+                      ? "Click to select file for upload"
+                      : uploadStatus
+                  }}
+                </p>
+                <p class="text-xs text-gray-400 mt-1">
+                  Supports zip, rar, jpg, png files (Max 1Mb)
+                </p>
               </div>
             </div>
-
-            <div
-              class="overflow-x-auto bg-white border border-gray-200 shadow-lg rounded-b-lg"
-            >
-              <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                  <tr>
-                    <th
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Invoice #
-                      <span class="ml-1 text-gray-400">⋮</span>
-                    </th>
-                    <th
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Invoice Date
-                      <span class="ml-1 text-gray-400">⋮</span>
-                    </th>
-                    <th
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Due Date
-                      <span class="ml-1 text-gray-400">⋮</span>
-                    </th>
-                    <th
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Total
-                      <span class="ml-1 text-gray-400">⋮</span>
-                    </th>
-                    <th
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Status/Action
-                      <span class="ml-1 text-gray-400">⋮</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                  <tr
-                    v-for="invoice in subscription.invoices"
-                    :key="invoice.id"
-                  >
-                    <td
-                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
-                    >
-                      {{ invoice.invoiceNo }}
-                    </td>
-                    <td
-                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                    >
-                      {{ invoice.invoiceDate }}
-                    </td>
-                    <td
-                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                    >
-                      {{ invoice.dueDate }}
-                    </td>
-                    <td
-                      class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
-                    >
-                      {{ invoice.total }}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <span
-                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                      >
-                        {{ invoice.status }}
-                      </span>
-                      <a
-                        href="#"
-                        class="ml-4 text-green-600 hover:text-green-900 flex items-center inline-block"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="w-4 h-4 mr-1"
-                        >
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                          <polyline points="7 10 12 15 17 10" />
-                          <line x1="12" x2="12" y1="15" y2="3" />
-                        </svg>
-                        Download
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div
-              class="flex justify-end items-center mt-4 text-sm text-gray-600"
-            >
-              <p class="mr-4">
-                Page {{ subscription.currentPage }} of
-                {{ subscription.totalPages }}
-              </p>
+            <div class="flex justify-end pt-4 border-t border-gray-100">
               <button
-                @click="goToPage(subscription.currentPage - 1)"
-                :disabled="subscription.currentPage === 1"
-                class="flex items-center text-gray-400 hover:text-gray-600 disabled:opacity-50 mr-2"
+                @click="addSignature"
+                class="px-6 py-2 text-sm text-white rounded-lg shadow-md bg-green-700 hover:bg-green-800 transition duration-150"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="m15 18-6-6 6-6" />
-                </svg>
-                Prev
-              </button>
-              <button
-                @click="goToPage(subscription.currentPage + 1)"
-                :disabled="subscription.currentPage === subscription.totalPages"
-                class="flex items-center text-gray-400 hover:text-gray-600 disabled:opacity-50"
-              >
-                Next
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="m9 18 6-6-6-6" />
-                </svg>
+                Add Signature
               </button>
             </div>
           </div>
-        </div>
+          <div class="p-6 bg-white shadow-lg">
+            <h2 class="text-xl font-semibold mb-6 text-gray-800">
+              My Uploaded Signatures
+            </h2>
 
-        <div
-          v-else
-          class="p-10 text-center bg-white rounded-xl shadow-lg text-gray-500"
-        >
-          <h2 class="text-2xl font-semibold mb-3">
-            Content for {{ activeTab }}
-          </h2>
-          <p>
-            This section will contain details related to your
-            {{ activeTab }} preferences or status.
-          </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div
+                v-for="sig in signatures"
+                :key="sig.id"
+                class="p-4 border border-gray-200 rounded-lg flex flex-col items-center text-center"
+              >
+                <div
+                  class="w-full h-24 bg-gray-100 border border-gray-300 rounded-md flex items-center justify-center mb-3 overflow-hidden"
+                >
+                  <img
+                    :src="sig.imageUrl"
+                    :alt="sig.name"
+                    class="h-full w-full object-contain"
+                  />
+                </div>
+                <h3 class="font-semibold text-gray-700 mb-1">
+                  {{ sig.name }}
+                </h3>
+                <p class="text-xs text-gray-500 mb-3">
+                  {{ sig.date }}
+                </p>
+                <div class="flex space-x-4 text-sm">
+                  <button
+                    @click="deleteSignature(sig.id)"
+                    class="flex items-center text-red-600 hover:text-red-800 transition duration-150"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-4 h-4 mr-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                    Delete
+                  </button>
+                  <button
+                    @click="downloadSignature(sig.imageUrl, sig.name)"
+                    class="flex items-center text-green-600 hover:text-green-800 transition duration-150"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-4 h-4 mr-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"
+                      />
+                    </svg>
+                    Download
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -696,10 +672,6 @@ const toggleInterest = (id) => {
         <h2 class="text-2xl font-semibold mb-3">
           Welcome to the {{ currentView }} Page
         </h2>
-        <p>
-          This is where the content for the primary {{ currentView }} view would
-          be rendered. The sidebar controls the major page view.
-        </p>
       </div>
     </main>
   </div>
