@@ -156,6 +156,13 @@ const connectionRequests = [
   { name: 'Request from John Doe', time: '1 hour ago' },
   { name: 'Request from Jane Smith', time: '5 hours ago' },
 ]; 
+
+ const connections = ref([
+  { name: "Jane Doe", position: "Product Manager" },
+  { name: "Michael Smith", position: "Software Engineer" },
+  { name: "Aisha Bello", position: "Graphic Designer" },
+]);
+ 
 </script>
 
 <template>
@@ -331,7 +338,34 @@ const connectionRequests = [
             <p v-else class="text-gray-500">You have no pending connection requests.</p>
             
             <h3 class="text-xl font-bold text-gray-800 mt-8 mb-4">Your Connections</h3>
-            <p class="text-gray-500">List of your established connections will go here.</p>
+            <div v-if="connections.length > 0" class="space-y-3">
+    <div
+      v-for="(connection, index) in connections"
+      :key="index"
+      class="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100"
+    >
+      <div class="flex items-center space-x-3">
+        <div
+          class="w-8 h-8 rounded-full bg-green-200 flex items-center justify-center text-sm font-bold text-green-700"
+        >
+          {{ connection.name.match(/\b(\w)/g).join('') }}
+        </div>
+        <div>
+          <p class="text-sm font-medium text-gray-800">
+            {{ connection.name }}
+          </p>
+          <span class="text-xs text-gray-500">{{ connection.position }}</span>
+        </div>
+      </div>
+      <button
+        class="px-3 py-1 text-sm rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100"
+      >
+        Message
+      </button>
+    </div>
+  </div>
+
+  <p v-else class="text-gray-500">You currently have no active connections.</p>
         </div>
 
         <div
