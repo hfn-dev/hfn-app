@@ -167,11 +167,13 @@ import reagan from "@/assets/reagan.png";
           </div>
         </div>
         <div class="mb-10 lg:mb-0">
-          <div class="relative w-full overflow-hidden h-60 sm:h-72 md:h-80">
+          <div
+            class="relative w-full overflow-hidden h-80 sm:h-96 md:h-[500px]"
+          >
             <img
               :src="partnership"
               alt="HFN partnership"
-              class="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+              class="w-full h-full object-cover object-center"
             />
           </div>
         </div>

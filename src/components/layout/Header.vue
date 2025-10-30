@@ -1,14 +1,15 @@
 <script setup>
 import hfn_logo from "@/assets/hfn-health.png";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
+const route = useRoute();
 
 const DARK_GREEN = "#004d33";
 const ACTIVE_BG_COLOR = "#F2F9F3";
 
-const currentPath = ref("/");
+const currentPath = ref(route.path)
 
 const isMobileMenuOpen = ref(false);
 
@@ -41,6 +42,14 @@ const navLinks = [
   },
   { title: "Contact Us", path: "/contact", hasDropdown: false },
 ];
+
+watch(
+  () => route.path,
+  (newPath) => {
+    currentPath.value = newPath; 
+  },
+  { immediate: true }
+);
 </script>
 
 <template>

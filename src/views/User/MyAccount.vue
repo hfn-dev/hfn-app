@@ -213,7 +213,7 @@ const toggleInterest = (id) => {
 </script>
 
 <template>
-  <div class="flex flex-col lg:flex-row min-h-screen font-inter">
+  <div class="flex flex-col lg:flex-row min-h-screen font-sans bg-white border-0">
     <AdminSidebar
       class="hidden md:flex"
       :navLinks="navLinks"

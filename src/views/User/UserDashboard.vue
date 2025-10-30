@@ -171,10 +171,11 @@ const getIconPaths = (name) => {
   };
   return icons[name] || "";
 };
+
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col font-sans">
+  <div class="min-h-screen flex flex-col bg-white border-0 font-sans">
     <div class="flex flex-grow overflow-hidden">
       <AdminSidebar class="hidden md:flex" />
       <main

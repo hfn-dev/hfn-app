@@ -1,4 +1,4 @@
-import DashboardLayout from '@/components/layout/DashboardLayout.vue';
+// import DashboardLayout from '@/components/layout/DashboardLayout.vue';
 import Blog from '@/views/Blog.vue';
 import BlogDetails from '@/views/BlogDetails.vue';
 import Contact from '@/views/Contact.vue';
@@ -34,16 +34,16 @@ import About from '../views/About.vue';
 import Homepage from '../views/Homepage.vue';
 
 const routes = [
-  {
-    path: '/dashboard',
-    component: DashboardLayout,
-    children: [
-      { path: 'editor', component: EditorDashboard },
-      { path: 'admin', component: UserDashboard },
-      { path: 'superadmin', component: SuperAdminDashboard },
-      { path: 'tutor', component: TutorDashboard },
-    ],
-  },
+  // {
+  //   path: '/dashboard',
+  //   component: DashboardLayout,
+  //   children: [
+  //     { path: 'editor', component: EditorDashboard },
+  //     { path: 'admin', component: UserDashboard },
+  //     { path: 'superadmin', component: SuperAdminDashboard },
+  //     { path: 'tutor', component: TutorDashboard },
+  //   ],
+  // },
   {
     path: '/',
     name: 'Home',
@@ -181,6 +181,7 @@ const routes = [
     name: 'SuperAdminMessages',
     component: SuperAdminMessages,
   },
+  
 ];
 
 const router = createRouter({

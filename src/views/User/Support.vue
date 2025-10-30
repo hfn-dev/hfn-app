@@ -146,7 +146,7 @@ const closeTicketDetails = () => {
     <AdminSidebar />
 
     <div class="flex-1 flex flex-col overflow-hidden relative">
-      <header class="p-6 bg-white border-t border-gray-200">
+      <header class="p-6 bg-white">
         <div class="text-sm text-gray-500">
           <span class="hover:underline cursor-pointer">Home</span> /
           <span class=" text-gray-800">Support</span>

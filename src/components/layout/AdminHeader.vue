@@ -1,14 +1,15 @@
 <script setup>
 import hfn_logo from "@/assets/hfn-health.png";
 import { useAuth } from "@/store/authStore";
-import { defineEmits, ref } from "vue";
-import { useRouter } from "vue-router";
-
+import { ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
+const route = useRoute();
+
 const { logout } = useAuth();
 const DARK_GREEN = "#004d33";
 const ACTIVE_BG_COLOR = "#f2f9f3";
-const currentPath = ref("/");
+const currentPath = ref(route.path)
 const isMobileMenuOpen = ref(false);
 
 const handleLinkClick = (path) => {
@@ -32,7 +33,14 @@ const handleLogout = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
-const emit = defineEmits(["toggle-sidebar"]);
+watch(
+  () => route.path,
+  (newPath) => {
+    currentPath.value = newPath; 
+  },
+  { immediate: true }
+);
+
 </script>
 
 <template>
@@ -70,10 +78,10 @@ const emit = defineEmits(["toggle-sidebar"]);
         </div>
       </div>
     </div>
-    <nav class="flex items-center justify-between lg:px-8 max-w-7xl mx-auto">
+    <nav class="flex items-center justify-between lg:px-8 py-4 max-w-7xl mx-auto">
       <div class="flex items-center flex-shrink-0">
         <button
-          @click="$emit('toggle-sidebar')"
+        @click="$emit('toggleSidebar')"
           class="lg:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100"
         >
           <svg
@@ -94,7 +102,7 @@ const emit = defineEmits(["toggle-sidebar"]);
         </button>
 
         <RouterLink
-          to="/admin/dashboard"
+          to="/"
           @click="handleLinkClick('/')"
           class="cursor-pointer"
         >
