@@ -1,6 +1,6 @@
 <template>
     <div id="app" class="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8 font-sans">
-        
+        <SuperAdminSidebar />
         <!-- Main Content Container - Centered -->
         <div class="mx-auto max-w-7xl">
 
@@ -208,8 +208,8 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 
-// --- MOCK DATA ---
 const TABS = ['Overview', 'Invitations']; 
 const overviewHeaders = ['Name', 'Role', 'Invited On', 'Status'];
 
