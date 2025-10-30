@@ -378,31 +378,7 @@ const lineOptions = {
           </div>
         </div>
 
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">
-          Most Viewed Courses
-        </h2>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div
-            v-for="course in courseData"
-            :key="course.name"
-            class="course-card"
-          >
-            <div class="flex justify-between items-center mb-1">
-              <p class="text-base font-bold text-gray-800">
-                {{ course.name }}
-              </p>
-              <button
-                class="text-xl font-bold text-gray-400 hover:text-gray-600 p-1"
-              >
-                &vellip;
-              </button>
-            </div>
-            <p class="text-sm text-gray-600">
-              Enrollments: {{ course.enrollments }}
-            </p>
-          </div>
-        </div>
+        
       </div>
 
       <div
@@ -411,7 +387,7 @@ const lineOptions = {
         <div class="lg:col-span-2">
           <div class="bg-white p-6 rounded-lg shadow-sm mb-0">
             <div class="flex justify-between items-start mb-4">
-              <h2 class="text-2xl font-bold text-gray-800">Revenue</h2>
+              <h2 class="text-2xl font-bold text-gray-800">Revenue generated</h2>
               <div
                 class="p-2 border border-gray-300 rounded-md text-sm cursor-pointer flex items-center"
               >
@@ -458,7 +434,7 @@ const lineOptions = {
         </div>
         <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-sm h-fit">
           <h2 class="text-xl font-semibold text-gray-800 mb-4">
-            Most Viewed Courses
+            Top most read articles
           </h2>
           <div class="space-y-4">
             <div
