@@ -178,7 +178,7 @@ const connectionRequests = [
             </div>
           </div>
         </div>
-        <div class="border-b border-gray-200 mb-6 max-w-7xl">
+        <div class="border-b border-gray-200 mb-6 max-w-7xl justify-center">
           <div class="flex text-lg font-medium">
             <button
               v-for="tab in tabs"
