@@ -104,7 +104,11 @@
                 
                 <div v-for="n in 3" :key="n" class="border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition duration-300">
                     <div class="h-40 bg-gray-200">
-                        [Small Event Image]
+                        <img
+                      :src="awards"
+                      alt="HFN Walk for Life Event"
+                      class="w-full h-full object-cover"
+                    />
                     </div>
                     
                     <div class="p-4">
@@ -142,5 +146,6 @@
 
 <script setup>
 import latest from "@/assets/latest_news.png";
+import awards from "@/assets/awards.png";
 
 </script>    
