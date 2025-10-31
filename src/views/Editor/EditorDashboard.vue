@@ -387,7 +387,7 @@ const lineOptions = {
         <div class="lg:col-span-2">
           <div class="bg-white p-6 rounded-lg shadow-sm mb-0">
             <div class="flex justify-between items-start mb-4">
-              <h2 class="text-2xl font-bold text-gray-800">Revenue generated</h2>
+              <h2 class="text-2xl font-bold text-gray-800">Total Content Uploaded</h2>
               <div
                 class="p-2 border border-gray-300 rounded-md text-sm cursor-pointer flex items-center"
               >

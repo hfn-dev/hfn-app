@@ -50,6 +50,14 @@ const directMessages = [
 //   { name: 'Diaspora', count: 0, path: 'diaspora', icon: '#' },
 // ];
 
+const searchQuery = ref("");
+
+const filteredDMs = computed(() =>
+  directMessages.filter((dm) =>
+    dm.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+);
+
 const chatMessages = [
   {
     sender: "Ade John",
@@ -247,8 +255,17 @@ const selectGroup = (name) => {
           </h2>
 
           <div v-if="currentTab === 'Direct Messages'" class="space-y-1">
+            <div class="mb-3">
+              <input
+                type="text"
+                v-model="searchQuery"
+                placeholder="Search user..."
+                class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+              />
+            </div>
+
             <button
-              v-for="dm in directMessages"
+              v-for="dm in filteredDMs"
               :key="dm.name"
               @click="selectDMUser(dm.name)"
               class="flex items-center justify-between w-full p-2 rounded-lg transition-colors"
@@ -279,6 +296,13 @@ const selectGroup = (name) => {
                 {{ dm.count }}
               </span>
             </button>
+
+            <p
+              v-if="filteredDMs.length === 0"
+              class="text-gray-400 text-sm mt-3 text-center"
+            >
+              No user found
+            </p>
           </div>
 
           <div v-else-if="currentTab === 'Groups'" class="space-y-1">
