@@ -202,7 +202,7 @@ watch(
         v-for="item in link.dropdownItems"
         :key="item.title"
         :to="item.path"
-        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+        class="block px-4 py-2 text-sm text-gray-700 hover:bg-[#F2F9F3] hover:text-[#004d33]"
         @click="handleLinkClick(item.path)"
       >
         {{ item.title }}
