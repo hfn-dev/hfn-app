@@ -3,6 +3,60 @@ import handsJoining from "@/assets/handsJoining.jpg";
 import logo from "@/assets/logo.png";
 
 import { computed, ref } from "vue";
+const searchQuery = ref("");
+const members = ref([
+  "ABIOLA MORUF TAJUDEEN",
+  "ABIOLA MORUF TAJUDEEN",
+  "ABIOLA MORUF TAJUDEEN",
+  "ABIOLA MORUF TAJUDEEN",
+  "ANIEBE SOMTO EMELDA",
+  "ANIEBE SOMTO EMELDA",
+  "ANIEBE SOMTO EMELDA",
+  "AROGUNDADE IFEOLUWAN THEOPHILUS",
+  "AROGUNDADE IFEOLUWAN THEOPHILUS",
+  "ATAGUBA FRANKLIN",
+  "ATAGUBA FRANKLIN",
+
+  // second column
+  "ABIOLA MORUF TAJUDEEN",
+  "ABIOLA MORUF TAJUDEEN",
+  "ABIOLA MORUF TAJUDEEN",
+  "ANIEBE SOMTO EMELDA",
+  "ANIEBE SOMTO EMELDA",
+  "ANIEBE SOMTO EMELDA",
+  "AROGUNDADE IFEOLUWAN THEOPHILUS",
+  "AROGUNDADE IFEOLUWAN THEOPHILUS",
+  "AROGUNDADE IFEOLUWAN THEOPHILUS",
+  "AROGUNDADE IFEOLUWAN THEOPHILUS",
+  "ATAGUBA FRANKLIN",
+
+  // third column
+  "AROGUNDADE IFEOLUWAN THEOPHILUS",
+  "AROGUNDADE IFEOLUWAN THEOPHILUS",
+  "AROGUNDADE IFEOLUWAN THEOPHILUS",
+  "AROGUNDADE IFEOLUWAN THEOPHILUS",
+  "AROGUNDADE IFEOLUWAN THEOPHILUS",
+]);
+
+const selectedMember = ref(null); 
+const showDialog = ref(false);
+
+// Filtered search
+const filteredMembers = computed(() => {
+  if (!searchQuery.value) return members.value;
+  return members.value.filter((m) =>
+    m.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
+
+function openDialog(member) {
+  selectedMember.value = member;
+  showDialog.value = true;
+}
+
+function closeDialog() {
+  showDialog.value = false;
+}
 
 const categories = ref([
   {
@@ -518,6 +572,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
             <input
               type="text"
               placeholder="Search"
+              v-model="searchQuery"
               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-1 focus:ring-green-500"
             />
             <svg
@@ -669,43 +724,17 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
           >
         </div>
 
-        <div
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-6 text-gray-800 text-sm mb-8"
-        >
-          <div class="space-y-2">
-            <p>ABIOLA MORUF TAJUDEEN</p>
-            <p>ABIOLA MORUF TAJUDEEN</p>
-            <p>ABIOLA MORUF TAJUDEEN</p>
-            <p>ABIOLA MORUF TAJUDEEN</p>
-            <p>ANIEBE SOMTO EMELDA</p>
-            <p>ANIEBE SOMTO EMELDA</p>
-            <p>ANIEBE SOMTO EMELDA</p>
-            <p>AROGUNDADE IFEOLUWAN THEOPHILUS</p>
-            <p>AROGUNDADE IFEOLUWAN THEOPHILUS</p>
-            <p>ATAGUBA FRANKLIN</p>
-            <p>ATAGUBA FRANKLIN</p>
-          </div>
-          <div class="space-y-2">
-            <p>ABIOLA MORUF TAJUDEEN</p>
-            <p>ABIOLA MORUF TAJUDEEN</p>
-            <p>ABIOLA MORUF TAJUDEEN</p>
-            <p>ANIEBE SOMTO EMELDA</p>
-            <p>ANIEBE SOMTO EMELDA</p>
-            <p>ANIEBE SOMTO EMELDA</p>
-            <p>AROGUNDADE IFEOLUWAN THEOPHILUS</p>
-            <p>AROGUNDADE IFEOLUWAN THEOPHILUS</p>
-            <p>AROGUNDADE IFEOLUWAN THEOPHILUS</p>
-            <p>AROGUNDADE IFEOLUWAN THEOPHILUS</p>
-            <p>ATAGUBA FRANKLIN</p>
-          </div>
-          <div class="space-y-2">
-            <p>AROGUNDADE IFEOLUWAN THEOPHILUS</p>
-            <p>AROGUNDADE IFEOLUWAN THEOPHILUS</p>
-            <p>AROGUNDADE IFEOLUWAN THEOPHILUS</p>
-            <p>AROGUNDADE IFEOLUWAN THEOPHILUS</p>
-            <p>AROGUNDADE IFEOLUWAN THEOPHILUS</p>
-          </div>
-        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-6 text-gray-800 text-sm mb-8">
+  <div v-for="member in filteredMembers" :key="member" class="space-y-2">
+    <p
+      class="cursor-pointer hover:text-green-700 transition font-medium"
+      @click="openDialog(member)"
+    >
+      {{ member }}
+    </p>
+  </div>
+</div>
+
 
         <div class="flex justify-end mt-6">
           <button
@@ -730,6 +759,37 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
         </div>
       </div>
     </div>
+    <!-- Member Connect Dialog -->
+<div
+  v-if="showDialog"
+  class="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50"
+>
+  <div
+    class="bg-white rounded-2xl shadow-lg p-6 w-[90%] max-w-sm text-center relative"
+  >
+    <button
+      class="absolute top-2 right-3 text-gray-500 hover:text-gray-700 text-lg"
+      @click="closeDialog"
+    >
+      &times;
+    </button>
+
+    <h3 class="text-xl font-semibold text-gray-800 mb-2">
+      {{ selectedMember }}
+    </h3>
+
+    <p class="text-orange-600 mb-6 text-sm">
+      Only registered members can connect.
+    </p>
+
+    <button
+      class="bg-green-700 hover:bg-green-800 text-white font-medium px-6 py-2 rounded-full shadow-md transition"
+    >
+      Connect
+    </button>
+  </div>
+</div>
+
   </section>
 </template>
 
