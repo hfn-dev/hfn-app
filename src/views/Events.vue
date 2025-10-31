@@ -178,7 +178,7 @@
 
               <div class="flex items-center">
                 <svg
-                  class="w-4 h-4 mr-1 text-blue-500"
+                  class="w-4 h-4 mr-1 text-orange-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -218,7 +218,7 @@
             </div>
 
             <button
-              class="px-3 py-2 bg-green-700 text-white rounded-full justify-center hover:bg-green-800 transition duration-150 text-sm font-semibold mt-2"
+              class="px-3 py-2 bg-green-700 text-white rounded-full item-center justify-center hover:bg-green-800 transition duration-150 text-sm font-semibold mt-2"
             >
               Register Now
             </button>
