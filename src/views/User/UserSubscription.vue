@@ -1,6 +1,6 @@
 <template>
   <div class="flex h-screen bg-gray-50">
-    <AdminSidebar />
+    <UserSidebar />
 
     <div class="flex-1 flex flex-col overflow-hidden relative">
       <header class="p-6 bg-white border-t border-gray-200">
@@ -83,7 +83,7 @@
 </template>
 
 <script setup>
-import AdminSidebar from "@/components/layout/AdminSidebar.vue";
+import UserSidebar from "@/components/layout/UserSidebar.vue";
 import { computed, reactive, ref } from "vue";
 
 const membershipTypes = reactive([
