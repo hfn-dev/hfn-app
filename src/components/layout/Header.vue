@@ -36,7 +36,7 @@ const navLinks = [
     path: "/blog",
     hasDropdown: true,
     dropdownItems: [
-      { title: "Programs & Initiatives", path: "/blog" },
+      { title: "Programs & Initiatives", path: "/programs" },
       { title: "News & Advocacy", path: "/blog" },
       { title: "Resources", path: "/" },
       { title: "Events", path: "/events" },
