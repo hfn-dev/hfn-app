@@ -218,10 +218,11 @@
             </div>
 
             <button
-              class="px-3 py-2 bg-green-700 text-white rounded-full item-center justify-center hover:bg-green-800 transition duration-150 text-sm font-semibold mt-2"
-            >
-              Register Now
-            </button>
+  class="px-3 py-2 bg-green-700 text-white rounded-full hover:bg-green-800 transition duration-150 text-sm font-semibold mt-2 mx-auto block"
+>
+  Register Now
+</button>
+
           </div>
         </div>
       </div>
