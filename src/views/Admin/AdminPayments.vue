@@ -1,5 +1,5 @@
 <script setup>
-import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
+import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
 import { computed, ref } from "vue";
 
 const DARK_GREEN = "#004d33";
@@ -147,7 +147,7 @@ const selectGroup = (name) => {
 
 <template>
   <div class="flex min-h-screen bg-gray-50">
-    <SuperAdminSidebar />
+    <AdminSidebar />
 
     <main class="flex-1 p-8 overflow-auto md:p-8 lg:p-12">
       <!-- Breadcrumbs -->
