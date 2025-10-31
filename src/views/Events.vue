@@ -71,6 +71,11 @@
             <div class="mb-12 border rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300">
                 <div class="flex flex-col lg:flex-row">
                     <div class="lg:w-3/5">
+                        <img 
+                    :src="latest" 
+                    alt="Collage of past events"
+                    class="object-cover w-full h-full rounded-lg shadow-xl"
+                />
                                             </div>
                     
                     <div class="lg:w-2/5 p-6 md:p-8 flex flex-col justify-center">
