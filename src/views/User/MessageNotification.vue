@@ -1,9 +1,8 @@
 <script setup>
-import AdminSidebar from '@/components/layout/AdminSidebar.vue';
+import UserSidebar from '@/components/layout/UserSidebar.vue';
 import { computed, ref } from 'vue';
 // import AppLayout from '@/components/layout/AppLayout.vue';
 // import AdminHeader from '../../components/layout/AdminHeader.vue';
-// import AdminSidebar from '../../components/layout/AdminSidebar.vue';
 
 const DARK_GREEN = '#004d33';
 const LIGHT_GREEN = '#f2f9f3';
@@ -168,7 +167,7 @@ const connectionRequests = [
 <template>
   <div class="min-h-screen bg-gray-50 flex flex-col">
     <div class="flex flex-grow">
-      <AdminSidebar />
+      <UserSidebar />
 
       <main class="flex-grow p-4 md:p-8 lg:p-12">
         <!-- <h1 class="text-4xl font-semibold text-gray-800 mb-8">Messages</h1> -->
