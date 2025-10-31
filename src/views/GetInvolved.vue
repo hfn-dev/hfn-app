@@ -50,7 +50,7 @@
             <section class="mb-20">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     
-                    <div class="border rounded-lg p-6 shadow-md bg-white hover:shadow-xl transition duration-300">
+                    <div class="border rounded-lg py-6 shadow-md bg-white hover:shadow-xl transition duration-300">
                         <h4 class="text-xl font-bold text-gray-900 mb-3">Event Sponsorship</h4>
                         <p class="text-gray-600 text-sm mb-6 h-52 overflow-hidden bg-pink-100 p-3">
                             HFN hosts over 10 events every year, attracting top policy makers, both physical and online. Sponsors can select from our various events and external delegates via different packages. This is a unique opportunity to identify opportunities that align with your brand.
@@ -63,7 +63,7 @@
                         </div>
                     </div>
 
-                    <div class="border rounded-lg p-6 shadow-md bg-white hover:shadow-xl transition duration-300">
+                    <div class="border rounded-lg py-6 shadow-md bg-white hover:shadow-xl transition duration-300">
                         <h4 class="text-xl font-bold text-gray-900 mb-3">Exhibitor Stands</h4>
                         <p class="text-gray-600 text-sm mb-6 h-52 overflow-hidden bg-pink-100 p-3">
                             This is an excellent way to showcase your brand directly to healthcare providers, key decision-makers and stakeholders within the healthcare sector. At various events, we can also offer exclusive packages.
@@ -76,7 +76,7 @@
                         </div>
                     </div>
 
-                    <div class="border rounded-lg p-6 shadow-md bg-white hover:shadow-xl transition duration-300">
+                    <div class="border rounded-lg py-6 shadow-md bg-white hover:shadow-xl transition duration-300">
                         <h4 class="text-xl font-bold text-gray-900 mb-3">Advertisements</h4>
                         <p class="text-gray-600 text-sm mb-6 h-52 overflow-hidden bg-pink-100 p-3">
                             Our Quarterly Newsletter is distributed to all our members and to various categories of healthcare professions. We accept advertisements ranging from a half page to double page spreads, subject to editorial approval by the secretary.
