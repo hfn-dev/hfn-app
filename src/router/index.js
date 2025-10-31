@@ -41,7 +41,7 @@ const routes = [
   //   component: DashboardLayout,
   //   children: [
   //     { path: 'editor', component: EditorDashboard },
-  //     { path: 'admin', component: UserDashboard },
+  //     { path: 'user', component: UserDashboard },
   //     { path: 'superadmin', component: SuperAdminDashboard },
   //     { path: 'tutor', component: TutorDashboard },
   //   ],
@@ -69,17 +69,17 @@ const routes = [
     component: SigninVerification,
   },
   {
-    path: '/admin/messages',
+    path: '/user/messages',
     name: 'UserMessage',
     component: MessageNotification,
   },
   {
-    path: '/admin/mylearning',
+    path: '/user/mylearning',
     name: 'MyLearning',
     component: MyLearning,
   },
   {
-    path: '/admin/dashboard',
+    path: '/user/dashboard',
     name: 'UserDasboard',
     component: UserDashboard,
   },
@@ -89,22 +89,22 @@ const routes = [
     component: CourseDetails,
   },
   {
-    path: '/admin/account',
+    path: '/user/account',
     name: 'UserAccount',
     component: MyAccount,
   },
   {
-    path: '/admin/support',
+    path: '/user/support',
     name: 'UserSupport',
     component: Support,
   },
   {
-    path: '/admin/subscription',
+    path: '/user/subscription',
     name: 'UserSubscription',
     component: UserSubscription,
   },
   {
-    path: '/admin/interests',
+    path: '/user/interests',
     name: 'Interest',
     component: Interests,
   },
@@ -188,7 +188,40 @@ const routes = [
     name: 'SuperAdminMessages',
     component: SuperAdminMessages,
   },
+
+  //For Admin
+  {
+    path: '/admin/dashboard',
+    name: 'AdminDashboard',
+    component: AdminDashboard,
+  },
+  {
+    path: '/admin/courses',
+    name: 'AdminCourseList',
+    component: AdminCourseList,
+  },
+  {
+    path: '/admin/create-course',
+    name: 'AdminCreateCourse',
+    component: AdminCreateCourse,
+  },
   
+  {
+    path: '/admin/account',
+    name: 'AdminAccount',
+    component: AdminAccount,
+  },
+  
+  {
+    path: '/admin/payments',
+    name: 'AdminPayments',
+    component: AdminPayments,
+  },
+  {
+    path: '/admin/messages',
+    name: 'AdminMessages',
+    component: AdminMessages,
+  },
 ];
 
 const router = createRouter({
