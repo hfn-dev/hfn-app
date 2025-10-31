@@ -72,7 +72,7 @@
                     
                     <div class="lg:w-1/2 rounded-lg overflow-hidden shadow-xl">
                         <img 
-                            src="" 
+                            :src="latest" 
                             alt="Standardizing Healthcare Quality Initiative" 
                             class="w-full h-auto object-cover"
                         />
@@ -83,7 +83,7 @@
                     
                     <div class="lg:w-1/2 rounded-lg overflow-hidden shadow-xl">
                         <img 
-                            src="" 
+                            :src="latest" 
                             alt="Technology Adoption Project" 
                             class="w-full h-auto object-cover"
                         />
