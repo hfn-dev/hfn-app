@@ -106,43 +106,64 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    
+    <div v-for="n in 3" :key="n" class="border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition duration-300">
+        
+        <div class="relative h-48"> <img
+                :src="awards"
+                alt="HFN Walk for Life Event"
+                class="w-full h-full object-cover brightness-[0.7] transition duration-300" 
+                :class="{'hover:brightness-90': false}" 
+            />
+            
+            <span class="absolute top-4 left-4 px-3 py-1 bg-[#4CAF50] text-white text-xs font-semibold rounded-full shadow-md">
+                Webinar
+            </span>
+
+            </div>
+        
+        <div class="p-4">
+            
+            <div class="flex justify-between items-center mb-2">
+                <h4 class="text-lg font-bold text-gray-900 leading-snug">
+                    HFN Walk for Life
+                </h4>
+                <span class="text-gray-500 text-xs flex items-center whitespace-nowrap">
+                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    Annually
+                </span>
+            </div>
+            
+            <p class="text-sm text-gray-600 mb-3 line-clamp-3">
+                Euismod magna id purus eget nunc ligula suspendisse dui netus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc
+            </p>
+            
+            <hr class="my-3 border-gray-100">
+            
+            <div class="grid grid-cols-2 gap-2 text-sm text-gray-500 mb-4">
                 
-                <div v-for="n in 3" :key="n" class="border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition duration-300">
-                    <div class="h-40 bg-gray-200">
-                        <img
-                      :src="awards"
-                      alt="HFN Walk for Life Event"
-                      class="w-full h-full object-cover"
-                    />
-                    </div>
-                    
-                    <div class="p-4">
-                        <div class="flex justify-between items-center text-xs font-medium mb-2">
-                            <span class="text-red-600 uppercase">Webinar</span>
-                            <span class="text-gray-500 flex items-center">
-                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                Virtually
-                            </span>
-                        </div>
-                        <h4 class="text-md font-bold text-gray-900 mb-2">
-                            HFN Walk for Life
-                        </h4>
-                        
-                        <div class="text-xs text-gray-500 mb-4">
-                            <p>October 31, 2025</p>
-                            <p class="flex items-center mt-1">
-                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18V6a2 2 0 012-2h10a2 2 0 012 2v12a2 2 0 01-2 2H7a2 2 0 01-2-2z"></path></svg>
-                                Zoom
-                            </p>
-                        </div>
-                        
-                        <button class="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-150 text-sm">
-                            Register Now
-                        </button>
-                    </div>
+                <div class="flex items-center">
+                    <svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <span>October 10, 2025</span>
                 </div>
                 
+                <div class="flex items-center">
+                    <svg class="w-4 h-4 mr-1 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span>10 am</span>
+                </div>
+
+                <div class="flex items-center col-span-2">
+                    <svg class="w-4 h-4 mr-1 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span>Zoom</span>
+                </div>
             </div>
+            
+            <button class="w-full px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 transition duration-150 text-sm font-semibold mt-2">
+                Register Now
+            </button>
+        </div>
+    </div>
+    </div>
         </section>
         
     </div>
