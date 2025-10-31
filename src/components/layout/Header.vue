@@ -12,10 +12,11 @@ const ACTIVE_BG_COLOR = "#F2F9F3";
 const currentPath = ref(route.path)
 
 const isMobileMenuOpen = ref(false);
-
+const openDropdown = ref(null);
 const handleLinkClick = (path) => {
   currentPath.value = path;
   isMobileMenuOpen.value = false;
+  openDropdown.value = null;
 };
 
 const goToRegistration = () => {
@@ -62,6 +63,10 @@ watch(
   },
   { immediate: true }
 );
+
+ const toggleDropdown = (title) => {  
+  openDropdown.value = openDropdown.value === title ? null : title;
+}; 
 </script>
 
 <template>
