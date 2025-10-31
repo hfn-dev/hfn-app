@@ -18,7 +18,7 @@ import {
   User,
 } from "lucide-vue-next";
 import { computed, ref } from "vue";
-import SuperAdminSidebar from "./SuperAdminSidebar.vue";
+import AdminSidebar from "./AdminSidebar.vue";
 
 const currentStep = ref(1);
 
@@ -272,7 +272,7 @@ const handleQuizAdded = () => {
 
 <template>
   <div class="flex min-h-screen font-sans">
-    <SuperAdminSidebar />
+    <AdminSidebar />
     <main class="flex-1 p-8 overflow-auto bg-white">
       <!-- Breadcrumbs -->
       <div class="text-sm text-gray-500 mb-6">
