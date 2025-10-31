@@ -34,6 +34,12 @@ import UserSubscription from '@/views/User/UserSubscription.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import About from '../views/About.vue';
 import Homepage from '../views/Homepage.vue';
+import AdminAccount from '@/views/Admin/AdminAccount.vue';
+import AdminCourseList from '@/views/Admin/AdminCourseList.vue';
+import AdminCreateCourse from '@/views/Admin/AdminCreateCourse.vue';
+import AdminDashboard from '@/views/Admin/AdminDashboard.vue';
+import AdminMessages from '@/views/Admin/AdminMessages.vue';
+import AdminPayments from '@/views/Admin/AdminPayments.vue';
 
 const routes = [
   // {
