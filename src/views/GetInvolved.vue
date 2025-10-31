@@ -52,12 +52,12 @@
                     
                     <div class="border rounded-lg p-6 shadow-md bg-white hover:shadow-xl transition duration-300">
                         <h4 class="text-xl font-bold text-gray-900 mb-3">Event Sponsorship</h4>
-                        <p class="text-gray-600 text-sm mb-6 h-32 overflow-hidden bg-pink-100 p-3">
+                        <p class="text-gray-600 text-sm mb-6 h-52 overflow-hidden bg-pink-100 p-3">
                             HFN hosts over 10 events every year, attracting top policy makers, both physical and online. Sponsors can select from our various events and external delegates via different packages. This is a unique opportunity to identify opportunities that align with your brand.
                             <span class="block mt-2 font-medium">To learn more about this programme, please contact our partnership team</span>
                         </p>
                         <div class="flex justify-center">
-                            <button class="px-6 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 transition duration-150 text-sm font-semibold">
+                            <button class="px-6 py-2 bg-green-700 text-white rounded-xl hover:bg-green-800 transition duration-150 text-sm font-semibold">
                                 Contact Us
                             </button>
                         </div>
@@ -65,12 +65,12 @@
 
                     <div class="border rounded-lg p-6 shadow-md bg-white hover:shadow-xl transition duration-300">
                         <h4 class="text-xl font-bold text-gray-900 mb-3">Exhibitor Stands</h4>
-                        <p class="text-gray-600 text-sm mb-6 h-32 overflow-hidden bg-pink-100 p-3">
+                        <p class="text-gray-600 text-sm mb-6 h-52 overflow-hidden bg-pink-100 p-3">
                             This is an excellent way to showcase your brand directly to healthcare providers, key decision-makers and stakeholders within the healthcare sector. At various events, we can also offer exclusive packages.
                             <span class="block mt-2 font-medium">For further details, contact our team</span>
                         </p>
                         <div class="flex justify-center">
-                            <button class="px-6 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 transition duration-150 text-sm font-semibold">
+                            <button class="px-6 py-2 bg-green-700 text-white rounded-xl hover:bg-green-800 transition duration-150 text-sm font-semibold">
                                 Contact Us
                             </button>
                         </div>
@@ -78,12 +78,12 @@
 
                     <div class="border rounded-lg p-6 shadow-md bg-white hover:shadow-xl transition duration-300">
                         <h4 class="text-xl font-bold text-gray-900 mb-3">Advertisements</h4>
-                        <p class="text-gray-600 text-sm mb-6 h-32 overflow-hidden bg-pink-100 p-3">
+                        <p class="text-gray-600 text-sm mb-6 h-52 overflow-hidden bg-pink-100 p-3">
                             Our Quarterly Newsletter is distributed to all our members and to various categories of healthcare professions. We accept advertisements ranging from a half page to double page spreads, subject to editorial approval by the secretary.
                             <span class="block mt-2 font-medium">For pricing, contact our team.</span>
                         </p>
                         <div class="flex justify-center">
-                            <button class="px-6 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 transition duration-150 text-sm font-semibold">
+                            <button class="px-6 py-2 bg-green-700 text-white rounded-xl hover:bg-green-800 transition duration-150 text-sm font-semibold">
                                 Contact Us
                             </button>
                         </div>
@@ -100,7 +100,7 @@
                     Every contribution helps enable us to share knowledge and foster collaboration amongst our global network of healthcare professionals, improving patient outcomes for better lives. Whether you’d like to make a one-off gift or set up a regular payment, it’s easy to donate online. Click the button to get started.
                 </p>
                 <div class="flex justify-center">
-                    <button class="px-8 py-3 bg-green-700 text-white rounded-md shadow-lg hover:bg-green-800 transition duration-150 font-bold">
+                    <button class="px-8 py-3 bg-green-700 text-white rounded-xl shadow-lg hover:bg-green-800 transition duration-150 font-bold">
                         Donate Now
                     </button>
                 </div>
@@ -115,7 +115,7 @@
           Join our network of passionate volunteers working together to improve healthcare outcomes in Nigeria.
                 </p>
                 <div class="flex justify-center">
-                    <button class="px-8 py-3 bg-green-700 text-white rounded-md shadow-lg hover:bg-green-800 transition duration-150 font-bold">
+                    <button class="px-8 py-3 bg-green-700 text-white rounded-xl shadow-lg hover:bg-green-800 transition duration-150 font-bold">
                         Sign Up Now
                     </button>
                 </div>
