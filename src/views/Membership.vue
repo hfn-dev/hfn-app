@@ -744,7 +744,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
     <transition name="fade">
       <div
         v-if="showDialog && selectedMember === member"
-        class="mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg p-4 relative z-50"
+        class="mt-2 w-full bg-white border border-gray-200 rounded-lg p-4 relative z-50"
       >
         <button
           class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-lg"
@@ -762,6 +762,9 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
         >
           Connect
         </button>
+        <p class="font-san text-orange-600 mb-3 text-sm">
+          Only registered members can connect*.
+        </p>
       </div>
     </transition>
   </div>
