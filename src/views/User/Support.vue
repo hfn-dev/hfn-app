@@ -1,8 +1,7 @@
 
-
 <script setup>
 import { ref, computed } from "vue";
-import AdminSidebar from "@/components/layout/AdminSidebar.vue";
+import UserSidebar from "@/components/layout/UserSidebar.vue";
 import TicketDetail from "./TicketDetail.vue";
 
 const activeTab = ref("new-ticket");
@@ -143,7 +142,7 @@ const closeTicketDetails = () => {
 
 <template>
   <div class="flex h-screen bg-gray-50">
-    <AdminSidebar />
+    <UserSidebar />
 
     <div class="flex-1 flex flex-col overflow-hidden relative">
       <header class="p-6 bg-white">
