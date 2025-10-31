@@ -9,6 +9,7 @@ const route = useRoute();
 const DARK_GREEN = "#004d33";
 const ACTIVE_BG_COLOR = "#F2F9F3";
 
+  
 const currentPath = ref(route.path)
 
 const isMobileMenuOpen = ref(false);
@@ -23,11 +24,16 @@ const goToRegistration = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
+navLinks.value.forEach(link => {
+  if (link.hasDropdown) link.isOpen = false;
+});
+  
+
 const isLinkActive = (path) => {
   return path === currentPath.value;
 };
 
-const navLinks = [
+const navLinks = ([
   { title: "Home", path: "/", hasDropdown: false },
   { title: "About Us", path: "/about", hasDropdown: false },
   {
@@ -53,7 +59,7 @@ const navLinks = [
 
   },
   { title: "Contact Us", path: "/contact", hasDropdown: false },
-];
+]);
 
 watch(
   () => route.path,
