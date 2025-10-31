@@ -40,6 +40,7 @@ import AdminCreateCourse from '@/views/Admin/AdminCreateCourse.vue';
 import AdminDashboard from '@/views/Admin/AdminDashboard.vue';
 import AdminMessages from '@/views/Admin/AdminMessages.vue';
 import AdminPayments from '@/views/Admin/AdminPayments.vue';
+import AdminMembers from '@/views/Admin/AdminMembers.vue';
 
 const routes = [
   // {
@@ -227,6 +228,11 @@ const routes = [
     path: '/admin/messages',
     name: 'AdminMessages',
     component: AdminMessages,
+  },
+  {
+    path: '/admin/members',
+    name: 'AdminMembers',
+    component: AdminMembers,
   },
 ];
 
