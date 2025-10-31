@@ -554,7 +554,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
       </section>
     </div>
   </section>
-  <section class="py-10 sm:py-24 bg-white">
+  <section class="sm:py-24 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2
         class="text-3xl px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md sm:text-4xl font-serif font-extrabold text-gray-900 text-center mb-10"
