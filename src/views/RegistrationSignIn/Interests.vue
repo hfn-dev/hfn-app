@@ -107,15 +107,15 @@ const categories = [
     image: aboutImage,
   },
   {
-    title: "Business",
+    title: "HealthCare",
     image: aboutImage,
   },
   {
-    title: "Business",
+    title: "Infants",
     image: aboutImage,
   },
   {
-    title: "Business",
+    title: "Physiology",
     image: aboutImage,
   },
 ];
