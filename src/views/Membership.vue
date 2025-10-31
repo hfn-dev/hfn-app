@@ -761,33 +761,33 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
     </div>
     <!-- Member Connect Dialog -->
 <div
-  v-if="showDialog"
-  class="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50"
+  v-if="showDialog"
+  class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4"
 >
-  <div
-    class="bg-white rounded-2xl shadow-lg p-6 w-[90%] max-w-sm text-center relative"
-  >
-    <button
-      class="absolute top-2 right-3 text-gray-500 hover:text-gray-700 text-lg"
-      @click="closeDialog"
-    >
-      &times;
-    </button>
+  <div
+    class="bg-white rounded-3xl shadow-2xl p-8 w-[90%] max-w-xs sm:max-w-sm text-center relative"
+  >
+    <button
+      class="absolute top-3 right-4 text-gray-500 hover:text-gray-900 text-2xl font-light leading-none"
+      @click="closeDialog"
+    >
+      &times;
+    </button>
 
-    <h3 class="text-xl font-semibold text-gray-800 mb-2">
-      {{ selectedMember }}
-    </h3>
+    <h3 class="text-xl font-bold text-gray-800 mb-3 mt-2">
+      {{ selectedMember }}
+    </h3>
 
-    <p class="text-orange-600 mb-6 text-sm">
-      Only registered members can connect.
-    </p>
+    <p class="text-orange-600 mb-8 text-base">
+      Only registered members can connect.
+    </p>
 
-    <button
-      class="bg-green-700 hover:bg-green-800 text-white font-medium px-6 py-2 rounded-full shadow-md transition"
-    >
-      Connect
-    </button>
-  </div>
+    <button
+      class="bg-green-700 hover:bg-green-800 text-white font-medium px-8 py-3 rounded-full shadow-lg transition transform hover:scale-[1.02]"
+    >
+      Connect
+    </button>
+  </div>
 </div>
 
   </section>
