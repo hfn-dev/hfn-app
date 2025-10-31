@@ -1,24 +1,30 @@
 <template>
     <div class="events-page font-sans bg-white">
 
-        <section class="container mx-auto px-4 md:px-8 pt-10 pb-16">
-            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between">
-                
-                <div class="lg:w-1/2 mb-8 lg:mb-0">
-                    <h1 class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
-                        <span class="text-green-700">Lorem Ipsum</span>
-                        <br>
-                        <span class="text-gray-900">Lorem Ipsum, ipsum</span>
-                    </h1>
-                    <p class="mt-4 text-gray-600 max-w-lg">
-                        Eutemod magna id purus eget nunc ligula suspendisse dal netus. Condimentum blandit nistrem at mauris enim pulvinar duie etset duls. Succiesseinae erat purue eget nunc.
-                    </p>
-                </div>
-                
-                <div class="lg:w-1/2 flex justify-center relative h-64 sm:h-80 w-full lg:h-96">
-                                        </div>
+        <section class="bg-pink-50"> <div class="container mx-auto px-4 md:px-8 pt-10 pb-16">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between">
+            
+            <div class="lg:w-1/2 mb-8 lg:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
+                    <span class="text-green-700">Lorem Ipsum</span>
+                    <br>
+                    <span class="text-gray-900">Lorem Ipsum, ipsum</span>
+                </h1>
+                <p class="mt-4 text-gray-600 max-w-lg">
+                    Eutemod magna id purus eget nunc ligula suspendisse dal netus. Condimentum blandit nistrem at mauris enim pulvinar duie etset duls. Succiesseinae erat purue eget nunc.
+                </p>
             </div>
-        </section>
+            
+            <div class="lg:w-1/2 flex justify-center w-full h-64 sm:h-80 lg:h-96 relative">
+                <img 
+                    :src="latest" 
+                    alt="Collage of past events"
+                    class="object-cover w-full h-full rounded-lg shadow-xl"
+                />
+            </div>
+        </div>
+    </div>
+</section>
 
         <section class="container mx-auto px-4 md:px-8 py-4">
             <h2 class="text-4xl font-bold text-gray-900 text-center">Events</h2>
@@ -132,3 +138,9 @@
         
     </div>
 </template>
+
+
+<script setup>
+import latest from "@/assets/latest_news.png";
+
+</script>    
