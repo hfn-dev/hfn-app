@@ -7,13 +7,15 @@
                     
                     <div class="lg:w-1/2 mb-8 lg:mb-0">
                         <h1 class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
-                            <span class="text-green-700">Lorem Ipsum</span>
+                            <span class="text-green-700">Empowering Healthcare</span>
                             <br>
-                            <span class="text-gray-900">Lorem Ipsum, ipsum</span>
+                            <span class="text-gray-900">Through Sustainable Programs</span>
                         </h1>
                         <p class="mt-4 text-gray-600 max-w-lg">
-                            Duis etiam duls. Euismod magna id purus eget nunc ligula suspendisse dal netus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duls. Euismod magna id purus eget nunc.
-                        </p>
+Our programs are designed to create long-term impact within Nigeria’s healthcare ecosystem. 
+              From digital innovation to quality improvement and workforce development, 
+              the Healthcare Federation of Nigeria (HFN) leads initiatives that strengthen systems, 
+              support professionals, and improve patient outcomes nationwide.                        </p>
                     </div>
                     
                     <div class="lg:w-1/2 flex justify-center w-full h-64 sm:h-80 lg:h-96 relative">
