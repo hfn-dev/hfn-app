@@ -457,7 +457,7 @@ const getIconPaths = (name) => {
 
 
 <template>
-  <div class="flex min-h-screen bg-[#FFFDF9]">
+  <div class="flex min-h-screen bg-white">
     <!-- Sidebar -->
     <UserSidebar />
 
