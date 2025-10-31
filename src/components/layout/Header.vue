@@ -1,5 +1,5 @@
 <script setup>
-import hfn_logo from "@/assets/hfn-health.png"; // <-- RESTORED YOUR ORIGINAL LOGO IMPORT
+import hfn_logo from "@/assets/hfn-health.png";
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -167,7 +167,8 @@ watch(
 
       <!-- DESKTOP MENU (FIXED: Uses inline style for custom dynamic colors) -->
       <div class="hidden lg:flex items-center space-x-2 xl:space-x-4">
-        <div v-for="link in navLinks.value" :key="link.title" class="relative group">
+        <!-- CORRECTED: Removed .value from navLinks -->
+        <div v-for="link in navLinks" :key="link.title" class="relative group">
           <!-- Main Link -->
           <RouterLink
             :to="!link.hasDropdown ? link.path : undefined"
@@ -283,10 +284,11 @@ watch(
             <path d="m6 6 12 12" />
           </svg>
         </button>
-      </div>
+        </div>
       <div class="flex flex-col p-4 space-y-2">
+        <!-- CORRECTED: Removed .value from navLinks -->
         <div
-    v-for="link in navLinks.value"
+    v-for="link in navLinks"
     :key="link.title"
     class="flex flex-col border-b border-gray-100"
   >
