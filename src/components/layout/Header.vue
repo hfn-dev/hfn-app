@@ -49,7 +49,7 @@ const navLinks = [
     hasDropdown: true,
     dropdownItems: [
       { title: "Member Area", path: "/register" },
-      { title: "Get Involved", path: "/membership" },
+      { title: "Get Involved", path: "/get-involved" },
     ],
 
   },
