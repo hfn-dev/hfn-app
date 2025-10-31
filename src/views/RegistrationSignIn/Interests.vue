@@ -80,6 +80,13 @@
 
 <script setup>
 import aboutImage from '@/assets/interest.png';
+import paediatrics from '@/assets/paediatrics.jpg';
+import gynaecology from '@/assets/gynaecology.jpg';
+import pharmacy from '@/assets/pharmacy.jpg';
+import healthcare from '@/assets/healthcare.jpg';
+import physiology from '@/assets/physiology.jpg';
+import infants from '@/assets/infants.jpg';
+  
 import UserSidebar from '@/components/layout/UserSidebar.vue';
 import { ref } from "vue";
 import { useRouter } from 'vue-router';
@@ -88,11 +95,11 @@ const router = useRouter();
 const categories = [
   {
     title: "Paediatrics",
-    image: aboutImage,
+    image: paediatrics,
   },
   {
     title: "Gynaecology",
-    image: aboutImage,
+    image: gynaecology,
   },
   {
     title: "Insurance",
@@ -100,7 +107,7 @@ const categories = [
   },
   {
     title: "Pharmacy",
-    image: aboutImage,
+    image: pharmacy,
   },
   {
     title: "Business",
@@ -108,15 +115,15 @@ const categories = [
   },
   {
     title: "HealthCare",
-    image: aboutImage,
+    image: healthcare,
   },
   {
     title: "Infants",
-    image: aboutImage,
+    image: infants,
   },
   {
     title: "Physiology",
-    image: aboutImage,
+    image: physiology,
   },
 ];
 
