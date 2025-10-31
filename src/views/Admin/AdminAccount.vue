@@ -1,6 +1,6 @@
 <script setup>
 import assets from "@/assets/assets.png";
-import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
+import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -308,7 +308,7 @@ const closeSidebar = () => (showSidebar.value = false);
       class="fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:translate-x-0"
       :class="showSidebar ? 'translate-x-0' : '-translate-x-full'"
     >
-      <SuperAdminSidebar @closeSidebar="closeSidebar" />
+      <AdminSidebar @closeSidebar="closeSidebar" />
     </div>
 
     <div
@@ -319,7 +319,7 @@ const closeSidebar = () => (showSidebar.value = false);
     <main class="flex-1 p-8 overflow-auto bg-white">
       <div class="mb-8">
         <h1 class="text-4xl font-extrabold text-[#E87A18]">
-          Welcome Super Admin!
+          Welcome Admin!
         </h1>
         <p class="text-gray-700 mt-2">
           Here is how your courses are performing today.
