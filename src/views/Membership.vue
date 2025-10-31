@@ -724,17 +724,40 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
           >
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-6 text-gray-800 text-sm mb-8">
-  <div v-for="member in filteredMembers" :key="member" class="space-y-2">
-    <p
-      class="cursor-pointer hover:text-green-700 transition font-medium"
-      @click="openDialog(member)"
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+  <div
+    v-for="(member, index) in filteredMembers"
+    :key="index"
+    class="relative group"
+  >
+    <div
+      class="p-2 text-gray-800 font-medium cursor-pointer hover:text-green-700 transition"
+      @click="openDialog(member, $event)"
     >
       {{ member }}
-    </p>
+    </div>
+
+    <!-- Dialog only appears for the selected member -->
+    <div
+      v-if="showDialog && selectedMember === member"
+      class="absolute left-full top-0 ml-2 z-50 bg-white shadow-lg border border-gray-200 rounded-lg p-4 w-56 animate-fadeIn"
+    >
+      <p class="font-semibold text-gray-900 mb-2">Connect with {{ member }}</p>
+      <button
+        class="w-full py-1.5 bg-green-700 text-white rounded-md text-sm hover:bg-green-800"
+        @click="sendConnectRequest(member)"
+      >
+        Send Request
+      </button>
+      <button
+        class="w-full mt-2 py-1.5 bg-gray-100 text-gray-700 rounded-md text-sm hover:bg-gray-200"
+        @click="closeDialog"
+      >
+        Cancel
+      </button>
+    </div>
   </div>
 </div>
-
 
         <div class="flex justify-end mt-6">
           <button
@@ -759,37 +782,6 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
         </div>
       </div>
     </div>
-    <!-- Member Connect Dialog -->
-<div
-  v-if="showDialog"
-  class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4"
->
-  <div
-    class="bg-white rounded-3xl shadow-2xl p-8 w-[90%] max-w-xs sm:max-w-sm text-center relative"
-  >
-    <button
-      class="absolute top-3 right-4 text-gray-500 hover:text-gray-900 text-2xl font-light leading-none"
-      @click="closeDialog"
-    >
-      &times;
-    </button>
-
-    <h3 class="text-xl font-bold text-gray-800 mb-3 mt-2">
-      {{ selectedMember }}
-    </h3>
-
-    <p class="text-orange-600 mb-8 text-base">
-      Only registered members can connect.
-    </p>
-
-    <button
-      class="bg-green-700 hover:bg-green-800 text-white font-medium px-8 py-3 rounded-full shadow-lg transition transform hover:scale-[1.02]"
-    >
-      Connect
-    </button>
-  </div>
-</div>
-
   </section>
 </template>
 
