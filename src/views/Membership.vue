@@ -726,7 +726,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
           >
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-6 text-gray-800 text-sm mb-8">
   <div
     v-for="(member, index) in filteredMembers"
     :key="index"
