@@ -98,7 +98,7 @@
                         <p class="text-gray-600 mb-6">
                             Eutemod magna id purus eget nunc ligula suspendisse dal netus. Condimentum blandit nistrem at mauris enim pulvinar duie etset duls.
                         </p>
-                        <button class="self-start px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-150 text-sm">
+                        <button class="self-start px-6 py-2 bg-green-900 text-white justify-center rounded-md hover:bg-green-700 transition duration-150 text-sm">
                             Register Now
                         </button>
                     </div>
@@ -125,7 +125,7 @@
         <div class="p-4">
             
             <div class="flex justify-between items-center mb-2">
-                <h4 class="text-lg font-bold text-green-400 leading-snug">
+                <h4 class="text-lg font-bold text-green-800 leading-snug">
                     HFN Walk for Life
                 </h4>
                 <span class="text-orange-400 text-xs flex items-center whitespace-nowrap">
@@ -158,7 +158,7 @@
                 </div>
             </div>
             
-            <button class="px-3 py-2 bg-green-700 text-white rounded-full hover:bg-green-800 transition duration-150 text-sm font-semibold mt-2">
+            <button class="px-3 py-2 bg-green-800 text-white rounded-full hover:bg-green-800 transition duration-150 text-sm font-semibold mt-2">
                 Register Now
             </button>
         </div>
