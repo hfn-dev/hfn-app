@@ -41,6 +41,7 @@ import AdminDashboard from '@/views/Admin/AdminDashboard.vue';
 import AdminMessages from '@/views/Admin/AdminMessages.vue';
 import AdminPayments from '@/views/Admin/AdminPayments.vue';
 import AdminMembers from '@/views/Admin/AdminMembers.vue';
+import AdminManager from '@/views/Admin/AdminManager.vue';
 
 const routes = [
   // {
@@ -233,6 +234,11 @@ const routes = [
     path: '/admin/members',
     name: 'AdminMembers',
     component: AdminMembers,
+  },
+  {
+    path: '/admin/access',
+    name: 'AdminManager',
+    component: AdminManager,
   },
 ];
 
