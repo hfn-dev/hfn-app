@@ -16,7 +16,7 @@ const { role } = useAuth()
 
 <template>
   <div id="app" class="antialiased text-gray-800">
-    <component :is="role === 'admin' || role === 'editor' || role === 'tutor' || role === 'superadmin' ? AdminHeader : Header" />
+    <component :is="role === 'admin' || role === 'editor' || role === 'user' || role === 'tutor' || role === 'superadmin' ? AdminHeader : Header" />
 
     <RouterView />
     <FeedbackFlag />
