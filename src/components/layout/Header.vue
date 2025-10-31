@@ -32,13 +32,25 @@ const navLinks = [
   { title: "About Us", path: "/about", hasDropdown: false },
   {
     title: "Latest Updates",
-    path: "/blog",
+    path: "#",
     hasDropdown: true,
+    dropdownItems: [
+      { title: "Programs & Initiatives", path: "#" },
+      { title: "News & Advocacy", path: "/blog" },
+      { title: "Resources", path: "#" },
+      { title: "Events", path: "#" },
+    ],
+
   },
   {
     title: "Membership",
-    path: "/membership",
+    path: "#",
     hasDropdown: true,
+    dropdownItems: [
+      { title: "Member Area", path: "/register" },
+      { title: "Get Involved", path: "/membership" },
+    ],
+
   },
   { title: "Contact Us", path: "/contact", hasDropdown: false },
 ];
