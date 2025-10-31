@@ -18,19 +18,22 @@ const handleSignIn = () => {
   } else if (user === 'superadmin') {
     login('superadmin')
     router.push('/superadmin/dashboard')
+   } else if (user === 'admin') {
+    login('admin')
+    router.push('/admin/dashboard') 
   } else if (user === 'tutor') {
     login('tutor')
     router.push('/tutor/dashboard')  
-  } else if (user === 'admin') {
-    login('admin')
+  } else if (user === 'user') {
+    login('user')
     const hasSelectedInterests = localStorage.getItem('hasSelectedInterests')
     if (!hasSelectedInterests) {
-      router.push('/admin/interests')
+      router.push('/user/interests')
     } else {
-      router.push('/admin/dashboard')
+      router.push('/user/dashboard')
     }
   } else {
-    alert('Invalid username. Use "superadmin", "editor", or "admin" for now.')
+    alert('Invalid username. Use "superadmin", "editor", "user", "tutor", or "admin" for now.')
   }
 }
 
