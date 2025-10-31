@@ -1,5 +1,5 @@
 <script setup>
-import AdminSidebar from "@/components/layout/AdminSidebar.vue";
+import UserSidebar from "@/components/layout/UserSidebar.vue";
 import { computed, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -212,7 +212,7 @@ const toggleInterest = (id) => {
   <div
     class="flex flex-col lg:flex-row min-h-screen font-sans bg-white border-0"
   >
-    <AdminSidebar
+    <UserSidebar
       class="hidden md:flex"
       :navLinks="navLinks"
       @update:view="currentView = $event"
