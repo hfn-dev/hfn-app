@@ -214,12 +214,6 @@ const lessonForm = ref({
     contentType: 'Select Option',
 });
 
-// --- Parent Form State for the input field (used in the button bar) ---
-const curriculumForm = ref({
-    newLessonTitle: '',
-    // other form data...
-});
-
 // --- Handlers for Lesson Dialog ---
 const openAddLessonDialog = () => {
     isLessonDialogOpen.value = true;
