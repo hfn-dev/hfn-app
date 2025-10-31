@@ -5,7 +5,7 @@ import user1 from "@/assets/user1.png";
 import user2 from "@/assets/user2.png";
 import { useRouter } from "vue-router";
 
-import AdminSidebar from "@/components/layout/AdminSidebar.vue";
+import UserSidebar from "@/components/layout/UserSidebar.vue";
 
 import { ref } from "vue";
 const router = useRouter();
@@ -177,7 +177,7 @@ const getIconPaths = (name) => {
 <template>
   <div class="min-h-screen flex flex-col bg-white border-0 font-sans">
     <div class="flex flex-grow overflow-hidden">
-      <AdminSidebar />
+      <UserSidebar />
       <main
         class="flex-grow overflow-y-auto pb-12"
         :style="{ backgroundColor: WHITE }"
@@ -459,7 +459,7 @@ const getIconPaths = (name) => {
 <template>
   <div class="flex min-h-screen bg-[#FFFDF9]">
     <!-- Sidebar -->
-    <AdminSidebar />
+    <UserSidebar />
 
     <!-- Main Content -->
     <div class="flex-1 p-6 md:p-10 overflow-y-auto">
@@ -752,7 +752,7 @@ const getIconPaths = (name) => {
 </template>
 
 <script setup>
-import AdminSidebar from "@/components/layout/AdminSidebar.vue";
+import UserSidebar from "@/components/layout/UserSidebar.vue";
 
 const newsletters = [
   {
