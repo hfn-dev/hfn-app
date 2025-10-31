@@ -23,39 +23,31 @@ watch(
 const navLinks = [
   {
     title: "Dashboard",
-    path: "/superadmin/dashboard",
+    path: "/admin/dashboard",
     icon: "M3 3v18h18V3H3zm16 16H5V5h14v14zM9 8h6v2H9V8zm0 4h6v2H9v-2zm0 4h4v2H9v-2z",
   },
   {
     title: "Courses",
-    path: "/superadmin/courses",
+    path: "/admin/courses",
     icon: "M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20zm-1-8V7h2v5h4l-5 5-5-5h4z",
   },
-  {
-    title: "Members",
-    path: "/superadmin/members",
-  icon: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8z",
-  },
+  
   {
     title: "Payments",
-    path: "/superadmin/payments",
+    path: "/admin/payments",
   icon: "M2 7h20a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2zm0 4h20M4 15h4",
   },
   {
     title: "Messages",
-    path: "/superadmin/messages",
+    path: "/admin/messages",
     icon: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z",
   },
   {
     title: "My Account",
-    path: "/superadmin/account",
+    path: "/admin/account",
     icon: "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2",
   },
-  {
-    title: 'Access Manager',
-    path: '/superadmin/access',
-    icon: 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20zm0-13a1 1 0 0 0-1 1v4a1 1 0 0 0 2 0V8a1 1 0 0 0-1-1zm0 8a1 1 0 1 0 0 2 1 1 0 0 0 0-2z',
-  },
+  
 ];
 
 const handleLogout = () => {
