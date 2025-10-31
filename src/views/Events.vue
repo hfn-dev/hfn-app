@@ -6,12 +6,14 @@
             
             <div class="lg:w-1/2 mb-8 lg:mb-0">
                 <h1 class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
-                    <span class="text-green-700">Lorem Ipsum</span>
+                    <span class="text-green-700">Upcoming Events</span>
                     <br>
-                    <span class="text-gray-900">Lorem Ipsum, ipsum</span>
+                    <span class="text-gray-900">Connect, Learn & Grow With Us</span>
                 </h1>
                 <p class="mt-4 text-gray-600 max-w-lg">
-                    Eutemod magna id purus eget nunc ligula suspendisse dal netus. Condimentum blandit nistrem at mauris enim pulvinar duie etset duls. Succiesseinae erat purue eget nunc.
+                   Stay updated with our latest conferences, webinars, and community programs.
+              Whether you're looking to expand your knowledge, network with industry leaders,
+              or engage with our vibrant community, there's an event for you.
                 </p>
             </div>
             
@@ -96,7 +98,9 @@
                             </span>
                         </div>
                         <p class="text-gray-600 mb-6">
-                            Eutemod magna id purus eget nunc ligula suspendisse dal netus. Condimentum blandit nistrem at mauris enim pulvinar duie etset duls.
+                            Join thought leaders, innovators, and entrepreneurs across Africa as we explore
+              the next phase of sustainable growth, technology-driven change, and inclusive
+              business practices.
                         </p>
                         <button class="self-start px-6 py-2 bg-green-900 text-white justify-center rounded-md hover:bg-green-700 transition duration-150 text-sm">
                             Register Now
@@ -106,64 +110,121 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    
-    <div v-for="n in 3" :key="n" class="border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition duration-300">
-        
-        <div class="relative h-48"> <img
-                :src="awards"
-                alt="HFN Walk for Life Event"
-                class="w-full h-full object-cover brightness-[0.7] transition duration-300" 
-                :class="{'hover:brightness-90': false}" 
+        <div
+          v-for="(event, index) in events"
+          :key="index"
+          class="border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition duration-300"
+        >
+          <div class="relative h-48">
+            <img
+              :src="awards"
+              alt="Event image"
+              class="w-full h-full object-cover brightness-[0.7] transition duration-300"
             />
-            
-            <span class="absolute top-4 left-4 px-3 py-1 bg-white text-green-400 text-xs font-semibold rounded-full shadow-md">
-                Webinar
+
+            <span
+              class="absolute top-4 left-4 px-3 py-1 bg-[#4CAF50] text-white text-xs font-semibold rounded-full shadow-md"
+            >
+              {{ event.category }}
             </span>
+          </div>
 
-            </div>
-        
-        <div class="p-4">
-            
+          <div class="p-4">
             <div class="flex justify-between items-center mb-2">
-                <h4 class="text-lg font-bold text-green-800 leading-snug">
-                    HFN Walk for Life
-                </h4>
-                <span class="text-orange-400 text-xs flex items-center whitespace-nowrap">
-                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                    Annually
-                </span>
+              <h4 class="text-lg font-bold text-gray-900 leading-snug">
+                {{ event.title }}
+              </h4>
+              <span class="text-gray-500 text-xs flex items-center whitespace-nowrap">
+                <svg
+                  class="w-3 h-3 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  ></path>
+                </svg>
+                {{ event.frequency }}
+              </span>
             </div>
-            
-            <p class="text-sm text-gray-600 mb-3 line-clamp-3">
-                Euismod magna id purus eget nunc ligula suspendisse dui netus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc
-            </p>
-            
-            <hr class="my-3 border-gray-100">
-            
-            <div class="grid grid-cols-2 gap-2 text-sm text-gray-500 mb-4">
-                
-                <div class="flex items-center">
-                    <svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                    <span class="text-orange-500">October 10, 2025</span>
-                </div>
-                
-                <div class="flex items-center">
-                    <svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span class="text-orange-500">10 am</span>
-                </div>
 
-                <div class="flex items-center col-span-2">
-                    <svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    <span class="text-orange-500">Zoom</span>
-                </div>
+            <p class="text-sm text-gray-600 mb-3 line-clamp-3">
+              {{ event.description }}
+            </p>
+
+            <hr class="my-3 border-gray-100" />
+
+            <div class="grid grid-cols-2 gap-2 text-sm text-gray-500 mb-4">
+              <div class="flex items-center">
+                <svg
+                  class="w-4 h-4 mr-1 text-orange-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  ></path>
+                </svg>
+                <span>{{ event.date }}</span>
+              </div>
+
+              <div class="flex items-center">
+                <svg
+                  class="w-4 h-4 mr-1 text-blue-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <span>{{ event.time }}</span>
+              </div>
+
+              <div class="flex items-center col-span-2">
+                <svg
+                  class="w-4 h-4 mr-1 text-red-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"
+                  ></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  ></path>
+                </svg>
+                <span>{{ event.location }}</span>
+              </div>
             </div>
-            
-            <button class="px-3 py-2 bg-green-800 text-white rounded-full hover:bg-green-800 transition duration-150 text-sm font-semibold mt-2">
-                Register Now
+
+            <button
+              class="w-full px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 transition duration-150 text-sm font-semibold mt-2"
+            >
+              Register Now
             </button>
+          </div>
         </div>
-    </div>
-    </div>
+      </div>
         </section>
         
     </div>
@@ -174,4 +235,37 @@
 import latest from "@/assets/latest_news.png";
 import awards from "@/assets/awards.png";
 
+
+ const events = [
+  {
+    title: "Digital Skills Bootcamp",
+    category: "Workshop",
+    date: "November 20, 2025",
+    time: "9:00 AM",
+    location: "Online via Zoom",
+    frequency: "Monthly",
+    description:
+      "A hands-on training designed to help beginners and professionals master essential digital tools for marketing, communication, and collaboration.",
+  },
+  {
+    title: "Women in Tech Summit",
+    category: "Conference",
+    date: "December 5, 2025",
+    time: "10:00 AM",
+    location: "Civic Centre, Victoria Island",
+    frequency: "Annually",
+    description:
+      "A gathering of tech enthusiasts and leaders driving innovation and inclusion in the African tech ecosystem.",
+  },
+  {
+    title: "Health & Wellness Webinar",
+    category: "Webinar",
+    date: "January 12, 2026",
+    time: "11:00 AM",
+    location: "Online",
+    frequency: "Quarterly",
+    description:
+      "Join medical experts and lifestyle coaches to discuss simple ways to achieve holistic wellness in a fast-paced world.",
+  },
+];   
 </script>    
