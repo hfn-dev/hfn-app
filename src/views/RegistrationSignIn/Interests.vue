@@ -1,6 +1,6 @@
 <template>
   <div class="flex min-h-screen bg-gray-50">
-    <AdminSidebar />
+    <UserSidebar />
 
     <div class="flex-1 p-8 bg-white flex flex-col items-center overflow-auto">
       <div class="text-center mb-10 max-w-lg mx-auto">
@@ -80,7 +80,7 @@
 
 <script setup>
 import aboutImage from '@/assets/interest.png';
-import AdminSidebar from '@/components/layout/AdminSidebar.vue';
+import UserSidebar from '@/components/layout/UserSidebar.vue';
 import { ref } from "vue";
 import { useRouter } from 'vue-router';
 
@@ -133,7 +133,7 @@ const toggleSelection = (categoryTitle) => {
 
 const finishSelection = () => {
   localStorage.setItem("hasSelectedInterests", "true");
-  router.push("/admin/dashboard");
+  router.push("/user/dashboard");
 };
 </script>
 
