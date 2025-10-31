@@ -2,7 +2,7 @@
 import courses from '@/assets/courses.jpg';
 import student from '@/assets/student.jpg';
 
-import AdminSidebar from '@/components/layout/AdminSidebar.vue';
+import UserSidebar from '@/components/layout/UserSidebar.vue';
 import { ref } from 'vue';
 const DARK_GREEN = '#004d33';
 const LIGHT_GREEN = '#f2f9f3';
@@ -61,7 +61,7 @@ const toggleModule = (moduleId) => {
 <template>
   <div class="min-h-screen bg-gray-50 flex flex-col">
     <div class="flex flex-grow">
-      <AdminSidebar />
+      <UserSidebar />
 
       <main class="flex-grow p-4 md:p-8 lg:p-12">
         <!-- Header & Breadcrumbs -->
