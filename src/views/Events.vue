@@ -123,7 +123,7 @@
             />
 
             <span
-              class="absolute top-4 left-4 px-3 py-1 bg-[#4CAF50] text-white text-xs font-semibold rounded-full shadow-md"
+              class="absolute top-4 left-4 px-3 py-1 bg-white text-green-700 text-xs font-semibold rounded-full shadow-md"
             >
               {{ event.category }}
             </span>
@@ -131,10 +131,10 @@
 
           <div class="p-4">
             <div class="flex justify-between items-center mb-2">
-              <h4 class="text-lg font-bold text-gray-900 leading-snug">
+              <h4 class="text-lg font-bold text-green-900 leading-snug">
                 {{ event.title }}
               </h4>
-              <span class="text-gray-500 text-xs flex items-center whitespace-nowrap">
+              <span class="text-orange-600 text-xs flex items-center whitespace-nowrap">
                 <svg
                   class="w-3 h-3 mr-1"
                   fill="none"
@@ -158,7 +158,7 @@
 
             <hr class="my-3 border-gray-100" />
 
-            <div class="grid grid-cols-2 gap-2 text-sm text-gray-500 mb-4">
+            <div class="grid grid-cols-2 gap-2 text-sm text-orange-600 mb-4">
               <div class="flex items-center">
                 <svg
                   class="w-4 h-4 mr-1 text-orange-500"
@@ -173,7 +173,7 @@
                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   ></path>
                 </svg>
-                <span>{{ event.date }}</span>
+                <span class="text-orange-600">{{ event.date }}</span>
               </div>
 
               <div class="flex items-center">
@@ -190,12 +190,12 @@
                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                   ></path>
                 </svg>
-                <span>{{ event.time }}</span>
+                <span class="text-orange-600">{{ event.time }}</span>
               </div>
 
               <div class="flex items-center col-span-2">
                 <svg
-                  class="w-4 h-4 mr-1 text-red-500"
+                  class="w-4 h-4 mr-1 text-orange-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -213,12 +213,12 @@
                     d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                   ></path>
                 </svg>
-                <span>{{ event.location }}</span>
+                <span class="text-orange-600">{{ event.location }}</span>
               </div>
             </div>
 
             <button
-              class="w-full px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 transition duration-150 text-sm font-semibold mt-2"
+              class="px-3 py-2 bg-green-700 text-white rounded-full justify-center hover:bg-green-800 transition duration-150 text-sm font-semibold mt-2"
             >
               Register Now
             </button>
