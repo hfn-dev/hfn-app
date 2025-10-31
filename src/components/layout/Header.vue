@@ -32,7 +32,7 @@ const navLinks = [
   { title: "About Us", path: "/about", hasDropdown: false },
   {
     title: "Latest Updates",
-    path: "#",
+    path: null,
     hasDropdown: true,
     dropdownItems: [
       { title: "Programs & Initiatives", path: "#" },
@@ -44,7 +44,7 @@ const navLinks = [
   },
   {
     title: "Membership",
-    path: "#",
+    path: null,
     hasDropdown: true,
     dropdownItems: [
       { title: "Member Area", path: "/register" },
