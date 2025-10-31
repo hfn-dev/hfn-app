@@ -49,7 +49,9 @@ const filteredMembers = computed(() => {
   );
 });
 
-function openDialog(member) {
+
+
+  function openDialog(member, event) {
   selectedMember.value = member;
   showDialog.value = true;
 }
@@ -790,4 +792,18 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
   background-color: #fcf8f3; 
   border-radius: 0.75rem; 
 }
+  @keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+
 </style>
