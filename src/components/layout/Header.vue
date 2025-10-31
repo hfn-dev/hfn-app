@@ -61,8 +61,6 @@ const navLinks = ref([
   { title: "Contact Us", path: "/contact", hasDropdown: false },
 ]);
 
-// The original, misplaced, and now unnecessary forEach loop has been removed.
-
 watch(
   () => route.path,
   (newPath) => {
@@ -165,18 +163,18 @@ watch(
         </button>
       </div>
 
-      <!-- DESKTOP MENU (FIXED: Uses inline style for custom dynamic colors) -->
+      <!-- DESKTOP MENU (FIXED: Merged class and :class) -->
       <div class="hidden lg:flex items-center space-x-2 xl:space-x-4">
-        <!-- CORRECTED: Removed .value from navLinks -->
         <div v-for="link in navLinks" :key="link.title" class="relative group">
           <!-- Main Link -->
           <RouterLink
             :to="!link.hasDropdown ? link.path : undefined"
             @click="!link.hasDropdown && handleLinkClick(link.path)"
-            class="flex items-center px-4 py-3 font-semibold transition-all duration-200 rounded-lg whitespace-nowrap"
             :class="[
+              // Merged static classes here:
+              'flex items-center px-4 py-3 font-semibold transition-all duration-200 rounded-lg whitespace-nowrap',
               isLinkActive(link.path)
-                ? 'shadow-md' // Tailwind classes that are static
+                ? 'shadow-md'
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
             ]"
             :style="isLinkActive(link.path) ? { backgroundColor: ACTIVE_BG_COLOR, color: DARK_GREEN } : {}"
@@ -284,9 +282,8 @@ watch(
             <path d="m6 6 12 12" />
           </svg>
         </button>
-        </div>
+      </div>
       <div class="flex flex-col p-4 space-y-2">
-        <!-- CORRECTED: Removed .value from navLinks -->
         <div
     v-for="link in navLinks"
     :key="link.title"
@@ -294,10 +291,11 @@ watch(
   >
     <RouterLink
       :to="!link.hasDropdown ? link.path : undefined"
-      class="flex items-center justify-between p-3 transition-colors cursor-pointer"
       :class="[
+        // Merged static classes here:
+        'flex items-center justify-between p-3 transition-colors cursor-pointer',
         isLinkActive(link.path)
-          ? '' // Tailwind classes that are static
+          ? ''
           : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
       ]"
       :style="isLinkActive(link.path) ? { backgroundColor: ACTIVE_BG_COLOR, color: DARK_GREEN } : {}"
