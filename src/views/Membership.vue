@@ -762,7 +762,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
         >
           Connect
         </button>
-        <p class="font-san text-orange-600 mb-3 text-sm">
+        <p class="font-san text-orange-600 mb-3 mt-3 text-sm">
           Only registered members can connect*.
         </p>
       </div>
