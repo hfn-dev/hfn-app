@@ -726,38 +726,44 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
           >
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1">
   <div
     v-for="(member, index) in filteredMembers"
     :key="index"
     class="relative group"
   >
+    <!-- Member name -->
     <div
-      class="p-2 text-gray-800 font-medium cursor-pointer hover:text-green-700 transition"
+      class="p-1 text-gray-800 font-medium cursor-pointer hover:text-green-700 transition"
       @click="openDialog(member, $event)"
     >
       {{ member }}
     </div>
 
-    <!-- Dialog only appears for the selected member -->
-    <div
-      v-if="showDialog && selectedMember === member"
-      class="absolute left-full top-0 ml-2 z-50 bg-white shadow-lg border border-gray-200 rounded-lg p-4 w-56 animate-fadeIn"
-    >
-      <p class="font-semibold text-gray-900 mb-2">Connect with {{ member }}</p>
-      <button
-        class="w-full py-1.5 bg-green-700 text-white rounded-md text-sm hover:bg-green-800"
-        @click="sendConnectRequest(member)"
+    <!-- Dialog under clicked name -->
+    <transition name="fade">
+      <div
+        v-if="showDialog && selectedMember === member"
+        class="mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg p-4 relative z-50"
       >
-        Send Request
-      </button>
-      <button
-        class="w-full mt-2 py-1.5 bg-gray-100 text-gray-700 rounded-md text-sm hover:bg-gray-200"
-        @click="closeDialog"
-      >
-        Cancel
-      </button>
-    </div>
+        <button
+          class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-lg"
+          @click="closeDialog"
+        >
+          &times;
+        </button>
+
+        <p class="font-semibold text-gray-900 mb-3 text-sm">
+          Connect with {{ member }}
+        </p>
+
+        <button
+          class="w-full py-1.5 border border-green-700 text-green-700 rounded-md text-sm font-medium hover:bg-green-50 transition"
+        >
+          Connect
+        </button>
+      </div>
+    </transition>
   </div>
 </div>
 
@@ -792,18 +798,13 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
   background-color: #fcf8f3; 
   border-radius: 0.75rem; 
 }
-  @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+ .fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
 }
-.animate-fadeIn {
-  animation: fadeIn 0.2s ease-out;
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 </style>
