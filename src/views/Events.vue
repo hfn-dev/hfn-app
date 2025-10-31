@@ -19,7 +19,7 @@
                 <img 
                     :src="latest" 
                     alt="Collage of past events"
-                    class="object-cover w-full h-full rounded-lg shadow-xl"
+                    class="object-cover w-full h-full rounded-lg"
                 />
             </div>
         </div>
@@ -74,7 +74,7 @@
                         <img 
                     :src="latest" 
                     alt="Collage of past events"
-                    class="object-cover w-full h-full rounded-lg shadow-xl"
+                    class="object-cover w-full h-full rounded-lg"
                 />
                                             </div>
                     
