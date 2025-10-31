@@ -1,7 +1,7 @@
 <template>
     <div class="get-involved-page font-sans bg-white">
 
-        <section class="bg-gray-50/50 pt-10 pb-16"> 
+        <section class="bg-green-50 pt-10 pb-16"> 
             <div class="container mx-auto px-4 md:px-8">
                 <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between">
                     
@@ -17,6 +17,11 @@
                     </div>
                     
                     <div class="lg:w-1/2 flex justify-center w-full h-64 sm:h-80 lg:h-96 relative">
+                        <img 
+                    :src="latest" 
+                    alt="Get involved"
+                    class="object-cover w-full h-full rounded-lg"
+                />
                          </div>
                 </div>
             </div>
@@ -31,7 +36,7 @@
             <section class="mb-16">
                 <h3 class="text-2xl font-semibold text-gray-800 mb-4">Partnerships</h3>
                 <p class="text-gray-600 mb-4 max-w-4xl">
-                    **Healthcare Federation Of Nigeria** is independent of any government/political ideology, economic interest, religious affiliation, and is mainly funded by our membership and volitional donations from well-meaning Nigerians.
+                    Healthcare Federation Of Nigeria is independent of any government/political ideology, economic interest, religious affiliation, and is mainly funded by our membership and volitional donations from well-meaning Nigerians.
                 </p>
                 <p class="text-gray-600 mb-6 max-w-4xl">
                     This vision is anchored on a **"patient-centric" approach** to policy advocacy which is our driving force. This is anchored on the simple conclusion that, if life is basic and fundamental, there is no reason why the patient should suffer due to a faulty health system. We are the voice for advocating better healthcare in Nigeria that human life.
@@ -63,7 +68,7 @@
                             This is an excellent way to showcase your brand directly to healthcare providers, key decision-makers and stakeholders within the healthcare sector. At various events, we can also offer exclusive packages.
                             <span class="block mt-2 font-medium">For further details, contact our team</span>
                         </p>
-                        <a href="#" class="inline-block">
+                        <a href="#" class="inline-block justify-center">
                             <button class="px-6 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 transition duration-150 text-sm font-semibold">
                                 Contact Us
                             </button>
@@ -76,7 +81,7 @@
                             Our Quarterly Newsletter is distributed to all our members and to various categories of healthcare professions. We accept advertisements ranging from a half page to double page spreads, subject to editorial approval by the secretary.
                             <span class="block mt-2 font-medium">For pricing, contact our team.</span>
                         </p>
-                        <a href="#" class="inline-block">
+                        <a href="#" class="inline-block justify-center">
                             <button class="px-6 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 transition duration-150 text-sm font-semibold">
                                 Contact Us
                             </button>
@@ -93,7 +98,7 @@
                 <p class="text-gray-600 mb-8 max-w-4xl">
                     Every contribution helps enable us to share knowledge and foster collaboration amongst our global network of healthcare professionals, improving patient outcomes for better lives. Whether you’d like to make a one-off gift or set up a regular payment, it’s easy to donate online. Click the button to get started.
                 </p>
-                <a href="#" class="inline-block">
+                <a href="#" class="inline-block justify-center">
                     <button class="px-8 py-3 bg-green-700 text-white rounded-md shadow-lg hover:bg-green-800 transition duration-150 font-bold">
                         Donate Now
                     </button>
@@ -108,7 +113,7 @@
                 <p class="text-gray-600 mb-8 max-w-4xl">
                     Euismod magna id purus eget nunc ligula suspendisse dul netus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis.
                 </p>
-                <a href="#" class="inline-block">
+                <a href="#" class="inline-block justify-center">
                     <button class="px-8 py-3 bg-green-700 text-white rounded-md shadow-lg hover:bg-green-800 transition duration-150 font-bold">
                         Sign Up Now
                     </button>
@@ -118,3 +123,8 @@
         </main>
     </div>
 </template>
+
+<script setup>
+import latest from "@/assets/latest_news.png";
+
+</script>   
