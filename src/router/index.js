@@ -4,6 +4,8 @@ import BlogDetails from '@/views/BlogDetails.vue';
 import Contact from '@/views/Contact.vue';
 import EditorAccount from '@/views/Editor/EditorAccount.vue';
 import EditorDashboard from '@/views/Editor/EditorDashboard.vue';
+import GetInvolved from '@/views/GetInvolved.vue';
+
 import EditorPages from '@/views/Editor/EditorPages.vue';
 import Signin from '@/views/Editor/Signin.vue';
 import Membership from '@/views/Membership.vue';
@@ -66,6 +68,8 @@ const routes = [
   { path: '/register', name: 'Register', component: Register },
   { path: '/signin', name: 'Signin', component: SignIn },
     { path: '/events', name: 'Events', component: Events },
+      { path: '/get-involved', name: 'GetInvolved', component: GetInvolved },
+
 
   {
     path: '/blog/:id',
