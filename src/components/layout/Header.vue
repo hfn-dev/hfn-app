@@ -38,7 +38,7 @@ const navLinks = [
       { title: "Programs & Initiatives", path: "/blog" },
       { title: "News & Advocacy", path: "/blog" },
       { title: "Resources", path: "/blog" },
-      { title: "Events", path: "/blog" },
+      { title: "Events", path: "/events" },
     ],
 
   },
