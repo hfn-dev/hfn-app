@@ -154,60 +154,53 @@ watch(
         </button>
       </div>
 
-      <div class="hidden lg:flex items-center space-x-2 xl:space-x-4">
-  <div
-    v-for="link in navLinks"
-    :key="link.title"
-    class="relative group"
-  >
+      <!-- DESKTOP MENU -->
+<div class="hidden lg:flex items-center space-x-2 xl:space-x-4">
+  <div v-for="link in navLinks" :key="link.title" class="relative group">
+    <!-- Main Link -->
     <RouterLink
-  v-for="link in navLinks"
-  :key="link.title"
-  :to="!link.hasDropdown ? link.path : undefined"
-  @click="!link.hasDropdown && handleLinkClick(link.path)"
-  class="flex items-center justify-between p-3 border-b border-gray-100 transition-colors"
-  :class="[
-    isLinkActive(link.path)
-      ? `bg-[${ACTIVE_BG_COLOR}] text-[${DARK_GREEN}]`
-      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
-  ]"
->
-  <div class="flex items-center justify-between w-full">
-    <span>{{ link.title }}</span>
-    <svg
-      v-if="link.hasDropdown"
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      class="w-4 h-4 ml-1 text-gray-500"
-      @click.stop="link.isOpen = !link.isOpen"
+      :to="!link.hasDropdown ? link.path : undefined"
+      @click="!link.hasDropdown && handleLinkClick(link.path)"
+      class="flex items-center px-4 py-3 font-semibold transition-all duration-200 rounded-lg whitespace-nowrap"
+      :class="[
+        isLinkActive(link.path)
+          ? `bg-[${ACTIVE_BG_COLOR}] text-[${DARK_GREEN}] shadow-md`
+          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
+      ]"
     >
-      <path d="m6 9 6 6 6-6" />
-    </svg>
-  </div>
-
-  <div
-    v-if="link.isOpen && link.hasDropdown"
-    class="mt-2 space-y-2 bg-gray-50 rounded-lg"
-  >
-    <RouterLink
-      v-for="item in link.dropdownItems"
-      :key="item.title"
-      :to="item.path"
-      @click="handleLinkClick(item.path)"
-      class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded"
-    >
-      {{ item.title }}
+      {{ link.title }}
+      <svg
+        v-if="link.hasDropdown"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="w-4 h-4 ml-1 text-gray-500"
+      >
+        <path d="m6 9 6 6 6-6" />
+      </svg>
     </RouterLink>
-  </div>
-</RouterLink>
 
+    <!-- Dropdown (hover only for desktop) -->
+    <div
+      v-if="link.hasDropdown"
+      class="absolute left-0 mt-2 w-56 bg-white border border-gray-100 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-20"
+    >
+      <RouterLink
+        v-for="item in link.dropdownItems"
+        :key="item.title"
+        :to="item.path"
+        @click="handleLinkClick(item.path)"
+        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+      >
+        {{ item.title }}
+      </RouterLink>
+    </div>
   </div>
 </div>
 
@@ -279,41 +272,57 @@ watch(
         </button>
       </div>
       <div class="flex flex-col p-4 space-y-2">
-        <RouterLink
-          v-for="link in navLinks"
-          :key="link.title"
-          :to="link.path"
-          @click="handleLinkClick(link.path)"
-          class="flex items-center justify-between p-3 border-b border-gray-100 transition-colors"
-          :class="[
-            isLinkActive(link.path)
-              ? `bg-[${ACTIVE_BG_COLOR}] text-[${DARK_GREEN}]`
-              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
-          ]"
-        >
-          {{ link.title }}
-          <svg
-            v-if="link.hasDropdown"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            :class="[
-              'w-4 h-4 ml-1 transition-transform',
-              isLinkActive(link.path)
-                ? `text-[${DARK_GREEN}]`
-                : 'text-gray-500',
-            ]"
-          >
-            <path d="m6 9 6 6 6-6" />
-          </svg>
-        </RouterLink>
+        <div
+    v-for="link in navLinks"
+    :key="link.title"
+    class="flex flex-col border-b border-gray-100"
+  >
+    <div
+      class="flex items-center justify-between p-3 transition-colors cursor-pointer"
+      :class="[
+        isLinkActive(link.path)
+          ? `bg-[${ACTIVE_BG_COLOR}] text-[${DARK_GREEN}]`
+          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
+      ]"
+      @click="link.hasDropdown ? (link.isOpen = !link.isOpen) : handleLinkClick(link.path)"
+    >
+      <span>{{ link.title }}</span>
+      <svg
+        v-if="link.hasDropdown"
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        :class="[
+          'w-4 h-4 ml-1 transition-transform duration-300',
+          link.isOpen ? 'rotate-180 text-gray-700' : 'text-gray-500',
+        ]"
+      >
+        <path d="m6 9 6 6 6-6" />
+      </svg>
+    </div>
 
+    <!-- Dropdown items -->
+    <div
+      v-if="link.hasDropdown && link.isOpen"
+      class="pl-6 py-2 space-y-2 bg-gray-50 rounded-lg"
+    >
+      <RouterLink
+        v-for="item in link.dropdownItems"
+        :key="item.title"
+        :to="item.path"
+        @click="handleLinkClick(item.path)"
+        class="block text-sm text-gray-700 hover:bg-gray-100 px-3 py-1 rounded"
+      >
+        {{ item.title }}
+      </RouterLink>
+    </div>
+  </div>
         <div class="mt-4 pt-4 border-t border-gray-200 space-y-4">
           <div class="relative">
             <input
