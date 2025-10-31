@@ -592,7 +592,7 @@ const handleQuizAdded = () => {
                 </div>
                 <div 
             v-if="isLessonDialogOpen" 
-            class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4"
+            class="fixed inset-0 bg-gray-100 bg-opacity-10 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4"
         >
             <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg">
                 
@@ -667,7 +667,7 @@ const handleQuizAdded = () => {
         
         <div 
             v-if="isQuizDialogOpen" 
-            class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4"
+            class="fixed inset-0 bg-gray-50 bg-opacity-10 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4"
         >
             <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
                 
