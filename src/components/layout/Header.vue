@@ -74,7 +74,7 @@ watch(
   <header class="w-full bg-white font-sans shadow-md">
     <!-- Top Bar -->
     <div
-      :style="{ backgroundColor: DARK_GREEN }"
+      
       class="text-white text-sm flex justify-end px-4 sm:px-8 py-2 rounded-b-xl"
     >
       <div class="relative group cursor-pointer">
