@@ -13,7 +13,6 @@ import SignIn from '@/views/RegistrationSignIn/SignIn.vue';
 import SigninVerification from '@/views/RegistrationSignIn/SigninVerification.vue';
 import SuperAdminAccount from '@/views/SuperAdmin/SuperAdminAccount.vue';
 import SuperAdminManager from '@/views/SuperAdmin/SuperAdminManager.vue';
-
 import SuperAdminCourseList from '@/views/SuperAdmin/SuperAdminCourseList.vue';
 import SuperAdminCreateCourse from '@/views/SuperAdmin/SuperAdminCreateCourse.vue';
 import SuperAdminDashboard from '@/views/SuperAdmin/SuperAdminDashboard.vue';
@@ -42,6 +41,7 @@ import AdminMessages from '@/views/Admin/AdminMessages.vue';
 import AdminPayments from '@/views/Admin/AdminPayments.vue';
 import AdminMembers from '@/views/Admin/AdminMembers.vue';
 import AdminManager from '@/views/Admin/AdminManager.vue';
+import Events from '@/views/Events.vue';
 
 const routes = [
   // {
@@ -65,6 +65,8 @@ const routes = [
   { path: '/contact', name: 'Contact', component: Contact },
   { path: '/register', name: 'Register', component: Register },
   { path: '/signin', name: 'Signin', component: SignIn },
+    { path: '/events', name: 'Events', component: Events },
+
   {
     path: '/blog/:id',
     name: 'BlogDetails',
