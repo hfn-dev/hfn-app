@@ -201,6 +201,79 @@ const goBack = () => {
     alert("Navigating back to My Courses list (Simulated).");
   }
 };
+
+ const isLessonDialogOpen = ref(false);
+const isQuizDialogOpen = ref(false);
+
+// --- Form State for the Lesson Dialog ---
+const lessonForm = ref({
+    title: 'Sample Text',
+    durationHours: '00',
+    durationMinutes: '00',
+    durationSeconds: '00',
+    contentType: 'Select Option',
+});
+
+// --- Parent Form State for the input field (used in the button bar) ---
+const curriculumForm = ref({
+    newLessonTitle: '',
+    // other form data...
+});
+
+// --- Handlers for Lesson Dialog ---
+const openAddLessonDialog = () => {
+    isLessonDialogOpen.value = true;
+};
+
+const closeAddLessonDialog = () => {
+    isLessonDialogOpen.value = false;
+    // Optional: Reset form state when closing
+    resetLessonForm();
+};
+
+const resetLessonForm = () => {
+    lessonForm.value = {
+        title: '',
+        durationHours: '00',
+        durationMinutes: '00',
+        durationSeconds: '00',
+        contentType: 'Select Option',
+    };
+};
+
+const handleLessonAdded = () => {
+    // 1. **Data Collection & Validation (in a real app)**
+    const lessonData = {
+        title: lessonForm.value.title,
+        duration: `${lessonForm.value.durationHours}:${lessonForm.value.durationMinutes}:${lessonForm.value.durationSeconds}`,
+        contentType: lessonForm.value.contentType,
+    };
+    
+    console.log('New Lesson Added (Data to be submitted):', lessonData);
+    
+    // 2. **Submission Logic** (e.g., API call)
+    
+    // 3. **Close Dialog**
+    closeAddLessonDialog();
+    // Optional: Reset the quick-add input field
+    curriculumForm.value.newLessonTitle = '';
+};
+
+// --- Handlers for Quiz Dialog ---
+const openAddQuizDialog = () => {
+    isQuizDialogOpen.value = true;
+};
+
+const closeAddQuizDialog = () => {
+    isQuizDialogOpen.value = false;
+    // No form reset here as it's a simple placeholder
+};
+
+const handleQuizAdded = () => {
+    console.log('New Quiz Added (Placeholder Action)');
+    // Submission logic for quiz...
+    closeAddQuizDialog();
+}; 
 </script>
 
 <template>
@@ -508,6 +581,7 @@ const goBack = () => {
                     />
                     <button
                       type="button"
+                      @click="openAddLessonDialog"
                       class="flex items-center px-3 py-1 bg-[#00cc66] text-white rounded-md text-sm hover:bg-[#00994d]"
                     >
                       <Plus class="w-4 h-4 mr-1" /> Add Lesson
@@ -516,11 +590,119 @@ const goBack = () => {
 
                   <button
                     type="button"
+                    @click="openAddQuizDialog"
                     class="flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium"
                   >
                     <Plus class="w-4 h-4 mr-1" /> Add Quiz
                   </button>
                 </div>
+                <div 
+            v-if="isLessonDialogOpen" 
+            class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4"
+        >
+            <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg">
+                
+                <h2 class="text-xl font-bold mb-4">Add Lesson</h2>
+                
+                <form @submit.prevent="handleLessonAdded">
+                    
+                    <div class="mb-4">
+                        <label for="lesson-title" class="text-sm text-gray-700">Course Title</label>
+                        <input 
+                            type="text" 
+                            id="lesson-title" 
+                            v-model="lessonForm.title" 
+                            placeholder="Sample Text"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66] focus:ring-[#00cc66]"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm text-gray-700">Estimated Duration</label>
+                        <div class="flex space-x-2 mt-1 items-center">
+                            <input type="number" placeholder="00" v-model="lessonForm.durationHours" min="0" max="99" class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center">
+                            <span class="text-sm">Hours</span>
+                            <input type="number" placeholder="00" v-model="lessonForm.durationMinutes" min="0" max="59" class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center">
+                            <span class="text-sm">Minutes</span>
+                            <input type="number" placeholder="00" v-model="lessonForm.durationSeconds" min="0" max="59" class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center">
+                            <span class="text-sm">Seconds</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="content-type" class="block text-sm text-gray-700">Upload Content Type</label>
+                        <select 
+                            id="content-type" 
+                            v-model="lessonForm.contentType"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66] focus:ring-[#00cc66]"
+                            required
+                        >
+                            <option disabled value="Select Option">Select Option</option>
+                            <option>Video File</option>
+                            <option>PDF Document</option>
+                            <option>External Link</option>
+                        </select>
+                    </div>
+
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer mb-6 hover:border-[#00cc66] transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                        <p class="mt-1 text-sm text-gray-600">Upload Content</p>
+                    </div>
+
+                    <div class="flex justify-end space-x-3">
+                        <button
+                            type="button"
+                            @click="closeAddLessonDialog"
+                            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            class="px-4 py-2 bg-[#00cc66] text-white rounded-md hover:bg-[#00994d]"
+                        >
+                            Add Lesson
+                        </button>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+
+        
+        <div 
+            v-if="isQuizDialogOpen" 
+            class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4"
+        >
+            <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
+                
+                <h2 class="text-xl font-bold mb-4">Add Quiz</h2>
+                <p class="text-gray-600 mb-6">This is a placeholder for the "Add Quiz" configuration form.</p>
+                
+                <div class="mb-4">
+                    <label for="quiz-title" class="text-sm text-gray-700">Quiz Title</label>
+                    <input type="text" id="quiz-title" placeholder="e.g., Chapter 1 Assessment" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                </div>
+                
+                <div class="flex justify-end space-x-3">
+                    <button
+                        type="button"
+                        @click="closeAddQuizDialog"
+                        class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="button"
+                        @click="handleQuizAdded"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800"
+                    >
+                        Create Quiz
+                    </button>
+                </div>
+            </div>
+        </div>
               </div>
             </div>
           </div>
