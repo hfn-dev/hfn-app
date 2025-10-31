@@ -20,7 +20,7 @@ import {
 import { computed, ref } from "vue";
 import TutorSidebar from "./TutorSidebar.vue";
 
-const currentStep = ref(4);
+const currentStep = ref(1);
 
 const basicInfoForm = ref({
   title: "Naturopathy 101: Discover Natural Healing",
