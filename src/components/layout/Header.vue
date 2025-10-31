@@ -155,41 +155,62 @@ watch(
       </div>
 
       <div class="hidden lg:flex items-center space-x-2 xl:space-x-4">
-        <RouterLink
-          v-for="link in navLinks"
-          :key="link.title"
-          :to="link.path"
-          @click="handleLinkClick(link.path)"
-          class="flex items-center px-4 py-3 font-semibold transition-all duration-200 rounded-lg whitespace-nowrap"
-          :class="[
-            isLinkActive(link.path)
-              ? `bg-[${ACTIVE_BG_COLOR}] text-[${DARK_GREEN}] shadow-md`
-              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
-          ]"
-        >
-          {{ link.title }}
-          <svg
-            v-if="link.hasDropdown"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            :class="[
-              'w-4 h-4 ml-1 transition-transform',
-              isLinkActive(link.path)
-                ? `text-[${DARK_GREEN}]`
-                : 'text-gray-500',
-            ]"
-          >
-            <path d="m6 9 6 6 6-6" />
-          </svg>
-        </RouterLink>
-      </div>
+  <div
+    v-for="link in navLinks"
+    :key="link.title"
+    class="relative group"
+  >
+    <RouterLink
+      :to="link.path"
+      @click="handleLinkClick(link.path)"
+      class="flex items-center px-4 py-3 font-semibold transition-all duration-200 rounded-lg whitespace-nowrap"
+      :class="[
+        isLinkActive(link.path)
+          ? `bg-[${ACTIVE_BG_COLOR}] text-[${DARK_GREEN}] shadow-md`
+          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
+      ]"
+    >
+      {{ link.title }}
+      <svg
+        v-if="link.hasDropdown"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        :class="[
+          'w-4 h-4 ml-1 transition-transform',
+          isLinkActive(link.path)
+            ? `text-[${DARK_GREEN}]`
+            : 'text-gray-500',
+        ]"
+      >
+        <path d="m6 9 6 6 6-6" />
+      </svg>
+    </RouterLink>
+
+    <!-- Dropdown Menu -->
+    <div
+      v-if="link.hasDropdown"
+      class="absolute left-0 mt-2 w-56 bg-white border border-gray-100 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-20"
+    >
+      <RouterLink
+        v-for="item in link.dropdownItems"
+        :key="item.title"
+        :to="item.path"
+        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+        @click="handleLinkClick(item.path)"
+      >
+        {{ item.title }}
+      </RouterLink>
+    </div>
+  </div>
+</div>
+
 
       <div class="hidden lg:flex items-center space-x-4">
         <div class="relative w-44">
