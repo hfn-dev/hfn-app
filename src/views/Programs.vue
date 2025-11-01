@@ -45,7 +45,7 @@ HFN’s ongoing programs address workforce gaps, policy advocacy,
     <div class="flex flex-col lg:flex-row items-start lg:space-x-8 space-y-8 lg:space-y-0">
         
         <div class="lg:w-1/2 w-full pt-20">
-            <h4 class="text-xl font-bold text-gray-900 mb-4 underlined">Project 1</h4>
+            <h4 class="text-xl font-bold text-gray-900 mb-4 underline">Project 1</h4>
             
             <p class="text-gray-600 mb-8 text-sm">
                 Leveraging technology to improve patient care, enhance hospital efficiency, 
