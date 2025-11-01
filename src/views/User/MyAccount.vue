@@ -589,53 +589,7 @@ const toggleInterest = (id) => {
             </div>
           </div>
 
-          <div v-if="isOrganization" class="p-6 bg-white shadow-lg">
-            <h2 class="text-xl font-semibold mb-6">Invitations</h2>
-            <p class="text-gray-600 mb-4">
-              You have sent
-              <span class="font-semibold text-gray-800"
-                >{{ sentInvitesCount }} of {{ invitations.length }}</span
-              >
-              invites.
-            </p>
-
-            <div class="space-y-4">
-              <div
-                v-for="invite in invitations"
-                :key="invite.id"
-                class="flex items-center space-x-3"
-              >
-                <input
-                  type="email"
-                  :placeholder="'Enter email for invite ' + invite.id"
-                  v-model="invite.email"
-                  :readonly="invite.sent"
-                  :disabled="invite.sent"
-                  :class="
-                    invite.sent
-                      ? 'bg-gray-100'
-                      : 'bg-white focus:ring-primary-green focus:border-primary-green'
-                  "
-                  class="flex-grow p-3 border border-gray-300 rounded-lg"
-                />
-                <button
-                  v-if="invite.sent"
-                  @click="removeInvitation(invite.id)"
-                  class="text-red-600 text-sm font-semibold hover:underline"
-                >
-                  Remove
-                </button>
-                <button
-                  v-else
-                  :disabled="invite.email === ''"
-                  @click="sendInvitation(invite.id)"
-                  class="text-sm font-semibold px-4 py-2 text-white rounded-lg main-button w-24 disabled:opacity-50"
-                >
-                  Invite
-                </button>
-              </div>
-            </div>
-          </div>
+          
 
           <div class="p-6 bg-white rounded-xl shadow-lg">
             <h2 class="text-xl font-semibold mb-4">My Interests</h2>
