@@ -36,8 +36,9 @@ support professionals, and improve patient outcomes nationwide.           �
             <section class="mb-20">
                 <h3 class="text-xl font-normal text-gray-800 mb-8 max-w-4xl mx-auto">Ongoing Programs</h3>
                 <p class="text-gray-600 mb-12 max-w-4xl mx-auto">
-                    Euismod magna id purus eget nunc ligula suspendisse dui metus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc ligula suspendisse dui.
-                </p>
+HFN’s ongoing programs address workforce gaps, policy advocacy, 
+          and system inefficiencies. Each initiative is designed to deliver measurable 
+          outcomes and sustainable change within Nigeria’s healthcare landscape.                </p>
 
                 <div class="flex flex-col mb-16 space-y-8 max-w-5xl mx-auto">
     
@@ -47,7 +48,8 @@ support professionals, and improve patient outcomes nationwide.           �
             <h4 class="text-xl font-normal text-gray-900 mb-4">Project 1</h4>
             
             <p class="text-gray-600 mb-8 text-sm">
-                Euismod magna id purus eget nunc ligula suspendisse dui
+                Leveraging technology to improve patient care, enhance hospital efficiency, 
+                and expand access to telemedicine across urban and rural areas.
             </p>
             </div>
         
@@ -65,21 +67,26 @@ support professionals, and improve patient outcomes nationwide.           �
         <div>
             <h5 class="font-normal text-lg text-gray-900 mb-2">Problem</h5>
             <p class="text-gray-600 text-sm">
-                Euismod magna id purus eget nunc ligula suspendisse dui. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc.
+                Nigeria’s healthcare sector faces gaps in data management, 
+                limited patient tracking, and poor digital record systems that 
+                slow down service delivery.
             </p>
         </div>
         
         <div>
             <h5 class="font-normal text-lg text-gray-900 mb-2">Solution</h5>
             <p class="text-gray-600 text-sm">
-                Euismod magna id purus eget nunc ligula suspendisse dui. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc.
+                Implementation of interoperable digital health systems 
+                and training healthcare professionals on e-health tools 
+                for real-time patient management.
             </p>
         </div>
         
         <div>
             <h5 class="font-normal text-lg text-gray-900 mb-2">Goals & Expected Outcome</h5>
             <p class="text-gray-600 text-sm">
-                Euismod magna id purus eget nunc ligula suspendisse dui. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc.
+                Improved efficiency in care coordination, enhanced data accuracy, 
+                and expanded access to telehealth solutions nationwide.
             </p>
         </div>
     </div>
@@ -101,7 +108,8 @@ support professionals, and improve patient outcomes nationwide.           �
             <h4 class="text-xl font-normal text-gray-900 mb-4">Project 2</h4>
             
             <p class="text-gray-600 mb-8 text-sm">
-                Euismod magna id purus eget nunc ligula suspendisse dui
+                Strengthening the capacity of Nigeria’s healthcare professionals 
+                through leadership training, technical upskilling, and mentorship opportunities.
             </p>
             </div>
         
@@ -112,21 +120,24 @@ support professionals, and improve patient outcomes nationwide.           �
         <div>
             <h5 class="font-normal text-lg text-gray-900 mb-2">Problem</h5>
             <p class="text-gray-600 text-sm">
-                Euismod magna id purus eget nunc ligula suspendisse dui. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc.
+                The shortage of qualified healthcare workers and migration of skilled professionals 
+                continue to hinder access to quality care in many regions.
             </p>
         </div>
         
         <div>
             <h5 class="font-normal text-lg text-gray-900 mb-2">Solution</h5>
             <p class="text-gray-600 text-sm">
-                Euismod magna id purus eget nunc ligula suspendisse dui. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc.
+                Launching continuous professional development programs, 
+                mentorship initiatives, and policy dialogues to improve retention and career growth.
             </p>
         </div>
         
         <div>
             <h5 class="font-normal text-lg text-gray-900 mb-2">Goals & Expected Outcome</h5>
             <p class="text-gray-600 text-sm">
-                Euismod magna id purus eget nunc ligula suspendisse dui. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc.
+                A more skilled, motivated, and well-distributed healthcare workforce 
+                equipped to meet Nigeria’s growing health demands.
             </p>
         </div>
     </div>
@@ -136,7 +147,9 @@ support professionals, and improve patient outcomes nationwide.           �
             <section class="max-w-5xl mx-auto pt-8"> 
     <h3 class="text-2xl font-normal text-gray-800 mb-2">Past Initiatives</h3>
     <p class="text-gray-600 mb-10">
-        Euismod magna id purus eget nunc ligula suspendisse dui metus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc
+        Over the years, HFN has implemented multiple programs 
+          that have advanced healthcare quality, access, and policy advocacy 
+          across Nigeria. Here are a few notable initiatives.
     </p>
     
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -150,9 +163,10 @@ support professionals, and improve patient outcomes nationwide.           �
                 />
             </div>
 
-            <h4 class="text-lg font-semibold text-gray-900 mb-2">Project XYZ</h4>
+            <h4 class="text-lg font-semibold text-gray-900 mb-2">Quality Improvement & Patient Safety Program Project</h4>
             <p class="text-gray-600 text-sm mb-3">
-                Euismod magna id purus eget nunc ligula suspendisse dui metus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc
+                Enhanced clinical governance through training on patient safety 
+              and standard operating procedures for private and public hospitals.
             </p>
             <a href="#" class="text-orange-600 text-sm font-medium hover:text-orange-700 transition">
                 Learn more...
@@ -163,14 +177,15 @@ support professionals, and improve patient outcomes nationwide.           �
             <div class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md">
                 <img 
                     :src="hands" 
-                    alt="Project XYZ Image 2" 
+                    alt="Project Image 2" 
                     class="w-full h-full object-cover"
                 />
             </div>
 
-            <h4 class="text-lg font-semibold text-gray-900 mb-2">Project XYZ</h4>
+            <h4 class="text-lg font-semibold text-gray-900 mb-2">Access to Care Project</h4>
             <p class="text-gray-600 text-sm mb-3">
-                Euismod magna id purus eget nunc ligula suspendisse dui metus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc
+                Partnered with community clinics and mobile health teams 
+              to provide essential services to underserved populations.
             </p>
             <a href="#" class="text-orange-600 text-sm font-medium hover:text-orange-700 transition">
                 Learn more...
@@ -186,9 +201,10 @@ support professionals, and improve patient outcomes nationwide.           �
                 />
             </div>
 
-            <h4 class="text-lg font-semibold text-gray-900 mb-2">Project XYZ</h4>
+            <h4 class="text-lg font-semibold text-gray-900 mb-2">Policy Dialogue Series Project</h4>
             <p class="text-gray-600 text-sm mb-3">
-                Euismod magna id purus eget nunc ligula suspendisse dui metus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc
+                Created a platform for government and private sector leaders 
+              to collaborate on national health reforms and sustainable financing.
             </p>
             <a href="#" class="text-orange-600 text-sm font-medium hover:text-orange-700 transition">
                 Learn more...
