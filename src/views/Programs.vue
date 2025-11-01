@@ -35,7 +35,7 @@ support professionals, and improve patient outcomes nationwide.           �
             
             <section class="mb-20">
                 <h3 class="text-xl font-normal text-gray-800 mb-8 max-w-4xl mx-auto">Ongoing Programs</h3>
-                <p class="text-gray-600 mb-12 max-w-4xl mx-auto text-center">
+                <p class="text-gray-600 mb-12 max-w-4xl mx-auto">
                     Euismod magna id purus eget nunc ligula suspendisse dui metus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc ligula suspendisse dui.
                 </p>
 
@@ -86,46 +86,51 @@ support professionals, and improve patient outcomes nationwide.           �
 </div>
 
                 <div class="flex flex-col space-y-8 max-w-5xl mx-auto">
-                    
-                    <div class="w-full rounded-lg overflow-hidden shadow-xl order-2 lg:order-1">
-                        <img 
-                            :src="latest" 
-                            alt="Project 2 Image" 
-                            class="w-full h-auto object-cover"
-                        />
-                    </div>
+    
+    <div class="flex flex-col lg:flex-row items-start lg:space-x-8 space-y-8 lg:space-y-0">
+        
+        <div class="lg:w-1/2 w-full rounded-xl overflow-hidden shadow-xl border-2 border-green-300 order-2 lg:order-1">
+            <img 
+                :src="latest" 
+                alt="Project 2 Image" 
+                class="w-full h-auto object-cover"
+            />
+        </div>
 
-                    <div class="w-full order-1 lg:order-2">
-                         <h4 class="text-xl font-normal text-gray-900 mb-4 text-center">Project 2</h4>
-                        <p class="text-gray-600 mb-8 text-center text-sm">
-                            Euismod magna id purus eget nunc ligula suspendisse dui
-                        </p>
+        <div class="lg:w-1/2 w-full order-1 lg:order-2 lg:ml-8">
+            <h4 class="text-xl font-normal text-gray-900 mb-4">Project 2</h4>
+            
+            <p class="text-gray-600 mb-8 text-sm">
+                Euismod magna id purus eget nunc ligula suspendisse dui
+            </p>
+            </div>
+        
+    </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                            
-                            <div>
-                                <h5 class="font-normal text-lg text-gray-900 mb-2">Problem</h5>
-                                <p class="text-gray-600 text-sm">
-                                    Euismod magna id purus eget nunc ligula suspendisse dui. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc.
-                                </p>
-                            </div>
-                            
-                            <div>
-                                <h5 class="font-normal text-lg text-gray-900 mb-2">Solution</h5>
-                                <p class="text-gray-600 text-sm">
-                                    Euismod magna id purus eget nunc ligula suspendisse dui. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc.
-                                </p>
-                            </div>
-                            
-                            <div>
-                                <h5 class="font-normal text-lg text-gray-900 mb-2">Goals & Expected Outcome</h5>
-                                <p class="text-gray-600 text-sm">
-                                    Euismod magna id purus eget nunc ligula suspendisse dui. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4">
+        
+        <div>
+            <h5 class="font-normal text-lg text-gray-900 mb-2">Problem</h5>
+            <p class="text-gray-600 text-sm">
+                Euismod magna id purus eget nunc ligula suspendisse dui. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc.
+            </p>
+        </div>
+        
+        <div>
+            <h5 class="font-normal text-lg text-gray-900 mb-2">Solution</h5>
+            <p class="text-gray-600 text-sm">
+                Euismod magna id purus eget nunc ligula suspendisse dui. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc.
+            </p>
+        </div>
+        
+        <div>
+            <h5 class="font-normal text-lg text-gray-900 mb-2">Goals & Expected Outcome</h5>
+            <p class="text-gray-600 text-sm">
+                Euismod magna id purus eget nunc ligula suspendisse dui. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc.
+            </p>
+        </div>
+    </div>
+</div>
             </section>
 
             <section>
