@@ -1,7 +1,7 @@
 <template>
     <div class="events-page font-sans bg-white">
 
-        <section class="bg-pink-50"> <div class="container mx-auto px-4 md:px-8 pt-10 pb-16">
+        <section class="bg-[#E87A1814]"> <div class="container mx-auto px-4 md:px-8 pt-10 pb-16">
         <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between">
             
             <div class="lg:w-1/2 mb-8 lg:mb-0">
