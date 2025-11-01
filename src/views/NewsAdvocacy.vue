@@ -180,7 +180,7 @@
 <script setup>
 import event from "@/assets/event.png"; 
 import hands from "@/assets/hands.png"; 
-import latest from "@/assets/latest.png"; 
+import latest from "@/assets/latest_news.png"; 
 import group from "@/assets/group.png";
 import group1 from "@/assets/group1.png";
 import wef from "@/assets/wef.jpg";
