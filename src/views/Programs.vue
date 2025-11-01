@@ -53,7 +53,7 @@ support professionals, and improve patient outcomes nationwide.           �
         
         <div class="lg:w-1/2 w-full rounded-xl overflow-hidden shadow-xl border-2 border-green-300">
             <img 
-                :src="latest" 
+                :src="group" 
                 alt="Project 1 Image" 
                 class="w-full h-auto object-cover"
             />
@@ -91,7 +91,7 @@ support professionals, and improve patient outcomes nationwide.           �
         
         <div class="lg:w-1/2 w-full rounded-xl overflow-hidden shadow-xl border-2 border-green-300 order-2 lg:order-1">
             <img 
-                :src="latest" 
+                :src="group" 
                 alt="Project 2 Image" 
                 class="w-full h-auto object-cover"
             />
@@ -133,25 +133,77 @@ support professionals, and improve patient outcomes nationwide.           �
 </div>
             </section>
 
-            <section>
-                <h3 class="text-xl font-normal text-gray-800 mb-4 max-w-5xl mx-auto">Past Initiatives</h3>
-                <p class="text-gray-600 mb-6 max-w-5xl mx-auto">
-                    HFN has a strong history of successful completed projects that laid the groundwork for current programs. These initiatives focused on early advocacy, capacity building, and emergency response planning.
-                </p>
-                
-                <ul class="list-disc list-inside space-y-2 pl-4 text-gray-700 max-w-5xl mx-auto">
-                    <li>"Health Policy Dialogue 2022": A successful conference that resulted in a white paper presented to the Ministry of Health on funding mechanisms.</li>
-                    <li>"Post-Pandemic Capacity Building": A nation-wide training program focused on supply chain resilience and infectious disease management for private clinics.</li>
-                    <li>"Community Health Workers Empowerment": A completed pilot program that equipped 50 community health workers with essential diagnostic kits and mobile reporting tools.</li>
-                </ul>
+            <section class="max-w-5xl mx-auto pt-8"> 
+    <h3 class="text-2xl font-normal text-gray-800 mb-2">Past Initiatives</h3>
+    <p class="text-gray-600 mb-10">
+        Euismod magna id purus eget nunc ligula suspendisse dui metus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc
+    </p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <div class="flex flex-col">
+            <div class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md">
+                <img 
+                    :src="hands" 
+                    alt="Project XYZ Image 1" 
+                    class="w-full h-full object-cover"
+                />
+            </div>
 
-            </section>
+            <h4 class="text-lg font-semibold text-gray-900 mb-2">Project XYZ</h4>
+            <p class="text-gray-600 text-sm mb-3">
+                Euismod magna id purus eget nunc ligula suspendisse dui metus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc
+            </p>
+            <a href="#" class="text-orange-600 text-sm font-medium hover:text-orange-700 transition">
+                Learn more...
+            </a>
+        </div>
 
+        <div class="flex flex-col">
+            <div class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md">
+                <img 
+                    :src="hands" 
+                    alt="Project XYZ Image 2" 
+                    class="w-full h-full object-cover"
+                />
+            </div>
+
+            <h4 class="text-lg font-semibold text-gray-900 mb-2">Project XYZ</h4>
+            <p class="text-gray-600 text-sm mb-3">
+                Euismod magna id purus eget nunc ligula suspendisse dui metus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc
+            </p>
+            <a href="#" class="text-orange-600 text-sm font-medium hover:text-orange-700 transition">
+                Learn more...
+            </a>
+        </div>
+
+        <div class="flex flex-col">
+            <div class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md">
+                <img 
+                    :src="hands" 
+                    alt="Project XYZ Image 3" 
+                    class="w-full h-full object-cover"
+                />
+            </div>
+
+            <h4 class="text-lg font-semibold text-gray-900 mb-2">Project XYZ</h4>
+            <p class="text-gray-600 text-sm mb-3">
+                Euismod magna id purus eget nunc ligula suspendisse dui metus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc
+            </p>
+            <a href="#" class="text-orange-600 text-sm font-medium hover:text-orange-700 transition">
+                Learn more...
+            </a>
+        </div>
+        
+    </div>
+</section>
         </main>
     </div>
 </template>
 
 <script setup>
 import latest from "@/assets/latest_news.png";
+import hands from "@/assets/hands.png";
+import group from "@/assets/group.png";
 
 </script>
