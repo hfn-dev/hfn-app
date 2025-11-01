@@ -798,7 +798,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
 
 <style scoped>
 .benefits-section {
-  background-color: #fcf8f3; 
+  background-color: #E87A1814; 
   border-radius: 0.75rem; 
 }
  .fade-enter-active,
