@@ -82,10 +82,11 @@
                     
                     <div class="lg:w-2/5 p-6 md:p-8 flex flex-col justify-center">
                         <div
-  class=" text-[10px] font-semibold uppercase text-orange-600 bg-white rounded-full py-1 shadow-sm border border-orange-100"
+  class="inline-block text-[10px] font-semibold uppercase text-orange-600 bg-white rounded-full px-3 py-1 shadow-sm border border-orange-100"
 >
   Conference
 </div>
+
 
                         
                         <div class="flex items-center space-x-4 text-sm text-orange-500 mb-4">
