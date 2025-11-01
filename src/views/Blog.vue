@@ -5,7 +5,7 @@ import latest from "@/assets/latest_news.png";
 </script>
 
 <template>
-  <section style="background-color: #fcf7f5">
+  <section style="background-color: #E87A1814">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
       <div class="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
         <div class="lg:col-span-6 mb-10 lg:mb-0">
