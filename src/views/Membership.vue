@@ -346,7 +346,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
 
           <div class="flex flex-col md:flex-row items-start gap-6 mb-10">
             <div
-              class="relative w-[200px] h-[200px] bg-orange-50 rounded-tr-[30px] rounded-bl-[30px] p-3 shadow-sm overflow-hidden flex flex-col justify-center flex-shrink-0"
+              class="relative w-[200px] h-[200px] bg-[#E87A1814] rounded-tr-[30px] rounded-bl-[30px] p-3 shadow-sm overflow-hidden flex flex-col justify-center flex-shrink-0"
             >
               <div
                 class="absolute top-0 right-0 w-1 bg-orange-700 h-full rounded-tr-[30px] rounded-br-none"
@@ -454,7 +454,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
 
           <div class="flex flex-col md:flex-row items-start gap-6 mb-10">
             <div
-              class="relative w-[200px] h-[200px] bg-orange-50 rounded-tr-[30px] rounded-bl-[30px] p-3 shadow-sm overflow-hidden flex flex-col justify-center flex-shrink-0"
+              class="relative w-[200px] h-[200px] bg-[#E87A1814] rounded-tr-[30px] rounded-bl-[30px] p-3 shadow-sm overflow-hidden flex flex-col justify-center flex-shrink-0"
             >
               <div
                 class="absolute top-0 right-0 w-1 bg-orange-700 h-full rounded-tr-[30px] rounded-br-none"
