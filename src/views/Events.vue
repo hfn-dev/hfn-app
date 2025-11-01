@@ -82,7 +82,7 @@
                     
                     <div class="lg:w-2/5 p-6 md:p-8 flex flex-col justify-center">
                         <div
-  class="inline-block text-[10px] font-semibold uppercase text-orange-600 bg-white rounded-full px-3 py-1 shadow-sm border border-orange-100"
+  class="self-start inline-block text-[10px] font-semibold uppercase text-orange-600 bg-white rounded-full px-3 py-1 shadow-sm border border-orange-100"
 >
   Conference
 </div>
