@@ -52,7 +52,7 @@
                     
                     <div class="border rounded-lg py-6 shadow-md bg-white hover:shadow-xl transition duration-300">
                         <h4 class="text-xl font-bold text-gray-900 mb-3 text-center">Event Sponsorship</h4>
-                        <p class="text-gray-600 text-sm mb-6 h-52 overflow-hidden bg-pink-100 p-3">
+                        <p class="text-gray-600 text-sm mb-6 h-52 overflow-hidden bg-[#E87A1814] p-3">
                             HFN hosts over 10 events every year, attracting top policy makers, both physical and online. Sponsors can select from our various events and external delegates via different packages. This is a unique opportunity to identify opportunities that align with your brand.
                             <span class="block mt-2 font-medium">To learn more about this programme, please contact our partnership team</span>
                         </p>
