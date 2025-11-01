@@ -349,7 +349,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
               class="relative w-[200px] h-[200px] bg-[#E87A1814] rounded-tr-[30px] rounded-bl-[30px] p-3 shadow-sm overflow-hidden flex flex-col justify-center flex-shrink-0"
             >
               <div
-                class="absolute top-0 right-0 w-1 bg-orange-700 h-full rounded-tr-[30px] rounded-br-none"
+                class="absolute top-0 right-0 w-1 bg-orange-500 h-full rounded-tr-[30px] rounded-br-none"
               ></div>
 
               <div class="relative z-10 pr-2">
@@ -457,7 +457,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
               class="relative w-[200px] h-[200px] bg-[#E87A1814] rounded-tr-[30px] rounded-bl-[30px] p-3 shadow-sm overflow-hidden flex flex-col justify-center flex-shrink-0"
             >
               <div
-                class="absolute top-0 right-0 w-1 bg-orange-700 h-full rounded-tr-[30px] rounded-br-none"
+                class="absolute top-0 right-0 w-1 bg-orange-500 h-full rounded-tr-[30px] rounded-br-none"
               ></div>
 
               <div class="relative z-10 pr-2">
