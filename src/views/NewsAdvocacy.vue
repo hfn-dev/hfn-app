@@ -18,7 +18,7 @@
           
           <div class="lg:w-1/2 flex justify-center w-full h-64 sm:h-80 lg:h-96 relative">
             <img 
-              :src="event" 
+              :src="latest" 
               alt="Latest news and updates"
               class="object-cover w-full h-full rounded-lg"
             />
@@ -40,7 +40,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto mb-16">
         <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-          <img :src="hands" alt="News Headline" class="w-full h-60 object-cover"/>
+          <img :src="event" alt="News Headline" class="w-full h-60 object-cover"/>
           <div class="p-6">
             <h3 class="text-xl font-semibold text-gray-900 mb-2">Hon. ABAYOMI, Akin – Commissione… State</h3>
             <p class="text-sm text-gray-500 mb-4 flex items-center space-x-4">
@@ -55,7 +55,7 @@
         </div>
 
         <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-          <img :src="hands" alt="News Headline" class="w-full h-60 object-cover"/>
+          <img :src="event" alt="News Headline" class="w-full h-60 object-cover"/>
           <div class="p-6">
             <h3 class="text-xl font-semibold text-gray-900 mb-2">Dr. IBE, Ifeanyi – Program Directo…</h3>
             <p class="text-sm text-gray-500 mb-4 flex items-center space-x-4">
@@ -70,7 +70,7 @@
         </div>
 
          <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-          <img :src="hands" alt="News Headline" class="w-full h-60 object-cover"/>
+          <img :src="event" alt="News Headline" class="w-full h-60 object-cover"/>
           <div class="p-6">
             <h3 class="text-xl font-semibold text-gray-900 mb-2">Hon. ABAYOMI, Akin – Commissione… State</h3>
             <p class="text-sm text-gray-500 mb-4 flex items-center space-x-4">
@@ -85,7 +85,7 @@
         </div>
 
         <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-          <img :src="hands" alt="News Headline" class="w-full h-60 object-cover"/>
+          <img :src="event" alt="News Headline" class="w-full h-60 object-cover"/>
           <div class="p-6">
             <h3 class="text-xl font-semibold text-gray-900 mb-2">Dr. IBE, Ifeanyi – Program Directo…</h3>
             <p class="text-sm text-gray-500 mb-4 flex items-center space-x-4">
@@ -114,7 +114,7 @@
         <div class="flex flex-col text-center">
             <div class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md flex items-center justify-center">
                 <img 
-                    :src="latest" 
+                    :src="hands" 
                     alt="Strengthening Emergency Healthcare" 
                     class="w-full h-full object-cover"
                 />
@@ -132,7 +132,7 @@
         <div class="flex flex-col text-center">
             <div class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md flex items-center justify-center">
                 <img 
-                    :src="latest" 
+                    :src="hands" 
                     alt="Strengthening Emergency Healthcare" 
                     class="w-full h-full object-cover"
                 />
@@ -150,7 +150,7 @@
         <div class="flex flex-col text-center">
             <div class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md flex items-center justify-center">
                 <img 
-                    :src="latest" 
+                    :src="hands" 
                     alt="Strengthening Emergency Healthcare" 
                     class="w-full h-full object-cover"
                 />
