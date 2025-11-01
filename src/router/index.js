@@ -6,6 +6,7 @@ import EditorAccount from '@/views/Editor/EditorAccount.vue';
 import EditorDashboard from '@/views/Editor/EditorDashboard.vue';
 import GetInvolved from '@/views/GetInvolved.vue';
 import Programs from '@/views/Programs.vue';
+import NewsAdvocacy from '@/views/NewsAdvocacy.vue';
 
 import EditorPages from '@/views/Editor/EditorPages.vue';
 import Signin from '@/views/Editor/Signin.vue';
@@ -71,6 +72,7 @@ const routes = [
     { path: '/events', name: 'Events', component: Events },
       { path: '/get-involved', name: 'GetInvolved', component: GetInvolved },
       { path: '/programs', name: 'Programs', component: Programs },
+      { path: '/news', name: 'NewsAdvocacy', component: NewsAdvocacy },
 
 
   {
