@@ -81,9 +81,12 @@
                                             </div>
                     
                     <div class="lg:w-2/5 p-6 md:p-8 flex flex-col justify-center">
-                        <div class="text-xs font-medium text-orange-600 bg-orange-50 rounded-full uppercase mb-2">
-                            Conference
-                        </div>
+                        <div
+  class="inline-flex items-center justify-center text-[10px] font-semibold uppercase text-orange-600 bg-white rounded-full px-3 py-1 shadow-sm border border-orange-100"
+>
+  Conference
+</div>
+
                         
                         <div class="flex items-center space-x-4 text-sm text-orange-500 mb-4">
                             <span class="flex items-center">
@@ -100,7 +103,7 @@
               the next phase of sustainable growth, technology-driven change, and inclusive
               business practices.
                         </p>
-                        <button class="self-start px-6 py-2 bg-green-900 text-white justify-center rounded-md hover:bg-green-700 transition duration-150 text-sm">
+                        <button class="self-start px-6 py-2 bg-green-900 text-white justify-center rounded-full hover:bg-green-700 transition duration-150 text-sm">
                             Register Now
                         </button>
                     </div>
