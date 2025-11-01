@@ -55,7 +55,7 @@
         </div>
 
         <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-          <img :src="event" alt="News Headline" class="w-full h-60 object-cover"/>
+          <img :src="group" alt="News Headline" class="w-full h-60 object-cover"/>
           <div class="p-6">
             <h3 class="text-xl font-semibold text-gray-900 mb-2">Dr. IBE, Ifeanyi – Program Directo…</h3>
             <p class="text-sm text-gray-500 mb-4 flex items-center space-x-4">
@@ -70,7 +70,7 @@
         </div>
 
          <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-          <img :src="event" alt="News Headline" class="w-full h-60 object-cover"/>
+          <img :src="group1" alt="News Headline" class="w-full h-60 object-cover"/>
           <div class="p-6">
             <h3 class="text-xl font-semibold text-gray-900 mb-2">Hon. ABAYOMI, Akin – Commissione… State</h3>
             <p class="text-sm text-gray-500 mb-4 flex items-center space-x-4">
@@ -85,7 +85,7 @@
         </div>
 
         <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-          <img :src="event" alt="News Headline" class="w-full h-60 object-cover"/>
+          <img :src="wef" alt="News Headline" class="w-full h-60 object-cover"/>
           <div class="p-6">
             <h3 class="text-xl font-semibold text-gray-900 mb-2">Dr. IBE, Ifeanyi – Program Directo…</h3>
             <p class="text-sm text-gray-500 mb-4 flex items-center space-x-4">
@@ -181,6 +181,9 @@
 import event from "@/assets/event.png"; 
 import hands from "@/assets/hands.png"; 
 import latest from "@/assets/latest.png"; 
+import group from "@/assets/group.png";
+import group1 from "@/assets/group1.png";
+import wef from "@/assets/wef.jpg";
 
 </script>
 
