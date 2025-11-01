@@ -40,46 +40,50 @@ support professionals, and improve patient outcomes nationwide.           �
                 </p>
 
                 <div class="flex flex-col mb-16 space-y-8 max-w-5xl mx-auto">
-                    
-                    <div class="w-full">
-                        <h4 class="text-xl font-normal text-gray-900 mb-4 text-center">Project 1</h4>
-                        <p class="text-gray-600 mb-8 text-center text-sm">
-                            Euismod magna id purus eget nunc ligula suspendisse dui
-                        </p>
+    
+    <div class="flex flex-col lg:flex-row items-start lg:space-x-8 space-y-8 lg:space-y-0">
+        
+        <div class="lg:w-1/2 w-full">
+            <h4 class="text-xl font-normal text-gray-900 mb-4">Project 1</h4>
+            
+            <p class="text-gray-600 mb-8 text-sm">
+                Euismod magna id purus eget nunc ligula suspendisse dui
+            </p>
+            </div>
+        
+        <div class="lg:w-1/2 w-full rounded-xl overflow-hidden shadow-xl border-2 border-green-300">
+            <img 
+                :src="latest" 
+                alt="Project 1 Image" 
+                class="w-full h-auto object-cover"
+            />
+        </div>
+    </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                            
-                            <div>
-                                <h5 class="font-normal text-lg text-gray-900 mb-2">Problem</h5>
-                                <p class="text-gray-600 text-sm">
-                                    Euismod magna id purus eget nunc ligula suspendisse dui. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc.
-                                </p>
-                            </div>
-                            
-                            <div>
-                                <h5 class="font-normal text-lg text-gray-900 mb-2">Solution</h5>
-                                <p class="text-gray-600 text-sm">
-                                    Euismod magna id purus eget nunc ligula suspendisse dui. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc.
-                                </p>
-                            </div>
-                            
-                            <div>
-                                <h5 class="font-normal text-lg text-gray-900 mb-2">Goals & Expected Outcome</h5>
-                                <p class="text-gray-600 text-sm">
-                                    Euismod magna id purus eget nunc ligula suspendisse dui. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="w-full rounded-lg overflow-hidden shadow-xl">
-                        <img 
-                            :src="latest" 
-                            alt="Project 1 Image" 
-                            class="w-full h-auto object-cover"
-                        />
-                    </div>
-                </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4"> 
+        
+        <div>
+            <h5 class="font-normal text-lg text-gray-900 mb-2">Problem</h5>
+            <p class="text-gray-600 text-sm">
+                Euismod magna id purus eget nunc ligula suspendisse dui. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc.
+            </p>
+        </div>
+        
+        <div>
+            <h5 class="font-normal text-lg text-gray-900 mb-2">Solution</h5>
+            <p class="text-gray-600 text-sm">
+                Euismod magna id purus eget nunc ligula suspendisse dui. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc.
+            </p>
+        </div>
+        
+        <div>
+            <h5 class="font-normal text-lg text-gray-900 mb-2">Goals & Expected Outcome</h5>
+            <p class="text-gray-600 text-sm">
+                Euismod magna id purus eget nunc ligula suspendisse dui. Condimentum blandit rutrum at mauris enim pulvinar duis etiam duis. Euismod magna id purus eget nunc.
+            </p>
+        </div>
+    </div>
+</div>
 
                 <div class="flex flex-col space-y-8 max-w-5xl mx-auto">
                     
