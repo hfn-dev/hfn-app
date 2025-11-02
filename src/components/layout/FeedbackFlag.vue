@@ -10,7 +10,9 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
     </button>
-    <div
+    
+  </div>
+  <div
       v-if="isOpen"
       class="fixed inset-0 flex items-center justify-center bg-black/40 z-50"
       @click.self="closeForm"
@@ -68,7 +70,6 @@
         </form>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup>
