@@ -38,7 +38,7 @@ const navLinks = [
     dropdownItems: [
       { title: "Programs & Initiatives", path: "/programs" },
       { title: "News & Advocacy", path: "/news" },
-      { title: "Resources", path: "/blog" },
+      { title: "Resources", path: "/resources" },
       { title: "Events", path: "/events" },
     ],
 
