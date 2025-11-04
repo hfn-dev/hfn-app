@@ -28,17 +28,14 @@
     </section>
 
     <main class="container mx-auto px-4 md:px-8 py-16">
-      <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">Latest News</h2>
+      <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">Resources</h2>
 
       <div class="max-w-7xl mx-auto mb-8">
-        <select class="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 text-sm">
-          <option>October 2025</option>
-          <option>September 2025</option>
-          <option>August 2025</option>
-        </select>
+              <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">Newsletter</h2>
+
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto mb-16">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-7xl mx-auto mb-16">
         <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
           <img :src="event" alt="News Headline" class="w-full h-60 object-cover"/>
           <div class="p-6">
