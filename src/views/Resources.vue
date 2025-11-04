@@ -30,13 +30,16 @@
     <section class="max-w-6xl mx-auto mb-16 px-6 sm:px-10">
       <h3 class="text-2xl font-semibold text-gray-700 mb-6">Newsletters</h3>
       
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <NewsletterCard 
-          v-for="item in pagedNewsletters" 
-          :key="item.id" 
-          :item="item" 
-        />
-      </div>
+      <div v-if="pagedNewsletters && pagedNewsletters.length" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    <NewsletterCard 
+      v-for="item in pagedNewsletters" 
+      :key="item.id" 
+      :item="item" 
+    />
+  </div>
+  <div v-else class="text-center py-10 text-gray-500">
+    Loading newsletters...
+  </div>
       
       <PaginationControls
         :current-page="currentNewsletterPage"
