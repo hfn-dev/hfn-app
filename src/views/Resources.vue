@@ -37,7 +37,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-7xl mx-auto mb-16">
         <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-          <img :src="event" alt="News Headline" class="w-full h-60 object-cover border br-10"/>
+          <img :src="newsletter" alt="News Headline" class="w-full h-60 object-cover border br-10"/>
           <div class="p-6">
             <p class="text-sm text-orange-500 mb-4 flex items-center space-x-4">
               <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h8M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> October 24, 2025</span>
@@ -51,7 +51,7 @@
         </div>
 
         <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-          <img :src="group" alt="News Headline" class="w-full h-60 object-cover border br-10"/>
+          <img :src="newsletter" alt="News Headline" class="w-full h-60 object-cover border br-10"/>
           <div class="p-6">
             <p class="text-sm text-orange-500 mb-4 flex items-center space-x-4">
               <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h8M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> October 24, 2025</span>
@@ -65,7 +65,7 @@
         </div>
 
          <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-          <img :src="group1" alt="News Headline" class="w-full h-60 object-cover border br-10"/>
+          <img :src="newsletter" alt="News Headline" class="w-full h-60 object-cover border br-10"/>
           <div class="p-6">
             <p class="text-sm text-orange-500 mb-4 flex items-center space-x-4">
               <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h8M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> October 24, 2025</span>
@@ -79,7 +79,7 @@
         </div>
 
         <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-          <img :src="wef" alt="News Headline" class="w-full h-60 object-cover border br-10"/>
+          <img :src="newsletter" alt="News Headline" class="w-full h-60 object-cover border br-10"/>
           <div class="p-6">
             <p class="text-sm text-orange-500 mb-4 flex items-center space-x-4">
               <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h8M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> October 24, 2025</span>
@@ -177,6 +177,7 @@ import latest from "@/assets/latest_news.png";
 import group from "@/assets/group.png";
 import group1 from "@/assets/group1.png";
 import wef from "@/assets/wef.jpg";
+import newsletter from "@/assets/newsletter.png";
 
 </script>
 
