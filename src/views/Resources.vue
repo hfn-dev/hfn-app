@@ -1,34 +1,5 @@
 <template>
   <div class="min-h-screen bg-white">
-    
-    <header class="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-6 sm:px-10 flex justify-between items-center py-3">
-            <div class="flex items-center space-x-8">
-                <img src="[HFN Logo URL]" alt="HFN Logo" class="h-10" />
-                <nav class="hidden lg:flex space-x-6 text-sm font-medium text-gray-700">
-                    <a href="#" class="hover:text-green-700">Home</a>
-                    <a href="#" class="hover:text-green-700">About Us</a>
-                    <div class="relative group">
-                        <button class="flex items-center hover:text-green-700">Latest Updates <span class="ml-1">&#9662;</span></button>
-                    </div>
-                    <a href="#" class="hover:text-green-700">Member Area</a>
-                    <a href="#" class="hover:text-green-700">Contact Us</a>
-                </nav>
-            </div>
-            <div class="flex items-center space-x-3">
-                <div class="relative hidden sm:block">
-                    <input type="text" placeholder="Search" class="py-1 px-3 border border-gray-300 rounded-md text-sm w-32 focus:w-40 transition-all duration-300" />
-                </div>
-                <div class="relative group hidden sm:block">
-                    <button class="flex items-center py-1 px-2 text-sm text-gray-700">English <span class="ml-1">&#9662;</span></button>
-                </div>
-                <button class="py-2 px-4 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition">
-                    Login / Sign up
-                </button>
-            </div>
-        </div>
-    </header>
-
     <section class="max-w-6xl mx-auto pt-10 pb-16 px-6 sm:px-10 flex flex-col md:flex-row gap-8 bg-hero-orange">
       
       <div class="md:w-1/2">
@@ -39,15 +10,15 @@
 
       <div class="md:w-1/2 relative h-72 sm:h-80 lg:h-96">
         <div class="absolute inset-0 bg-gray-200 rounded-lg shadow-xl overflow-hidden transform rotate-1">
-             <img src="[Your Hero Image 1 URL]" alt="Healthcare professionals in a meeting" class="w-full h-full object-cover opacity-80" />
+             <img :src="latest" alt="Healthcare professionals in a meeting" class="w-full h-full object-cover opacity-80" />
         </div>
         
         <div class="absolute w-5/6 h-2/3 top-8 left-10 bg-white rounded-lg shadow-2xl p-4 transform -rotate-3 border border-gray-100">
-             <img src="[Your Hero Image 2 URL]" alt="Digital document preview" class="w-full h-full object-contain" />
+             <img :src="latest" alt="Digital document preview" class="w-full h-full object-contain" />
         </div>
 
         <div class="absolute bottom-0 right-0 w-48 h-64 bg-white rounded-lg shadow-2xl overflow-hidden p-2 transform rotate-6 border border-gray-100">
-            <img src="[Your Newsletter Preview URL]" alt="Newsletter cover preview" class="w-full h-full object-cover" />
+            <img :src="latest" alt="Newsletter cover preview" class="w-full h-full object-cover" />
         </div>
       </div>
     </section>
@@ -100,65 +71,15 @@
       />
     </section>
 
-    <footer class="bg-gray-50 border-t border-gray-200 pt-8 pb-4">
-        <div class="max-w-6xl mx-auto px-6 sm:px-10">
-            <div class="flex flex-wrap justify-between items-start mb-8 border-b border-gray-300 pb-6">
-                <div class="w-full md:w-1/4 mb-6 md:mb-0">
-                    <img src="[HFN Footer Logo URL]" alt="HFN Footer Logo" class="h-12 mb-3" />
-                    <p class="text-xs text-gray-600">3rd Floor, 108, Awolowo Road, Ikoyi, Lagos State, Nigeria.</p>
-                    <p class="text-xs text-gray-600">Phone: +234 703 018 7894</p>
-                </div>
-                
-                <div class="w-full md:w-3/4 flex flex-wrap justify-between">
-                    <div class="w-1/2 sm:w-1/4 mb-4">
-                        <h5 class="font-semibold text-sm text-gray-800 mb-2">About Us</h5>
-                        <ul class="space-y-1 text-xs text-gray-600">
-                            <li><a href="#" class="hover:text-green-700">Our Mission</a></li>
-                            <li><a href="#" class="hover:text-green-700">Leadership</a></li>
-                            <li><a href="#" class="hover:text-green-700">Our Team</a></li>
-                        </ul>
-                    </div>
-                    <div class="w-1/2 sm:w-1/4 mb-4">
-                        <h5 class="font-semibold text-sm text-gray-800 mb-2">Latest Updates</h5>
-                        <ul class="space-y-1 text-xs text-gray-600">
-                            <li><a href="#" class="hover:text-green-700">Newsletters</a></li>
-                            <li><a href="#" class="hover:text-green-700">Public Health Stories</a></li>
-                            <li><a href="#" class="hover:text-green-700">Biography and Initiatives</a></li>
-                        </ul>
-                    </div>
-                    <div class="w-1/2 sm:w-1/4 mb-4">
-                        <h5 class="font-semibold text-sm text-gray-800 mb-2">Membership</h5>
-                        <ul class="space-y-1 text-xs text-gray-600">
-                            <li><a href="#" class="hover:text-green-700">Join Us</a></li>
-                            <li><a href="#" class="hover:text-green-700">Member Directory</a></li>
-                        </ul>
-                    </div>
-                    <div class="w-1/2 sm:w-1/4 mb-4">
-                        <h5 class="font-semibold text-sm text-gray-800 mb-2">Follow Us</h5>
-                        <div class="flex space-x-2">
-                             <span class="text-lg text-gray-600">FB</span>
-                             <span class="text-lg text-gray-600">TW</span>
-                             <span class="text-lg text-gray-600">LI</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center text-xs text-gray-500">
-                &copy; 2024. Healthcare Federation of Nigeria. All Rights Reserved.
-            </div>
-        </div>
-    </footer>
-
-
+    
     <teleport to="body">
       
       <template id="newsletter-card-template">
         <div v-if="item" class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 flex flex-col">
           <div class="relative h-48 bg-gray-100/50 flex flex-col">
               <img 
-                src="[Newsletter Cover URL]" 
-                :alt="'HFCN Quarterly Newsletter Cover ' + item.quarter" 
+                :src="latest" 
+                :alt="'HFCN Quarterly Newsletter Cover ' + item?.quarter" 
                 class="w-full h-full object-cover" 
               />
               <div class="absolute top-4 left-1/2 transform -translate-x-1/2 w-4/5 text-center bg-orange-500 text-white text-xs font-bold py-1 px-2 rounded-sm shadow-md">
@@ -167,7 +88,7 @@
           </div>
           
           <div class="p-4 flex flex-col flex-grow text-left">
-            <h4 class="text-sm font-medium text-gray-700 mb-1">HFN Quarterly Newsletter - {{ item.quarter }}</h4>
+            <h4 class="text-sm font-medium text-gray-700 mb-1">HFN Quarterly Newsletter - {{ item?.quarter }}</h4>
             <p class="text-xs text-gray-500 mb-2">{{ item.date }} | <span class="text-green-600">2 Downloads</span></p>
             <p class="text-sm text-gray-600 mb-4 flex-grow">{{ item.description }}</p>
             <a :href="item.downloadLink" target="_blank" class="mt-auto block w-full text-center py-2 px-4 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition duration-150">
@@ -184,7 +105,7 @@
             <div class="absolute top-0 right-0 w-full h-full bg-green-500/5 opacity-50 transform -skew-y-6 translate-y-1/4 translate-x-1/2"></div>
             
             <img 
-              src="[Publication Cover URL]" 
+              :src="latest" 
               :alt="item.title + ' Cover'" 
               class="absolute w-full h-full object-contain p-4" 
             />
@@ -239,6 +160,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import latest from "@/assets/latest_news.png";
 
 // --- Local Component Definitions (Composition API) ---
 
