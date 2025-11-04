@@ -51,13 +51,13 @@
     <section class="max-w-6xl mx-auto mb-16 px-6 sm:px-10">
       <h3 class="text-2xl font-semibold text-gray-700 mb-6">Publications</h3>
       
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <PublicationCard 
-          v-for="item in pagedPublications" 
-          :key="item.id" 
-          :item="item" 
-        />
-      </div>
+      <div v-if="pagedPublications && pagedPublications.length" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <PublicationCard 
+      v-for="item in pagedPublications" 
+      :key="item.id" 
+      :item="item" 
+    />
+  </div>
       
       <PaginationControls
         :current-page="currentPublicationPage"
