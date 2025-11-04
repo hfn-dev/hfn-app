@@ -69,12 +69,12 @@
     <teleport to="body">
       
       <template id="newsletter-card-template">
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition duration-300 flex flex-col">
+        <div v-if="item" class="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition duration-300 flex flex-col">
           <div class="h-48 bg-gray-100 flex items-end justify-center pt-8 px-4">
             <span class="text-xs font-bold text-center text-orange-500 bg-white/70 p-1">QUARTERLY NEWSLETTER</span>
           </div>
           <div class="p-4 flex flex-col flex-grow text-center">
-            <h4 class="text-base font-semibold text-gray-800 mb-1">HFCN Quarterly Newsletter - {{ item.quarter }}</h4>
+            <h4 class="text-base font-semibold text-gray-800 mb-1">HFN Quarterly Newsletter - {{ item?.quarter }}</h4>
             <p class="text-xs text-gray-500 mb-2">{{ item.date }}</p>
             <p class="text-sm text-gray-600 mb-4 flex-grow">{{ item.description }}</p>
             <a :href="item.downloadLink" target="_blank" class="mt-auto block w-full text-center py-2 px-4 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition duration-150">
@@ -85,7 +85,7 @@
       </template>
 
       <template id="publication-card-template">
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition duration-300 flex flex-col">
+        <div v-if="item" class="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition duration-300 flex flex-col">
           <div class="h-64 bg-white relative overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-br from-white to-green-50/50"></div>
             <div class="absolute top-0 right-0 w-1/4 h-full bg-green-50 opacity-50 transform skew-x-12 -translate-x-1/2"></div>
