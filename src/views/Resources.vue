@@ -1,222 +1,187 @@
 <template>
-  <div class="min-h-screen bg-white">
-    <section class="max-w-6xl mx-auto pt-10 pb-16 px-6 sm:px-10 flex flex-col md:flex-row gap-8 bg-hero-orange">
-      
-      <div class="md:w-1/2">
-        <h1 class="text-4xl font-extrabold text-green-700 mb-2 leading-tight">Lorem Ipsum</h1>
-        <h2 class="text-4xl font-bold text-gray-800 mb-4 leading-tight">Lorem Ipsum, ipsum</h2>
-        <p class="text-gray-600 max-w-lg">Euismod magna id purus eget nunc ligula suspendisse dul netus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam donec. Euismod magna id purus eget nunc.</p>
-      </div>
+  <div class="news-page font-sans bg-white">
 
-      <div class="md:w-1/2 relative h-72 sm:h-80 lg:h-96">
-        <div class="absolute inset-0 bg-gray-200 rounded-lg shadow-xl overflow-hidden transform rotate-1">
-             <img :src="latest" alt="Healthcare professionals in a meeting" class="w-full h-full object-cover opacity-80" />
-        </div>
-        
-        <div class="absolute w-5/6 h-2/3 top-8 left-10 bg-white rounded-lg shadow-2xl p-4 transform -rotate-3 border border-gray-100">
-             <img :src="latest" alt="Digital document preview" class="w-full h-full object-contain" />
-        </div>
-
-        <div class="absolute bottom-0 right-0 w-48 h-64 bg-white rounded-lg shadow-2xl overflow-hidden p-2 transform rotate-6 border border-gray-100">
-            <img :src="latest" alt="Newsletter cover preview" class="w-full h-full object-cover" />
-        </div>
-      </div>
-    </section>
-
-    <div class="py-12 px-6 sm:px-10 text-center">
-      <h2 class="inline-block text-3xl font-bold text-gray-800 border-b-2 border-green-700 pb-1 px-4">Resources</h2>
-    </div>
-
-    <section class="max-w-6xl mx-auto mb-16 px-6 sm:px-10">
-      <h3 class="text-2xl font-semibold text-gray-700 mb-6">Newsletters</h3>
-      
-      <div v-if="pagedNewsletters && pagedNewsletters.length" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <NewsletterCard 
-          v-for="item in pagedNewsletters" 
-          :key="item.id" 
-          :item="item" 
-        />
-      </div>
-      <div v-else class="text-center py-10 text-gray-500">
-        No newsletters found.
-      </div>
-      
-      <PaginationControls
-        v-if="totalNewsletterPages > 0"
-        :current-page="currentNewsletterPage"
-        :total-pages="totalNewsletterPages"
-        @page-change="(newPage) => changePage('newsletters', newPage)"
-      />
-    </section>
-
-    <section class="max-w-6xl mx-auto mb-16 px-6 sm:px-10">
-      <h3 class="text-2xl font-semibold text-gray-700 mb-6">Publications</h3>
-      
-      <div v-if="pagedPublications && pagedPublications.length" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <PublicationCard 
-          v-for="item in pagedPublications" 
-          :key="item.id" 
-          :item="item" 
-        />
-      </div>
-      <div v-else class="text-center py-10 text-gray-500">
-        No publications found.
-      </div>
-      
-      <PaginationControls
-        v-if="totalPublicationPages > 0"
-        :current-page="currentPublicationPage"
-        :total-pages="totalPublicationPages"
-        @page-change="(newPage) => changePage('publications', newPage)"
-      />
-    </section>
-
-    
-    <teleport to="body">
-      
-      <template id="newsletter-card-template">
-        <div v-if="item" class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 flex flex-col">
-          <div class="relative h-48 bg-gray-100/50 flex flex-col">
-              <img 
-                :src="latest" 
-                :alt="'HFCN Quarterly Newsletter Cover ' + item?.quarter" 
-                class="w-full h-full object-cover" 
-              />
-              <div class="absolute top-4 left-1/2 transform -translate-x-1/2 w-4/5 text-center bg-orange-500 text-white text-xs font-bold py-1 px-2 rounded-sm shadow-md">
-                QUARTERLY NEWSLETTER
-              </div>
+    <section class="bg-[#E87A1814] pt-10 pb-16">
+      <div class="container mx-auto px-4 md:px-8">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between">
+          
+          <div class="lg:w-1/2 mb-8 lg:mb-0">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
+              <span class="text-green-700">Stay Informed:</span>
+              <br>
+              <span class="text-gray-900">Latest Healthcare News & Updates</span>
+            </h1>
+            <p class="mt-4 text-gray-600 max-w-lg">
+              Get the latest insights, announcements, and policy developments from the Healthcare Federation of Nigeria and across the health sector.
+            </p>
           </div>
           
-          <div class="p-4 flex flex-col flex-grow text-left">
-            <h4 class="text-sm font-medium text-gray-700 mb-1">HFN Quarterly Newsletter - {{ item?.quarter }}</h4>
-            <p class="text-xs text-gray-500 mb-2">{{ item.date }} | <span class="text-green-600">2 Downloads</span></p>
-            <p class="text-sm text-gray-600 mb-4 flex-grow">{{ item.description }}</p>
-            <a :href="item.downloadLink" target="_blank" class="mt-auto block w-full text-center py-2 px-4 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition duration-150">
-              Download
-            </a>
-          </div>
-        </div>
-      </template>
-
-      <template id="publication-card-template">
-        <div v-if="item" class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 flex flex-col">
-          <div class="h-64 bg-white relative overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-tr from-white to-green-50"></div>
-            <div class="absolute top-0 right-0 w-full h-full bg-green-500/5 opacity-50 transform -skew-y-6 translate-y-1/4 translate-x-1/2"></div>
-            
+          <div class="lg:w-1/2 flex justify-center w-full h-64 sm:h-80 lg:h-96 relative">
             <img 
               :src="latest" 
-              :alt="item.title + ' Cover'" 
-              class="absolute w-full h-full object-contain p-4" 
+              alt="Latest news and updates"
+              class="object-cover w-full h-full rounded-lg"
             />
-            
-            <div class="absolute p-4 bottom-0 left-0 text-left w-full z-10 bg-white/50 backdrop-blur-sm">
-              <p class="text-xs text-gray-500 mb-1">Healthcare Federation of Nigeria (HFN)</p>
-              <p class="text-lg text-gray-800 font-medium">{{ item.reportType.toUpperCase() }}</p>
-              <h3 class="text-xl font-bold text-gray-900 leading-tight">{{ item.title }}</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="container mx-auto px-4 md:px-8 py-16">
+      <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">Latest News</h2>
+
+      <div class="max-w-7xl mx-auto mb-8">
+        <select class="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 text-sm">
+          <option>October 2025</option>
+          <option>September 2025</option>
+          <option>August 2025</option>
+        </select>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto mb-16">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+          <img :src="event" alt="News Headline" class="w-full h-60 object-cover"/>
+          <div class="p-6">
+            <p class="text-sm text-orange-500 mb-4 flex items-center space-x-4">
+              <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h8M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> October 24, 2025</span>
+              <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg> 2 Comments</span>
+            </p>
+            <p class="text-gray-700 text-base mb-4">
+              The Lagos State Ministry of Health has partnered with private hospitals to enhance emergency response times across key districts. This initiative, supported by HFN, ensures faster patient care and improved coordination among healthcare facilities.
+            </p>
+            <a href="#" class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors">Read More</a>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+          <img :src="group" alt="News Headline" class="w-full h-60 object-cover"/>
+          <div class="p-6">
+            <p class="text-sm text-orange-500 mb-4 flex items-center space-x-4">
+              <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h8M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> October 24, 2025</span>
+              <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg> 2 Comments</span>
+            </p>
+            <p class="text-gray-700 text-base mb-4">
+              The Healthcare Federation of Nigeria convened stakeholders from public and private sectors to discuss frameworks for digital health transformation, data management, and interoperability standards.
+            </p>
+            <a href="#" class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors">Read More</a>
+          </div>
+        </div>
+
+         <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+          <img :src="group1" alt="News Headline" class="w-full h-60 object-cover"/>
+          <div class="p-6">
+            <p class="text-sm text-orange-500 mb-4 flex items-center space-x-4">
+              <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h8M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> October 24, 2025</span>
+              <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg> 2 Comments</span>
+            </p>
+            <p class="text-gray-700 text-base mb-4">
+              In collaboration with donor agencies, HFN supported Kaduna’s investment in solar-powered clinics, ensuring sustainable and reliable care in rural communities.
+            </p>
+            <a href="#" class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors">Read More</a>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+          <img :src="wef" alt="News Headline" class="w-full h-60 object-cover"/>
+          <div class="p-6">
+            <p class="text-sm text-orange-500 mb-4 flex items-center space-x-4">
+              <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h8M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> October 24, 2025</span>
+              <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg> 2 Comments</span>
+            </p>
+            <p class="text-gray-700 text-base mb-4">
+              A delegation from HFN joined the World Economic Forum’s Health Innovators Group to discuss equitable access to care, technology-driven solutions, and investment opportunities for Africa.
+            </p>
+            <a href="#" class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors">Read More</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-center items-center space-x-4 text-gray-600 mb-20">
+        <span class="text-sm">Page 1 of 2</span>
+        <a href="#" class="flex items-center space-x-1 text-green-700 hover:underline">
+          <span>Next</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        </a>
+      </div>
+
+      <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">Policy & Advocacy</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16">
+        <div class="flex flex-col text-center">
+            <div class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md flex items-center justify-center">
+                <img 
+                    :src="hands" 
+                    alt="Strengthening Emergency Healthcare" 
+                    class="w-full h-full object-cover"
+                />
             </div>
-          </div>
-          
-          <div class="p-4 flex flex-col flex-grow">
-            <p class="text-xs text-gray-500 mb-2">{{ item.date }} | <span class="text-green-600">2 Downloads</span></p>
-            <p class="text-sm text-gray-600 mb-4 flex-grow">{{ item.description }}</p>
-            <a :href="item.downloadLink" target="_blank" class="mt-auto block w-full text-center py-2 px-4 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition duration-150">
-              Download
+
+            <h4 class="text-lg font-semibold text-gray-900 mb-2">Strengthening Emergency Healthcare in Nigeria through Partnership.</h4>
+            <p class="text-gray-600 text-sm mb-3">
+                HFN and the Federal Ministry of Health jointly announced a new partnership model to enhance emergency medical infrastructure across Nigeria’s six geopolitical zones.
+            </p>
+            <a href="#" class="text-orange-600 text-sm font-medium hover:text-orange-700 transition mx-auto">
+                Learn more...
             </a>
-          </div>
         </div>
-      </template>
 
-      <template id="pagination-controls-template">
-        <div class="flex justify-center items-center mt-8 space-x-2 text-sm font-medium">
-          <a
-            v-if="currentPage > 1"
-            @click.prevent="$emit('page-change', currentPage - 1)"
-            href="#"
-            class="text-gray-700 hover:text-green-600 transition"
-          >
-            &larr; Page {{ currentPage - 1 }}
-          </a>
+        <div class="flex flex-col text-center">
+            <div class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md flex items-center justify-center">
+                <img 
+                    :src="hands" 
+                    alt="Strengthening Emergency Healthcare" 
+                    class="w-full h-full object-cover"
+                />
+            </div>
 
-          <span class="text-gray-600">
-            Page {{ currentPage }} of {{ totalPages }}
-          </span>
-
-          <a 
-            v-if="currentPage < totalPages"
-            @click.prevent="$emit('page-change', currentPage + 1)"
-            href="#"
-            class="text-gray-700 font-bold hover:text-green-600 transition"
-          >
-            &rarr; Next
-          </a>
-          <span v-else class="text-gray-400">&rarr; Next</span>
+            <h4 class="text-lg font-semibold text-gray-900 mb-2">Policy Framework for Health Technology Adoption</h4>
+            <p class="text-gray-600 text-sm mb-3">
+                HFN’s Policy and Advocacy team released a new white paper encouraging structured regulation and faster adoption of digital health tools in clinical settings.
+            </p>
+            <a href="#" class="text-orange-600 text-sm font-medium hover:text-orange-700 transition mx-auto">
+                Learn more...
+            </a>
         </div>
-      </template>
-    </teleport>
 
+        <div class="flex flex-col text-center">
+            <div class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md flex items-center justify-center">
+                <img 
+                    :src="hands" 
+                    alt="Strengthening Emergency Healthcare" 
+                    class="w-full h-full object-cover"
+                />
+            </div>
+
+            <h4 class="text-lg font-semibold text-gray-900 mb-2">Public-Private Dialogue on Universal Health Coverage (UHC)</h4>
+            <p class="text-gray-600 text-sm mb-3">
+                Stakeholders met in Abuja to evaluate funding mechanisms and policy frameworks driving Nigeria’s progress toward universal access to affordable healthcare.
+            </p>
+            <a href="#" class="text-orange-600 text-sm font-medium hover:text-orange-700 transition mx-auto">
+                Learn more...
+            </a>
+        </div>
+      </div>
+       <div class="flex justify-center items-center space-x-4 text-gray-600">
+        <span class="text-sm">Page 1 of 2</span>
+        <a href="#" class="flex items-center space-x-1 text-green-700 hover:underline">
+          <span>Next</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        </a>
+      </div>
+
+    </main>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import latest from "@/assets/latest_news.png";
+import event from "@/assets/event.png"; 
+import hands from "@/assets/hands.png"; 
+import latest from "@/assets/latest_news.png"; 
+import group from "@/assets/group.png";
+import group1 from "@/assets/group1.png";
+import wef from "@/assets/wef.jpg";
 
-// --- Local Component Definitions (Composition API) ---
-
-const NewsletterCard = { props: ['item'], template: '#newsletter-card-template' };
-const PublicationCard = { props: ['item'], template: '#publication-card-template' };
-const PaginationControls = { props: ['currentPage', 'totalPages'], emits: ['page-change'], template: '#pagination-controls-template' };
-
-// --- Mock Data --- 
-const newslettersData = ref([
-  { id: 1, quarter: 'Q4 2024', date: 'October 30, 2024', description: 'We’re thrilled to present to you once again the HFN Quarterly Newsletter...', downloadLink: '#' },
-  { id: 2, quarter: 'Q3 2024', date: 'July 30, 2024', description: 'Exploring the federation\'s activities during the third quarter.', downloadLink: '#' },
-  { id: 3, quarter: 'Q2 2024', date: 'April 30, 2024', description: 'It has indeed been an eventful year already!', downloadLink: '#' },
-  { id: 4, quarter: 'Q1 2024', date: 'January 30, 2024', description: 'The first quarterly report for the year, detailing key events.', downloadLink: '#' },
-  { id: 5, quarter: 'Q4 2023', date: 'October 30, 2023', description: 'Archived newsletter for the previous year.', downloadLink: '#' },
-  { id: 6, quarter: 'Q3 2023', date: 'July 30, 2023', description: 'Archived newsletter for the previous year.', downloadLink: '#' },
-]);
-
-const publicationsData = ref([
-  { id: 101, reportType: 'Impact Report', title: 'Impact Evaluation Report: Delta State Access to Finance Scheme', date: 'October 25, 2024', description: 'We’re thrilled to present to you once again the HFN Quarterly Newsletter...', downloadLink: '#' },
-  { id: 102, reportType: 'Policy Brochure', title: 'Healthcare Policy Dialogue Brochure', date: 'October 25, 2024', description: 'We’re thrilled to present to you once again the HFN Quarterly Newsletter...', downloadLink: '#' },
-  { id: 103, reportType: 'Impact Report', title: 'Impact Evaluation Report: Delta State Access to Finance Scheme', date: 'October 25, 2024', description: 'We’re thrilled to present to you once again the HFN Quarterly Newsletter...', downloadLink: '#' },
-  { id: 104, reportType: 'Annual Report', title: 'The HFN Annual Activities Report for 2023', date: 'October 25, 2024', description: 'A comprehensive review of the federation\'s activities and financial standing.', downloadLink: '#' },
-  { id: 105, reportType: 'White Paper', title: 'Future of Healthcare Investment', date: 'October 25, 2024', description: 'A detailed white paper on strategic healthcare investment.', downloadLink: '#' },
-]);
-
-// --- Pagination State and Logic ---
-const currentNewsletterPage = ref(1);
-const newsletterItemsPerPage = 4;
-const currentPublicationPage = ref(1);
-const publicationItemsPerPage = 3;
-
-const totalNewsletterPages = computed(() => Math.ceil(newslettersData.value.length / newsletterItemsPerPage));
-const pagedNewsletters = computed(() => {
-  const start = (currentNewsletterPage.value - 1) * newsletterItemsPerPage;
-  const end = start + newsletterItemsPerPage;
-  return newslettersData.value.slice(start, end);
-});
-
-const totalPublicationPages = computed(() => Math.ceil(publicationsData.value.length / publicationItemsPerPage));
-const pagedPublications = computed(() => {
-  const start = (currentPublicationPage.value - 1) * publicationItemsPerPage;
-  const end = start + publicationItemsPerPage;
-  return publicationsData.value.slice(start, end);
-});
-
-const changePage = (type, newPage) => {
-  if (type === 'newsletters') {
-    currentNewsletterPage.value = newPage;
-  } else if (type === 'publications') {
-    currentPublicationPage.value = newPage;
-  }
-};
 </script>
 
 <style scoped>
-.bg-hero-orange {
-  background-color: rgba(232, 122, 24, 0.08); 
-}
 </style>
