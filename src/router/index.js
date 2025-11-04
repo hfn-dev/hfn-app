@@ -75,6 +75,7 @@ const routes = [
       { path: '/programs', name: 'Programs', component: Programs },
       { path: '/news', name: 'NewsAdvocacy', component: NewsAdvocacy },
 
+      { path: '/resources', name: 'Resources', component: Resources },
 
   {
     path: '/blog/:id',
