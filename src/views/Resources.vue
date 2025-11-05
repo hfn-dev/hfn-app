@@ -31,7 +31,7 @@
       <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">Resources</h2>
 
       <div class="max-w-7xl mx-auto mb-8">
-              <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">Newsletter</h2>
+              <h2 class="text-3xl font-bold text-gray-900 mb-12">Newsletter</h2>
 
       </div>
 
@@ -101,7 +101,7 @@
         </a>
       </div>
 
-      <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">Policy & Advocacy</h2>
+      <h2 class="text-3xl font-bold text-gray-900 mb-12">Publications</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16">
         <div class="flex flex-col text-center">
@@ -117,9 +117,9 @@
             <p class="text-gray-600 text-sm mb-3">
                 HFN and the Federal Ministry of Health jointly announced a new partnership model to enhance emergency medical infrastructure across Nigeria’s six geopolitical zones.
             </p>
-            <a href="#" class="text-orange-600 text-sm font-medium hover:text-orange-700 transition mx-auto">
-                Learn more...
-            </a>
+            
+            <a href="#" class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors">Download</a>
+          
         </div>
 
         <div class="flex flex-col text-center">
@@ -135,9 +135,7 @@
             <p class="text-gray-600 text-sm mb-3">
                 HFN’s Policy and Advocacy team released a new white paper encouraging structured regulation and faster adoption of digital health tools in clinical settings.
             </p>
-            <a href="#" class="text-orange-600 text-sm font-medium hover:text-orange-700 transition mx-auto">
-                Learn more...
-            </a>
+            <a href="#" class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors">Download</a>
         </div>
 
         <div class="flex flex-col text-center">
@@ -153,9 +151,8 @@
             <p class="text-gray-600 text-sm mb-3">
                 Stakeholders met in Abuja to evaluate funding mechanisms and policy frameworks driving Nigeria’s progress toward universal access to affordable healthcare.
             </p>
-            <a href="#" class="text-orange-600 text-sm font-medium hover:text-orange-700 transition mx-auto">
-                Learn more...
-            </a>
+        
+          <a href="#" class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors">Download</a>
         </div>
       </div>
        <div class="flex justify-center items-center space-x-4 text-gray-600">
