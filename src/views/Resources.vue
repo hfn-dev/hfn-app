@@ -46,7 +46,7 @@
             <p class="text-gray-700 text-base mb-4">
               The Lagos State Ministry of Health has partnered with private hospitals to enhance emergency response times across key districts. This initiative, supported by HFN, ensures faster patient care and improved coordination among healthcare facilities.
             </p>
-            <a href="#" class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors">Download</a>
+            <a href="#" class="inline-block justify-center bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors">Download</a>
           </div>
         </div>
 
