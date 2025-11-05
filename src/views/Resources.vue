@@ -152,7 +152,7 @@
                 Stakeholders met in Abuja to evaluate funding mechanisms and policy frameworks driving Nigeria’s progress toward universal access to affordable healthcare.
             </p>
         
-          <a href="#" class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors">Download</a>
+          <a href="#" class="bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors">Download</a>
         </div>
       </div>
        <div class="flex justify-center items-center space-x-4 text-gray-600">
