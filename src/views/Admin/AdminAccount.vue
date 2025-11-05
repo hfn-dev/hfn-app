@@ -3,7 +3,9 @@ import cert from "@/assets/cert.png";
 import sign from "@/assets/sign.png";
 import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
 import { computed, reactive, ref } from "vue";
+import { useToast } from "@/composables/useToast";
 
+const { showToast } = useToast();
 const isOrganization = ref(true);
 const currentView = ref("My Profile");
 const activeTab = ref("My Profile");
@@ -70,12 +72,12 @@ const handleProfilePicUpload = (event) => {
   if (!file) return;
 
   if (!["image/jpeg", "image/png", "image/jpg"].includes(file.type)) {
-    alert("Please upload a valid JPG or PNG image.");
+    showToast("Please upload a valid JPG or PNG image.", "error");
     return;
   }
 
   if (file.size > 1024 * 1024) {
-    alert("File size exceeds 1MB limit.");
+    showToast("File size exceeds 1MB limit.", "error");
     return;
   }
 
@@ -105,7 +107,7 @@ const handleFileUpload = (event) => {
     ].includes(file.type) &&
     file.type !== ""
   ) {
-    alert("Invalid file type. Please upload a zip, rar, jpg, or png file.");
+    showToast("Invalid file type. Please upload a zip, rar, jpg, or png file.", "error");
     clearPreview();
     uploadStatus.value = "Invalid file type";
     return;
