@@ -1,6 +1,9 @@
 <script setup>
 import logo from "@/assets/logo.png";
+import { useRoute, useRouter } from "vue-router";
 
+const router = useRouter();
+const route = useRoute();
 const currentYear = new Date().getFullYear();
 
 </script>
@@ -96,25 +99,37 @@ const currentYear = new Date().getFullYear();
             <div>
               <h5 class="font-bold text-lg mb-3 text-gray-900">
                 <a href="#" class="border-b-2 border-green-700 pb-0.5"
+                  >Home</a
+                >
+              </h5>
+              <ul class="space-y-2 text-base text-gray-700">
+                <li>
+                  <a href="#calendar" class="hover:text-green-700 transition"
+                    >Event Calendar</a
+                  >
+                </li>
+                <li>
+                  <a href="#faq" class="hover:text-green-700 transition"
+                    >FAQ</a
+                  >
+                </li>
+                
+              </ul>
+            </div>
+
+            <div>
+              <h5 class="font-bold text-lg mb-3 text-gray-900">
+                <a href="#" class="border-b-2 border-green-700 pb-0.5"
                   >About Us</a
                 >
               </h5>
               <ul class="space-y-2 text-base text-gray-700">
                 <li>
                   <a href="#" class="hover:text-green-700 transition"
-                    >Mission and Vision</a
+                    >Why join HFN</a
                   >
                 </li>
-                <li>
-                  <a href="#" class="hover:text-green-700 transition"
-                    >Leadership</a
-                  >
-                </li>
-                <li>
-                  <a href="#" class="hover:text-green-700 transition"
-                    >Partners</a
-                  >
-                </li>
+                
               </ul>
             </div>
 
@@ -126,18 +141,23 @@ const currentYear = new Date().getFullYear();
               </h5>
               <ul class="space-y-2 text-base text-gray-700">
                 <li>
-                  <a href="#" class="hover:text-green-700 transition"
-                    >Health Alerts</a
+                  <RouterLink  to="/programs" class="hover:text-green-700 transition"
+                    >Programs and Initiatives</RouterLink 
                   >
                 </li>
                 <li>
-                  <a href="#" class="hover:text-green-700 transition"
-                    >Public Health Stories</a
+                  <RouterLink  to="/news" class="hover:text-green-700 transition"
+                    >News & Advocacy</RouterLink 
                   >
                 </li>
                 <li>
-                  <a href="#" class="hover:text-green-700 transition"
-                    >Programs and Initiatives</a
+                  <RouterLink to="/resources" class="hover:text-green-700 transition"
+                    >Resources</RouterLink
+                  >
+                </li>
+                <li>
+                  <RouterLink to="/events" class="hover:text-green-700 transition"
+                    >Events</RouterLink
                   >
                 </li>
               </ul>
@@ -151,26 +171,19 @@ const currentYear = new Date().getFullYear();
               </h5>
               <ul class="space-y-2 text-base text-gray-700">
                 <li>
-                  <a href="#" class="hover:text-green-700 transition"
-                    >Categories</a
+                  <RouterLink to="/membership" class="hover:text-green-700 transition"
+                    >Member Area</RouterLink
                   >
                 </li>
                 <li>
-                  <a href="#" class="hover:text-green-700 transition"
-                    >Member Directory</a
+                  <RouterLink to="/get-involved" class="hover:text-green-700 transition"
+                    >Get Involved</RouterLink
                   >
                 </li>
               </ul>
             </div>
 
-            <div>
-              <h5 class="font-bold text-lg mb-3 text-gray-900">
-                <a href="#" class="border-b-2 border-green-700 pb-0.5"
-                  >Upcoming Activities</a
-                >
-              </h5>
-            </div>
-
+            
             <div class="col-span-2 sm:col-span-1 flex flex-col justify-start">
               <h5 class="font-bold text-lg mb-3 text-gray-900">
                 <a href="#" class="border-b-2 border-green-700 pb-0.5"

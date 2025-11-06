@@ -532,7 +532,7 @@ onMounted(() => {
     </div>
   </section>
 
-  <HfnCalender />
+  <HfnCalender id="calendar" />
 
   <section class="py-16 bg-white">
     <div class="container mx-auto px-6 text-center">
@@ -574,7 +574,7 @@ onMounted(() => {
     </div>
   </section>
 
-  <section class="py-20 lg:py-28 bg-white">
+  <section class="py-20 lg:py-28 bg-white" id="faq">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2
         class="text-3xl text-center md:text-4xl font-serif mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
