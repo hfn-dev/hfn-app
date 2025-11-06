@@ -104,12 +104,12 @@ const currentYear = new Date().getFullYear();
               </h5>
               <ul class="space-y-2 text-base text-gray-700">
                 <li>
-                  <a href="#" class="hover:text-green-700 transition"
+                  <a href="#calendar" class="hover:text-green-700 transition"
                     >Event Calendar</a
                   >
                 </li>
                 <li>
-                  <a href="#" class="hover:text-green-700 transition"
+                  <a href="#faq" class="hover:text-green-700 transition"
                     >FAQ</a
                   >
                 </li>
