@@ -241,6 +241,15 @@ const goToPage = (page) => {
       <td class="py-3 px-3">
         {{ course.creationDate }}
       </td>
+      <td class="py-3 px-3">
+  <button
+    @click="handleAction('Approve', course.id)"
+    class="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+  >
+    Approve
+  </button>
+</td>
+
     </template>
 
     <!-- NORMAL TAB body -->
