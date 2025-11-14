@@ -34,6 +34,8 @@ import MyAccount from '@/views/User/MyAccount.vue';
 import MyLearning from '@/views/User/MyLearning.vue';
 import Support from '@/views/User/Support.vue';
 import UserDashboard from '@/views/User/UserDashboard.vue';
+import UserCourses from '@/views/User/UserCourses.vue';
+
 import UserSubscription from '@/views/User/UserSubscription.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import About from '../views/About.vue';
@@ -102,6 +104,11 @@ const routes = [
     path: '/user/dashboard',
     name: 'UserDasboard',
     component: UserDashboard,
+  },
+  {
+    path: '/user/courses',
+    name: 'UserCourses',
+    component: UserCourses,
   },
   {
     path: '/course/:id',
