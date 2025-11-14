@@ -1,8 +1,163 @@
 <script setup>
 import handsJoining from "@/assets/handsJoining.jpg";
 import logo from "@/assets/logo.png";
-
 import { computed, ref } from "vue";
+
+ const tabs = [
+  {
+    id: 'policy',
+    name: 'Policy Influence and Advocacy.',
+    titleHtml: 'Policy Influence <br />and Advocacy.',
+    color: 'default',
+    contentHtml: `
+      <p>
+        <strong>Representation in Policy and Decision-Making:</strong>
+        Members are represented in high-level national health policy
+        discussions through HFN’s recognized advocacy platforms.
+      </p>
+      <p>
+        <strong>Policy Advocacy:</strong> As the officially recognized
+        body for the private health sector, HFN maintains close rapport
+        with government policymakers while ensuring constant feedback on
+        critical health matters.
+      </p>
+      <p>
+        <strong>Improvement of the Operating Environment:</strong> HFN
+        actively engages in lobbying and advocacy to create a more
+        enabling and sustainable environment for healthcare operations.
+      </p>
+      <p>
+        <strong>Opportunity to Shape the Future:</strong> Members enjoy
+        ongoing opportunity to contribute to shaping the policies and
+        frameworks that determine the fortunes of Nigeria’s healthcare
+        sector.
+      </p>
+    `,
+  },
+  {
+    id: 'collaboration',
+    name: 'Collaboration, Networking, and Exposure.',
+    titleHtml: 'Collaboration, <br />Networking, <br />and Exposure.',
+    color: 'orange',
+    contentHtml: `
+      <p>
+        <strong>Opportunities for Collaboration:</strong> Through its
+        diverse membership base, HFN promotes sectoral, inter-sectoral,
+        and multi-stakeholder collaboration across the healthcare value
+        chain.
+      </p>
+      <p>
+        <strong>Networking with Industry Leaders:</strong> Members enjoy
+        access to exclusive networking events such as dinners,
+        luncheons, and business forums with public and private industry
+        policymakers, and international partners.
+      </p>
+      <p>
+        <strong>Linkages and Business Development:</strong> Members gain
+        access to both local and international partnerships, with
+        referrals through business/private sector groups such as LCCI,
+        NASIMA, and the Nigeria-South Africa Chamber of Commerce.
+      </p>
+      <p>
+        <strong>Enhanced Access to Investment Opportunities:</strong>
+        Members benefit from linkages to funding and investment
+        institutions for health innovation and expansion.
+      </p>
+      <p>
+        <strong>Invitation to Field Trips and International Programs:</strong>
+        Participate in study tours, exchange programs, and global health
+        forums.
+      </p>
+    `,
+  },
+  {
+    id: 'knowledge',
+    name: 'Information, Knowledge, and Capacity Development.',
+    titleHtml: 'Information, Knowledge, <br /> and Capacity Development.',
+    color: 'green',
+    contentHtml: `
+      <p>
+        <strong>Access to Data and Sector Information:</strong> Members
+        have exclusive access to research data, policy briefs, and
+        insights on healthcare trends and opportunities.
+      </p>
+      <p>
+        <strong>Information on Policies and Regulations:</strong>
+        Receive timely updates on emerging policies and how they impact
+        members’ businesses.
+      </p>
+      <p>
+        <strong>Subsidized Training and Conferences:</strong> Members
+        enjoy discounted participation in HFN conferences, training
+        programs, and workshops.
+      </p>
+      <p>
+        <strong>Right of First Refusal:</strong> Members receive
+        priority consideration for opportunities and initiatives within
+        the Federation.
+      </p>
+    `,
+  },
+  {
+    id: 'digital',
+    name: 'Digital and Media Visibility.',
+    titleHtml: 'Digital and <br />Media Visibility.',
+    color: 'orange',
+    contentHtml: `
+      <p>
+        <strong>Membership Access to Website:</strong> Fully-subscribed
+        members have unlimited access to restricted sections of the HFN
+        website, containing premium content and opportunities.
+      </p>
+      <p>
+        <strong>Increased Publicity:</strong> Registered members’
+        profiles are published on the HFN website, providing visibility
+        to potential partners and clients.
+      </p>
+      <p>
+        <strong>Advertisement Opportunities:</strong> Members can
+        advertise products and services on the HFN website and through
+        HFN communication channels.
+      </p>
+      <p>
+        <strong>International Exposure:</strong> Through HFN’s
+        partnerships with international bodies such as the IFC and other
+        development agencies, members gain global recognition and
+        visibility.
+      </p>
+    `,
+  },
+  {
+    id: 'support',
+    name: 'Member Support, Benefits, and Privileges.',
+    titleHtml: 'Member Support, Benefits, <br /> and Privileges.',
+    color: 'green',
+    contentHtml: `
+      <p>
+        <strong>HFN Support and Endorsement:</strong> Members benefit
+        from the Federation’s credibility, brand recognition, and
+        endorsements.
+      </p>
+      <p>
+        <strong>Access to Discounted Services:</strong> Enjoy exclusive
+        discounts on products and services offered by fellow members and
+        partner organizations.
+      </p>
+      <p>
+        <strong>Membership Card:</strong> Members receive an official
+        HFN Membership Card which grants access to discounts and
+        benefits.
+      </p>
+      <p>
+        <strong>Job Offers and Recruitment Support:</strong> Members can
+        access job postings, recruitment adverts, and downloadable
+        resumes from the HFN database.
+      </p>
+    `,
+  },
+];
+
+const activeTab = ref(tabs[0].id); 
 const searchQuery = ref("");
 const members = ref([
   "ABIOLA MORUF TAJUDEENA",
@@ -287,6 +442,96 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
           </div>
         </div>
       </div>
+      <section class="py-16 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-10">
+        HFN Members enjoy…
+      </h2>
+
+      <div class="flex flex-wrap justify-between gap-4 mb-10">
+        <button
+          v-for="tab in tabs"
+          :key="tab.id"
+          @click="activeTab = tab.id"
+          :class="[
+            'relative py-3 px-6 text-center font-medium rounded-tl-2xl rounded-br-2xl transition-colors duration-300 flex-grow min-w-[150px] md:min-w-0',
+            {
+              'bg-green-500 text-white shadow-lg': activeTab === tab.id && (tab.color === 'green' || tab.color === 'default'),
+              'bg-orange-500 text-white shadow-lg': activeTab === tab.id && tab.color === 'orange',
+              'bg-gray-100 text-gray-700 hover:bg-gray-200': activeTab !== tab.id,
+            },
+            // Apply the curved border design effect with Tailwind utility classes
+            tab.color === 'green' || tab.color === 'default'
+              ? 'border border-green-200'
+              : 'border border-orange-200',
+          ]"
+        >
+          {{ tab.name }}
+          <span
+            v-if="activeTab === tab.id"
+            :class="[
+              'absolute inset-0 rounded-tl-2xl rounded-br-2xl -z-1',
+              {
+                'bg-green-500': tab.color === 'green' || tab.color === 'default',
+                'bg-orange-500': tab.color === 'orange',
+              }
+            ]"
+          ></span>
+        </button>
+      </div>
+
+      <div v-for="tab in tabs" :key="tab.id">
+        <div v-if="activeTab === tab.id">
+          <div class="flex flex-col md:flex-row items-start gap-6">
+            <div
+              :class="[
+                'relative w-[200px] h-[200px] rounded-tr-[30px] rounded-bl-[30px] p-3 shadow-sm overflow-hidden flex flex-col justify-center flex-shrink-0',
+                tab.color === 'green' || tab.color === 'default'
+                  ? 'bg-green-50'
+                  : 'bg-[#E87A1814]', // Using the provided light orange background
+              ]"
+            >
+              <div
+                :class="[
+                  'absolute top-0 right-0 w-1 h-full rounded-tr-[30px] rounded-br-none',
+                  tab.color === 'green' || tab.color === 'default'
+                    ? 'bg-green-700'
+                    : 'bg-orange-500',
+                ]"
+              ></div>
+
+              <div class="relative z-10 pr-2">
+                <div class="mb-0.5">
+                  <img
+                    :src="logo"
+                    alt="Logo Icon"
+                    class="inline-block w-5 h-5 object-contain"
+                  />
+                </div>
+
+                <h3
+                  :class="[
+                    'font-semibold text-md leading-tight',
+                    tab.color === 'green' || tab.color === 'default'
+                      ? 'text-green-800'
+                      : 'text-orange-800',
+                  ]"
+                >
+                  <span v-html="tab.titleHtml"></span>
+                </h3>
+              </div>
+            </div>
+
+            <div
+              class="text-gray-700 text-sm leading-relaxed space-y-4 md:flex-grow"
+              v-html="tab.contentHtml"
+            >
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
       <section class="py-16 bg-white">
         <div class="max-w-6xl mx-auto px-6">
           <h2 class="text-2xl font-semibold text-gray-800 mb-10">
