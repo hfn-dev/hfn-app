@@ -585,7 +585,7 @@ onMounted(() => {
       <div id="faq-accordion" class="space-y-4">
         <div class="rounded-xl shadow-lg bg-[#F2F9F3] overflow-hidden">
           <button
-            class="faq-toggle w-full flex justify-between items-center p-6 text-lg font-semibold hover:bg-gray-100 transition duration-150"
+            class="faq-toggle w-full flex justify-between items-center p-6 text-lg font-semibold hover:bg-[#F2F9F3] transition duration-150"
             aria-expanded="false"
             data-target="faq-1"
           >
@@ -612,7 +612,7 @@ onMounted(() => {
 
         <div class="rounded-xl shadow-lg bg-[#F2F9F3] overflow-hidden">
           <button
-            class="faq-toggle w-full flex justify-between items-center p-6 text-lg font-semibold hover:bg-gray-100 transition duration-150"
+            class="faq-toggle w-full flex justify-between items-center p-6 text-lg font-semibold hover:bg-[#F2F9F3] transition duration-150"
             aria-expanded="false"
             data-target="faq-2"
           >
@@ -638,7 +638,7 @@ onMounted(() => {
 
         <div class="rounded-xl shadow-lg bg-[#F2F9F3] overflow-hidden">
           <button
-            class="faq-toggle w-full flex justify-between items-center p-6 text-lg font-semibold hover:bg-gray-100 transition duration-150"
+            class="faq-toggle w-full flex justify-between items-center p-6 text-lg font-semibold hover:bg-[#F2F9F3] transition duration-150"
             aria-expanded="false"
             data-target="faq-3"
           >
@@ -664,7 +664,7 @@ onMounted(() => {
         </div>
         <div class="rounded-xl shadow-lg bg-[#F2F9F3] overflow-hidden">
           <button
-            class="faq-toggle w-full flex justify-between items-center p-6 text-lg font-semibold hover:bg-gray-100 transition duration-150"
+            class="faq-toggle w-full flex justify-between items-center p-6 text-lg font-semibold hover:bg-[#F2F9F3] transition duration-150"
             aria-expanded="false"
             data-target="faq-4"
           >
