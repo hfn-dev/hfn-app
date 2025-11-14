@@ -84,21 +84,20 @@ const archivedCourses = ref([
 
  const approvedCourses = ref([
   {
-    id: 5,
+    id: 1,
     title: "Sustainable Living",
-    enrollments: 4,
-    completion: "100%",
-    lastUpdate: "November 19 2024",
+    createdBy: "John Doe - HBA",
+    creationDate: "December 19 2024",
   },
   {
-    id: 6,
+    id: 2,
     title: "Advanced Anatomy",
-    enrollments: null,
-    completion: "-",
-    lastUpdate: "November 11 2024",
+    createdBy: "Jane Smith - HBA",
+    creationDate: "November 11 2024",
   },
 ]);
- 
+
+ const isApprovalTab = computed(() => currentTab.value === "Approvals");
 
 const activeCourses = computed(() => {
   if (currentTab.value === "Published") return publishedCourses.value;
@@ -182,110 +181,104 @@ const goToPage = (page) => {
 
         <table class="min-w-full divide-y divide-gray-200">
           <thead>
-            <tr
-              class="bg-[#f0fff0] text-gray-700 uppercase text-sm leading-normal border-b border-[#00cc66]/50"
-            >
-              <th class="py-3 px-3 text-left w-12 rounded-tl-lg">
-                <input
-                  type="checkbox"
-                  class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]"
-                />
-              </th>
-              <th class="py-3 px-3 text-left flex items-center">
-                Course Title
-                <MoreVertical
-                  class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
-                />
-              </th>
-              <th class="py-3 px-3 text-left">
-                Enrollments
-                <MoreVertical
-                  class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
-                />
-              </th>
-              <th class="py-3 px-3 text-left">
-                Completion Rate
-                <MoreVertical
-                  class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
-                />
-              </th>
-              <th class="py-3 px-3 text-left">
-                Last Update
-                <MoreVertical
-                  class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
-                />
-              </th>
-              <th class="py-3 px-3 text-center rounded-tr-lg">Action</th>
-            </tr>
-          </thead>
-          <tbody
-            class="text-gray-600 text-sm font-light divide-y divide-gray-100"
-          >
-            <tr
-              v-for="course in activeCourses"
-              :key="course.id"
-              class="hover:bg-[#f9fff9] transition-colors"
-            >
-              <td class="py-3 px-3 whitespace-nowrap">
-                <input
-                  type="checkbox"
-                  class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]"
-                />
-              </td>
-              <td
-                class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]"
-              >
-                {{ course.title }}
-              </td>
-              <td class="py-3 px-3">
-                {{ course.enrollments !== null ? course.enrollments : "-" }}
-              </td>
-              <td class="py-3 px-3">
-                <span
-                  :class="{
-                    'text-green-600 font-semibold':
-                      course.completion.includes('100'),
-                    'text-orange-500':
-                      parseFloat(course.completion) < 50 &&
-                      course.completion !== '-',
-                  }"
-                >
-                  {{ course.completion }}
-                </span>
-              </td>
-              <td class="py-3 px-3">
-                {{ course.lastUpdate }}
-              </td>
-              <td class="py-3 px-3 text-center">
-                <div class="flex item-center justify-center space-x-2">
-                  <button
-                    @click="handleAction('View', course.id)"
-                    class="w-6 h-6 transform hover:text-blue-500 hover:scale-110 transition-transform p-0.5"
-                  >
-                    <Eye
-                      class="w-full h-full text-gray-500 hover:text-blue-500"
-                    />
-                  </button>
-                  <button
-                    @click="handleAction('Edit', course.id)"
-                    class="w-6 h-6 transform hover:text-green-500 hover:scale-110 transition-transform p-0.5"
-                  >
-                    <Edit2
-                      class="w-full h-full text-gray-500 hover:text-green-500"
-                    />
-                  </button>
-                  <button
-                    @click="handleAction('Delete', course.id)"
-                    class="w-6 h-6 transform hover:text-red-500 hover:scale-110 transition-transform p-0.5"
-                  >
-                    <Trash2
-                      class="w-full h-full text-gray-500 hover:text-red-500"
-                    />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
+  <tr
+    class="bg-[#f0fff0] text-gray-700 uppercase text-sm leading-normal border-b border-[#00cc66]/50"
+  >
+    <th class="py-3 px-3 text-left w-12 rounded-tl-lg">
+      <input type="checkbox" class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]" />
+    </th>
+
+    <th class="py-3 px-3 text-left flex items-center">
+      Course Title
+      <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
+    </th>
+
+    <!-- If APPROVAL tab -->
+    <template v-if="isApprovalTab">
+      <th class="py-3 px-3 text-left">Created By</th>
+      <th class="py-3 px-3 text-left">Creation Date</th>
+    </template>
+
+    <!-- Otherwise normal tabs -->
+    <template v-else>
+      <th class="py-3 px-3 text-left">
+        Enrollments
+        <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
+      </th>
+      <th class="py-3 px-3 text-left">
+        Completion Rate
+        <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
+      </th>
+      <th class="py-3 px-3 text-left">
+        Last Update
+        <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
+      </th>
+    </template>
+
+    <th class="py-3 px-3 text-center rounded-tr-lg">Action</th>
+  </tr>
+</thead>
+
+          <tbody class="text-gray-600 text-sm font-light divide-y divide-gray-100">
+  <tr
+    v-for="course in activeCourses"
+    :key="course.id"
+    class="hover:bg-[#f9fff9] transition-colors"
+  >
+    <td class="py-3 px-3">
+      <input type="checkbox" class="h-4 w-4 text-[#00cc66]" />
+    </td>
+
+    <td class="py-3 px-3 font-medium text-[#006633]">
+      {{ course.title }}
+    </td>
+
+    <!-- APPROVAL TAB body -->
+    <template v-if="isApprovalTab">
+      <td class="py-3 px-3">
+        {{ course.createdBy }}
+      </td>
+      <td class="py-3 px-3">
+        {{ course.creationDate }}
+      </td>
+    </template>
+
+    <!-- NORMAL TAB body -->
+    <template v-else>
+      <td class="py-3 px-3">
+        {{ course.enrollments ?? "-" }}
+      </td>
+      <td class="py-3 px-3">
+        <span
+          :class="{
+            'text-green-600 font-semibold': course.completion?.includes('100'),
+            'text-orange-500': parseFloat(course.completion) < 50 && course.completion !== '-'
+          }"
+        >
+          {{ course.completion }}
+        </span>
+      </td>
+      <td class="py-3 px-3">
+        {{ course.lastUpdate }}
+      </td>
+    </template>
+
+    <td class="py-3 px-3 text-center">
+      <div class="flex item-center justify-center space-x-2">
+        <button @click="handleAction('View', course.id)" class="w-6 h-6 hover:text-blue-500">
+          <Eye class="w-full h-full" />
+        </button>
+        <button @click="handleAction('Edit', course.id)" class="w-6 h-6 hover:text-green-500">
+          <Edit2 class="w-full h-full" />
+        </button>
+        <button @click="handleAction('Delete', course.id)" class="w-6 h-6 hover:text-red-500">
+          <Trash2 class="w-full h-full" />
+        </button>
+      </div>
+    </td>
+  </tr>
+</tbody>
+
         </table>
 
         <!-- Pagination -->
