@@ -92,7 +92,7 @@ HFN’s ongoing programs address workforce gaps, policy advocacy,
     </div>
 </div>
 
-                <div class="flex flex-col space-y-8 max-w-5xl mx-auto">
+                <div class="flex flex-col space-y-8 max-w-5xl mx-auto bg-[#F2F9F3]">
     
     <div class="flex flex-col lg:flex-row items-start lg:space-x-8 space-y-8 lg:space-y-0">
         
