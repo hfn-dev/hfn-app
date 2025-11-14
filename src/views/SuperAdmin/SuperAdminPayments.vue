@@ -67,7 +67,7 @@ const statCards = [
     changeColor: "text-red-500",
   },
   {
-    title: "Total Guests",
+    title: "Unpaid members",
     value: "500",
     change: "10% Increase",
     changeColor: "text-gray-500",
@@ -163,6 +163,30 @@ const formatCurrency = (amount) => {
 const getBarHeight = (amount) => {
     return `${(amount / maxRevenue.value) * 100}%`;
 };  
+
+ const isMessageModalOpen = ref(false);
+const messageSubject = ref("Action Required: Your Account Status");
+const messageContent = ref(
+  "Dear user, we noticed your account is currently unpaid. Please complete your payment to continue enjoying full access to our services. Thank you."
+);
+
+const openMessageModal = (title) => {
+  if (title === "Unpaid users") {
+    isMessageModalOpen.value = true;
+  }
+};
+
+const closeMessageModal = () => {
+  isMessageModalOpen.value = false;
+};
+
+const sendMessage = () => {
+  console.log("Sending message to all unpaid users:");
+  console.log(`Subject: ${messageSubject.value}`);
+  console.log(`Content: ${messageContent.value}`);
+  
+  closeMessageModal();
+}; 
 </script>
 
 <template>
@@ -270,7 +294,10 @@ const getBarHeight = (amount) => {
       'rounded-tl-4xl rounded-br-4xl': index === 0,
       'rounded-tl-4xl rounded-br-4xl': index === activeStatCards.length - 1,
       'rounded-tl-4xl rounded-br-4xl': true,
+      'cursor-pointer hover:shadow-xl transform hover:scale-[1.02]': stat.title === 'Unpaid members'
+
     }"
+    @click="openMessageModal(stat.title)"
   >
     <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
     <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
@@ -437,6 +464,65 @@ const getBarHeight = (amount) => {
             >
               <ChevronRight class="w-4 h-4" />
             </button>
+          </div>
+        </div>
+      </div>
+      <div v-if="isMessageModalOpen" class="fixed inset-0 z-50 overflow-y-auto">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" @click="closeMessageModal"></div>
+
+        <!-- Modal Content -->
+        <div class="flex items-center justify-center min-h-screen p-4">
+          <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg transition-all transform scale-100 p-6 border-t-4 border-[#00cc66]">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4 flex justify-between items-center">
+              Message All Unpaid Users
+              <button @click="closeMessageModal" class="text-gray-400 hover:text-gray-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
+            </h3>
+            <p class="text-sm text-gray-600 mb-6">This message will be sent to all <strong>{{ statCards[3].value }}</strong> unpaid users.</p>
+
+            <form @submit.prevent="sendMessage">
+              <div class="mb-4">
+                <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                <input
+                  id="subject"
+                  v-model="messageSubject"
+                  type="text"
+                  required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors"
+                  placeholder="Enter message subject"
+                />
+              </div>
+
+              <div class="mb-6">
+                <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Message Content</label>
+                <textarea
+                  id="content"
+                  v-model="messageContent"
+                  rows="6"
+                  required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors resize-none"
+                  placeholder="Write your message here..."
+                ></textarea>
+              </div>
+
+              <div class="flex justify-end space-x-3">
+                <button
+                  type="button"
+                  @click="closeMessageModal"
+                  class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors shadow-md"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  class="px-6 py-2 text-sm font-medium text-white bg-[#006633] rounded-lg hover:bg-[#00994d] transition-colors shadow-lg shadow-[#006633]/50"
+                >
+                  Send Message
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
