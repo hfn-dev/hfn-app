@@ -168,7 +168,7 @@ import reagan from "@/assets/reagan.png";
         </div>
         <div class="mb-10 lg:mb-0">
           <div
-            class="relative w-full overflow-hidden h-80 sm:h-96 md:h-[500px] bg-[#F2F9F3] rounded-3xl"
+            class="relative w-full overflow-hidden h-80 sm:h-96 md:h-[500px] bg-[#F2F9F3] rounded-3xl mt-5"
           >
             <img
               :src="partnership"
