@@ -41,6 +41,30 @@ const statCards = [
     change: "10% Increase",
     changeColor: "text-gray-500",
   },
+  {
+    title: "Total Members",
+    value: "13",
+    change: "13% Increase",
+    changeColor: "text-[#00cc66]",
+  },
+  {
+    title: "Total New Members",
+    value: "7",
+    change: "13% Increase",
+    changeColor: "text-[#00cc66]",
+  },
+  {
+    title: "Total Corporate",
+    value: "13",
+    change: "–5% Decrease",
+    changeColor: "text-red-500",
+  },
+  {
+    title: "Total Individual",
+    value: "4.5",
+    change: "10% Increase",
+    changeColor: "text-gray-500",
+  },
 ];
 
 const publishedCourses = ref([
