@@ -5,7 +5,7 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-const certificateUrl = ref("/certificates/sample-certificate.png"); 
+const certificateUrl = ref("/sample-certificate.png"); 
 
 const viewCertificateInNewTab = () => {
   if (certificateUrl.value) {
