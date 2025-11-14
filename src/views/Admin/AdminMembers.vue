@@ -20,8 +20,8 @@ const statCards = [
   {
     title: "Total Members",
     value: "13",
-    change: "13% Increase",
-    changeColor: "text-[#00cc66]",
+    change: "1% Increase",
+    changeColor: "text-blue-300",
   },
   {
     title: "Total New Members",
@@ -31,13 +31,37 @@ const statCards = [
   },
   {
     title: "Total Corporate",
-    value: "13",
+    value: "8",
     change: "–5% Decrease",
     changeColor: "text-red-500",
   },
   {
     title: "Total Individual",
     value: "4.5",
+    change: "10% Increase",
+    changeColor: "text-gray-500",
+  },
+  {
+    title: "Multinationals",
+    value: "23",
+    change: "-3% Increase",
+    changeColor: "text-red-500",
+  },
+  {
+    title: "Diaspora",
+    value: "25",
+    change: "43% Increase",
+    changeColor: "text-[#00cc66]",
+  },
+  {
+    title: "Health Guardians",
+    value: "11",
+    change: "–5% Decrease",
+    changeColor: "text-blue-300",
+  },
+  {
+    title: "Total Associations",
+    value: "10",
     change: "10% Increase",
     changeColor: "text-gray-500",
   },
@@ -132,7 +156,7 @@ const goToPage = (page) => {
           Members
         </h1>
 
-        <div class="flex justify-between items-stretch mb-10 space-x-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           <div
             v-for="(stat, index) in statCards"
             :key="stat.title"
