@@ -43,7 +43,39 @@ const maxCount = computed(() => {
 const courseTabs = ref(["Registration", "Purchases"]);
 const currentTab = ref("Registration");
 
+const activeStatCards = computed(() => {
+  return currentTab.value === "Registration" ? statCards : statCards1;
+});
+  
 const statCards = [
+  {
+    title: "Total Registrations",
+    value: "23",
+    change: "8% Increase",
+    changeColor: "text-[#00cc66]",
+  },
+  {
+    title: "Total Individuals",
+    value: "17",
+    change: "33% Increase",
+    changeColor: "text-[#00cc66]",
+  },
+  {
+    title: "Total Organizations",
+    value: "13",
+    change: "–5% Decrease",
+    changeColor: "text-red-500",
+  },
+  {
+    title: "Total Guests",
+    value: "105,000",
+    change: "10% Increase",
+    changeColor: "text-gray-500",
+  },
+];
+
+  
+const statCards1 = [
   {
     title: "Total Course purchased",
     value: "23",
@@ -230,35 +262,33 @@ const getBarHeight = (amount) => {
         </div>
 
         <div class="flex justify-between items-stretch mb-10 mt-10 space-x-6">
-          <div
-            v-for="(stat, index) in statCards"
-            :key="stat.title"
-            class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
-            :class="{
-              'rounded-tl-4xl rounded-br-4xl': index === 0,
-              'rounded-tl-4xl rounded-br-4xl': index === statCards.length - 1,
+  <div
+    v-for="(stat, index) in activeStatCards"
+    :key="stat.title"
+    class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
+    :class="{
+      'rounded-tl-4xl rounded-br-4xl': index === 0,
+      'rounded-tl-4xl rounded-br-4xl': index === activeStatCards.length - 1
+    }"
+  >
+    <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
+    <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
 
-              'rounded-tl-4xl rounded-br-4xl': true,
-            }"
-          >
-            <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
-            <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
+    <p class="text-gray-600 text-sm mb-1">{{ stat.title }}</p>
 
-            <p class="text-gray-600 text-sm mb-1">{{ stat.title }}</p>
+    <div class="text-4xl font-bold text-gray-800 mb-1">
+      <span v-if="stat.stars">
+        <span class="text-[#ff9900]">★★★★</span><span class="text-gray-300">★</span>
+      </span>
+      <span v-else>{{ stat.value }}</span>
+    </div>
 
-            <div class="text-4xl font-bold text-gray-800 mb-1">
-              <span v-if="stat.stars">
-                <span class="text-[#ff9900]">★★★★</span
-                ><span class="text-gray-300">★</span>
-              </span>
-              <span v-else>{{ stat.value }}</span>
-            </div>
+    <p :class="[stat.changeColor, 'text-sm font-medium']">
+      {{ stat.change }}
+    </p>
+  </div>
+</div>
 
-            <p :class="[stat.changeColor, 'text-sm font-medium']">
-              {{ stat.change }}
-            </p>
-          </div>
-        </div>
       </div>
 
       <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
