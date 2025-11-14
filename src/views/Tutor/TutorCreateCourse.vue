@@ -127,7 +127,7 @@ const steps = [
   { id: 1, title: "Basic Information" },
   { id: 2, title: "Curriculum Builder" },
   { id: 3, title: "Pricing & Access" },
-  { id: 4, title: "Preview & Publish" },
+  { id: 4, title: "Preview & Submit" },
 ];
 
 // --- Step 1: Basic Info Logic ---
@@ -184,8 +184,8 @@ const saveAndContinue = () => {
     );
     currentStep.value += 1;
   } else {
-    console.log("Course fully configured. Ready to Publish!");
-    alert("Course Published Successfully! (Simulated)");
+    console.log("Course fully configured. Ready to Submit!");
+    alert("Course Submited Successfully! (Simulated)");
   }
 };
 
@@ -933,10 +933,10 @@ const handleQuizAdded = () => {
 
         <div v-if="currentStep === 4">
           <h2 class="text-2xl font-semibold text-gray-800 mb-6">
-            Preview & Publish
+            Preview & Submit
           </h2>
           <p class="text-gray-600 mb-8">
-            Preview your course details before publishing.
+            Preview your course details before Submiting.
           </p>
 
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -1154,7 +1154,7 @@ const handleQuizAdded = () => {
                 @click="saveAndContinue"
                 class="w-full px-6 py-2 bg-[#00cc66] text-white rounded-lg font-medium hover:bg-[#00994d] transition-colors shadow-md"
               >
-                Publish
+                Submit
               </button>
             </div>
           </div>
@@ -1174,7 +1174,7 @@ const handleQuizAdded = () => {
             @click="saveAndContinue"
             class="px-6 py-2 bg-[#00cc66] text-white rounded-lg font-medium hover:bg-[#00994d] transition-colors shadow-md"
           >
-            {{ currentStep < 4 ? "Save & Continue" : "Publish Course" }}
+            {{ currentStep < 4 ? "Save & Continue" : "Submit Course" }}
           </button>
         </div>
       </div>
