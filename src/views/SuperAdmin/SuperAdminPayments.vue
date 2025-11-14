@@ -469,7 +469,7 @@ const sendMessage = () => {
       </div>
       <div v-if="isMessageModalOpen" class="fixed inset-0 z-50 overflow-y-auto">
         <!-- Backdrop -->
-        <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" @click="closeMessageModal"></div>
+        <div class="fixed inset-0 bg-opacity-50 transition-opacity" @click="closeMessageModal"></div>
 
         <!-- Modal Content -->
         <div class="flex items-center justify-center min-h-screen p-4">
