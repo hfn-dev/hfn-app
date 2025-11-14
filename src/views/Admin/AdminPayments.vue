@@ -13,20 +13,51 @@ import {
 } from "lucide-vue-next";
 import { ref } from "vue";
 
+ const revenueData = ref([
+  { month: 'Jan', amount: 45000 },
+  { month: 'Feb', amount: 62000 },
+  { month: 'Mar', amount: 78000 },
+  { month: 'Apr', amount: 55000 },
+  { month: 'May', amount: 89000 },
+  { month: 'Jun', amount: 105000 },
+]);
+
+const paymentTrendData = ref([
+  { day: 'Mon', count: 120 },
+  { day: 'Tue', count: 180 },
+  { day: 'Wed', count: 90 },
+  { day: 'Thu', count: 250 },
+  { day: 'Fri', 'count': 160 },
+  { day: 'Sat', 'count': 50 },
+  { day: 'Sun', 'count': 30 },
+]);
+
+const maxRevenue = computed(() => {
+  return Math.max(...revenueData.value.map(d => d.amount)) || 1;
+});
+
+const maxCount = computed(() => {
+  return Math.max(...paymentTrendData.value.map(d => d.count)) || 1;
+});
+ 
 const courseTabs = ref(["Registration", "Purchases"]);
 const currentTab = ref("Registration");
 
+const activeStatCards = computed(() => {
+  return currentTab.value === "Registration" ? statCards : statCards1;
+});
+  
 const statCards = [
   {
     title: "Total Registrations",
-    value: "13",
-    change: "13% Increase",
+    value: "23",
+    change: "8% Increase",
     changeColor: "text-[#00cc66]",
   },
   {
     title: "Total Individuals",
-    value: "7",
-    change: "13% Increase",
+    value: "17",
+    change: "33% Increase",
     changeColor: "text-[#00cc66]",
   },
   {
@@ -36,8 +67,36 @@ const statCards = [
     changeColor: "text-red-500",
   },
   {
-    title: "Total Guests",
-    value: "4.5",
+    title: "Unpaid members",
+    value: "500",
+    change: "10% Increase",
+    changeColor: "text-gray-500",
+  },
+];
+
+  
+const statCards1 = [
+  {
+    title: "Total Course purchased",
+    value: "23",
+    change: "8% Increase",
+    changeColor: "text-[#00cc66]",
+  },
+  {
+    title: "Total Member Purchase",
+    value: "17",
+    change: "33% Increase",
+    changeColor: "text-[#00cc66]",
+  },
+  {
+    title: "Total Guest Purchase",
+    value: "13",
+    change: "–5% Decrease",
+    changeColor: "text-red-500",
+  },
+  {
+    title: "Total Revenue",
+    value: "105,000",
     change: "10% Increase",
     changeColor: "text-gray-500",
   },
@@ -96,6 +155,38 @@ const goToPage = (page) => {
     currentPage.value = page;
   }
 };
+
+const formatCurrency = (amount) => {
+    return `₦${amount.toLocaleString('en-US')}`;
+};
+
+const getBarHeight = (amount) => {
+    return `${(amount / maxRevenue.value) * 100}%`;
+};  
+
+ const isMessageModalOpen = ref(false);
+const messageSubject = ref("Action Required: Your Account Status");
+const messageContent = ref(
+  "Dear user, we noticed your account is currently unpaid. Please complete your payment to continue enjoying full access to our services. Thank you."
+);
+
+const openMessageModal = (title) => {
+  if (title === "Unpaid members") {
+    isMessageModalOpen.value = true;
+  }
+};
+
+const closeMessageModal = () => {
+  isMessageModalOpen.value = false;
+};
+
+const sendMessage = () => {
+  console.log("Sending message to all unpaid users:");
+  console.log(`Subject: ${messageSubject.value}`);
+  console.log(`Content: ${messageContent.value}`);
+  
+  closeMessageModal();
+}; 
 </script>
 
 <template>
@@ -113,6 +204,68 @@ const goToPage = (page) => {
         >
           Payments
         </h1>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            
+            <!-- Monthly Revenue Bar Chart -->
+            <div class="p-6 bg-white rounded-xl shadow-lg border border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Monthly Revenue Overview</h2>
+                <div class="h-64 flex items-end justify-between space-x-2 p-2">
+                    <div
+                        v-for="data in revenueData"
+                        :key="data.month"
+                        class="flex-1 h-full flex flex-col items-center justify-end group cursor-pointer"
+                    >
+                        <!-- Bar -->
+                        <div
+                            :style="{ height: getBarHeight(data.amount) }"
+                            class="w-8 md:w-10 bg-[#00cc66] rounded-t-lg transition-all duration-300 hover:bg-[#00994d] relative"
+                        >
+                            <!-- Tooltip/Value -->
+                            <span class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-medium text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+                                {{ formatCurrency(data.amount) }}
+                            </span>
+                        </div>
+                        <!-- Label -->
+                        <p class="mt-2 text-sm text-gray-600">{{ data.month }}</p>
+                    </div>
+                </div>
+                <p class="mt-4 text-xs text-gray-500 text-right">Maximum Revenue: {{ formatCurrency(maxRevenue) }}</p>
+            </div>
+
+            <!-- Weekly Payment Count Trend -->
+            <div class="p-6 bg-white rounded-xl shadow-lg border border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Weekly Payment Count</h2>
+                <div class="relative h-64 p-4">
+                    <!-- Y-Axis max label (mock) -->
+                    <div class="absolute top-0 left-0 text-xs text-gray-400">
+                        {{ maxCount }}
+                    </div>
+                    <!-- X-Axis line -->
+                    <div class="absolute bottom-6 left-0 right-0 h-px bg-gray-300"></div>
+
+                    <div class="flex h-full pb-6 relative">
+                        <div
+                            v-for="(data, index) in paymentTrendData"
+                            :key="data.day"
+                            class="flex-1 flex flex-col items-center justify-end relative z-10"
+                        >
+                            <div
+                                :style="{ bottom: `${(data.count / maxCount) * 200 + 10}px` }"
+                                class="absolute w-3 h-3 rounded-full bg-[#006633] shadow-md transition-all duration-500 group cursor-pointer"
+                            >
+                                <!-- Tooltip/Value -->
+                                <span class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-medium text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+                                    {{ data.count }} payments
+                                </span>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600 absolute bottom-0">
+                                {{ data.day }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="relative flex justify-center items-center">
           <div class="flex border-b border-gray-200 space-x-4">
@@ -133,35 +286,38 @@ const goToPage = (page) => {
         </div>
 
         <div class="flex justify-between items-stretch mb-10 mt-10 space-x-6">
-          <div
-            v-for="(stat, index) in statCards"
-            :key="stat.title"
-            class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
-            :class="{
-              'rounded-tl-4xl rounded-br-4xl': index === 0,
-              'rounded-tl-4xl rounded-br-4xl': index === statCards.length - 1,
+  <div
+    v-for="(stat, index) in activeStatCards"
+    :key="stat.title"
+    class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
+    :class="{
+      'rounded-tl-4xl rounded-br-4xl': index === 0,
+      'rounded-tl-4xl rounded-br-4xl': index === activeStatCards.length - 1,
+      'rounded-tl-4xl rounded-br-4xl': true,
+      'cursor-pointer hover:shadow-xl transform hover:scale-[1.02]': stat.title === 'Unpaid members'
 
-              'rounded-tl-4xl rounded-br-4xl': true,
-            }"
-          >
-            <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
-            <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
+    }"
+    @click="openMessageModal(stat.title)"
+  >
+    <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
+    <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
 
-            <p class="text-gray-600 text-sm mb-1">{{ stat.title }}</p>
+    <p class="text-gray-600 text-sm mb-1">{{ stat.title }}</p>
 
-            <div class="text-4xl font-bold text-gray-800 mb-1">
-              <span v-if="stat.stars">
-                <span class="text-[#ff9900]">★★★★</span
-                ><span class="text-gray-300">★</span>
-              </span>
-              <span v-else>{{ stat.value }}</span>
-            </div>
+    <div class="text-4xl font-bold text-gray-800 mb-1">
+      <span v-if="stat.stars">
+        <span class="text-[#ff9900]">★★★★</span>
+        <span class="text-gray-300">★</span>
+      </span>
+      <span v-else>{{ stat.value }}</span>
+    </div>
 
-            <p :class="[stat.changeColor, 'text-sm font-medium']">
-              {{ stat.change }}
-            </p>
-          </div>
-        </div>
+    <p :class="[stat.changeColor, 'text-sm font-medium']">
+      {{ stat.change }}
+    </p>
+  </div>
+</div>
+
       </div>
 
       <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
@@ -308,6 +464,65 @@ const goToPage = (page) => {
             >
               <ChevronRight class="w-4 h-4" />
             </button>
+          </div>
+        </div>
+      </div>
+      <div v-if="isMessageModalOpen" class="fixed inset-0 z-50 overflow-y-auto">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-opacity-50 transition-opacity" @click="closeMessageModal"></div>
+
+        <!-- Modal Content -->
+        <div class="flex items-center justify-center min-h-screen p-4">
+          <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg transition-all transform scale-100 p-6 border-t-4 border-[#00cc66]">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4 flex justify-between items-center">
+              Message All Unpaid Users
+              <button @click="closeMessageModal" class="text-gray-400 hover:text-gray-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
+            </h3>
+            <p class="text-sm text-gray-600 mb-6">This message will be sent to all <strong>{{ statCards[3].value }}</strong> unpaid users.</p>
+
+            <form @submit.prevent="sendMessage">
+              <div class="mb-4">
+                <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                <input
+                  id="subject"
+                  v-model="messageSubject"
+                  type="text"
+                  required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors"
+                  placeholder="Enter message subject"
+                />
+              </div>
+
+              <div class="mb-6">
+                <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Message Content</label>
+                <textarea
+                  id="content"
+                  v-model="messageContent"
+                  rows="6"
+                  required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors resize-none"
+                  placeholder="Write your message here..."
+                ></textarea>
+              </div>
+
+              <div class="flex justify-end space-x-3">
+                <button
+                  type="button"
+                  @click="closeMessageModal"
+                  class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors shadow-md"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  class="px-6 py-2 text-sm font-medium text-white bg-[#006633] rounded-lg hover:bg-[#00994d] transition-colors shadow-lg shadow-[#006633]/50"
+                >
+                  Send Message
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
