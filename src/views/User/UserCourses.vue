@@ -343,7 +343,7 @@ const getIconPaths = (name) => {
                   class="mt-4 w-full py-2 rounded-lg font-semibold text-white transition duration-200 hover:opacity-90"
                   :style="{ backgroundColor: DARK_GREEN }"
                 >
-                  Read More
+                  Take Course
                 </button>
               </div>
             </div>
@@ -390,7 +390,7 @@ const getIconPaths = (name) => {
           </div>
 
           <h2 class="text-2xl font-bold text-gray-800 mt-12 mb-6">
-            Our Events
+            Our Latest Courses
           </h2>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -441,7 +441,7 @@ const getIconPaths = (name) => {
                   class="mt-4 w-full py-2 rounded-lg font-semibold text-white transition duration-200 hover:opacity-90"
                   :style="{ backgroundColor: DARK_GREEN }"
                 >
-                  Join Event
+                  Take Course
                 </button>
               </div>
             </div>
