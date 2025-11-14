@@ -20,8 +20,8 @@ const statCards = [
   {
     title: "Total Members",
     value: "13",
-    change: "13% Increase",
-    changeColor: "text-[#00cc66]",
+    change: "1% Increase",
+    changeColor: "text-blue-300",
   },
   {
     title: "Total New Members",
@@ -31,7 +31,7 @@ const statCards = [
   },
   {
     title: "Total Corporate",
-    value: "13",
+    value: "8",
     change: "–5% Decrease",
     changeColor: "text-red-500",
   },
@@ -49,19 +49,19 @@ const statCards = [
   },
   {
     title: "Diaspora",
-    value: "77",
+    value: "25",
     change: "43% Increase",
     changeColor: "text-[#00cc66]",
   },
   {
     title: "Health Guardians",
-    value: "15",
+    value: "11",
     change: "–5% Decrease",
     changeColor: "text-blue-300",
   },
   {
     title: "Total Associations",
-    value: "15",
+    value: "10",
     change: "10% Increase",
     changeColor: "text-gray-500",
   },
