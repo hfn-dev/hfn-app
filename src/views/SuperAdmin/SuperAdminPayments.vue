@@ -68,7 +68,7 @@ const statCards = [
   },
   {
     title: "Total Guests",
-    value: "105,000",
+    value: "500",
     change: "10% Increase",
     changeColor: "text-gray-500",
   },
@@ -268,7 +268,7 @@ const getBarHeight = (amount) => {
     class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
     :class="{
       'rounded-tl-4xl rounded-br-4xl': index === 0,
-      'rounded-tl-4xl rounded-br-4xl': index === activeStatCards.length - 1
+      'rounded-tl-4xl rounded-br-4xl': index === activeStatCards.length - 1,
     }"
   >
     <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
@@ -278,7 +278,8 @@ const getBarHeight = (amount) => {
 
     <div class="text-4xl font-bold text-gray-800 mb-1">
       <span v-if="stat.stars">
-        <span class="text-[#ff9900]">★★★★</span><span class="text-gray-300">★</span>
+        <span class="text-[#ff9900]">★★★★</span>
+        <span class="text-gray-300">★</span>
       </span>
       <span v-else>{{ stat.value }}</span>
     </div>
