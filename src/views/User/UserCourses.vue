@@ -26,8 +26,8 @@ const activeCourseTrack = ref("Care");
 
 const courses = [
   {
-    title: "The Power of Natural Healing in Modern Wellness",
-    instructor: "Mrs Njide Ndili",
+    title: "Kanu Nwakwo",
+    instructor: "Professor of medicine",
     rating: 4.5,
     reviews: 78,
     date: "October 10, 2025",
@@ -37,8 +37,8 @@ const courses = [
       "Discover how natural healing methods are reshaping modern health practices — from nutrition to mindfulness and herbal care.",
   },
   {
-    title: "Building a Sustainable Lifestyle Through Herbal Nutrition",
-    instructor: "Mrs Chinyere",
+    title: "Mrs Njide Ndili",
+    instructor: "Scientist",
     rating: 4.5,
     reviews: 78,
     date: "September 22, 2025",
@@ -200,7 +200,7 @@ const getIconPaths = (name) => {
               <h2
                 class="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-10"
               >
-                How HFN Community hub works...
+                How HFN Learning hub works...
               </h2>
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div
@@ -267,7 +267,7 @@ const getIconPaths = (name) => {
           </div>
 
           <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">
-            Our Latest Post
+            Our Course Tracks
           </h2>
 
           <div
