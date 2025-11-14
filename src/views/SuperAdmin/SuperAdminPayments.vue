@@ -262,33 +262,29 @@ const getBarHeight = (amount) => {
         </div>
 
         <div class="flex justify-between items-stretch mb-10 mt-10 space-x-6">
-  <div
-    v-for="(stat, index) in activeStatCards"
-    :key="stat.title"
-    class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
-    :class="{
-      'rounded-tl-4xl rounded-br-4xl': index === 0,
-      'rounded-tl-4xl rounded-br-4xl': index === activeStatCards.length - 1,
-    }"
-  >
-    <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
-    <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
+          <div
+            v-for="stat in activeStatCards"
+            :key="stat.title"
+            class="flex-1 p-6 text-center bg-white shadow-lg rounded-xl border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
+          >
+            <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
+            <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
 
-    <p class="text-gray-600 text-sm mb-1">{{ stat.title }}</p>
+            <p class="text-gray-600 text-sm mb-1">{{ stat.title }}</p>
 
-    <div class="text-4xl font-bold text-gray-800 mb-1">
-      <span v-if="stat.stars">
-        <span class="text-[#ff9900]">★★★★</span>
-        <span class="text-gray-300">★</span>
-      </span>
-      <span v-else>{{ stat.value }}</span>
-    </div>
+            <div class="text-4xl font-bold text-gray-800 mb-1">
+              <span v-if="stat.stars">
+                <span class="text-[#ff9900]">★★★★</span>
+                <span class="text-gray-300">★</span>
+              </span>
+              <span v-else>{{ stat.value }}</span>
+            </div>
 
-    <p :class="[stat.changeColor, 'text-sm font-medium']">
-      {{ stat.change }}
-    </p>
-  </div>
-</div>
+            <p :class="[stat.changeColor, 'text-sm font-medium']">
+              {{ stat.change }}
+            </p>
+          </div>
+        </div>
 
       </div>
 
