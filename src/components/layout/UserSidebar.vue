@@ -40,7 +40,7 @@ const navLinks = [
   {
     title: "Courses",
     path: "/user/courses",
-    icon: "M4 19.5A2.5 2.5 0 0 1 6.5 17H20V5H6.5A2.5 2.5 0 0 0 4 7.5v12z",
+    icon: "M12 3L1 9l11 6 9-5.1V17h2V9L12 3zm0 4.2L18.6 9 12 12.8 5.4 9 12 7.2z",
   },
   {
     title: "Messages",
