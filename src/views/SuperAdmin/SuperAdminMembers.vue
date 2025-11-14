@@ -160,7 +160,7 @@ const goToPage = (page) => {
           <div
             v-for="(stat, index) in statCards"
             :key="stat.title"
-            class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#e87a18] relative overflow-hidden group transition-all duration-300"
+            class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
             :class="{
               'rounded-tl-4xl rounded-br-4xl': index === 0,
               'rounded-tl-4xl rounded-br-4xl': index === statCards.length - 1,
@@ -168,8 +168,8 @@ const goToPage = (page) => {
               'rounded-tl-4xl rounded-br-4xl': true,
             }"
           >
-            <div class="absolute inset-y-0 left-0 w-1 bg-[#e87a18]"></div>
-            <div class="absolute inset-y-0 right-0 w-1 bg-[#e87a18]"></div>
+            <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
+            <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
 
             <p class="text-gray-600 text-sm mb-1">{{ stat.title }}</p>
 
