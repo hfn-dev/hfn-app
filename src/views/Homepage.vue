@@ -574,7 +574,7 @@ onMounted(() => {
     </div>
   </section>
 
-  <section class="py-20 lg:py-28 bg-white" id="faq">
+  <section class="py-20 lg:py-28 bg-[#F2F9F3]" id="faq">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2
         class="text-3xl text-center md:text-4xl font-serif mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
@@ -636,7 +636,7 @@ onMounted(() => {
           </div>
         </div>
 
-        <div class="rounded-xl shadow-lg bg-white overflow-hidden">
+        <div class="rounded-xl shadow-lg bg-[#F2F9F3] overflow-hidden">
           <button
             class="faq-toggle w-full flex justify-between items-center p-6 text-lg font-semibold hover:bg-gray-100 transition duration-150"
             aria-expanded="false"
