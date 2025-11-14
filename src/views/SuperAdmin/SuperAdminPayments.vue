@@ -171,7 +171,7 @@ const messageContent = ref(
 );
 
 const openMessageModal = (title) => {
-  if (title === "Unpaid users") {
+  if (title === "Unpaid members") {
     isMessageModalOpen.value = true;
   }
 };
