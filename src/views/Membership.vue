@@ -517,7 +517,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
       </div>
     </div>
   </section>
-      <section class="py-16 bg-white">
+      /*<section class="py-16 bg-white">
         <div class="max-w-6xl mx-auto px-6">
           <h2 class="text-2xl font-semibold text-gray-800 mb-10">
             HFN Members enjoy…
@@ -781,7 +781,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
             </div>
           </div>
         </div>
-      </section>
+      </section>*/
     </div>
   </section>
   <section class="sm:py-24 bg-white">
