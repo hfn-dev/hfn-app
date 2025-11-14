@@ -155,7 +155,7 @@ import reagan from "@/assets/reagan.png";
       </div>
     </section>
 
-    <section class="bg-white py-16 sm:py-24">
+    <section class="bg-white py-6 sm:py-24">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div>
           <div
@@ -180,7 +180,7 @@ import reagan from "@/assets/reagan.png";
       </div>
     </section>
 
-    <section class="bg-white py-16 sm:py-24">
+    <section class="bg-white py-6 sm:py-24">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-16">
           <div
