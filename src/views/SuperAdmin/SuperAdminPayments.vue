@@ -45,26 +45,26 @@ const currentTab = ref("Registration");
 
 const statCards = [
   {
-    title: "Total Registrations",
-    value: "13",
-    change: "13% Increase",
+    title: "Total Course purchased",
+    value: "23",
+    change: "8% Increase",
     changeColor: "text-[#00cc66]",
   },
   {
-    title: "Total Individuals",
-    value: "7",
-    change: "13% Increase",
+    title: "Total Member Purchase",
+    value: "17",
+    change: "33% Increase",
     changeColor: "text-[#00cc66]",
   },
   {
-    title: "Total Organizations",
+    title: "Total Guest Purchase",
     value: "13",
     change: "–5% Decrease",
     changeColor: "text-red-500",
   },
   {
-    title: "Total Guests",
-    value: "4.5",
+    title: "Total Revenue",
+    value: "105,000",
     change: "10% Increase",
     changeColor: "text-gray-500",
   },
