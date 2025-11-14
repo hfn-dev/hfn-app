@@ -454,15 +454,15 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
           :key="tab.id"
           @click="activeTab = tab.id"
           :class="[
-            'relative w-[180px] h-[100px] p-3 shadow-sm flex flex-col justify-center text-left transition-all duration-300 transform',
+            'relative w-[200px] h-[200px] p-3 shadow-sm flex flex-col justify-center text-left transition-all duration-300 transform',
             // Base rounded corners matching the content blocks
-            'rounded-tr-[30px] rounded-bl-[30px]', 
-            
+            'rounded-tr-[30px] rounded-bl-[30px]',
+
             // Color backgrounds
             tab.color === 'green' || tab.color === 'default'
               ? 'bg-green-50'
               : 'bg-[#E87A1814]', // Light orange background for orange boxes
-              
+
             // Active state: Add border and shadow to highlight
             activeTab === tab.id
               ? 'ring-2 ring-offset-2 scale-105 shadow-md ' + (tab.color === 'green' || tab.color === 'default' ? 'ring-green-700' : 'ring-orange-500')
@@ -479,76 +479,40 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
           ></div>
 
           <div class="relative z-10 pr-2">
-            <div class="mb-0.5">
+            <div class="mb-2">
               <img
                 :src="logo"
                 alt="Logo Icon"
-                class="inline-block w-5 h-5 object-contain opacity-75"
+                class="inline-block w-8 h-8 object-contain opacity-75"
               />
             </div>
 
             <span
               :class="[
-                'font-semibold text-sm leading-snug',
+                'font-bold text-lg leading-snug',
                 tab.color === 'green' || tab.color === 'default'
                   ? 'text-green-800'
                   : 'text-orange-800',
               ]"
+              v-html="tab.titleHtml"
             >
-              {{ tab.name }}
-            </span>
+              </span>
           </div>
         </button>
       </div>
 
       <div v-for="tab in tabs" :key="tab.id">
         <div v-if="activeTab === tab.id">
-          <div class="flex flex-col md:flex-row items-start gap-6">
-            <div
-              :class="[
-                'relative w-[200px] h-[200px] rounded-tr-[30px] rounded-bl-[30px] p-3 shadow-sm overflow-hidden flex flex-col justify-center flex-shrink-0',
-                tab.color === 'green' || tab.color === 'default'
-                  ? 'bg-green-50'
-                  : 'bg-[#E87A1814]',
-              ]"
-            >
-              <div
-                :class="[
-                  'absolute top-0 right-0 w-1 h-full rounded-tr-[30px] rounded-br-none',
-                  tab.color === 'green' || tab.color === 'default'
-                    ? 'bg-green-700'
-                    : 'bg-orange-500',
-                ]"
-              ></div>
-
-              <div class="relative z-10 pr-2">
-                <div class="mb-0.5">
-                  <img
-                    :src="logo"
-                    alt="Logo Icon"
-                    class="inline-block w-5 h-5 object-contain"
-                  />
-                </div>
-
-                <h3
-                  :class="[
-                    'font-semibold text-md leading-tight',
-                    tab.color === 'green' || tab.color === 'default'
-                      ? 'text-green-800'
-                      : 'text-orange-800',
-                  ]"
-                >
-                  <span v-html="tab.titleHtml"></span>
-                </h3>
-              </div>
+          <div
+            class="text-gray-700 text-base leading-relaxed space-y-5 px-6 py-4 border-l-4"
+            :class="[
+              tab.color === 'green' || tab.color === 'default'
+                ? 'border-green-700'
+                : 'border-orange-500',
+            ]"
+            v-html="tab.contentHtml"
+          >
             </div>
-
-            <div
-              class="text-gray-700 text-sm leading-relaxed space-y-4 md:flex-grow"
-              v-html="tab.contentHtml"
-            >
-              </div>
-          </div>
         </div>
       </div>
     </div>
