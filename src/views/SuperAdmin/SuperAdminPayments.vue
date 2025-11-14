@@ -269,6 +269,7 @@ const getBarHeight = (amount) => {
     :class="{
       'rounded-tl-4xl rounded-br-4xl': index === 0,
       'rounded-tl-4xl rounded-br-4xl': index === activeStatCards.length - 1,
+      'rounded-tl-4xl rounded-br-4xl': true,
     }"
   >
     <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
