@@ -442,7 +442,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
           </div>
         </div>
       </div>
-      <section class="py-16 bg-white">
+      <section class=" bg-white">
     <div class="max-w-6xl mx-auto px-6">
       <h2 class="text-2xl font-semibold text-gray-800 mb-10">
         HFN Members enjoy…
@@ -520,7 +520,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
       
     </div>
   </section>
-  <section class="sm:py-24 bg-white">
+  <section class="sm:py-14 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2
         class="text-3xl px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md sm:text-4xl font-serif font-extrabold text-gray-900 text-center mb-10"
