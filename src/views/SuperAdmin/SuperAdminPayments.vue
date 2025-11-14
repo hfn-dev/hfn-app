@@ -13,6 +13,33 @@ import {
 } from "lucide-vue-next";
 import { ref } from "vue";
 
+ const revenueData = ref([
+  { month: 'Jan', amount: 45000 },
+  { month: 'Feb', amount: 62000 },
+  { month: 'Mar', amount: 78000 },
+  { month: 'Apr', amount: 55000 },
+  { month: 'May', amount: 89000 },
+  { month: 'Jun', amount: 105000 },
+]);
+
+const paymentTrendData = ref([
+  { day: 'Mon', count: 120 },
+  { day: 'Tue', count: 180 },
+  { day: 'Wed', count: 90 },
+  { day: 'Thu', count: 250 },
+  { day: 'Fri', 'count': 160 },
+  { day: 'Sat', 'count': 50 },
+  { day: 'Sun', 'count': 30 },
+]);
+
+const maxRevenue = computed(() => {
+  return Math.max(...revenueData.value.map(d => d.amount)) || 1;
+});
+
+const maxCount = computed(() => {
+  return Math.max(...paymentTrendData.value.map(d => d.count)) || 1;
+});
+ 
 const courseTabs = ref(["Registration", "Purchases"]);
 const currentTab = ref("Registration");
 
@@ -96,6 +123,14 @@ const goToPage = (page) => {
     currentPage.value = page;
   }
 };
+
+const formatCurrency = (amount) => {
+    return `₦${amount.toLocaleString('en-US')}`;
+};
+
+const getBarHeight = (amount) => {
+    return `${(amount / maxRevenue.value) * 100}%`;
+};  
 </script>
 
 <template>
@@ -113,6 +148,68 @@ const goToPage = (page) => {
         >
           Payments
         </h1>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            
+            <!-- Monthly Revenue Bar Chart -->
+            <div class="p-6 bg-white rounded-xl shadow-lg border border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Monthly Revenue Overview</h2>
+                <div class="h-64 flex items-end justify-between space-x-2 p-2">
+                    <div
+                        v-for="data in revenueData"
+                        :key="data.month"
+                        class="flex-1 h-full flex flex-col items-center justify-end group cursor-pointer"
+                    >
+                        <!-- Bar -->
+                        <div
+                            :style="{ height: getBarHeight(data.amount) }"
+                            class="w-8 md:w-10 bg-[#00cc66] rounded-t-lg transition-all duration-300 hover:bg-[#00994d] relative"
+                        >
+                            <!-- Tooltip/Value -->
+                            <span class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-medium text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+                                {{ formatCurrency(data.amount) }}
+                            </span>
+                        </div>
+                        <!-- Label -->
+                        <p class="mt-2 text-sm text-gray-600">{{ data.month }}</p>
+                    </div>
+                </div>
+                <p class="mt-4 text-xs text-gray-500 text-right">Maximum Revenue: {{ formatCurrency(maxRevenue) }}</p>
+            </div>
+
+            <!-- Weekly Payment Count Trend -->
+            <div class="p-6 bg-white rounded-xl shadow-lg border border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Weekly Payment Count</h2>
+                <div class="relative h-64 p-4">
+                    <!-- Y-Axis max label (mock) -->
+                    <div class="absolute top-0 left-0 text-xs text-gray-400">
+                        {{ maxCount }}
+                    </div>
+                    <!-- X-Axis line -->
+                    <div class="absolute bottom-6 left-0 right-0 h-px bg-gray-300"></div>
+
+                    <div class="flex h-full pb-6 relative">
+                        <div
+                            v-for="(data, index) in paymentTrendData"
+                            :key="data.day"
+                            class="flex-1 flex flex-col items-center justify-end relative z-10"
+                        >
+                            <div
+                                :style="{ bottom: `${(data.count / maxCount) * 200 + 10}px` }"
+                                class="absolute w-3 h-3 rounded-full bg-[#006633] shadow-md transition-all duration-500 group cursor-pointer"
+                            >
+                                <!-- Tooltip/Value -->
+                                <span class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-medium text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+                                    {{ data.count }} payments
+                                </span>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600 absolute bottom-0">
+                                {{ data.day }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="relative flex justify-center items-center">
           <div class="flex border-b border-gray-200 space-x-4">
