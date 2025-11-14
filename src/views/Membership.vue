@@ -504,7 +504,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
       <div v-for="tab in tabs" :key="tab.id">
         <div v-if="activeTab === tab.id">
           <div
-            class="text-gray-700 text-base leading-relaxed space-y-5 px-6 py-4 border-l-4"
+            class="text-gray-700 text-lg leading-relaxed space-y-5 px-6 py-4 border-l-4"
             :class="[
               tab.color === 'green' || tab.color === 'default'
                 ? 'border-green-700'
