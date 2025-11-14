@@ -106,7 +106,7 @@
                 </div>
             </section>
 
-            <section>
+            <section class="py-10 px-10 rounded-3xl bg-[#F2F9F3]">
                 <h3 class="text-2xl font-semibold text-gray-800 mb-4">Volunteer</h3>
                 <p class="text-gray-600 mb-4 max-w-4xl">
           Whether in logistics, community outreach, or event support, there’s always a role for you.
