@@ -103,7 +103,7 @@
 
       <h2 class="text-3xl font-bold text-gray-900 mb-12">Publications</h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16 py-10 px-10 rounded-3xl bg-[#F2F9F3]">
         <div class="flex flex-col text-center">
             <div class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md flex items-center justify-center">
                 <img 
