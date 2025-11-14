@@ -197,6 +197,8 @@ const goToPage = (page) => {
     <template v-if="isApprovalTab">
       <th class="py-3 px-3 text-left">Created By</th>
       <th class="py-3 px-3 text-left">Creation Date</th>
+          <th class="py-3 px-3 text-center rounded-tr-lg">Action</th>
+
     </template>
 
     <!-- Otherwise normal tabs -->
