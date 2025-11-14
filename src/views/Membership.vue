@@ -448,35 +448,56 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
         HFN Members enjoy…
       </h2>
 
-      <div class="flex flex-wrap justify-between gap-4 mb-10">
+      <div class="flex flex-wrap justify-center md:justify-start gap-4 mb-10">
         <button
           v-for="tab in tabs"
           :key="tab.id"
           @click="activeTab = tab.id"
           :class="[
-            'relative py-3 px-6 text-center font-medium rounded-tl-2xl rounded-br-2xl transition-colors duration-300 flex-grow min-w-[150px] md:min-w-0',
-            {
-              'bg-green-500 text-white shadow-lg': activeTab === tab.id && (tab.color === 'green' || tab.color === 'default'),
-              'bg-orange-500 text-white shadow-lg': activeTab === tab.id && tab.color === 'orange',
-              'bg-gray-100 text-gray-700 hover:bg-gray-200': activeTab !== tab.id,
-            },
-            // Apply the curved border design effect with Tailwind utility classes
+            'relative w-[180px] h-[100px] p-3 shadow-sm flex flex-col justify-center text-left transition-all duration-300 transform',
+            // Base rounded corners matching the content blocks
+            'rounded-tr-[30px] rounded-bl-[30px]', 
+            
+            // Color backgrounds
             tab.color === 'green' || tab.color === 'default'
-              ? 'border border-green-200'
-              : 'border border-orange-200',
+              ? 'bg-green-50'
+              : 'bg-[#E87A1814]', // Light orange background for orange boxes
+              
+            // Active state: Add border and shadow to highlight
+            activeTab === tab.id
+              ? 'ring-2 ring-offset-2 scale-105 shadow-md ' + (tab.color === 'green' || tab.color === 'default' ? 'ring-green-700' : 'ring-orange-500')
+              : 'hover:shadow-md hover:scale-[1.02]',
           ]"
         >
-          {{ tab.name }}
-          <span
-            v-if="activeTab === tab.id"
+          <div
             :class="[
-              'absolute inset-0 rounded-tl-2xl rounded-br-2xl -z-1',
-              {
-                'bg-green-500': tab.color === 'green' || tab.color === 'default',
-                'bg-orange-500': tab.color === 'orange',
-              }
+              'absolute top-0 right-0 w-1 h-full rounded-tr-[30px] rounded-br-none',
+              tab.color === 'green' || tab.color === 'default'
+                ? 'bg-green-700'
+                : 'bg-orange-500',
             ]"
-          ></span>
+          ></div>
+
+          <div class="relative z-10 pr-2">
+            <div class="mb-0.5">
+              <img
+                :src="logo"
+                alt="Logo Icon"
+                class="inline-block w-5 h-5 object-contain opacity-75"
+              />
+            </div>
+
+            <span
+              :class="[
+                'font-semibold text-sm leading-snug',
+                tab.color === 'green' || tab.color === 'default'
+                  ? 'text-green-800'
+                  : 'text-orange-800',
+              ]"
+            >
+              {{ tab.name }}
+            </span>
+          </div>
         </button>
       </div>
 
@@ -488,7 +509,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
                 'relative w-[200px] h-[200px] rounded-tr-[30px] rounded-bl-[30px] p-3 shadow-sm overflow-hidden flex flex-col justify-center flex-shrink-0',
                 tab.color === 'green' || tab.color === 'default'
                   ? 'bg-green-50'
-                  : 'bg-[#E87A1814]', // Using the provided light orange background
+                  : 'bg-[#E87A1814]',
               ]"
             >
               <div
