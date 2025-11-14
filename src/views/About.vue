@@ -6,7 +6,7 @@ import chinyere from "@/assets/chinyere.png";
 import jennifer from "@/assets/jennifer.png";
 import map from "@/assets/map.jpg";
 import njide from "@/assets/njide.png";
-import partnership from "@/assets/partnership.png";
+import partnership from "@/assets/partnership-01.png";
 import reagan from "@/assets/reagan.png";
 </script>
 <template>
