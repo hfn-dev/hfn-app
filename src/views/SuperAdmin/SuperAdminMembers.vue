@@ -42,19 +42,19 @@ const statCards = [
     changeColor: "text-gray-500",
   },
   {
-    title: "Total Members",
+    title: "Corporate",
     value: "13",
     change: "13% Increase",
     changeColor: "text-[#00cc66]",
   },
   {
-    title: "Total New Members",
+    title: "Diaspora",
     value: "7",
     change: "13% Increase",
     changeColor: "text-[#00cc66]",
   },
   {
-    title: "Total Corporate",
+    title: "Health Guardians",
     value: "13",
     change: "–5% Decrease",
     changeColor: "text-red-500",
