@@ -14,7 +14,7 @@ const DARK_GREEN = "#004d33";
 const LIGHT_GREEN = "#f2f9f3";
 const ACCENT_GRAY = "#f9fafb";
 const ACCENT_ORANGE = "#ff6600";
-const LIGHT_PINKISH_GRAY = "#fcf3f6";
+const LIGHT_PINKISH_GRAY = "#E87A1814";
 
 const userName = "Ruthie";
 const activeSidebarItem = ref("Dashboard");
