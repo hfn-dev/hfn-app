@@ -99,7 +99,7 @@ import reagan from "@/assets/reagan.png";
             </div>
           </div>
 
-          <div class="lg:col-span-7 text-gray-700 text-lg space-y-6">
+          <div class="lg:col-span-7 text-gray-700 text-lg space-y-6 pt-10">
             <p>
               HFN is an umbrella body for private-sector stakeholders dedicated
               to improving healthcare delivery in Nigeria. As the leading
