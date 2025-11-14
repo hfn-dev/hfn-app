@@ -156,7 +156,7 @@ const goToPage = (page) => {
           Members
         </h1>
 
-        <div class="flex justify-between items-stretch mb-10 space-x-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           <div
             v-for="(stat, index) in statCards"
             :key="stat.title"
