@@ -518,8 +518,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
     </div>
   </section>
       
-    </div>
-  </section>
+   
   <section class="sm:py-14 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2
