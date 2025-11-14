@@ -5,6 +5,14 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
+const certificateUrl = ref("/certificates/sample-certificate.png"); 
+
+const viewCertificateInNewTab = () => {
+  if (certificateUrl.value) {
+    window.open(certificateUrl.value, "_blank");
+  }
+};
+
 const subscription = reactive({
   expiryDate: "31st December 2025",
   invoices: [
@@ -243,6 +251,18 @@ const toggleInterest = (id) => {
           >
             My Profile
           </button>
+          <button
+  @click="activeTab = 'My Certificate'"
+  :class="[
+    'py-2 px-1 border-b-2 transition duration-150 font-medium',
+    activeTab === 'My Certificate'
+      ? 'border-green-600 text-green-600'
+      : 'border-transparent text-gray-500 hover:text-gray-700',
+  ]"
+>
+  My Certificate
+</button>
+
           <button
             @click="activeTab = 'Subscription'"
             :class="[
@@ -878,6 +898,54 @@ const toggleInterest = (id) => {
             </div>
           </div>
         </div>
+        <div v-else-if="activeTab === 'My Certificate'" class="space-y-10">
+
+  <div class="p-10 bg-white rounded-xl shadow-lg border border-gray-200">
+    <h2 class="text-2xl font-semibold mb-4 text-gray-800">
+      My Certificate
+    </h2>
+
+    <p class="text-gray-600 mb-6">
+      Preview and download your certificate below.
+    </p>
+
+    <!-- Certificate Preview Box -->
+    <div
+      class="w-full border border-gray-300 rounded-lg overflow-hidden shadow-md bg-gray-50 flex justify-center items-center h-80"
+    >
+      <iframe
+        v-if="certificateUrl"
+        :src="certificateUrl"
+        class="w-full h-full"
+      ></iframe>
+
+      <div v-else class="text-center text-gray-500">
+        Certificate preview unavailable
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="mt-6 flex justify-center space-x-4">
+      <a
+        v-if="certificateUrl"
+        :href="certificateUrl"
+        download="certificate.pdf"
+        class="px-6 py-2 bg-[#0c6b39] hover:bg-[#09572d] text-white rounded-lg shadow"
+      >
+        Download Certificate
+      </a>
+
+      <button
+        @click="viewCertificateInNewTab"
+        class="px-6 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100"
+      >
+        Open in New Tab
+      </button>
+    </div>
+  </div>
+
+</div>
+
 
         <div
           v-else
