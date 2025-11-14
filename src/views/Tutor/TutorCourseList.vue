@@ -14,7 +14,7 @@ import {
 } from "lucide-vue-next";
 import { ref } from "vue";
 
-const courseTabs = ref(["Published", "Drafts", "Archived"]);
+const courseTabs = ref(["Published", "Drafts", "Archived", "Approval"]);
 const currentTab = ref("Published");
 
 const publishedCourses = ref([
@@ -24,6 +24,7 @@ const publishedCourses = ref([
     enrollments: 457,
     completion: "80%",
     lastUpdate: "December 28 2024",
+    approvalStatus: "Approved",
   },
   {
     id: 2,
@@ -31,23 +32,26 @@ const publishedCourses = ref([
     enrollments: 47,
     completion: "72%",
     lastUpdate: "December 19 2024",
+    approvalStatus: "Approved",
   },
 ]);
 
 const draftCourses = ref([
   {
-    id: 3,
+    id: 1,
     title: "Holistic Nutrition (Draft)",
-    enrollments: null,
+    enrollments: 23,
     completion: "-",
     lastUpdate: "December 14 2024",
+    approvalStatus: "Pending",
   },
   {
-    id: 4,
+    id: 2,
     title: "Mindfulness Practice (Draft)",
-    enrollments: null,
+    enrollments: 34,
     completion: "-",
     lastUpdate: "November 19 2024",
+    approvalStatus: "Pending",
   },
 ]);
 
@@ -58,6 +62,7 @@ const archivedCourses = ref([
     enrollments: 4,
     completion: "100%",
     lastUpdate: "November 19 2024",
+    approvalStatus: "Archived",
   },
   {
     id: 6,
@@ -65,13 +70,44 @@ const archivedCourses = ref([
     enrollments: null,
     completion: "-",
     lastUpdate: "November 11 2024",
+    approvalStatus: "Archived",
   },
 ]);
+
+ const approvalCourses = ref([
+  {
+    id: 1,
+    title: "Introduction to Ayurveda",
+    enrollments: null,
+    completion: "-",
+    lastUpdate: "January 10 2025",
+    approvalStatus: "Approved",
+  },
+  {
+    id: 2,
+    title: "Advanced Quantum Healing",
+    enrollments: null,
+    completion: "-",
+    lastUpdate: "January 01 2025",
+    approvalStatus: "Declined",
+  },
+  {
+    id: 3,
+    title: "Ancient Greek Philosophy",
+    enrollments: null,
+    completion: "-",
+    lastUpdate: "January 05 2025",
+    approvalStatus: "Approved",
+  },
+]);
+ 
 
 const activeCourses = computed(() => {
   if (currentTab.value === "Published") return publishedCourses.value;
   if (currentTab.value === "Drafts") return draftCourses.value;
   if (currentTab.value === "Archived") return archivedCourses.value;
+    if (currentTab.value === "Approval") return approvalCourses.value;
+
   return [];
 });
 
@@ -204,22 +240,44 @@ const goToPage = (page) => {
               >
                 {{ course.title }}
               </td>
-              <td class="py-3 px-3">
-                {{ course.enrollments !== null ? course.enrollments : "-" }}
-              </td>
-              <td class="py-3 px-3">
-                <span
-                  :class="{
-                    'text-green-600 font-semibold':
-                      course.completion.includes('100'),
-                    'text-orange-500':
-                      parseFloat(course.completion) < 50 &&
-                      course.completion !== '-',
-                  }"
-                >
-                  {{ course.completion }}
-                </span>
-              </td>
+              <template v-if="currentTab === 'Approval'">
+                <!-- Approval Status Column -->
+                <td class="py-3 px-3">
+                  <span
+                    class="px-3 py-1 font-semibold text-xs rounded-full"
+                    :class="{
+                      'bg-green-100 text-green-800':
+                        course.approvalStatus === 'Approved',
+                      'bg-red-100 text-red-800':
+                        course.approvalStatus === 'Declined',
+                    }"
+                  >
+                    {{ course.approvalStatus }}
+                  </span>
+                </td>
+                <!-- Blank cell to align with the empty header slot -->
+                <td class="py-3 px-3"></td>
+              </template>
+              <template v-else>
+                <!-- Enrollments Column -->
+                <td class="py-3 px-3">
+                  {{ course.enrollments !== null ? course.enrollments : "-" }}
+                </td>
+                <!-- Completion Rate Column -->
+                <td class="py-3 px-3">
+                  <span
+                    :class="{
+                      'text-green-600 font-semibold':
+                        course.completion.includes('100'),
+                      'text-orange-500':
+                        parseFloat(course.completion) < 50 &&
+                        course.completion !== '-',
+                    }"
+                  >
+                    {{ course.completion }}
+                  </span>
+                </td>
+              </template>
               <td class="py-3 px-3">
                 {{ course.lastUpdate }}
               </td>
