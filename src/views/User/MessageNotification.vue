@@ -86,6 +86,13 @@ const chatMessages = [
 
 const messageNotifications = [
   {
+    category: 'ADMIN',
+    time: '10:05 AM',
+    title: 'ROLE PROMOTION REQUEST: TUTOR',
+    body: 'The platform administrator is requesting to promote you to the role of Tutor. Accepting this role will grant you new permissions and responsibilities, including course creation and student mentoring.',
+    type: 'ACTION', 
+  },
+  {
     category: 'COURSES',
     time: '09:14 AM',
     title: 'NATUROPATHY BY KANU NWANKWO HAS BEEN UPDATED',
@@ -272,6 +279,7 @@ const connectionRequests = [
               'border-blue-600': message.category === 'SYSTEM',
               'border-yellow-600': message.category === 'MY ACCOUNT',
               'border-red-600': message.category === 'SUBSCRIPTION',
+              'border-purple-600': message.category === 'ADMIN',
             }"
           >
             <div class="flex justify-between items-start mb-2">
@@ -291,6 +299,21 @@ const connectionRequests = [
                     d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V5H6.5A2.5 2.5 0 0 0 4 7.5v12z"
                   />
                 </svg>
+                <svg
+          v-if="message.category === 'ADMIN'"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-5 h-5 text-purple-600"
+        >
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="8.5" cy="7" r="4" />
+          <polyline points="17 11 19 13 23 9" />
+        </svg>
                 <span
                   class="text-xs font-semibold uppercase tracking-wider"
                   :class="{
@@ -298,6 +321,7 @@ const connectionRequests = [
                     'text-blue-600': message.category === 'SYSTEM',
                     'text-yellow-600': message.category === 'MY ACCOUNT',
                     'text-red-600': message.category === 'SUBSCRIPTION',
+                    'text-purple-600': message.category === 'ADMIN',
                   }"
                 >
                   {{ message.category }}
@@ -312,6 +336,22 @@ const connectionRequests = [
             <p class="text-sm text-gray-600 line-clamp-2">
               {{ message.body }}
             </p>
+            <div v-if="message.type === 'ACTION'" class="mt-4 flex space-x-3">
+      <!-- Accept Button (Primary Action) -->
+      <button
+        @click="acceptAdminRequest(message)"
+        class="px-4 py-2 text-sm font-semibold rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition shadow-md"
+      >
+        Accept
+      </button>
+      <!-- Decline Button (Secondary Action) -->
+      <button
+        @click="declineAdminRequest(message)"
+        class="px-4 py-2 text-sm font-semibold rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
+      >
+        Decline
+      </button>
+    </div>
           </div>
         </div>
 
