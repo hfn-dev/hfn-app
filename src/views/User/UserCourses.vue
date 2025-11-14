@@ -20,9 +20,9 @@ const userName = "Ruthie";
 const activeSidebarItem = ref("Dashboard");
 const activeCourseTrack = ref("Care");
 
-// const goToCourseDetails = () => {
-//   router.push({ name: "CourseDetails", params: { id: 1 } });
-// };
+const goToCourseDetails = () => {
+  router.push({ name: "CourseDetails", params: { id: 1 } });
+};
 
 const courses = [
   {
