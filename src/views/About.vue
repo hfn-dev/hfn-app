@@ -78,7 +78,7 @@ import reagan from "@/assets/reagan.png";
 
     <section class="bg-white py-6 sm:py-24">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mb-16">
+        <div>
           <div
             class="w-full px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-50 bg-white shadow-md text-center"
           >
@@ -182,7 +182,7 @@ import reagan from "@/assets/reagan.png";
 
     <section class="bg-white py-6 sm:py-24">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mb-16">
+        <div>
           <div
             class="w-full px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-50 bg-white shadow-md text-center"
           >
