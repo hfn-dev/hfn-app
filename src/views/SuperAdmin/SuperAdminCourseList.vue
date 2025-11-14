@@ -14,7 +14,7 @@ import {
 } from "lucide-vue-next";
 import { ref } from "vue";
 
-const courseTabs = ref(["Published", "Drafts", "Archived"]);
+const courseTabs = ref(["Published", "Drafts", "Archived", "Approvals"]);
 const currentTab = ref("Published");
 
 const publishedCourses = ref([
@@ -27,6 +27,20 @@ const publishedCourses = ref([
   },
   {
     id: 2,
+    title: "Herbal Remedies",
+    enrollments: 47,
+    completion: "72%",
+    lastUpdate: "December 19 2024",
+  },
+  {
+    id: 3,
+    title: "Herbal Remedies",
+    enrollments: 47,
+    completion: "72%",
+    lastUpdate: "December 19 2024",
+  },
+  {
+    id: 4,
     title: "Herbal Remedies",
     enrollments: 47,
     completion: "72%",
@@ -68,10 +82,29 @@ const archivedCourses = ref([
   },
 ]);
 
+ const approvedCourses = ref([
+  {
+    id: 5,
+    title: "Sustainable Living",
+    enrollments: 4,
+    completion: "100%",
+    lastUpdate: "November 19 2024",
+  },
+  {
+    id: 6,
+    title: "Advanced Anatomy",
+    enrollments: null,
+    completion: "-",
+    lastUpdate: "November 11 2024",
+  },
+]);
+ 
+
 const activeCourses = computed(() => {
   if (currentTab.value === "Published") return publishedCourses.value;
   if (currentTab.value === "Drafts") return draftCourses.value;
   if (currentTab.value === "Archived") return archivedCourses.value;
+    if (currentTab.value === "Approvals") return approvedCourses.value;
   return [];
 });
 
