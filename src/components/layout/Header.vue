@@ -246,7 +246,7 @@ watch(
           :style="{ backgroundColor: DARK_GREEN }"
           class="px-6 py-2 font-bold text-white rounded-xl shadow-lg hover:opacity-90 transition-all duration-200 transform hover:scale-[1.02]"
         >
-          Login/Sign up
+          Login/Signup
         </button>
       </div>
     </nav>
