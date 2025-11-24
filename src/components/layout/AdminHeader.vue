@@ -93,7 +93,7 @@ watch(
           <img
             :src="hfn_logo"
             alt="HFN Logo"
-            class="w-36 h-auto mr-3 flex-shrink-0"
+            class="w-54 h-auto mr-3 flex-shrink-0"
           />
         </RouterLink>
       </div>
