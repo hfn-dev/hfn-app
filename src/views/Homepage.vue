@@ -8,7 +8,7 @@ import hfn_partner from "@/assets/hfn_partner.png";
 import wef from "@/assets/wef.jpg";
 
 import group1 from "@/assets/group1.png";
-import hba from "@/assets/hba.png";
+import hba from "@/assets/hba-africa.png";
 import Image from "@/assets/image.jpg";
 import oando from "@/assets/oando_logo.png";
 import pharm from "@/assets/pharm.png";
