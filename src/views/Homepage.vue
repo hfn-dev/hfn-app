@@ -276,7 +276,7 @@ onMounted(() => {
       <div
         class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-75"
       >
-        <div class="flex items-center justify-center h-10">
+        <div class="flex items-center justify-center h-15">
           <img
             :src="emzor"
             alt="Emzor Logo"
@@ -284,7 +284,7 @@ onMounted(() => {
           />
         </div>
 
-        <div class="flex items-center justify-center h-10">
+        <div class="flex items-center justify-center h-15">
           <img
             :src="oando"
             alt="Oando Logo"
@@ -292,7 +292,7 @@ onMounted(() => {
           />
         </div>
 
-        <div class="flex items-center justify-center h-10">
+        <div class="flex items-center justify-center h-15">
           <img
             :src="society"
             alt="Society for Family Health Logo"
@@ -300,7 +300,7 @@ onMounted(() => {
           />
         </div>
 
-        <div class="flex items-center justify-center h-10">
+        <div class="flex items-center justify-center h-15">
           <img
             :src="hba"
             alt="Health Business Academy Logo"
@@ -308,7 +308,7 @@ onMounted(() => {
           />
         </div>
 
-        <div class="flex items-center justify-center h-10">
+        <div class="flex items-center justify-center h-15">
           <img
             :src="bridge"
             alt="Bridge Clinic Logo"
@@ -316,7 +316,7 @@ onMounted(() => {
           />
         </div>
 
-        <div class="flex items-center justify-center h-10">
+        <div class="flex items-center justify-center h-15">
           <img
             :src="pharm"
             alt="Pharm Logo"
