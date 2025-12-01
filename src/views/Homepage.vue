@@ -386,8 +386,8 @@ onMounted(() => {
             <p class="text-green-800 font-semibold">Projects Executed</p>
           </div>
           <div>
-            <h3 class="text-3xl font-bold text-red-600">104</h3>
-            <p class="text-green-800 font-semibold">Projects Executed</p>
+            <h3 class="text-3xl font-bold text-red-600">1200</h3>
+            <p class="text-green-800 font-semibold">Patient's assitance</p>
           </div>
           <div>
             <h3 class="text-3xl font-bold text-red-600">50+</h3>
