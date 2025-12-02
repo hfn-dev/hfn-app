@@ -3,42 +3,156 @@ import registerImage from '@/assets/register.jpg';
 import { useAuth } from '@/store/authStore';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification';
+import userRegister from "@/api/userRegister";
+
 const username = ref('');
 const password = ref('');
 const rememberMe = ref(false);
+const isLoading = ref(false);
 const router = useRouter();
+const toast = useToast();
 const { login } = useAuth();
 
-const handleSignIn = () => {
-  const user = username.value.trim().toLowerCase()
-
-  if (user === 'editor') {
-    login('editor')
-    router.push('/editor/dashboard')
-  } else if (user === 'superadmin') {
-    login('superadmin')
-    router.push('/superadmin/dashboard')
-   } else if (user === 'admin') {
-    login('admin')
-    router.push('/admin/dashboard') 
-  } else if (user === 'tutor') {
-    login('tutor')
-    router.push('/tutor/dashboard')  
-  } else if (user === 'user') {
-    login('user')
-    const hasSelectedInterests = localStorage.getItem('hasSelectedInterests')
-    if (!hasSelectedInterests) {
-      router.push('/user/interests')
-    } else {
-      router.push('/user/dashboard')
-    }
-  } else {
-    alert('Invalid username. Use "superadmin", "editor", "user", "tutor", or "admin" for now.')
+const handleSignIn = async () => {
+  if (!username.value.trim()) {
+    toast.error('Please enter your email');
+    return;
   }
-}
+  
+  if (!password.value) {
+    toast.error('Please enter your password');
+    return;
+  }
 
-const alert = (message) => {
-  console.log(message);
+  try {
+    isLoading.value = true;
+    
+    const payload = {
+      email: username.value.trim(),
+      password: password.value
+    };
+
+    console.log("Login payload:", payload);
+
+    const response = await userRegister.loginUser(payload);
+    
+    if (response.data?.status === "success") {
+      toast.success(response.data.messages?.[0] || "Login successful!");
+      
+      if (response.data.actions_required?.includes("verify_2fa")) {
+        localStorage.setItem("pending2FAEmail", username.value.trim());
+        localStorage.setItem("loginTokens", JSON.stringify(response.data.tokens || {}));
+        
+        setTimeout(() => {
+          router.push('/verify-2fa');
+        }, 1000);
+      } 
+      else if (response.data.actions_required?.includes("verify_email")) {
+        toast.warning(response.data.messages?.[1] || "Email verification required.");
+        
+        localStorage.setItem("pendingVerificationEmail", username.value.trim());
+        
+        setTimeout(() => {
+          router.push('/signinverification');
+        }, 1500);
+      }
+      else {
+        if (response.data.tokens) {
+          localStorage.setItem('token', response.data.tokens.access);
+          localStorage.setItem('refreshToken', response.data.tokens.refresh);
+          
+          if (response.data.role) {
+            localStorage.setItem('role', response.data.role);
+          }
+          
+          login({
+            token: response.data.tokens.access,
+            refreshToken: response.data.tokens.refresh,
+            role: response.data.role || 'member'
+          });
+        }
+        
+        const userRole = response.data.role || localStorage.getItem('role') || 'member';
+        handleRoleBasedRedirect(userRole);
+      }
+    } 
+    else if (response.data?.status === "warning") {
+      toast.warning(response.data.messages?.[0] || "Action required.");
+      
+      if (response.data.actions_required?.includes("verify_email")) {
+          
+        localStorage.setItem("pendingVerificationEmail", username.value.trim());
+        
+        setTimeout(() => {
+          router.push('/signinverification');
+        }, 1500);
+      }
+    }
+    else {
+      const errorMessage = response.data?.messages?.[0] || "Login failed. Please try again.";
+      toast.error(errorMessage);
+    }
+    
+  } catch (error) {
+    console.error("Login error:", error);
+    
+    if (error.response) {
+      const errorMsg = error.response.data?.messages?.[0] || 
+                      error.response.data?.message || 
+                      `Error: ${error.response.status}`;
+      toast.error(errorMsg);
+      
+      if (error.response.data?.actions_required?.includes("verify_email")) {
+      
+        localStorage.setItem("pendingVerificationEmail", username.value.trim());
+      }
+    } else if (error.request) {
+    
+      toast.error("Network error. Please check your connection and try again.");
+    } else {
+      toast.error("An unexpected error occurred. Please try again.");
+    }
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+const handleRoleBasedRedirect = (role) => {
+  const roleMap = {
+    'superadmin': '/superadmin/dashboard',
+    'admin': '/admin/dashboard',
+    'editor': '/editor/dashboard',
+    'member': '/member/dashboard'
+  };
+
+  const targetPath = roleMap[role.toLowerCase()] || '/dashboard';
+  
+  if (role.toLowerCase() === 'admin') {
+    const hasSelectedInterests = localStorage.getItem('hasSelectedInterests');
+    if (!hasSelectedInterests) {
+      router.push('/admin/interests');
+      return;
+    }
+  }
+  
+  router.push(targetPath);
+};
+
+const handleGoogleSignIn = () => {
+  console.log('Google Sign-in initiated');
+  toast.info('Google Sign-in will be implemented soon.');
+};
+
+const handleForgotPassword = () => {
+  if (!username.value.trim()) {
+    toast.warning('Please enter your email first to reset password');
+    return;
+  }
+  
+  localStorage.setItem('passwordResetEmail', username.value.trim());
+  
+  router.push('/forgot-password');
 };
 </script>
 
@@ -63,9 +177,10 @@ const alert = (message) => {
           </div>
         </div>
 
-        <!-- <button
+        <button
           @click="handleGoogleSignIn"
-          class="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-150 ease-in-out"
+          :disabled="isLoading"
+          class="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <svg
             class="w-5 h-5 mr-3"
@@ -91,39 +206,47 @@ const alert = (message) => {
             />
           </svg>
           Sign in with Google
-        </button> -->
+        </button>
 
-        <!-- <div class="relative flex justify-center text-xs uppercase">
+        <div class="relative flex justify-center text-xs uppercase">
           <span class="bg-white px-2 text-gray-500"> OR </span>
           <div class="absolute inset-0 flex items-center" aria-hidden="true">
             <div class="w-full border-t border-gray-300"></div>
           </div>
-        </div> -->
+        </div>
 
         <form @submit.prevent="handleSignIn" class="space-y-6">
           <div>
-            <label for="username" class="sr-only">Username</label>
+            <label for="username" class="block text-sm font-medium text-gray-700 mb-1">
+              Email Address
+            </label>
             <input
               id="username"
               name="username"
-              type="text"
+              type="email"
               v-model="username"
               required
-              class="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#0c6b39] focus:border-[#0c6b39] sm:text-sm transition-all duration-150 ease-in-out"
-              placeholder="Username"
+              :disabled="isLoading"
+              class="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#0c6b39] focus:border-[#0c6b39] sm:text-sm transition-all duration-150 ease-in-out disabled:bg-gray-50 disabled:opacity-70"
+              placeholder="your@email.com"
+              autocomplete="email"
             />
           </div>
 
           <div>
-            <label for="password" class="sr-only">Password</label>
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+              Password
+            </label>
             <input
               id="password-field"
               name="password"
               type="password"
               v-model="password"
               required
-              class="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#0c6b39] focus:border-[#0c6b39] sm:text-sm transition-all duration-150 ease-in-out"
-              placeholder="Password"
+              :disabled="isLoading"
+              class="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-[#0c6b39] focus:border-[#0c6b39] sm:text-sm transition-all duration-150 ease-in-out disabled:bg-gray-50 disabled:opacity-70"
+              placeholder="Enter your password"
+              autocomplete="current-password"
             />
           </div>
 
@@ -134,7 +257,8 @@ const alert = (message) => {
                 name="remember-me"
                 type="checkbox"
                 v-model="rememberMe"
-                class="h-4 w-4 text-[#0c6b39] focus:ring-[#0c6b39] border-gray-300 rounded transition-colors duration-150 ease-in-out"
+                :disabled="isLoading"
+                class="h-4 w-4 text-[#0c6b39] focus:ring-[#0c6b39] border-gray-300 rounded transition-colors duration-150 ease-in-out disabled:opacity-50"
               />
               <label for="remember-me" class="ml-2 block text-sm text-gray-900">
                 Remember me
@@ -142,22 +266,31 @@ const alert = (message) => {
             </div>
 
             <div class="text-sm">
-              <a
-                href="#"
-                class="text-[#0c6b39] hover:text-[#09572d] font-medium transition-colors duration-150 ease-in-out"
+              <button
+                type="button"
+                @click="handleForgotPassword"
+                :disabled="isLoading"
+                class="text-[#0c6b39] hover:text-[#09572d] font-medium transition-colors duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Forgot Password
-              </a>
+              </button>
             </div>
           </div>
 
           <div>
-            
             <button
-              @click="handleSignIn"
-              class="w-full flex justify-center py-3 px-4 rounded-lg bg-[#0c6b39] text-white font-medium hover:bg-[#09572d] transition"
+              type="submit"
+              :disabled="isLoading"
+              class="w-full flex justify-center items-center py-3 px-4 rounded-lg bg-[#0c6b39] text-white font-medium hover:bg-[#09572d] transition-all duration-150 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              Sign In
+              <span v-if="isLoading" class="flex items-center">
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Signing in...
+              </span>
+              <span v-else>Sign In</span>
             </button>
           </div>
         </form>
@@ -166,10 +299,21 @@ const alert = (message) => {
           Don't have an account?
           <router-link
             to="/register"
-            class="text-[#0c6b39] hover:text-[#09572d] font-medium transition-colors duration-150 ease-in-out"
+            :class="[
+              'text-[#0c6b39] hover:text-[#09572d] font-medium transition-colors duration-150 ease-in-out',
+              isLoading ? 'opacity-50' : ''
+            ]"
+            :disabled="isLoading"
           >
             Register here
           </router-link>
+        </div>
+
+        <div class="text-center text-xs text-gray-500 mt-4">
+          <p class="mb-1">Demo accounts (for testing only):</p>
+          <p class="mb-1">• admin@example.com / admin123</p>
+          <p class="mb-1">• editor@example.com / editor123</p>
+          <p>• member@example.com / member123</p>
         </div>
       </div>
     </div>
@@ -179,5 +323,14 @@ const alert = (message) => {
 <style scoped>
 .font-inter {
   font-family: 'Inter', sans-serif;
+}
+
+/* Auto-fill styling */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #111827;
+  -webkit-box-shadow: 0 0 0px 1000px white inset;
+  transition: background-color 5000s ease-in-out 0s;
 }
 </style>

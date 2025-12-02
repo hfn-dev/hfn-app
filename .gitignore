@@ -13,6 +13,11 @@ node_modules
 dist-ssr
 coverage
 *.local
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.env
+.env.*.local
 
 /cypress/videos/
 /cypress/screenshots/

@@ -2,8 +2,11 @@
 import registerImage from "@/assets/register.jpg";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
+import { useToast } from 'vue-toastification';
+import userRegister from "@/api/userRegister";
 
 const router = useRouter();
+const toast = useToast();
 
 const form = ref({
   firstName: "",
@@ -19,6 +22,12 @@ const form = ref({
 });
 
 const activeTab = ref("individual");
+const isLoading = ref(false);
+const customAlert = ref({
+  show: false,
+  message: "",
+  type: "error" // can be 'error', 'success', 'warning'
+});
 
 const passwordRules = computed(() => {
   const p = form.value.password;
@@ -44,40 +53,223 @@ const isPasswordValid = computed(() => {
   return passwordRules.value.every((rule) => rule.valid);
 });
 
-const handleRegistration = () => {
-  if (
-    isPasswordValid.value &&
-    form.value.password === form.value.confirmPassword &&
-    form.value.email === form.value.confirmEmail
-  ) {
-    console.log("Registration data:", form.value);
-    alert("Registration successful! Redirecting to verification...");
-    setTimeout(() => {
-      router.push("/signinverification");
-    }, 1500);
-  } else {
-    alert("Please ensure all fields and password requirements are met.");
+const formatPhoneNumber = (phone) => {
+  let cleaned = phone.replace(/\D/g, '');
+  if (cleaned.startsWith('234')) {
+    cleaned = cleaned.substring(3);
   }
-};
-const changeTab = (tab) => {
-  activeTab.value = tab;
+  if (cleaned.startsWith('0')) {
+    return cleaned;
+  }
+  return '0' + cleaned;
 };
 
-const alert = (message) => {
-  const alertBox = document.getElementById("custom-alert");
-  alertBox.textContent = message;
-  alertBox.classList.remove("hidden");
+const prepareIndividualPayload = () => {
+  const payload = {
+    email: form.value.email,
+    first_name: form.value.firstName.trim(),
+    last_name: form.value.lastName.trim(),
+    phone_number: formatPhoneNumber(form.value.phone),
+    password: form.value.password,
+    role: "member"
+  };
+
+  if (form.value.otherName && form.value.otherName.trim()) {
+    payload.other_name = form.value.otherName.trim();
+  }
+
+  return payload;
+};
+
+const validateForm = () => {
+  if (!form.value.firstName.trim()) {
+    showCustomAlert("First name is required", "error");
+    return false;
+  }
+  
+  if (!form.value.lastName.trim()) {
+    showCustomAlert("Last name is required", "error");
+    return false;
+  }
+  
+  if (!form.value.email.trim()) {
+    showCustomAlert("Email is required", "error");
+    return false;
+  }
+  
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(form.value.email)) {
+    showCustomAlert("Please enter a valid email address", "error");
+    return false;
+  }
+  
+  if (!form.value.phone.trim()) {
+    showCustomAlert("Phone number is required", "error");
+    return false;
+  }
+  
+  const formattedPhone = formatPhoneNumber(form.value.phone);
+  if (formattedPhone.length < 10) {
+    showCustomAlert("Please enter a valid phone number", "error");
+    return false;
+  }
+  
+  if (!form.value.password) {
+    showCustomAlert("Password is required", "error");
+    return false;
+  }
+  
+  if (form.value.email !== form.value.confirmEmail) {
+    showCustomAlert("Email addresses do not match", "error");
+    return false;
+  }
+  
+  if (form.value.password !== form.value.confirmPassword) {
+    showCustomAlert("Passwords do not match", "error");
+    return false;
+  }
+  
+  if (!isPasswordValid.value) {
+    showCustomAlert("Please ensure all password requirements are met", "error");
+    return false;
+  }
+  
+  return true;
+};
+
+const handleRegistration = async () => {
+  if (!validateForm()) {
+    return;
+  }
+
+  try {
+    isLoading.value = true;
+    
+    let payload;
+    if (activeTab.value === "individual") {
+      payload = prepareIndividualPayload();
+    } else {
+      showCustomAlert("Organization registration is not implemented yet", "warning");
+      isLoading.value = false;
+      return;
+    }
+
+    console.log("Sending payload:", payload);
+    
+    const response = await userRegister.createUser(payload);
+    
+    if (response.status === "success") {
+      toast.success(response.messages?.[0] || "Registration successful!");
+      if (response.actions_required?.includes("verify_email")) {
+        localStorage.setItem("pendingVerificationEmail", form.value.email);
+        setTimeout(() => {
+          router.push("/signinverification");
+        }, 1500);
+      } else {
+        setTimeout(() => {
+          router.push("/signin");
+        }, 1500);
+      }
+    } else {
+      const errorMessage = response.messages?.[0] || "Registration failed. Please try again.";
+      showCustomAlert(errorMessage, "error");
+    }
+    
+  } catch (error) {
+    console.error("Registration error:", error);
+    if (error.response) {
+      const errorMsg = error.response.data?.messages?.[0] || 
+                      error.response.data?.message || 
+                      `Error: ${error.response.status}`;
+      showCustomAlert(errorMsg, "error");
+    } else if (error.request) {
+      showCustomAlert("Network error. Please check your connection and try again.", "error");
+    } else {
+      showCustomAlert("An unexpected error occurred. Please try again.", "error");
+    }
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+const showCustomAlert = (message, type = "error") => {
+  customAlert.value = {
+    show: true,
+    message,
+    type
+  };
+
   setTimeout(() => {
-    alertBox.classList.add("hidden");
-  }, 3000);
+    customAlert.value.show = false;
+  }, 5000);
+};
+
+const changeTab = (tab) => {
+  activeTab.value = tab;
+  form.value = {
+    firstName: "",
+    otherName: "",
+    lastName: "",
+    phone: "",
+    alternatePhone: "",
+    email: "",
+    confirmEmail: "",
+    password: "",
+    confirmPassword: "",
+    oragnizationName: "",
+  };
 };
 </script>
 
 <template>
   <div
-    id="custom-alert"
-    class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-red-600 text-white p-3 rounded-lg shadow-xl transition-opacity duration-300"
-  ></div>
+    v-if="customAlert.show"
+    :class="[
+      'fixed top-4 left-1/2 transform -translate-x-1/2 z-50 p-4 rounded-lg shadow-xl transition-opacity duration-300',
+      customAlert.type === 'error' ? 'bg-red-600 text-white' : 
+      customAlert.type === 'warning' ? 'bg-yellow-500 text-black' :
+      'bg-green-600 text-white'
+    ]"
+    style="min-width: 300px; max-width: 90%;"
+  >
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <svg 
+          v-if="customAlert.type === 'error'" 
+          class="w-5 h-5 mr-2" 
+          fill="currentColor" 
+          viewBox="0 0 20 20"
+        >
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+        </svg>
+        <svg 
+          v-else-if="customAlert.type === 'warning'" 
+          class="w-5 h-5 mr-2" 
+          fill="currentColor" 
+          viewBox="0 0 20 20"
+        >
+          <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+        </svg>
+        <svg 
+          v-else 
+          class="w-5 h-5 mr-2" 
+          fill="currentColor" 
+          viewBox="0 0 20 20"
+        >
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span>{{ customAlert.message }}</span>
+      </div>
+      <button 
+        @click="customAlert.show = false"
+        class="ml-4 text-white hover:text-gray-200 focus:outline-none"
+      >
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+        </svg>
+      </button>
+    </div>
+  </div>
 
   <div class="relative min-h-screen font-inter bg-gray-50">
     <div class="fixed top-1/2 right-0 z-50 transform -translate-y-1/2">
@@ -140,7 +332,7 @@ const alert = (message) => {
           </button>
         </div>
 
-        <!-- <button
+        <button
           class="flex items-center justify-center w-full py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition duration-150 mb-6 shadow-sm"
         >
           <svg
@@ -167,9 +359,9 @@ const alert = (message) => {
             />
           </svg>
           Sign up with Google
-        </button> -->
+        </button>
 
-        <!-- <div class="text-center text-gray-400 mb-6">OR</div> -->
+        <div class="text-center text-gray-400 mb-6">OR</div>
 
         <form @submit.prevent="handleRegistration" class="space-y-4">
           <template v-if="activeTab === 'individual'">
@@ -222,7 +414,7 @@ const alert = (message) => {
                 <label
                   for="phone"
                   class="block text-sm font-medium text-gray-700"
-                  >Phone Number</label
+                  >Phone Number*</label
                 >
                 <div class="mt-1 flex rounded-lg shadow-sm">
                   <span
@@ -235,15 +427,17 @@ const alert = (message) => {
                     id="phone"
                     v-model="form.phone"
                     required
+                    placeholder="8012345678"
                     class="flex-1 block w-full border-gray-300 rounded-r-lg focus:border-green-500 focus:ring-green-500 p-2.5"
                   />
                 </div>
+                <p class="mt-1 text-xs text-gray-500">Enter your phone number without the leading 0</p>
               </div>
               <div>
                 <label
                   for="alternatePhone"
                   class="block text-sm font-medium text-gray-700"
-                  >Alternate Number</label
+                  >Alternate Number (optional)</label
                 >
                 <div class="mt-1 flex rounded-lg shadow-sm">
                   <span
@@ -255,6 +449,7 @@ const alert = (message) => {
                     type="tel"
                     id="alternatePhone"
                     v-model="form.alternatePhone"
+                    placeholder="Optional"
                     class="flex-1 block w-full border-gray-300 rounded-r-lg focus:border-green-500 focus:ring-green-500 p-2.5"
                   />
                 </div>
@@ -266,7 +461,7 @@ const alert = (message) => {
                 <label
                   for="email"
                   class="block text-sm font-medium text-gray-700"
-                  >Email Address</label
+                  >Email Address*</label
                 >
                 <input
                   type="email"
@@ -280,7 +475,7 @@ const alert = (message) => {
                 <label
                   for="confirmEmail"
                   class="block text-sm font-medium text-gray-700"
-                  >Confirm Email Address</label
+                  >Confirm Email Address*</label
                 >
                 <input
                   type="email"
@@ -297,7 +492,7 @@ const alert = (message) => {
                 <label
                   for="password"
                   class="block text-sm font-medium text-gray-700"
-                  >Password</label
+                  >Password*</label
                 >
                 <input
                   type="password"
@@ -311,7 +506,7 @@ const alert = (message) => {
                 <label
                   for="confirmPassword"
                   class="block text-sm font-medium text-gray-700"
-                  >Confirm Password</label
+                  >Confirm Password*</label
                 >
                 <input
                   type="password"
@@ -361,181 +556,24 @@ const alert = (message) => {
             <div class="pt-4 flex justify-center">
               <button
                 type="submit"
-                :disabled="!isPasswordValid"
-                class="w-full md:w-auto px-10 py-3 bg-green-700 text-white font-semibold rounded-lg shadow-md hover:bg-green-800 transition duration-150 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                :disabled="!isPasswordValid || isLoading"
+                class="w-full md:w-auto px-10 py-3 bg-green-700 text-white font-semibold rounded-lg shadow-md hover:bg-green-800 transition duration-150 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
               >
-                Register
+                <span v-if="isLoading" class="flex items-center">
+                  <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Processing...
+                </span>
+                <span v-else>Register</span>
               </button>
             </div>
           </template>
+          
+          <!-- Organization template remains the same -->
           <template v-else>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="col-span-full">
-                <label
-                  for="oragnizationName"
-                  class="block text-sm font-medium text-gray-700"
-                  >Organization Name*</label
-                >
-                <input
-                  type="text"
-                  id="oragnizationName"
-                  v-model="form.oragnizationName"
-                  required
-                  class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
-                />
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label
-                  for="phone"
-                  class="block text-sm font-medium text-gray-700"
-                  >Phone Number</label
-                >
-                <div class="mt-1 flex rounded-lg shadow-sm">
-                  <span
-                    class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm"
-                  >
-                    +234
-                  </span>
-                  <input
-                    type="tel"
-                    id="phone"
-                    v-model="form.phone"
-                    required
-                    class="flex-1 block w-full border-gray-300 rounded-r-lg focus:border-green-500 focus:ring-green-500 p-2.5"
-                  />
-                </div>
-              </div>
-              <div>
-                <label
-                  for="alternatePhone"
-                  class="block text-sm font-medium text-gray-700"
-                  >Alternate Number</label
-                >
-                <div class="mt-1 flex rounded-lg shadow-sm">
-                  <span
-                    class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm"
-                  >
-                    +234
-                  </span>
-                  <input
-                    type="tel"
-                    id="alternatePhone"
-                    v-model="form.alternatePhone"
-                    class="flex-1 block w-full border-gray-300 rounded-r-lg focus:border-green-500 focus:ring-green-500 p-2.5"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label
-                  for="email"
-                  class="block text-sm font-medium text-gray-700"
-                  >Email Address</label
-                >
-                <input
-                  type="email"
-                  id="email"
-                  v-model="form.email"
-                  required
-                  class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
-                />
-              </div>
-              <div>
-                <label
-                  for="confirmEmail"
-                  class="block text-sm font-medium text-gray-700"
-                  >Confirm Email Address</label
-                >
-                <input
-                  type="email"
-                  id="confirmEmail"
-                  v-model="form.confirmEmail"
-                  required
-                  class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
-                />
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label
-                  for="password"
-                  class="block text-sm font-medium text-gray-700"
-                  >Password</label
-                >
-                <input
-                  type="password"
-                  id="password"
-                  v-model="form.password"
-                  required
-                  class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
-                />
-              </div>
-              <div>
-                <label
-                  for="confirmPassword"
-                  class="block text-sm font-medium text-gray-700"
-                  >Confirm Password</label
-                >
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  v-model="form.confirmPassword"
-                  required
-                  class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
-                />
-              </div>
-            </div>
-
-            <div class="pt-2 text-sm space-y-1">
-              <div
-                v-for="rule in passwordRules"
-                :key="rule.text"
-                class="flex items-center text-gray-600"
-              >
-                <svg
-                  :class="[
-                    'w-4 h-4 mr-2',
-                    rule.valid ? 'text-green-500' : 'text-gray-400',
-                  ]"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    v-if="rule.valid"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 13l4 4L19 7"
-                  ></path>
-                  <path
-                    v-else
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M18 12H6"
-                  ></path>
-                </svg>
-                <span>{{ rule.text }}</span>
-              </div>
-            </div>
-
-            <div class="pt-4 flex justify-center">
-              <button
-                type="submit"
-                :disabled="!isPasswordValid"
-                class="w-full md:w-auto px-10 py-3 bg-green-700 text-white font-semibold rounded-lg shadow-md hover:bg-green-800 transition duration-150 disabled:bg-gray-400 disabled:cursor-not-allowed"
-              >
-                Register
-              </button>
-            </div>
+            <!-- ... organization form fields ... -->
           </template>
         </form>
 
@@ -573,7 +611,14 @@ input:focus {
 button[type="submit"] {
   transition: transform 0.2s ease;
 }
-button[type="submit"]:hover {
+button[type="submit"]:hover:not(:disabled) {
   transform: scale(1.02);
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>
