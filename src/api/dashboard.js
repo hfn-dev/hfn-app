@@ -1,7 +1,7 @@
 import api from "./axios.js";
 
 export default {
-  async fetchDashboard(params) {
+  async fetchDashboard(params = {}) {
     try {
       const response = await api.get("/analytics/dashboard/", {
         params,
@@ -13,7 +13,7 @@ export default {
     }
   },
 
-  async fetchCourseAnalytics(params) {
+  async fetchCourseAnalytics(params = {}) {
     try {
       const response = await api.get("/analytics/courses/", {
         params,

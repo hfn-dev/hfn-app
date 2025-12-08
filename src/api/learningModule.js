@@ -97,7 +97,7 @@ export default {
 
   async createCourses(payload) {
     try {
-      const response = await api.post("/learning/courses/{slug}/", payload);
+      const response = await api.post("/learning/courses/", payload);
       return response.data;
     } catch (error) {
       console.error("create courses API error:", error);
