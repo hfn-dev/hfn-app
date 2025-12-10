@@ -1,83 +1,65 @@
 <script setup>
-import courses from '@/assets/courses.jpg';
-import student from '@/assets/student.jpg';
+import { ref, onMounted, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification';
+import learningModule from '@/api/learningModule.js';
 import UserSidebar from '@/components/layout/UserSidebar.vue';
-import { computed, ref } from 'vue';
+
+const router = useRouter();
+const toast = useToast();
 
 const DARK_GREEN = '#004d33';
 const LIGHT_GREEN = '#f2f9f3';
 
-const activeCourses = ref([
-  {
-    id: 1,
-    instructor: 'Kanu Nwankwo',
-    title: 'Naturopathy',
-    lessonsCompleted: 2,
-    totalLessons: 54,
-    progress: 2, 
-    image: courses,
-  },
-  {
-    id: 2,
-    instructor: 'Kanu Nwankwo',
-    title: 'Naturopathy',
-    lessonsCompleted: 30,
-    totalLessons: 60,
-    progress: 50, 
-    image: courses,
-  },
-  {
-    id: 3,
-    instructor: 'Kanu Nwankwo',
-    title: 'Naturopathy',
-    lessonsCompleted: 50,
-    totalLessons: 99,
-    progress: 50, 
-    image: courses,
-  },
-  {
-    id: 4,
-    instructor: 'Kanu Nwankwo',
-    title: 'Naturopathy',
-    lessonsCompleted: 2,
-    totalLessons: 54,
-    progress: 2,
-    image: courses,
-  },
-  {
-    id: 5,
-    instructor: 'Kanu Nwankwo',
-    title: 'Naturopathy',
-    lessonsCompleted: 20,
-    totalLessons: 54,
-    progress: 37,
-    image: courses,
-  },
-]);
+// State
+const isLoading = ref(true);
+const userEnrollments = ref([]);
+const activeCourses = ref([]);
+const completedCourses = ref([]);
 
-const completedCourses = ref([
-  {
-    id: 101,
-    instructor: 'Kanu Nwankwo',
-    title: 'Naturopathy',
-    lessonsCompleted: 54,
-    totalLessons: 54,
-    progress: 100,
-    image: courses,
-  },
-  {
-    id: 102,
-    instructor: 'Kanu Nwankwo',
-    title: 'Naturopathy',
-    lessonsCompleted: 54,
-    totalLessons: 54,
-    progress: 100,
-    image: courses,
-  },
-]);
-
+// Pagination
 const activePage = ref(1);
-const activePerPage = 5; 
+const activePerPage = 5;
+const completedPage = ref(1);
+const completedPerPage = 3;
+
+// Fetch user enrollments
+const fetchUserEnrollments = async () => {
+  try {
+    isLoading.value = true;
+    
+    const response = await learningModule.getEnrollment({
+      expand: 'course',
+      ordering: '-last_accessed'
+    });
+    
+    if (response.data) {
+      userEnrollments.value = Array.isArray(response.data)
+        ? response.data
+        : response.data.results || [];
+      
+      // Separate active and completed courses
+      activeCourses.value = userEnrollments.value.filter(
+        enrollment => !enrollment.is_completed && enrollment.completion_percentage < 100
+      );
+      
+      completedCourses.value = userEnrollments.value.filter(
+        enrollment => enrollment.is_completed || enrollment.completion_percentage === 100
+      );
+      
+      console.log('Enrollments loaded:', userEnrollments.value.length);
+      console.log('Active courses:', activeCourses.value.length);
+      console.log('Completed courses:', completedCourses.value.length);
+    }
+  } catch (error) {
+    console.error('Error fetching enrollments:', error);
+    toast.error('Failed to load your learning progress');
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+// Computed properties for pagination
 const totalActivePages = computed(() =>
   Math.ceil(activeCourses.value.length / activePerPage)
 );
@@ -88,8 +70,6 @@ const paginatedActiveCourses = computed(() => {
   return activeCourses.value.slice(start, end);
 });
 
-const completedPage = ref(1);
-const completedPerPage = 3;
 const totalCompletedPages = computed(() =>
   Math.ceil(completedCourses.value.length / completedPerPage)
 );
@@ -100,6 +80,7 @@ const paginatedCompletedCourses = computed(() => {
   return completedCourses.value.slice(start, end);
 });
 
+// Navigation functions
 const goToActivePage = (page) => {
   if (page >= 1 && page <= totalActivePages.value) {
     activePage.value = page;
@@ -112,7 +93,43 @@ const goToCompletedPage = (page) => {
   }
 };
 
+// Continue learning button handler
+const continueLearning = async (enrollment) => {
+  try {
+    // Navigate to the course learning page
+    router.push(`/learning/courses/${enrollment.course.slug || enrollment.course.id}`);
+  } catch (error) {
+    console.error('Error navigating to course:', error);
+    toast.error('Failed to open course');
+  }
+};
 
+// Review course button handler
+const reviewCourse = async (enrollment) => {
+  try {
+    // Navigate to course details or certificate page
+    if (enrollment.certificate_url) {
+      // Open certificate
+      window.open(enrollment.certificate_url, '_blank');
+    } else {
+      // Go to course details
+      router.push(`/courses/${enrollment.course.slug || enrollment.course.id}`);
+    }
+  } catch (error) {
+    console.error('Error reviewing course:', error);
+    toast.error('Failed to open course');
+  }
+};
+
+// Format progress percentage
+const formatProgress = (progress) => {
+  return Math.round(progress || 0);
+};
+
+// On component mount
+onMounted(() => {
+  fetchUserEnrollments();
+});
 </script>
 
 <template>
@@ -136,94 +153,99 @@ const goToCompletedPage = (page) => {
           </div>
         </div>
 
+        <!-- Loading State -->
+        <div v-if="isLoading" class="flex justify-center items-center h-64">
+          <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#00cc66]"></div>
+        </div>
+
+        <!-- Empty State -->
+        <div v-else-if="userEnrollments.length === 0" class="text-center py-12">
+          <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">
+            No courses enrolled yet
+          </h3>
+          <p class="text-gray-500 mb-4">
+            Start your learning journey by enrolling in courses.
+          </p>
+          <button
+            @click="router.push('/user/courses')"
+            class="inline-flex items-center px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#00994d] transition-colors"
+          >
+            Browse Courses
+          </button>
+        </div>
+
         <!-- Active Courses Section -->
-        <div class="mb-12">
+        <div v-else-if="activeCourses.length > 0" class="mb-12">
           <h2 class="text-2xl font-bold text-gray-800 mb-6">Active Courses</h2>
 
-          <div
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl"
-          >
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl">
             <!-- Course Card -->
             <div
-              v-for="course in paginatedActiveCourses"
-              :key="course.id"
+              v-for="enrollment in paginatedActiveCourses"
+              :key="enrollment.id"
               class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col transform transition-all duration-300 hover:shadow-xl"
             >
               <!-- Course Image -->
               <div class="relative w-full h-36 bg-gray-100">
                 <img
-                  :src="course.image"
-                  alt="Course Thumbnail"
+                  v-if="enrollment.course.thumbnail"
+                  :src="enrollment.course.thumbnail"
+                  :alt="enrollment.course.title"
                   class="w-full h-full object-cover"
                 />
+                <div v-else class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#004d33] to-[#00cc66]">
+                  <span class="text-white text-lg font-bold">{{ enrollment.course.title?.charAt(0) || 'C' }}</span>
+                </div>
                 <div
                   class="absolute bottom-0 left-4 transform translate-y-1/2 p-1 bg-white rounded-full shadow-lg"
                 >
-                  <img
-                    :src="student"
-                    alt="Instructor"
-                    class="w-10 h-10 rounded-full object-cover"
-                  />
+                  <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#004d33] to-[#00cc66] flex items-center justify-center">
+                    <span class="text-white text-sm font-bold">
+                      {{ enrollment.course.instructor?.full_name?.charAt(0) || 'I' }}
+                    </span>
+                  </div>
                 </div>
               </div>
 
               <!-- Course Details -->
               <div class="p-4 pt-8 flex flex-col flex-grow">
-                <p class="text-xs text-gray-500 font-medium">Kanu Nwankwo</p>
-                <p class="text-xs text-gray-500 mb-2">Professor of Medicine</p>
+                <p class="text-xs text-gray-500 font-medium">
+                  {{ enrollment.course.instructor?.full_name || 'Instructor' }}
+                </p>
+                <p class="text-xs text-gray-500 mb-2">
+                  {{ enrollment.course.instructor?.title || '' }}
+                </p>
                 <h3 class="text-lg font-bold text-gray-800 mb-4">
-                  {{ course.title }}
+                  {{ enrollment.course.title }}
                 </h3>
 
-                <!-- Progress Bar / Status -->
-                <div v-if="course.progress !== 100" class="mb-4">
+                <!-- Progress Bar -->
+                <div class="mb-4">
                   <div class="h-1 bg-gray-200 rounded-full mb-1">
                     <div
                       class="h-1 rounded-full"
                       :style="{
-                        width: course.progress + '%',
+                        width: formatProgress(enrollment.progress_percentage) + '%',
                         backgroundColor: DARK_GREEN,
                       }"
                     ></div>
                   </div>
                   <p class="text-xs text-gray-500">
-                    Lesson {{ course.lessonsCompleted }} of
-                    {{ course.totalLessons }} | {{ course.progress }}% complete
+                    {{ enrollment.completed_lessons || 0 }} of {{ enrollment.course.total_lessons || 0 }} lessons | 
+                    {{ formatProgress(enrollment.progress_percentage) }}% complete
                   </p>
                 </div>
 
-                <p v-else class="text-sm text-gray-600 mb-4 flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-4 h-4 mr-1"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    :style="{ color: DARK_GREEN }"
-                  >
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                  </svg>
-                  100% complete
-                </p>
-
                 <!-- Action Button -->
                 <button
-                  class="mt-auto py-2 rounded-lg font-semibold transition duration-200"
-                  :style="
-                    course.progress === 100
-                      ? {
-                          backgroundColor: LIGHT_GREEN,
-                          color: DARK_GREEN,
-                          border: '1px solid #004d33',
-                        }
-                      : { backgroundColor: DARK_GREEN, color: 'white' }
-                  "
+                  @click="continueLearning(enrollment)"
+                  class="mt-auto py-2 rounded-lg font-semibold text-white transition duration-200 hover:opacity-90"
+                  :style="{ backgroundColor: DARK_GREEN }"
                 >
-                  {{ course.progress === 100 ? 'Review Course' : 'Continue' }}
+                  Continue Learning
                 </button>
               </div>
             </div>
@@ -278,65 +300,58 @@ const goToCompletedPage = (page) => {
         </div>
 
         <!-- Completed Courses Section -->
-        <div>
+        <div v-if="completedCourses.length > 0">
           <h2 class="text-2xl font-bold text-gray-800 mb-6">
             Completed Courses
           </h2>
 
-          <div
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl"
-          >
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl">
             <!-- Course Card -->
             <div
-              v-for="course in paginatedCompletedCourses"
-              :key="course.id"
+              v-for="enrollment in paginatedCompletedCourses"
+              :key="enrollment.id"
               class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col transform transition-all duration-300 hover:shadow-xl"
             >
               <!-- Course Image -->
               <div class="relative w-full h-36 bg-gray-100">
                 <img
-                  :src="course.image"
-                  alt="Course Thumbnail"
+                  v-if="enrollment.course.thumbnail"
+                  :src="enrollment.course.thumbnail"
+                  :alt="enrollment.course.title"
                   class="w-full h-full object-cover"
                 />
+                <div v-else class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#004d33] to-[#00cc66]">
+                  <span class="text-white text-lg font-bold">{{ enrollment.course.title?.charAt(0) || 'C' }}</span>
+                </div>
                 <div
                   class="absolute bottom-0 left-4 transform translate-y-1/2 p-1 bg-white rounded-full shadow-lg"
                 >
-                  <img
-                    :src="student"
-                    alt="Instructor"
-                    class="w-10 h-10 rounded-full object-cover"
-                  />
+                  <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#004d33] to-[#00cc66] flex items-center justify-center">
+                    <span class="text-white text-sm font-bold">
+                      {{ enrollment.course.instructor?.full_name?.charAt(0) || 'I' }}
+                    </span>
+                  </div>
+                </div>
+                <!-- Completed Badge -->
+                <div class="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                  Completed
                 </div>
               </div>
 
               <!-- Course Details -->
               <div class="p-4 pt-8 flex flex-col flex-grow">
-                <p class="text-xs text-gray-500 font-medium">Kanu Nwankwo</p>
-                <p class="text-xs text-gray-500 mb-2">Professor of Medicine</p>
+                <p class="text-xs text-gray-500 font-medium">
+                  {{ enrollment.course.instructor?.full_name || 'Instructor' }}
+                </p>
+                <p class="text-xs text-gray-500 mb-2">
+                  {{ enrollment.course.instructor?.title || '' }}
+                </p>
                 <h3 class="text-lg font-bold text-gray-800 mb-4">
-                  {{ course.title }}
+                  {{ enrollment.course.title }}
                 </h3>
 
-                <!-- Progress Bar / Status -->
-                <div v-if="course.progress !== 100" class="mb-4">
-                  <div class="h-1 bg-gray-200 rounded-full mb-1">
-                    <div
-                      class="h-1 rounded-full"
-                      :style="{
-                        width: course.progress + '%',
-                        backgroundColor: DARK_GREEN,
-                      }"
-                    ></div>
-                  </div>
-                  <p class="text-xs text-gray-500">
-                    Lesson {{ course.lessonsCompleted }} of
-                    {{ course.totalLessons }} | {{ course.progress }}% complete
-                  </p>
-                </div>
-
-                <!-- Completed Text -->
-                <p v-else class="text-sm text-gray-600 mb-4 flex items-center">
+                <!-- Completion Status -->
+                <p class="text-sm text-gray-600 mb-4 flex items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="w-4 h-4 mr-1"
@@ -351,23 +366,20 @@ const goToCompletedPage = (page) => {
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                     <polyline points="22 4 12 14.01 9 11.01"></polyline>
                   </svg>
-                  100% complete
+                  Completed on {{ new Date(enrollment.completed_at).toLocaleDateString() }}
                 </p>
 
                 <!-- Action Button -->
                 <button
+                  @click="reviewCourse(enrollment)"
                   class="mt-auto py-2 rounded-lg font-semibold transition duration-200"
-                  :style="
-                    course.progress === 100
-                      ? {
-                          backgroundColor: LIGHT_GREEN,
-                          color: DARK_GREEN,
-                          border: '1px solid #004d33',
-                        }
-                      : { backgroundColor: DARK_GREEN, color: 'white' }
-                  "
+                  :style="{
+                    backgroundColor: LIGHT_GREEN,
+                    color: DARK_GREEN,
+                    border: '1px solid #004d33',
+                  }"
                 >
-                  {{ course.progress === 100 ? 'Review Course' : 'Continue' }}
+                  Review Course
                 </button>
               </div>
             </div>
@@ -425,4 +437,5 @@ const goToCompletedPage = (page) => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

@@ -1,7 +1,6 @@
 import api from "./axios.js";
 
 export default {
-
   async sendConnectionRequest(payload) {
     try {
       const response = await api.post(
@@ -73,7 +72,6 @@ export default {
     }
   },
 
-
   async sendMessage(payload) {
     try {
       const response = await api.post("/messaging/messages/", payload);
@@ -117,7 +115,6 @@ export default {
       throw error;
     }
   },
-
 
   async listGroups(params = {}) {
     try {
@@ -207,7 +204,6 @@ export default {
       throw error;
     }
   },
-
 
   async listForums(params = {}) {
     try {

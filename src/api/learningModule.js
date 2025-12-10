@@ -1,33 +1,34 @@
 import api from "./axios.js";
 
 export default {
-  async getCategories(payload) {
+  async getCategories(params = {}) {
     try {
-      const response = await api.get("/learning/categories/", payload);
-      return response.data;
+      const response = await api.get("/learning/categories/", { params });
+      return response;
     } catch (error) {
       console.error("list categories API error:", error);
       throw error;
     }
   },
 
-  async getCategoriesById(payload) {
+  async getCategoriesById(slug, params = {}) {
     try {
-      const response = await api.get("/learning/categories/{slug}/", payload);
-      return response.data;
+      const response = await api.get(`/learning/categories/${slug}/`, {
+        params,
+      });
+      return response;
     } catch (error) {
       console.error("list categories by id API error:", error);
       throw error;
     }
   },
 
-  async getCourseCategory(payload) {
+  async getCourseCategory(slug, params = {}) {
     try {
-      const response = await api.get(
-        "/learning/categories/{slug}/courses/",
-        payload
-      );
-      return response.data;
+      const response = await api.get(`/learning/categories/${slug}/courses/`, {
+        params,
+      });
+      return response;
     } catch (error) {
       console.error("list course category API error:", error);
       throw error;
@@ -74,21 +75,22 @@ export default {
     }
   },
 
-  async listCourses(payload) {
-    // take query params category, level,is_free, search
+  async listCourses(params = {}) {
     try {
-      const response = await api.get("/learning/courses/", payload);
-      return response.data;
+      const response = await api.get("/learning/courses/", {
+        params: params,
+      });
+      return response;
     } catch (error) {
       console.error("get all courses API error:", error);
       throw error;
     }
   },
 
-  async getCoursesDetails(payload) {
+  async getCoursesDetails(slug, params = {}) {
     try {
-      const response = await api.get("/learning/courses/{slug}/", payload);
-      return response.data;
+      const response = await api.get(`/learning/courses/${slug}/`, { params });
+      return response;
     } catch (error) {
       console.error("get courses details API error:", error);
       throw error;
@@ -148,10 +150,10 @@ export default {
     }
   },
 
-  async getEnrollment(payload) {
+  async getEnrollment() {
     try {
-      const response = await api.get("/learning/enrollments/", payload);
-      return response.data;
+      const response = await api.get("/learning/enrollments/");
+      return response;
     } catch (error) {
       console.error("get enrollment API error:", error);
       throw error;
@@ -194,10 +196,10 @@ export default {
     }
   },
 
-  async progressTracking(payload) {
+  async progressTracking(id, payload) {
     try {
       const response = await api.get(
-        "/learning/lessons/{id}/progress/",
+        `/learning/lessons/${id}/progress/`,
         payload
       );
       return response.data;
@@ -207,10 +209,10 @@ export default {
     }
   },
 
-  async completeLessonMark(payload) {
+  async completeLessonMark(id, payload) {
     try {
       const response = await api.get(
-        "/learning/lessons/{id}/complete/",
+        `/learning/lessons/${id}/complete/`,
         payload
       );
       return response.data;
@@ -373,7 +375,10 @@ export default {
 
   async verifyCertificate(payload) {
     try {
-      const response = await api.get("/learning/certificates/verify/?number={certificate_number}", payload);
+      const response = await api.get(
+        "/learning/certificates/verify/?number={certificate_number}",
+        payload
+      );
       return response.data;
     } catch (error) {
       console.error("verify certificate API error:", error);

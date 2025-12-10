@@ -1,6 +1,42 @@
 import api from "./axios.js";
 
 export default {
+  async listDirectoryUsers(params = {}) {
+    try {
+      const response = await api.get("/messaging/connections/directory/", {
+        params,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("List directory users API error:", error);
+      throw error;
+    }
+  },
+
+  async searchDirectoryUsers(searchQuery, params = {}) {
+    try {
+      const response = await api.get("/messaging/connections/directory/", {
+        params: { search: searchQuery, ...params },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Search directory users API error:", error);
+      throw error;
+    }
+  },
+
+  async getDirectoryUsersByLetter(letter, params = {}) {
+    try {
+      const response = await api.get("/messaging/connections/directory/", {
+        params: { letter, ...params },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Get directory users by letter API error:", error);
+      throw error;
+    }
+  },
+  
   async listUsers(params = {}) {
     try {
       const response = await api.get("/users/directory/", { params });
