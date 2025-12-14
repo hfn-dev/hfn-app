@@ -1,3 +1,40 @@
+<script setup>
+import ticketApi from '@/api/tickets.js';
+import { defineEmits, defineProps, ref } from 'vue';
+import { useToast } from 'vue-toastification';
+
+const props = defineProps({
+  ticket: {
+    type: Object,
+    required: true,
+  },
+});
+
+const toast = useToast();
+
+const emit = defineEmits(['close']);
+const updateText = ref('');
+
+const submitUpdate = async () => {
+  const text = updateText.value.trim();
+  if (!text) return;
+
+  try {
+    const updatedTicket = await ticketApi.updateTicket(props.ticket.id, {
+      update: text,
+    });
+
+    props.ticket.update1 = updatedTicket.update1 || text;
+    props.ticket.status = updatedTicket.status || props.ticket.status;
+
+    toast.success(`Update submitted for Ticket #${props.ticket.number}.`);
+    updateText.value = '';
+  } catch (error) {
+    console.error('Failed to submit ticket update:', error);
+    toast.error('Failed to submit update. Please try again later.');
+  }
+};
+</script>
 
 <template>
   <div class="space-y-8 p-4 sm:p-8 border border-gray-200 rounded-lg bg-white">
@@ -126,32 +163,3 @@
     </form>
   </div>
 </template>
-
-<script setup>
-import { ref, defineProps, defineEmits } from "vue";
-
-const props = defineProps({
-  ticket: {
-    type: Object,
-    required: true,
-  },
-});
-
-const emit = defineEmits(["close"]);
-
-const updateText = ref("");
-
-const submitUpdate = () => {
-  if (updateText.value.trim() !== "") {
-    console.log(
-      `Submitting update for ticket ${props.ticket.number}: ${updateText.value}`
-    );
-    window.alert(
-      `Update submitted for Ticket #${props.ticket.number}. Thank you!`
-    );
-    updateText.value = "";
-  } else {
-    window.alert("Please enter an update description before submitting.");
-  }
-};
-</script>

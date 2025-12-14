@@ -1,13 +1,63 @@
+<script setup>
+import eventsApi from '@/api/events.js';
+import newsApi from '@/api/newsModule.js';
+import UserSidebar from '@/components/layout/UserSidebar.vue';
 
+const newsletters = ref([]);
+const events = ref([]);
+const topics = ref([]);
+
+const user = ref({ name: '' });
+
+const fetchUser = async () => {
+  try {
+    const data = await authApi.getCurrentUser();
+    user.value = data;
+  } catch (error) {
+    console.error('Failed to fetch user info:', error);
+  }
+};
+
+const fetchNewsletters = async () => {
+  try {
+    const data = await newsApi.getFeaturedArticles();
+    newsletters.value = data;
+  } catch (error) {
+    console.error('Failed to fetch newsletters:', error);
+  }
+};
+
+const fetchEvents = async () => {
+  try {
+    const data = await eventsApi.listEvents({ upcoming: true });
+    events.value = data;
+  } catch (error) {
+    console.error('Failed to fetch events:', error);
+  }
+};
+
+const fetchTopics = async () => {
+  try {
+    const data = await newsApi.listArticles({ limit: 4 });
+    topics.value = data;
+  } catch (error) {
+    console.error('Failed to fetch topics:', error);
+  }
+};
+
+onMounted(() => {
+  fetchNewsletters();
+  fetchEvents();
+  fetchTopics();
+  fetchUser();
+});
+</script>
 
 <template>
   <div class="flex min-h-screen bg-white">
-    <!-- Sidebar -->
     <UserSidebar />
 
-    <!-- Main Content -->
     <div class="flex-1 p-6 md:p-10 overflow-y-auto">
-      <!-- Header -->
       <h2 class="text-xl md:text-2xl font-semibold text-[#f54a00]">
         Welcome Ruthie,
       </h2>
@@ -240,7 +290,7 @@
                   class="text-xs font-semibold px-3 py-1 text-white rounded-lg shadow-md z-10"
                   :style="{ backgroundColor: topic.tagColor || '#ff6600' }"
                 >
-                  {{ topic.tag || "Public Health Stories" }}
+                  {{ topic.tag || 'Public Health Stories' }}
                 </span>
               </div>
 
@@ -259,7 +309,7 @@
                           d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 18H5V8h14v13z"
                         />
                       </svg>
-                      {{ topic.date || "October 10, 2025" }}
+                      {{ topic.date || 'October 10, 2025' }}
                     </span>
                     <span class="flex items-center text-orange-600">
                       <svg
@@ -271,7 +321,7 @@
                           d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
                         />
                       </svg>
-                      {{ topic.comments || "0 Comments" }}
+                      {{ topic.comments || '0 Comments' }}
                     </span>
                   </div>
 
@@ -294,109 +344,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import UserSidebar from "@/components/layout/UserSidebar.vue";
-
-const newsletters = [
-  {
-    image: new URL("@/assets/event.png", import.meta.url).href,
-    title: "Q4 2025 ISSUE IS AVAILABLE!",
-    description:
-      "Catch up on the latest insights, stories, and updates from our HFN community. Stay informed and inspired.",
-    buttonText: "Read Newsletter",
-  },
-  {
-    image: new URL("@/assets/event.png", import.meta.url).href,
-    title: "Q3 2025 RECAP",
-    description:
-      "Highlights from our previous edition. Learn what’s been trending in the HFN circle.",
-    buttonText: "View Now",
-  },
-];
-
-const events = [
-  {
-    image: new URL("@/assets/event.png", import.meta.url).href,
-    title: "HFN Medical Summit",
-    description: "Join experts discussing healthcare innovation and impact.",
-    buttonText: "Register Now",
-    tag: "Programs & Initiatives",
-    date: "October 10, 2025",
-    time: "10 am",
-    location: "No 12 Ifeanyi Str, Ikeja Lagos",
-  },
-  {
-    image: new URL("@/assets/event.png", import.meta.url).href,
-    title: "Health Awareness Campaign",
-    description:
-      "Be part of our initiative to spread wellness across communities.",
-    buttonText: "Join Us",
-    tag: "Programs & Initiatives",
-    date: "October 10, 2025",
-    time: "10 am",
-    location: "No 12 Ifeanyi Str, Ikeja Lagos",
-  },
-  {
-    image: new URL("@/assets/event.png", import.meta.url).href,
-    title: "Women in Health Forum",
-    description:
-      "Empowering women professionals to lead in healthcare and beyond.",
-    buttonText: "Learn More",
-    tag: "Programs & Initiatives",
-    date: "October 10, 2025",
-    time: "10 am",
-    location: "No 12 Ifeanyi Str, Ikeja Lagos",
-  },
-];
-
-const topics = [
-  {
-    title: "Understanding Health Policies",
-    description:
-      "Explore how public health policies shape healthcare systems today.",
-    buttonText: "Apply Now",
-    tagColor: "#ff6600",
-    tag: "Public Health Stories",
-    date: "October 10, 2025",
-    comments: "0 Comments",
-    visualImage: new URL("@/assets/courses.jpg", import.meta.url).href,
-  },
-  {
-    title: "Nutrition and Wellness",
-    description:
-      "Simple guides to a healthier life through balanced nutrition.",
-    buttonText: "Read More",
-    tagColor: "#ff6600",
-    tag: "Public Health Stories",
-    date: "October 10, 2025",
-    comments: "0 Comments",
-    visualImage: new URL("@/assets/courses.jpg", import.meta.url).href,
-  },
-  {
-    title: "HFN Community Highlights",
-    description:
-      "Catch up with stories and achievements from our vibrant community.",
-    buttonText: "View Stories",
-    tagColor: "#ff6600",
-    tag: "Public Health Stories",
-    date: "October 10, 2025",
-    comments: "0 Comments",
-    visualImage: new URL("@/assets/courses.jpg", import.meta.url).href,
-  },
-  {
-    title: "Understanding Health Policies",
-    description:
-      "Explore how public health policies shape healthcare systems today.",
-    buttonText: "Apply Now",
-    tagColor: "#ff6600",
-    tag: "Public Health Stories",
-    date: "October 10, 2025",
-    comments: "0 Comments",
-    visualImage: new URL("@/assets/courses.jpg", import.meta.url).href,
-  },
-];
-</script>
 
 <style scoped>
 ::-webkit-scrollbar {
