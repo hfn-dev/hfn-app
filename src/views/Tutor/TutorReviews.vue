@@ -1,5 +1,5 @@
 <script setup>
-import learningModule from '@/services/learningModule';
+import learningModule from '@/api/learningModule';
 import { ArrowLeft, ChevronDown, Eye, Search } from 'lucide-vue-next';
 import { computed, onMounted, ref, watch } from 'vue';
 import TutorSidebar from './TutorSidebar.vue';
