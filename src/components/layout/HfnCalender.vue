@@ -12,7 +12,7 @@ const events = ref([
   {
     id: 1,
     title: "Annual Conference & Networking",
-    date: "2025-12-02",
+    date: "2025-01-02",
     time: "09:00 AM",
     tag: "Programs & Initiatives",
     image: eventThumb,
@@ -24,7 +24,7 @@ const events = ref([
   {
     id: 2,
     title: "Health Alert: Seasonal Flu Advisory",
-    date: "2025-12-19",
+    date: "2025-01-19",
     time: "All day",
     tag: "Health Alert",
     image: eventThumb2,
@@ -36,7 +36,7 @@ const events = ref([
   {
     id: 3,
     title: "Webinar: AI in Healthcare",
-    date: "2025-12-25",
+    date: "2025-01-25",
     time: "03:00 PM",
     tag: "Webinar",
     image: eventThumb2,
@@ -48,7 +48,7 @@ const events = ref([
 ]);
 
 const year = computed(() => activeDate.value.getFullYear());
-const month = computed(() => activeDate.value.getMonth()); // 0-indexed
+const month = computed(() => activeDate.value.getMonth()); 
 
 function startOfMonth(d) {
   return new Date(d.getFullYear(), d.getMonth(), 1);
@@ -93,21 +93,10 @@ const weeks = computed(() => {
   return weeks;
 });
 
-const eventsThisMonth = computed(() => {
-  return events.value
-    .filter(e => {
-      const d = new Date(e.date);
-      return d.getFullYear() === year.value && d.getMonth() === month.value;
-    })
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .slice(0, 3);
-});
-
 function eventsForDate(date) {
   const iso = dateToISO(date);
-  return eventsThisMonth.value.filter((e) => e.date === iso);
+  return events.value.filter((e) => e.date === iso);
 }
-  
 function dateToISO(d) {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
@@ -240,7 +229,7 @@ function isToday(date) {
 
                 <div class="mt-2 space-y-1 flex-1">
                   <template
-                    v-for="ev in eventsForDate(day)"
+                    v-for="ev in eventsForDate(day).slice(0, 2)"
                     :key="ev.id"
                   >
                     <button
@@ -279,39 +268,6 @@ function isToday(date) {
                     +{{ eventsForDate(day).length - 2 }} more
                   </div>
                 </div>
-                <div class="mt-6">
-  <h3 class="font-semibold text-gray-800 mb-2 text-lg">Top Events This Month</h3>
-  <div class="space-y-2">
-    <template v-for="ev in eventsThisMonth" :key="ev.id">
-      <button
-        @click="onEventClick(ev)"
-        class="w-full flex items-center gap-2 text-left text-xs py-1 px-2 rounded-md hover:shadow-sm"
-        :class="[
-          ev.tag.includes('Health')
-            ? 'bg-red-50 border border-red-100'
-            : ev.tag.includes('Program')
-            ? 'bg-green-50 border border-green-100'
-            : 'bg-blue-50 border border-blue-100',
-        ]"
-      >
-        <img
-          :src="ev.image"
-          alt=""
-          class="w-8 h-8 object-cover rounded-sm flex-shrink-0"
-        />
-        <div class="truncate">
-          <div class="font-semibold text-[11px] text-gray-800 truncate">
-            {{ ev.title }}
-          </div>
-          <div class="text-[10px] text-gray-500 truncate">
-            {{ ev.time }}
-          </div>
-        </div>
-      </button>
-    </template>
-  </div>
-</div>
-
               </div>
             </template>
           </template>
