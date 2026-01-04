@@ -103,12 +103,13 @@ const eventsThisMonth = computed(() => {
   const end = endOfMonth(activeDate.value);
 
   return events.value
-    .filter((e) => {
-      const eventDate = new Date(e.date);
-      return eventDate >= start && eventDate <= end;
+    .map((e, index) => {
+      const randomDay = Math.floor(Math.random() * (end.getDate())) + 1;
+      const eventDate = new Date(activeDate.value.getFullYear(), activeDate.value.getMonth(), randomDay);
+      return { ...e, date: dateToISO(eventDate) };
     })
-    .sort((a, b) => new Date(a.date) - new Date(b.date)) // sort ascending
-    .slice(0, 3); // pick top 3 events
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .slice(0, 3); 
 });
   
 function dateToISO(d) {
