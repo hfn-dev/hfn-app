@@ -94,14 +94,14 @@ const weeks = computed(() => {
 });
 
 const eventsThisMonth = computed(() => {
-  const currentMonthStr = `${year.value}-${String(month.value + 1).padStart(2, "0")}`;
+  const yearStr = activeDate.value.getFullYear();
+  const monthStr = String(activeDate.value.getMonth() + 1).padStart(2, "0");
+  const currentMonthPrefix = `${yearStr}-${monthStr}`;
   
   return events.value
-    .filter(e => e.date.startsWith(currentMonthStr))
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .slice(0, 3); 
+    .filter(e => e.date.startsWith(currentMonthPrefix))
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
 });
-
 
 function eventsForDate(date) {
   const iso = dateToISO(date);
