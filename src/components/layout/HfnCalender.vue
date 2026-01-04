@@ -97,6 +97,20 @@ function eventsForDate(date) {
   const iso = dateToISO(date);
   return events.value.filter((e) => e.date === iso);
 }
+
+const eventsThisMonth = computed(() => {
+  const start = startOfMonth(activeDate.value);
+  const end = endOfMonth(activeDate.value);
+
+  return events.value
+    .filter((e) => {
+      const eventDate = new Date(e.date);
+      return eventDate >= start && eventDate <= end;
+    })
+    .sort((a, b) => new Date(a.date) - new Date(b.date)) // sort ascending
+    .slice(0, 3); // pick top 3 events
+});
+  
 function dateToISO(d) {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
@@ -229,7 +243,7 @@ function isToday(date) {
 
                 <div class="mt-2 space-y-1 flex-1">
                   <template
-                    v-for="ev in eventsForDate(day).slice(0, 2)"
+                    v-for="ev in eventsThisMonth"
                     :key="ev.id"
                   >
                     <button
