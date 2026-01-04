@@ -12,7 +12,7 @@ const events = ref([
   {
     id: 1,
     title: "Annual Conference & Networking",
-    date: "2025-01-02",
+    date: "2026-01-02",
     time: "09:00 AM",
     tag: "Programs & Initiatives",
     image: eventThumb,
@@ -24,7 +24,7 @@ const events = ref([
   {
     id: 2,
     title: "Health Alert: Seasonal Flu Advisory",
-    date: "2025-01-19",
+    date: "2026-01-19",
     time: "All day",
     tag: "Health Alert",
     image: eventThumb2,
@@ -36,7 +36,7 @@ const events = ref([
   {
     id: 3,
     title: "Webinar: AI in Healthcare",
-    date: "2025-01-25",
+    date: "2026-01-25",
     time: "03:00 PM",
     tag: "Webinar",
     image: eventThumb2,
