@@ -11,19 +11,16 @@ const toast = useToast();
 const DARK_GREEN = '#004d33';
 const LIGHT_GREEN = '#f2f9f3';
 
-// State
 const isLoading = ref(true);
 const userEnrollments = ref([]);
 const activeCourses = ref([]);
 const completedCourses = ref([]);
 
-// Pagination
 const activePage = ref(1);
 const activePerPage = 5;
 const completedPage = ref(1);
 const completedPerPage = 3;
 
-// Fetch user enrollments
 const fetchUserEnrollments = async () => {
   try {
     isLoading.value = true;
@@ -38,7 +35,6 @@ const fetchUserEnrollments = async () => {
         ? response.data
         : response.data.results || [];
       
-      // Separate active and completed courses
       activeCourses.value = userEnrollments.value.filter(
         enrollment => !enrollment.is_completed && enrollment.completion_percentage < 100
       );
@@ -59,7 +55,6 @@ const fetchUserEnrollments = async () => {
   }
 };
 
-// Computed properties for pagination
 const totalActivePages = computed(() =>
   Math.ceil(activeCourses.value.length / activePerPage)
 );
@@ -80,7 +75,6 @@ const paginatedCompletedCourses = computed(() => {
   return completedCourses.value.slice(start, end);
 });
 
-// Navigation functions
 const goToActivePage = (page) => {
   if (page >= 1 && page <= totalActivePages.value) {
     activePage.value = page;
@@ -93,10 +87,8 @@ const goToCompletedPage = (page) => {
   }
 };
 
-// Continue learning button handler
 const continueLearning = async (enrollment) => {
   try {
-    // Navigate to the course learning page
     router.push(`/learning/courses/${enrollment.course.slug || enrollment.course.id}`);
   } catch (error) {
     console.error('Error navigating to course:', error);
@@ -104,15 +96,11 @@ const continueLearning = async (enrollment) => {
   }
 };
 
-// Review course button handler
 const reviewCourse = async (enrollment) => {
   try {
-    // Navigate to course details or certificate page
     if (enrollment.certificate_url) {
-      // Open certificate
       window.open(enrollment.certificate_url, '_blank');
     } else {
-      // Go to course details
       router.push(`/courses/${enrollment.course.slug || enrollment.course.id}`);
     }
   } catch (error) {
@@ -121,12 +109,10 @@ const reviewCourse = async (enrollment) => {
   }
 };
 
-// Format progress percentage
 const formatProgress = (progress) => {
   return Math.round(progress || 0);
 };
 
-// On component mount
 onMounted(() => {
   fetchUserEnrollments();
 });
@@ -138,7 +124,6 @@ onMounted(() => {
       <UserSidebar />
 
       <main class="flex-grow p-4 md:p-8 lg:p-12">
-        <!-- Header & Breadcrumbs -->
         <div class="flex justify-center w-full items-center mb-8">
           <div class="w-full">
             <div class="mb-16 w-full">
@@ -175,18 +160,15 @@ onMounted(() => {
           </button>
         </div>
 
-        <!-- Active Courses Section -->
         <div v-else-if="activeCourses.length > 0" class="mb-12">
           <h2 class="text-2xl font-bold text-gray-800 mb-6">Active Courses</h2>
 
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl">
-            <!-- Course Card -->
             <div
               v-for="enrollment in paginatedActiveCourses"
               :key="enrollment.id"
               class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col transform transition-all duration-300 hover:shadow-xl"
             >
-              <!-- Course Image -->
               <div class="relative w-full h-36 bg-gray-100">
                 <img
                   v-if="enrollment.course.thumbnail"
@@ -208,7 +190,6 @@ onMounted(() => {
                 </div>
               </div>
 
-              <!-- Course Details -->
               <div class="p-4 pt-8 flex flex-col flex-grow">
                 <p class="text-xs text-gray-500 font-medium">
                   {{ enrollment.course.instructor?.full_name || 'Instructor' }}
@@ -220,7 +201,6 @@ onMounted(() => {
                   {{ enrollment.course.title }}
                 </h3>
 
-                <!-- Progress Bar -->
                 <div class="mb-4">
                   <div class="h-1 bg-gray-200 rounded-full mb-1">
                     <div
@@ -237,7 +217,6 @@ onMounted(() => {
                   </p>
                 </div>
 
-                <!-- Action Button -->
                 <button
                   @click="continueLearning(enrollment)"
                   class="mt-auto py-2 rounded-lg font-semibold text-white transition duration-200 hover:opacity-90"
@@ -247,10 +226,8 @@ onMounted(() => {
                 </button>
               </div>
             </div>
-            <!-- End Course Card -->
           </div>
 
-          <!-- Pagination for Active Courses -->
           <div
             v-if="totalActivePages > 1"
             class="flex justify-center items-center mt-8 space-x-4"
@@ -297,20 +274,17 @@ onMounted(() => {
           </div>
         </div>
 
-        <!-- Completed Courses Section -->
         <div v-if="completedCourses.length > 0">
           <h2 class="text-2xl font-bold text-gray-800 mb-6">
             Completed Courses
           </h2>
 
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl">
-            <!-- Course Card -->
             <div
               v-for="enrollment in paginatedCompletedCourses"
               :key="enrollment.id"
               class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col transform transition-all duration-300 hover:shadow-xl"
             >
-              <!-- Course Image -->
               <div class="relative w-full h-36 bg-gray-100">
                 <img
                   v-if="enrollment.course.thumbnail"
@@ -330,13 +304,11 @@ onMounted(() => {
                     </span>
                   </div>
                 </div>
-                <!-- Completed Badge -->
                 <div class="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded text-xs font-semibold">
                   Completed
                 </div>
               </div>
 
-              <!-- Course Details -->
               <div class="p-4 pt-8 flex flex-col flex-grow">
                 <p class="text-xs text-gray-500 font-medium">
                   {{ enrollment.course.instructor?.full_name || 'Instructor' }}
@@ -348,7 +320,6 @@ onMounted(() => {
                   {{ enrollment.course.title }}
                 </h3>
 
-                <!-- Completion Status -->
                 <p class="text-sm text-gray-600 mb-4 flex items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -367,7 +338,6 @@ onMounted(() => {
                   Completed on {{ new Date(enrollment.completed_at).toLocaleDateString() }}
                 </p>
 
-                <!-- Action Button -->
                 <button
                   @click="reviewCourse(enrollment)"
                   class="mt-auto py-2 rounded-lg font-semibold transition duration-200"
@@ -381,10 +351,8 @@ onMounted(() => {
                 </button>
               </div>
             </div>
-            <!-- End Course Card -->
           </div>
 
-          <!-- Pagination for Completed Courses -->
           <div
             v-if="totalCompletedPages > 1"
             class="flex justify-center items-center mt-8 space-x-4"

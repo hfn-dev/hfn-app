@@ -45,11 +45,9 @@ const directoryPagination = ref({
 
 const tabs = ['Directory', 'Direct Messages', 'Groups', 'Notifications', 'Connections'];
 
-// API calls
 const fetchDirectoryUsers = async (letter = null, search = '', page = 1) => {
   isLoading.value.directory = true;
   
-  // Update state
   if (letter !== null) {
     directoryPagination.value.currentLetter = letter;
     directoryPagination.value.currentSearch = '';

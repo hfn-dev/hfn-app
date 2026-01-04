@@ -45,6 +45,7 @@ import AdminMembers from '@/views/Admin/AdminMembers.vue';
 import AdminMessages from '@/views/Admin/AdminMessages.vue';
 import AdminPayments from '@/views/Admin/AdminPayments.vue';
 import Events from '@/views/Events.vue';
+import ArticleDetail from '@/views/User/ArticleDetail.vue';
 import UserSubscription from '@/views/User/UserSubscription.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import About from '../views/About.vue';
@@ -114,6 +115,11 @@ const routes = [
     path: '/course/:id',
     name: 'CourseDetails',
     component: CourseDetails,
+  },
+  {
+    path: '/news/:slug',
+    name: 'ArticleDetail',
+    component: ArticleDetail,
   },
   {
     path: '/user/account',

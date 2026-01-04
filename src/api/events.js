@@ -1,33 +1,32 @@
-import api from "./axios.js";
+import api from './axios.js';
 
 export default {
-
   async listEvents(params = {}) {
     try {
-      const response = await api.get("/events/events/", { params });
+      const response = await api.get('/events/', { params });
       return response.data;
     } catch (error) {
-      console.error("List events API error:", error);
+      console.error('List events API error:', error);
       throw error;
     }
   },
 
-  async getEvent(id) {
+  async getEvent(slug) {
     try {
-      const response = await api.get(`/events/events/${id}/`);
+      const response = await api.get(`/events/${slug}/`);
       return response.data;
     } catch (error) {
-      console.error("Get event API error:", error);
+      console.error('Get event API error:', error);
       throw error;
     }
   },
 
-  async createEvent(payload) {
+  async createEvent() {
     try {
-      const response = await api.post("/events/events/", payload);
+      const response = await api.post(`/events/${slug}/register/`, {});
       return response.data;
     } catch (error) {
-      console.error("Create event API error:", error);
+      console.error('Create event API error:', error);
       throw error;
     }
   },
@@ -37,7 +36,7 @@ export default {
       const response = await api.patch(`/events/events/${id}/`, payload);
       return response.data;
     } catch (error) {
-      console.error("Update event API error:", error);
+      console.error('Update event API error:', error);
       throw error;
     }
   },
@@ -47,17 +46,17 @@ export default {
       const response = await api.delete(`/events/events/${id}/`);
       return response.data;
     } catch (error) {
-      console.error("Delete event API error:", error);
+      console.error('Delete event API error:', error);
       throw error;
     }
   },
 
   async listEventGalleries(params = {}) {
     try {
-      const response = await api.get("/events/event-galleries/", { params });
+      const response = await api.get('/events/event-galleries/', { params });
       return response.data;
     } catch (error) {
-      console.error("List event galleries API error:", error);
+      console.error('List event galleries API error:', error);
       throw error;
     }
   },
@@ -67,17 +66,17 @@ export default {
       const response = await api.get(`/events/event-galleries/${id}/`);
       return response.data;
     } catch (error) {
-      console.error("Get event gallery API error:", error);
+      console.error('Get event gallery API error:', error);
       throw error;
     }
   },
 
   async createEventGallery(payload) {
     try {
-      const response = await api.post("/events/event-galleries/", payload);
+      const response = await api.post('/events/event-galleries/', payload);
       return response.data;
     } catch (error) {
-      console.error("Create event gallery API error:", error);
+      console.error('Create event gallery API error:', error);
       throw error;
     }
   },
@@ -87,20 +86,19 @@ export default {
       const response = await api.delete(`/events/event-galleries/${id}/`);
       return response.data;
     } catch (error) {
-      console.error("Delete event gallery API error:", error);
+      console.error('Delete event gallery API error:', error);
       throw error;
     }
   },
 
-
   async listEventRegistrations(params = {}) {
     try {
-      const response = await api.get("/events/event-registrations/", {
+      const response = await api.get('/events/event-registrations/', {
         params,
       });
       return response.data;
     } catch (error) {
-      console.error("List event registrations API error:", error);
+      console.error('List event registrations API error:', error);
       throw error;
     }
   },
@@ -110,17 +108,17 @@ export default {
       const response = await api.get(`/events/event-registrations/${id}/`);
       return response.data;
     } catch (error) {
-      console.error("Get event registration API error:", error);
+      console.error('Get event registration API error:', error);
       throw error;
     }
   },
 
   async createEventRegistration(payload) {
     try {
-      const response = await api.post("/events/event-registrations/", payload);
+      const response = await api.post('/events/event-registrations/', payload);
       return response.data;
     } catch (error) {
-      console.error("Create event registration API error:", error);
+      console.error('Create event registration API error:', error);
       throw error;
     }
   },
@@ -133,7 +131,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error("Update event registration API error:", error);
+      console.error('Update event registration API error:', error);
       throw error;
     }
   },
@@ -143,7 +141,7 @@ export default {
       const response = await api.delete(`/events/event-registrations/${id}/`);
       return response.data;
     } catch (error) {
-      console.error("Delete event registration API error:", error);
+      console.error('Delete event registration API error:', error);
       throw error;
     }
   },
@@ -151,22 +149,21 @@ export default {
   async myEventRegistrations() {
     try {
       const response = await api.get(
-        "/events/event-registrations/my_registrations/"
+        '/events/event-registrations/my_registrations/'
       );
       return response.data;
     } catch (error) {
-      console.error("Get my registrations API error:", error);
+      console.error('Get my registrations API error:', error);
       throw error;
     }
   },
 
-
   async listEventPayments(params = {}) {
     try {
-      const response = await api.get("/events/event-payments/", { params });
+      const response = await api.get('/events/event-payments/', { params });
       return response.data;
     } catch (error) {
-      console.error("List event payments API error:", error);
+      console.error('List event payments API error:', error);
       throw error;
     }
   },
@@ -176,7 +173,7 @@ export default {
       const response = await api.get(`/events/event-payments/${id}/`);
       return response.data;
     } catch (error) {
-      console.error("Get event payment API error:", error);
+      console.error('Get event payment API error:', error);
       throw error;
     }
   },
@@ -184,12 +181,12 @@ export default {
   async initiateEventPayment(payload) {
     try {
       const response = await api.post(
-        "/events/event-payments/initiate/",
+        '/events/event-payments/initiate/',
         payload
       );
       return response.data;
     } catch (error) {
-      console.error("Initiate event payment API error:", error);
+      console.error('Initiate event payment API error:', error);
       throw error;
     }
   },
@@ -197,12 +194,12 @@ export default {
   async verifyEventPayment(payload) {
     try {
       const response = await api.post(
-        "/events/event-payments/verify/",
+        '/events/event-payments/verify/',
         payload
       );
       return response.data;
     } catch (error) {
-      console.error("Verify event payment API error:", error);
+      console.error('Verify event payment API error:', error);
       throw error;
     }
   },

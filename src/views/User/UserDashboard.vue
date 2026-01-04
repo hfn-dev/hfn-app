@@ -6,8 +6,66 @@ import UserSidebar from '@/components/layout/UserSidebar.vue';
 const newsletters = ref([]);
 const events = ref([]);
 const topics = ref([]);
-
+const showRegisterModal = ref(false);
+const selectedEvent = ref(null);
+const registering = ref(false);
+const registerError = ref(null);
 const user = ref({ name: '' });
+const downloadingMinutes = ref(false);
+const minutesError = ref(null);
+const latestMinutes = ref(null);
+
+const downloadMinutes = async () => {
+  downloadingMinutes.value = true;
+  minutesError.value = null;
+
+  try {
+    const response = await newsApi.downloadMinutes();
+
+    const link = document.createElement('a');
+    link.href = response.file_url;
+    link.download = response.filename || 'HFN-Meeting-Minutes.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    const blob = new Blob([response], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    window.open(url);
+  } catch (err) {
+    minutesError.value = 'Failed to download minutes';
+  } finally {
+    downloadingMinutes.value = false;
+  }
+};
+
+const openRegisterModal = (event) => {
+  selectedEvent.value = event;
+  showRegisterModal.value = true;
+};
+
+const closeRegisterModal = () => {
+  showRegisterModal.value = false;
+  selectedEvent.value = null;
+  registerError.value = null;
+};
+
+const confirmRegistration = async () => {
+  if (!selectedEvent.value) return;
+
+  registering.value = true;
+  registerError.value = null;
+
+  try {
+    await eventsApi.createEvent(selectedEvent.value.slug);
+    closeRegisterModal();
+    console.log('Successfully registered for event');
+  } catch (err) {
+    registerError.value = 'Failed to register for event';
+  } finally {
+    registering.value = false;
+  }
+};
 
 const fetchUser = async () => {
   try {
@@ -21,7 +79,13 @@ const fetchUser = async () => {
 const fetchNewsletters = async () => {
   try {
     const data = await newsApi.getFeaturedArticles();
-    newsletters.value = data;
+    newsletters.value = data.map((item) => ({
+      title: item.title,
+      image: item.featured_image,
+      description_short: item.excerpt,
+      date: item.publish_date,
+      slug: item.slug,
+    }));
   } catch (error) {
     console.error('Failed to fetch newsletters:', error);
   }
@@ -29,8 +93,22 @@ const fetchNewsletters = async () => {
 
 const fetchEvents = async () => {
   try {
-    const data = await eventsApi.listEvents({ upcoming: true });
-    events.value = data;
+    const data = await eventsApi.listEvents({
+      status: 'upcoming',
+      ordering: 'start_datetime',
+      limit: 6,
+    });
+    events.value = data.results.map((event) => ({
+      slug: event.slug,
+      title: event.title,
+      image: event.banner_image,
+      tag: event.event_type,
+      description: event.description,
+      date: new Date(event.start_datetime).toLocaleDateString(),
+      time: new Date(event.start_datetime).toLocaleTimeString(),
+      location: event.location,
+      buttonText: event.is_free ? 'Register Free' : 'Buy Ticket',
+    }));
   } catch (error) {
     console.error('Failed to fetch events:', error);
   }
@@ -59,7 +137,7 @@ onMounted(() => {
 
     <div class="flex-1 p-6 md:p-10 overflow-y-auto">
       <h2 class="text-xl md:text-2xl font-semibold text-[#f54a00]">
-        Welcome Ruthie,
+        Welcome {{user.name}},
       </h2>
       <p class="text-[#555] mt-1">Stay up to date with the latest on HFN</p>
 
@@ -90,23 +168,37 @@ onMounted(() => {
             </div>
           </div>
 
-          <a
+          <!-- <a
             href="[Link_to_your_PDF]"
             download
             class="inline-block bg-[#004D33] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#006644] transition shadow-lg"
           >
             Download Minutes
-          </a>
+          </a> -->
+          <button
+            @click="downloadMinutes"
+            :disabled="downloadingMinutes"
+            class="inline-flex items-center gap-2 bg-[#004D33] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#006644] transition shadow-lg disabled:opacity-60"
+          >
+            <span v-if="downloadingMinutes">Downloading…</span>
+            <span v-else>Download Minutes</span>
+          </button>
+
+          <p v-if="minutesError" class="text-red-600 text-sm mt-3">
+            {{ minutesError }}
+          </p>
         </section>
       </div>
-      <!-- Newsletter -->
       <section class="mt-10 max-w-6xl mx-auto px-4">
         <h3 class="text-3xl font-sans font-bold text-black text-center mb-10">
           HFN Newsletter
         </h3>
 
         <div class="bg-white rounded-xl overflow-hidden shadow-lg p-6 md:p-10">
-          <div class="grid md:grid-cols-2 gap-8 items-center">
+          <div
+            v-if="newsletters.length"
+            class="grid md:grid-cols-2 gap-8 items-center"
+          >
             <div class="order-2 md:order-1">
               <div class="w-full relative">
                 <img
@@ -185,9 +277,7 @@ onMounted(() => {
 
             <div class="p-6">
               <p class="text-sm text-gray-700 mb-4">
-                What does it really take to de-risk healthcare investments in
-                Nigeria, and make “Made in Nigeria, Made for Health” a
-                sustainable national reality?
+                {{ event.description }}
               </p>
 
               <div
@@ -253,6 +343,7 @@ onMounted(() => {
               </div>
 
               <button
+                @click="openRegisterModal(event)"
                 class="w-full mt-4 bg-[#004D33] text-white px-4 py-3 rounded-lg font-medium hover:bg-[#006644] transition"
               >
                 {{ event.buttonText }}
@@ -330,17 +421,51 @@ onMounted(() => {
                   </p>
                 </div>
 
-                <a
-                  href="#"
+                <router-link
+                  :to="`/news/${topic.slug}`"
                   class="text-sm font-medium text-green-700 hover:text-green-800 transition self-start mt-2"
                 >
                   Read more...
-                </a>
+                </router-link>
               </div>
             </div>
           </div>
         </div>
       </section>
+    </div>
+    <!-- Register Event Modal -->
+    <div
+      v-if="showRegisterModal"
+      class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
+    >
+      <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
+        <h3 class="text-xl font-bold text-[#333] mb-2">Register for Event</h3>
+
+        <p class="text-gray-600 mb-6">
+          {{ selectedEvent?.title }}
+        </p>
+
+        <div v-if="registerError" class="text-red-600 text-sm mb-4">
+          {{ registerError }}
+        </div>
+
+        <div class="flex gap-3">
+          <button
+            @click="closeRegisterModal"
+            class="flex-1 border border-gray-300 rounded-lg py-2"
+          >
+            Cancel
+          </button>
+
+          <button
+            @click="confirmRegistration"
+            :disabled="registering"
+            class="flex-1 bg-[#004D33] text-white rounded-lg py-2 font-semibold hover:bg-[#006644]"
+          >
+            {{ registering ? 'Registering…' : 'Confirm' }}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
