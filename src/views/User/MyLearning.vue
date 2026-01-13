@@ -99,8 +99,7 @@ const continueLearning = async (enrollment) => {
     // Navigate to the course learning page
     router.push(`/learning/courses/${enrollment.course.slug || enrollment.course.id}`);
   } catch (error) {
-    console.error('Error navigating to course:', error);
-    toast.error('Failed to open course');
+    toast.error(`Failed to open course ${error.message}`);
   }
 };
 

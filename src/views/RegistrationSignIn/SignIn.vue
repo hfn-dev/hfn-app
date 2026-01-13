@@ -33,23 +33,22 @@ const handleSignIn = async () => {
       password: password.value
     };
 
-    console.log("Login payload:", payload);
 
     const response = await userRegister.loginUser(payload);
-    
-    if (response.data?.status === "success") {
-      toast.success(response.data.messages?.[0] || "Login successful!");
+    console.log("Login payload:", response);
+    if (response?.status === "success") {
+      toast.success(response.messages?.[0] || "Login successful!");
       
-      if (response.data.actions_required?.includes("verify_2fa")) {
+      if (response.actions_required?.includes("verify_2fa")) {
         localStorage.setItem("pending2FAEmail", username.value.trim());
-        localStorage.setItem("loginTokens", JSON.stringify(response.data.tokens || {}));
+        localStorage.setItem("loginTokens", JSON.stringify(response.tokens || {}));
         
         setTimeout(() => {
           router.push('/verify-2fa');
         }, 1000);
       } 
-      else if (response.data.actions_required?.includes("verify_email")) {
-        toast.warning(response.data.messages?.[1] || "Email verification required.");
+      else if (response.actions_required?.includes("verify_email")) {
+        toast.warning(response.messages?.[1] || "Email verification required.");
         
         localStorage.setItem("pendingVerificationEmail", username.value.trim());
         
@@ -58,29 +57,41 @@ const handleSignIn = async () => {
         }, 1500);
       }
       else {
-        if (response.data.tokens) {
-          localStorage.setItem('token', response.data.tokens.access);
-          localStorage.setItem('refreshToken', response.data.tokens.refresh);
+        if (response.tokens) {
+          // Save tokens (keep legacy keys for compatibility and add explicit keys)
+          localStorage.setItem('token', response.tokens.access);
+          localStorage.setItem('refreshToken', response.tokens.refresh);
+          localStorage.setItem('refresh', response.tokens.refresh);
           
-          if (response.data.role) {
-            localStorage.setItem('role', response.data.role);
+          if (response.role) {
+            localStorage.setItem('role', response.role);
           }
           
           login({
-            token: response.data.tokens.access,
-            refreshToken: response.data.tokens.refresh,
-            role: response.data.role || 'member'
+            token: response.tokens.access,
+            refreshToken: response.tokens.refresh,
+            role: response.role || 'member'
           });
+
+          // Fetch current user profile and save locally as 'User'
+          try {
+            const userProfile = await userRegister.getUser();
+            console.log('Fetched user profile after login:', userProfile);
+            localStorage.setItem('User', JSON.stringify(userProfile));
+          } catch (err) {
+            console.error('Failed to fetch user profile after login:', err);
+            toast.warning('Logged in, but failed to fetch user profile.');
+          }
         }
-        
-        const userRole = response.data.role || localStorage.getItem('role') || 'member';
+
+        const userRole = response.role || localStorage.getItem('role') || 'member';
         handleRoleBasedRedirect(userRole);
       }
     } 
-    else if (response.data?.status === "warning") {
-      toast.warning(response.data.messages?.[0] || "Action required.");
+    else if (response?.status === "warning") {
+      toast.warning(response.messages?.[0] || "Action required.");
       
-      if (response.data.actions_required?.includes("verify_email")) {
+      if (response.actions_required?.includes("verify_email")) {
           
         localStorage.setItem("pendingVerificationEmail", username.value.trim());
         
@@ -90,7 +101,7 @@ const handleSignIn = async () => {
       }
     }
     else {
-      const errorMessage = response.data?.messages?.[0] || "Login failed. Please try again.";
+      const errorMessage = response?.messages?.[0] || "Login failed. Please try again.";
       toast.error(errorMessage);
     }
     
@@ -98,13 +109,12 @@ const handleSignIn = async () => {
     console.error("Login error:", error);
     
     if (error.response) {
-      const errorMsg = error.response.data?.messages?.[0] || 
-                      error.response.data?.message || 
+      const errorMsg = error.response?.messages?.[0] || 
+                      error.response?.message || 
                       `Error: ${error.response.status}`;
       toast.error(errorMsg);
       
-      if (error.response.data?.actions_required?.includes("verify_email")) {
-      
+      if (error.response?.actions_required?.includes("verify_email")) {
         localStorage.setItem("pendingVerificationEmail", username.value.trim());
       }
     } else if (error.request) {
@@ -123,10 +133,10 @@ const handleRoleBasedRedirect = (role) => {
     'superadmin': '/superadmin/dashboard',
     'admin': '/admin/dashboard',
     'editor': '/editor/dashboard',
-    'member': '/member/dashboard'
+    'member': '/user/dashboard'
   };
 
-  const targetPath = roleMap[role.toLowerCase()] || '/dashboard';
+  const targetPath = roleMap[role.toLowerCase()] || '/user/dashboard';
   
   if (role.toLowerCase() === 'admin') {
     const hasSelectedInterests = localStorage.getItem('hasSelectedInterests');

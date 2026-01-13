@@ -107,28 +107,23 @@ const handleVerification = async () => {
     console.log("Verifying OTP with payload:", payload);
     
     const response = await userRegister.verifyUser(payload);
+    console.log("Verification response:", response);
     
-    if (response.data?.status === "success") {
-      toast.success(response.data.messages?.[0] || "Email verified successfully!");
-      
+    if (response?.status === "success") {
+      const successMsg = response.messages?.[0] || "Email verified successfully!";
+      toast.success(successMsg);
+
+      // Clear saved email and navigate to sign-in immediately
       localStorage.removeItem("pendingVerificationEmail");
-      
-      if (response.data.actions_required?.includes("login")) {
-        setTimeout(() => {
-          router.push('/signin');
-        }, 1500);
-      } else {
-        setTimeout(() => {
-          router.push('/signin');
-        }, 1500);
-      }
+      router.push('/signin');
+      return;
     } else {
       // Handle API errors (invalid/expired code)
-      const errorMessage = response.data?.messages?.[0] || "Verification failed.";
+      const errorMessage = response.messages?.[0] || "Verification failed.";
       toast.error(errorMessage);
-      
+
       // If resend is suggested, enable resend button
-      if (response.data?.actions_required?.includes("resend_email_verification")) {
+      if (response.actions_required?.includes("resend_email_verification")) {
         // The user might need to resend, but we keep the timer running
         // The resend button will be enabled when timer expires
       }
@@ -141,8 +136,8 @@ const handleVerification = async () => {
                       error.response.data?.message || 
                       `Error: ${error.response.status}`;
       toast.error(errorMsg);
-      
-      if (error.response.data?.actions_required?.includes("resend_email_verification")) {
+
+      if (error.response?.actions_required?.includes("resend_email_verification")) {
         // Optionally auto-resend or just show message
       }
     } else if (error.request) {
@@ -172,7 +167,7 @@ const handleResend = async () => {
     
     const response = await userRegister.resendOtp(payload);
     
-    if (response.data?.status === "success") {
+    if (response?.status === "success") {
       toast.success(response.data.messages?.[0] || "Verification code resent successfully!");
       
       startTimer();
@@ -205,9 +200,6 @@ const handleResend = async () => {
 };
 
 
-const handleVerifyAndSignup = () => {
-  handleVerification();
-};
 
 </script>
 
@@ -293,7 +285,6 @@ const handleVerifyAndSignup = () => {
           <div>
             <button
               type="submit"
-              @click="handleVerifyAndSignup"
               :disabled="fullCode.length !== 6 || !isTimerRunning || isLoading"
               class="group relative w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white shadow-sm transition-all duration-150 ease-in-out"
               :class="
