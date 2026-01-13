@@ -1,6 +1,8 @@
 <script setup>
-import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
-import { computed } from "vue";
+import courseApi from '@/api/learningModule.js';
+import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
+import { computed } from 'vue';
+import { useRouter } from 'vue-router';
 
 import {
   ChevronLeft,
@@ -11,105 +13,72 @@ import {
   Plus,
   Search,
   Trash2,
-} from "lucide-vue-next";
-import { ref } from "vue";
+} from 'lucide-vue-next';
+import { ref } from 'vue';
 
-const courseTabs = ref(["Published", "Drafts", "Archived", "Approvals"]);
-const currentTab = ref("Published");
+const courseTabs = ref(['Published', 'Drafts', 'Archived', 'Approvals']);
+const currentTab = ref('Published');
+const router = useRouter();
+const courses = ref([]);
+const loading = ref(false);
+const searchQuery = ref('');
 
-const publishedCourses = ref([
-  {
-    id: 1,
-    title: "Naturopathy 101",
-    enrollments: 457,
-    completion: "80%",
-    lastUpdate: "December 28 2024",
-  },
-  {
-    id: 2,
-    title: "Herbal Remedies",
-    enrollments: 47,
-    completion: "72%",
-    lastUpdate: "December 19 2024",
-  },
-  {
-    id: 3,
-    title: "Herbal Remedies",
-    enrollments: 47,
-    completion: "72%",
-    lastUpdate: "December 19 2024",
-  },
-  {
-    id: 4,
-    title: "Herbal Remedies",
-    enrollments: 47,
-    completion: "72%",
-    lastUpdate: "December 19 2024",
-  },
-]);
+const tabStatusMap = {
+  Published: 'published',
+  Drafts: 'draft',
+  Archived: 'archived',
+  Approvals: 'pending',
+};
 
-const draftCourses = ref([
-  {
-    id: 3,
-    title: "Holistic Nutrition (Draft)",
-    enrollments: null,
-    completion: "-",
-    lastUpdate: "December 14 2024",
-  },
-  {
-    id: 4,
-    title: "Mindfulness Practice (Draft)",
-    enrollments: null,
-    completion: "-",
-    lastUpdate: "November 19 2024",
-  },
-]);
+const fetchCourses = async () => {
+  loading.value = true;
 
-const archivedCourses = ref([
-  {
-    id: 5,
-    title: "Sustainable Living (Archived)",
-    enrollments: 4,
-    completion: "100%",
-    lastUpdate: "November 19 2024",
-  },
-  {
-    id: 6,
-    title: "Advanced Anatomy (Archived)",
-    enrollments: null,
-    completion: "-",
-    lastUpdate: "November 11 2024",
-  },
-]);
+  try {
+    const status = tabStatusMap[currentTab.value];
 
- const approvedCourses = ref([
-  {
-    id: 1,
-    title: "Sustainable Living",
-    createdBy: "John Doe - HBA",
-    creationDate: "December 19 2024",
-  },
-  {
-    id: 2,
-    title: "Advanced Anatomy",
-    createdBy: "Jane Smith - HBA",
-    creationDate: "November 11 2024",
-  },
-]);
+    const response = await courseApi.fetchCourses({
+      status,
+      search: searchQuery.value,
+      page: currentPage.value,
+    });
 
- const isApprovalTab = computed(() => currentTab.value === "Approvals");
+    courses.value = response.results || response.data || [];
+  } finally {
+    loading.value = false;
+  }
+};
 
 const activeCourses = computed(() => {
-  if (currentTab.value === "Published") return publishedCourses.value;
-  if (currentTab.value === "Drafts") return draftCourses.value;
-  if (currentTab.value === "Archived") return archivedCourses.value;
-    if (currentTab.value === "Approvals") return approvedCourses.value;
-  return [];
+  if (!searchQuery.value) return courses.value;
+
+  return courses.value.filter((course) =>
+    course.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
 });
 
-const handleAction = (action, courseId) => {
-  console.log(`${action} course ID: ${courseId}`);
-  alert(`${action} action triggered for Course ID: ${courseId}`);
+const isApprovalTab = computed(() => currentTab.value === 'Approvals');
+
+const handleAction = async (action, course) => {
+  switch (action) {
+    case 'View':
+      router.push(`/superadmin/courses/${course.slug}`);
+      break;
+
+    case 'Edit':
+      router.push(`/superadmin/courses/${course.slug}/edit`);
+      break;
+
+    case 'Delete':
+      if (!confirm('Delete this course?')) return;
+      await courseApi.deleteCourse(course.id);
+      fetchCourses();
+      break;
+
+    case 'Approve':
+      await courseApi.approveCourse(course.id);
+      fetchCourses();
+      break;
+  }
 };
 
 const currentPage = ref(1);
@@ -120,6 +89,14 @@ const goToPage = (page) => {
     currentPage.value = page;
   }
 };
+
+watch(searchQuery, fetchCourses);
+watch(currentTab, () => {
+  currentPage.value = 1;
+  fetchCourses();
+});
+
+onMounted(fetchCourses);
 </script>
 
 <template>
@@ -173,6 +150,7 @@ const goToPage = (page) => {
             />
             <input
               type="text"
+              v-model="searchQuery"
               placeholder="Search..."
               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors"
             />
@@ -181,118 +159,139 @@ const goToPage = (page) => {
 
         <table class="min-w-full divide-y divide-gray-200">
           <thead>
-  <tr
-    class="bg-[#f0fff0] text-gray-700 uppercase text-sm leading-normal border-b border-[#00cc66]/50"
-  >
-    <th class="py-3 px-3 text-left w-12 rounded-tl-lg">
-      <input type="checkbox" class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]" />
-    </th>
+            <tr
+              class="bg-[#f0fff0] text-gray-700 uppercase text-sm leading-normal border-b border-[#00cc66]/50"
+            >
+              <th class="py-3 px-3 text-left w-12 rounded-tl-lg">
+                <input
+                  type="checkbox"
+                  class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]"
+                />
+              </th>
 
-    <th class="py-3 px-3 text-left flex items-center">
-      Course Title
-      <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
-    </th>
+              <th class="py-3 px-3 text-left flex items-center">
+                Course Title
+                <MoreVertical
+                  class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
+                />
+              </th>
 
-    <!-- If APPROVAL tab -->
-    <template v-if="isApprovalTab">
-      <th class="py-3 px-3 text-left">Created By</th>
-      <th class="py-3 px-3 text-left">Creation Date</th>
-          <th class="py-3 px-3 text-center rounded-tr-lg">Action</th>
+              <!-- If APPROVAL tab -->
+              <template v-if="isApprovalTab">
+                <th class="py-3 px-3 text-left">Created By</th>
+                <th class="py-3 px-3 text-left">Creation Date</th>
+                <th class="py-3 px-3 text-center rounded-tr-lg">Action</th>
+              </template>
 
-    </template>
+              <!-- Otherwise normal tabs -->
+              <template v-else>
+                <th class="py-3 px-3 text-left">
+                  Enrollments
+                  <MoreVertical
+                    class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
+                  />
+                </th>
+                <th class="py-3 px-3 text-left">
+                  Completion Rate
+                  <MoreVertical
+                    class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
+                  />
+                </th>
+                <th class="py-3 px-3 text-left">
+                  Last Update
+                  <MoreVertical
+                    class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
+                  />
+                </th>
+              </template>
 
-    <!-- Otherwise normal tabs -->
-    <template v-else>
-      <th class="py-3 px-3 text-left">
-        Enrollments
-        <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
-      </th>
-      <th class="py-3 px-3 text-left">
-        Completion Rate
-        <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
-      </th>
-      <th class="py-3 px-3 text-left">
-        Last Update
-        <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
-      </th>
-    </template>
+              <th class="py-3 px-3 text-center rounded-tr-lg">Action</th>
+            </tr>
+          </thead>
 
-    <th class="py-3 px-3 text-center rounded-tr-lg">Action</th>
-  </tr>
-</thead>
+          <tbody
+            class="text-gray-600 text-sm font-light divide-y divide-gray-100"
+          >
+            <tr
+              v-for="course in activeCourses"
+              :key="course.id"
+              class="hover:bg-[#f9fff9] transition-colors"
+            >
+              <td class="py-3 px-3">
+                <input type="checkbox" class="h-4 w-4 text-[#00cc66]" />
+              </td>
 
-          <tbody class="text-gray-600 text-sm font-light divide-y divide-gray-100">
-  <tr
-    v-for="course in activeCourses"
-    :key="course.id"
-    class="hover:bg-[#f9fff9] transition-colors"
-  >
-    <td class="py-3 px-3">
-      <input type="checkbox" class="h-4 w-4 text-[#00cc66]" />
-    </td>
+              <td class="py-3 px-3 font-medium text-[#006633]">
+                {{ course.title }}
+              </td>
 
-    <td class="py-3 px-3 font-medium text-[#006633]">
-      {{ course.title }}
-    </td>
+              <!-- APPROVAL TAB body -->
+              <template v-if="isApprovalTab">
+                <td class="py-3 px-3">
+                  {{ course.created_by?.name }}
+                </td>
+                <td class="py-3 px-3">
+                  {{ course.created_at }}
+                </td>
+                <td class="py-3 px-3">
+                  <button
+                    @click="handleAction('Approve', course)"
+                    class="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+                  >
+                    Approve
+                  </button>
+                </td>
+              </template>
 
-    <!-- APPROVAL TAB body -->
-    <template v-if="isApprovalTab">
-      <td class="py-3 px-3">
-        {{ course.createdBy }}
-      </td>
-      <td class="py-3 px-3">
-        {{ course.creationDate }}
-      </td>
-      <td class="py-3 px-3">
-  <button
-    @click="handleAction('Approve', course.id)"
-    class="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
-  >
-    Approve
-  </button>
-</td>
+              <!-- NORMAL TAB body -->
+              <template v-else>
+                <td class="py-3 px-3">
+                  {{ course.enrollments_count ?? '-' }}
+                </td>
+                <td class="py-3 px-3">
+                  <span
+                    :class="{
+                      'text-green-600 font-semibold':
+                        course.completion?.includes('100'),
+                      'text-orange-500':
+                        parseFloat(course.completion) < 50 &&
+                        course.completion !== '-',
+                    }"
+                  >
+                    {{ course.completion_rate ?? '-' }}
+                  </span>
+                </td>
+                <td class="py-3 px-3">
+                  {{ course.updated_at }}
+                </td>
+              </template>
 
-    </template>
-
-    <!-- NORMAL TAB body -->
-    <template v-else>
-      <td class="py-3 px-3">
-        {{ course.enrollments ?? "-" }}
-      </td>
-      <td class="py-3 px-3">
-        <span
-          :class="{
-            'text-green-600 font-semibold': course.completion?.includes('100'),
-            'text-orange-500': parseFloat(course.completion) < 50 && course.completion !== '-'
-          }"
-        >
-          {{ course.completion }}
-        </span>
-      </td>
-      <td class="py-3 px-3">
-        {{ course.lastUpdate }}
-      </td>
-    </template>
-
-    <td class="py-3 px-3 text-center">
-      <div class="flex item-center justify-center space-x-2">
-        <button @click="handleAction('View', course.id)" class="w-6 h-6 hover:text-blue-500">
-          <Eye class="w-full h-full" />
-        </button>
-        <button @click="handleAction('Edit', course.id)" class="w-6 h-6 hover:text-green-500">
-          <Edit2 class="w-full h-full" />
-        </button>
-        <button @click="handleAction('Delete', course.id)" class="w-6 h-6 hover:text-red-500">
-          <Trash2 class="w-full h-full" />
-        </button>
-      </div>
-    </td>
-  </tr>
-</tbody>
-
+              <td class="py-3 px-3 text-center">
+                <div class="flex item-center justify-center space-x-2">
+                  <button
+                    @click="handleAction('View', course)"
+                    class="w-6 h-6 hover:text-blue-500"
+                  >
+                    <Eye class="w-full h-full" />
+                  </button>
+                  <button
+                    @click="handleAction('Edit', course)"
+                    class="w-6 h-6 hover:text-green-500"
+                  >
+                    <Edit2 class="w-full h-full" />
+                  </button>
+                  <button
+                    @click="handleAction('Delete', course)"
+                    class="w-6 h-6 hover:text-red-500"
+                  >
+                    <Trash2 class="w-full h-full" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
         </table>
 
-        <!-- Pagination -->
         <div class="flex justify-end items-center mt-6 text-sm text-gray-600">
           <span class="mr-4">Page {{ currentPage }} of {{ totalPages }}</span>
           <div class="flex space-x-2">
@@ -321,5 +320,4 @@ const goToPage = (page) => {
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

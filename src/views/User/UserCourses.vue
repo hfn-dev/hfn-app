@@ -132,14 +132,12 @@ const filterCoursesByTrack = () => {
   updatePagination();
 };
 
-// Get current page courses
 const currentPageCourses = computed(() => {
   const startIndex = (currentPage.value - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   return filteredCourses.value.slice(startIndex, endIndex);
 });
 
-// Handle search
 const handleSearch = () => {
   if (!searchQuery.value.trim()) {
     filteredCourses.value = courses.value;
@@ -157,39 +155,31 @@ const handleSearch = () => {
   updatePagination();
 };
 
-// Format price
 const formatPrice = (course) => {
   if (course.is_free) return "Free";
   return `₦${course.price?.toLocaleString() || '0'}`;
 };
 
-// Format rating
 const formatRating = (course) => {
   return course.rating_average?.toFixed(1) || '0.0';
 };
 
-// Format review count
 const formatReviewCount = (course) => {
   return course.rating_count?.toLocaleString() || '0';
 };
 
-// Navigate to course details
 const goToCourseDetails = (courseId) => {
   router.push({ name: "CourseDetails", params: { id: courseId } });
 };
 
-// Check if user is enrolled
 const isUserEnrolled = (courseId) => {
   return userEnrollments.value.some(enrollment => enrollment.course?.id === courseId);
 };
 
-// Handle course action
 const handleCourseAction = async (course) => {
   if (isUserEnrolled(course.id)) {
-    // Continue course
     router.push(`/learning/courses/${course.id || course.slug}`);
   } else {
-    // Enroll in course
     try {
       await learningModule.courseEnrollment({
         slug: course.slug || course.id
@@ -203,12 +193,10 @@ const handleCourseAction = async (course) => {
   }
 };
 
-// Get action button text
 const getActionButtonText = (course) => {
   return isUserEnrolled(course.id) ? 'Continue Course' : 'Take Course';
 };
 
-// Get star icons
 const getStarIcons = (rating) => {
   const stars = [];
   const fullStars = Math.floor(rating);
@@ -230,7 +218,6 @@ const getStarIcons = (rating) => {
   return stars;
 };
 
-// SVG icons
 const getIconPaths = (name) => {
   const icons = {
     dashboard:
@@ -261,7 +248,6 @@ const getIconPaths = (name) => {
   return icons[name] || "";
 };
 
-// Initialize data
 const initializeData = async () => {
   try {
     isLoading.value = true;
@@ -273,7 +259,6 @@ const initializeData = async () => {
       fetchUserEnrollments()
     ]);
     
-    // Set default track if categories exist
     if (courseTracks.value.length > 0) {
       activeCourseTrack.value = courseTracks.value[0];
       filterCoursesByTrack();
@@ -287,12 +272,10 @@ const initializeData = async () => {
   }
 };
 
-// Watch for track changes
 watch(() => activeCourseTrack.value, () => {
   filterCoursesByTrack();
 });
 
-// On component mount
 onMounted(() => {
   initializeData();
 });
@@ -307,14 +290,11 @@ onMounted(() => {
         :style="{ backgroundColor: 'white' }"
       >
         <div class="max-w-6xl mx-auto p-4 sm:p-8">
-          <!-- Loading State -->
           <div v-if="isLoading" class="flex justify-center items-center h-64">
             <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#00cc66]"></div>
           </div>
 
-          <!-- Dashboard Content -->
           <div v-else>
-            <!-- Welcome Section -->
             <div class="mb-10 pt-4">
               <h1 class="text-3xl font-bold" style="color: #e87a18">
                 Welcome {{ userName }},
@@ -324,7 +304,6 @@ onMounted(() => {
               </p>
             </div>
 
-            <!-- How It Works Section -->
             <div
               class="w-screen mb-12 py-16 shadow-inner relative left-1/2 right-1/2 -mx-[50vw]"
               :style="{ backgroundColor: LIGHT_PINKISH_GRAY }"
@@ -399,7 +378,6 @@ onMounted(() => {
               </div>
             </div>
 
-            <!-- Search Bar -->
             <div class="mb-8">
               <div class="relative max-w-2xl mx-auto">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -417,7 +395,6 @@ onMounted(() => {
               </div>
             </div>
 
-            <!-- Course Tracks -->
             <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">
               Our Course Tracks
             </h2>
@@ -445,14 +422,12 @@ onMounted(() => {
               </button>
             </div>
 
-            <!-- Courses Grid -->
             <div v-if="currentPageCourses.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               <div
                 v-for="course in currentPageCourses"
                 :key="course.id"
                 class="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-2xl transition duration-300 transform hover:-translate-y-1"
               >
-                <!-- Course Thumbnail -->
                 <div class="relative h-48 bg-gray-200 overflow-hidden">
                   <img
                     v-if="course.thumbnail"
@@ -480,7 +455,6 @@ onMounted(() => {
                   </div>
                 </div>
 
-                <!-- Course Info -->
                 <div class="p-4">
                   <p class="text-xs text-gray-500 font-semibold uppercase mb-1">
                     {{ course.category?.name || 'Uncategorized' }}
@@ -493,7 +467,6 @@ onMounted(() => {
                   </h3>
                   <p class="text-sm text-gray-600 mb-2">By {{ course.instructor?.full_name || course.instructor?.username || 'HFN Team' }}</p>
 
-                  <!-- Rating -->
                   <div class="flex items-center my-3">
                     <div class="flex items-center mr-2">
                       <svg
@@ -520,12 +493,10 @@ onMounted(() => {
                     </span>
                   </div>
 
-                  <!-- Description -->
                   <p class="text-sm text-gray-500 line-clamp-3 mb-4">
                     {{ course.short_description || course.description || 'No description available' }}
                   </p>
 
-                  <!-- Course Stats -->
                   <div class="flex justify-between text-xs text-gray-500 mb-4">
                     <div class="flex items-center">
                       <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -541,7 +512,6 @@ onMounted(() => {
                     </div>
                   </div>
 
-                  <!-- Action Button -->
                   <button
                     @click="handleCourseAction(course)"
                     class="w-full py-2 rounded-lg font-semibold text-white transition duration-200 hover:opacity-90"
@@ -556,7 +526,6 @@ onMounted(() => {
               </div>
             </div>
 
-            <!-- Empty State -->
             <div v-else class="text-center py-12">
               <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -569,7 +538,6 @@ onMounted(() => {
               </p>
             </div>
 
-            <!-- Pagination -->
             <div v-if="currentPageCourses.length > 0" class="flex justify-center items-center mt-10 space-x-4 text-gray-600">
               <button
                 @click="currentPage--"
@@ -612,7 +580,6 @@ onMounted(() => {
               </button>
             </div>
 
-            <!-- Latest Courses Section -->
             <div v-if="latestCourses.length > 0">
               <h2 class="text-2xl font-bold text-gray-800 mt-12 mb-6">
                 Latest Courses

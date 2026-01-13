@@ -1,8 +1,8 @@
 <script setup>
-import assets from "@/assets/assets.png";
-import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
-import { reactive, ref } from "vue";
-import { useRouter } from "vue-router";
+import assets from '@/assets/assets.png';
+import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
+import { reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import {
   ArcElement,
@@ -16,8 +16,8 @@ import {
   PointElement,
   Title,
   Tooltip,
-} from "chart.js";
-import { Bar, Line, Pie } from "vue-chartjs";
+} from 'chart.js';
+import { Bar, Line, Pie } from 'vue-chartjs';
 
 ChartJS.register(
   Title,
@@ -32,21 +32,34 @@ ChartJS.register(
   Filler
 );
 
-const active = ref("Dashboard");
+const active = ref('Dashboard');
 const router = useRouter();
 
+const dashboardData = reactive({
+  stats: [],
+  summary: [],
+  courses: [],
+  mostViewed: [],
+  revenue: {},
+  enrollment: {},
+  completion: {},
+  growth: {},
+});
+const loading = ref(true);
+const error = ref(null);
+
 const revenueData = reactive({
-  labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023"],
+  labels: [],
   datasets: [
     {
-      label: "Revenue",
-      backgroundColor: "rgba(0, 204, 102, 0.3)",
-      borderColor: "#00cc66",
-      pointBackgroundColor: "#00cc66",
-      pointBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "#00cc66",
-      data: [5000, 10000, 30000, 60000, 10000, 20000, 70000, 95000],
+      label: 'Revenue',
+      backgroundColor: 'rgba(0, 204, 102, 0.3)',
+      borderColor: '#00cc66',
+      pointBackgroundColor: '#00cc66',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: '#00cc66',
+      data: [],
       fill: true,
       tension: 0.4,
     },
@@ -63,14 +76,14 @@ const revenueChartOptions = reactive({
     tooltip: {
       callbacks: {
         label: function (context) {
-          let label = context.dataset.label || "";
+          let label = context.dataset.label || '';
           if (label) {
-            label += ": ";
+            label += ': ';
           }
           if (context.parsed.y !== null) {
-            label += new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
+            label += new Intl.NumberFormat('en-US', {
+              style: 'currency',
+              currency: 'USD',
               maximumFractionDigits: 0,
             }).format(context.parsed.y);
           }
@@ -95,7 +108,7 @@ const revenueChartOptions = reactive({
       ticks: {
         callback: function (value) {
           if (value >= 1000) {
-            return value / 1000 + "k";
+            return value / 1000 + 'k';
           }
           return value;
         },
@@ -105,146 +118,45 @@ const revenueChartOptions = reactive({
       },
       grid: {
         borderDash: [5, 5],
-        color: "rgba(0,0,0,0.1)",
+        color: 'rgba(0,0,0,0.1)',
       },
     },
   },
 });
 
-const mostViewedCourses = reactive([
-  { name: "Pregnancy", value: "120K", progress: "100%" },
-  { name: "Pregnancy", value: "120K", progress: "100%" },
-  { name: "Pregnancy", value: "80K", progress: "66%" },
-  { name: "Pregnancy", value: "80K", progress: "66%" },
-  { name: "Pregnancy", value: "70K", progress: "58%" },
-  { name: "Pregnancy", value: "70K", progress: "58%" },
-  { name: "Pregnancy", value: "50K", progress: "42%" },
-  { name: "Pregnancy", value: "50K", progress: "42%" },
-  { name: "Pregnancy", value: "50K", progress: "42%" },
-]);
-
-const summaryData = reactive([
-  {
-    title: "Total Visits",
-    value: "12,456",
-    trendValue: "Up 12%",
-    trendType: "up",
-  },
-  {
-    title: "Unique Visits",
-    value: "456",
-    trendValue: "Down 29%",
-    trendType: "down",
-  },
-  {
-    title: "Bounce Rate",
-    value: "12,456",
-    trendValue: "Up 12%",
-    trendType: "up",
-  },
-  {
-    title: "Time spent on Courses",
-    value: "36,090 hrs",
-    trendValue: "Up 12%",
-    trendType: "up",
-  },
-]);
-
-const courseData = reactive([
-  { name: "Pregnancy", enrollments: 340 },
-  { name: "Data Science Course", enrollments: 275 },
-  { name: "Digital Illustration", enrollments: 50 },
-  { name: "Advanced Excel", enrollments: 410 },
-]);
-
-// --- STATS DATA ---
-const statCards = [
-  {
-    title: "Total Courses",
-    value: "13",
-    change: "13% Increase",
-    changeColor: "text-[#00cc66]",
-  },
-  {
-    title: "Active Courses",
-    value: "7",
-    change: "13% Increase",
-    changeColor: "text-[#00cc66]",
-  },
-  {
-    title: "Average Enrollment",
-    value: "13",
-    change: "–5% Decrease",
-    changeColor: "text-red-500",
-  },
-  {
-    title: "Average Rating",
-    value: "4.5",
-    stars: true,
-    change: "0% Increase",
-    changeColor: "text-gray-500",
-  },
-];
-
 const engagementData = {
-  labels: [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ],
+  labels: [],
   datasets: [
     {
-      label: "Engagement",
-      backgroundColor: "#28a745",
+      label: 'Engagement',
+      backgroundColor: '#28a745',
       borderRadius: 8,
-      data: [60, 80, 40, 70, 100, 90, 80, 110, 95, 85, 70, 90],
+      data: [],
     },
   ],
 };
 
 const completionData = {
-  labels: ["Completed", "In Progress", "Pending"],
+  labels: [],
   datasets: [
     {
-      label: "Course Completion",
-      backgroundColor: ["#28a745", "#ffb300", "#ff5252"],
-      data: [45, 35, 20],
+      label: 'Course Completion',
+      backgroundColor: ['#28a745', '#ffb300', '#ff5252'],
+      data: [],
     },
   ],
 };
 
 const growthData = {
-  labels: [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ],
+  labels: [],
   datasets: [
     {
-      label: "Students",
-      borderColor: "#fdc700",
-      backgroundColor: "#fdc7008a",
+      label: 'Students',
+      borderColor: '#fdc700',
+      backgroundColor: '#fdc7008a',
       fill: true,
       tension: 0.4,
-      data: [150, 200, 180, 260, 300, 400, 380, 420, 450, 480, 460, 500],
+      data: [],
     },
   ],
 };
@@ -263,7 +175,7 @@ const pieOptions = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
-    legend: { position: "bottom" },
+    legend: { position: 'bottom' },
   },
 };
 
@@ -279,6 +191,61 @@ const lineOptions = {
 const showSidebar = ref(false);
 const toggleSidebar = () => (showSidebar.value = !showSidebar.value);
 const closeSidebar = () => (showSidebar.value = false);
+
+onMounted(async () => {
+  try {
+    loading.value = true;
+
+    const dash = await analyticsApi.fetchDashboard();
+
+    dashboardData.stats = dash.stats;
+    dashboardData.summary = dash.summary;
+    dashboardData.courses = dash.courses;
+    dashboardData.mostViewed = dash.mostViewed;
+    dashboardData.revenue = dash.revenue;
+    dashboardData.enrollment = dash.enrollment;
+    dashboardData.completion = dash.completion;
+    dashboardData.growth = dash.growth;
+
+    const revenueAnalytics = await analyticsApi.fetchRevenueAnalytics();
+    dashboardData.revenue = revenueAnalytics.highlights || {};
+
+    if (revenueAnalytics.chartData) {
+      revenueData.labels = revenueAnalytics.chartData.labels || [];
+      revenueData.datasets[0].data = revenueAnalytics.chartData.data || [];
+    }
+
+    const courseAnalytics = await analyticsApi.fetchCourseAnalytics();
+
+    if (courseAnalytics.enrollmentByMonth) {
+      engagementData.labels = courseAnalytics.enrollmentByMonth.labels || [];
+      engagementData.datasets[0].data =
+        courseAnalytics.enrollmentByMonth.data || [];
+      dashboardData.enrollment = courseAnalytics.enrollmentByMonth;
+    }
+
+    if (courseAnalytics.completionStatus) {
+      completionData.labels = courseAnalytics.completionStatus.labels || [];
+      completionData.datasets[0].data =
+        courseAnalytics.completionStatus.data || [];
+      dashboardData.completion = courseAnalytics.completionStatus;
+    }
+
+    const membershipAnalytics = await analyticsApi.fetchMembershipAnalytics();
+
+    if (membershipAnalytics.studentGrowth) {
+      growthData.labels = membershipAnalytics.studentGrowth.labels || [];
+      growthData.datasets[0].data =
+        membershipAnalytics.studentGrowth.data || [];
+      dashboardData.growth = membershipAnalytics.studentGrowth;
+    }
+  } catch (err) {
+    console.error('Failed to load dashboard data', err);
+    error.value = err;
+  } finally {
+    loading.value = false;
+  }
+});
 </script>
 
 <template>
@@ -303,7 +270,6 @@ const closeSidebar = () => (showSidebar.value = false);
       </svg>
     </button>
 
-    <!-- SIDEBAR -->
     <div
       class="fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:translate-x-0"
       :class="showSidebar ? 'translate-x-0' : '-translate-x-full'"
@@ -328,7 +294,7 @@ const closeSidebar = () => (showSidebar.value = false);
 
       <div class="flex justify-between items-stretch mb-10 space-x-6">
         <div
-          v-for="(stat, index) in statCards"
+          v-for="(stat, index) in dashboardData.stats"
           :key="stat.title"
           class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
           :class="{
@@ -388,7 +354,7 @@ const closeSidebar = () => (showSidebar.value = false);
       <div class="p-6 bg-white rounded-xl">
         <div class="flex justify-between items-stretch mb-8 space-x-6">
           <div
-            v-for="card in summaryData"
+            v-for="card in dashboardData.summary"
             :key="card.title"
             class="summary-card-alt flex-1 p-6 text-center bg-white shadow-lg relative overflow-hidden group transition-all duration-300"
             :class="{
@@ -421,7 +387,7 @@ const closeSidebar = () => (showSidebar.value = false);
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <div
-            v-for="course in courseData"
+            v-for="course in dashboardData.courses"
             :key="course.name"
             class="course-card"
           >
@@ -464,17 +430,23 @@ const closeSidebar = () => (showSidebar.value = false);
             <div class="highlight-card-wrapper border-r border-orange-100">
               <div class="highlight-card">
                 <p class="text-sm text-gray-500 mb-1">Top month</p>
-                <p class="text-3xl font-bold text-[#E87A18]">November</p>
-                <p class="text-xl font-semibold text-[#E87A18] mt-1">2019</p>
+                <p class="text-3xl font-bold text-[#E87A18]">
+                  {{ dashboardData.revenue.topMonth?.name || 'N/A' }}
+                </p>
+                <p class="text-xl font-semibold text-[#E87A18] mt-1">
+                  {{ dashboardData.revenue.topMonth?.year || 'N/A' }}
+                </p>
               </div>
             </div>
 
             <div class="highlight-card-wrapper border-r border-orange-100">
               <div class="highlight-card">
                 <p class="text-sm text-gray-500 mb-1">Top year</p>
-                <p class="text-3xl font-bold text-[#E87A18]">2023</p>
+                <p class="text-3xl font-bold text-[#E87A18]">
+                  {{ dashboardData.revenue.topYear?.year || 'N/A' }}
+                </p>
                 <p class="text-xl font-semibold text-gray-600 mt-1">
-                  96K sold so far
+                  {{ dashboardData.revenue.topYear?.sales || 'N/A' }}
                 </p>
               </div>
             </div>
@@ -487,8 +459,12 @@ const closeSidebar = () => (showSidebar.value = false);
                   alt="Instructor"
                   class="w-10 h-10 rounded-full mb-1 border-2 border-orange-300"
                 />
-                <p class="text-lg font-bold text-gray-800">Naturopathy 101</p>
-                <p class="text-sm text-gray-600">Dr. Kanu Nwarikwo</p>
+                <p class="text-lg font-bold text-gray-800">
+                  {{ dashboardData.revenue.bestSeller?.name || 'N/A' }}
+                </p>
+                <p class="text-sm text-gray-600">
+                  {{ dashboardData.revenue.bestSeller?.instructor || 'N/A' }}
+                </p>
               </div>
             </div>
           </div>
@@ -499,7 +475,7 @@ const closeSidebar = () => (showSidebar.value = false);
           </h2>
           <div class="space-y-4">
             <div
-              v-for="(course, index) in mostViewedCourses"
+              v-for="(course, index) in dashboardData.mostViewed"
               :key="index"
               class="flex items-center"
             >
@@ -560,7 +536,7 @@ const closeSidebar = () => (showSidebar.value = false);
 }
 
 .summary-card-corrected::before {
-  content: "";
+  content: '';
   position: absolute;
   top: -10px;
   left: -10px;
@@ -575,7 +551,7 @@ const closeSidebar = () => (showSidebar.value = false);
 }
 
 .summary-card-corrected::after {
-  content: "";
+  content: '';
   position: absolute;
   bottom: -10px;
   right: -10px;
@@ -600,7 +576,3 @@ const closeSidebar = () => (showSidebar.value = false);
   color: #f97316;
 }
 </style>
-
-
-
-

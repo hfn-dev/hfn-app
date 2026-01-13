@@ -1,15 +1,143 @@
+<script setup>
+import eventsApi from '@/api/events.js';
+import newsApi from '@/api/newsModule.js';
+import UserSidebar from '@/components/layout/UserSidebar.vue';
 
+const newsletters = ref([]);
+const events = ref([]);
+const topics = ref([]);
+const showRegisterModal = ref(false);
+const selectedEvent = ref(null);
+const registering = ref(false);
+const registerError = ref(null);
+const user = ref({ name: '' });
+const downloadingMinutes = ref(false);
+const minutesError = ref(null);
+const latestMinutes = ref(null);
+
+const downloadMinutes = async () => {
+  downloadingMinutes.value = true;
+  minutesError.value = null;
+
+  try {
+    const response = await newsApi.downloadMinutes();
+
+    const link = document.createElement('a');
+    link.href = response.file_url;
+    link.download = response.filename || 'HFN-Meeting-Minutes.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    const blob = new Blob([response], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    window.open(url);
+  } catch (err) {
+    minutesError.value = 'Failed to download minutes';
+  } finally {
+    downloadingMinutes.value = false;
+  }
+};
+
+const openRegisterModal = (event) => {
+  selectedEvent.value = event;
+  showRegisterModal.value = true;
+};
+
+const closeRegisterModal = () => {
+  showRegisterModal.value = false;
+  selectedEvent.value = null;
+  registerError.value = null;
+};
+
+const confirmRegistration = async () => {
+  if (!selectedEvent.value) return;
+
+  registering.value = true;
+  registerError.value = null;
+
+  try {
+    await eventsApi.createEvent(selectedEvent.value.slug);
+    closeRegisterModal();
+    console.log('Successfully registered for event');
+  } catch (err) {
+    registerError.value = 'Failed to register for event';
+  } finally {
+    registering.value = false;
+  }
+};
+
+const fetchUser = async () => {
+  try {
+    const data = await authApi.getCurrentUser();
+    user.value = data;
+  } catch (error) {
+    console.error('Failed to fetch user info:', error);
+  }
+};
+
+const fetchNewsletters = async () => {
+  try {
+    const data = await newsApi.getFeaturedArticles();
+    newsletters.value = data.map((item) => ({
+      title: item.title,
+      image: item.featured_image,
+      description_short: item.excerpt,
+      date: item.publish_date,
+      slug: item.slug,
+    }));
+  } catch (error) {
+    console.error('Failed to fetch newsletters:', error);
+  }
+};
+
+const fetchEvents = async () => {
+  try {
+    const data = await eventsApi.listEvents({
+      status: 'upcoming',
+      ordering: 'start_datetime',
+      limit: 6,
+    });
+    events.value = data.results.map((event) => ({
+      slug: event.slug,
+      title: event.title,
+      image: event.banner_image,
+      tag: event.event_type,
+      description: event.description,
+      date: new Date(event.start_datetime).toLocaleDateString(),
+      time: new Date(event.start_datetime).toLocaleTimeString(),
+      location: event.location,
+      buttonText: event.is_free ? 'Register Free' : 'Buy Ticket',
+    }));
+  } catch (error) {
+    console.error('Failed to fetch events:', error);
+  }
+};
+
+const fetchTopics = async () => {
+  try {
+    const data = await newsApi.listArticles({ limit: 4 });
+    topics.value = data;
+  } catch (error) {
+    console.error('Failed to fetch topics:', error);
+  }
+};
+
+onMounted(() => {
+  fetchNewsletters();
+  fetchEvents();
+  fetchTopics();
+  fetchUser();
+});
+</script>
 
 <template>
   <div class="flex min-h-screen bg-white">
-    <!-- Sidebar -->
     <UserSidebar />
 
-    <!-- Main Content -->
     <div class="flex-1 p-6 md:p-10 overflow-y-auto">
-      <!-- Header -->
       <h2 class="text-xl md:text-2xl font-semibold text-[#f54a00]">
-        Welcome Ruthie,
+        Welcome {{user.name}},
       </h2>
       <p class="text-[#555] mt-1">Stay up to date with the latest on HFN</p>
 
@@ -40,23 +168,37 @@
             </div>
           </div>
 
-          <a
+          <!-- <a
             href="[Link_to_your_PDF]"
             download
             class="inline-block bg-[#004D33] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#006644] transition shadow-lg"
           >
             Download Minutes
-          </a>
+          </a> -->
+          <button
+            @click="downloadMinutes"
+            :disabled="downloadingMinutes"
+            class="inline-flex items-center gap-2 bg-[#004D33] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#006644] transition shadow-lg disabled:opacity-60"
+          >
+            <span v-if="downloadingMinutes">Downloading…</span>
+            <span v-else>Download Minutes</span>
+          </button>
+
+          <p v-if="minutesError" class="text-red-600 text-sm mt-3">
+            {{ minutesError }}
+          </p>
         </section>
       </div>
-      <!-- Newsletter -->
       <section class="mt-10 max-w-6xl mx-auto px-4">
         <h3 class="text-3xl font-sans font-bold text-black text-center mb-10">
           HFN Newsletter
         </h3>
 
         <div class="bg-white rounded-xl overflow-hidden shadow-lg p-6 md:p-10">
-          <div class="grid md:grid-cols-2 gap-8 items-center">
+          <div
+            v-if="newsletters.length"
+            class="grid md:grid-cols-2 gap-8 items-center"
+          >
             <div class="order-2 md:order-1">
               <div class="w-full relative">
                 <img
@@ -135,9 +277,7 @@
 
             <div class="p-6">
               <p class="text-sm text-gray-700 mb-4">
-                What does it really take to de-risk healthcare investments in
-                Nigeria, and make “Made in Nigeria, Made for Health” a
-                sustainable national reality?
+                {{ event.description }}
               </p>
 
               <div
@@ -203,6 +343,7 @@
               </div>
 
               <button
+                @click="openRegisterModal(event)"
                 class="w-full mt-4 bg-[#004D33] text-white px-4 py-3 rounded-lg font-medium hover:bg-[#006644] transition"
               >
                 {{ event.buttonText }}
@@ -240,7 +381,7 @@
                   class="text-xs font-semibold px-3 py-1 text-white rounded-lg shadow-md z-10"
                   :style="{ backgroundColor: topic.tagColor || '#ff6600' }"
                 >
-                  {{ topic.tag || "Public Health Stories" }}
+                  {{ topic.tag || 'Public Health Stories' }}
                 </span>
               </div>
 
@@ -259,7 +400,7 @@
                           d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 18H5V8h14v13z"
                         />
                       </svg>
-                      {{ topic.date || "October 10, 2025" }}
+                      {{ topic.date || 'October 10, 2025' }}
                     </span>
                     <span class="flex items-center text-orange-600">
                       <svg
@@ -271,7 +412,7 @@
                           d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
                         />
                       </svg>
-                      {{ topic.comments || "0 Comments" }}
+                      {{ topic.comments || '0 Comments' }}
                     </span>
                   </div>
 
@@ -280,123 +421,54 @@
                   </p>
                 </div>
 
-                <a
-                  href="#"
+                <router-link
+                  :to="`/news/${topic.slug}`"
                   class="text-sm font-medium text-green-700 hover:text-green-800 transition self-start mt-2"
                 >
                   Read more...
-                </a>
+                </router-link>
               </div>
             </div>
           </div>
         </div>
       </section>
     </div>
+    <!-- Register Event Modal -->
+    <div
+      v-if="showRegisterModal"
+      class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
+    >
+      <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
+        <h3 class="text-xl font-bold text-[#333] mb-2">Register for Event</h3>
+
+        <p class="text-gray-600 mb-6">
+          {{ selectedEvent?.title }}
+        </p>
+
+        <div v-if="registerError" class="text-red-600 text-sm mb-4">
+          {{ registerError }}
+        </div>
+
+        <div class="flex gap-3">
+          <button
+            @click="closeRegisterModal"
+            class="flex-1 border border-gray-300 rounded-lg py-2"
+          >
+            Cancel
+          </button>
+
+          <button
+            @click="confirmRegistration"
+            :disabled="registering"
+            class="flex-1 bg-[#004D33] text-white rounded-lg py-2 font-semibold hover:bg-[#006644]"
+          >
+            {{ registering ? 'Registering…' : 'Confirm' }}
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-
-<script setup>
-import UserSidebar from "@/components/layout/UserSidebar.vue";
-
-const newsletters = [
-  {
-    image: new URL("@/assets/event.png", import.meta.url).href,
-    title: "Q4 2025 ISSUE IS AVAILABLE!",
-    description:
-      "Catch up on the latest insights, stories, and updates from our HFN community. Stay informed and inspired.",
-    buttonText: "Read Newsletter",
-  },
-  {
-    image: new URL("@/assets/event.png", import.meta.url).href,
-    title: "Q3 2025 RECAP",
-    description:
-      "Highlights from our previous edition. Learn what’s been trending in the HFN circle.",
-    buttonText: "View Now",
-  },
-];
-
-const events = [
-  {
-    image: new URL("@/assets/event.png", import.meta.url).href,
-    title: "HFN Medical Summit",
-    description: "Join experts discussing healthcare innovation and impact.",
-    buttonText: "Register Now",
-    tag: "Programs & Initiatives",
-    date: "October 10, 2025",
-    time: "10 am",
-    location: "No 12 Ifeanyi Str, Ikeja Lagos",
-  },
-  {
-    image: new URL("@/assets/event.png", import.meta.url).href,
-    title: "Health Awareness Campaign",
-    description:
-      "Be part of our initiative to spread wellness across communities.",
-    buttonText: "Join Us",
-    tag: "Programs & Initiatives",
-    date: "October 10, 2025",
-    time: "10 am",
-    location: "No 12 Ifeanyi Str, Ikeja Lagos",
-  },
-  {
-    image: new URL("@/assets/event.png", import.meta.url).href,
-    title: "Women in Health Forum",
-    description:
-      "Empowering women professionals to lead in healthcare and beyond.",
-    buttonText: "Learn More",
-    tag: "Programs & Initiatives",
-    date: "October 10, 2025",
-    time: "10 am",
-    location: "No 12 Ifeanyi Str, Ikeja Lagos",
-  },
-];
-
-const topics = [
-  {
-    title: "Understanding Health Policies",
-    description:
-      "Explore how public health policies shape healthcare systems today.",
-    buttonText: "Apply Now",
-    tagColor: "#ff6600",
-    tag: "Public Health Stories",
-    date: "October 10, 2025",
-    comments: "0 Comments",
-    visualImage: new URL("@/assets/courses.jpg", import.meta.url).href,
-  },
-  {
-    title: "Nutrition and Wellness",
-    description:
-      "Simple guides to a healthier life through balanced nutrition.",
-    buttonText: "Read More",
-    tagColor: "#ff6600",
-    tag: "Public Health Stories",
-    date: "October 10, 2025",
-    comments: "0 Comments",
-    visualImage: new URL("@/assets/courses.jpg", import.meta.url).href,
-  },
-  {
-    title: "HFN Community Highlights",
-    description:
-      "Catch up with stories and achievements from our vibrant community.",
-    buttonText: "View Stories",
-    tagColor: "#ff6600",
-    tag: "Public Health Stories",
-    date: "October 10, 2025",
-    comments: "0 Comments",
-    visualImage: new URL("@/assets/courses.jpg", import.meta.url).href,
-  },
-  {
-    title: "Understanding Health Policies",
-    description:
-      "Explore how public health policies shape healthcare systems today.",
-    buttonText: "Apply Now",
-    tagColor: "#ff6600",
-    tag: "Public Health Stories",
-    date: "October 10, 2025",
-    comments: "0 Comments",
-    visualImage: new URL("@/assets/courses.jpg", import.meta.url).href,
-  },
-];
-</script>
 
 <style scoped>
 ::-webkit-scrollbar {

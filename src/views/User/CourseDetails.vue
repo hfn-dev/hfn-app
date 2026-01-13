@@ -1,61 +1,48 @@
 <script setup>
+import learningModule from '@/api/learningModule';
 import courses from '@/assets/courses.jpg';
 import student from '@/assets/student.jpg';
 
 import UserSidebar from '@/components/layout/UserSidebar.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+
 const DARK_GREEN = '#004d33';
 const LIGHT_GREEN = '#f2f9f3';
 
-const activeTab = ref('courseInfo'); 
-const activeModule = ref(null); 
+const activeTab = ref('courseInfo');
+const activeModule = ref(null);
 
-const courseContentModules = ref([
-  {
-    id: 1,
-    title: 'Module One: Meanings and Definitions',
-    lessons: [
-      { title: 'Lesson 1: What is Naturopathy?', duration: '20:05' },
-      { title: 'Lesson 2: Lorem ipsum', duration: '20:05' },
-    ],
-    resources: [{ title: 'Additional Resources', type: 'link' }],
-  },
-  { id: 2, title: 'Module Two: Lorem ipsum', lessons: [], resources: [] },
-  { id: 3, title: 'Module Three: Lorem ipsum', lessons: [], resources: [] },
-  { id: 4, title: 'Module Four: Lorem ipsum', lessons: [], resources: [] },
-  { id: 5, title: 'Module Five: Lorem ipsum', lessons: [], resources: [] },
-]);
+const route = useRoute();
+const slug = route.params.slug;
+const loading = ref(true);
 
-const similarCourses = ref([
-  {
-    id: 1,
-    instructor: 'Kanu Nwankwo',
-    title: 'Naturopathy',
-    image: courses,
-    rating: 4.5,
-    reviews: 24,
-  },
-  {
-    id: 2,
-    instructor: 'Kanu Nwankwo',
-    title: 'Naturopathy',
-    image: courses,
-    rating: 4.5,
-    reviews: 24,
-  },
-  {
-    id: 3,
-    instructor: 'Kanu Nwankwo',
-    title: 'Naturopathy',
-    image: courses,
-    rating: 4.5,
-    reviews: 24,
-  },
-]);
+const course = ref(null);
+const modules = ref([]);
+const instructor = ref(null);
+const similarCourses = ref([]);
 
 const toggleModule = (moduleId) => {
   activeModule.value = activeModule.value === moduleId ? null : moduleId;
 };
+
+const fetchCourse = async () => {
+  try {
+    loading.value = true;
+    const data = await learningModule.getCoursesDetails(slug);
+
+    course.value = data.course;
+    modules.value = data.modules || [];
+    instructor.value = data.instructor;
+    similarCourses.value = data.similar_courses || [];
+  } catch (err) {
+    console.error('Failed to load course', err);
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(fetchCourse);
 </script>
 
 <template>
@@ -64,15 +51,17 @@ const toggleModule = (moduleId) => {
       <UserSidebar />
 
       <main class="flex-grow p-4 md:p-8 lg:p-12">
-        <!-- Header & Breadcrumbs -->
         <div class="mb-8">
-          <p class="text-sm text-gray-500 mb-1">Home > Course: Naturopathy</p>
-          <h1 class="text-4xl font-semibold text-gray-800">Naturopathy</h1>
+          <p class="text-sm text-gray-500 mb-1">
+            Home > Course: {{ course?.title }}
+          </p>
+          <h1 class="text-4xl font-semibold text-gray-800">
+            {{ course?.title }}
+          </h1>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           <div class="lg:col-span-2 space-y-8">
-            <!-- Video Player Section -->
             <div
               class="relative bg-black rounded-xl overflow-hidden shadow-lg aspect-video"
             >
@@ -224,31 +213,27 @@ const toggleModule = (moduleId) => {
               </div>
             </div>
 
-            <!-- Course Info Tab Content -->
             <div v-if="activeTab === 'courseInfo'" class="space-y-8">
-              <!-- Course Description -->
               <div>
                 <h3 class="text-xl font-bold text-gray-800 mb-4">
                   Course Description
                 </h3>
                 <p class="text-gray-700 leading-relaxed">
-                  Euismod magna id purus eget nunc ligula suspendisse dui metus.
-                  Condimentum blandit rutrum at mauris enim pulvinar diam metus
-                  at morbi. Eu malesuada fames ultrices ipsum. Condimentum
-                  blandit rutrum at mauris enim pulvinar diam metus et. Euismod
-                  magna id purus eget nunc. Condimentum blandit rutrum at mauris
-                  enim pulvinar diam metus et. Euismod magna id purus eget nunc.
+                  {{ course?.description }}
                 </p>
               </div>
 
-              <!-- Course Content -->
               <div>
                 <h3 class="text-xl font-bold text-gray-800 mb-4">
                   Course Content
                 </h3>
+                <div v-if="modules.length === 0" class="text-gray-500 p-4">
+                  No modules available for this course yet.
+                </div>
+
                 <div class="bg-white rounded-xl shadow-md overflow-hidden">
                   <div
-                    v-for="module in courseContentModules"
+                    v-for="module in modules"
                     :key="module.id"
                     class="border-b border-gray-200 last:border-b-0"
                   >
@@ -337,7 +322,9 @@ const toggleModule = (moduleId) => {
               class="bg-white rounded-xl shadow-lg p-6 border-b-4"
               :style="{ borderBottomColor: DARK_GREEN }"
             >
-              <p class="text-3xl font-bold text-gray-800 mb-2">₦20,000.00</p>
+              <p class="text-3xl font-bold text-gray-800 mb-2">
+                ₦{{ course?.discount_price || course?.price }}
+              </p>
               <p class="text-xs text-gray-500 mb-4">
                 Get 20% off exclusive to HFN members.
               </p>
@@ -386,19 +373,17 @@ const toggleModule = (moduleId) => {
                   class="w-16 h-16 rounded-full object-cover mr-4"
                 />
                 <div>
-                  <p class="font-bold text-gray-800">Ade John</p>
-                  <p class="text-sm text-gray-600">Professor of Medicine</p>
+                  <p class="font-bold text-gray-800">
+                    {{ instructor?.name }}
+                  </p>
+                  <p class="text-sm text-gray-600">{{ instructor.title }}</p>
                 </div>
               </div>
               <p class="text-gray-700 text-sm leading-relaxed">
-                Condimentum blandit rutrum at mauris enim pulvinar diam metus
-                et. Euismod magna id purus eget nunc. Condimentum blandit rutrum
-                at mauris enim pulvinar diam metus et. Euismod magna id purus
-                eget nunc.
+                {{ course?.description }}
               </p>
             </div>
 
-            <!-- What you will learn -->
             <div class="bg-white rounded-xl shadow-lg p-6">
               <h3 class="text-xl font-bold text-gray-800 mb-4">
                 What you will learn
@@ -600,7 +585,7 @@ const toggleModule = (moduleId) => {
             >
               <div class="relative w-full h-36 bg-gray-100">
                 <img
-                  :src="course.image"
+                  :src="course.thumbnail"
                   alt="Course Thumbnail"
                   class="w-full h-full object-cover"
                 />
@@ -615,8 +600,12 @@ const toggleModule = (moduleId) => {
                 </div>
               </div>
               <div class="p-4 pt-8 flex flex-col flex-grow">
-                <p class="text-xs text-gray-500 font-medium">Kanu Nwankwo</p>
-                <p class="text-xs text-gray-500 mb-2">Professor of Medicine</p>
+                <p class="text-xs text-gray-500 font-medium">
+                  {{ course.instructor }}
+                </p>
+                <p class="text-xs text-gray-500 mb-2">
+                  {{ course.profession }}
+                </p>
                 <h3 class="text-lg font-bold text-gray-800 mb-2">
                   {{ course.title }}
                 </h3>
@@ -651,5 +640,4 @@ const toggleModule = (moduleId) => {
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

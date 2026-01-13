@@ -1,3 +1,37 @@
+<script setup>
+import UserSidebar from '@/components/layout/UserSidebar.vue';
+import { computed, reactive, ref } from 'vue';
+
+const membershipTypes = reactive([
+  {
+    title: 'Corporate',
+    description: 'For locally registered healthcare businesses.',
+    price: '₦200,000 per year.',
+  },
+  {
+    title: 'Multinational',
+    description: 'For international healthcare organizations.',
+    price: '₦500,000 per year.',
+  },
+  {
+    title: 'Association',
+    description: 'For registered healthcare professional associations.',
+    price: '₦150,000 per year.',
+  },
+  {
+    title: 'Diaspora',
+    description: 'For healthcare professionals residing outside the country.',
+    price: '₦50,000 per year.',
+  },
+]);
+
+const selectedType = ref('Corporate');
+
+const selectedDetail = computed(() =>
+  membershipTypes.find((type) => type.title === selectedType.value)
+);
+</script>
+
 <template>
   <div class="flex h-screen bg-gray-50">
     <UserSidebar />
@@ -33,18 +67,20 @@
               v-for="type in membershipTypes"
               :key="type.title"
               @click="selectedType = type.title"
-              :class="[ 
+              :class="[
                 'px-6 py-2 rounded-lg font-semibold transition-all duration-300 border-2 relative',
                 selectedType === type.title
                   ? 'active-tab-curve'
-                  : 'bg-white text-gray-700 border-gray-300 hover:border-[#006633]'
+                  : 'bg-white text-gray-700 border-gray-300 hover:border-[#006633]',
               ]"
             >
               {{ type.title }}
             </button>
           </div>
 
-          <div class="relative p-6 border-2 border-gray-200 rounded-lg bg-white">
+          <div
+            class="relative p-6 border-2 border-gray-200 rounded-lg bg-white"
+          >
             <div class="text-center">
               <h2 class="text-2xl font-bold mb-4 text-gray-800">
                 {{ selectedDetail.title }}
@@ -82,48 +118,7 @@
   </div>
 </template>
 
-<script setup>
-import UserSidebar from "@/components/layout/UserSidebar.vue";
-import { computed, reactive, ref } from "vue";
-
-const membershipTypes = reactive([
-  {
-    title: "Corporate",
-    description: "For locally registered healthcare businesses.",
-    price: "₦200,000 per year.",
-  },
-  {
-    title: "Multinational",
-    description: "For international healthcare organizations.",
-    price: "₦500,000 per year.",
-  },
-  {
-    title: "Association",
-    description: "For registered healthcare professional associations.",
-    price: "₦150,000 per year.",
-  },
-  {
-    title: "Diaspora",
-    description: "For healthcare professionals residing outside the country.",
-    price: "₦50,000 per year.",
-  },
-]);
-
-const selectedType = ref("Corporate");
-
-const selectedDetail = computed(() =>
-  membershipTypes.find((type) => type.title === selectedType.value)
-);
-</script>
-
 <style scoped>
-/* --- REMOVE decorative green corner curves --- */
-/* .detail-card-wrapper::before,
-.detail-card-wrapper::after {
-  content: none !important;
-} */
-
-/* --- ACTIVE TAB WITH GRAY CURVED OUTLINE --- */
 .active-tab-curve {
   background-color: #006633 !important;
   color: white !important;
@@ -134,7 +129,7 @@ const selectedDetail = computed(() =>
 }
 
 .active-tab-curve::before {
-  content: "";
+  content: '';
   position: absolute;
   top: -2px;
   left: -2px;

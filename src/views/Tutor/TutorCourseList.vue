@@ -1,6 +1,7 @@
 <script setup>
-import TutorSidebar from "@/views/Tutor/TutorSidebar.vue";
-import { computed } from "vue";
+import learningModule from '@/api/learningModule.js';
+import TutorSidebar from '@/views/Tutor/TutorSidebar.vue';
+import { computed } from 'vue';
 
 import {
   ChevronLeft,
@@ -11,109 +12,73 @@ import {
   Plus,
   Search,
   Trash2,
-} from "lucide-vue-next";
-import { ref } from "vue";
+} from 'lucide-vue-next';
+import { onMounted, ref, watch } from 'vue';
 
-const courseTabs = ref(["Published", "Drafts", "Archived", "Approval"]);
-const currentTab = ref("Published");
+const courseTabs = ref(['Published', 'Drafts', 'Archived', 'Approval']);
+const currentTab = ref('Published');
+const loading = ref(false);
+const searchQuery = ref('');
 
-const publishedCourses = ref([
-  {
-    id: 1,
-    title: "Naturopathy 101",
-    enrollments: 457,
-    completion: "80%",
-    lastUpdate: "December 28 2024",
-    approvalStatus: "Approved",
-  },
-  {
-    id: 2,
-    title: "Herbal Remedies",
-    enrollments: 47,
-    completion: "72%",
-    lastUpdate: "December 19 2024",
-    approvalStatus: "Approved",
-  },
-]);
-
-const draftCourses = ref([
-  {
-    id: 1,
-    title: "Holistic Nutrition (Draft)",
-    enrollments: 23,
-    completion: "-",
-    lastUpdate: "December 14 2024",
-    approvalStatus: "Pending",
-  },
-  {
-    id: 2,
-    title: "Mindfulness Practice (Draft)",
-    enrollments: 34,
-    completion: "-",
-    lastUpdate: "November 19 2024",
-    approvalStatus: "Pending",
-  },
-]);
-
-const archivedCourses = ref([
-  {
-    id: 5,
-    title: "Sustainable Living (Archived)",
-    enrollments: 4,
-    completion: "100%",
-    lastUpdate: "November 19 2024",
-    approvalStatus: "Archived",
-  },
-  {
-    id: 6,
-    title: "Advanced Anatomy (Archived)",
-    enrollments: null,
-    completion: "-",
-    lastUpdate: "November 11 2024",
-    approvalStatus: "Archived",
-  },
-]);
-
- const approvalCourses = ref([
-  {
-    id: 1,
-    title: "Introduction to Ayurveda",
-    enrollments: null,
-    completion: "-",
-    lastUpdate: "January 10 2025",
-    approvalStatus: "Approved",
-  },
-  {
-    id: 2,
-    title: "Advanced Quantum Healing",
-    enrollments: null,
-    completion: "-",
-    lastUpdate: "January 01 2025",
-    approvalStatus: "Declined",
-  },
-  {
-    id: 3,
-    title: "Ancient Greek Philosophy",
-    enrollments: null,
-    completion: "-",
-    lastUpdate: "January 05 2025",
-    approvalStatus: "Approved",
-  },
-]);
- 
+const publishedCourses = ref([]);
+const draftCourses = ref([]);
+const archivedCourses = ref([]);
+const approvalCourses = ref([]);
 
 const activeCourses = computed(() => {
-  if (currentTab.value === "Published") return publishedCourses.value;
-  if (currentTab.value === "Drafts") return draftCourses.value;
-  if (currentTab.value === "Archived") return archivedCourses.value;
-    if (currentTab.value === "Approval") return approvalCourses.value;
+  if (currentTab.value === 'Published') return publishedCourses.value;
+  if (currentTab.value === 'Drafts') return draftCourses.value;
+  if (currentTab.value === 'Archived') return archivedCourses.value;
+  if (currentTab.value === 'Approval') return approvalCourses.value;
 
   return [];
 });
 
-const handleAction = (action, courseId) => {
-  console.log(`${action} course ID: ${courseId}`);
-  alert(`${action} action triggered for Course ID: ${courseId}`);
+const mapCourse = (course) => ({
+  id: course.id,
+  slug: course.slug,
+  title: course.title,
+  enrollments: course.enrollments ?? null,
+  completion: course.completion_rate ? `${course.completion_rate}%` : '-',
+  lastUpdate: new Date(course.updated_at).toLocaleDateString(),
+  approvalStatus: course.approval_status, // Approved | Pending | Declined
+  status: course.status, // published | draft | archived | approval
+});
+
+const fetchCourses = async () => {
+  loading.value = true;
+  try {
+    const res = await learningModule.getAllCourses({
+      status: currentTab.value.toLowerCase(),
+      page: currentPage.value,
+      search: searchQuery.value,
+    });
+
+    const courses = (res.results || res.data || []).map(mapCourse);
+
+    if (currentTab.value === 'Published') publishedCourses.value = courses;
+    if (currentTab.value === 'Drafts') draftCourses.value = courses;
+    if (currentTab.value === 'Archived') archivedCourses.value = courses;
+    if (currentTab.value === 'Approval') approvalCourses.value = courses;
+  } catch (err) {
+    console.error('Failed to fetch courses', err);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handleAction = async (action, course) => {
+  if (action === 'View') {
+    router.push(`/tutor/courses/${course.slug}`);
+  }
+
+  if (action === 'Edit') {
+    router.push(`/tutor/courses/${course.slug}/edit`);
+  }
+
+  if (action === 'Delete') {
+    await handleDelete(course.slug);
+  }
 };
 
 const currentPage = ref(1);
@@ -124,6 +89,41 @@ const goToPage = (page) => {
     currentPage.value = page;
   }
 };
+
+const handleDelete = async (slug) => {
+  const confirmDelete = confirm('Are you sure you want to delete this course?');
+
+  if (!confirmDelete) return;
+
+  try {
+    await learningModule.deleteCourse(slug);
+
+    publishedCourses.value = publishedCourses.value.filter(
+      (c) => c.slug !== slug
+    );
+    draftCourses.value = draftCourses.value.filter((c) => c.id !== courseId);
+    archivedCourses.value = archivedCourses.value.filter(
+      (c) => c.slug !== slug
+    );
+    approvalCourses.value = approvalCourses.value.filter(
+      (c) => c.slug !== slug
+    );
+  } catch (err) {
+    console.error('Delete failed', err);
+    alert('Failed to delete course');
+  }
+};
+
+onMounted(fetchCourses);
+
+watch([currentTab, currentPage], () => {
+  fetchCourses();
+});
+
+watch(searchQuery, () => {
+  currentPage.value = 1;
+  fetchCourses();
+});
 </script>
 
 <template>
@@ -177,6 +177,7 @@ const goToPage = (page) => {
             />
             <input
               type="text"
+              v-model="searchQuery"
               placeholder="Search..."
               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors"
             />
@@ -261,7 +262,7 @@ const goToPage = (page) => {
               <template v-else>
                 <!-- Enrollments Column -->
                 <td class="py-3 px-3">
-                  {{ course.enrollments !== null ? course.enrollments : "-" }}
+                  {{ course.enrollments !== null ? course.enrollments : '-' }}
                 </td>
                 <!-- Completion Rate Column -->
                 <td class="py-3 px-3">
@@ -284,7 +285,7 @@ const goToPage = (page) => {
               <td class="py-3 px-3 text-center">
                 <div class="flex item-center justify-center space-x-2">
                   <button
-                    @click="handleAction('View', course.id)"
+                    @click="handleAction('View', course)"
                     class="w-6 h-6 transform hover:text-blue-500 hover:scale-110 transition-transform p-0.5"
                   >
                     <Eye
@@ -292,7 +293,7 @@ const goToPage = (page) => {
                     />
                   </button>
                   <button
-                    @click="handleAction('Edit', course.id)"
+                    @click="handleAction('Edit', course)"
                     class="w-6 h-6 transform hover:text-green-500 hover:scale-110 transition-transform p-0.5"
                   >
                     <Edit2
@@ -300,7 +301,7 @@ const goToPage = (page) => {
                     />
                   </button>
                   <button
-                    @click="handleAction('Delete', course.id)"
+                    @click="handleAction('Delete', course)"
                     class="w-6 h-6 transform hover:text-red-500 hover:scale-110 transition-transform p-0.5"
                   >
                     <Trash2
@@ -342,5 +343,4 @@ const goToPage = (page) => {
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

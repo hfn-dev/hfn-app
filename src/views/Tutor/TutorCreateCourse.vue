@@ -1,30 +1,24 @@
 <script setup>
-import courses from "@/assets/courses.jpg";
+import learningModule from '@/api/learningModule.js';
 import {
   Book,
-  Check,
   ChevronDown,
   DollarSign,
   Edit2,
-  Home,
-  LifeBuoy,
   Lock,
-  LogOut,
-  Minimize2,
   Plus,
-  Star,
   Trash2,
   UploadCloud,
-  User,
-} from "lucide-vue-next";
-import { computed, ref,  onMounted  } from "vue";
-import TutorSidebar from "./TutorSidebar.vue";
-import learningModule from "@/api/learningModule.js";
+} from 'lucide-vue-next';
+import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
-import { useRouter } from "vue-router";
+import TutorSidebar from './TutorSidebar.vue';
 
+const isEditMode = computed(() => !!route.params.slug);
+const courseSlug = route.params.slug;
 
-// todo uncomment the case 2 to 3 validation logic after and separately models to different components. also check if admin or tutor to create course. 
+// todo uncomment the case 2 to 3 validation logic after and separately models to different components. also check if admin or tutor to create course.
 
 const toast = useToast();
 const router = useRouter();
@@ -33,25 +27,25 @@ const currentStep = ref(1);
 const isLoading = ref(false);
 
 const basicInfoForm = ref({
-  title: "Naturopathy 101: Discover Natural Healing",
+  title: 'Naturopathy 101: Discover Natural Healing',
   shortDescription:
-    "Discover the fundamentals of natural healing and holistic wellness techniques.",
-  category: "1", // Changed to ID instead of name
-  level: "beginner",
+    'Discover the fundamentals of natural healing and holistic wellness techniques.',
+  category: '1', // Changed to ID instead of name
+  level: 'beginner',
   fullOverview:
-    "Euismod magna id purus eget nunc ligula suspendisse dui netus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam pulvinar duis etiam. Euismod magna id purus eget nunc. Conduis etiam pulvinar duis etiam. Euismod magna id purus eget nunc. Condimentum blandit rutrum at mauris enim pulvinar duis etiam.",
-  durationHours: "02",
-  durationMinutes: "30",
-  durationSeconds: "00",
+    'Euismod magna id purus eget nunc ligula suspendisse dui netus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam pulvinar duis etiam. Euismod magna id purus eget nunc. Conduis etiam pulvinar duis etiam. Euismod magna id purus eget nunc. Condimentum blandit rutrum at mauris enim pulvinar duis etiam.',
+  durationHours: '02',
+  durationMinutes: '30',
+  durationSeconds: '00',
   learnOutcomes: [
-    { id: 1, text: "Understand core naturopathic philosophies", charCount: 38 },
-    { id: 2, text: "Identify essential vitamins and minerals", charCount: 38 },
-    { id: 3, text: "Prepare simple herbal infusions", charCount: 30 },
-    { id: 4, text: "Develop a personal wellness plan", charCount: 32 },
+    { id: 1, text: 'Understand core naturopathic philosophies', charCount: 38 },
+    { id: 2, text: 'Identify essential vitamins and minerals', charCount: 38 },
+    { id: 3, text: 'Prepare simple herbal infusions', charCount: 30 },
+    { id: 4, text: 'Develop a personal wellness plan', charCount: 32 },
   ],
   thumbnail: null, // Added for file upload
   tags_list: [], // Added for tags
-  prerequisites: "", // Added for prerequisites
+  prerequisites: '', // Added for prerequisites
   certificate_available: true,
   max_students: null,
 });
@@ -60,123 +54,123 @@ const curriculumForm = ref({
   modules: [
     {
       id: 1,
-      title: "Module One: Meanings and Definitions",
+      title: 'Module One: Meanings and Definitions',
       isOpen: true,
-      description: "", // Added module description
+      description: '', // Added module description
       order: 1,
       is_published: true,
       lessons: [
-        { 
-          id: 101, 
-          title: "Lesson 1: What is Naturopathy?", 
-          duration: "8:09",
-          content_type: "video",
-          video_url: "",
+        {
+          id: 101,
+          title: 'Lesson 1: What is Naturopathy?',
+          duration: '8:09',
+          content_type: 'video',
+          video_url: '',
           video_duration: 489, // 8:09 in seconds
           order: 1,
           is_preview: true,
           is_published: true,
-          content: "" // For text content
+          content: '', // For text content
         },
-        { 
-          id: 102, 
-          title: "Lesson 2: Lorem", 
-          duration: "20:35",
-          content_type: "text",
-          video_url: "",
+        {
+          id: 102,
+          title: 'Lesson 2: Lorem',
+          duration: '20:35',
+          content_type: 'text',
+          video_url: '',
           video_duration: 1235, // 20:35 in seconds
           order: 2,
           is_preview: false,
           is_published: true,
-          content: "Text content here..."
+          content: 'Text content here...',
         },
       ],
-      resources: "Additional Resources",
+      resources: 'Additional Resources',
     },
     {
       id: 2,
-      title: "Module Two: Lorem Ipsum",
+      title: 'Module Two: Lorem Ipsum',
       isOpen: false,
-      description: "",
+      description: '',
       order: 2,
       is_published: true,
       lessons: [
-        { 
-          id: 201, 
-          title: "Lesson 1: Lorem Ipsum", 
-          duration: "12:00",
-          content_type: "video",
-          video_url: "",
+        {
+          id: 201,
+          title: 'Lesson 1: Lorem Ipsum',
+          duration: '12:00',
+          content_type: 'video',
+          video_url: '',
           video_duration: 720,
           order: 1,
           is_preview: false,
           is_published: true,
-          content: ""
+          content: '',
         },
-        { 
-          id: 202, 
-          title: "Lesson 2: The Role of Hydration", 
-          duration: "7:45",
-          content_type: "text",
-          video_url: "",
+        {
+          id: 202,
+          title: 'Lesson 2: The Role of Hydration',
+          duration: '7:45',
+          content_type: 'text',
+          video_url: '',
           video_duration: 465,
           order: 2,
           is_preview: false,
           is_published: true,
-          content: "Hydration content..."
+          content: 'Hydration content...',
         },
       ],
-      resources: "Supplementary Reading Materials",
+      resources: 'Supplementary Reading Materials',
     },
-    { 
-      id: 3, 
-      title: "Module Three: Lorem Ipsum", 
-      isOpen: false, 
-      description: "",
+    {
+      id: 3,
+      title: 'Module Three: Lorem Ipsum',
+      isOpen: false,
+      description: '',
       order: 3,
       is_published: true,
-      lessons: [] 
+      lessons: [],
     },
-    { 
-      id: 4, 
-      title: "Module Four: Lorem Ipsum", 
-      isOpen: false, 
-      description: "",
+    {
+      id: 4,
+      title: 'Module Four: Lorem Ipsum',
+      isOpen: false,
+      description: '',
       order: 4,
       is_published: true,
-      lessons: [] 
+      lessons: [],
     },
-    { 
-      id: 5, 
-      title: "Module Five: Lorem Ipsum", 
-      isOpen: false, 
-      description: "",
+    {
+      id: 5,
+      title: 'Module Five: Lorem Ipsum',
+      isOpen: false,
+      description: '',
       order: 5,
       is_published: true,
-      lessons: [] 
+      lessons: [],
     },
   ],
-  newLessonTitle: "Sample Lesson Title",
-  newModuleNumber: "",
+  newLessonTitle: 'Sample Lesson Title',
+  newModuleNumber: '',
   materialsIncluded: [
-    { id: 1, text: "Downloadable PDF guides for each module", charCount: 41 },
-    { id: 2, text: "Quizzes after every lesson", charCount: 26 },
-    { id: 3, text: "Access to a private student community", charCount: 40 },
-    { id: 4, text: "Certificate of Completion", charCount: 30 },
+    { id: 1, text: 'Downloadable PDF guides for each module', charCount: 41 },
+    { id: 2, text: 'Quizzes after every lesson', charCount: 26 },
+    { id: 3, text: 'Access to a private student community', charCount: 40 },
+    { id: 4, text: 'Certificate of Completion', charCount: 30 },
   ],
-  instructorName: "Dr. Aisha Musa",
+  instructorName: 'Dr. Aisha Musa',
   briefBiography:
-    "Condimentum blandit rutrum at mauris enim pulvinar duis etiam pulvinar duis etiam. Condimentum blandit rutrum at mauris enim pulvinar duis etiam. Condimentum blandit rutrum at mauris enim pulvinar duis etiam.",
+    'Condimentum blandit rutrum at mauris enim pulvinar duis etiam pulvinar duis etiam. Condimentum blandit rutrum at mauris enim pulvinar duis etiam. Condimentum blandit rutrum at mauris enim pulvinar duis etiam.',
 });
 
 const pricingAccessForm = ref({
-  courseAccessType: "paid",
-  courseVisibility: "public",
+  courseAccessType: 'paid',
+  courseVisibility: 'public',
   price: 20000.0,
-  currency: "NGN",
-  discountAmount: "20%",
-  discountAvailability: "members_only",
-  status: "draft", // Added course status
+  currency: 'NGN',
+  discountAmount: '20%',
+  discountAvailability: 'members_only',
+  status: 'draft', // Added course status
   is_free: false, // Added free flag
 });
 
@@ -191,22 +185,31 @@ const pricingAccessForm = ref({
 
 const categories = ref([]);
 
-// Fetch categories on component mount
 onMounted(async () => {
   await fetchCategories();
+
+  if (!isEditMode.value) return;
+
+  try {
+    const course = await learningModule.getCourseDetails(courseSlug);
+    populateCourse(course);
+  } catch (error) {
+    console.error(error);
+    toast.error('Failed to load course');
+  }
 });
 
 const fetchCategories = async () => {
   try {
     const response = await learningModule.getCategories();
-   if (Array.isArray(response.data)) {
-      categories.value = response.data.map(item => item.name);
+    if (Array.isArray(response.data)) {
+      categories.value = response.data.map((item) => item.name);
     } else {
       categories.value = [];
     }
   } catch (error) {
-    console.error("Error fetching categories:", error);
-    toast.error("Failed to load categories");
+    console.error('Error fetching categories:', error);
+    toast.error('Failed to load categories');
   }
 };
 
@@ -214,26 +217,26 @@ const pricingStatus = computed(() => {
   const access = pricingAccessForm.value.courseAccessType;
   const visibility = pricingAccessForm.value.courseVisibility;
 
-  if (access === "free") return { main: "Free", sub: "Public Access" };
-  if (access === "paid")
+  if (access === 'free') return { main: 'Free', sub: 'Public Access' };
+  if (access === 'paid')
     return {
-      main: "Paid Only",
+      main: 'Paid Only',
       sub: `${
         pricingAccessForm.value.currency
-      } ${pricingAccessForm.value.price.toLocaleString("en-US")}`,
+      } ${pricingAccessForm.value.price.toLocaleString('en-US')}`,
     };
-  if (access === "membership")
-    return { main: "Members Only", sub: "Subscription" };
+  if (access === 'membership')
+    return { main: 'Members Only', sub: 'Subscription' };
 
-  return { main: "Unknown", sub: "" };
+  return { main: 'Unknown', sub: '' };
 });
 
 const discountStatus = computed(() => {
-  return pricingAccessForm.value.discountAvailability === "all"
-    ? "All"
-    : pricingAccessForm.value.discountAvailability === "members_only"
-    ? "Members Only"
-    : "None";
+  return pricingAccessForm.value.discountAvailability === 'all'
+    ? 'All'
+    : pricingAccessForm.value.discountAvailability === 'members_only'
+    ? 'Members Only'
+    : 'None';
 });
 
 // Calculate total lessons and lesson duration for Step 4
@@ -246,20 +249,23 @@ const totalLessons = computed(() => {
 // Calculate total duration in hours
 const totalDurationHours = computed(() => {
   const totalSeconds = curriculumForm.value.modules.reduce((total, module) => {
-    return total + module.lessons.reduce((moduleTotal, lesson) => {
-      return moduleTotal + lesson.video_duration;
-    }, 0);
+    return (
+      total +
+      module.lessons.reduce((moduleTotal, lesson) => {
+        return moduleTotal + lesson.video_duration;
+      }, 0)
+    );
   }, 0);
-  
+
   return (totalSeconds / 3600).toFixed(2); // Convert seconds to hours
 });
 
 // --- Stepper Logic ---
 const steps = [
-  { id: 1, title: "Basic Information" },
-  { id: 2, title: "Curriculum Builder" },
-  { id: 3, title: "Pricing & Access" },
-  { id: 4, title: "Preview & Submit" },
+  { id: 1, title: 'Basic Information' },
+  { id: 2, title: 'Curriculum Builder' },
+  { id: 3, title: 'Pricing & Access' },
+  { id: 4, title: 'Preview & Submit' },
 ];
 
 // --- Step 1: Basic Info Logic ---
@@ -270,7 +276,7 @@ const addOutcome = () => {
       : 1;
   basicInfoForm.value.learnOutcomes.push({
     id: newId,
-    text: "What you will teach in this course...",
+    text: 'What you will teach in this course...',
     charCount: 0,
   });
 };
@@ -291,14 +297,15 @@ const handleThumbnailUpload = (event) => {
       toast.error('Please upload an image file');
       return;
     }
-    
-    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+
+    if (file.size > 5 * 1024 * 1024) {
+      // 5MB limit
       toast.error('Image size should be less than 5MB');
       return;
     }
-    
+
     basicInfoForm.value.thumbnail = file;
-    
+
     // Create preview URL
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -306,7 +313,7 @@ const handleThumbnailUpload = (event) => {
       console.log('Thumbnail uploaded:', file.name);
     };
     reader.readAsDataURL(file);
-    
+
     toast.success('Thumbnail uploaded successfully');
   }
 };
@@ -321,21 +328,23 @@ const addModule = () => {
     curriculumForm.value.modules.length > 0
       ? Math.max(...curriculumForm.value.modules.map((m) => m.id)) + 1
       : 1;
-  
+
   curriculumForm.value.modules.push({
     id: newId,
     title: `Module ${newId}: New Module`,
     isOpen: true,
-    description: "",
+    description: '',
     order: newId,
     is_published: true,
     lessons: [],
-    resources: ""
+    resources: '',
   });
 };
 
 const removeModule = (id) => {
-  curriculumForm.value.modules = curriculumForm.value.modules.filter((m) => m.id !== id);
+  curriculumForm.value.modules = curriculumForm.value.modules.filter(
+    (m) => m.id !== id
+  );
   // Reorder modules after removal
   curriculumForm.value.modules.forEach((module, index) => {
     module.order = index + 1;
@@ -349,7 +358,7 @@ const addMaterial = () => {
       : 1;
   curriculumForm.value.materialsIncluded.push({
     id: newId,
-    text: "What materials are included...",
+    text: 'What materials are included...',
     charCount: 0,
   });
 };
@@ -369,7 +378,7 @@ const saveAndContinue = () => {
         currentStep.value + 1
       }: ${steps[currentStep.value].title}`
     );
-    
+
     // Validate current step before continuing
     if (validateCurrentStep()) {
       currentStep.value += 1;
@@ -381,7 +390,7 @@ const saveAndContinue = () => {
 };
 
 const validateCurrentStep = () => {
-  switch(currentStep.value) {
+  switch (currentStep.value) {
     case 1:
       if (!basicInfoForm.value.title.trim()) {
         toast.error('Course title is required');
@@ -408,16 +417,16 @@ const validateCurrentStep = () => {
         return false;
       }
       return true;
-      
+
     case 2:
       console.log('Validating step 2 - Curriculum Builder');
       console.log('Modules:', curriculumForm.value.modules);
-      
+
       // if (curriculumForm.value.modules.length === 0) {
       //   toast.error('Please add at least one module');
       //   return false;
       // }
-      
+
       // Check if all modules have at least one lesson
       // Make sure we're checking the correct property name
       // const hasEmptyModules = curriculumForm.value.modules.some(module => {
@@ -425,12 +434,12 @@ const validateCurrentStep = () => {
       //   console.log(`Module "${module.title}" has ${lessonCount} lessons`);
       //   return lessonCount === 0;
       // });
-      
+
       // if (hasEmptyModules) {
       //   toast.error('All modules must have at least one lesson');
       //   return false;
       // }
-      
+
       // Check if all lessons have required fields
       // const allModulesValid = curriculumForm.value.modules.every(module => {
       //   return module.lessons.every(lesson => {
@@ -441,22 +450,25 @@ const validateCurrentStep = () => {
       //     return isValid;
       //   });
       // });
-      
+
       // if (!allModulesValid) {
       //   toast.error('All lessons must have a title');
       //   return false;
       // }
-      
+
       console.log('Step 2 validation passed');
       return true;
-      
+
     case 3:
-      if (pricingAccessForm.value.courseAccessType === 'paid' && !pricingAccessForm.value.price) {
+      if (
+        pricingAccessForm.value.courseAccessType === 'paid' &&
+        !pricingAccessForm.value.price
+      ) {
         toast.error('Price is required for paid courses');
         return false;
       }
       return true;
-      
+
     default:
       return true;
   }
@@ -476,15 +488,15 @@ const isQuizDialogOpen = ref(false);
 
 // --- Form State for the Lesson Dialog ---
 const lessonForm = ref({
-    title: 'Sample Text',
-    durationHours: '00',
-    durationMinutes: '00',
-    durationSeconds: '00',
-    contentType: 'video',
-    videoUrl: '',
-    content: '',
-    isPreview: false,
-    currentModuleId: null
+  title: 'Sample Text',
+  durationHours: '00',
+  durationMinutes: '00',
+  durationSeconds: '00',
+  contentType: 'video',
+  videoUrl: '',
+  content: '',
+  isPreview: false,
+  currentModuleId: null,
 });
 
 // --- Handlers for Lesson Dialog ---
@@ -494,22 +506,22 @@ const openAddLessonDialog = (moduleId) => {
 };
 
 const closeAddLessonDialog = () => {
-    isLessonDialogOpen.value = false;
-    resetLessonForm();
+  isLessonDialogOpen.value = false;
+  resetLessonForm();
 };
 
 const resetLessonForm = () => {
-    lessonForm.value = {
-        title: '',
-        durationHours: '00',
-        durationMinutes: '00',
-        durationSeconds: '00',
-        contentType: 'video',
-        videoUrl: '',
-        content: '',
-        isPreview: false,
-        currentModuleId: null
-    };
+  lessonForm.value = {
+    title: '',
+    durationHours: '00',
+    durationMinutes: '00',
+    durationSeconds: '00',
+    contentType: 'video',
+    videoUrl: '',
+    content: '',
+    isPreview: false,
+    currentModuleId: null,
+  };
 };
 
 const handleLessonAdded = () => {
@@ -517,61 +529,73 @@ const handleLessonAdded = () => {
     toast.error('No module selected');
     return;
   }
-  
-  const module = curriculumForm.value.modules.find(m => m.id === lessonForm.value.currentModuleId);
+
+  const module = curriculumForm.value.modules.find(
+    (m) => m.id === lessonForm.value.currentModuleId
+  );
   if (!module) {
     toast.error('Module not found');
     return;
   }
-  
+
   // Ensure lessons array exists
   if (!module.lessons) {
     module.lessons = [];
   }
-  
-  const newId = module.lessons.length > 0 
-    ? Math.max(...module.lessons.map(l => l.id)) + 1
-    : module.id * 100 + 1;
-  
-  const durationInSeconds = 
-    (parseInt(lessonForm.value.durationHours) * 3600) +
-    (parseInt(lessonForm.value.durationMinutes) * 60) +
+
+  const newId =
+    module.lessons.length > 0
+      ? Math.max(...module.lessons.map((l) => l.id)) + 1
+      : module.id * 100 + 1;
+
+  const durationInSeconds =
+    parseInt(lessonForm.value.durationHours) * 3600 +
+    parseInt(lessonForm.value.durationMinutes) * 60 +
     parseInt(lessonForm.value.durationSeconds);
-  
+
   const newLesson = {
     id: newId,
     title: lessonForm.value.title.trim(),
-    duration: `${lessonForm.value.durationHours.padStart(2, '0')}:${lessonForm.value.durationMinutes.padStart(2, '0')}:${lessonForm.value.durationSeconds.padStart(2, '0')}`,
+    duration: `${lessonForm.value.durationHours.padStart(
+      2,
+      '0'
+    )}:${lessonForm.value.durationMinutes.padStart(
+      2,
+      '0'
+    )}:${lessonForm.value.durationSeconds.padStart(2, '0')}`,
     content_type: lessonForm.value.contentType,
-    video_url: lessonForm.value.videoUrl || "",
+    video_url: lessonForm.value.videoUrl || '',
     video_duration: durationInSeconds,
     order: module.lessons.length + 1,
     is_preview: lessonForm.value.isPreview || false,
     is_published: true,
-    content: lessonForm.value.contentType === 'text' ? (lessonForm.value.content || "") : ""
+    content:
+      lessonForm.value.contentType === 'text'
+        ? lessonForm.value.content || ''
+        : '',
   };
-  
+
   console.log('Adding new lesson:', newLesson);
-  
+
   module.lessons.push(newLesson);
-  
+
   toast.success('Lesson added successfully');
   closeAddLessonDialog();
 };
 
 // --- Handlers for Quiz Dialog ---
 const openAddQuizDialog = () => {
-    isQuizDialogOpen.value = true;
+  isQuizDialogOpen.value = true;
 };
 
 const closeAddQuizDialog = () => {
-    isQuizDialogOpen.value = false;
+  isQuizDialogOpen.value = false;
 };
 
 const handleQuizAdded = () => {
-    console.log('New Quiz Added (Placeholder Action)');
-    toast.info('Quiz functionality will be added in future updates');
-    closeAddQuizDialog();
+  console.log('New Quiz Added (Placeholder Action)');
+  toast.info('Quiz functionality will be added in future updates');
+  closeAddQuizDialog();
 };
 
 // --- Course Submission Logic ---
@@ -585,19 +609,26 @@ const prepareCourseData = () => {
     level: basicInfoForm.value.level,
     status: pricingAccessForm.value.status,
     duration_hours: parseFloat(totalDurationHours.value),
-    price: pricingAccessForm.value.courseAccessType === 'paid' ? parseFloat(pricingAccessForm.value.price) : 0,
+    price:
+      pricingAccessForm.value.courseAccessType === 'paid'
+        ? parseFloat(pricingAccessForm.value.price)
+        : 0,
     is_free: pricingAccessForm.value.courseAccessType === 'free',
-    max_students: basicInfoForm.value.max_students ? parseInt(basicInfoForm.value.max_students) : null,
+    max_students: basicInfoForm.value.max_students
+      ? parseInt(basicInfoForm.value.max_students)
+      : null,
     certificate_available: basicInfoForm.value.certificate_available,
-    prerequisites: basicInfoForm.value.prerequisites || "",
-    learning_outcomes: basicInfoForm.value.learnOutcomes.map(outcome => outcome.text),
+    prerequisites: basicInfoForm.value.prerequisites || '',
+    learning_outcomes: basicInfoForm.value.learnOutcomes.map(
+      (outcome) => outcome.text
+    ),
     tags_list: basicInfoForm.value.tags_list,
-    modules: curriculumForm.value.modules.map(module => ({
+    modules: curriculumForm.value.modules.map((module) => ({
       title: module.title,
-      description: module.description || "",
+      description: module.description || '',
       order: module.order,
       is_published: module.is_published,
-      lessons: module.lessons.map(lesson => ({
+      lessons: module.lessons.map((lesson) => ({
         title: lesson.title,
         content_type: lesson.content_type,
         video_url: lesson.video_url,
@@ -605,69 +636,136 @@ const prepareCourseData = () => {
         order: lesson.order,
         is_preview: lesson.is_preview,
         is_published: lesson.is_published,
-        content: lesson.content || ""
-      }))
-    }))
+        content: lesson.content || '',
+      })),
+    })),
   };
-  
+
   return payload;
 };
 
+const populateCourse = (course) => {
+  // BASIC INFO
+  basicInfoForm.value.title = course.title;
+  basicInfoForm.value.shortDescription = course.short_description;
+  basicInfoForm.value.fullOverview = course.description;
+  basicInfoForm.value.category = course.category?.id;
+  basicInfoForm.value.level = course.level;
+  basicInfoForm.value.max_students = course.max_students;
+  basicInfoForm.value.certificate_available = course.certificate_available;
+  basicInfoForm.value.prerequisites = course.prerequisites;
+
+  // TAGS & OUTCOMES
+  basicInfoForm.value.tags_list = course.tags_list || [];
+  basicInfoForm.value.learnOutcomes = (course.learning_outcomes || []).map(
+    (text) => ({ text })
+  );
+
+  // PRICING
+  pricingAccessForm.value.courseAccessType = course.is_free ? 'free' : 'paid';
+  pricingAccessForm.value.price = course.price;
+  pricingAccessForm.value.currency = course.currency;
+  pricingAccessForm.value.status = course.status;
+
+  // MODULES & LESSONS
+  curriculumForm.value.modules = (course.modules || []).map((module) => ({
+    id: module.id,
+    title: module.title,
+    description: module.description,
+    is_published: module.is_published,
+    lessons: (module.lessons || []).map((lesson) => ({
+      id: lesson.id,
+      title: lesson.title,
+      content_type: lesson.content_type,
+      content: lesson.content,
+      video_url: lesson.video_url,
+      video_duration: lesson.video_duration,
+      is_preview: lesson.is_preview,
+      is_published: lesson.is_published,
+    })),
+  }));
+};
+
+// const submitCourse = async () => {
+//   try {
+//     isLoading.value = true;
+
+//     // Validate final step
+//     if (!validateCurrentStep()) {
+//       return;
+//     }
+
+//     const courseData = prepareCourseData();
+
+//     console.log('Submitting course data:', courseData);
+
+//     // Submit to API
+//     const response = await learningModule.createCourses(courseData);
+
+//     if (response.data) {
+//       toast.success('Course created successfully!');
+
+//       // If thumbnail was uploaded, upload it separately
+//       if (basicInfoForm.value.thumbnail) {
+//         await uploadThumbnail(response.data.id);
+//       }
+
+//       // Redirect to course management or dashboard
+//       setTimeout(() => {
+//         // You might want to redirect to the course edit page or courses list
+//         window.location.href = '/tutor/courses';
+//       }, 1500);
+//     } else {
+//       toast.error('Failed to create course');
+//     }
+//   } catch (error) {
+//     console.error('Course creation error:', error);
+
+//     if (error.response) {
+//       const errorMsg =
+//         error.response.data?.detail ||
+//         error.response.data?.message ||
+//         `Error: ${error.response.status}`;
+//       toast.error(errorMsg);
+
+//       // Handle validation errors
+//       if (error.response.data) {
+//         for (const [field, errors] of Object.entries(error.response.data)) {
+//           if (Array.isArray(errors)) {
+//             toast.error(`${field}: ${errors[0]}`);
+//           }
+//         }
+//       }
+//     } else if (error.request) {
+//       toast.error('Network error. Please check your connection and try again.');
+//     } else {
+//       toast.error('An unexpected error occurred. Please try again.');
+//     }
+//   } finally {
+//     isLoading.value = false;
+//   }
+// };
+
 const submitCourse = async () => {
+  if (!validateCurrentStep()) return;
+
+  isLoading.value = true;
+
   try {
-    isLoading.value = true;
-    
-    // Validate final step
-    if (!validateCurrentStep()) {
-      return;
-    }
-    
-    const courseData = prepareCourseData();
-    
-    console.log('Submitting course data:', courseData);
-    
-    // Submit to API
-    const response = await learningModule.createCourses(courseData);
-    
-    if (response.data) {
-      toast.success('Course created successfully!');
-      
-      // If thumbnail was uploaded, upload it separately
-      if (basicInfoForm.value.thumbnail) {
-        await uploadThumbnail(response.data.id);
-      }
-      
-      // Redirect to course management or dashboard
-      setTimeout(() => {
-        // You might want to redirect to the course edit page or courses list
-        window.location.href = '/tutor/courses';
-      }, 1500);
+    const payload = prepareCourseData();
+
+    if (isEditMode.value) {
+      await learningModule.updateCourse(courseSlug, payload);
+      toast.success('Course updated successfully ');
     } else {
-      toast.error('Failed to create course');
+      await learningModule.createCourses(payload);
+      toast.success('Course created successfully ');
     }
-    
+
+    router.push('/tutor/courses');
   } catch (error) {
-    console.error('Course creation error:', error);
-    
-    if (error.response) {
-      const errorMsg = error.response.data?.detail || 
-                      error.response.data?.message || 
-                      `Error: ${error.response.status}`;
-      toast.error(errorMsg);
-      
-      // Handle validation errors
-      if (error.response.data) {
-        for (const [field, errors] of Object.entries(error.response.data)) {
-          if (Array.isArray(errors)) {
-            toast.error(`${field}: ${errors[0]}`);
-          }
-        }
-      }
-    } else if (error.request) {
-      toast.error('Network error. Please check your connection and try again.');
-    } else {
-      toast.error('An unexpected error occurred. Please try again.');
-    }
+    console.error(error);
+    toast.error('Failed to save course');
   } finally {
     isLoading.value = false;
   }
@@ -676,14 +774,14 @@ const submitCourse = async () => {
 const uploadThumbnail = async (courseId) => {
   try {
     if (!basicInfoForm.value.thumbnail) return;
-    
+
     const formData = new FormData();
     formData.append('thumbnail', basicInfoForm.value.thumbnail);
-    
+
     // This assumes you have an endpoint for thumbnail upload
     // You might need to adjust this based on your API
     await learningModule.uploadThumbnail(courseId, formData);
-    
+
     toast.success('Thumbnail uploaded successfully');
   } catch (error) {
     console.error('Thumbnail upload error:', error);
@@ -695,8 +793,8 @@ const uploadThumbnail = async (courseId) => {
 <template>
   <div class="flex min-h-screen font-sans">
     <TutorSidebar />
-  <main class="flex-1 p-8 overflow-auto bg-white">
-  <div class="text-sm text-gray-500 mb-6">
+    <main class="flex-1 p-8 overflow-auto bg-white">
+      <div class="text-sm text-gray-500 mb-6">
         <span class="text-[#006633]">Home</span> > My Courses >
         <span class="text-gray-700 font-medium">Create New Course</span>
       </div>
@@ -803,7 +901,11 @@ const uploadThumbnail = async (courseId) => {
                     required
                   >
                     <option value="">Select Category</option>
-                    <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+                    <option
+                      v-for="cat in categories"
+                      :key="cat.id"
+                      :value="cat.id"
+                    >
                       {{ cat.name }}
                     </option>
                   </select>
@@ -842,9 +944,16 @@ const uploadThumbnail = async (courseId) => {
                   v-model="basicInfoForm.tags_list"
                   placeholder="python, programming, beginner"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
-                  @input="e => basicInfoForm.tags_list = e.target.value.split(',').map(tag => tag.trim())"
+                  @input="
+                    (e) =>
+                      (basicInfoForm.tags_list = e.target.value
+                        .split(',')
+                        .map((tag) => tag.trim()))
+                  "
                 />
-                <p class="text-xs text-gray-500 mt-1">Separate tags with commas</p>
+                <p class="text-xs text-gray-500 mt-1">
+                  Separate tags with commas
+                </p>
               </div>
 
               <!-- Prerequisites -->
@@ -873,7 +982,9 @@ const uploadThumbnail = async (courseId) => {
                 @click="document.getElementById('thumbnail-upload').click()"
               >
                 <UploadCloud class="w-10 h-10 text-gray-400 mb-3" />
-                <p class="text-sm text-gray-600 font-medium">Click to upload thumbnail</p>
+                <p class="text-sm text-gray-600 font-medium">
+                  Click to upload thumbnail
+                </p>
                 <p class="text-xs text-gray-500 mt-1">PNG, JPG up to 5MB</p>
                 <input
                   type="file"
@@ -882,7 +993,10 @@ const uploadThumbnail = async (courseId) => {
                   @change="handleThumbnailUpload"
                   class="hidden"
                 />
-                <p v-if="basicInfoForm.thumbnail" class="text-xs text-green-600 mt-2">
+                <p
+                  v-if="basicInfoForm.thumbnail"
+                  class="text-xs text-green-600 mt-2"
+                >
                   ✓ {{ basicInfoForm.thumbnail.name }}
                 </p>
               </div>
@@ -914,7 +1028,10 @@ const uploadThumbnail = async (courseId) => {
               v-model="basicInfoForm.certificate_available"
               class="h-4 w-4 text-[#00cc66] focus:ring-[#00cc66] border-gray-300 rounded"
             />
-            <label for="certificate-available" class="ml-2 block text-sm text-gray-900">
+            <label
+              for="certificate-available"
+              class="ml-2 block text-sm text-gray-900"
+            >
               Certificate of Completion available
             </label>
           </div>
@@ -934,7 +1051,9 @@ const uploadThumbnail = async (courseId) => {
               min="1"
               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
             />
-            <p class="text-xs text-gray-500 mt-1">Leave empty for unlimited enrollment</p>
+            <p class="text-xs text-gray-500 mt-1">
+              Leave empty for unlimited enrollment
+            </p>
           </div>
 
           <!-- What users will learn -->
@@ -984,7 +1103,6 @@ const uploadThumbnail = async (courseId) => {
           </div>
         </div>
 
-      
         <div v-if="currentStep === 2">
           <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">
             Curriculum Builder
@@ -1063,113 +1181,168 @@ const uploadThumbnail = async (courseId) => {
                     <Plus class="w-4 h-4 mr-1" /> Add Quiz
                   </button>
                 </div>
-                <div 
-            v-if="isLessonDialogOpen" 
-            class="fixed inset-0 bg-gray-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4"
-        >
-            <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg">
-                
-                <h2 class="text-xl font-bold mb-4">Add Lesson</h2>
-                
-                <form @submit.prevent="handleLessonAdded">
-                    
-                    <div class="mb-4">
-                        <label for="lesson-title" class="text-sm text-gray-700">Course Title</label>
-                        <input 
-                            type="text" 
-                            id="lesson-title" 
-                            v-model="lessonForm.title" 
-                            placeholder="Sample Text"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66] focus:ring-[#00cc66]"
-                            required
+                <div
+                  v-if="isLessonDialogOpen"
+                  class="fixed inset-0 bg-gray-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4"
+                >
+                  <div
+                    class="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg"
+                  >
+                    <h2 class="text-xl font-bold mb-4">Add Lesson</h2>
+
+                    <form @submit.prevent="handleLessonAdded">
+                      <div class="mb-4">
+                        <label for="lesson-title" class="text-sm text-gray-700"
+                          >Course Title</label
                         >
-                    </div>
-                    
-                    <div class="mb-4">
-                        <label class="block text-sm text-gray-700">Estimated Duration</label>
+                        <input
+                          type="text"
+                          id="lesson-title"
+                          v-model="lessonForm.title"
+                          placeholder="Sample Text"
+                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66] focus:ring-[#00cc66]"
+                          required
+                        />
+                      </div>
+
+                      <div class="mb-4">
+                        <label class="block text-sm text-gray-700"
+                          >Estimated Duration</label
+                        >
                         <div class="flex space-x-2 mt-1 items-center">
-                            <input type="number" placeholder="00" v-model="lessonForm.durationHours" min="0" max="99" class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center">
-                            <span class="text-sm">Hours</span>
-                            <input type="number" placeholder="00" v-model="lessonForm.durationMinutes" min="0" max="59" class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center">
-                            <span class="text-sm">Minutes</span>
-                            <input type="number" placeholder="00" v-model="lessonForm.durationSeconds" min="0" max="59" class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center">
-                            <span class="text-sm">Seconds</span>
+                          <input
+                            type="number"
+                            placeholder="00"
+                            v-model="lessonForm.durationHours"
+                            min="0"
+                            max="99"
+                            class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center"
+                          />
+                          <span class="text-sm">Hours</span>
+                          <input
+                            type="number"
+                            placeholder="00"
+                            v-model="lessonForm.durationMinutes"
+                            min="0"
+                            max="59"
+                            class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center"
+                          />
+                          <span class="text-sm">Minutes</span>
+                          <input
+                            type="number"
+                            placeholder="00"
+                            v-model="lessonForm.durationSeconds"
+                            min="0"
+                            max="59"
+                            class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center"
+                          />
+                          <span class="text-sm">Seconds</span>
                         </div>
-                    </div>
+                      </div>
+
+                      <div class="mb-4">
+                        <label
+                          for="content-type"
+                          class="block text-sm text-gray-700"
+                          >Upload Content Type</label
+                        >
+                        <select
+                          id="content-type"
+                          v-model="lessonForm.contentType"
+                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66] focus:ring-[#00cc66]"
+                          required
+                        >
+                          <option disabled value="Select Option">
+                            Select Option
+                          </option>
+                          <option>Video File</option>
+                          <option>PDF Document</option>
+                          <option>External Link</option>
+                        </select>
+                      </div>
+
+                      <div
+                        class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer mb-6 hover:border-[#00cc66] transition"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="mx-auto h-12 w-12 text-gray-400"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                          />
+                        </svg>
+                        <p class="mt-1 text-sm text-gray-600">Upload Content</p>
+                      </div>
+
+                      <div class="flex justify-end space-x-3">
+                        <button
+                          type="button"
+                          @click="closeAddLessonDialog"
+                          class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          class="px-4 py-2 bg-[#00cc66] text-white rounded-md hover:bg-[#00994d]"
+                        >
+                          Add Lesson
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <div
+                  v-if="isQuizDialogOpen"
+                  class="fixed inset-0 bg-gray-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4"
+                >
+                  <div
+                    class="bg-white p-6 rounded-lg shadow-xl w-full max-w-md"
+                  >
+                    <h2 class="text-xl font-bold mb-4">Add Quiz</h2>
+                    <p class="text-gray-600 mb-6">
+                      This is a placeholder for the "Add Quiz" configuration
+                      form.
+                    </p>
 
                     <div class="mb-4">
-                        <label for="content-type" class="block text-sm text-gray-700">Upload Content Type</label>
-                        <select 
-                            id="content-type" 
-                            v-model="lessonForm.contentType"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66] focus:ring-[#00cc66]"
-                            required
-                        >
-                            <option disabled value="Select Option">Select Option</option>
-                            <option>Video File</option>
-                            <option>PDF Document</option>
-                            <option>External Link</option>
-                        </select>
-                    </div>
-
-                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer mb-6 hover:border-[#00cc66] transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-                        <p class="mt-1 text-sm text-gray-600">Upload Content</p>
+                      <label for="quiz-title" class="text-sm text-gray-700"
+                        >Quiz Title</label
+                      >
+                      <input
+                        type="text"
+                        id="quiz-title"
+                        placeholder="e.g., Chapter 1 Assessment"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"
+                      />
                     </div>
 
                     <div class="flex justify-end space-x-3">
-                        <button
-                            type="button"
-                            @click="closeAddLessonDialog"
-                            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            class="px-4 py-2 bg-[#00cc66] text-white rounded-md hover:bg-[#00994d]"
-                        >
-                            Add Lesson
-                        </button>
-                    </div>
-                </form>
-                
-            </div>
-        </div>
-
-        
-        <div 
-            v-if="isQuizDialogOpen" 
-            class="fixed inset-0 bg-gray-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4"
-        >
-            <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
-                
-                <h2 class="text-xl font-bold mb-4">Add Quiz</h2>
-                <p class="text-gray-600 mb-6">This is a placeholder for the "Add Quiz" configuration form.</p>
-                
-                <div class="mb-4">
-                    <label for="quiz-title" class="text-sm text-gray-700">Quiz Title</label>
-                    <input type="text" id="quiz-title" placeholder="e.g., Chapter 1 Assessment" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
-                </div>
-                
-                <div class="flex justify-end space-x-3">
-                    <button
+                      <button
                         type="button"
                         @click="closeAddQuizDialog"
                         class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-                    >
+                      >
                         Cancel
-                    </button>
-                    <button
+                      </button>
+                      <button
                         type="button"
                         @click="handleQuizAdded"
                         class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800"
-                    >
+                      >
                         Create Quiz
-                    </button>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-            </div>
-        </div>
               </div>
             </div>
           </div>
@@ -1282,9 +1455,9 @@ const uploadThumbnail = async (courseId) => {
               </div>
               <div class="font-bold text-lg text-gray-800">
                 {{
-                  pricingAccessForm.courseAccessType === "paid"
+                  pricingAccessForm.courseAccessType === 'paid'
                     ? pricingStatus.sub
-                    : "Access Policy"
+                    : 'Access Policy'
                 }}
               </div>
               <div class="text-xs text-gray-500">
@@ -1404,7 +1577,7 @@ const uploadThumbnail = async (courseId) => {
           </div>
         </div>
 
-     <div
+        <div
           v-if="currentStep < 4"
           class="flex justify-end space-x-4 pt-8 border-t border-gray-200"
         >
@@ -1421,9 +1594,25 @@ const uploadThumbnail = async (courseId) => {
             class="px-6 py-2 bg-[#00cc66] text-white rounded-lg font-medium hover:bg-[#00994d] transition-colors shadow-md flex items-center justify-center min-w-[120px]"
           >
             <span v-if="isLoading" class="flex items-center">
-              <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <svg
+                class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
               </svg>
               Processing...
             </span>
@@ -1449,9 +1638,25 @@ const uploadThumbnail = async (courseId) => {
             class="px-6 py-2 bg-[#00cc66] text-white rounded-lg font-medium hover:bg-[#00994d] transition-colors shadow-md flex items-center justify-center min-w-[120px]"
           >
             <span v-if="isLoading" class="flex items-center">
-              <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <svg
+                class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
               </svg>
               Creating Course...
             </span>
@@ -1471,12 +1676,12 @@ input:focus {
   box-shadow: 0 0 0 1px #00cc66 !important;
 }
 
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 

@@ -1,6 +1,8 @@
 <script setup>
-import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
-import { computed } from "vue";
+import analyticsApi from '@/api/dashboard.js';
+import membershipAPI from '@/api/membership.js';
+import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
+import { computed } from 'vue';
 
 import {
   ChevronLeft,
@@ -10,141 +12,141 @@ import {
   MoreVertical,
   Search,
   Trash2,
-} from "lucide-vue-next";
-import { ref } from "vue";
+} from 'lucide-vue-next';
+import { ref } from 'vue';
 
-const courseTabs = ref(["Published", "Drafts", "Archived"]);
-const currentTab = ref("Published");
-
-const statCards = [
-  {
-    title: "Total Members",
-    value: "13",
-    change: "1% Increase",
-    changeColor: "text-blue-300",
-  },
-  {
-    title: "Total New Members",
-    value: "7",
-    change: "13% Increase",
-    changeColor: "text-[#00cc66]",
-  },
-  {
-    title: "Total Corporate",
-    value: "8",
-    change: "–5% Decrease",
-    changeColor: "text-red-500",
-  },
-  {
-    title: "Total Individual",
-    value: "4.5",
-    change: "10% Increase",
-    changeColor: "text-gray-500",
-  },
-  {
-    title: "Multinationals",
-    value: "23",
-    change: "-3% Increase",
-    changeColor: "text-red-500",
-  },
-  {
-    title: "Diaspora",
-    value: "25",
-    change: "43% Increase",
-    changeColor: "text-[#00cc66]",
-  },
-  {
-    title: "Health Guardians",
-    value: "11",
-    change: "–5% Decrease",
-    changeColor: "text-blue-300",
-  },
-  {
-    title: "Total Associations",
-    value: "10",
-    change: "10% Increase",
-    changeColor: "text-gray-500",
-  },
-];
-
-const publishedCourses = ref([
-  {
-    id: 1,
-    title: "Ruthie Bolade",
-    enrollments: "Individual",
-    completion: "November 11 2024",
-    lastUpdate: "Active",
-  },
-  {
-    id: 2,
-    title: "Bidemi Joy",
-    enrollments: "Individual",
-    completion: "November 11 2024",
-    lastUpdate: "Active",
-  },
-]);
-
-const draftCourses = ref([
-  {
-    id: 3,
-    title: "Kola Bidemi",
-    enrollments: "Individual",
-    completion: "November 11 2024",
-    lastUpdate: "Active",
-  },
-  {
-    id: 4,
-    title: "Fagbiyi Femi",
-    enrollments: "Individual",
-    completion: "November 11 2024",
-    lastUpdate: "Inactive",
-  },
-]);
-
-const archivedCourses = ref([
-  {
-    id: 5,
-    title: "Fola Abayomi",
-    enrollments: "Individual",
-    completion: "November 11 2024",
-    lastUpdate: "Inactive",
-  },
-  {
-    id: 6,
-    title: "Adebiyi Boni",
-    enrollments: "Individual",
-    completion: "November 11 2024",
-    lastUpdate: "Active",
-  },
-]);
-
-const activeCourses = computed(() => {
-  if (currentTab.value === "Published") return publishedCourses.value;
-  if (currentTab.value === "Drafts") return draftCourses.value;
-  if (currentTab.value === "Archived") return archivedCourses.value;
-  return [];
-});
-
-const handleAction = (action, courseId) => {
-  console.log(`${action} course ID: ${courseId}`);
-  alert(`${action} action triggered for Course ID: ${courseId}`);
-};
+const courseTabs = ref(['Published', 'Drafts', 'Archived']);
+const currentTab = ref('Published');
+const members = ref([]);
+const itemsPerPage = 10;
+const searchTerm = ref('');
+const statCards = ref([]);
 
 const currentPage = ref(1);
-const totalPages = 2;
+const totalPages = ref(1);
 
-const goToPage = (page) => {
-  if (page >= 1 && page <= totalPages) {
-    currentPage.value = page;
+const loadMembershipAnalytics = async () => {
+  try {
+    const data = await analyticsApi.fetchMembershipAnalytics();
+
+    statCards.value = [
+      {
+        title: 'Total Members',
+        value: data.total_members ?? 0,
+        change: '',
+        changeColor: 'text-blue-300',
+      },
+      {
+        title: 'Total New Members',
+        value: data.new_members ?? 0,
+        change: '',
+        changeColor: 'text-[#00cc66]',
+      },
+      {
+        title: 'Total Corporate',
+        value: data.corporate ?? 0,
+        change: '',
+        changeColor: 'text-gray-500',
+      },
+      {
+        title: 'Total Individual',
+        value: data.individual ?? 0,
+        change: '',
+        changeColor: 'text-gray-500',
+      },
+      {
+        title: 'Multinationals',
+        value: data.multinationals ?? 0,
+        change: '',
+        changeColor: 'text-gray-500',
+      },
+      {
+        title: 'Diaspora',
+        value: data.diaspora ?? 0,
+        change: '',
+        changeColor: 'text-[#00cc66]',
+      },
+      {
+        title: 'Health Guardians',
+        value: data.health_guardians ?? 0,
+        change: '',
+        changeColor: 'text-blue-300',
+      },
+      {
+        title: 'Total Associations',
+        value: data.associations ?? 0,
+        change: '',
+        changeColor: 'text-gray-500',
+      },
+    ];
+  } catch (error) {
+    console.error('Failed to load membership analytics', error);
   }
 };
+
+const fetchMembers = async () => {
+  try {
+    const data = await membershipAPI.listApplications({
+      page: currentPage.value,
+    });
+    members.value = data.results;
+    totalPages.value = Math.ceil(data.count / itemsPerPage);
+  } catch (error) {
+    console.error('Failed to fetch members', error);
+  }
+};
+
+onMounted(() => {
+  fetchMembers();
+  loadMembershipAnalytics();
+});
+
+const handleAction = async (action, memberId) => {
+  try {
+    if (action === 'Delete') {
+      await membershipAPI.deleteApplication(memberId);
+      members.value = members.value.filter((m) => m.id !== memberId);
+    } else if (action === 'Edit') {
+      console.log(`Edit member ID: ${memberId}`);
+    } else if (action === 'View') {
+      const data = await membershipAPI.getApplication(memberId);
+      console.log('Member Details:', data);
+    }
+  } catch (error) {
+    console.error(`${action} failed for member ${memberId}:`, error);
+  }
+};
+
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+    fetchMembers();
+  }
+};
+
+const filteredMembers = computed(() => {
+  if (!searchTerm.value) return members.value;
+
+  const term = searchTerm.value.toLowerCase();
+  return members.value.filter(
+    (m) =>
+      m.name.toLowerCase().includes(term) ||
+      m.category?.toLowerCase().includes(term) ||
+      (m.lastPayment || '').toLowerCase().includes(term)
+  );
+});
+
+const paginatedMembers = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return filteredMembers.value.slice(start, end);
+});
 </script>
 
 <template>
   <div class="flex min-h-screen font-sans">
     <SuperAdminSidebar />
     <main class="flex-1 p-8 overflow-auto bg-white">
-      <!-- Breadcrumbs -->
       <div class="text-sm text-gray-500 mb-6">
         <span class="text-[#006633]">Home</span> > Members
       </div>
@@ -196,6 +198,7 @@ const goToPage = (page) => {
             />
             <input
               type="text"
+              v-model="searchTerm"
               placeholder="Search..."
               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors"
             />
@@ -244,8 +247,8 @@ const goToPage = (page) => {
             class="text-gray-600 text-sm font-light divide-y divide-gray-100"
           >
             <tr
-              v-for="course in activeCourses"
-              :key="course.id"
+              v-for="member in paginatedMembers"
+              :key="member.id"
               class="hover:bg-[#f9fff9] transition-colors"
             >
               <td class="py-3 px-3 whitespace-nowrap">
@@ -257,31 +260,31 @@ const goToPage = (page) => {
               <td
                 class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]"
               >
-                {{ course.title }}
+                {{ member.name }}
               </td>
               <td class="py-3 px-3">
-                {{ course.enrollments !== null ? course.enrollments : "-" }}
+                {{ member.enrollments !== null ? member.enrollments : '-' }}
               </td>
               <td class="py-3 px-3">
                 <span
                   :class="{
                     'text-green-600 font-semibold':
-                      course.completion.includes('100'),
+                      member.completion.includes('100'),
                     'text-orange-500':
                       parseFloat(course.completion) < 50 &&
-                      course.completion !== '-',
+                      member.completion !== '-',
                   }"
                 >
-                  {{ course.completion }}
+                  {{ member.completion }}
                 </span>
               </td>
               <td class="py-3 px-3">
-                {{ course.lastUpdate }}
+                {{ member.lastUpdate }}
               </td>
               <td class="py-3 px-3 text-center">
                 <div class="flex item-center justify-center space-x-2">
                   <button
-                    @click="handleAction('View', course.id)"
+                    @click="handleAction('View', member.id)"
                     class="w-6 h-6 transform hover:text-blue-500 hover:scale-110 transition-transform p-0.5"
                   >
                     <Eye
@@ -289,7 +292,7 @@ const goToPage = (page) => {
                     />
                   </button>
                   <button
-                    @click="handleAction('Edit', course.id)"
+                    @click="handleAction('Edit', member.id)"
                     class="w-6 h-6 transform hover:text-green-500 hover:scale-110 transition-transform p-0.5"
                   >
                     <Edit2
@@ -297,7 +300,7 @@ const goToPage = (page) => {
                     />
                   </button>
                   <button
-                    @click="handleAction('Delete', course.id)"
+                    @click="handleAction('Delete', member.id)"
                     class="w-6 h-6 transform hover:text-red-500 hover:scale-110 transition-transform p-0.5"
                   >
                     <Trash2
@@ -310,7 +313,6 @@ const goToPage = (page) => {
           </tbody>
         </table>
 
-        <!-- Pagination -->
         <div class="flex justify-end items-center mt-6 text-sm text-gray-600">
           <span class="mr-4">Page {{ currentPage }} of {{ totalPages }}</span>
           <div class="flex space-x-2">
@@ -339,5 +341,4 @@ const goToPage = (page) => {
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
