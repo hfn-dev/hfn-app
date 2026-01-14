@@ -33,6 +33,8 @@ import MessageNotification from '@/views/User/MessageNotification.vue';
 import MyAccount from '@/views/User/MyAccount.vue';
 import MyLearning from '@/views/User/MyLearning.vue';
 import Support from '@/views/User/Support.vue';
+import Publications from '@/views/Publications.vue';
+
 import UserCourses from '@/views/User/UserCourses.vue';
 import UserDashboard from '@/views/User/UserDashboard.vue';
 
@@ -76,6 +78,8 @@ const routes = [
   { path: '/signin', name: 'Signin', component: SignIn },
   { path: '/events', name: 'Events', component: Events },
   { path: '/gallery', name: 'Gallery', component: Gallery },
+    { path: '/publication', name: 'Publications', component: Publications },
+
 
   { path: '/get-involved', name: 'GetInvolved', component: GetInvolved },
   { path: '/programs', name: 'Programs', component: Programs },
