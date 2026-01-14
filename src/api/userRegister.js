@@ -50,4 +50,14 @@ export default {
       throw error;
     }
   },
+
+  async getUser(config = {}) {
+    try {
+      const response = await api.get("/account/me/", config);
+      return response.data;
+    } catch (error) {
+      console.error("Get User API error:", error);
+      throw error;
+    }
+  },
 };
