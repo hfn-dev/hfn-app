@@ -58,9 +58,7 @@ const handleSignIn = async () => {
       }
       else {
         if (response.tokens) {
-          // Save tokens (keep legacy keys for compatibility and add explicit keys)
           localStorage.setItem('token', response.tokens.access);
-          localStorage.setItem('refreshToken', response.tokens.refresh);
           localStorage.setItem('refresh', response.tokens.refresh);
           
           if (response.role) {

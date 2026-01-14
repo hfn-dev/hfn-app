@@ -1,7 +1,7 @@
 <script setup>
 import courseApi from '@/api/learningModule.js';
 import courses from '@/assets/courses.jpg';
-import { useToast } from '@/composables/useToast';
+import { useToast } from 'vue-toastification';
 import {
   Book,
   Check,
@@ -15,9 +15,11 @@ import {
   UploadCloud,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import SuperAdminSidebar from './SuperAdminSidebar.vue';
 
 const toast = useToast();
+const router = useRouter();
 const currentStep = ref(1);
 
 const basicInfoForm = ref({
@@ -242,10 +244,10 @@ const submitCourse = async () => {
       created_by_role: 'super_admin',
     };
 
-    await courseApi.createCourse(payload);
-
+    const createResponse = await courseApi.createCourses(payload);
+      console.log('Course created successfully:', createResponse);
     toast.success('Course Published Successfully');
-    router.push('/super-admin/courses');
+    router.push('/superadmin/courses');
   } catch (error) {
     console.error(error);
     toast.error('Failed to publish course');

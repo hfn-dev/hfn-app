@@ -2,7 +2,7 @@
 import analyticsApi from '@/api/dashboard.js';
 import membershipAPI from '@/api/membership.js';
 import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
-import { computed } from 'vue';
+import { computed, onMounted  } from 'vue';
 
 import {
   ChevronLeft,
@@ -89,8 +89,9 @@ const fetchMembers = async () => {
     const data = await membershipAPI.listApplications({
       page: currentPage.value,
     });
-    members.value = data.results;
-    totalPages.value = Math.ceil(data.count / itemsPerPage);
+    // Ensure we always have an array, even if API returns unexpected shape
+    members.value = data.results || data.data || [];
+    totalPages.value = data.count ? Math.ceil(data.count / itemsPerPage) : 1;
   } catch (error) {
     console.error('Failed to fetch members', error);
   }
@@ -125,21 +126,23 @@ const goToPage = (page) => {
 };
 
 const filteredMembers = computed(() => {
-  if (!searchTerm.value) return members.value;
+  const list = members.value || [];
+  if (!searchTerm.value) return list;
 
   const term = searchTerm.value.toLowerCase();
-  return members.value.filter(
+  return list.filter(
     (m) =>
-      m.name.toLowerCase().includes(term) ||
-      m.category?.toLowerCase().includes(term) ||
-      (m.lastPayment || '').toLowerCase().includes(term)
+      (m.name || '').toLowerCase().includes(term) ||
+      (m.category || '').toLowerCase().includes(term) ||
+      ((m.lastPayment || '')).toLowerCase().includes(term)
   );
 });
 
 const paginatedMembers = computed(() => {
+  const list = filteredMembers.value || [];
   const start = (currentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
-  return filteredMembers.value.slice(start, end);
+  return list.slice(start, end);
 });
 </script>
 
@@ -268,11 +271,8 @@ const paginatedMembers = computed(() => {
               <td class="py-3 px-3">
                 <span
                   :class="{
-                    'text-green-600 font-semibold':
-                      member.completion.includes('100'),
-                    'text-orange-500':
-                      parseFloat(course.completion) < 50 &&
-                      member.completion !== '-',
+                    'text-green-600 font-semibold': (member.completion || '').toString().includes('100'),
+                    'text-orange-500': Number.parseFloat(member.completion) < 50 && member.completion !== '-',
                   }"
                 >
                   {{ member.completion }}

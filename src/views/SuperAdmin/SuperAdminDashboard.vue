@@ -1,8 +1,9 @@
 <script setup>
 import assets from '@/assets/assets.png';
 import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
-import { reactive, ref } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import analyticsApi from '@/api/dashboard.js';
 
 import {
   ArcElement,
@@ -298,10 +299,7 @@ onMounted(async () => {
           :key="stat.title"
           class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
           :class="{
-            'rounded-tl-4xl rounded-br-4xl': index === 0,
-            'rounded-tl-4xl rounded-br-4xl': index === statCards.length - 1,
-
-            'rounded-tl-4xl rounded-br-4xl': true,
+            'rounded-tl-4xl rounded-br-4xl': index === 0 || index === dashboardData.stats.length - 1,
           }"
         >
           <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
