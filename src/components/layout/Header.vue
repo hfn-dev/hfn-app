@@ -1,7 +1,7 @@
 <script setup>
 import hfn_logo from "@/assets/hfn-health.png";
 import { useAuth } from "@/store/authStore";
-import { ref, watch, computed } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
 const route = useRoute();
@@ -19,6 +19,20 @@ const handleLinkClick = (path) => {
   isMobileMenuOpen.value = false;
   openDropdown.value = null;
 };
+
+const handleLogout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('refreshToken');
+  localStorage.removeItem('refresh');
+  localStorage.removeItem('role');
+  localStorage.removeItem('user');
+
+  logout();
+
+  router.push("/");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
 
 const dashboardLink = computed(() => {
   if (!isAuthenticated.value) return "/signin";

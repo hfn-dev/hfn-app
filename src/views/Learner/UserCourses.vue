@@ -1,9 +1,9 @@
 <script setup>
-import { ref, onMounted, computed, reactive,  watch } from "vue";
-import { useRouter } from "vue-router";
 import learningModule from "@/api/learningModule.js";
+import { computed, onMounted, ref, watch } from "vue";
+import { useRouter } from "vue-router";
 import { useToast } from 'vue-toastification';
-import UserSidebar from "@/components/layout/UserSidebar.vue";
+import LearnerSidebar from "./LearnerSidebar.vue";
 
 import user from "@/assets/user.png";
 import user1 from "@/assets/user1.png";
@@ -284,7 +284,7 @@ onMounted(() => {
 <template>
   <div class="min-h-screen flex flex-col bg-white border-0 font-sans">
     <div class="flex flex-grow overflow-hidden">
-      <UserSidebar />
+      <LearnerSidebar />
       <main
         class="flex-grow overflow-y-auto pb-12"
         :style="{ backgroundColor: 'white' }"

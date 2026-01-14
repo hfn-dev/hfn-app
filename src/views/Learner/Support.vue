@@ -1,8 +1,8 @@
 <script setup>
 import ticketApi from '@/api/tickets.js';
-import UserSidebar from '@/components/layout/UserSidebar.vue';
 import { computed, onMounted, ref } from 'vue';
 import { useToast } from 'vue-toastification';
+import LearnerSidebar from './LearnerSidebar.vue';
 import TicketDetail from './TicketDetail.vue';
 
 const activeTab = ref('new-ticket');
@@ -82,7 +82,7 @@ const currentTicket = computed(() => {
 
 <template>
   <div class="flex h-screen bg-gray-50">
-    <UserSidebar />
+    <LearnerSidebar />
 
     <div class="flex-1 flex flex-col overflow-hidden relative">
       <header class="p-6 bg-white">

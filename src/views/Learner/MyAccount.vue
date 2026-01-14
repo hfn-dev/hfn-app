@@ -1,7 +1,7 @@
 <script setup>
-import UserSidebar from '@/components/layout/UserSidebar.vue';
 import { computed, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import LearnerSidebar from './LearnerSidebar.vue';
 
 const router = useRouter();
 
@@ -224,7 +224,7 @@ const toggleInterest = (id) => {
   <div
     class="flex flex-col lg:flex-row min-h-screen font-sans bg-white border-0"
   >
-    <UserSidebar
+    <LearnerSidebar
       class="hidden md:flex"
       :navLinks="navLinks"
       @update:view="currentView = $event"
