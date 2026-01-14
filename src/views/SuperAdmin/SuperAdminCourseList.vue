@@ -1,7 +1,7 @@
 <script setup>
-import courseApi from '@/api/learningModule.js';
+import courseApi from '@/api/learningModule.js';  
 import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 import {
