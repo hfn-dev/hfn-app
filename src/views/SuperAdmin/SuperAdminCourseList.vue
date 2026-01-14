@@ -1,7 +1,7 @@
 <script setup>
 import courseApi from '@/api/learningModule.js';
 import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
-import { computed } from 'vue';
+import { computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 import {
@@ -36,7 +36,7 @@ const fetchCourses = async () => {
   try {
     const status = tabStatusMap[currentTab.value];
 
-    const response = await courseApi.fetchCourses({
+    const response = await courseApi.listCourses({
       status,
       search: searchQuery.value,
       page: currentPage.value,

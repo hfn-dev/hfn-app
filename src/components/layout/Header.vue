@@ -1,8 +1,8 @@
 <script setup>
 import hfn_logo from "@/assets/hfn-health.png";
-import { ref, watch } from "vue";
+import { useAuth } from "@/store/authStore";
+import { ref, watch, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-
 const router = useRouter();
 const route = useRoute();
 
@@ -10,14 +10,27 @@ const DARK_GREEN = "#004d33";
 const ACTIVE_BG_COLOR = "#F2F9F3";
 
 const currentPath = ref(route.path)
-
+const { user, isAuthenticated, logout, role } = useAuth();
 const isMobileMenuOpen = ref(false);
 const openDropdown = ref(null);
+
 const handleLinkClick = (path) => {
   currentPath.value = path;
   isMobileMenuOpen.value = false;
   openDropdown.value = null;
 };
+
+const dashboardLink = computed(() => {
+  if (!isAuthenticated.value) return "/signin";
+  const userRole = role.value || "user";
+  const roleMap = {
+    superadmin: "/superadmin/dashboard",
+    admin: "/admin/dashboard",
+    editor: "/editor/dashboard",
+    user: "/user/dashboard",
+  };
+  return roleMap[userRole.toLowerCase()] || "/dashboard";
+});
 
 const goToRegistration = () => {
   router.push("/register");
@@ -163,10 +176,36 @@ const toggleDropdown = (title) => {
           </svg>
         </div>
 
-        <button @click="goToRegistration" :style="{ backgroundColor: DARK_GREEN }"
+        <button v-if="!isAuthenticated" @click="goToRegistration" :style="{ backgroundColor: DARK_GREEN }"
           class="px-6 py-2 font-bold text-white rounded-xl shadow-lg hover:opacity-90 transition-all duration-200 transform hover:scale-[1.02]">
           Login/Signup
         </button>
+        <div v-else class="relative group cursor-pointer">
+          <div :style="{ backgroundColor: ACTIVE_BG_COLOR, borderColor: DARK_GREEN }"
+            class="w-10 h-10 rounded-full flex items-center justify-center border-2 hover:border-green-600 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              :style="{ color: DARK_GREEN }" class="w-6 h-6">
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
+
+          <div
+            class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 overflow-hidden ring-1 ring-gray-200">
+            <div class="p-3 border-b bg-gray-50">
+              <p class="font-semibold text-sm truncate">{{ user?.name || 'User' }}</p>
+              <p class="text-xs text-gray-500 truncate">{{ user?.email }}</p>
+            </div>
+            <RouterLink :to="dashboardLink" class="block px-4 py-2 hover:bg-green-50 transition duration-150">
+              Dashboard
+            </RouterLink>
+            <button @click="handleLogout"
+              class="w-full text-left block px-4 py-2 hover:bg-red-50 transition duration-150 text-red-600 font-medium">
+              Logout
+            </button>
+          </div>
+        </div>
       </div>
     </nav>
 

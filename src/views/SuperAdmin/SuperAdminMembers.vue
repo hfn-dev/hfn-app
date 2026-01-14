@@ -2,7 +2,7 @@
 import analyticsApi from '@/api/dashboard.js';
 import membershipAPI from '@/api/membership.js';
 import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 
 import {
   ChevronLeft,

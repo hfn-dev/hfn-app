@@ -1,6 +1,7 @@
 <script setup>
+import messagingApi from '@/api/messaging.js';
 import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const DARK_GREEN = '#004d33';
 const LIGHT_GREEN = '#f2f9f3';

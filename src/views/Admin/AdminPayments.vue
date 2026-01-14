@@ -1,8 +1,8 @@
 <script setup>
 import analyticsApi from '@/api/dashboard.js';
 import paymentApi from '@/api/payments.js';
-import { useToast } from '@/composables/useToast';
 import AdminSidebar from '@/views/Admin/AdminSidebar.vue';
+import { useToast } from 'vue-toastification';
 
 import {
   ChevronLeft,
@@ -82,7 +82,7 @@ const courseTabs = ref(['Registration', 'Purchases']);
 const currentTab = ref('Registration');
 
 const activeStatCards = computed(() => {
-  return currentTab.value === 'Registration' ? statCards : statCards1;
+  return currentTab.value === 'Registration' ? statCards.value : statCards1.value;
 });
 
 const fetchDashboardAnalytics = async () => {
@@ -326,7 +326,7 @@ watch(currentTab, () => {
               <div class="flex h-full pb-6 relative">
                 <div
                   v-for="(data, index) in paymentTrendData"
-                  :key="data.day"
+                  :key="data.day || index"
                   class="flex-1 flex flex-col items-center justify-end relative z-10"
                 >
                   <div

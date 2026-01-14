@@ -72,8 +72,8 @@ const handleSignIn = async () => {
             refreshToken: response.tokens.refresh,
             role: response.role || 'member',
             user: {
-    role: response.role || 'member',
-  },
+              role: response.role || 'member',
+            },
           });
 
           // Fetch current user profile and save locally as 'User'
@@ -92,6 +92,7 @@ const handleSignIn = async () => {
               };
 
               localStorage.setItem('user', JSON.stringify(normalizedUser));
+              
             }
           } catch (err) {
             console.error('Failed to fetch user profile after login:', err);

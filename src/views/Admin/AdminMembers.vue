@@ -1,5 +1,7 @@
 <script setup>
 import analyticsApi from '@/api/dashboard.js';
+import membershipApi from '@/api/membership.js';
+
 import { useToast } from '@/composables/useToast';
 import AdminSidebar from '@/views/Admin/AdminSidebar.vue';
 import {

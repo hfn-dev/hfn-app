@@ -26,8 +26,7 @@ import reagan from "@/assets/reagan.png";
               professionals, including their businesses and associations and those of their partners in the Nigerian
               Health Sector.
 
-              To organize, facilitate and contribute to the training/development of health workers and stakeholders
-              through consultancy, webinars, learning events, exhibitions/trade promotion events.
+              
 
             </p>
             <p class="mt-4 text-gray-700 text-lg">

@@ -1,7 +1,9 @@
 <script setup>
 import eventsApi from '@/api/events.js';
 import newsApi from '@/api/newsModule.js';
+import authApi from '@/api/userRegister.js';
 import UserSidebar from '@/components/layout/UserSidebar.vue';
+import { onMounted, ref } from 'vue';
 
 const newsletters = ref([]);
 const events = ref([]);
@@ -69,7 +71,7 @@ const confirmRegistration = async () => {
 
 const fetchUser = async () => {
   try {
-    const data = await authApi.getCurrentUser();
+    const data = await authApi.getUser();
     user.value = data;
   } catch (error) {
     console.error('Failed to fetch user info:', error);

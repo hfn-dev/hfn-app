@@ -7,33 +7,25 @@ import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 
-const { logout } = useAuth();
 const DARK_GREEN = "#004d33";
 const ACTIVE_BG_COLOR = "#f2f9f3";
 const currentPath = ref(route.path)
 const isMobileMenuOpen = ref(false);
 
 
-
-
-const user = computed(() => {
-  const storedUser = localStorage.getItem('user');
-  return storedUser ? JSON.parse(storedUser) : null;
-});
+const { user, isAuthenticated, logout, role } = useAuth();
 
 const dashboardLink = computed(() => {
-  if (!user.value) return "/login";
-
-  const role = localStorage.getItem("role") || "member";
-
+  if (!isAuthenticated.value) return "/signin";
+  
+  const userRole = role.value || "user";
   const roleMap = {
     superadmin: "/superadmin/dashboard",
     admin: "/admin/dashboard",
     editor: "/editor/dashboard",
-    member: "/member/dashboard",
+    user: "/user/dashboard",
   };
-
-  return roleMap[role.toLowerCase()] || "/dashboard";
+  return roleMap[userRole.toLowerCase()] || "/dashboard";
 });
 
 const handleLinkClick = (path) => {
@@ -51,11 +43,7 @@ const navLinks = [
   { title: "Contact Us", path: "/contact", hasDropdown: false },
 ];
 
-// const handleLogout = () => {
-//   logout();
-//   router.push("/");
-//   window.scrollTo({ top: 0, behavior: "smooth" });
-// };
+
 
 const handleLogout = () => {
   localStorage.removeItem('token');
@@ -166,25 +154,7 @@ watch(
             </svg>
           </div>
 
-          <!-- <div
-            class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300 z-50 overflow-hidden ring-1 ring-gray-200"
-          >
-            <div class="p-3 border-b">
-              <p class="font-semibold text-sm">{{ user?.name }}</p>
-              <p class="text-xs text-gray-500">{{ user?.email }}</p>
-            </div>
-            <a
-              href="/admin/settings"
-              class="block px-4 py-2 hover:bg-gray-100 transition duration-150"
-              >Settings</a
-            >
-            <a
-              href="#"
-              @click.prevent="handleLogout"
-              class="block px-4 py-2 hover:bg-gray-100 transition duration-150 text-red-600 font-medium"
-              >Logout</a
-            >
-          </div> -->
+          
           <div v-if="user"
             class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300 z-50 overflow-hidden ring-1 ring-gray-200">
             <div class="p-3 border-b">
@@ -199,11 +169,6 @@ watch(
             <RouterLink :to="dashboardLink" class="block px-4 py-2 hover:bg-gray-100 transition duration-150">
               Dashboard
             </RouterLink>
-
-            <!-- <RouterLink v-if="user.role === 'admin'" to="/admin/settings"
-              class="block px-4 py-2 hover:bg-gray-100 transition duration-150">
-              Settings
-            </RouterLink> -->
 
             <a href="#" @click.prevent="handleLogout"
               class="block px-4 py-2 hover:bg-gray-100 transition duration-150 text-red-600 font-medium">

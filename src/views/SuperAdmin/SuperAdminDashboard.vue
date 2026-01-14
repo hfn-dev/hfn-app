@@ -1,7 +1,8 @@
 <script setup>
+import analyticsApi from '@/api/dashboard.js';
 import assets from '@/assets/assets.png';
 import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import {
