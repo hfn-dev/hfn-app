@@ -2,7 +2,7 @@
 import analyticsApi from '@/api/dashboard.js';
 import membershipAPI from '@/api/membership.js';
 import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
-import { computed, onMounted  } from 'vue';
+import { computed, onMounted } from 'vue';
 
 import {
   ChevronLeft,
@@ -125,9 +125,8 @@ const goToPage = (page) => {
   }
 };
 
-const filteredMembers = computed(() => {
-  const list = members.value || [];
-  if (!searchTerm.value) return list;
+const filteredMembers = comped(() => {
+  if (!searchTerm.value) return members.value;
 
   const term = searchTerm.value.toLowerCase();
   return list.filter(
