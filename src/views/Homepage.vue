@@ -278,16 +278,8 @@ onMounted(() => {
       >
         <div class="flex items-center justify-center h-15">
           <img
-            :src="emzor"
-            alt="Emzor Logo"
-            class="max-h-full max-w-full object-contain"
-          />
-        </div>
-
-        <div class="flex items-center justify-center h-15">
-          <img
-            :src="oando"
-            alt="Oando Logo"
+            :src="pharm"
+            alt="Pharm Logo"
             class="max-h-full max-w-full object-contain"
           />
         </div>
@@ -302,27 +294,40 @@ onMounted(() => {
 
         <div class="flex items-center justify-center h-15">
           <img
-            :src="hba"
-            alt="Health Business Academy Logo"
-            class="max-h-full max-w-full object-contain"
-          />
-        </div>
-
-        <div class="flex items-center justify-center h-15">
-          <img
             :src="bridge"
             alt="Bridge Clinic Logo"
             class="max-h-full max-w-full object-contain"
           />
         </div>
 
+
         <div class="flex items-center justify-center h-15">
           <img
-            :src="pharm"
-            alt="Pharm Logo"
+            :src="emzor"
+            alt="Emzor Logo"
             class="max-h-full max-w-full object-contain"
           />
         </div>
+
+        <div class="flex items-center justify-center h-15">
+          <img
+            :src="oando"
+            alt="Oando Logo"
+            class="max-h-full max-w-full object-contain"
+          />
+        </div>
+
+        
+        <div class="flex items-center justify-center h-15">
+          <img
+            :src="hba"
+            alt="Health Business Academy Logo"
+            class="max-h-full max-w-full object-contain"
+          />
+        </div>
+
+        
+        
       </div>
     </div>
   </div>
