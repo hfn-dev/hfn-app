@@ -1,4 +1,5 @@
 <script setup>
+import { ref, onMounted } from 'vue';
 import eventsApi from '@/api/events.js';
 import newsApi from '@/api/newsModule.js';
 import authApi from '@/api/userRegister.js';

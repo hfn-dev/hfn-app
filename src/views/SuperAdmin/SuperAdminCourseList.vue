@@ -1,7 +1,8 @@
 <script setup>
-import courseApi from '@/api/learningModule.js';
+import courseApi from '@/api/learningModule.js';  
+import analyticsApi from '@/api/dashboard.js';    
 import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
-import { computed, onMounted, watch } from 'vue';
+import { computed, ref, watch, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 import {
@@ -14,7 +15,6 @@ import {
   Search,
   Trash2,
 } from 'lucide-vue-next';
-import { ref } from 'vue';
 
 const courseTabs = ref(['Published', 'Drafts', 'Archived', 'Approvals']);
 const currentTab = ref('Published');
@@ -36,13 +36,13 @@ const fetchCourses = async () => {
   try {
     const status = tabStatusMap[currentTab.value];
 
-    const response = await courseApi.listCourses({
+    const response = await courseApi.getAllCourses({
       status,
       search: searchQuery.value,
       page: currentPage.value,
     });
 
-    courses.value = response.results || response.data || [];
+    courses.value = response.results || response.data || response || [];
   } finally {
     loading.value = false;
   }
