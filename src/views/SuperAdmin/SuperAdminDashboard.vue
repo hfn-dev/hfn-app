@@ -1,7 +1,7 @@
 <script setup>
 import assets from '@/assets/assets.png';
 import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
-import { reactive, ref } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 import {
