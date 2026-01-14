@@ -200,10 +200,10 @@ watch(
               Dashboard
             </RouterLink>
 
-            <RouterLink v-if="user.role === 'admin'" to="/admin/settings"
+            <!-- <RouterLink v-if="user.role === 'admin'" to="/admin/settings"
               class="block px-4 py-2 hover:bg-gray-100 transition duration-150">
               Settings
-            </RouterLink>
+            </RouterLink> -->
 
             <a href="#" @click.prevent="handleLogout"
               class="block px-4 py-2 hover:bg-gray-100 transition duration-150 text-red-600 font-medium">

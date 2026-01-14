@@ -521,7 +521,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
       </section>
     </div>
   </section>
-  <section class="sm:py-14 bg-white">
+  <!-- <section class="sm:py-14 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2
         class="text-3xl px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md sm:text-4xl font-serif font-extrabold text-gray-900 text-center mb-10"
@@ -701,7 +701,6 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
             :key="index"
             class="relative group"
           >
-            <!-- Member name -->
             <div
               class="p-1 text-gray-800 font-medium cursor-pointer hover:text-green-700 transition"
               @click="openDialog(member, $event)"
@@ -709,7 +708,6 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
               {{ member }}
             </div>
 
-            <!-- Dialog under clicked name -->
             <transition name="fade">
               <div
                 v-if="showDialog && selectedMember === member"
@@ -762,7 +760,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
 </template>
 
 <style scoped>
