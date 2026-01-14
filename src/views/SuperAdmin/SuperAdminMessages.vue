@@ -1,148 +1,123 @@
 <script setup>
-import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
-import { computed, ref } from "vue";
+import messagingApi from '@/api/messaging.js';
+import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
+import { computed, onMounted, ref } from 'vue';
 
-const DARK_GREEN = "#004d33";
-const LIGHT_GREEN = "#f2f9f3";
+const DARK_GREEN = '#004d33';
+const LIGHT_GREEN = '#f2f9f3';
 
-const currentTab = ref("Direct Messages");
-const currentGroup = ref("General");
-const currentDMUser = ref("Ade John");
-const messageInput = ref("");
+const currentTab = ref('Direct Messages');
+const currentGroup = ref('General');
+const currentDMUser = ref('Ade John');
+const messageInput = ref('');
+const directMessages = ref([]);
+const chatMessages = ref([]);
+const selectedUserId = ref(null);
 
-const tabs = ["Direct Messages"];
-
-const directMessages = [
-  {
-    name: "Ade John",
-    initial: "AJ",
-    count: 5,
-    path: "ade-john",
-    color: "bg-orange-500",
-  },
-  {
-    name: "Victor Thompson",
-    initial: "VT",
-    count: 2,
-    path: "victor-thompson",
-    color: "bg-amber-600",
-  },
-  {
-    name: "John Doe",
-    initial: "JD",
-    count: 0,
-    path: "john-doe",
-    color: "bg-gray-500",
-  },
-  {
-    name: "Blessing Victor",
-    initial: "BV",
-    count: 0,
-    path: "blessing-victor",
-    color: "bg-blue-500",
-  },
-];
-
-// const groups = [
-//   { name: 'General', count: 6, path: 'general', icon: '#' },
-//   { name: 'Paediatrics', count: 2, path: 'paediatrics', icon: '#' },
-//   { name: 'Doctors', count: 0, path: 'doctors', icon: '#' },
-//   { name: 'Diaspora', count: 0, path: 'diaspora', icon: '#' },
-// ];
-
-const searchQuery = ref("");
+const tabs = ['Direct Messages'];
+const searchQuery = ref('');
 
 const filteredDMs = computed(() =>
-  directMessages.filter((dm) =>
+  directMessages.value.filter((dm) =>
     dm.name.toLowerCase().includes(searchQuery.value.toLowerCase())
   )
 );
 
-const chatMessages = [
-  {
-    sender: "Ade John",
-    time: "09:00 AM",
-    initial: "AJ",
-    color: "bg-orange-500",
-    body: "Lorem ipsum dolor sit amet consectetur. Et dui neque et fames volutpat. Vulputate feugiat nisl diam nec cursus malesuada. Viverra laoreet faucibus",
-  },
-  {
-    sender: "Salisu Orisha",
-    time: "09:04 AM",
-    initial: "SO",
-    color: "bg-green-600",
-    body: "Lorem ipsum dolor sit amet consectetur. Et dui neque et fames volutpat. Vulputate feugiat nisl diam nec cursus malesuada. Viverra laoreet faucibus",
-  },
-  {
-    sender: "Ade John",
-    time: "09:08 AM",
-    initial: "VT",
-    color: "bg-amber-600",
-    body: "Lorem ipsum dolor sit amet consectetur. Et dui neque et fames volutpat. Viverra laoreet faucibus",
-  },
-  { type: "file", sender: "Ade John", file: "File.doc" },
-  {
-    sender: "Salisu Orisha",
-    time: "09:12 AM",
-    initial: "SO",
-    color: "bg-green-600",
-    body: "Lorem ipsum dolor sit amet consectetur. Et dui neque et fames volutpat. Vulputate feugiat nisl diam nec cursus malesuada. Viverra laoreet faucibus",
-  },
-];
+const loadConversations = async () => {
+  try {
+    const res = await messagingApi.getConversations();
+    directMessages.value = res.results.map((c) => ({
+      id: c.user.id,
+      name: c.user.full_name,
+      initial: c.user.full_name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .slice(0, 2),
+      count: c.unread_count,
+      color: 'bg-green-600',
+    }));
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-// const messageNotifications = [
-//   {
-//     category: 'COURSES',
-//     time: '09:14 AM',
-//     title: 'NATUROPATHY BY KANU NWANKWO HAS BEEN UPDATED',
-//     body: 'Do ullamco ex velit anim do proident exercitation et anim tempor. Lorem sunt deserunt labore non excepteur veniam enim quis officia magna ani...',
-//   },
-//   {
-//     category: 'SYSTEM',
-//     time: '09:14 AM',
-//     title: 'UPDATED TERMS AND CONDITIONS',
-//     body: 'Do ullamco ex velit anim do proident exercitation et anim tempor. Lorem sunt deserunt labore non excepteur veniam enim quis officia magna ani...',
-//   },
-//   {
-//     category: 'MY ACCOUNT',
-//     time: '09:14 AM',
-//     title: 'INCOMPLETE PROFILE',
-//     body: 'Do ullamco ex velit anim do proident exercitation et anim tempor. Lorem sunt deserunt labore non excepteur veniam enim quis officia magna ani...',
-//   },
-//   {
-//     category: 'SUBSCRIPTION',
-//     time: '09:14 AM',
-//     title: 'YOUR SUBSCRIPTION IS ABOUT TO END',
-//     body: 'Do ullamco ex velit anim do proident exercitation et anim tempor. Lorem sunt deserunt labore non excepteur veniam enim quis officia magna ani...',
-//   },
-// ];
+const loadMessages = async (userId) => {
+  try {
+    const res = await messagingApi.getMessagesWithUser({
+      user_id: userId,
+    });
+
+    chatMessages.value = res.results.map((m) => ({
+      id: m.id,
+      sender: m.sender.full_name,
+      time: new Date(m.created_at).toLocaleTimeString(),
+      initial: m.sender.full_name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .slice(0, 2),
+      color: m.sender.is_admin ? 'bg-green-600' : 'bg-gray-500',
+      body: m.content,
+    }));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const sendMessage = async () => {
+  if (!messageInput.value || !selectedUserId.value) return;
+
+  try {
+    const res = await messagingApi.sendMessage({
+      receiver_id: selectedUserId.value,
+      content: messageInput.value,
+    });
+
+    chatMessages.value.push({
+      sender: 'You',
+      time: new Date(res.created_at).toLocaleTimeString(),
+      initial: 'AD',
+      color: 'bg-green-600',
+      body: res.content,
+    });
+
+    messageInput.value = '';
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 const isGroupActive = (name) => name === currentGroup.value;
-const isDMActive = (name) => name === currentDMUser.value;
+const isDMActive = (dm) => dm.id === selectedUserId.value;
 
 const activeChatTitle = computed(() => {
-  if (currentTab.value === "Groups") {
+  if (currentTab.value === 'Groups') {
     return currentGroup.value;
   }
-  if (currentTab.value === "Direct Messages") {
+  if (currentTab.value === 'Direct Messages') {
     return currentDMUser.value;
   }
-  return "";
+  return '';
 });
 
-const selectDMUser = (name) => {
-  currentDMUser.value = name;
-  if (currentTab.value !== "Direct Messages") {
-    currentTab.value = "Direct Messages";
-  }
+const selectDMUser = async (dm) => {
+  currentDMUser.value = dm.name;
+  selectedUserId.value = dm.id;
+
+  await loadMessages(dm.id);
 };
 
 const selectGroup = (name) => {
   currentGroup.value = name;
-  if (currentTab.value !== "Groups") {
-    currentTab.value = "Groups";
+  if (currentTab.value !== 'Groups') {
+    currentTab.value = 'Groups';
   }
 };
+
+onMounted(() => {
+  loadConversations();
+});
 </script>
 
 <template>
@@ -267,15 +242,15 @@ const selectGroup = (name) => {
             <button
               v-for="dm in filteredDMs"
               :key="dm.name"
-              @click="selectDMUser(dm.name)"
+              @click="selectDMUser(dm)"
               class="flex items-center justify-between w-full p-2 rounded-lg transition-colors"
               :class="
-                isDMActive(dm.name)
+                isDMActive(dm)
                   ? 'font-semibold'
                   : 'hover:bg-gray-50 text-gray-600'
               "
               :style="
-                isDMActive(dm.name)
+                isDMActive(dm)
                   ? { backgroundColor: LIGHT_GREEN, color: DARK_GREEN }
                   : {}
               "
@@ -440,6 +415,7 @@ const selectGroup = (name) => {
                 @keyup.enter="sendMessage"
               />
               <button
+                @click="sendMessage"
                 class="p-3 text-white rounded-lg transition"
                 :style="{ backgroundColor: DARK_GREEN }"
               >

@@ -1,3 +1,40 @@
+<script setup>
+import ticketApi from '@/api/tickets.js';
+import { defineEmits, defineProps, ref } from 'vue';
+import { useToast } from 'vue-toastification';
+
+const props = defineProps({
+  ticket: {
+    type: Object,
+    required: true,
+  },
+});
+
+const toast = useToast();
+
+const emit = defineEmits(['close']);
+const updateText = ref('');
+
+const submitUpdate = async () => {
+  const text = updateText.value.trim();
+  if (!text) return;
+
+  try {
+    const updatedTicket = await ticketApi.updateTicket(props.ticket.id, {
+      update: text,
+    });
+
+    props.ticket.update1 = updatedTicket.update1 || text;
+    props.ticket.status = updatedTicket.status || props.ticket.status;
+
+    toast.success(`Update submitted for Ticket #${props.ticket.number}.`);
+    updateText.value = '';
+  } catch (error) {
+    console.error('Failed to submit ticket update:', error);
+    toast.error('Failed to submit update. Please try again later.');
+  }
+};
+</script>
 
 <template>
   <div class="space-y-8 p-4 sm:p-8 border border-gray-200 rounded-lg bg-white">
@@ -59,13 +96,11 @@
         <dd class="mt-1 sm:mt-0 sm:col-span-2">{{ ticket.dateCreated }}</dd>
       </div>
 
-      <!-- Description Row -->
       <div class="py-3 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="font-medium text-gray-500">Description:</dt>
         <dd class="mt-1 sm:mt-0 sm:col-span-2">{{ ticket.description }}</dd>
       </div>
 
-      <!-- Status Row -->
       <div class="py-3 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-gray-50">
         <dt class="font-medium text-gray-500">Status:</dt>
         <dd class="mt-1 sm:mt-0 sm:col-span-2 flex items-center">
@@ -126,32 +161,3 @@
     </form>
   </div>
 </template>
-
-<script setup>
-import { ref, defineProps, defineEmits } from "vue";
-
-const props = defineProps({
-  ticket: {
-    type: Object,
-    required: true,
-  },
-});
-
-const emit = defineEmits(["close"]);
-
-const updateText = ref("");
-
-const submitUpdate = () => {
-  if (updateText.value.trim() !== "") {
-    console.log(
-      `Submitting update for ticket ${props.ticket.number}: ${updateText.value}`
-    );
-    window.alert(
-      `Update submitted for Ticket #${props.ticket.number}. Thank you!`
-    );
-    updateText.value = "";
-  } else {
-    window.alert("Please enter an update description before submitting.");
-  }
-};
-</script>

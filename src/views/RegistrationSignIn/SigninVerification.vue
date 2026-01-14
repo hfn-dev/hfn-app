@@ -3,14 +3,19 @@ import registerImage from '@/assets/register.jpg';
 import { useAuth } from '@/store/authStore';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification';
+import userRegister from "@/api/userRegister";
 
 const router = useRouter();
+const toast = useToast();
 const { login } = useAuth();
 const verificationCode = ref(['', '', '', '', '', '']);
 const timerSeconds = ref(3 * 60);
 const isTimerRunning = ref(true);
 const timerInterval = ref(null);
 const inputRefs = ref([]);
+const isLoading = ref(false);
+const userEmail = ref('');
 
 const displayTime = computed(() => {
   const minutes = Math.floor(timerSeconds.value / 60);
@@ -33,6 +38,14 @@ const startTimer = () => {
 };
 
 onMounted(() => {
+  const savedEmail = localStorage.getItem("pendingVerificationEmail");
+  if (savedEmail) {
+    userEmail.value = savedEmail;
+  } else {
+    toast.error("No email found for verification. Please register first.");
+    setTimeout(() => router.push('/register'), 2000);
+  }
+  
   startTimer();
   if (inputRefs.value[0]) {
     inputRefs.value[0].focus();
@@ -71,29 +84,122 @@ const handleKeydown = (index, event) => {
 
 const fullCode = computed(() => verificationCode.value.join(''));
 
-const handleVerification = () => {
-  if (fullCode.value.length === 6) {
-    console.log('Verifying code:', fullCode.value);
-    alert('Verification attempted for code: ' + fullCode.value);
-  } else {
-    alert('Please enter the full 6-digit code.');
+const handleVerification = async () => {
+  if (fullCode.value.length !== 6) {
+    toast.error('Please enter the full 6-digit code.');
+    return;
+  }
+
+  if (!userEmail.value) {
+    toast.error('Email not found. Please register again.');
+    return;
+  }
+
+  try {
+    isLoading.value = true;
+    
+    const payload = {
+      email: userEmail.value,
+      code: fullCode.value,
+      purpose: "email_verification"
+    };
+
+    console.log("Verifying OTP with payload:", payload);
+    
+    const response = await userRegister.verifyUser(payload);
+    console.log("Verification response:", response);
+    
+    if (response?.status === "success") {
+      const successMsg = response.messages?.[0] || "Email verified successfully!";
+      toast.success(successMsg);
+
+      // Clear saved email and navigate to sign-in immediately
+      localStorage.removeItem("pendingVerificationEmail");
+      router.push('/signin');
+      return;
+    } else {
+      // Handle API errors (invalid/expired code)
+      const errorMessage = response.messages?.[0] || "Verification failed.";
+      toast.error(errorMessage);
+
+      // If resend is suggested, enable resend button
+      if (response.actions_required?.includes("resend_email_verification")) {
+        // The user might need to resend, but we keep the timer running
+        // The resend button will be enabled when timer expires
+      }
+    }
+    
+  } catch (error) {
+    console.error("Verification error:", error);
+    if (error.response) {
+      const errorMsg = error.response.data?.messages?.[0] || 
+                      error.response.data?.message || 
+                      `Error: ${error.response.status}`;
+      toast.error(errorMsg);
+
+      if (error.response?.actions_required?.includes("resend_email_verification")) {
+        // Optionally auto-resend or just show message
+      }
+    } else if (error.request) {
+      toast.error("Network error. Please check your connection and try again.");
+    } else {
+      toast.error("An unexpected error occurred. Please try again.");
+    }
+  } finally {
+    isLoading.value = false;
   }
 };
 
-const handleResend = () => {
-  console.log('Resend email initiated');
-  startTimer();
-  alert('Verification code resent! Timer reset.');
+const handleResend = async () => {
+  if (!userEmail.value) {
+    toast.error("No email found. Please register again.");
+    return;
+  }
+
+  try {
+    isLoading.value = true;
+    
+    const payload = {
+      email: userEmail.value
+    };
+
+    console.log("Resending OTP with payload:", payload);
+    
+    const response = await userRegister.resendOtp(payload);
+    
+    if (response?.status === "success") {
+      toast.success(response.data.messages?.[0] || "Verification code resent successfully!");
+      
+      startTimer();
+      
+      verificationCode.value = ['', '', '', '', '', ''];
+      if (inputRefs.value[0]) {
+        inputRefs.value[0].focus();
+      }
+    } else {
+      const errorMessage = response.data?.messages?.[0] || "Failed to resend verification code.";
+      toast.error(errorMessage);
+    }
+    
+  } catch (error) {
+    console.error("Resend error:", error);
+    
+    if (error.response) {
+      const errorMsg = error.response.data?.messages?.[0] || 
+                      error.response.data?.message || 
+                      `Error: ${error.response.status}`;
+      toast.error(errorMsg);
+    } else if (error.request) {
+      toast.error("Network error. Please check your connection and try again.");
+    } else {
+      toast.error("An unexpected error occurred. Please try again.");
+    }
+  } finally {
+    isLoading.value = false;
+  }
 };
 
-const alert = (message) => {
-  console.log(message);
-};
 
-const handleSignupVerification = () => {
-  login();
-  router.push('/signin');
-};
 
 </script>
 
@@ -118,10 +224,14 @@ const handleSignupVerification = () => {
           </div>
         </div>
 
-        <p class="text-center text-gray-600 text-sm">
-          Check your inbox. Enter the 6-digit code sent to your email to finish
-          sign up.
-        </p>
+        <div v-if="userEmail" class="text-center text-gray-600 text-sm">
+          <p>We've sent a 6-digit verification code to:</p>
+          <p class="font-semibold mt-1">{{ userEmail }}</p>
+          <p class="mt-2">Enter the code below to verify your email address.</p>
+        </div>
+        <div v-else class="text-center text-red-600 text-sm">
+          <p>Email not found. Please complete registration first.</p>
+        </div>
 
         <form @submit.prevent="handleVerification" class="space-y-6">
           <div class="flex justify-center space-x-2 sm:space-x-3">
@@ -138,7 +248,11 @@ const handleSignupVerification = () => {
               inputmode="numeric"
               pattern="[0-9]*"
               class="w-1/6 aspect-square text-center text-2xl font-bold border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-[#0c6b39] focus:border-[#0c6b39] transition-all duration-150 ease-in-out"
-              :class="{ 'opacity-50 pointer-events-none': !isTimerRunning }"
+              :disabled="isLoading"
+              :class="{
+                'opacity-50 pointer-events-none': !isTimerRunning,
+                'bg-gray-50': isLoading
+              }"
             />
           </div>
 
@@ -148,10 +262,10 @@ const handleSignupVerification = () => {
               <button
                 type="button"
                 @click="handleResend"
-                :disabled="isTimerRunning"
-                class="font-semibold transition-colors duration-150 ease-in-out"
+                :disabled="isTimerRunning || isLoading"
+                class="font-semibold transition-colors duration-150 ease-in-out ml-1"
                 :class="
-                  isTimerRunning
+                  isTimerRunning || isLoading
                     ? 'text-gray-400 cursor-not-allowed'
                     : 'text-[#0c6b39] hover:text-[#09572d]'
                 "
@@ -164,26 +278,37 @@ const handleSignupVerification = () => {
               class="font-medium"
               :class="isTimerRunning ? 'text-gray-700' : 'text-red-600'"
             >
-              {{ isTimerRunning ? displayTime + ' minutes' : 'Expired' }}
+              {{ isTimerRunning ? displayTime : 'Expired' }}
             </span>
           </div>
 
           <div>
-            
             <button
-              @click="handleSignupVerification"
-              :disabled="fullCode.length !== 6 || !isTimerRunning"
-              class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white shadow-sm transition-all duration-150 ease-in-out"
+              type="submit"
+              :disabled="fullCode.length !== 6 || !isTimerRunning || isLoading"
+              class="group relative w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white shadow-sm transition-all duration-150 ease-in-out"
               :class="
-                fullCode.length === 6 && isTimerRunning
+                fullCode.length === 6 && isTimerRunning && !isLoading
                   ? 'bg-[#0c6b39] hover:bg-[#09572d]'
                   : 'bg-gray-400 cursor-not-allowed'
               "
             >
-              Sign Up
+              <span v-if="isLoading" class="flex items-center">
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Verifying...
+              </span>
+              <span v-else>Verify & Continue</span>
             </button>
           </div>
         </form>
+
+        <div class="text-center text-gray-500 text-xs mt-8">
+          <p>If you don't see the email in your inbox, please check your spam folder.</p>
+          <p class="mt-1">The verification code will expire in 3 minutes.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -195,5 +320,14 @@ const handleSignupVerification = () => {
 }
 .h-full {
   height: 100%;
+}
+
+/* Auto-fill styling */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #111827;
+  -webkit-box-shadow: 0 0 0px 1000px white inset;
+  transition: background-color 5000s ease-in-out 0s;
 }
 </style>

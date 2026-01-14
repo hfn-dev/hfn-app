@@ -1,136 +1,92 @@
 <script setup>
-import courses from "@/assets/courses.jpg";
+import courseApi from '@/api/learningModule.js';
+import courses from '@/assets/courses.jpg';
+import { useToast } from 'vue-toastification';
 import {
   Book,
   Check,
   ChevronDown,
   DollarSign,
   Edit2,
-  Home,
-  LifeBuoy,
   Lock,
-  LogOut,
   Minimize2,
   Plus,
-  Star,
   Trash2,
   UploadCloud,
-  User,
-} from "lucide-vue-next";
-import { computed, ref } from "vue";
-import SuperAdminSidebar from "./SuperAdminSidebar.vue";
+} from 'lucide-vue-next';
+import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import SuperAdminSidebar from './SuperAdminSidebar.vue';
 
+const toast = useToast();
+const router = useRouter();
 const currentStep = ref(1);
 
 const basicInfoForm = ref({
-  title: "Naturopathy 101: Discover Natural Healing",
-  shortDescription:
-    "Discover the fundamentals of natural healing and holistic wellness techniques.",
-  category: "Nutrition",
-  level: "Beginner",
-  fullOverview:
-    "Euismod magna id purus eget nunc ligula suspendisse dui netus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam pulvinar duis etiam. Euismod magna id purus eget nunc. Conduis etiam pulvinar duis etiam. Euismod magna id purus eget nunc. Condimentum blandit rutrum at mauris enim pulvinar duis etiam.",
-  durationHours: "02",
-  durationMinutes: "30",
-  durationSeconds: "00",
-  learnOutcomes: [
-    { id: 1, text: "Understand core naturopathic philosophies", charCount: 38 },
-    { id: 2, text: "Identify essential vitamins and minerals", charCount: 38 },
-    { id: 3, text: "Prepare simple herbal infusions", charCount: 30 },
-    { id: 4, text: "Develop a personal wellness plan", charCount: 32 },
-  ],
+  title: '',
+  shortDescription: '',
+  category: '',
+  level: '',
+  fullOverview: '',
+  durationHours: '00',
+  durationMinutes: '00',
+  durationSeconds: '00',
+  learnOutcomes: [],
 });
 
 const curriculumForm = ref({
-  modules: [
-    {
-      id: 1,
-      title: "Module One: Meanings and Definitions",
-      isOpen: true,
-      lessons: [
-        { id: 101, title: "Lesson 1: What is Naturopathy?", duration: "8:09" },
-        { id: 102, title: "Lesson 2: Lorem", duration: "20:35" },
-      ],
-      resources: "Additional Resources",
-    },
-    {
-      id: 2,
-      title: "Module Two: Lorem Ipsum",
-      isOpen: false,
-      lessons: [
-        { id: 201, title: "Lesson 1: Lorem Ipsum", duration: "12:00" },
-        { id: 202, title: "Lesson 2: The Role of Hydration", duration: "7:45" },
-      ],
-      resources: "Supplementary Reading Materials",
-    },
-    { id: 3, title: "Module Three: Lorem Ipsum", isOpen: false, lessons: [] },
-    { id: 4, title: "Module Four: Lorem Ipsum", isOpen: false, lessons: [] },
-    { id: 5, title: "Module Five: Lorem Ipsum", isOpen: false, lessons: [] },
-  ],
-  newLessonTitle: "Sample Lesson Title",
-  newModuleNumber: "",
-  materialsIncluded: [
-    { id: 1, text: "Downloadable PDF guides for each module", charCount: 41 },
-    { id: 2, text: "Quizzes after every lesson", charCount: 26 },
-    { id: 3, text: "Access to a private student community", charCount: 40 },
-    { id: 4, text: "Certificate of Completion", charCount: 30 },
-  ],
-  instructorName: "Dr. Aisha Musa",
-  briefBiography:
-    "Condimentum blandit rutrum at mauris enim pulvinar duis etiam pulvinar duis etiam. Condimentum blandit rutrum at mauris enim pulvinar duis etiam. Condimentum blandit rutrum at mauris enim pulvinar duis etiam.",
+  modules: [],
+  newLessonTitle: '',
+  materialsIncluded: [],
+  instructorName: '',
+  briefBiography: '',
 });
 
 const pricingAccessForm = ref({
-  courseAccessType: "paid",
-  courseVisibility: "public",
-  price: 20000.0,
-  currency: "NGN",
-  discountAmount: "20%",
-  discountAvailability: "members_only",
+  courseAccessType: 'paid',
+  courseVisibility: 'public',
+  price: 0,
+  currency: 'NGN',
+  discountAmount: 'none',
+  discountAvailability: 'all',
 });
 
 const pricingStatus = computed(() => {
   const access = pricingAccessForm.value.courseAccessType;
-  const visibility = pricingAccessForm.value.courseVisibility;
-
-  if (access === "free") return { main: "Free", sub: "Public Access" };
-  if (access === "paid")
+  if (access === 'free') return { main: 'Free', sub: 'Public Access' };
+  if (access === 'paid')
     return {
-      main: "Paid Only",
+      main: 'Paid Only',
       sub: `${
         pricingAccessForm.value.currency
-      } ${pricingAccessForm.value.price.toLocaleString("en-US")}`,
+      } ${pricingAccessForm.value.price.toLocaleString('en-US')}`,
     };
-  if (access === "membership")
-    return { main: "Members Only", sub: "Subscription" };
-
-  return { main: "Unknown", sub: "" };
+  if (access === 'membership')
+    return { main: 'Members Only', sub: 'Subscription' };
+  return { main: 'Unknown', sub: '' };
 });
 
 const discountStatus = computed(() => {
-  return pricingAccessForm.value.discountAvailability === "all"
-    ? "All"
-    : pricingAccessForm.value.discountAvailability === "members_only"
-    ? "Members Only"
-    : "None";
+  return pricingAccessForm.value.discountAvailability === 'all'
+    ? 'All'
+    : pricingAccessForm.value.discountAvailability === 'members_only'
+    ? 'Members Only'
+    : 'None';
 });
 
-// Calculate total lessons and lesson duration for Step 4
 const totalLessons = computed(() => {
   return curriculumForm.value.modules.reduce((count, module) => {
     return count + module.lessons.length;
   }, 0);
 });
 
-// --- Stepper Logic ---
 const steps = [
-  { id: 1, title: "Basic Information" },
-  { id: 2, title: "Curriculum Builder" },
-  { id: 3, title: "Pricing & Access" },
-  { id: 4, title: "Preview & Publish" },
+  { id: 1, title: 'Basic Information' },
+  { id: 2, title: 'Curriculum Builder' },
+  { id: 3, title: 'Pricing & Access' },
+  { id: 4, title: 'Preview & Publish' },
 ];
 
-// --- Step 1: Basic Info Logic ---
 const addOutcome = () => {
   const newId =
     basicInfoForm.value.learnOutcomes.length > 0
@@ -138,7 +94,7 @@ const addOutcome = () => {
       : 1;
   basicInfoForm.value.learnOutcomes.push({
     id: newId,
-    text: "What you will teach in this course...",
+    text: '',
     charCount: 0,
   });
 };
@@ -151,7 +107,6 @@ const updateCharCount = (outcome) => {
   outcome.charCount = outcome.text.length;
 };
 
-// --- Step 2: Curriculum Builder Logic ---
 const toggleModule = (module) => {
   module.isOpen = !module.isOpen;
 };
@@ -162,7 +117,7 @@ const addMaterial = () => {
       : 1;
   curriculumForm.value.materialsIncluded.push({
     id: newId,
-    text: "What materials are included...",
+    text: '',
     charCount: 0,
   });
 };
@@ -174,18 +129,11 @@ const updateMaterialCharCount = (material) => {
   material.charCount = material.text.length;
 };
 
-// --- Form Navigation ---
-const saveAndContinue = () => {
+const saveAndContinue = async () => {
   if (currentStep.value < 4) {
-    console.log(
-      `Saving Step ${currentStep.value} and continuing to Step ${
-        currentStep.value + 1
-      }: ${steps[currentStep.value].title}`
-    );
     currentStep.value += 1;
   } else {
-    console.log("Course fully configured. Ready to Publish!");
-    alert("Course Published Successfully! (Simulated)");
+    await submitCourse();
   }
 };
 
@@ -198,83 +146,119 @@ const goBack = () => {
     );
     currentStep.value -= 1;
   } else {
-    alert("Navigating back to My Courses list (Simulated).");
+    toast.success('Navigating back to My Courses list.');
   }
 };
 
- const isLessonDialogOpen = ref(false);
+const isLessonDialogOpen = ref(false);
 const isQuizDialogOpen = ref(false);
 
-// --- Form State for the Lesson Dialog ---
 const lessonForm = ref({
-    title: 'Sample Text',
+  title: '',
+  durationHours: '00',
+  durationMinutes: '00',
+  durationSeconds: '00',
+  contentType: '',
+});
+
+const openAddLessonDialog = () => {
+  isLessonDialogOpen.value = true;
+};
+
+const closeAddLessonDialog = () => {
+  isLessonDialogOpen.value = false;
+  resetLessonForm();
+};
+
+const resetLessonForm = () => {
+  lessonForm.value = {
+    title: '',
     durationHours: '00',
     durationMinutes: '00',
     durationSeconds: '00',
     contentType: 'Select Option',
-});
-
-// --- Handlers for Lesson Dialog ---
-const openAddLessonDialog = () => {
-    isLessonDialogOpen.value = true;
-};
-
-const closeAddLessonDialog = () => {
-    isLessonDialogOpen.value = false;
-    // Optional: Reset form state when closing
-    resetLessonForm();
-};
-
-const resetLessonForm = () => {
-    lessonForm.value = {
-        title: '',
-        durationHours: '00',
-        durationMinutes: '00',
-        durationSeconds: '00',
-        contentType: 'Select Option',
-    };
+  };
 };
 
 const handleLessonAdded = () => {
-    // 1. **Data Collection & Validation (in a real app)**
-    const lessonData = {
-        title: lessonForm.value.title,
-        duration: `${lessonForm.value.durationHours}:${lessonForm.value.durationMinutes}:${lessonForm.value.durationSeconds}`,
-        contentType: lessonForm.value.contentType,
-    };
-    
-    console.log('New Lesson Added (Data to be submitted):', lessonData);
-    
-    // 2. **Submission Logic** (e.g., API call)
-    
-    // 3. **Close Dialog**
-    closeAddLessonDialog();
-    // Optional: Reset the quick-add input field
-    curriculumForm.value.newLessonTitle = '';
+  const lessonData = {
+    title: lessonForm.value.title,
+    duration: `${lessonForm.value.durationHours}:${lessonForm.value.durationMinutes}:${lessonForm.value.durationSeconds}`,
+    contentType: lessonForm.value.contentType,
+  };
+
+  console.log('New Lesson Added (Data to be submitted):', lessonData);
+
+  closeAddLessonDialog();
+  curriculumForm.value.newLessonTitle = '';
 };
 
-// --- Handlers for Quiz Dialog ---
 const openAddQuizDialog = () => {
-    isQuizDialogOpen.value = true;
+  isQuizDialogOpen.value = true;
 };
 
 const closeAddQuizDialog = () => {
-    isQuizDialogOpen.value = false;
-    // No form reset here as it's a simple placeholder
+  isQuizDialogOpen.value = false;
 };
 
 const handleQuizAdded = () => {
-    console.log('New Quiz Added (Placeholder Action)');
-    // Submission logic for quiz...
-    closeAddQuizDialog();
-}; 
+  console.log('New Quiz Added (Placeholder Action)');
+  closeAddQuizDialog();
+};
+
+const submitCourse = async () => {
+  try {
+    const payload = {
+      title: basicInfoForm.value.title,
+      short_description: basicInfoForm.value.shortDescription,
+      category: basicInfoForm.value.category,
+      level: basicInfoForm.value.level,
+      overview: basicInfoForm.value.fullOverview,
+      duration: {
+        hours: basicInfoForm.value.durationHours,
+        minutes: basicInfoForm.value.durationMinutes,
+        seconds: basicInfoForm.value.durationSeconds,
+      },
+      learning_outcomes: basicInfoForm.value.learnOutcomes.map((o) => o.text),
+
+      curriculum: curriculumForm.value.modules.map((m) => ({
+        title: m.title,
+        lessons: m.lessons,
+        resources: m.resources,
+      })),
+      materials: curriculumForm.value.materialsIncluded.map((m) => m.text),
+      instructor: {
+        name: curriculumForm.value.instructorName,
+        bio: curriculumForm.value.briefBiography,
+      },
+
+      pricing: {
+        access_type: pricingAccessForm.value.courseAccessType,
+        visibility: pricingAccessForm.value.courseVisibility,
+        price: pricingAccessForm.value.price,
+        currency: pricingAccessForm.value.currency,
+        discount_amount: pricingAccessForm.value.discountAmount,
+        discount_availability: pricingAccessForm.value.discountAvailability,
+      },
+
+      created_by_role: 'super_admin',
+    };
+
+    const createResponse = await courseApi.createCourses(payload);
+      console.log('Course created successfully:', createResponse);
+    toast.success('Course Published Successfully');
+    router.push('/superadmin/courses');
+  } catch (error) {
+    console.error(error);
+    toast.error('Failed to publish course');
+  }
+};
 </script>
 
 <template>
   <div class="flex min-h-screen font-sans">
     <SuperAdminSidebar />
     <main class="flex-1 p-8 overflow-auto bg-white">
-      <!-- Breadcrumbs -->
       <div class="text-sm text-gray-500 mb-6">
         <span class="text-[#006633]">Home</span> > My Courses >
         <span class="text-gray-700 font-medium">Create New Course</span>
@@ -286,7 +270,6 @@ const handleQuizAdded = () => {
         Create New Course
       </h1>
 
-      <!-- Stepper Component -->
       <div class="flex justify-between items-start mb-12 relative">
         <div class="absolute top-4 left-1/4 right-1/4 h-1 bg-gray-300"></div>
         <div
@@ -322,9 +305,7 @@ const handleQuizAdded = () => {
           </span>
         </div>
       </div>
-      <!-- END Stepper Component -->
 
-      <!-- Form Card -->
       <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
         <div v-if="currentStep === 1">
           <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">
@@ -333,7 +314,6 @@ const handleQuizAdded = () => {
 
           <div class="flex flex-col lg:flex-row gap-8">
             <div class="flex-1 space-y-6">
-              <!-- Course Title -->
               <div>
                 <label
                   for="course-title"
@@ -349,7 +329,6 @@ const handleQuizAdded = () => {
                 />
               </div>
 
-              <!-- Short Description -->
               <div>
                 <label
                   for="short-description"
@@ -365,7 +344,6 @@ const handleQuizAdded = () => {
                 />
               </div>
 
-              <!-- Category & Level -->
               <div class="grid grid-cols-2 gap-4">
                 <div>
                   <label
@@ -411,7 +389,6 @@ const handleQuizAdded = () => {
             </div>
           </div>
 
-          <!-- Full Course Overview -->
           <div class="mt-6">
             <label
               for="full-overview"
@@ -427,7 +404,6 @@ const handleQuizAdded = () => {
             ></textarea>
           </div>
 
-          <!-- Estimated Duration -->
           <div class="mt-6">
             <label class="block text-sm font-medium text-gray-700 mb-2"
               >Estimated Duration</label
@@ -469,7 +445,6 @@ const handleQuizAdded = () => {
             </div>
           </div>
 
-          <!-- What users will learn -->
           <div class="mt-8 pt-4 border-t border-gray-200">
             <div class="flex justify-between items-center mb-4">
               <h3 class="text-lg font-semibold text-gray-800">
@@ -575,8 +550,7 @@ const handleQuizAdded = () => {
                     />
                     <button
                       type="button"
-                                            @click="openAddLessonDialog"
-
+                      @click="openAddLessonDialog"
                       class="flex items-center px-3 py-1 bg-[#00cc66] text-white rounded-md text-sm hover:bg-[#00994d]"
                     >
                       <Plus class="w-4 h-4 mr-1" /> Add Lesson
@@ -585,120 +559,174 @@ const handleQuizAdded = () => {
 
                   <button
                     type="button"
-                                        @click="openAddQuizDialog"
-
+                    @click="openAddQuizDialog"
                     class="flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium"
                   >
                     <Plus class="w-4 h-4 mr-1" /> Add Quiz
                   </button>
                 </div>
-                <div 
-            v-if="isLessonDialogOpen" 
-            class="fixed inset-0 bg-gray-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4"
-        >
-            <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg">
-                
-                <h2 class="text-xl font-bold mb-4">Add Lesson</h2>
-                
-                <form @submit.prevent="handleLessonAdded">
-                    
-                    <div class="mb-4">
-                        <label for="lesson-title" class="text-sm text-gray-700">Course Title</label>
-                        <input 
-                            type="text" 
-                            id="lesson-title" 
-                            v-model="lessonForm.title" 
-                            placeholder="Sample Text"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66] focus:ring-[#00cc66]"
-                            required
+                <div
+                  v-if="isLessonDialogOpen"
+                  class="fixed inset-0 bg-gray-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4"
+                >
+                  <div
+                    class="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg"
+                  >
+                    <h2 class="text-xl font-bold mb-4">Add Lesson</h2>
+
+                    <form @submit.prevent="handleLessonAdded">
+                      <div class="mb-4">
+                        <label for="lesson-title" class="text-sm text-gray-700"
+                          >Course Title</label
                         >
-                    </div>
-                    
-                    <div class="mb-4">
-                        <label class="block text-sm text-gray-700">Estimated Duration</label>
+                        <input
+                          type="text"
+                          id="lesson-title"
+                          v-model="lessonForm.title"
+                          placeholder="Sample Text"
+                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66] focus:ring-[#00cc66]"
+                          required
+                        />
+                      </div>
+
+                      <div class="mb-4">
+                        <label class="block text-sm text-gray-700"
+                          >Estimated Duration</label
+                        >
                         <div class="flex space-x-2 mt-1 items-center">
-                            <input type="number" placeholder="00" v-model="lessonForm.durationHours" min="0" max="99" class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center">
-                            <span class="text-sm">Hours</span>
-                            <input type="number" placeholder="00" v-model="lessonForm.durationMinutes" min="0" max="59" class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center">
-                            <span class="text-sm">Minutes</span>
-                            <input type="number" placeholder="00" v-model="lessonForm.durationSeconds" min="0" max="59" class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center">
-                            <span class="text-sm">Seconds</span>
+                          <input
+                            type="number"
+                            placeholder="00"
+                            v-model="lessonForm.durationHours"
+                            min="0"
+                            max="99"
+                            class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center"
+                          />
+                          <span class="text-sm">Hours</span>
+                          <input
+                            type="number"
+                            placeholder="00"
+                            v-model="lessonForm.durationMinutes"
+                            min="0"
+                            max="59"
+                            class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center"
+                          />
+                          <span class="text-sm">Minutes</span>
+                          <input
+                            type="number"
+                            placeholder="00"
+                            v-model="lessonForm.durationSeconds"
+                            min="0"
+                            max="59"
+                            class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center"
+                          />
+                          <span class="text-sm">Seconds</span>
                         </div>
-                    </div>
+                      </div>
+
+                      <div class="mb-4">
+                        <label
+                          for="content-type"
+                          class="block text-sm text-gray-700"
+                          >Upload Content Type</label
+                        >
+                        <select
+                          id="content-type"
+                          v-model="lessonForm.contentType"
+                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66] focus:ring-[#00cc66]"
+                          required
+                        >
+                          <option disabled value="Select Option">
+                            Select Option
+                          </option>
+                          <option>Video File</option>
+                          <option>PDF Document</option>
+                          <option>External Link</option>
+                        </select>
+                      </div>
+
+                      <div
+                        class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer mb-6 hover:border-[#00cc66] transition"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="mx-auto h-12 w-12 text-gray-400"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                          />
+                        </svg>
+                        <p class="mt-1 text-sm text-gray-600">Upload Content</p>
+                      </div>
+
+                      <div class="flex justify-end space-x-3">
+                        <button
+                          type="button"
+                          @click="closeAddLessonDialog"
+                          class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          class="px-4 py-2 bg-[#00cc66] text-white rounded-md hover:bg-[#00994d]"
+                        >
+                          Add Lesson
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <div
+                  v-if="isQuizDialogOpen"
+                  class="fixed inset-0 bg-gray-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4"
+                >
+                  <div
+                    class="bg-white p-6 rounded-lg shadow-xl w-full max-w-md"
+                  >
+                    <h2 class="text-xl font-bold mb-4">Add Quiz</h2>
+                    <p class="text-gray-600 mb-6">
+                      This is a placeholder for the "Add Quiz" configuration
+                      form.
+                    </p>
 
                     <div class="mb-4">
-                        <label for="content-type" class="block text-sm text-gray-700">Upload Content Type</label>
-                        <select 
-                            id="content-type" 
-                            v-model="lessonForm.contentType"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66] focus:ring-[#00cc66]"
-                            required
-                        >
-                            <option disabled value="Select Option">Select Option</option>
-                            <option>Video File</option>
-                            <option>PDF Document</option>
-                            <option>External Link</option>
-                        </select>
-                    </div>
-
-                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer mb-6 hover:border-[#00cc66] transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-                        <p class="mt-1 text-sm text-gray-600">Upload Content</p>
+                      <label for="quiz-title" class="text-sm text-gray-700"
+                        >Quiz Title</label
+                      >
+                      <input
+                        type="text"
+                        id="quiz-title"
+                        placeholder="e.g., Chapter 1 Assessment"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"
+                      />
                     </div>
 
                     <div class="flex justify-end space-x-3">
-                        <button
-                            type="button"
-                            @click="closeAddLessonDialog"
-                            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            class="px-4 py-2 bg-[#00cc66] text-white rounded-md hover:bg-[#00994d]"
-                        >
-                            Add Lesson
-                        </button>
-                    </div>
-                </form>
-                
-            </div>
-        </div>
-
-        
-        <div 
-            v-if="isQuizDialogOpen" 
-            class="fixed inset-0 bg-gray-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4"
-        >
-            <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
-                
-                <h2 class="text-xl font-bold mb-4">Add Quiz</h2>
-                <p class="text-gray-600 mb-6">This is a placeholder for the "Add Quiz" configuration form.</p>
-                
-                <div class="mb-4">
-                    <label for="quiz-title" class="text-sm text-gray-700">Quiz Title</label>
-                    <input type="text" id="quiz-title" placeholder="e.g., Chapter 1 Assessment" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
-                </div>
-                
-                <div class="flex justify-end space-x-3">
-                    <button
+                      <button
                         type="button"
                         @click="closeAddQuizDialog"
                         class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-                    >
+                      >
                         Cancel
-                    </button>
-                    <button
+                      </button>
+                      <button
                         type="button"
                         @click="handleQuizAdded"
                         class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800"
-                    >
+                      >
                         Create Quiz
-                    </button>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-            </div>
-        </div>
               </div>
             </div>
           </div>
@@ -811,9 +839,9 @@ const handleQuizAdded = () => {
               </div>
               <div class="font-bold text-lg text-gray-800">
                 {{
-                  pricingAccessForm.courseAccessType === "paid"
+                  pricingAccessForm.courseAccessType === 'paid'
                     ? pricingStatus.sub
-                    : "Access Policy"
+                    : 'Access Policy'
                 }}
               </div>
               <div class="text-xs text-gray-500">
@@ -1035,7 +1063,7 @@ const handleQuizAdded = () => {
               >
                 <div class="text-4xl font-extrabold text-[#006633]">
                   {{ pricingAccessForm.currency }}
-                  {{ pricingAccessForm.price.toLocaleString("en-US") }}
+                  {{ pricingAccessForm.price.toLocaleString('en-US') }}
                 </div>
                 <p
                   v-if="pricingAccessForm.discountAmount !== 'none'"
@@ -1176,7 +1204,7 @@ const handleQuizAdded = () => {
             @click="saveAndContinue"
             class="px-6 py-2 bg-[#00cc66] text-white rounded-lg font-medium hover:bg-[#00994d] transition-colors shadow-md"
           >
-            {{ currentStep < 4 ? "Save & Continue" : "Publish Course" }}
+            {{ currentStep < 4 ? 'Save & Continue' : 'Publish Course' }}
           </button>
         </div>
       </div>
@@ -1192,12 +1220,12 @@ input:focus {
   box-shadow: 0 0 0 1px #00cc66 !important;
 }
 
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 

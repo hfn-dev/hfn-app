@@ -1,143 +1,83 @@
-
 <script setup>
-import { ref, computed } from "vue";
-import UserSidebar from "@/components/layout/UserSidebar.vue";
-import TicketDetail from "./TicketDetail.vue";
+import ticketApi from '@/api/tickets.js';
+import UserSidebar from '@/components/layout/UserSidebar.vue';
+import { computed, onMounted, ref } from 'vue';
+import { useToast } from 'vue-toastification';
+import TicketDetail from './TicketDetail.vue';
 
-const activeTab = ref("new-ticket");
+const activeTab = ref('new-ticket');
 const selectedTicketId = ref(null);
+const toast = useToast();
 
 const formData = ref({
-  name: "",
-  email: "",
-  subject: "",
-  message: "",
+  name: '',
+  email: '',
+  subject: '',
+  message: '',
 });
 
-const searchQuery = ref("");
-
-const tickets = ref([
-  {
-    id: 1,
-    number: "ED1001",
-    type: "Payment Issue",
-    dateCreated: "December 28 2024",
-    status: "Published",
-    lastUpdate: "December 28 2024",
-    description:
-      "This is the main description for ticket ED1001. I cannot seem to process payment for the latest course I purchased. Please investigate the transaction issue immediately.",
-    update1:
-      "Our team is currently looking into the payment gateway logs. We will provide an update within 24 hours.",
-    userName: "Jerome Saka",
-  },
-  {
-    id: 2,
-    number: "ED2327",
-    type: "Technical Bug",
-    dateCreated: "December 19 2024",
-    status: "Archived",
-    lastUpdate: "December 19 2024",
-    description:
-      "The video player crashes every time I try to fast-forward on my mobile device. This is very frustrating.",
-    update1:
-      "A patch was deployed today to fix an issue with mobile video buffering. Please test and confirm the fix.",
-    userName: "Peter Pan",
-  },
-  {
-    id: 3,
-    number: "ED004",
-    type: "Content Request",
-    dateCreated: "December 14 2024",
-    status: "Published",
-    lastUpdate: "December 14 2024",
-    description:
-      "I would like to see a new module on advanced Vue 3 composition API patterns. This would be a great addition.",
-    update1:
-      "Thank you for your suggestion! We have added it to our content roadmap for Q1 next year.",
-    userName: "Alice Smith",
-  },
-  {
-    id: 4,
-    number: "ED004",
-    type: "Account Issue",
-    dateCreated: "November 19 2024",
-    status: "Published",
-    lastUpdate: "November 19 2024",
-    description:
-      "I forgot my password and the reset link is not arriving in my inbox.",
-    update1:
-      "We have manually reset your password and sent a temporary one to your verified email. Check spam if you don't see it in 5 minutes.",
-    userName: "Bob Johnson",
-  },
-  {
-    id: 5,
-    number: "ED004",
-    type: "General Inquiry",
-    dateCreated: "November 11 2024",
-    status: "Archived",
-    lastUpdate: "November 11 2024",
-    description: "Can you tell me more about the mentorship program?",
-    update1:
-      "We sent you an information packet detailing the tiers and availability of our mentorship program.",
-    userName: "Charlie Brown",
-  },
-  {
-    id: 6,
-    number: "ED004",
-    type: "Payment Issue",
-    dateCreated: "November 10 2024",
-    status: "Published",
-    lastUpdate: "November 10 2024",
-    description: "I was double-charged for my subscription this month.",
-    update1:
-      "We have processed a refund for the duplicate charge. It should reflect in your bank account in 3-5 business days.",
-    userName: "Diana Prince",
-  },
-  {
-    id: 7,
-    number: "ED004",
-    type: "Technical Bug",
-    dateCreated: "November 9 2024",
-    status: "Published",
-    lastUpdate: "November 9 2024",
-    description:
-      "The site loads very slowly when I open the dashboard on Friday afternoons.",
-    update1:
-      "We identified a server capacity issue during peak times and have scaled up our resources. The site should now be fast, even on Fridays.",
-    userName: "Ethan Hunt",
-  },
-  {
-    id: 8,
-    number: "ED004",
-    type: "Account Issue",
-    dateCreated: "December 9 2024",
-    status: "Archived",
-    lastUpdate: "December 9 2024",
-    description: "My account name is misspelled.",
-    update1: "Your account name has been successfully updated.",
-    userName: "Fiona Glenanne",
-  },
-]);
-
-const currentTicket = computed(() => {
-  return tickets.value.find((t) => t.id === selectedTicketId.value) || null;
-});
-
-const submitTicket = () => {
-  console.log("Submitting ticket:", formData.value);
-  window.alert(`Ticket for subject "${formData.value.subject}" submitted!`);
-  formData.value.subject = "";
-  formData.value.message = "";
+const searchQuery = ref('');
+const tickets = ref([]);
+const filteredTickets = ref([]);
+const fetchTickets = async () => {
+  try {
+    const data = await ticketApi.getTickets();
+    tickets.value = data;
+    filteredTickets.value = data;
+  } catch (error) {
+    console.error('Failed to fetch tickets:', error);
+  }
 };
 
-const viewTicketDetails = (id) => {
+const submitTicket = async () => {
+  try {
+    const created = await ticketApi.createTicket(formData.value);
+    toast.success(`Ticket "${created.subject}" submitted successfully!`);
+    await fetchTickets();
+    formData.value = { name: '', email: '', subject: '', message: '' };
+
+    activeTab.value = 'tickets';
+  } catch (error) {
+    console.error('Failed to create ticket:', error);
+    toast.error('Failed to submit ticket. Try again later.');
+  }
+};
+
+const viewTicketDetails = async (id) => {
   selectedTicketId.value = id;
-  activeTab.value = "tickets";
+  activeTab.value = 'tickets';
+
+  try {
+    const details = await ticketApi.viewTicketDetails(id); // fetch full ticket details
+    const index = tickets.value.findIndex((t) => t.id === id);
+    if (index !== -1) tickets.value[index] = details;
+  } catch (error) {
+    console.error('Failed to fetch ticket details:', error);
+  }
 };
 
 const closeTicketDetails = () => {
   selectedTicketId.value = null;
 };
+
+watch(searchQuery, (newQuery) => {
+  if (!newQuery) {
+    filteredTickets.value = tickets.value;
+  } else {
+    filteredTickets.value = tickets.value.filter(
+      (t) =>
+        t.number.toLowerCase().includes(newQuery.toLowerCase()) ||
+        t.subject?.toLowerCase().includes(newQuery.toLowerCase()) ||
+        t.status?.toLowerCase().includes(newQuery.toLowerCase())
+    );
+  }
+});
+
+onMounted(fetchTickets);
+
+const currentTicket = computed(() => {
+  return tickets.value.find((t) => t.id === selectedTicketId.value) || null;
+});
 </script>
 
 <template>
@@ -148,12 +88,10 @@ const closeTicketDetails = () => {
       <header class="p-6 bg-white">
         <div class="text-sm text-gray-500">
           <span class="hover:underline cursor-pointer">Home</span> >
-          <span class=" text-gray-800">Support</span>
+          <span class="text-gray-800">Support</span>
           <span v-if="activeTab === 'tickets'" class="text-gray-500">
             >
-            <span v-if="!selectedTicketId" class=" text-gray-800"
-              >Tickets</span
-            >
+            <span v-if="!selectedTicketId" class="text-gray-800">Tickets</span>
             <span v-else class="text-gray-500">
               <span
                 @click="closeTicketDetails"
@@ -162,7 +100,7 @@ const closeTicketDetails = () => {
               >
               &gt;
               <span class="font-semibold text-gray-800">{{
-                currentTicket ? currentTicket.number : "Details"
+                currentTicket ? currentTicket.number : 'Details'
               }}</span>
             </span>
           </span>
@@ -177,7 +115,6 @@ const closeTicketDetails = () => {
         </h1>
 
         <div class="bg-white rounded-lg shadow-sm">
-          <!-- Tab Navigation -->
           <div
             class="flex space-x-4 border-b border-gray-200 justify-center px-8 pt-4"
           >
@@ -209,7 +146,6 @@ const closeTicketDetails = () => {
           </div>
 
           <div class="p-8">
-            <!-- New Ticket Form -->
             <div v-if="activeTab === 'new-ticket'">
               <p class="text-gray-600 mb-8 text-center">
                 Can't find what you are looking for? Having trouble with
@@ -313,7 +249,6 @@ const closeTicketDetails = () => {
               </form>
             </div>
 
-            <!-- Tickets Tab Content -->
             <div v-else>
               <TicketDetail
                 v-if="selectedTicketId && currentTicket"
@@ -399,7 +334,7 @@ const closeTicketDetails = () => {
 
                       <tbody class="bg-white divide-y divide-gray-200">
                         <tr
-                          v-for="ticket in tickets"
+                          v-for="ticket in filteredTickets"
                           :key="ticket.id"
                           class="hover:bg-gray-50"
                         >
@@ -476,7 +411,6 @@ const closeTicketDetails = () => {
                     </table>
                   </div>
 
-                  <!-- Pagination -->
                   <div
                     class="flex justify-end items-center pt-4 text-sm text-gray-600"
                   >

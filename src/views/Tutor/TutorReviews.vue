@@ -1,168 +1,59 @@
 <script setup>
-import {
-  ArrowLeft,
-  Book,
-  ChevronDown,
-  Eye,
-  Home,
-  LifeBuoy,
-  LogOut,
-  Search,
-  Star,
-  User,
-} from "lucide-vue-next";
-import { computed, ref } from "vue";
-import TutorSidebar from "./TutorSidebar.vue";
+import learningModule from '@/api/learningModule';
+import { ArrowLeft, ChevronDown, Eye, Search } from 'lucide-vue-next';
+import { computed, onMounted, ref, watch } from 'vue';
+import TutorSidebar from './TutorSidebar.vue';
 
-const reviews = ref([
-  {
-    id: 1,
-    title: "Naturopathy 101",
-    status: "Published",
-    rating: 4.8,
-    lastUpdate: "December 28 2024",
-  },
-  {
-    id: 2,
-    title: "Health & Wellness Fundamentals",
-    status: "Archived",
-    rating: 3.5,
-    lastUpdate: "December 19 2024",
-  },
-  {
-    id: 3,
-    title: "Herbal Infusions Masterclass",
-    status: "Published",
-    rating: 4.0,
-    lastUpdate: "December 19 2024",
-  },
-  {
-    id: 4,
-    title: "Nutrition for Athletes",
-    status: "Published",
-    rating: 3.2,
-    lastUpdate: "December 14 2024",
-  },
-  {
-    id: 5,
-    title: "Naturopathy 101",
-    status: "Published",
-    rating: 5.0,
-    lastUpdate: "November 19 2024",
-  },
-  {
-    id: 6,
-    title: "Health & Wellness Fundamentals",
-    status: "Published",
-    rating: 2.7,
-    lastUpdate: "November 19 2024",
-  },
-  {
-    id: 7,
-    title: "Herbal Infusions Masterclass",
-    status: "Archived",
-    rating: 3.9,
-    lastUpdate: "November 11 2024",
-  },
-  {
-    id: 8,
-    title: "Nutrition for Athletes",
-    status: "Published",
-    rating: 4.1,
-    lastUpdate: "November 10 2024",
-  },
-  {
-    id: 9,
-    title: "Naturopathy 101",
-    status: "Published",
-    rating: 3.4,
-    lastUpdate: "November 9 2024",
-  },
-  {
-    id: 10,
-    title: "Health & Wellness Fundamentals",
-    status: "Archived",
-    rating: 2.5,
-    lastUpdate: "December 19 2024",
-  },
-]);
+const reviews = ref([]);
+const loading = ref(false);
 
-const mockCourseDetails = {
-  title: "Naturopathy 101",
-  averageRating: 4.8,
-  ratingDistribution: [
-    { stars: 5, count: 75, percentage: 75 },
-    { stars: 4, count: 21, percentage: 21 },
-    { stars: 3, count: 3, percentage: 3 },
-    { stars: 2, count: 1, percentage: 1 },
-    { stars: 1, count: 1, percentage: 1 },
-  ],
-  feedback: [
-    {
-      id: 1,
-      user: "Guy Hawkins",
-      time: "1 week ago",
-      rating: 5,
-      comment: "Thank you!",
-      avatar: "https://placehold.co/40x40/cccccc/333333?text=GH",
-    },
-    {
-      id: 2,
-      user: "Dianne Russell",
-      time: "51 mins ago",
-      rating: 5,
-      comment:
-        "This course is just amazing! has great course content, the best practices, and a lot of real-world knowledge. I love the way of giving examples, the best tips by the instructor which are pretty interesting, fun and knowledgeable and I was never getting bored throughout the course.",
-      avatar: "https://placehold.co/40x40/f0e68c/333333?text=DR",
-    },
-    {
-      id: 3,
-      user: "Eleanor Pena",
-      time: "1 days ago",
-      rating: 4,
-      comment:
-        "This course meets more than my expectation and, I made the best investment of time to learn and practice what I am passionate about. Thank you so much to our excellent instructor Fermi!! Highly recommend this course! Take the next step.",
-      avatar: "https://placehold.co/40x40/add8e6/333333?text=EP",
-    },
-    {
-      id: 4,
-      user: "Eleanor Pena",
-      time: "1 days ago",
-      rating: 3,
-      comment:
-        "I appreciate the precise short videos (10 mins or less each) because overly long videos tend to make me lose focus. The instructor is very knowledgeable in Web Design and it shows as he shares his knowledge. These were my best 6 months of training. Thanks, Dr. Obed.",
-      avatar: "https://placehold.co/40x40/add8e6/333333?text=EP",
-    },
-    {
-      id: 5,
-      user: "Eleanor Pena",
-      time: "1 days ago",
-      rating: 4,
-      comment:
-        "I appreciate the precise short videos (10 mins or less each) because overly long videos tend to make me lose focus. The instructor is very knowledgeable in Web Design and it shows as he shares his knowledge. These were my best 6 months of training. Thanks, Dr. Obed.",
-      avatar: "https://placehold.co/40x40/add8e6/333333?text=EP",
-    },
-  ],
+const selectedRating = ref('all');
+
+const mapReviewRow = (review) => ({
+  id: review.id,
+  title: review.course.title,
+  courseSlug: review.course.slug,
+  status: review.course.status,
+  rating: review.rating,
+  lastUpdate: new Date(review.created_at).toLocaleDateString(),
+});
+
+const fetchReviews = async () => {
+  loading.value = true;
+
+  try {
+    const res = await learningModule.reviewCourse('all', {
+      page: currentPage.value,
+      search: searchQuery.value,
+      rating: selectedRating.value !== 'all' ? selectedRating.value : undefined,
+    });
+
+    reviews.value = (res.results || []).map(mapReviewRow);
+    totalPages.value = res.total_pages || 1;
+  } catch (err) {
+    console.error(err);
+  } finally {
+    loading.value = false;
+  }
 };
 
-const currentView = ref("list"); 
-const selectedCourse = ref(mockCourseDetails);
+const currentView = ref('list');
+const selectedCourse = ref(null);
 
-const searchQuery = ref("");
+const searchQuery = ref('');
 const currentPage = ref(1);
 const itemsPerPage = 8;
-
 
 const renderStars = (rating) => {
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating % 1 >= 0.25 && rating % 1 <= 0.75;
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
-  const starFilled = "★";
-  const starHalf = "✭";
-  const starEmpty = "☆";
+  const starFilled = '★';
+  const starHalf = '✭';
+  const starEmpty = '☆';
 
-  let starsHtml = "";
+  let starsHtml = '';
   starsHtml += `<span class="text-orange-400">${starFilled.repeat(
     fullStars
   )}</span>`;
@@ -176,34 +67,45 @@ const renderStars = (rating) => {
   return starsHtml;
 };
 
-const filteredReviews = computed(() => {
-  return reviews.value.filter((review) =>
-    review.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+const filteredFeedback = computed(() => {
+  if (selectedRating.value === 'all') return selectedCourse.value.feedback;
+  return selectedCourse.value.feedback.filter(
+    (f) => f.rating === Number(selectedRating.value)
   );
 });
 
-const paginatedReviews = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  return filteredReviews.value.slice(start, end);
-});
+const paginatedReviews = computed(() => reviews.value);
 
-const totalPages = computed(() => {
-  return Math.ceil(filteredReviews.value.length / itemsPerPage);
-});
+const viewReviewDetails = async (review) => {
+  try {
+    const res = await learningModule.reviewCourse(review.courseSlug);
 
-const viewReviewDetails = (review) => {
-  selectedCourse.value = {
-    ...mockCourseDetails,
-    title: review.title, 
-    averageRating: review.rating,
-  };
-  currentView.value = "details";
+    const feedback = res.results.map((r) => ({
+      id: r.id,
+      user: r.user.full_name,
+      time: new Date(r.created_at).toLocaleDateString(),
+      rating: r.rating,
+      comment: r.comment,
+      avatar: r.user.avatar,
+    }));
+
+    selectedCourse.value = {
+      title: review.title,
+      averageRating: res.average_rating,
+      ratingDistribution: res.rating_distribution,
+      feedback,
+    };
+
+    currentView.value = 'details';
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const goBackToList = () => {
-  currentView.value = "list";
-  searchQuery.value = "";
+  currentView.value = 'list';
+  selectedCourse.value = null;
+  searchQuery.value = '';
   currentPage.value = 1;
 };
 
@@ -218,6 +120,12 @@ const prevPage = () => {
     currentPage.value--;
   }
 };
+
+onMounted(fetchReviews);
+
+watch([searchQuery, selectedRating, currentPage], () => {
+  fetchReviews();
+});
 </script>
 
 <template>
@@ -249,7 +157,11 @@ const prevPage = () => {
         class="text-4xl text-center font-bold text-gray-800 mb-8 border-b border-gray-200 pb-4"
       >
         Reviews:
-        {{ currentView === "details" ? selectedCourse.title : "Reviews" }}
+        {{
+          currentView === 'details' && selectedCourse
+            ? selectedCourse.title
+            : 'Reviews'
+        }}
       </h1>
       <div
         v-if="currentView === 'list'"
@@ -415,10 +327,11 @@ const prevPage = () => {
         </div>
       </div>
 
-     
-      <div v-if="currentView === 'details'" class="space-y-8">
+      <div v-if="currentView === 'details' && selectedCourse" class="space-y-8">
         <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-          <h2 class="text-xl font-semibold text-gray-800 border-b border-gray-100 pb-2 mb-6">
+          <h2
+            class="text-xl font-semibold text-gray-800 border-b border-gray-100 pb-2 mb-6"
+          >
             Course Rating
           </h2>
 
@@ -428,7 +341,7 @@ const prevPage = () => {
               class="flex flex-col items-center justify-center space-y-2 p-6 bg-white rounded-xl border border-gray-200 shadow-sm w-full max-w-xs mx-auto md:mx-0"
             >
               <div class="text-7xl font-extrabold text-[#006633]">
-                {{ selectedCourse.averageRating.toFixed(1) }}
+                {{ selectedCourse.averageRating?.toFixed(1) }}
               </div>
               <div
                 v-html="renderStars(selectedCourse.averageRating)"
@@ -438,7 +351,7 @@ const prevPage = () => {
             </div>
             <div class="space-y-5 pt-4 md:pt-0">
               <div
-                v-for="dist in selectedCourse.ratingDistribution"
+                v-for="dist in selectedCourse.ratingDistribution || []"
                 :key="dist.stars"
                 class="flex items-center"
               >
@@ -474,11 +387,14 @@ const prevPage = () => {
 
         <!-- 2. Students Feedback Row -->
         <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-          <div class="flex justify-between items-center border-b border-gray-100 pb-2 mb-6">
+          <div
+            class="flex justify-between items-center border-b border-gray-100 pb-2 mb-6"
+          >
             <h2 class="text-xl font-semibold text-gray-800">
               Students Feedback
             </h2>
             <select
+              v-model="selectedRating"
               class="p-2 border border-gray-300 rounded-lg text-sm bg-white focus:border-[#00cc66] focus:ring-[#00cc66]"
             >
               <option value="5">5 Star Rating</option>
@@ -493,7 +409,7 @@ const prevPage = () => {
           <!-- Individual Feedback Entries -->
           <div class="space-y-6">
             <div
-              v-for="feedback in selectedCourse.feedback"
+              v-for="feedback in filteredFeedback"
               :key="feedback.id"
               class="flex space-x-4 border-b border-gray-100 pb-4 last:border-b-0"
             >
@@ -553,12 +469,12 @@ const prevPage = () => {
 
 <style scoped>
 .text-orange-400 {
-  color: #f97316; 
+  color: #f97316;
 }
 .text-gray-300 {
-  color: #d1d5db; 
+  color: #d1d5db;
 }
 .bg-orange-500 {
-  background-color: #f97316; 
+  background-color: #f97316;
 }
 </style>

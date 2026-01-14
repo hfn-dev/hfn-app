@@ -1,7 +1,9 @@
 <script setup>
-import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
-import { computed } from "vue";
+import analyticsApi from '@/api/dashboard.js';
+import membershipApi from '@/api/membership.js';
 
+import { useToast } from '@/composables/useToast';
+import AdminSidebar from '@/views/Admin/AdminSidebar.vue';
 import {
   ChevronLeft,
   ChevronRight,
@@ -10,134 +12,170 @@ import {
   MoreVertical,
   Search,
   Trash2,
-} from "lucide-vue-next";
-import { ref } from "vue";
+} from 'lucide-vue-next';
+import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-const courseTabs = ref(["Published", "Drafts", "Archived"]);
-const currentTab = ref("Published");
+const router = useRouter();
+const isEditOpen = ref(false);
+const editingSubscription = ref(null);
+const selectedType = ref(null);
+const toast = useToast();
+const courseTabs = ref(['Published', 'Drafts', 'Archived']);
+const currentTab = ref('Published');
+const statCards = ref([]);
+const members = ref([]);
+const activeCourses = computed(() => members.value);
+const searchTerm = ref('');
 
-const statCards = [
-  {
-    title: "Total Members",
-    value: "13",
-    change: "1% Increase",
-    changeColor: "text-blue-300",
-  },
-  {
-    title: "Total New Members",
-    value: "7",
-    change: "13% Increase",
-    changeColor: "text-[#00cc66]",
-  },
-  {
-    title: "Total Corporate",
-    value: "8",
-    change: "–5% Decrease",
-    changeColor: "text-red-500",
-  },
-  {
-    title: "Total Individual",
-    value: "4.5",
-    change: "10% Increase",
-    changeColor: "text-gray-500",
-  },
-  {
-    title: "Multinationals",
-    value: "23",
-    change: "-3% Increase",
-    changeColor: "text-red-500",
-  },
-  {
-    title: "Diaspora",
-    value: "25",
-    change: "43% Increase",
-    changeColor: "text-[#00cc66]",
-  },
-  {
-    title: "Health Guardians",
-    value: "11",
-    change: "–5% Decrease",
-    changeColor: "text-blue-300",
-  },
-  {
-    title: "Total Associations",
-    value: "10",
-    change: "10% Increase",
-    changeColor: "text-gray-500",
-  },
-];
+const loadMembershipAnalytics = async () => {
+  try {
+    const data = await analyticsApi.fetchMembershipAnalytics();
 
-const publishedCourses = ref([
-  {
-    id: 1,
-    title: "Ruthie Bolade",
-    enrollments: "Individual",
-    completion: "November 11 2024",
-    lastUpdate: "Active",
-  },
-  {
-    id: 2,
-    title: "Bidemi Joy",
-    enrollments: "Individual",
-    completion: "November 11 2024",
-    lastUpdate: "Active",
-  },
-]);
+    statCards.value = [
+      {
+        title: 'Total Members',
+        value: data.total_members ?? 0,
+        change: '',
+        changeColor: 'text-blue-300',
+      },
+      {
+        title: 'Total New Members',
+        value: data.new_members ?? 0,
+        change: '',
+        changeColor: 'text-[#00cc66]',
+      },
+      {
+        title: 'Total Corporate',
+        value: data.corporate ?? 0,
+        change: '',
+        changeColor: 'text-gray-500',
+      },
+      {
+        title: 'Total Individual',
+        value: data.individual ?? 0,
+        change: '',
+        changeColor: 'text-gray-500',
+      },
+      {
+        title: 'Multinationals',
+        value: data.multinationals ?? 0,
+        change: '',
+        changeColor: 'text-gray-500',
+      },
+      {
+        title: 'Diaspora',
+        value: data.diaspora ?? 0,
+        change: '',
+        changeColor: 'text-[#00cc66]',
+      },
+      {
+        title: 'Health Guardians',
+        value: data.health_guardians ?? 0,
+        change: '',
+        changeColor: 'text-blue-300',
+      },
+      {
+        title: 'Total Associations',
+        value: data.associations ?? 0,
+        change: '',
+        changeColor: 'text-gray-500',
+      },
+    ];
+  } catch (error) {
+    console.error('Failed to load membership analytics', error);
+  }
+};
 
-const draftCourses = ref([
-  {
-    id: 3,
-    title: "Kola Bidemi",
-    enrollments: "Individual",
-    completion: "November 11 2024",
-    lastUpdate: "Active",
-  },
-  {
-    id: 4,
-    title: "Fagbiyi Femi",
-    enrollments: "Individual",
-    completion: "November 11 2024",
-    lastUpdate: "Inactive",
-  },
-]);
+const loadMembers = async () => {
+  try {
+    const data = await membershipApi.listSubscriptions({
+      page: currentPage.value,
+      search: searchTerm.value,
+    });
 
-const archivedCourses = ref([
-  {
-    id: 5,
-    title: "Fola Abayomi",
-    enrollments: "Individual",
-    completion: "November 11 2024",
-    lastUpdate: "Inactive",
-  },
-  {
-    id: 6,
-    title: "Adebiyi Boni",
-    enrollments: "Individual",
-    completion: "November 11 2024",
-    lastUpdate: "Active",
-  },
-]);
+    members.value = data.results.map((item) => ({
+      id: item.id,
+      title: item.user?.full_name || '—',
+      enrollments: item.membership_type?.name || '—',
+      completion: item.last_payment_date || '—',
+      lastUpdate: item.status === 'active' ? 'Active' : 'Inactive',
+    }));
 
-const activeCourses = computed(() => {
-  if (currentTab.value === "Published") return publishedCourses.value;
-  if (currentTab.value === "Drafts") return draftCourses.value;
-  if (currentTab.value === "Archived") return archivedCourses.value;
-  return [];
-});
+    totalPages.value = Math.ceil(data.count / 10);
+  } catch (error) {
+    console.error('Failed to load members', error);
+  }
+};
 
-const handleAction = (action, courseId) => {
-  console.log(`${action} course ID: ${courseId}`);
-  alert(`${action} action triggered for Course ID: ${courseId}`);
+// const activeCourses = computed(() => {
+//   if (currentTab.value === 'Published') return publishedCourses.value;
+//   if (currentTab.value === 'Drafts') return draftCourses.value;
+//   if (currentTab.value === 'Archived') return archivedCourses.value;
+//   return [];
+// });
+
+const handleAction = (action, member) => {
+  if (action === 'View') {
+    router.push(`/admin/members/${member.id}`);
+  }
+
+  if (action === 'Edit') {
+    editingSubscription.value = { ...member };
+    selectedType.value = member.membershipTypeId;
+    isEditOpen.value = true;
+  }
+
+  if (action === 'Delete') {
+    cancelSubscription(member.id);
+  }
+};
+
+const cancelSubscription = async (id) => {
+  const confirmCancel = confirm(
+    'Are you sure you want to cancel this subscription?'
+  );
+
+  if (!confirmCancel) return;
+
+  try {
+    await membershipApi.cancelSubscription(id);
+    await loadMembers(); // refresh list
+  } catch (error) {
+    console.error('Failed to cancel subscription', error);
+  }
 };
 
 const currentPage = ref(1);
 const totalPages = 2;
 
 const goToPage = (page) => {
-  if (page >= 1 && page <= totalPages) {
+  if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page;
+    loadMembers();
   }
 };
+
+const saveEdit = async () => {
+  try {
+    await membershipApi.updateSubscription(editingSubscription.value.id, {
+      membership_type: selectedType.value,
+      status: editingSubscription.value.status,
+    });
+
+    isEditOpen.value = false;
+    editingSubscription.value = null;
+
+    await loadMembers(); // refresh table
+  } catch (error) {
+    console.error('Failed to update subscription', error);
+  }
+};
+
+onMounted(() => {
+  loadMembershipAnalytics();
+  loadMembers();
+});
 </script>
 
 <template>
@@ -196,6 +234,8 @@ const goToPage = (page) => {
             />
             <input
               type="text"
+              v-model="searchTerm"
+              @input="loadMembers"
               placeholder="Search..."
               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors"
             />
@@ -260,7 +300,7 @@ const goToPage = (page) => {
                 {{ course.title }}
               </td>
               <td class="py-3 px-3">
-                {{ course.enrollments !== null ? course.enrollments : "-" }}
+                {{ course.enrollments !== null ? course.enrollments : '-' }}
               </td>
               <td class="py-3 px-3">
                 <span
@@ -281,7 +321,7 @@ const goToPage = (page) => {
               <td class="py-3 px-3 text-center">
                 <div class="flex item-center justify-center space-x-2">
                   <button
-                    @click="handleAction('View', course.id)"
+                    @click="handleAction('View', course)"
                     class="w-6 h-6 transform hover:text-blue-500 hover:scale-110 transition-transform p-0.5"
                   >
                     <Eye
@@ -289,7 +329,7 @@ const goToPage = (page) => {
                     />
                   </button>
                   <button
-                    @click="handleAction('Edit', course.id)"
+                    @click="handleAction('Edit', course)"
                     class="w-6 h-6 transform hover:text-green-500 hover:scale-110 transition-transform p-0.5"
                   >
                     <Edit2
@@ -310,7 +350,64 @@ const goToPage = (page) => {
           </tbody>
         </table>
 
-        <!-- Pagination -->
+        <!-- Edit Subscription Modal -->
+        <div
+          v-if="isEditOpen"
+          class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+        >
+          <div class="bg-white rounded-xl w-full max-w-md p-6 shadow-xl">
+            <h3 class="text-xl font-semibold mb-4">Edit Subscription</h3>
+
+            <!-- Membership Type -->
+            <div class="mb-4">
+              <label class="block text-sm font-medium mb-1"
+                >Membership Type</label
+              >
+              <select
+                v-model="selectedType"
+                class="w-full border rounded-lg px-3 py-2"
+              >
+                <option
+                  v-for="type in membershipTypes"
+                  :key="type.id"
+                  :value="type.id"
+                >
+                  {{ type.name }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Status -->
+            <div class="mb-6">
+              <label class="block text-sm font-medium mb-1">Status</label>
+              <select
+                v-model="editingSubscription.status"
+                class="w-full border rounded-lg px-3 py-2"
+              >
+                <option value="active">Active</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex justify-end space-x-3">
+              <button
+                @click="isEditOpen = false"
+                class="px-4 py-2 rounded-lg border"
+              >
+                Cancel
+              </button>
+
+              <button
+                @click="saveEdit"
+                class="px-4 py-2 rounded-lg bg-[#00cc66] text-white"
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div class="flex justify-end items-center mt-6 text-sm text-gray-600">
           <span class="mr-4">Page {{ currentPage }} of {{ totalPages }}</span>
           <div class="flex space-x-2">
@@ -339,5 +436,4 @@ const goToPage = (page) => {
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

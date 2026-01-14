@@ -8,6 +8,13 @@ const today = new Date();
 const activeDate = ref(new Date(today.getFullYear(), today.getMonth(), 1));
 const sortBy = ref("All");
 
+
+
+
+function closeModal() {
+  selectedEvent.value = null;
+}
+
 const events = ref([
   {
     id: 1,
@@ -48,7 +55,7 @@ const events = ref([
 ]);
 
 const year = computed(() => activeDate.value.getFullYear());
-const month = computed(() => activeDate.value.getMonth()); 
+const month = computed(() => activeDate.value.getMonth());
 
 function startOfMonth(d) {
   return new Date(d.getFullYear(), d.getMonth(), 1);
@@ -125,23 +132,14 @@ function isToday(date) {
 <template>
   <section class="py-12 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div
-        class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4"
-      >
-        <h2
-          class="text-xl sm:text-2xl font-semibold text-gray-800 text-center md:text-left w-full md:w-auto"
-        >
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+        <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 text-center md:text-left w-full md:w-auto">
           HFN Events Calendar
         </h2>
 
         <div class="flex items-center gap-3 ml-auto">
-          <div
-            class="flex items-center gap-2 bg-white border border-gray-100 rounded-md shadow-sm px-3 py-1"
-          >
-            <button
-              @click="prevMonth"
-              class="px-2 py-1 rounded hover:bg-gray-50"
-            >
+          <div class="flex items-center gap-2 bg-white border border-gray-100 rounded-md shadow-sm px-3 py-1">
+            <button @click="prevMonth" class="px-2 py-1 rounded hover:bg-gray-50">
               ‹
             </button>
             <div class="text-sm font-medium">
@@ -152,18 +150,13 @@ function isToday(date) {
                 })
               }}
             </div>
-            <button
-              @click="nextMonth"
-              class="px-2 py-1 rounded hover:bg-gray-50"
-            >
+            <button @click="nextMonth" class="px-2 py-1 rounded hover:bg-gray-50">
               ›
             </button>
           </div>
 
-          <button
-            @click="goToday"
-            class="text-sm px-3 py-1 bg-green-50 border border-green-200 rounded text-green-700 hover:bg-green-100"
-          >
+          <button @click="goToday"
+            class="text-sm px-3 py-1 bg-green-50 border border-green-200 rounded text-green-700 hover:bg-green-100">
             Today
           </button>
 
@@ -214,44 +207,30 @@ function isToday(date) {
                 :class="[
                   isSameMonth(day) ? 'bg-white' : 'bg-gray-50 text-gray-400',
                   isToday(day) ? 'ring-2 ring-green-100' : '',
-                ]"
-              >
+                ]">
                 <div class="flex items-start justify-between">
                   <div class="text-sm font-medium">
                     {{ day.getDate() }}
                   </div>
                   <div v-if="eventsForDate(day).length" class="ml-1">
-                    <span
-                      class="inline-block w-2 h-2 rounded-full bg-green-600"
-                    ></span>
+                    <span class="inline-block w-2 h-2 rounded-full bg-green-600"></span>
                   </div>
                 </div>
 
                 <div class="mt-2 space-y-1 flex-1">
-                  <template
-                    v-for="ev in eventsForDate(day).slice(0, 2)"
-                    :key="ev.id"
-                  >
-                    <button
-                      @click="onEventClick(ev)"
+                  <template v-for="ev in eventsForDate(day).slice(0, 2)" :key="ev.id">
+                    <button @click="onEventClick(ev)"
                       class="w-full flex items-center gap-2 text-left text-xs py-1 px-2 rounded-md hover:shadow-sm"
                       :class="[
                         ev.tag.includes('Health')
                           ? 'bg-red-50 border border-red-100'
                           : ev.tag.includes('Program')
-                          ? 'bg-green-50 border border-green-100'
-                          : 'bg-blue-50 border border-blue-100',
-                      ]"
-                    >
-                      <img
-                        :src="ev.image"
-                        alt=""
-                        class="w-8 h-8 object-cover rounded-sm flex-shrink-0"
-                      />
+                            ? 'bg-green-50 border border-green-100'
+                            : 'bg-blue-50 border border-blue-100',
+                      ]">
+                      <img :src="ev.image" alt="" class="w-8 h-8 object-cover rounded-sm flex-shrink-0" />
                       <div class="truncate">
-                        <div
-                          class="font-semibold text-[11px] text-gray-800 truncate"
-                        >
+                        <div class="font-semibold text-[11px] text-gray-800 truncate">
                           {{ ev.title }}
                         </div>
                         <div class="text-[10px] text-gray-500 truncate">
@@ -261,10 +240,7 @@ function isToday(date) {
                     </button>
                   </template>
 
-                  <div
-                    v-if="eventsForDate(day).length > 2"
-                    class="text-[11px] text-gray-500 mt-1"
-                  >
+                  <div v-if="eventsForDate(day).length > 2" class="text-[11px] text-gray-500 mt-1">
                     +{{ eventsForDate(day).length - 2 }} more
                   </div>
                 </div>
@@ -274,7 +250,7 @@ function isToday(date) {
         </div>
       </div>
 
-      <div v-if="selectedEvent" class="mt-6">
+      <!-- <div v-if="selectedEvent" class="mt-6">
         <div
           class="bg-white rounded-lg border border-gray-100 shadow p-6 flex flex-col md:flex-row gap-6 items-start"
         >
@@ -320,10 +296,60 @@ function isToday(date) {
 
       <div v-else class="mt-6 text-center text-gray-500">
         Click an event on the calendar to see details here.
-      </div>
+      </div> -->
     </div>
+    <teleport to="body">
+      <div v-if="selectedEvent" class="fixed inset-0 z-50 flex items-center justify-center">
+        <div class="absolute inset-0 bg-black/50" @click="closeModal"></div>
+
+        <div class="relative bg-white rounded-xl shadow-xl max-w-3xl w-full mx-4 overflow-hidden animate-fade-in">
+          <button @click="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700">
+            ✕
+          </button>
+
+          <div class="flex flex-col md:flex-row gap-6 p-6">
+            <img :src="selectedEvent.image" alt="event image"
+              class="w-full md:w-64 h-48 object-cover rounded-lg flex-shrink-0" />
+
+            <div class="flex-1">
+              <div class="flex items-start justify-between gap-4 mb-2">
+                <h3 class="text-xl font-semibold text-gray-900">
+                  {{ selectedEvent.title }}
+                </h3>
+              </div>
+
+              <div class="text-sm text-gray-500 mb-3">
+                {{ selectedEvent.date }} • {{ selectedEvent.time }}
+              </div>
+
+              <span
+                class="inline-block mb-3 text-xs font-medium px-3 py-1 rounded-full bg-green-50 text-green-700 border border-green-100">
+                {{ selectedEvent.tag }}
+              </span>
+
+              <p class="text-sm text-gray-700 mb-3">
+                {{ selectedEvent.excerpt }}
+              </p>
+
+              <p class="text-sm text-gray-600 mb-6">
+                {{ selectedEvent.details }}
+              </p>
+
+              <div class="flex items-center gap-3">
+                <button class="px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800">
+                  RSVP
+                </button>
+                <!-- <a href="#" class="text-sm text-green-700 underline">
+                  View full event page
+                </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </teleport>
+
   </section>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

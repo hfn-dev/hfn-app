@@ -1,9 +1,9 @@
 <script setup>
-import handsJoining from "@/assets/handsJoining.jpg";
-import logo from "@/assets/logo.png";
-import { computed, ref } from "vue";
+import handsJoining from '@/assets/handsJoining.jpg';
+import logo from '@/assets/logo.png';
+import { computed, ref } from 'vue';
 
- const tabs = [
+const tabs = [
   {
     id: 'policy',
     name: 'Policy Influence and Advocacy.',
@@ -157,43 +157,43 @@ import { computed, ref } from "vue";
   },
 ];
 
-const activeTab = ref(tabs[0].id); 
-const searchQuery = ref("");
+const activeTab = ref(tabs[0].id);
+const searchQuery = ref('');
 const members = ref([
-  "ABIOLA MORUF TAJUDEENA",
-  "ABIOLA MORUF TAJUDEENB",
-  "ABIOLA MORUF TAJUDEENC",
-  "ABIOLA MORUF TAJUDEEND",
-  "ANIEBE SOMTO EMELDAA",
-  "ANIEBE SOMTO EMELDAB",
-  "ANIEBE SOMTO EMELDAC",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSA",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSB",
-  "ATAGUBA FRANKLINA",
-  "ATAGUBA FRANKLINB",
+  'ABIOLA MORUF TAJUDEENA',
+  'ABIOLA MORUF TAJUDEENB',
+  'ABIOLA MORUF TAJUDEENC',
+  'ABIOLA MORUF TAJUDEEND',
+  'ANIEBE SOMTO EMELDAA',
+  'ANIEBE SOMTO EMELDAB',
+  'ANIEBE SOMTO EMELDAC',
+  'AROGUNDADE IFEOLUWAN THEOPHILUSA',
+  'AROGUNDADE IFEOLUWAN THEOPHILUSB',
+  'ATAGUBA FRANKLINA',
+  'ATAGUBA FRANKLINB',
 
   // second column
-  "ABIOLA MORUF TAJUDEENE",
-  "ABIOLA MORUF TAJUDEENF",
-  "ABIOLA MORUF TAJUDEENG",
-  "ANIEBE SOMTO EMELDAD",
-  "ANIEBE SOMTO EMELDAE",
-  "ANIEBE SOMTO EMELDAF",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSC",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSD",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSE",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSF",
-  "ATAGUBA FRANKLINC",
+  'ABIOLA MORUF TAJUDEENE',
+  'ABIOLA MORUF TAJUDEENF',
+  'ABIOLA MORUF TAJUDEENG',
+  'ANIEBE SOMTO EMELDAD',
+  'ANIEBE SOMTO EMELDAE',
+  'ANIEBE SOMTO EMELDAF',
+  'AROGUNDADE IFEOLUWAN THEOPHILUSC',
+  'AROGUNDADE IFEOLUWAN THEOPHILUSD',
+  'AROGUNDADE IFEOLUWAN THEOPHILUSE',
+  'AROGUNDADE IFEOLUWAN THEOPHILUSF',
+  'ATAGUBA FRANKLINC',
 
   // third column
-  "AROGUNDADE IFEOLUWAN THEOPHILUSG",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSH",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSI",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSJ",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSK",
+  'AROGUNDADE IFEOLUWAN THEOPHILUSG',
+  'AROGUNDADE IFEOLUWAN THEOPHILUSH',
+  'AROGUNDADE IFEOLUWAN THEOPHILUSI',
+  'AROGUNDADE IFEOLUWAN THEOPHILUSJ',
+  'AROGUNDADE IFEOLUWAN THEOPHILUSK',
 ]);
 
-const selectedMember = ref(null); 
+const selectedMember = ref(null);
 const showDialog = ref(false);
 
 // Filtered search
@@ -204,9 +204,7 @@ const filteredMembers = computed(() => {
   );
 });
 
-
-
-  function openDialog(member, event) {
+function openDialog(member, event) {
   selectedMember.value = member;
   showDialog.value = true;
 }
@@ -217,101 +215,102 @@ function closeDialog() {
 
 const categories = ref([
   {
-    name: "Individual",
-    description: "Ideal for private and insurance companies",
+    name: 'Individual',
+    description: 'Ideal for private and insurance companies',
     plans: [
       {
-        title: "Individual ",
-        price: "₦50,000 per month",
-        audience: "Ideal for private companies",
+        title: 'Individual ',
+        price: '₦50,000 per year',
+        audience: 'Ideal for private companies',
         benefits: [
-          "Ideal",
-          "Unlimited Pages",
-          "No Ads",
-          "Site Search",
-          "Password Protection",
-          "Classes",
-          "HD Video & Audio",
-          "Up to 100 Members",
-          "Membership Registration",
+          'Advocacy/Public-Private Engagement project',
+          'Networking/High Profile Breakfast Meetings',
+          'Access to Finance',
+          'Promotion & Brand Visibility',
+
+          'Access to Industry Information for Members Only',
+          'Partnership & Engagement with International Organizations',
+
         ],
       },
     ],
   },
   {
-    name: "Corporate",
-    description: "Ideal for private and insurance companies",
+    name: 'Corporate',
+    description: 'Ideal for private and insurance companies',
     plans: [
       {
-        title: "Corporate ",
-        price: "₦200,000 per month",
-        audience: "Ideal for private companies",
+        title: 'Corporate ',
+        price: '₦200,000 per year',
+        audience: 'Ideal for private companies',
         benefits: [
-          "Ideal",
-          "Unlimited Pages",
-          "No Ads",
-          "Site Search",
-          "Password Protection",
-          "Classes",
-          "HD Video & Audio",
-          "Up to 100 Members",
-          "Membership Registration",
+          'Advocacy/Public-Private Engagement project',
+          'Networking/High Profile Breakfast Meetings',
+          'Access to Finance',
+          'Promotion & Brand Visibility',
+
+          'Access to Industry Information for Members Only',
+          'Partnership & Engagement with International Organizations',
         ],
       },
     ],
   },
   {
-    name: "Multinational",
-    description: "Designed for international and cross-border organizations",
+    name: 'Multinational',
+    description: 'Designed for international and cross-border organizations',
     plans: [
       {
-        title: "Global Partner ",
-        price: "₦500,000 per month",
-        audience: "Ideal for international firms",
+        title: 'Global Partner ',
+        price: '₦750,000 per year',
+        audience: 'Ideal for international firms',
         benefits: [
-          "Access to cross-border collaborations",
-          "International policy influence",
-          "Brand visibility across regions",
-          "Premium networking events",
-          "Priority partnership slots",
-          "Dedicated liaison support",
+          'Advocacy/Public-Private Engagement project',
+          'Networking/High Profile Breakfast Meetings',
+          'Access to Finance',
+          'Promotion & Brand Visibility',
+
+          'Access to Industry Information for Members Only',
+          'Partnership & Engagement with International Organizations',
         ],
       },
     ],
   },
   {
-    name: "Association",
-    description: "For registered professional or trade associations",
+    name: 'Association',
+    description: 'For registered professional or trade associations',
     plans: [
       {
-        title: "Association Member",
-        price: "₦150,000 per month",
-        audience: "Ideal for professional bodies",
+        title: 'Association Member',
+        price: '₦150,000 per year',
+        audience: 'Ideal for professional bodies',
         benefits: [
-          "Shared research access",
-          "Joint advocacy opportunities",
-          "Discounted event sponsorships",
-          "Directory listing for all member firms",
-          "Dedicated community platform",
+          'Advocacy/Public-Private Engagement project',
+          'Networking/High Profile Breakfast Meetings',
+          'Access to Finance',
+          'Promotion & Brand Visibility',
+          'Access to Industry Information for Members Only',
+          'Partnership & Engagement with International Organizations',
         ],
       },
     ],
   },
   {
-    name: "Diaspora",
+    name: 'Diaspora',
     description:
-      "For professionals or organizations abroad supporting local development",
+      'For professionals or organizations abroad supporting local development',
     plans: [
       {
-        title: "Diaspora Partner",
-        price: "₦100,000 per month",
-        audience: "Ideal for Nigerians in diaspora",
+        title: 'Diaspora Partner',
+        price: '$50 per year',
+        audience: 'Ideal for Nigerians in diaspora',
         benefits: [
-          "Participation in home-country initiatives",
-          "Diaspora business network access",
-          "Discounted investment opportunities",
-          "Recognition at annual HFN summits",
-          "Digital collaboration tools",
+          'Advocacy/Public-Private Engagement project',
+          'Networking/High Profile Breakfast Meetings',
+          'Access to Finance',
+          'Promotion & Brand Visibility',
+
+          'Access to Industry Information for Members Only',
+          'Partnership & Engagement with International Organizations',
         ],
       },
     ],
@@ -327,15 +326,9 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
         <div class="mb-12 lg:mb-0">
-          <h2
-            class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4"
-          >
-            <span class="text-orange-500 block"
-              >Unite. Influence. Transform.</span
-            >
-            <span class="text-green-700 block mt-2"
-              >A digital coalition driving policy and innovation.</span
-            >
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4">
+            <span class="text-orange-500 block">Unite. Influence. Transform.</span>
+            <span class="text-green-700 block mt-2">A digital coalition driving policy and innovation.</span>
           </h2>
           <p class="mt-6 text-lg text-gray-600 max-w-xl">
             Within the professional network, HFN offers access to a secure
@@ -346,13 +339,9 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
 
         <div class="flex justify-center lg:justify-end">
           <div
-            class="relative w-[320px] h-[240px] sm:w-[400px] sm:h-[300px] lg:w-[500px] lg:h-[375px] rounded-[30px] overflow-hidden shadow-2xl"
-          >
-            <img
-              :src="handsJoining"
-              alt="Diverse hands joining in a heart shape, symbolizing unity and healthcare"
-              class="object-cover w-full h-full"
-            />
+            class="relative w-[320px] h-[240px] sm:w-[400px] sm:h-[300px] lg:w-[500px] lg:h-[375px] rounded-[30px] overflow-hidden shadow-2xl">
+            <img :src="handsJoining" alt="Diverse hands joining in a heart shape, symbolizing unity and healthcare"
+              class="object-cover w-full h-full" />
           </div>
         </div>
       </div>
@@ -361,31 +350,23 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
   <section class="py-10 sm:py-24 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2
-        class="text-3xl px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md sm:text-4xl font-serif font-extrabold text-gray-900 text-center mb-12"
-      >
+        class="text-3xl px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md sm:text-4xl font-serif font-extrabold text-gray-900 text-center mb-12">
         Membership Categories
       </h2>
 
       <div class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
         <div class="flex flex-wrap justify-center space-x-2 sm:space-x-4 mb-8">
-          <button
-            v-for="category in categories"
-            :key="category.name"
-            @click="activeCategory = category"
-            :class="[
-              'px-5 py-2 rounded-lg font-medium transition duration-200 ease-in-out whitespace-nowrap',
-              activeCategory.name === category.name
-                ? 'bg-green-700 text-white shadow-md'
-                : 'bg-white text-gray-700 border border-gray-300 hover:border-green-700 hover:text-green-700',
-            ]"
-          >
+          <button v-for="category in categories" :key="category.name" @click="activeCategory = category" :class="[
+            'px-5 py-2 rounded-lg font-medium transition duration-200 ease-in-out whitespace-nowrap',
+            activeCategory.name === category.name
+              ? 'bg-green-700 text-white shadow-md'
+              : 'bg-white text-gray-700 border border-gray-300 hover:border-green-700 hover:text-green-700',
+          ]">
             {{ category.name }}
           </button>
         </div>
 
-        <div
-          class="p-6 sm:p-10 rounded-[30px] border-2 border-green-200 bg-white shadow-xl flex flex-col gap-6"
-        >
+        <div class="p-6 sm:p-10 rounded-[30px] border-2 border-green-200 bg-white shadow-xl flex flex-col gap-6">
           <div class="text-center mb-6">
             <p class="text-3xl font-extrabold text-green-700">
               {{ activePlan.price }}
@@ -397,30 +378,14 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
           </h3>
 
           <div class="benefits-section p-6 rounded-xl">
-            <h5
-              class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2 border-gray-300"
-            >
+            <h5 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2 border-gray-300">
               Benefits to Members
             </h5>
             <ul class="space-y-3 text-gray-700 text-base">
-              <li
-                v-for="(benefit, i) in activePlan.benefits"
-                :key="i"
-                class="flex items-start"
-              >
-                <svg
-                  class="w-5 h-5 mr-3 text-green-700 flex-shrink-0 mt-0.5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2.5"
-                    d="M5 13l4 4L19 7"
-                  />
+              <li v-for="(benefit, i) in activePlan.benefits" :key="i" class="flex items-start">
+                <svg class="w-5 h-5 mr-3 text-green-700 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                  viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
                 </svg>
                 <span class="text-gray-700">{{ benefit }}</span>
               </li>
@@ -428,99 +393,77 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
           </div>
 
           <div class="text-center mt-4">
-            <a
-              href="#"
+            <a href="#"
               class="inline-flex items-center justify-center px-10 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-green-800 hover:bg-green-900 transition transform hover:scale-[1.02]"
               style="
                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
                   0 2px 4px -2px rgba(0, 0, 0, 0.06),
                   0 5px 15px rgba(0, 0, 0, 0.2);
-              "
-            >
+              ">
               Join Now
             </a>
           </div>
         </div>
       </div>
-      <section class=" bg-white">
-    <div class="max-w-6xl mx-auto px-6">
-      <h2 class="text-2xl font-semibold text-gray-800 mb-10">
-        HFN Members enjoy…
-      </h2>
+      <section class="bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+          <h2 class="text-2xl font-semibold text-gray-800 mb-10">
+            HFN Members enjoy…
+          </h2>
 
-      <div class="flex flex-wrap justify-center md:justify-start gap-4 mb-10">
-        <button
-          v-for="tab in tabs"
-          :key="tab.id"
-          @click="activeTab = tab.id"
-          :class="[
-            'relative w-[200px] h-[200px] p-3 shadow-sm flex flex-col justify-center text-left transition-all duration-300 transform',
-            // Base rounded corners matching the content blocks
-            'rounded-tr-[30px] rounded-bl-[30px]',
+          <div class="flex flex-wrap justify-center md:justify-start gap-4 mb-10">
+            <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id" :class="[
+              'relative w-[200px] h-[200px] p-3 shadow-sm flex flex-col justify-center text-left transition-all duration-300 transform',
+              'rounded-tr-[30px] rounded-bl-[30px]',
 
-            // Color backgrounds
-            tab.color === 'green' || tab.color === 'default'
-              ? 'bg-green-50'
-              : 'bg-[#E87A1814]', // Light orange background for orange boxes
-
-            // Active state: Add border and shadow to highlight
-            activeTab === tab.id
-              ? 'ring-2 ring-offset-2 scale-105 shadow-md ' + (tab.color === 'green' || tab.color === 'default' ? 'ring-green-700' : 'ring-orange-500')
-              : 'hover:shadow-md hover:scale-[1.02]',
-          ]"
-        >
-          <div
-            :class="[
-              'absolute top-0 right-0 w-1 h-full rounded-tr-[30px] rounded-br-none',
               tab.color === 'green' || tab.color === 'default'
-                ? 'bg-green-700'
-                : 'bg-orange-500',
-            ]"
-          ></div>
+                ? 'bg-green-50'
+                : 'bg-[#E87A1814]',
 
-          <div class="relative z-10 pr-2">
-            <div class="mb-2">
-              <img
-                :src="logo"
-                alt="Logo Icon"
-                class="inline-block w-8 h-8 object-contain opacity-75"
-              />
-            </div>
-
-            <span
-              :class="[
-                'font-bold text-lg leading-snug',
+              activeTab === tab.id
+                ? 'ring-2 ring-offset-2 scale-105 shadow-md ' +
+                (tab.color === 'green' || tab.color === 'default'
+                  ? 'ring-green-700'
+                  : 'ring-orange-500')
+                : 'hover:shadow-md hover:scale-[1.02]',
+            ]">
+              <div :class="[
+                'absolute top-0 right-0 w-1 h-full rounded-tr-[30px] rounded-br-none',
                 tab.color === 'green' || tab.color === 'default'
-                  ? 'text-green-800'
-                  : 'text-orange-800',
-              ]"
-              v-html="tab.titleHtml"
-            >
-              </span>
-          </div>
-        </button>
-      </div>
+                  ? 'bg-green-700'
+                  : 'bg-orange-500',
+              ]"></div>
 
-      <div v-for="tab in tabs" :key="tab.id">
-        <div v-if="activeTab === tab.id">
-          <div
-            class="text-gray-700 text-xl leading-relaxed space-y-5 px-6 py-4 border-l-4"
-            :class="[
-              tab.color === 'green' || tab.color === 'default'
-                ? 'border-green-700'
-                : 'border-orange-500',
-            ]"
-            v-html="tab.contentHtml"
-          >
+              <div class="relative z-10 pr-2">
+                <div class="mb-2">
+                  <img :src="logo" alt="Logo Icon" class="inline-block w-8 h-8 object-contain opacity-75" />
+                </div>
+
+                <span :class="[
+                  'font-bold text-lg leading-snug',
+                  tab.color === 'green' || tab.color === 'default'
+                    ? 'text-green-800'
+                    : 'text-orange-800',
+                ]" v-html="tab.titleHtml">
+                </span>
+              </div>
+            </button>
+          </div>
+
+          <div v-for="tab in tabs" :key="tab.id">
+            <div v-if="activeTab === tab.id">
+              <div class="text-gray-700 text-xl leading-relaxed space-y-5 px-6 py-4 border-l-4" :class="[
+                tab.color === 'green' || tab.color === 'default'
+                  ? 'border-green-700'
+                  : 'border-orange-500',
+              ]" v-html="tab.contentHtml"></div>
             </div>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   </section>
-      
-    </div>
-  </section>
-  <section class="sm:py-14 bg-white">
+  <!-- <section class="sm:py-14 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2
         class="text-3xl px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md sm:text-4xl font-serif font-extrabold text-gray-900 text-center mb-10"
@@ -692,49 +635,49 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
           >
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-6 text-gray-800 text-sm mb-8">
-  <div
-    v-for="(member, index) in filteredMembers"
-    :key="index"
-    class="relative group"
-  >
-    <!-- Member name -->
-    <div
-      class="p-1 text-gray-800 font-medium cursor-pointer hover:text-green-700 transition"
-      @click="openDialog(member, $event)"
-    >
-      {{ member }}
-    </div>
-
-    <!-- Dialog under clicked name -->
-    <transition name="fade">
-      <div
-        v-if="showDialog && selectedMember === member"
-        class="mt-2 w-full bg-white border border-gray-200 rounded-lg p-4 relative z-50"
-      >
-        <button
-          class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-lg"
-          @click="closeDialog"
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-6 text-gray-800 text-sm mb-8"
         >
-          &times;
-        </button>
+          <div
+            v-for="(member, index) in filteredMembers"
+            :key="index"
+            class="relative group"
+          >
+            <div
+              class="p-1 text-gray-800 font-medium cursor-pointer hover:text-green-700 transition"
+              @click="openDialog(member, $event)"
+            >
+              {{ member }}
+            </div>
 
-        <p class="font-semibold text-gray-900 mb-3 text-sm">
-          Connect with {{ member }}
-        </p>
+            <transition name="fade">
+              <div
+                v-if="showDialog && selectedMember === member"
+                class="mt-2 w-full bg-white border border-gray-200 rounded-lg p-4 relative z-50"
+              >
+                <button
+                  class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-lg"
+                  @click="closeDialog"
+                >
+                  &times;
+                </button>
 
-        <button
-          class="w-full py-1.5 border border-green-700 text-green-700 rounded-md text-sm font-medium hover:bg-green-50 transition"
-        >
-          Connect
-        </button>
-        <p class="font-san text-orange-600 mb-3 mt-3 text-sm">
-          Only registered members can connect*.
-        </p>
-      </div>
-    </transition>
-  </div>
-</div>
+                <p class="font-semibold text-gray-900 mb-3 text-sm">
+                  Connect with {{ member }}
+                </p>
+
+                <button
+                  class="w-full py-1.5 border border-green-700 text-green-700 rounded-md text-sm font-medium hover:bg-green-50 transition"
+                >
+                  Connect
+                </button>
+                <p class="font-san text-orange-600 mb-3 mt-3 text-sm">
+                  Only registered members can connect*.
+                </p>
+              </div>
+            </transition>
+          </div>
+        </div>
 
         <div class="flex justify-end mt-6">
           <button
@@ -759,21 +702,22 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
 </template>
 
 <style scoped>
 .benefits-section {
-  background-color: #E87A1814; 
-  border-radius: 0.75rem; 
+  background-color: #e87a1814;
+  border-radius: 0.75rem;
 }
- .fade-enter-active,
+
+.fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
 }
-
 </style>

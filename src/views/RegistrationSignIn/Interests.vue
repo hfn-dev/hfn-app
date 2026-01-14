@@ -94,19 +94,19 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const categories = [
   {
-    title: "Paediatrics",
+    title: "Governance",
     image: paediatrics,
   },
   {
-    title: "Gynaecology",
+    title: "Advocacy",
     image: gynaecology,
   },
   {
-    title: "Insurance",
+    title: "Training",
     image: aboutImage,
   },
   {
-    title: "Pharmacy",
+    title: "Finance",
     image: pharmacy,
   },
   {
@@ -114,15 +114,15 @@ const categories = [
     image: aboutImage,
   },
   {
-    title: "HealthCare",
+    title: "Mobilization",
     image: healthcare,
   },
   {
-    title: "Infants",
+    title: "Policy Advocacy",
     image: infants,
   },
   {
-    title: "Physiology",
+    title: "Public Engagement",
     image: physiology,
   },
 ];

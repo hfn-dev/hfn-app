@@ -5,8 +5,8 @@ import Contact from '@/views/Contact.vue';
 import EditorAccount from '@/views/Editor/EditorAccount.vue';
 import EditorDashboard from '@/views/Editor/EditorDashboard.vue';
 import GetInvolved from '@/views/GetInvolved.vue';
-import Programs from '@/views/Programs.vue';
 import NewsAdvocacy from '@/views/NewsAdvocacy.vue';
+import Programs from '@/views/Programs.vue';
 import Resources from '@/views/Resources.vue';
 
 import EditorPages from '@/views/Editor/EditorPages.vue';
@@ -17,10 +17,10 @@ import Register from '@/views/RegistrationSignIn/Register.vue';
 import SignIn from '@/views/RegistrationSignIn/SignIn.vue';
 import SigninVerification from '@/views/RegistrationSignIn/SigninVerification.vue';
 import SuperAdminAccount from '@/views/SuperAdmin/SuperAdminAccount.vue';
-import SuperAdminManager from '@/views/SuperAdmin/SuperAdminManager.vue';
 import SuperAdminCourseList from '@/views/SuperAdmin/SuperAdminCourseList.vue';
 import SuperAdminCreateCourse from '@/views/SuperAdmin/SuperAdminCreateCourse.vue';
 import SuperAdminDashboard from '@/views/SuperAdmin/SuperAdminDashboard.vue';
+import SuperAdminManager from '@/views/SuperAdmin/SuperAdminManager.vue';
 import SuperAdminMembers from '@/views/SuperAdmin/SuperAdminMembers.vue';
 import SuperAdminMessages from '@/views/SuperAdmin/SuperAdminMessages.vue';
 import SuperAdminPayments from '@/views/SuperAdmin/SuperAdminPayments.vue';
@@ -33,22 +33,26 @@ import MessageNotification from '@/views/User/MessageNotification.vue';
 import MyAccount from '@/views/User/MyAccount.vue';
 import MyLearning from '@/views/User/MyLearning.vue';
 import Support from '@/views/User/Support.vue';
-import UserDashboard from '@/views/User/UserDashboard.vue';
-import UserCourses from '@/views/User/UserCourses.vue';
+import Publications from '@/views/Publications.vue';
 
-import UserSubscription from '@/views/User/UserSubscription.vue';
-import { createRouter, createWebHistory } from 'vue-router';
-import About from '../views/About.vue';
-import Homepage from '../views/Homepage.vue';
+import UserCourses from '@/views/User/UserCourses.vue';
+import UserDashboard from '@/views/User/UserDashboard.vue';
+
 import AdminAccount from '@/views/Admin/AdminAccount.vue';
 import AdminCourseList from '@/views/Admin/AdminCourseList.vue';
 import AdminCreateCourse from '@/views/Admin/AdminCreateCourse.vue';
 import AdminDashboard from '@/views/Admin/AdminDashboard.vue';
+import AdminManager from '@/views/Admin/AdminManager.vue';
+import AdminMembers from '@/views/Admin/AdminMembers.vue';
 import AdminMessages from '@/views/Admin/AdminMessages.vue';
 import AdminPayments from '@/views/Admin/AdminPayments.vue';
-import AdminMembers from '@/views/Admin/AdminMembers.vue';
-import AdminManager from '@/views/Admin/AdminManager.vue';
 import Events from '@/views/Events.vue';
+import Gallery from '@/views/Gallery.vue';
+import ArticleDetail from '@/views/User/ArticleDetail.vue';
+import UserSubscription from '@/views/User/UserSubscription.vue';
+import { createRouter, createWebHistory } from 'vue-router';
+import About from '../views/About.vue';
+import Homepage from '../views/Homepage.vue';
 
 const routes = [
   // {
@@ -72,12 +76,16 @@ const routes = [
   { path: '/contact', name: 'Contact', component: Contact },
   { path: '/register', name: 'Register', component: Register },
   { path: '/signin', name: 'Signin', component: SignIn },
-    { path: '/events', name: 'Events', component: Events },
-      { path: '/get-involved', name: 'GetInvolved', component: GetInvolved },
-      { path: '/programs', name: 'Programs', component: Programs },
-      { path: '/news', name: 'NewsAdvocacy', component: NewsAdvocacy },
+  { path: '/events', name: 'Events', component: Events },
+  { path: '/gallery', name: 'Gallery', component: Gallery },
+    { path: '/publication', name: 'Publications', component: Publications },
 
-      { path: '/resources', name: 'Resources', component: Resources },
+
+  { path: '/get-involved', name: 'GetInvolved', component: GetInvolved },
+  { path: '/programs', name: 'Programs', component: Programs },
+  { path: '/news', name: 'NewsAdvocacy', component: NewsAdvocacy },
+
+  { path: '/resources', name: 'Resources', component: Resources },
 
   {
     path: '/blog/:id',
@@ -114,6 +122,11 @@ const routes = [
     path: '/course/:id',
     name: 'CourseDetails',
     component: CourseDetails,
+  },
+  {
+    path: '/news/:slug',
+    name: 'ArticleDetail',
+    component: ArticleDetail,
   },
   {
     path: '/user/account',
@@ -166,6 +179,11 @@ const routes = [
     component: TutorCreateCourse,
   },
   {
+    path: '/tutor/courses/:slug/edit',
+    name: 'TutorEditCourse',
+    component: TutorCreateCourse,
+  },
+  {
     path: '/tutor/dashboard',
     name: 'TutorDashboard',
     component: TutorDashboard,
@@ -188,6 +206,11 @@ const routes = [
   {
     path: '/superadmin/create-course',
     name: 'SuperAdminCreateCourse',
+    component: SuperAdminCreateCourse,
+  },
+  {
+    path: '/superadmin/courses/:slug/edit',
+    name: 'SuperAdminEditCourse',
     component: SuperAdminCreateCourse,
   },
   {
@@ -232,13 +255,13 @@ const routes = [
     name: 'AdminCreateCourse',
     component: AdminCreateCourse,
   },
-  
+
   {
     path: '/admin/account',
     name: 'AdminAccount',
     component: AdminAccount,
   },
-  
+
   {
     path: '/admin/payments',
     name: 'AdminPayments',
@@ -258,6 +281,36 @@ const routes = [
     path: '/admin/access',
     name: 'AdminManager',
     component: AdminManager,
+  },
+
+  //for learners
+
+  {
+    path: '/learner/mylearning',
+    name: 'MyLearning',
+    component: MyLearning,
+  },
+
+  {
+    path: '/learner/courses',
+    name: 'UserCourses',
+    component: UserCourses,
+  },
+  {
+    path: '/course/:id',
+    name: 'CourseDetails',
+    component: CourseDetails,
+  },
+
+  {
+    path: '/learner/account',
+    name: 'UserAccount',
+    component: MyAccount,
+  },
+  {
+    path: '/learner/support',
+    name: 'UserSupport',
+    component: Support,
   },
 ];
 

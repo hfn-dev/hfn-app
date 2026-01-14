@@ -1,44 +1,44 @@
 <script setup>
-import UserSidebar from "@/components/layout/UserSidebar.vue";
-import { computed, reactive, ref } from "vue";
-import { useRouter } from "vue-router";
+import UserSidebar from '@/components/layout/UserSidebar.vue';
+import { computed, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-const certificateUrl = ref("/sample-certificates.png"); 
+const certificateUrl = ref('/sample-certificates.png');
 
 const viewCertificateInNewTab = () => {
   if (certificateUrl.value) {
-    window.open(certificateUrl.value, "_blank");
+    window.open(certificateUrl.value, '_blank');
   }
 };
 
 const subscription = reactive({
-  expiryDate: "31st December 2025",
+  expiryDate: '31st December 2025',
   invoices: [
     {
       id: 1,
-      invoiceNo: "001",
-      invoiceDate: "Monday, December 19 2024",
-      dueDate: "Monday, December 31 2025",
-      total: "₦200,000.00",
-      status: "Paid",
+      invoiceNo: '001',
+      invoiceDate: 'Monday, December 19 2024',
+      dueDate: 'Monday, December 31 2025',
+      total: '₦200,000.00',
+      status: 'Paid',
     },
     {
       id: 2,
-      invoiceNo: "001",
-      invoiceDate: "Monday, December 29 2023",
-      dueDate: "Monday, December 31 2024",
-      total: "₦200,000.00",
-      status: "Paid",
+      invoiceNo: '001',
+      invoiceDate: 'Monday, December 29 2023',
+      dueDate: 'Monday, December 31 2024',
+      total: '₦200,000.00',
+      status: 'Paid',
     },
     {
       id: 3,
-      invoiceNo: "001",
-      invoiceDate: "Monday, December 01 2022",
-      dueDate: "Monday, December 31 2023",
-      total: "₦200,000.00",
-      status: "Paid",
+      invoiceNo: '001',
+      invoiceDate: 'Monday, December 01 2022',
+      dueDate: 'Monday, December 31 2023',
+      total: '₦200,000.00',
+      status: 'Paid',
     },
   ],
   currentPage: 1,
@@ -47,7 +47,7 @@ const subscription = reactive({
 });
 
 const makePayment = () => {
-  router.push({ name: "UserSubscription" });
+  router.push({ name: 'UserSubscription' });
 };
 
 const goToPage = (page) => {
@@ -58,79 +58,83 @@ const goToPage = (page) => {
 };
 
 const isOrganization = ref(true);
-const currentView = ref("My Profile");
-const activeTab = ref("My Profile");
+const currentView = ref('My Profile');
+const activeTab = ref('My Profile');
 
 const navLinks = [
   {
-    name: "Dashboard",
-    icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6",
+    name: 'Dashboard',
+    icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
   },
   {
-    name: "My Learning",
-    icon: "M12 6.253v13M3.475 12h17.052M18.82 8.16l-1.397 1.5M5.18 8.16l1.397 1.5",
+    name: 'My Learning',
+    icon: 'M12 6.253v13M3.475 12h17.052M18.82 8.16l-1.397 1.5M5.18 8.16l1.397 1.5',
   },
   {
-    name: "Messages",
-    icon: "M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z",
+    name: 'Messages',
+    icon: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z',
   },
   {
-    name: "My Account",
-    icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z",
+    name: 'My Account',
+    icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
   },
   {
-    name: "Support",
-    icon: "M18.364 5.636l-1.414 1.414M16 12a4 4 0 10-8 0 4 4 0 008 0zM12 1v2M12 19v2M5.636 18.364l1.414-1.414M19 12h2M3 12h2M5.636 5.636l1.414 1.414M18.364 18.364l-1.414-1.414",
+    name: 'Support',
+    icon: 'M18.364 5.636l-1.414 1.414M16 12a4 4 0 10-8 0 4 4 0 008 0zM12 1v2M12 19v2M5.636 18.364l1.414-1.414M19 12h2M3 12h2M5.636 5.636l1.414 1.414M18.364 18.364l-1.414-1.414',
   },
   {
-    name: "Logout",
-    icon: "M11 16l-4-4m0 0l4-4m-4 4h14M3 12h2a2 2 0 002-2V6a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H9a2 2 0 00-2 2v-4",
+    name: 'Logout',
+    icon: 'M11 16l-4-4m0 0l4-4m-4 4h14M3 12h2a2 2 0 002-2V6a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H9a2 2 0 00-2 2v-4',
   },
 ];
 
+watch(currentView, (newVal) => {
+  if (newVal === 'My Account') activeTab.value = 'My Profile';
+});
+
 const isOrgEditing = ref(false);
 const orgDetails = reactive({
-  name: "Ruthie & Co Nigeria Limited",
-  email: "peterpan@gmail.com.us",
-  phone: "+234 123 456 78",
-  password: "********",
+  name: 'Ruthie & Co Nigeria Limited',
+  email: 'peterpan@gmail.com.us',
+  phone: '+234 123 456 78',
+  password: '********',
 });
 const orgDetailsKeys = [
-  { key: "name", label: "Name" },
-  { key: "email", label: "Email Address" },
-  { key: "phone", label: "Phone Number" },
-  { key: "password", label: "Password" },
+  { key: 'name', label: 'Name' },
+  { key: 'email', label: 'Email Address' },
+  { key: 'phone', label: 'Phone Number' },
+  { key: 'password', label: 'Password' },
 ];
 
 const isIndividualEditing = ref(false);
 const individualDetails = reactive({
-  firstName: "John",
-  lastName: "Doe",
-  email: "john.doe@example.com",
-  phone: "+1 555 123 4567",
-  password: "********",
+  firstName: 'John',
+  lastName: 'Doe',
+  email: 'john.doe@example.com',
+  phone: '+1 555 123 4567',
+  password: '********',
 });
 const individualDetailsKeys = [
-  { key: "firstName", label: "First Name" },
-  { key: "lastName", label: "Last Name" },
-  { key: "email", label: "Email Address" },
-  { key: "phone", label: "Phone Number" },
-  { key: "password", label: "Password" },
+  { key: 'firstName', label: 'First Name' },
+  { key: 'lastName', label: 'Last Name' },
+  { key: 'email', label: 'Email Address' },
+  { key: 'phone', label: 'Phone Number' },
+  { key: 'password', label: 'Password' },
 ];
 
 const isOtherDetailsEditing = ref(false);
 const otherDetails = reactive({
-  addressLine1: "Address Line 1",
-  addressLine2: "Address Line 2",
-  state: "State",
-  country: "Country",
-  description: "",
+  addressLine1: 'Address Line 1',
+  addressLine2: 'Address Line 2',
+  state: 'State',
+  country: 'Country',
+  description: '',
 });
 
 const invitations = reactive([
-  { id: 1, email: "peterpan@gmail.com", sent: true },
-  { id: 2, email: "", sent: false },
-  { id: 3, email: "", sent: false },
+  { id: 1, email: 'peterpan@gmail.com', sent: true },
+  { id: 2, email: '', sent: false },
+  { id: 3, email: '', sent: false },
 ]);
 
 const sentInvitesCount = computed(
@@ -138,16 +142,16 @@ const sentInvitesCount = computed(
 );
 
 const interests = reactive([
-  { id: 10, name: "Mother", selected: true, isMainCategory: true },
-  { id: 11, name: "Child", selected: true, isMainCategory: true },
-  { id: 12, name: "Baby", selected: true, isMainCategory: true },
-  { id: 13, name: "Pregnancy", selected: true, isMainCategory: true },
-  { id: 1, name: "Marketing", selected: true, isMainCategory: false },
-  { id: 2, name: "Gynaecology", selected: true, isMainCategory: false },
-  { id: 3, name: "Paediatrics", selected: true, isMainCategory: false },
-  { id: 4, name: "General Health", selected: false, isMainCategory: false },
-  { id: 5, name: "Insurance", selected: false, isMainCategory: false },
-  { id: 6, name: "Dentistry", selected: false, isMainCategory: false },
+  { id: 10, name: 'Mother', selected: true, isMainCategory: true },
+  { id: 11, name: 'Child', selected: true, isMainCategory: true },
+  { id: 12, name: 'Baby', selected: true, isMainCategory: true },
+  { id: 13, name: 'Pregnancy', selected: true, isMainCategory: true },
+  { id: 1, name: 'Marketing', selected: true, isMainCategory: false },
+  { id: 2, name: 'Gynaecology', selected: true, isMainCategory: false },
+  { id: 3, name: 'Paediatrics', selected: true, isMainCategory: false },
+  { id: 4, name: 'General Health', selected: false, isMainCategory: false },
+  { id: 5, name: 'Insurance', selected: false, isMainCategory: false },
+  { id: 6, name: 'Dentistry', selected: false, isMainCategory: false },
 ]);
 
 const selectedInterestsCount = computed(
@@ -157,7 +161,7 @@ const selectedInterestsCount = computed(
 const toggleOrgEdit = () => {
   if (isOrgEditing.value) {
     console.log(
-      "Saving Organization Details:",
+      'Saving Organization Details:',
       JSON.parse(JSON.stringify(orgDetails))
     );
   }
@@ -167,7 +171,7 @@ const toggleOrgEdit = () => {
 const toggleIndividualEdit = () => {
   if (isIndividualEditing.value) {
     console.log(
-      "Saving Individual Details:",
+      'Saving Individual Details:',
       JSON.parse(JSON.stringify(individualDetails))
     );
   }
@@ -177,7 +181,7 @@ const toggleIndividualEdit = () => {
 const toggleOtherDetailsEdit = () => {
   if (isOtherDetailsEditing.value) {
     console.log(
-      "Saving Other Details:",
+      'Saving Other Details:',
       JSON.parse(JSON.stringify(otherDetails))
     );
   }
@@ -186,7 +190,7 @@ const toggleOtherDetailsEdit = () => {
 
 const sendInvitation = (id) => {
   const invite = invitations.find((i) => i.id === id);
-  if (invite && invite.email !== "") {
+  if (invite && invite.email !== '') {
     console.log(`Sending invite to: ${invite.email}`);
     invite.sent = true;
   }
@@ -195,7 +199,7 @@ const sendInvitation = (id) => {
 const removeInvitation = (id) => {
   const invite = invitations.find((i) => i.id === id);
   if (invite) {
-    invite.email = "";
+    invite.email = '';
     invite.sent = false;
   }
 };
@@ -207,7 +211,7 @@ const toggleInterest = (id) => {
     const willBeSelected = !item.selected;
 
     if (willBeSelected && selectedInterestsCount.value >= 4) {
-      console.log("Cannot select more than 4 secondary interests.");
+      console.log('Cannot select more than 4 secondary interests.');
       return;
     }
 
@@ -252,16 +256,16 @@ const toggleInterest = (id) => {
             My Profile
           </button>
           <button
-  @click="activeTab = 'My Certificate'"
-  :class="[
-    'py-2 px-1 border-b-2 transition duration-150 font-medium',
-    activeTab === 'My Certificate'
-      ? 'border-green-600 text-green-600'
-      : 'border-transparent text-gray-500 hover:text-gray-700',
-  ]"
->
-  My Certificate
-</button>
+            @click="activeTab = 'My Certificate'"
+            :class="[
+              'py-2 px-1 border-b-2 transition duration-150 font-medium',
+              activeTab === 'My Certificate'
+                ? 'border-green-600 text-green-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700',
+            ]"
+          >
+            My Certificate
+          </button>
 
           <button
             @click="activeTab = 'Subscription'"
@@ -373,7 +377,7 @@ const toggleInterest = (id) => {
                     "
                     class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150"
                   >
-                    {{ isOrgEditing ? "Save Changes" : "Change Password" }}
+                    {{ isOrgEditing ? 'Save Changes' : 'Change Password' }}
                   </button>
                 </div>
               </div>
@@ -424,7 +428,7 @@ const toggleInterest = (id) => {
                 "
                 class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150"
               >
-                {{ isIndividualEditing ? "Save Changes" : "Change Password" }}
+                {{ isIndividualEditing ? 'Save Changes' : 'Change Password' }}
               </button>
             </div>
 
@@ -511,7 +515,7 @@ const toggleInterest = (id) => {
                     "
                     class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150"
                   >
-                    {{ isIndividualEditing ? "Save Changes" : "Edit" }}
+                    {{ isIndividualEditing ? 'Save Changes' : 'Edit' }}
                   </button>
                 </div>
               </div>
@@ -536,7 +540,7 @@ const toggleInterest = (id) => {
                 "
                 class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150"
               >
-                {{ isOtherDetailsEditing ? "Save Changes" : "Edit" }}
+                {{ isOtherDetailsEditing ? 'Save Changes' : 'Edit' }}
               </button>
             </div>
             <div class="space-y-4">
@@ -608,8 +612,6 @@ const toggleInterest = (id) => {
               ></textarea>
             </div>
           </div>
-
-          
 
           <div class="p-6 bg-white rounded-xl shadow-lg">
             <h2 class="text-xl font-semibold mb-4">My Interests</h2>
@@ -821,7 +823,10 @@ const toggleInterest = (id) => {
                         {{ invoice.status }}
                       </span>
                       <a
-                        href="#"
+                        v-for="invoice in subscription.invoices"
+                        :key="invoice.id"
+                        :href="invoice.downloadUrl"
+                        download
                         class="ml-4 text-green-600 hover:text-green-900 flex items-center inline-block"
                       >
                         <svg
@@ -899,53 +904,52 @@ const toggleInterest = (id) => {
           </div>
         </div>
         <div v-else-if="activeTab === 'My Certificate'" class="space-y-10">
+          <div
+            class="p-10 bg-white rounded-xl shadow-lg border border-gray-200"
+          >
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">
+              My Certificate
+            </h2>
 
-  <div class="p-10 bg-white rounded-xl shadow-lg border border-gray-200">
-    <h2 class="text-2xl font-semibold mb-4 text-gray-800">
-      My Certificate
-    </h2>
+            <p class="text-gray-600 mb-6">
+              Preview and download your certificate below.
+            </p>
 
-    <p class="text-gray-600 mb-6">
-      Preview and download your certificate below.
-    </p>
+            <!-- Certificate Preview Box -->
+            <div
+              class="w-full border border-gray-300 rounded-lg overflow-hidden shadow-md bg-gray-50 flex justify-center items-center h-80"
+            >
+              <iframe
+                v-if="certificateUrl"
+                :src="certificateUrl"
+                class="w-full h-full"
+              ></iframe>
 
-    <!-- Certificate Preview Box -->
-    <div
-      class="w-full border border-gray-300 rounded-lg overflow-hidden shadow-md bg-gray-50 flex justify-center items-center h-80"
-    >
-      <iframe
-        v-if="certificateUrl"
-        :src="certificateUrl"
-        class="w-full h-full"
-      ></iframe>
+              <div v-else class="text-center text-gray-500">
+                Certificate preview unavailable
+              </div>
+            </div>
 
-      <div v-else class="text-center text-gray-500">
-        Certificate preview unavailable
-      </div>
-    </div>
+            <!-- Actions -->
+            <div class="mt-6 flex justify-center space-x-4">
+              <a
+                v-if="certificateUrl"
+                :href="certificateUrl"
+                download="certificate.pdf"
+                class="px-6 py-2 bg-[#0c6b39] hover:bg-[#09572d] text-white rounded-lg shadow"
+              >
+                Download Certificate
+              </a>
 
-    <!-- Actions -->
-    <div class="mt-6 flex justify-center space-x-4">
-      <a
-        v-if="certificateUrl"
-        :href="certificateUrl"
-        download="certificate.pdf"
-        class="px-6 py-2 bg-[#0c6b39] hover:bg-[#09572d] text-white rounded-lg shadow"
-      >
-        Download Certificate
-      </a>
-
-      <button
-        @click="viewCertificateInNewTab"
-        class="px-6 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100"
-      >
-        Open in New Tab
-      </button>
-    </div>
-  </div>
-
-</div>
-
+              <button
+                @click="viewCertificateInNewTab"
+                class="px-6 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100"
+              >
+                Open in New Tab
+              </button>
+            </div>
+          </div>
+        </div>
 
         <div
           v-else
@@ -987,7 +991,7 @@ const toggleInterest = (id) => {
 }
 
 .font-inter {
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 .main-button {
