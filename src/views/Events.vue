@@ -8,7 +8,7 @@
                 <h1 class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
                     <span class="text-green-700">Upcoming Events</span>
                     <br>
-                    <span class="text-gray-900">Connect, Learn & Grow With Us</span>
+                    <span class="text-gray-900">Speaking with one voice for the private health sector</span>
                 </h1>
                 <p class="mt-4 text-gray-600 max-w-lg">
                    Stay updated with our latest conferences, webinars, and community programs.

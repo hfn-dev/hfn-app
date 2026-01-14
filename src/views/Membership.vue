@@ -223,15 +223,14 @@ const categories = ref([
         price: '₦50,000 per year',
         audience: 'Ideal for private companies',
         benefits: [
-          'Ideal',
-          'Unlimited Pages',
-          'No Ads',
-          'Site Search',
-          'Password Protection',
-          'Classes',
-          'HD Video & Audio',
-          'Up to 100 Members',
-          'Membership Registration',
+          'Advocacy/Public-Private Engagement project',
+          'Networking/High Profile Breakfast Meetings',
+          'Access to Finance',
+          'Promotion & Brand Visibility',
+
+          'Access to Industry Information for Members Only',
+          'Partnership & Engagement with International Organizations',
+
         ],
       },
     ],
@@ -245,15 +244,13 @@ const categories = ref([
         price: '₦200,000 per year',
         audience: 'Ideal for private companies',
         benefits: [
-          'Ideal',
-          'Unlimited Pages',
-          'No Ads',
-          'Site Search',
-          'Password Protection',
-          'Classes',
-          'HD Video & Audio',
-          'Up to 100 Members',
-          'Membership Registration',
+          'Advocacy/Public-Private Engagement project',
+          'Networking/High Profile Breakfast Meetings',
+          'Access to Finance',
+          'Promotion & Brand Visibility',
+
+          'Access to Industry Information for Members Only',
+          'Partnership & Engagement with International Organizations',
         ],
       },
     ],
@@ -267,12 +264,13 @@ const categories = ref([
         price: '₦750,000 per year',
         audience: 'Ideal for international firms',
         benefits: [
-          'Access to cross-border collaborations',
-          'International policy influence',
-          'Brand visibility across regions',
-          'Premium networking events',
-          'Priority partnership slots',
-          'Dedicated liaison support',
+          'Advocacy/Public-Private Engagement project',
+          'Networking/High Profile Breakfast Meetings',
+          'Access to Finance',
+          'Promotion & Brand Visibility',
+
+          'Access to Industry Information for Members Only',
+          'Partnership & Engagement with International Organizations',
         ],
       },
     ],
@@ -286,11 +284,12 @@ const categories = ref([
         price: '₦150,000 per year',
         audience: 'Ideal for professional bodies',
         benefits: [
-          'Shared research access',
-          'Joint advocacy opportunities',
-          'Discounted event sponsorships',
-          'Directory listing for all member firms',
-          'Dedicated community platform',
+          'Advocacy/Public-Private Engagement project',
+          'Networking/High Profile Breakfast Meetings',
+          'Access to Finance',
+          'Promotion & Brand Visibility',
+          'Access to Industry Information for Members Only',
+          'Partnership & Engagement with International Organizations',
         ],
       },
     ],
@@ -305,11 +304,13 @@ const categories = ref([
         price: '$50 per year',
         audience: 'Ideal for Nigerians in diaspora',
         benefits: [
-          'Participation in home-country initiatives',
-          'Diaspora business network access',
-          'Discounted investment opportunities',
-          'Recognition at annual HFN summits',
-          'Digital collaboration tools',
+          'Advocacy/Public-Private Engagement project',
+          'Networking/High Profile Breakfast Meetings',
+          'Access to Finance',
+          'Promotion & Brand Visibility',
+
+          'Access to Industry Information for Members Only',
+          'Partnership & Engagement with International Organizations',
         ],
       },
     ],
@@ -325,15 +326,9 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
         <div class="mb-12 lg:mb-0">
-          <h2
-            class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4"
-          >
-            <span class="text-orange-500 block"
-              >Unite. Influence. Transform.</span
-            >
-            <span class="text-green-700 block mt-2"
-              >A digital coalition driving policy and innovation.</span
-            >
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4">
+            <span class="text-orange-500 block">Unite. Influence. Transform.</span>
+            <span class="text-green-700 block mt-2">A digital coalition driving policy and innovation.</span>
           </h2>
           <p class="mt-6 text-lg text-gray-600 max-w-xl">
             Within the professional network, HFN offers access to a secure
@@ -344,13 +339,9 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
 
         <div class="flex justify-center lg:justify-end">
           <div
-            class="relative w-[320px] h-[240px] sm:w-[400px] sm:h-[300px] lg:w-[500px] lg:h-[375px] rounded-[30px] overflow-hidden shadow-2xl"
-          >
-            <img
-              :src="handsJoining"
-              alt="Diverse hands joining in a heart shape, symbolizing unity and healthcare"
-              class="object-cover w-full h-full"
-            />
+            class="relative w-[320px] h-[240px] sm:w-[400px] sm:h-[300px] lg:w-[500px] lg:h-[375px] rounded-[30px] overflow-hidden shadow-2xl">
+            <img :src="handsJoining" alt="Diverse hands joining in a heart shape, symbolizing unity and healthcare"
+              class="object-cover w-full h-full" />
           </div>
         </div>
       </div>
@@ -359,31 +350,23 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
   <section class="py-10 sm:py-24 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2
-        class="text-3xl px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md sm:text-4xl font-serif font-extrabold text-gray-900 text-center mb-12"
-      >
+        class="text-3xl px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md sm:text-4xl font-serif font-extrabold text-gray-900 text-center mb-12">
         Membership Categories
       </h2>
 
       <div class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
         <div class="flex flex-wrap justify-center space-x-2 sm:space-x-4 mb-8">
-          <button
-            v-for="category in categories"
-            :key="category.name"
-            @click="activeCategory = category"
-            :class="[
-              'px-5 py-2 rounded-lg font-medium transition duration-200 ease-in-out whitespace-nowrap',
-              activeCategory.name === category.name
-                ? 'bg-green-700 text-white shadow-md'
-                : 'bg-white text-gray-700 border border-gray-300 hover:border-green-700 hover:text-green-700',
-            ]"
-          >
+          <button v-for="category in categories" :key="category.name" @click="activeCategory = category" :class="[
+            'px-5 py-2 rounded-lg font-medium transition duration-200 ease-in-out whitespace-nowrap',
+            activeCategory.name === category.name
+              ? 'bg-green-700 text-white shadow-md'
+              : 'bg-white text-gray-700 border border-gray-300 hover:border-green-700 hover:text-green-700',
+          ]">
             {{ category.name }}
           </button>
         </div>
 
-        <div
-          class="p-6 sm:p-10 rounded-[30px] border-2 border-green-200 bg-white shadow-xl flex flex-col gap-6"
-        >
+        <div class="p-6 sm:p-10 rounded-[30px] border-2 border-green-200 bg-white shadow-xl flex flex-col gap-6">
           <div class="text-center mb-6">
             <p class="text-3xl font-extrabold text-green-700">
               {{ activePlan.price }}
@@ -395,30 +378,14 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
           </h3>
 
           <div class="benefits-section p-6 rounded-xl">
-            <h5
-              class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2 border-gray-300"
-            >
+            <h5 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2 border-gray-300">
               Benefits to Members
             </h5>
             <ul class="space-y-3 text-gray-700 text-base">
-              <li
-                v-for="(benefit, i) in activePlan.benefits"
-                :key="i"
-                class="flex items-start"
-              >
-                <svg
-                  class="w-5 h-5 mr-3 text-green-700 flex-shrink-0 mt-0.5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2.5"
-                    d="M5 13l4 4L19 7"
-                  />
+              <li v-for="(benefit, i) in activePlan.benefits" :key="i" class="flex items-start">
+                <svg class="w-5 h-5 mr-3 text-green-700 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                  viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
                 </svg>
                 <span class="text-gray-700">{{ benefit }}</span>
               </li>
@@ -426,15 +393,13 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
           </div>
 
           <div class="text-center mt-4">
-            <a
-              href="#"
+            <a href="#"
               class="inline-flex items-center justify-center px-10 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-green-800 hover:bg-green-900 transition transform hover:scale-[1.02]"
               style="
                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
                   0 2px 4px -2px rgba(0, 0, 0, 0.06),
                   0 5px 15px rgba(0, 0, 0, 0.2);
-              "
-            >
+              ">
               Join Now
             </a>
           </div>
@@ -446,56 +411,40 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
             HFN Members enjoy…
           </h2>
 
-          <div
-            class="flex flex-wrap justify-center md:justify-start gap-4 mb-10"
-          >
-            <button
-              v-for="tab in tabs"
-              :key="tab.id"
-              @click="activeTab = tab.id"
-              :class="[
-                'relative w-[200px] h-[200px] p-3 shadow-sm flex flex-col justify-center text-left transition-all duration-300 transform',
-                'rounded-tr-[30px] rounded-bl-[30px]',
+          <div class="flex flex-wrap justify-center md:justify-start gap-4 mb-10">
+            <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id" :class="[
+              'relative w-[200px] h-[200px] p-3 shadow-sm flex flex-col justify-center text-left transition-all duration-300 transform',
+              'rounded-tr-[30px] rounded-bl-[30px]',
 
+              tab.color === 'green' || tab.color === 'default'
+                ? 'bg-green-50'
+                : 'bg-[#E87A1814]',
+
+              activeTab === tab.id
+                ? 'ring-2 ring-offset-2 scale-105 shadow-md ' +
+                (tab.color === 'green' || tab.color === 'default'
+                  ? 'ring-green-700'
+                  : 'ring-orange-500')
+                : 'hover:shadow-md hover:scale-[1.02]',
+            ]">
+              <div :class="[
+                'absolute top-0 right-0 w-1 h-full rounded-tr-[30px] rounded-br-none',
                 tab.color === 'green' || tab.color === 'default'
-                  ? 'bg-green-50'
-                  : 'bg-[#E87A1814]',
-
-                activeTab === tab.id
-                  ? 'ring-2 ring-offset-2 scale-105 shadow-md ' +
-                    (tab.color === 'green' || tab.color === 'default'
-                      ? 'ring-green-700'
-                      : 'ring-orange-500')
-                  : 'hover:shadow-md hover:scale-[1.02]',
-              ]"
-            >
-              <div
-                :class="[
-                  'absolute top-0 right-0 w-1 h-full rounded-tr-[30px] rounded-br-none',
-                  tab.color === 'green' || tab.color === 'default'
-                    ? 'bg-green-700'
-                    : 'bg-orange-500',
-                ]"
-              ></div>
+                  ? 'bg-green-700'
+                  : 'bg-orange-500',
+              ]"></div>
 
               <div class="relative z-10 pr-2">
                 <div class="mb-2">
-                  <img
-                    :src="logo"
-                    alt="Logo Icon"
-                    class="inline-block w-8 h-8 object-contain opacity-75"
-                  />
+                  <img :src="logo" alt="Logo Icon" class="inline-block w-8 h-8 object-contain opacity-75" />
                 </div>
 
-                <span
-                  :class="[
-                    'font-bold text-lg leading-snug',
-                    tab.color === 'green' || tab.color === 'default'
-                      ? 'text-green-800'
-                      : 'text-orange-800',
-                  ]"
-                  v-html="tab.titleHtml"
-                >
+                <span :class="[
+                  'font-bold text-lg leading-snug',
+                  tab.color === 'green' || tab.color === 'default'
+                    ? 'text-green-800'
+                    : 'text-orange-800',
+                ]" v-html="tab.titleHtml">
                 </span>
               </div>
             </button>
@@ -503,15 +452,11 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
 
           <div v-for="tab in tabs" :key="tab.id">
             <div v-if="activeTab === tab.id">
-              <div
-                class="text-gray-700 text-xl leading-relaxed space-y-5 px-6 py-4 border-l-4"
-                :class="[
-                  tab.color === 'green' || tab.color === 'default'
-                    ? 'border-green-700'
-                    : 'border-orange-500',
-                ]"
-                v-html="tab.contentHtml"
-              ></div>
+              <div class="text-gray-700 text-xl leading-relaxed space-y-5 px-6 py-4 border-l-4" :class="[
+                tab.color === 'green' || tab.color === 'default'
+                  ? 'border-green-700'
+                  : 'border-orange-500',
+              ]" v-html="tab.contentHtml"></div>
             </div>
           </div>
         </div>
@@ -765,10 +710,12 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
   background-color: #e87a1814;
   border-radius: 0.75rem;
 }
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
