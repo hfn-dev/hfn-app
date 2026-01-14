@@ -220,7 +220,7 @@ const categories = ref([
     plans: [
       {
         title: 'Individual ',
-        price: '₦50,000 per month',
+        price: '₦50,000 per year',
         audience: 'Ideal for private companies',
         benefits: [
           'Ideal',
@@ -242,7 +242,7 @@ const categories = ref([
     plans: [
       {
         title: 'Corporate ',
-        price: '₦200,000 per month',
+        price: '₦200,000 per year',
         audience: 'Ideal for private companies',
         benefits: [
           'Ideal',
@@ -264,7 +264,7 @@ const categories = ref([
     plans: [
       {
         title: 'Global Partner ',
-        price: '₦500,000 per month',
+        price: '₦750,000 per year',
         audience: 'Ideal for international firms',
         benefits: [
           'Access to cross-border collaborations',
@@ -283,7 +283,7 @@ const categories = ref([
     plans: [
       {
         title: 'Association Member',
-        price: '₦150,000 per month',
+        price: '₦150,000 per year',
         audience: 'Ideal for professional bodies',
         benefits: [
           'Shared research access',
@@ -302,7 +302,7 @@ const categories = ref([
     plans: [
       {
         title: 'Diaspora Partner',
-        price: '₦100,000 per month',
+        price: '$50 per year',
         audience: 'Ideal for Nigerians in diaspora',
         benefits: [
           'Participation in home-country initiatives',
@@ -455,15 +455,12 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
               @click="activeTab = tab.id"
               :class="[
                 'relative w-[200px] h-[200px] p-3 shadow-sm flex flex-col justify-center text-left transition-all duration-300 transform',
-                // Base rounded corners matching the content blocks
                 'rounded-tr-[30px] rounded-bl-[30px]',
 
-                // Color backgrounds
                 tab.color === 'green' || tab.color === 'default'
                   ? 'bg-green-50'
-                  : 'bg-[#E87A1814]', // Light orange background for orange boxes
+                  : 'bg-[#E87A1814]',
 
-                // Active state: Add border and shadow to highlight
                 activeTab === tab.id
                   ? 'ring-2 ring-offset-2 scale-105 shadow-md ' +
                     (tab.color === 'green' || tab.color === 'default'

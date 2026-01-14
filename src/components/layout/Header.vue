@@ -40,6 +40,8 @@ const navLinks = [
       { title: "News & Advocacy", path: "/news" },
       { title: "Resources", path: "/resources" },
       { title: "Events", path: "/events" },
+      { title: "Gallery", path: "/gallery" },
+
     ],
 
   },
@@ -185,7 +187,6 @@ const toggleDropdown = (title) => {
       </div>
       <div class="flex flex-col p-4 space-y-2">
         <div v-for="link in navLinks" :key="link.title">
-          <!-- Normal links -->
           <div v-if="!link.hasDropdown"
             class="flex items-center justify-between p-3 border-b border-gray-100 transition-colors cursor-pointer"
             :class="[
@@ -198,7 +199,6 @@ const toggleDropdown = (title) => {
             </RouterLink>
           </div>
 
-          <!-- Dropdown links -->
           <div v-else>
             <div class="flex items-center justify-between p-3 border-b border-gray-100 transition-colors cursor-pointer"
               :class="[
@@ -216,7 +216,6 @@ const toggleDropdown = (title) => {
               </svg>
             </div>
 
-            <!-- Dropdown items -->
             <div v-if="openDropdown === link.title"
               class="pl-6 pr-4 pb-2 bg-gray-50 border-b border-gray-100 space-y-2">
               <RouterLink v-for="item in link.dropdownItems" :key="item.title" :to="item.path"

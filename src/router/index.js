@@ -45,6 +45,7 @@ import AdminMembers from '@/views/Admin/AdminMembers.vue';
 import AdminMessages from '@/views/Admin/AdminMessages.vue';
 import AdminPayments from '@/views/Admin/AdminPayments.vue';
 import Events from '@/views/Events.vue';
+import Gallery from '@/views/Gallery.vue';
 import ArticleDetail from '@/views/User/ArticleDetail.vue';
 import UserSubscription from '@/views/User/UserSubscription.vue';
 import { createRouter, createWebHistory } from 'vue-router';
@@ -74,6 +75,8 @@ const routes = [
   { path: '/register', name: 'Register', component: Register },
   { path: '/signin', name: 'Signin', component: SignIn },
   { path: '/events', name: 'Events', component: Events },
+  { path: '/gallery', name: 'Gallery', component: Gallery },
+
   { path: '/get-involved', name: 'GetInvolved', component: GetInvolved },
   { path: '/programs', name: 'Programs', component: Programs },
   { path: '/news', name: 'NewsAdvocacy', component: NewsAdvocacy },
@@ -274,6 +277,36 @@ const routes = [
     path: '/admin/access',
     name: 'AdminManager',
     component: AdminManager,
+  },
+
+  //for learners
+
+  {
+    path: '/learner/mylearning',
+    name: 'MyLearning',
+    component: MyLearning,
+  },
+
+  {
+    path: '/learner/courses',
+    name: 'UserCourses',
+    component: UserCourses,
+  },
+  {
+    path: '/course/:id',
+    name: 'CourseDetails',
+    component: CourseDetails,
+  },
+
+  {
+    path: '/learner/account',
+    name: 'UserAccount',
+    component: MyAccount,
+  },
+  {
+    path: '/learner/support',
+    name: 'UserSupport',
+    component: Support,
   },
 ];
 
