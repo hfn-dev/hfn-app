@@ -250,53 +250,7 @@ function isToday(date) {
         </div>
       </div>
 
-      <!-- <div v-if="selectedEvent" class="mt-6">
-        <div
-          class="bg-white rounded-lg border border-gray-100 shadow p-6 flex flex-col md:flex-row gap-6 items-start"
-        >
-          <img
-            :src="selectedEvent.image"
-            alt="event image"
-            class="w-full md:w-56 h-40 object-cover rounded-lg flex-shrink-0"
-          />
-
-          <div class="flex-1">
-            <div class="flex items-center justify-between gap-4 mb-2">
-              <h3 class="text-lg font-semibold text-gray-900">
-                {{ selectedEvent.title }}
-              </h3>
-              <div class="text-sm text-gray-500">
-                {{ selectedEvent.date }} • {{ selectedEvent.time }}
-              </div>
-            </div>
-
-            <div class="text-sm text-gray-700 mb-4">
-              <p
-                class="mb-2 font-medium text-green-700 text-xs inline-block px-3 py-1 rounded-full bg-green-50 border border-green-100"
-              >
-                {{ selectedEvent.tag }}
-              </p>
-              <p class="mb-2">{{ selectedEvent.excerpt }}</p>
-              <p class="text-sm text-gray-600">{{ selectedEvent.details }}</p>
-            </div>
-
-            <div class="flex items-center gap-3 mt-4">
-              <button
-                class="px-4 py-2 bg-green-700 text-white rounded-md shadow hover:bg-green-800"
-              >
-                RSVP
-              </button>
-              <a href="#" class="text-sm text-green-700 underline"
-                >View full event page</a
-              >
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div v-else class="mt-6 text-center text-gray-500">
-        Click an event on the calendar to see details here.
-      </div> -->
+      
     </div>
     <teleport to="body">
       <div v-if="selectedEvent" class="fixed inset-0 z-50 flex items-center justify-center">

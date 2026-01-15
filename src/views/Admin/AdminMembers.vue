@@ -182,7 +182,6 @@ onMounted(() => {
   <div class="flex min-h-screen font-sans">
     <AdminSidebar />
     <main class="flex-1 p-8 overflow-auto bg-white">
-      <!-- Breadcrumbs -->
       <div class="text-sm text-gray-500 mb-6">
         <span class="text-[#006633]">Home</span> > Members
       </div>
@@ -350,7 +349,6 @@ onMounted(() => {
           </tbody>
         </table>
 
-        <!-- Edit Subscription Modal -->
         <div
           v-if="isEditOpen"
           class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
@@ -358,7 +356,6 @@ onMounted(() => {
           <div class="bg-white rounded-xl w-full max-w-md p-6 shadow-xl">
             <h3 class="text-xl font-semibold mb-4">Edit Subscription</h3>
 
-            <!-- Membership Type -->
             <div class="mb-4">
               <label class="block text-sm font-medium mb-1"
                 >Membership Type</label
@@ -377,7 +374,6 @@ onMounted(() => {
               </select>
             </div>
 
-            <!-- Status -->
             <div class="mb-6">
               <label class="block text-sm font-medium mb-1">Status</label>
               <select
@@ -389,7 +385,6 @@ onMounted(() => {
               </select>
             </div>
 
-            <!-- Actions -->
             <div class="flex justify-end space-x-3">
               <button
                 @click="isEditOpen = false"

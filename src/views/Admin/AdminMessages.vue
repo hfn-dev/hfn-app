@@ -126,7 +126,6 @@ onMounted(() => {
     <AdminSidebar />
 
     <main class="flex-1 p-8 overflow-auto md:p-8 lg:p-12">
-      <!-- Breadcrumbs -->
       <div class="text-sm text-gray-500 mb-6">
         <span class="text-[#006633]">Home</span> > Messages
       </div>

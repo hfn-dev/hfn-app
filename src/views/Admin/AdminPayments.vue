@@ -576,13 +576,11 @@ watch(currentTab, () => {
         </div>
       </div>
       <div v-if="isMessageModalOpen" class="fixed inset-0 z-50 overflow-y-auto">
-        <!-- Backdrop -->
         <div
           class="fixed inset-0 bg-opacity-50 transition-opacity"
           @click="closeMessageModal"
         ></div>
 
-        <!-- Modal Content -->
         <div class="flex items-center justify-center min-h-screen p-4">
           <div
             class="bg-white rounded-xl shadow-2xl w-full max-w-lg transition-all transform scale-100 p-6 border-t-4 border-[#00cc66]"
