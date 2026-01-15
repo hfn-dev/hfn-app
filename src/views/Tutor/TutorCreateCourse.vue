@@ -11,7 +11,7 @@ import {
   UploadCloud,
 } from 'lucide-vue-next';
 import { computed, onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import TutorSidebar from './TutorSidebar.vue';
 
@@ -22,7 +22,7 @@ const courseSlug = route.params.slug;
 
 const toast = useToast();
 const router = useRouter();
-
+const route = useRoute();
 const currentStep = ref(1);
 const isLoading = ref(false);
 
