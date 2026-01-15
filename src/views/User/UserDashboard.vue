@@ -139,7 +139,7 @@ onMounted(() => {
 
     <div class="flex-1 p-6 md:p-10 overflow-y-auto">
       <h2 class="text-xl md:text-2xl font-semibold text-[#f54a00]">
-        Welcome {{ user.name }},
+        Welcome {{ user.first_name }},
       </h2>
       <p class="text-[#555] mt-1">Stay up to date with the latest on HFN</p>
 
