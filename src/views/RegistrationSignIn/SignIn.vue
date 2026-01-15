@@ -180,10 +180,10 @@ const handleRoleBasedRedirect = (role) => {
 
   const targetPath = roleMap[role.toLowerCase()] || '/user/dashboard';
 
-  if (role.toLowerCase() === 'admin') {
+  if (role.toLowerCase() === 'member') {
     const hasSelectedInterests = localStorage.getItem('hasSelectedInterests');
     if (!hasSelectedInterests) {
-      router.push('/admin/interests');
+      router.push('/user/interests');
       return;
     }
   }
