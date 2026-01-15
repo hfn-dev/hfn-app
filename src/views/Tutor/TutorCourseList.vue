@@ -1,7 +1,7 @@
 <script setup>
 import learningModule from '@/api/learningModule.js';
 import TutorSidebar from '@/views/Tutor/TutorSidebar.vue';
-import { computed } from 'vue';
+import { onMounted, ref, watch, computed } from 'vue';
 
 import {
   ChevronLeft,
@@ -13,7 +13,6 @@ import {
   Search,
   Trash2,
 } from 'lucide-vue-next';
-import { onMounted, ref, watch } from 'vue';
 
 const courseTabs = ref(['Published', 'Drafts', 'Archived', 'Approval']);
 const currentTab = ref('Published');
