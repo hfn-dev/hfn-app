@@ -125,7 +125,7 @@ const goToPage = (page) => {
   }
 };
 
-const filteredMembers = comped(() => {
+const filteredMembers = computed(() => {
   if (!searchTerm.value) return members.value;
 
   const term = searchTerm.value.toLowerCase();
