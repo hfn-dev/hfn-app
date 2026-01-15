@@ -1,6 +1,6 @@
 <script setup>
 import UserSidebar from '@/components/layout/UserSidebar.vue';
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
