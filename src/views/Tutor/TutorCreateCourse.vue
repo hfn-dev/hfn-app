@@ -11,9 +11,12 @@ import {
   UploadCloud,
 } from 'lucide-vue-next';
 import { computed, onMounted, ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import TutorSidebar from './TutorSidebar.vue';
+
+const router = useRouter();
+const route = useRoute();
 
 const isEditMode = computed(() => !!route.params.slug);
 const courseSlug = route.params.slug;
@@ -21,167 +24,44 @@ const courseSlug = route.params.slug;
 // todo uncomment the case 2 to 3 validation logic after and separately models to different components. also check if admin or tutor to create course.
 
 const toast = useToast();
-const router = useRouter();
-const route = useRoute();
+
 const currentStep = ref(1);
 const isLoading = ref(false);
 
 const basicInfoForm = ref({
-  title: 'Naturopathy 101: Discover Natural Healing',
-  shortDescription:
-    'Discover the fundamentals of natural healing and holistic wellness techniques.',
-  category: '1', // Changed to ID instead of name
-  level: 'beginner',
-  fullOverview:
-    'Euismod magna id purus eget nunc ligula suspendisse dui netus. Condimentum blandit rutrum at mauris enim pulvinar duis etiam pulvinar duis etiam. Euismod magna id purus eget nunc. Conduis etiam pulvinar duis etiam. Euismod magna id purus eget nunc. Condimentum blandit rutrum at mauris enim pulvinar duis etiam.',
-  durationHours: '02',
-  durationMinutes: '30',
-  durationSeconds: '00',
-  learnOutcomes: [
-    { id: 1, text: 'Understand core naturopathic philosophies', charCount: 38 },
-    { id: 2, text: 'Identify essential vitamins and minerals', charCount: 38 },
-    { id: 3, text: 'Prepare simple herbal infusions', charCount: 30 },
-    { id: 4, text: 'Develop a personal wellness plan', charCount: 32 },
-  ],
-  thumbnail: null, // Added for file upload
-  tags_list: [], // Added for tags
-  prerequisites: '', // Added for prerequisites
-  certificate_available: true,
+  title: '',
+  shortDescription: '',
+  category: '',
+  level: '',
+  tags_list: [],
+  prerequisites: '',
+  thumbnail: null,
+  fullOverview: '',
+  durationHours: '',
+  durationMinutes: '',
+  durationSeconds: '',
+  certificate_available: false,
   max_students: null,
+  learnOutcomes: [{ id: Date.now(), text: '', charCount: 0 }],
 });
 
 const curriculumForm = ref({
-  modules: [
-    {
-      id: 1,
-      title: 'Module One: Meanings and Definitions',
-      isOpen: true,
-      description: '', // Added module description
-      order: 1,
-      is_published: true,
-      lessons: [
-        {
-          id: 101,
-          title: 'Lesson 1: What is Naturopathy?',
-          duration: '8:09',
-          content_type: 'video',
-          video_url: '',
-          video_duration: 489, // 8:09 in seconds
-          order: 1,
-          is_preview: true,
-          is_published: true,
-          content: '', // For text content
-        },
-        {
-          id: 102,
-          title: 'Lesson 2: Lorem',
-          duration: '20:35',
-          content_type: 'text',
-          video_url: '',
-          video_duration: 1235, // 20:35 in seconds
-          order: 2,
-          is_preview: false,
-          is_published: true,
-          content: 'Text content here...',
-        },
-      ],
-      resources: 'Additional Resources',
-    },
-    {
-      id: 2,
-      title: 'Module Two: Lorem Ipsum',
-      isOpen: false,
-      description: '',
-      order: 2,
-      is_published: true,
-      lessons: [
-        {
-          id: 201,
-          title: 'Lesson 1: Lorem Ipsum',
-          duration: '12:00',
-          content_type: 'video',
-          video_url: '',
-          video_duration: 720,
-          order: 1,
-          is_preview: false,
-          is_published: true,
-          content: '',
-        },
-        {
-          id: 202,
-          title: 'Lesson 2: The Role of Hydration',
-          duration: '7:45',
-          content_type: 'text',
-          video_url: '',
-          video_duration: 465,
-          order: 2,
-          is_preview: false,
-          is_published: true,
-          content: 'Hydration content...',
-        },
-      ],
-      resources: 'Supplementary Reading Materials',
-    },
-    {
-      id: 3,
-      title: 'Module Three: Lorem Ipsum',
-      isOpen: false,
-      description: '',
-      order: 3,
-      is_published: true,
-      lessons: [],
-    },
-    {
-      id: 4,
-      title: 'Module Four: Lorem Ipsum',
-      isOpen: false,
-      description: '',
-      order: 4,
-      is_published: true,
-      lessons: [],
-    },
-    {
-      id: 5,
-      title: 'Module Five: Lorem Ipsum',
-      isOpen: false,
-      description: '',
-      order: 5,
-      is_published: true,
-      lessons: [],
-    },
-  ],
-  newLessonTitle: 'Sample Lesson Title',
-  newModuleNumber: '',
-  materialsIncluded: [
-    { id: 1, text: 'Downloadable PDF guides for each module', charCount: 41 },
-    { id: 2, text: 'Quizzes after every lesson', charCount: 26 },
-    { id: 3, text: 'Access to a private student community', charCount: 40 },
-    { id: 4, text: 'Certificate of Completion', charCount: 30 },
-  ],
-  instructorName: 'Dr. Aisha Musa',
-  briefBiography:
-    'Condimentum blandit rutrum at mauris enim pulvinar duis etiam pulvinar duis etiam. Condimentum blandit rutrum at mauris enim pulvinar duis etiam. Condimentum blandit rutrum at mauris enim pulvinar duis etiam.',
+  modules: [],
+  newLessonTitle: '',
+  materialsIncluded: [{ id: Date.now(), text: '', charCount: 0 }],
+  instructorName: '',
+  briefBiography: '',
 });
+
 
 const pricingAccessForm = ref({
-  courseAccessType: 'paid',
+  courseAccessType: 'free',
   courseVisibility: 'public',
-  price: 20000.0,
+  price: 0,
   currency: 'NGN',
-  discountAmount: '20%',
-  discountAvailability: 'members_only',
-  status: 'draft', // Added course status
-  is_free: false, // Added free flag
+  discountAmount: 'none',
+  discountAvailability: 'all',
 });
-
-// Add categories array (you should fetch this from API)
-// const categories = ref([
-//   { id: 1, name: "Nutrition" },
-//   { id: 2, name: "Herbalism" },
-//   { id: 3, name: "Fitness" },
-//   { id: 4, name: "Mindfulness" },
-//   { id: 5, name: "Detoxification" }
-// ]);
 
 const categories = ref([]);
 
@@ -203,7 +83,7 @@ const fetchCategories = async () => {
   try {
     const response = await learningModule.getCategories();
     if (Array.isArray(response.data)) {
-      categories.value = response.data.map((item) => item.name);
+      categories.value = response.data; 
     } else {
       categories.value = [];
     }
@@ -260,7 +140,6 @@ const totalDurationHours = computed(() => {
   return (totalSeconds / 3600).toFixed(2); // Convert seconds to hours
 });
 
-// --- Stepper Logic ---
 const steps = [
   { id: 1, title: 'Basic Information' },
   { id: 2, title: 'Curriculum Builder' },
@@ -268,7 +147,6 @@ const steps = [
   { id: 4, title: 'Preview & Submit' },
 ];
 
-// --- Step 1: Basic Info Logic ---
 const addOutcome = () => {
   const newId =
     basicInfoForm.value.learnOutcomes.length > 0
@@ -318,7 +196,6 @@ const handleThumbnailUpload = (event) => {
   }
 };
 
-// --- Step 2: Curriculum Builder Logic ---
 const toggleModule = (module) => {
   module.isOpen = !module.isOpen;
 };
@@ -370,7 +247,6 @@ const updateMaterialCharCount = (material) => {
   material.charCount = material.text.length;
 };
 
-// --- Form Navigation ---
 const saveAndContinue = () => {
   if (currentStep.value < 4) {
     console.log(
@@ -486,7 +362,6 @@ const goBack = () => {
 const isLessonDialogOpen = ref(false);
 const isQuizDialogOpen = ref(false);
 
-// --- Form State for the Lesson Dialog ---
 const lessonForm = ref({
   title: 'Sample Text',
   durationHours: '00',
@@ -499,7 +374,6 @@ const lessonForm = ref({
   currentModuleId: null,
 });
 
-// --- Handlers for Lesson Dialog ---
 const openAddLessonDialog = (moduleId) => {
   lessonForm.value.currentModuleId = moduleId;
   isLessonDialogOpen.value = true;
@@ -583,7 +457,6 @@ const handleLessonAdded = () => {
   closeAddLessonDialog();
 };
 
-// --- Handlers for Quiz Dialog ---
 const openAddQuizDialog = () => {
   isQuizDialogOpen.value = true;
 };
