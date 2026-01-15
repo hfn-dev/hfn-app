@@ -26,7 +26,7 @@ const navLinks = [
   
   {
     title: 'My Learning',
-    path: '/learner/mylearning',
+    path: '/learner/dashboard',
     icon: 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20zm-1-8V7h2v5h4l-5 5-5-5h4z',
   },
 
