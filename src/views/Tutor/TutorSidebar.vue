@@ -4,8 +4,7 @@ import { ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter()
-  const route = useRoute();
-
+const route = useRoute();
 const { logout } = useAuth()
 
 const DARK_GREEN = '#004d33';
