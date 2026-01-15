@@ -1,7 +1,7 @@
 <script setup>
 import analyticsService from '@/api/dashboard.js';
 import TutorSidebar from '@/views/Tutor/TutorSidebar.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 import {
