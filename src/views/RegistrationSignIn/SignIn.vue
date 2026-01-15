@@ -57,54 +57,75 @@ const handleSignIn = async () => {
         }, 1500);
       }
       else {
-        if (response.tokens) {
-          localStorage.setItem('token', response.tokens.access);
-          localStorage.setItem('refresh', response.tokens.refresh);
+        // if (response.tokens) {
+        //   localStorage.setItem('token', response.tokens.access);
+        //   localStorage.setItem('refresh', response.tokens.refresh);
 
-          if (response.role) {
-            localStorage.setItem('role', response.role);
-          }
+        //   if (response.role) {
+        //     localStorage.setItem('role', response.role);
+        //   }
 
-          // login({
-          //   token: response.tokens.access,
-          //   refreshToken: response.tokens.refresh,
-          //   role: response.role || 'member',
-          //   user: {
-          //     role: response.role || 'member',
-          //   },
-          // });
-          login({
-  role: response.role || 'member',
-  user: normalizedUser,
-});
+        //   login({
+        //     token: response.tokens.access,
+        //     refreshToken: response.tokens.refresh,
+        //     role: response.role || 'member',
+        //     user: {
+        //       role: response.role || 'member',
+        //     },
+        //   });
+          
+        //   try {
+        //     const userProfile = await userRegister.getUser();
+        //     console.log('Fetched user profile after login:', userProfile);
+        //     const user =
+        //       userProfile?.data?.user ||
+        //       userProfile?.data ||
+        //       userProfile;
 
+        //     if (user) {
+        //       const normalizedUser = {
+        //         ...user,
+        //         role: response.role || 'member',
+        //       };
 
-          // Fetch current user profile and save locally as 'User'
-          try {
-            const userProfile = await userRegister.getUser();
-            console.log('Fetched user profile after login:', userProfile);
-            const user =
-              userProfile?.data?.user ||
-              userProfile?.data ||
-              userProfile;
-
-            if (user) {
-              const normalizedUser = {
-                ...user,
-                role: response.role || 'member',
-              };
-
-              localStorage.setItem('user', JSON.stringify(normalizedUser));
+        //       localStorage.setItem('user', JSON.stringify(normalizedUser));
               
-            }
-          } catch (err) {
-            console.error('Failed to fetch user profile after login:', err);
-            toast.warning('Logged in, but failed to fetch user profile.');
-          }
-        }
+        //     }
+        //   } catch (err) {
+        //     console.error('Failed to fetch user profile after login:', err);
+        //     toast.warning('Logged in, but failed to fetch user profile.');
+        //   }
+        // }
+        if (response.tokens) {
+  localStorage.setItem('token', response.tokens.access);
+  localStorage.setItem('refresh', response.tokens.refresh);
 
-        const userRole = response.role || localStorage.getItem('role') || 'member';
-        handleRoleBasedRedirect(userRole);
+  const role = (response.role || 'member').toLowerCase();
+
+  try {
+    const userProfile = await userRegister.getUser();
+    const rawUser =
+      userProfile?.data?.user ||
+      userProfile?.data ||
+      userProfile;
+
+    const normalizedUser = {
+      ...rawUser,
+      role,
+    };
+
+    login({
+      role,
+      user: normalizedUser,
+    });
+
+    handleRoleBasedRedirect(role);
+
+  } catch (err) {
+    console.error('Failed to fetch user profile:', err);
+    toast.error('Login failed: unable to load user profile.');
+  }
+}
       }
     }
     else if (response?.status === "warning") {
