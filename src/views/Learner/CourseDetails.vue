@@ -3,7 +3,7 @@ import learningModule from '@/api/learningModule';
 import courses from '@/assets/courses.jpg';
 import student from '@/assets/student.jpg';
 
-import UserSidebar from '@/components/layout/UserSidebar.vue';
+import LearnerSidebar from './LearnerSidebar.vue';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -48,7 +48,7 @@ onMounted(fetchCourse);
 <template>
   <div class="min-h-screen bg-gray-50 flex flex-col">
     <div class="flex flex-grow">
-      <UserSidebar />
+      <LearnerSidebar />
 
       <main class="flex-grow p-4 md:p-8 lg:p-12">
         <div class="mb-8">
