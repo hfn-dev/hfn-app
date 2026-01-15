@@ -52,20 +52,49 @@ const fetchUsers = async () => {
   }
 };
 
+const ROLE_MAP = {
+  admin: 'administrators',
+  administrator: 'administrators',
+  editor: 'editors',
+  tutor: 'tutors',
+};
+
 const fetchInvitations = async () => {
   try {
     const data = await accessAPI.listRoleInvites();
-    const grouped = data.reduce((acc, invite) => {
-      const roleKey = invite.role.toLowerCase();
-      if (!acc[roleKey]) acc[roleKey] = [];
-      acc[roleKey].push(invite);
-      return acc;
-    }, {});
+
+    const grouped = {
+      administrators: [],
+      editors: [],
+      tutors: [],
+    };
+
+    data.forEach((invite) => {
+      const key = ROLE_MAP[invite.role.toLowerCase()];
+      if (key) grouped[key].push(invite);
+    });
+
     INVITATIONS_DATA.value = grouped;
   } catch (error) {
     console.error('Failed to fetch invitations', error);
   }
 };
+  
+
+// const fetchInvitations = async () => {
+//   try {
+//     const data = await accessAPI.listRoleInvites();
+//     const grouped = data.reduce((acc, invite) => {
+//       const roleKey = invite.role.toLowerCase();
+//       if (!acc[roleKey]) acc[roleKey] = [];
+//       acc[roleKey].push(invite);
+//       return acc;
+//     }, {});
+//     INVITATIONS_DATA.value = grouped;
+//   } catch (error) {
+//     console.error('Failed to fetch invitations', error);
+//   }
+// };
 
 onMounted(() => {
   fetchUsers();
@@ -553,12 +582,14 @@ const resendInvitation = async (inviteId) => {
                   </button>
                 </div>
                 <div
-                  v-if="invitationsForRole.length === 0"
+                  v-if="Object.keys(invitationsByRole).length === 0"
                   class="text-center text-gray-500 py-4"
                 >
                   No pending invitations for this role. Click "Add new" to
                   invite.
                 </div>
+
+                
               </div>
             </div>
           </div>
