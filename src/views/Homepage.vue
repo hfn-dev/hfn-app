@@ -265,7 +265,7 @@ onMounted(() => {
           <img :src="pharm" alt="Pharm Logo" class="max-h-full max-w-full object-contain" />
         </div>
 
-        <div class="flex items-center justify-center h-24 w-48">
+        <div class="flex items-center justify-center h-31 w-48">
           <img :src="society" alt="Society for Family Health Logo" class="max-h-full max-w-full object-contain" />
         </div>
 
