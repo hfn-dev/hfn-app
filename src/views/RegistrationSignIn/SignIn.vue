@@ -65,14 +65,19 @@ const handleSignIn = async () => {
             localStorage.setItem('role', response.role);
           }
 
+          // login({
+          //   token: response.tokens.access,
+          //   refreshToken: response.tokens.refresh,
+          //   role: response.role || 'member',
+          //   user: {
+          //     role: response.role || 'member',
+          //   },
+          // });
           login({
-            token: response.tokens.access,
-            refreshToken: response.tokens.refresh,
-            role: response.role || 'member',
-            user: {
-              role: response.role || 'member',
-            },
-          });
+  role: response.role || 'member',
+  user: normalizedUser,
+});
+
 
           // Fetch current user profile and save locally as 'User'
           try {
@@ -147,6 +152,8 @@ const handleRoleBasedRedirect = (role) => {
     'superadmin': '/superadmin/dashboard',
     'admin': '/admin/dashboard',
     'editor': '/editor/dashboard',
+    'tutor': '/tutor/dashboard',
+    'learner': '/learner/dashboard',
     'member': '/user/dashboard'
   };
 
