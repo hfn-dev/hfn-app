@@ -36,14 +36,14 @@ const handleLogout = () => {
 
 const dashboardLink = computed(() => {
   if (!isAuthenticated.value) return "/signin";
-  const userRole = role.value || "user";
+  const userRole = role.value || "member";
   const roleMap = {
     superadmin: "/superadmin/dashboard",
     admin: "/admin/dashboard",
     editor: "/editor/dashboard",
-    tutor: '/tutor/dashboard',
-    learner: '/learner/dashboard',
-    user: "/user/dashboard",
+    tutor: "/tutor/dashboard",
+    learner: "/learner/dashboard",
+    member: "/user/dashboard",
   };
   return roleMap[userRole.toLowerCase()] || "/dashboard";
 });
