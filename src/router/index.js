@@ -16,6 +16,7 @@ import Interests from '@/views/RegistrationSignIn/Interests.vue';
 import Register from '@/views/RegistrationSignIn/Register.vue';
 import SignIn from '@/views/RegistrationSignIn/SignIn.vue';
 import SigninVerification from '@/views/RegistrationSignIn/SigninVerification.vue';
+
 import SuperAdminAccount from '@/views/SuperAdmin/SuperAdminAccount.vue';
 import SuperAdminCourseList from '@/views/SuperAdmin/SuperAdminCourseList.vue';
 import SuperAdminCreateCourse from '@/views/SuperAdmin/SuperAdminCreateCourse.vue';
@@ -24,19 +25,30 @@ import SuperAdminManager from '@/views/SuperAdmin/SuperAdminManager.vue';
 import SuperAdminMembers from '@/views/SuperAdmin/SuperAdminMembers.vue';
 import SuperAdminMessages from '@/views/SuperAdmin/SuperAdminMessages.vue';
 import SuperAdminPayments from '@/views/SuperAdmin/SuperAdminPayments.vue';
+
 import TutorCourseList from '@/views/Tutor/TutorCourseList.vue';
 import TutorCreateCourse from '@/views/Tutor/TutorCreateCourse.vue';
 import TutorDashboard from '@/views/Tutor/TutorDashboard.vue';
 import TutorReviews from '@/views/Tutor/TutorReviews.vue';
+
 import CourseDetails from '@/views/User/CourseDetails.vue';
 import MessageNotification from '@/views/User/MessageNotification.vue';
 import MyAccount from '@/views/User/MyAccount.vue';
 import MyLearning from '@/views/User/MyLearning.vue';
 import Support from '@/views/User/Support.vue';
-import Publications from '@/views/Publications.vue';
-
 import UserCourses from '@/views/User/UserCourses.vue';
 import UserDashboard from '@/views/User/UserDashboard.vue';
+import ArticleDetail from '@/views/User/ArticleDetail.vue';
+import UserSubscription from '@/views/User/UserSubscription.vue';
+
+import Publications from '@/views/Publications.vue';
+
+import LearnerMyAccount from '@/views/Learner/MyAccount.vue';
+import MyLearningLearner from '@/views/Learner/MyLearning.vue';
+import LearnerSupport from '@/views/Learner/Support.vue';
+import LearnerCourseDetails from '@/views/Learner/CourseDetails.vue';
+import LearnerCourses from '@/views/Learner/UserCourses.vue';
+
 
 import AdminAccount from '@/views/Admin/AdminAccount.vue';
 import AdminCourseList from '@/views/Admin/AdminCourseList.vue';
@@ -48,23 +60,11 @@ import AdminMessages from '@/views/Admin/AdminMessages.vue';
 import AdminPayments from '@/views/Admin/AdminPayments.vue';
 import Events from '@/views/Events.vue';
 import Gallery from '@/views/Gallery.vue';
-import ArticleDetail from '@/views/User/ArticleDetail.vue';
-import UserSubscription from '@/views/User/UserSubscription.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import About from '../views/About.vue';
 import Homepage from '../views/Homepage.vue';
 
 const routes = [
-  // {
-  //   path: '/dashboard',
-  //   component: DashboardLayout,
-  //   children: [
-  //     { path: 'editor', component: EditorDashboard },
-  //     { path: 'user', component: UserDashboard },
-  //     { path: 'superadmin', component: SuperAdminDashboard },
-  //     { path: 'tutor', component: TutorDashboard },
-  //   ],
-  // },
   {
     path: '/',
     name: 'Home',
@@ -287,29 +287,29 @@ const routes = [
 
   {
     path: '/learner/dashboard',
-    name: 'MyLearning',
+    name: 'MyLearningLearner',
     component: MyLearning,
   },
 
   {
     path: '/learner/courses',
-    name: 'UserCourses',
+    name: 'LearnerCourses',
     component: UserCourses,
   },
   {
     path: '/course/:id',
-    name: 'CourseDetails',
+    name: 'LearnerCourseDetails',
     component: CourseDetails,
   },
 
   {
     path: '/learner/account',
-    name: 'UserAccount',
+    name: 'LearnerMyAccount',
     component: MyAccount,
   },
   {
     path: '/learner/support',
-    name: 'UserSupport',
+    name: 'LearnerSupport',
     component: Support,
   },
 ];
