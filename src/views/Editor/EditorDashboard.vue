@@ -1,7 +1,25 @@
 <script setup>
 import assets from "@/assets/assets.png";
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
+import analyticsApi from "../../api/dashboard";
+
+const isLoading = ref(true);
+
+const statCards = ref([]);
+
+const summaryData = ref([]);
+
+const engagementData = reactive({ labels: [], datasets: [] });
+const completionData = reactive({ labels: [], datasets: [] });
+const growthData = reactive({ labels: [], datasets: [] });
+const revenueData = reactive({ labels: [], datasets: [] });
+const usersByRoleData = reactive({
+  labels: [],
+  datasets: []
+});
+
+const mostViewedCourses = ref([]);
 
 import {
   ArcElement,
@@ -19,6 +37,119 @@ import {
 import { Bar, Line, Pie } from "vue-chartjs";
 import EditorSidebar from "./EditorSidebar.vue";
 
+
+const fetchDashboardAnalytics = async () => {
+  try {
+    isLoading.value = true;
+
+    const dashboard = await analyticsApi.fetchDashboard();
+
+    statCards.value = [
+      {
+        title: "Total Visits",
+        value: dashboard.total_visits,
+        change: dashboard.total_visits_change,
+        changeColor: dashboard.total_visits_change?.includes("Increase")
+          ? "text-[#00cc66]"
+          : "text-red-500",
+      },
+      {
+        title: "Unique Visits",
+        value: dashboard.unique_visits,
+        change: dashboard.unique_visits_change,
+        changeColor: "text-[#00cc66]",
+      },
+      {
+        title: "Time Spent on website",
+        value: dashboard.time_spent,
+        change: dashboard.time_spent_change,
+        changeColor: "text-red-500",
+      },
+      {
+        title: "Bounce Rate",
+        value: dashboard.bounce_rate,
+        change: dashboard.bounce_rate_change,
+        changeColor: "text-gray-500",
+      },
+    ];
+
+    summaryData.value = dashboard.summary || [];
+
+    engagementData.labels = dashboard.engagement?.labels || [];
+    engagementData.datasets = [
+      {
+        label: "Engagement",
+        backgroundColor: "#28a745",
+        borderRadius: 8,
+        data: dashboard.engagement?.data || [],
+      },
+    ];
+
+    completionData.labels = dashboard.page_visits?.labels || [];
+    completionData.datasets = [
+      {
+        backgroundColor: ["#28a745", "#ffb300", "#ff5252"],
+        data: dashboard.page_visits?.data || [],
+      },
+    ];
+
+    growthData.labels = dashboard.visitors_growth?.labels || [];
+    growthData.datasets = [
+      {
+        label: "Visitors",
+        borderColor: "#fdc700",
+        backgroundColor: "#fdc7008a",
+        fill: true,
+        tension: 0.4,
+        data: dashboard.visitors_growth?.data || [],
+      },
+    ];
+
+    revenueData.labels = dashboard.revenue?.labels || [];
+    revenueData.datasets = [
+      {
+        label: "Content Uploaded",
+        backgroundColor: "rgba(0, 204, 102, 0.3)",
+        borderColor: "#00cc66",
+        fill: true,
+        tension: 0.4,
+        data: dashboard.revenue?.data || [],
+      },
+    ];
+
+    mostViewedCourses.value = dashboard.top_articles || [];
+
+    usersByRoleData.labels = dashboard.users_by_role?.map(
+      item => item.role
+    ) || [];
+
+    usersByRoleData.datasets = [
+      {
+        label: "Users",
+        backgroundColor: [
+          "#00cc66",
+          "#E87A18",
+          "#fdc700",
+          "#4caf50",
+          "#ff5252",
+          "#2196f3"
+        ],
+        data: dashboard.users_by_role?.map(
+          item => item.count
+        ) || [],
+      },
+    ];
+
+
+  } catch (err) {
+    console.error("Failed to load dashboard analytics", err);
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+
+
 ChartJS.register(
   Title,
   Tooltip,
@@ -35,23 +166,6 @@ ChartJS.register(
 const active = ref("Dashboard");
 const router = useRouter();
 
-const revenueData = reactive({
-  labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023"],
-  datasets: [
-    {
-      label: "Revenue",
-      backgroundColor: "rgba(0, 204, 102, 0.3)",
-      borderColor: "#00cc66",
-      pointBackgroundColor: "#00cc66",
-      pointBorderColor: "#fff",
-      pointHoverBackgroundColor: "#fff",
-      pointHoverBorderColor: "#00cc66",
-      data: [5000, 10000, 30000, 60000, 10000, 20000, 70000, 95000],
-      fill: true,
-      tension: 0.4,
-    },
-  ],
-});
 
 const revenueChartOptions = reactive({
   responsive: true,
@@ -111,144 +225,6 @@ const revenueChartOptions = reactive({
   },
 });
 
-const mostViewedCourses = reactive([
-  { name: "Pregnancy", value: "120K", progress: "100%" },
-  { name: "Pregnancy", value: "120K", progress: "100%" },
-  { name: "Pregnancy", value: "80K", progress: "66%" },
-  { name: "Pregnancy", value: "80K", progress: "66%" },
-  { name: "Pregnancy", value: "70K", progress: "58%" },
-  { name: "Pregnancy", value: "70K", progress: "58%" },
-  { name: "Pregnancy", value: "50K", progress: "42%" },
-  { name: "Pregnancy", value: "50K", progress: "42%" },
-  { name: "Pregnancy", value: "50K", progress: "42%" },
-]);
-
-const summaryData = reactive([
-  {
-    title: "Highest bounced page",
-    value: "About Us",
-    trendValue: "Up 12%",
-    trendType: "up",
-  },
-  {
-    title: "Highest clicked page",
-    value: "Latest Update",
-    trendValue: "Down 29%",
-    trendType: "down",
-  },
-  {
-    title: "Highest clicked CTA",
-    value: "Join Now",
-    trendValue: "Up 12%",
-    trendType: "up",
-  },
-  {
-    title: "Average Time spent on pages",
-    value: "20 hrs",
-    trendValue: "Up 12%",
-    trendType: "up",
-  },
-]);
-
-const courseData = reactive([
-  { name: "Pregnancy", enrollments: 340 },
-  { name: "Data Science Course", enrollments: 275 },
-  { name: "Digital Illustration", enrollments: 50 },
-  { name: "Advanced Excel", enrollments: 410 },
-]);
-
-// --- STATS DATA ---
-const statCards = [
-  {
-    title: "Total Visits",
-    value: "13,456",
-    change: "13% Increase",
-    changeColor: "text-[#00cc66]",
-  },
-  {
-    title: "Unique Visits",
-    value: "700",
-    change: "13% Increase",
-    changeColor: "text-[#00cc66]",
-  },
-  {
-    title: "Time Spent on website",
-    value: "13hrs",
-    change: "–5% Decrease",
-    changeColor: "text-red-500",
-  },
-  {
-    title: "Bounce Rate",
-    value: "4.5%",
-    stars: false,
-    change: "0% Increase",
-    changeColor: "text-gray-500",
-  },
-];
-
-const engagementData = {
-  labels: [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ],
-  datasets: [
-    {
-      label: "Engagement",
-      backgroundColor: "#28a745",
-      borderRadius: 8,
-      data: [60, 80, 40, 70, 100, 90, 80, 110, 95, 85, 70, 90],
-    },
-  ],
-};
-
-const completionData = {
-  labels: ["Completed", "In Progress", "Pending"],
-  datasets: [
-    {
-      label: "Course Completion",
-      backgroundColor: ["#28a745", "#ffb300", "#ff5252"],
-      data: [45, 35, 20],
-    },
-  ],
-};
-
-const growthData = {
-  labels: [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ],
-  datasets: [
-    {
-      label: "Students",
-      borderColor: "#fdc700",
-      backgroundColor: "#fdc7008a",
-      fill: true,
-      tension: 0.4,
-      data: [150, 200, 180, 260, 300, 400, 380, 420, 450, 480, 460, 500],
-    },
-  ],
-};
-
 const barOptions = {
   responsive: true,
   maintainAspectRatio: false,
@@ -275,6 +251,11 @@ const lineOptions = {
     y: { beginAtZero: true },
   },
 };
+
+onMounted(() => {
+  fetchDashboardAnalytics();
+});
+
 </script>
 
 <template>
@@ -289,17 +270,14 @@ const lineOptions = {
       </div>
 
       <div class="flex justify-between items-stretch mb-10 space-x-6">
-        <div
-          v-for="(stat, index) in statCards"
-          :key="stat.title"
+        <div v-for="(stat, index) in statCards" :key="stat.title"
           class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
           :class="{
             'rounded-tl-4xl rounded-br-4xl': index === 0,
             'rounded-tl-4xl rounded-br-4xl': index === statCards.length - 1,
 
             'rounded-tl-4xl rounded-br-4xl': true,
-          }"
-        >
+          }">
           <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
           <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
 
@@ -307,8 +285,7 @@ const lineOptions = {
 
           <div class="text-4xl font-bold text-gray-800 mb-1">
             <span v-if="stat.stars">
-              <span class="text-[#ff9900]">★★★★</span
-              ><span class="text-gray-300">★</span>
+              <span class="text-[#ff9900]">★★★★</span><span class="text-gray-300">★</span>
             </span>
             <span v-else>{{ stat.value }}</span>
           </div>
@@ -325,7 +302,8 @@ const lineOptions = {
             Website Visit
           </h2>
           <div class="h-[300px] w-full">
-            <Bar :data="engagementData" :options="barOptions" />
+            <Bar v-if="engagementData.datasets.length" :data="engagementData" :options="barOptions" />
+
           </div>
         </div>
 
@@ -334,7 +312,7 @@ const lineOptions = {
             Page Visits
           </h2>
           <div class="h-[300px] w-full">
-            <Pie :data="completionData" :options="pieOptions" />
+            <Pie v-if="completionData.datasets.length" :data="completionData" :options="pieOptions" />
           </div>
         </div>
 
@@ -343,21 +321,18 @@ const lineOptions = {
             Number of visitors per page
           </h2>
           <div class="h-[300px] w-full">
-            <Line :data="growthData" :options="lineOptions" />
+            <Line v-if="growthData.datasets.length" :data="growthData" :options="lineOptions" />
           </div>
         </div>
       </div>
       <div class="p-6 bg-white rounded-xl">
-        
+
         <div class="flex justify-between items-stretch mb-8 space-x-6">
-          <div
-            v-for="card in summaryData"
-            :key="card.title"
+          <div v-for="card in summaryData" :key="card.title"
             class="summary-card-alt flex-1 p-6 text-center bg-white shadow-lg relative overflow-hidden group transition-all duration-300"
             :class="{
               'rounded-tl-4xl rounded-br-4xl': true,
-            }"
-          >
+            }">
             <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
             <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
 
@@ -367,35 +342,29 @@ const lineOptions = {
               <span>{{ card.value }}</span>
             </div>
 
-            <p
-              :class="[
-                card.trendType === 'up' ? 'text-[#00cc66]' : 'text-red-500',
-                'text-sm font-medium',
-              ]"
-            >
+            <p :class="[
+              card.trendType === 'up' ? 'text-[#00cc66]' : 'text-red-500',
+              'text-sm font-medium',
+            ]">
               {{ card.trendValue }}
             </p>
           </div>
         </div>
 
-        
+
       </div>
 
-      <div
-        class="grid grid-cols-1 lg:grid-cols-3 gap-8 p-6 bg-white rounded-lg"
-      >
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 p-6 bg-white rounded-lg">
         <div class="lg:col-span-2">
           <div class="bg-white p-6 rounded-lg shadow-sm mb-0">
             <div class="flex justify-between items-start mb-4">
               <h2 class="text-2xl font-bold text-gray-800">Total Content Uploaded</h2>
-              <div
-                class="p-2 border border-gray-300 rounded-md text-sm cursor-pointer flex items-center"
-              >
+              <div class="p-2 border border-gray-300 rounded-md text-sm cursor-pointer flex items-center">
                 Yearly <span class="ml-1 text-xs">⌄</span>
               </div>
             </div>
             <div class="h-80">
-              <Line :data="revenueData" :options="revenueChartOptions" />
+              <Line v-if="revenueData.datasets.length" :data="revenueData" :options="revenueChartOptions" />
             </div>
           </div>
 
@@ -421,37 +390,26 @@ const lineOptions = {
             <div class="highlight-card-wrapper">
               <div class="highlight-card">
                 <p class="text-sm text-gray-500 mb-1">Best Seller</p>
-                <img
-                  :src="assets"
-                  alt="Instructor"
-                  class="w-10 h-10 rounded-full mb-1 border-2 border-orange-300"
-                />
+                <img :src="assets" alt="Instructor" class="w-10 h-10 rounded-full mb-1 border-2 border-orange-300" />
                 <p class="text-lg font-bold text-gray-800">Naturopathy 101</p>
                 <p class="text-sm text-gray-600">Dr. Kanu Nwarikwo</p>
               </div>
             </div>
           </div>
         </div>
+        
         <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-sm h-fit">
           <h2 class="text-xl font-semibold text-gray-800 mb-4">
             Top most read articles
           </h2>
           <div class="space-y-4">
-            <div
-              v-for="(course, index) in mostViewedCourses"
-              :key="index"
-              class="flex items-center"
-            >
+            <div v-for="(course, index) in mostViewedCourses" :key="index" class="flex items-center">
               <div
-                class="relative flex-grow h-8 bg-gradient-to-r from-orange-100 to-orange-200 rounded-lg overflow-hidden"
-              >
-                <div
-                  class="absolute inset-0 bg-gradient-to-r from-orange-300 to-orange-400 rounded-lg"
-                  :style="{ width: course.progress }"
-                ></div>
+                class="relative flex-grow h-8 bg-gradient-to-r from-orange-100 to-orange-200 rounded-lg overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-orange-300 to-orange-400 rounded-lg"
+                  :style="{ width: course.progress }"></div>
                 <p
-                  class="relative z-10 text-sm font-semibold text-gray-800 px-3 py-1 flex justify-between items-center h-full"
-                >
+                  class="relative z-10 text-sm font-semibold text-gray-800 px-3 py-1 flex justify-between items-center h-full">
                   <span>{{ course.name }}</span>
                   <span>{{ course.value }}</span>
                 </p>
@@ -539,7 +497,3 @@ const lineOptions = {
   color: #f97316;
 }
 </style>
-
-
-
-

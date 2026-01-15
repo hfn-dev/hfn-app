@@ -1,13 +1,9 @@
 <script setup>
-// import hero from "@/assets/hero.png";
-// import section1 from "@/assets/section1.png";
-// import section2 from "@/assets/section2.png";
-// import section3 from "@/assets/section3.png";
-// import section5 from "@/assets/section5.png";
-// import section6 from "@/assets/section6.png";
-import { useRouter } from "vue-router";
 
-import { computed, ref } from "vue";
+import pagesApi from "@/api/pageManagement";
+import { useRouter } from "vue-router";
+ 
+import { computed, onMounted, ref } from "vue";
 import EditorSidebar from "./EditorSidebar.vue";
 
 const currentView = ref("manager");
@@ -15,221 +11,21 @@ const activePage = ref(null);
 const activeSection = ref("hero");
 const router = useRouter();
 
-const pages = ref([
-  {
-    id: 1,
-    slug: "/",
-    title: "Home",
-    isVisible: true,
-    sections: {
-      hero: {
-        name: "Hero Section",
-        title: "Health Advocacy Partnership, Leadership",
-        subText:
-          "Healthcare Federation of Nigeria is uniting healthcare providers, insurers, and tech leaders to drive transformation. Gain cutting-edge certifications, seamlessly manage your membership, unlock exclusive resources and connect with the sectors most influential network.",
-        cta: "Join the Coalition",
-        imagePlaceholder:
-          "https://placehold.co/400x250/F0FDF4/1e4040?text=Image+Uploaded",
-        backgroundColor: "#F2E9F3",
-        previewUrl: "https://res.cloudinary.com/djoacytdk/image/upload/v1761825555/map-DalHobDl_lrlx11.png",
-      },
-      section1: {
-        name: "Section 1",
-        title: "Health Guardians",
-        logos: [
-          {
-            id: 101,
-            name: "Mzor",
-            src: "https://placehold.co/80x40/E5E7EB/4B5563?text=Mzor",
-          },
-          {
-            id: 102,
-            name: "Oando",
-            src: "https://placehold.co/80x40/E5E7EB/4B5563?text=Oando",
-          },
-          {
-            id: 103,
-            name: "Health Policy",
-            src: "https://placehold.co/80x40/E5E7EB/4B5563?text=Health+Policy",
-          },
-          {
-            id: 104,
-            name: "Academy",
-            src: "https://placehold.co/80x40/E5E7EB/4B5563?text=Academy",
-          },
-          {
-            id: 105,
-            name: "Bridge Clinic",
-            src: "https://placehold.co/80x40/E5E7EB/4B5563?text=BridgeClinic",
-          },
-          {
-            id: 106,
-            name: "PharmAccess",
-            src: "https://placehold.co/80x40/E5E7EB/4B5563?text=PharmAccess",
-          },
-        ],
-        previewUrl: "https://res.cloudinary.com/djoacytdk/image/upload/v1761825555/map-DalHobDl_lrlx11.png",
-      },
-      section2: {
-        name: "Section 2",
-        title: "Our HFN Story",
-        subText:
-          "The Healthcare Federation of Nigeria (HFN) is the umbrella body for private healthcare stakeholders in Nigeria, representing the interests of health professionals, companies, investors, associations, and institutions. HFN provides members with access to advocacy platforms, strategic partnerships, knowledge sharing, and investment opportunities aimed at building a stronger, more resilient health system.",
-        imagePlaceholder:
-          "https://placehold.co/300x200/F0F9FF/1D4ED8?text=Section+2+Image",
-        altText: "A group of people collaborating at a healthcare conference.",
-        cta: "Join the Coalition",
-        metrics: [
-          {
-            id: 201,
-            label: "Vision",
-            color: "text-green-600",
-            text: "To be the voice of private healthcare in Nigeria.",
-          },
-          {
-            id: 202,
-            label: "Projects Impact",
-            color: "text-orange-600",
-            text: "Driving key policy changes through partnerships.",
-          },
-          {
-            id: 203,
-            label: "Regulatory Control",
-            color: "text-blue-600",
-            text: "Lobbying for fair and clear industry regulations.",
-          },
-          {
-            id: 204,
-            label: "Expert Synapse",
-            color: "text-purple-600",
-            text: "Networking events and knowledge exchange programs.",
-          },
-        ],
-        previewUrl: "https://res.cloudinary.com/djoacytdk/image/upload/v1761825555/map-DalHobDl_lrlx11.png",
-      },
-      section3: {
-        name: "Section 3",
-        primaryNews: {
-          title: "HFN News",
-          subText:
-            "Our “Healthy Mothers, Healthy Nation” initiative focuses on maternal and child healthcare through accessible antenatal services, nutrition education, and support for safe deliveries in underserved areas. Be part of the movement to reduce maternal mortality in Nigeria.",
-          imagePlaceholder:
-            "https://placehold.co/300x200/FFFBEB/D97706?text=Primary+News+Image",
-          metadate: "Comments",
-          date: "2025-10-20",
-          contentType: "Programs & Initiatives",
-          cta: "Read More",
-        },
-        secondaryNews: [
-          {
-            id: 301,
-            title: "Other News Content",
-            content:
-              "Public health experts have reported a rise in seasonal flu cases.",
-          },
-          {
-            id: 302,
-            title: "Other News Content",
-            content:
-              " We advise all residents to get vaccinated, maintain proper hygiene, and avoid self-medication.",
-          },
-          {
-            id: 303,
-            title: "Other News Content",
-            content:
-              "HFN extends heartfelt appreciation to its Health Guardians.",
-          },
-        ],
-        previewUrl: "https://res.cloudinary.com/djoacytdk/image/upload/v1761825555/map-DalHobDl_lrlx11.png",
-      },
-      section4: {
-        name: "Section 4",
-        teamMember: {
-          title: "HFN Executives",
-          name: "Mrs. Njide Ndili",
-          position: "President",
-          imagePlaceholder:
-            "https://placehold.co/200x250/E0F2F7/0284C7?text=Team+Photo",
-        },
-        previewUrl: "https://res.cloudinary.com/djoacytdk/image/upload/v1761825555/map-DalHobDl_lrlx11.png",
-      },
-      section5: {
-        name: "Section 5",
-        title: "Frequently Asked Questions (FAQ)",
-        introText:
-          "The Healthcare Federation of Nigeria is uniting healthcare providers, insurers, and tech leaders to drive.",
-        faqs: [
-          {
-            id: 501,
-            question:
-              "Question 1: What is the Healthcare Federation of Nigeria?",
-            response:
-              "The Healthcare Federation of Nigeria (HFN) is the umbrella body for private healthcare stakeholders in Nigeria, representing the interests of health professionals, companies, investors, associations, and institutions.",
-          },
-          {
-            id: 502,
-            question: "Question 2: Who are the members of the HFN?",
-            response:
-              "Our members include private hospitals, clinics, diagnostic centers, pharmaceutical companies, medical equipment suppliers, health insurance providers, and other key players in the Nigerian healthcare ecosystem.",
-          },
-          {
-            id: 503,
-            question: "Question 3: How can I become a member?",
-            response:
-              "Membership is open to all legitimate private sector organizations and individuals operating in the healthcare space in Nigeria. You can apply through our online portal and a team member will follow up.",
-          },
-          {
-            id: 504,
-            question: "Question 4: What are the benefits of joining HFN?",
-            response:
-              "Benefits include access to advocacy platforms, strategic partnerships, knowledge sharing, networking events, and investment opportunities aimed at building a stronger, more resilient health system.",
-          },
-        ],
-        previewUrl: "https://res.cloudinary.com/djoacytdk/image/upload/v1761825555/map-DalHobDl_lrlx11.png",
-      },
-    },
-  },
-  {
-    id: 2,
-    slug: "/about",
+const pages = ref([]);
+const isLoading = ref(false);
 
-    title: "About Us",
-    isVisible: true,
-    sections: {
-      hero: { name: "Hero Section", title: "About Us Intro", subText: "..." },
-    },
-  },
-  {
-    id: 3,
-    slug: "/blog",
+const fetchPages = async () => {
+  isLoading.value = true;
+  try {
+    pages.value = await pagesApi.listPages();
+  } catch (e) {
+    console.error("Failed to load pages", e);
+  } finally {
+    isLoading.value = false;
+  }
+};
 
-    title: "Latest Updates",
-    isVisible: true,
-    sections: {
-      hero: { name: "Hero Section", title: "Latest News", subText: "..." },
-    },
-  },
-  {
-    id: 4,
-    slug: "/membership",
-
-    title: "Member Area",
-    isVisible: true,
-    sections: {
-      hero: { name: "Hero Section", title: "Members Only", subText: "..." },
-    },
-  },
-  {
-    id: 5,
-    slug: "/contact",
-
-    title: "Contact Us",
-    isVisible: true,
-    sections: {
-      hero: { name: "Hero Section", title: "Get in Touch", subText: "..." },
-    },
-  },
-]);
+onMounted(fetchPages);
 
 const sectionKeys = computed(() =>
   Object.keys(activePage.value?.sections || pages.value[0].sections)
@@ -238,9 +34,26 @@ const sectionKeys = computed(() =>
 const newPageTitle = ref("");
 
 const viewPage = (page) => {
-  const path = page.slug ? `/${page.slug}` : "/";
-  router.push({ path });
+  router.push({
+    path: page.slug,
+    query: { preview: "true" }
+  });
 };
+
+
+const uploadSectionImage = async (event, sectionKey) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  try {
+    const { url } = await pagesApi.uploadImage(file);
+    activePage.value.sections[sectionKey].imageUrl = url;
+    activePage.value.sections[sectionKey].previewUrl = url;
+  } catch (e) {
+    console.error("Image upload failed", e);
+  }
+};
+
 
 const editPage = (page) => {
   activePage.value = page;
@@ -269,17 +82,17 @@ const addNewSection = () => {
   console.log("Simulating 'Add New Section' action.");
 };
 
-const addNewLogo = () => {
-  const section = activePage.value.sections["section1"];
-  if (section && section.logos) {
-    const newId = Math.max(...section.logos.map((l) => l.id), 0) + 1;
-    section.logos.push({
-      id: newId,
-      name: `New Client ${newId}`,
-      src: `https://placehold.co/80x40/9CA3AF/374151?text=New+Logo`,
-    });
-  }
-  console.log("Added new logo placeholder.");
+const addNewLogo = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const { url } = await pagesApi.uploadImage(file);
+
+  activePage.value.sections.section1.logos.push({
+    id: Date.now(),
+    name: "New Logo",
+    src: url,
+  });
 };
 
 const deleteLogo = (logoId) => {
@@ -340,9 +153,13 @@ const deleteFaq = (faqId) => {
   }
 };
 
-const saveChanges = () => {
-  console.log(`Changes saved for page: ${activePage.value.title}`);
-  goBackToManager();
+const saveChanges = async () => {
+  try {
+    await pagesApi.updatePage(activePage.value.id, activePage.value);
+    goBackToManager();
+  } catch (e) {
+    console.error("Failed to save page", e);
+  }
 };
 
 const breadcrumbViewName = computed(() => {
@@ -351,10 +168,15 @@ const breadcrumbViewName = computed(() => {
   return "Page Manager";
 });
 
-const toggleVisibility = (page) => {
+const toggleVisibility = async (page) => {
   page.isVisible = !page.isVisible;
-  console.log(`Page '${page.title}' visibility set to: ${page.isVisible}`);
+  try {
+    await pagesApi.updatePageVisibility(page.id, page.isVisible);
+  } catch (e) {
+    page.isVisible = !page.isVisible; 
+  }
 };
+
 </script>
 
 <template>

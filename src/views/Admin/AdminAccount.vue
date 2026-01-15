@@ -54,18 +54,6 @@ const sentInvitesCount = computed(
   () => invitations.filter((i) => i.sent).length
 );
 
-const interests = reactive([
-  { id: 10, name: "Mother", selected: true, isMainCategory: true },
-  { id: 11, name: "Child", selected: true, isMainCategory: true },
-  { id: 12, name: "Baby", selected: true, isMainCategory: true },
-  { id: 13, name: "Pregnancy", selected: true, isMainCategory: true },
-  { id: 1, name: "Marketing", selected: true, isMainCategory: false },
-  { id: 2, name: "Gynaecology", selected: true, isMainCategory: false },
-  { id: 3, name: "Paediatrics", selected: true, isMainCategory: false },
-  { id: 4, name: "General Health", selected: false, isMainCategory: false },
-  { id: 5, name: "Insurance", selected: false, isMainCategory: false },
-  { id: 6, name: "Dentistry", selected: false, isMainCategory: false },
-]);
 
 const handleProfilePicUpload = (event) => {
   const file = event.target.files[0];

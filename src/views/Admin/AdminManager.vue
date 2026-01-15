@@ -334,7 +334,6 @@ onMounted(() => {
                             : 'text-red-500 hover:text-red-700',
                         ]"
                       >
-                        <!-- Icon based on status -->
                         <svg
                           v-if="
                             user.status === 'Removed' ||
@@ -389,7 +388,6 @@ onMounted(() => {
               </table>
             </div>
 
-            <!-- Pagination Controls -->
             <div
               class="flex justify-end items-center mt-4 max-w-4xl mx-auto text-sm"
             >
@@ -451,7 +449,6 @@ onMounted(() => {
             </div>
           </div>
 
-          <!-- INVITATIONS TAB CONTENT (Form View from second image) -->
           <div
             v-else-if="currentTab === 'Invitations'"
             class="max-w-4xl mx-auto space-y-8 mt-8"
