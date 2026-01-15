@@ -41,6 +41,8 @@ const dashboardLink = computed(() => {
     superadmin: "/superadmin/dashboard",
     admin: "/admin/dashboard",
     editor: "/editor/dashboard",
+    tutor: '/tutor/dashboard',
+    learner: '/learner/dashboard',
     user: "/user/dashboard",
   };
   return roleMap[userRole.toLowerCase()] || "/dashboard";
