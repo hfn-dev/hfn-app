@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: "https://temp-hf.onrender.com/api",
-  timeout: 15000,
+  timeout: 45000,
 });
 
 api.interceptors.request.use((config) => {
