@@ -286,7 +286,7 @@ const routes = [
   //for learners
 
   {
-    path: '/learner/mylearning',
+    path: '/learner/dashboard',
     name: 'MyLearning',
     component: MyLearning,
   },
