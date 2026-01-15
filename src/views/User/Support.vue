@@ -1,7 +1,7 @@
 <script setup>
 import ticketApi from '@/api/tickets.js';
 import UserSidebar from '@/components/layout/UserSidebar.vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useToast } from 'vue-toastification';
 import TicketDetail from './TicketDetail.vue';
 
