@@ -285,7 +285,6 @@ const submitCourse = async () => {
   <div class="flex min-h-screen font-sans">
     <AdminSidebar />
     <main class="flex-1 p-8 overflow-auto bg-white">
-      <!-- Breadcrumbs -->
       <div class="text-sm text-gray-500 mb-6">
         <span class="text-[#006633]">Home</span> > My Courses >
         <span class="text-gray-700 font-medium">Create New Course</span>
@@ -297,7 +296,6 @@ const submitCourse = async () => {
         Create New Course
       </h1>
 
-      <!-- Stepper Component -->
       <div class="flex justify-between items-start mb-12 relative">
         <div class="absolute top-4 left-1/4 right-1/4 h-1 bg-gray-300"></div>
         <div
@@ -333,9 +331,7 @@ const submitCourse = async () => {
           </span>
         </div>
       </div>
-      <!-- END Stepper Component -->
 
-      <!-- Form Card -->
       <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
         <div v-if="currentStep === 1">
           <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">
@@ -344,7 +340,6 @@ const submitCourse = async () => {
 
           <div class="flex flex-col lg:flex-row gap-8">
             <div class="flex-1 space-y-6">
-              <!-- Course Title -->
               <div>
                 <label
                   for="course-title"
@@ -360,7 +355,6 @@ const submitCourse = async () => {
                 />
               </div>
 
-              <!-- Short Description -->
               <div>
                 <label
                   for="short-description"
@@ -376,7 +370,6 @@ const submitCourse = async () => {
                 />
               </div>
 
-              <!-- Category & Level -->
               <div class="grid grid-cols-2 gap-4">
                 <div>
                   <label
@@ -422,7 +415,6 @@ const submitCourse = async () => {
             </div>
           </div>
 
-          <!-- Full Course Overview -->
           <div class="mt-6">
             <label
               for="full-overview"
@@ -438,7 +430,6 @@ const submitCourse = async () => {
             ></textarea>
           </div>
 
-          <!-- Estimated Duration -->
           <div class="mt-6">
             <label class="block text-sm font-medium text-gray-700 mb-2"
               >Estimated Duration</label
@@ -480,7 +471,6 @@ const submitCourse = async () => {
             </div>
           </div>
 
-          <!-- What users will learn -->
           <div class="mt-8 pt-4 border-t border-gray-200">
             <div class="flex justify-between items-center mb-4">
               <h3 class="text-lg font-semibold text-gray-800">
