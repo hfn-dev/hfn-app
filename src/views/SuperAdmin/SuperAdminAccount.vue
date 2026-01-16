@@ -2,9 +2,9 @@
 import cert from "@/assets/cert.png";
 import sign from "@/assets/sign.png";
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
-import { computed, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 
-const isOrganization = ref(true);
+const isOrganization = ref(false);
 const currentView = ref("My Profile");
 const activeTab = ref("My Profile");
 const previewImageUrl = ref(null);
@@ -12,14 +12,25 @@ const uploadedFileName = ref(null);
 const uploadStatus = ref("Awaiting Upload");
 const fileInput = ref(null);
 const profileImageUrl = ref(null);
+const isLoading = ref(true);
 
 let nextSignatureId = 3;
-const orgDetails = reactive({
-  name: "Ruthie & Co Nigeria Limited",
-  email: "peterpan@gmail.com.us",
-  phone: "+234 123 456 78",
+
+const individualDetails = reactive({
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
   password: "********",
 });
+
+const orgDetails = reactive({
+  name: "",
+  email: "",
+  phone: "",
+  password: "********",
+});
+
 const orgDetailsKeys = [
   { key: "name", label: "Name" },
   { key: "email", label: "Email Address" },
@@ -27,13 +38,7 @@ const orgDetailsKeys = [
   { key: "password", label: "Password" },
 ];
 
-const individualDetails = reactive({
-  firstName: "John",
-  lastName: "Doe",
-  email: "john.doe@example.com",
-  phone: "+1 555 123 4567",
-  password: "********",
-});
+
 const individualDetailsKeys = [
   { key: "firstName", label: "First Name" },
   { key: "lastName", label: "Last Name" },
@@ -43,7 +48,7 @@ const individualDetailsKeys = [
 ];
 
 const invitations = reactive([
-  { id: 1, email: "peterpan@gmail.com", sent: true },
+  { id: 1, email: "", sent: true },
   { id: 2, email: "", sent: false },
   { id: 3, email: "", sent: false },
 ]);
@@ -52,18 +57,34 @@ const sentInvitesCount = computed(
   () => invitations.filter((i) => i.sent).length
 );
 
-const interests = reactive([
-  { id: 10, name: "Mother", selected: true, isMainCategory: true },
-  { id: 11, name: "Child", selected: true, isMainCategory: true },
-  { id: 12, name: "Baby", selected: true, isMainCategory: true },
-  { id: 13, name: "Pregnancy", selected: true, isMainCategory: true },
-  { id: 1, name: "Marketing", selected: true, isMainCategory: false },
-  { id: 2, name: "Gynaecology", selected: true, isMainCategory: false },
-  { id: 3, name: "Paediatrics", selected: true, isMainCategory: false },
-  { id: 4, name: "General Health", selected: false, isMainCategory: false },
-  { id: 5, name: "Insurance", selected: false, isMainCategory: false },
-  { id: 6, name: "Dentistry", selected: false, isMainCategory: false },
-]);
+onMounted(async () => {
+  try {
+    isLoading.value = true;
+    const userData = await authApi.getUser();
+    
+    
+    isOrganization.value = userData.role === 'organization' || !!userData.organization_name;
+
+    if (isOrganization.value) {
+      orgDetails.name = userData.organization_name || userData.full_name;
+      orgDetails.email = userData.email;
+      orgDetails.phone = userData.phone_number || "";
+    } else {
+      individualDetails.firstName = userData.first_name || userData.full_name?.split(' ')[0] || "";
+      individualDetails.lastName = userData.last_name || userData.full_name?.split(' ')[1] || "";
+      individualDetails.email = userData.email;
+      individualDetails.phone = userData.phone_number || "";
+    }
+
+    if (userData.profile_image) {
+      profileImageUrl.value = userData.profile_image;
+    }
+  } catch (error) {
+    console.error("Failed to fetch user details:", error);
+  } finally {
+    isLoading.value = false;
+  }
+});
 
 const handleProfilePicUpload = (event) => {
   const file = event.target.files[0];

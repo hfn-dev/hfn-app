@@ -45,7 +45,7 @@ export default {
     }
   },
 
-  async updateCategory(payload) {
+  async updateCategory(slug, payload) {
     try {
       const response = await api.put(`/learning/categories/${slug}/`, payload);
       return response.data;
@@ -55,9 +55,12 @@ export default {
     }
   },
 
-  async deleteCategory(payload) {
+  async deleteCategory(slug, payload) {
     try {
-      const response = await api.delete('/learning/categories/{slug}', payload);
+      const response = await api.delete(
+        `/learning/categories/${slug}`,
+        payload
+      );
       return response.data;
     } catch (error) {
       console.error('delete category API error:', error);
@@ -97,11 +100,21 @@ export default {
     }
   },
 
+  async getCourseBySlug(slug, params = {}) {
+    try {
+      const response = await api.get(`/learning/courses/${slug}/`, { params });
+      return response;
+    } catch (error) {
+      console.error('get course by slug API error:', error);
+      throw error;
+    }
+  },
+
   async createCourses(payload) {
     try {
       const response = await api.post('/learning/courses/', payload);
 
-      console.log("Course created successfully:", response);
+      console.log('Course created successfully:', response);
       return response.data;
     } catch (error) {
       console.error('create courses API error:', error);
@@ -109,7 +122,7 @@ export default {
     }
   },
 
-  async updateCourses(payload) {
+  async updateCourses(slug, payload) {
     try {
       const response = await api.put(`/learning/courses/${slug}/`, payload);
       return response.data;
@@ -119,7 +132,7 @@ export default {
     }
   },
 
-  async deleteCourse(payload) {
+  async deleteCourse(slug, payload) {
     try {
       const response = await api.delete(`/learning/courses/${slug}`, payload);
       return response.data;
@@ -129,10 +142,10 @@ export default {
     }
   },
 
-  async listCourseModules(payload) {
+  async listCourseModules(slug, payload) {
     try {
       const response = await api.get(
-        '/learning/courses/{slug}/modules',
+        `/learning/courses/${slug}/modules`,
         payload
       );
       return response.data;
@@ -142,9 +155,9 @@ export default {
     }
   },
 
-  async getModulesdetails(payload) {
+  async getModulesdetails(id, payload) {
     try {
-      const response = await api.get('/learning/modules/{id}/', payload);
+      const response = await api.get(`/learning/modules/${id}/`, payload);
       return response.data;
     } catch (error) {
       console.error('get modules detail API error:', error);
@@ -162,9 +175,9 @@ export default {
     }
   },
 
-  async getEnrollmentDetails(payload) {
+  async getEnrollmentDetails(id, payload) {
     try {
-      const response = await api.get('/learning/enrollments/{id}', payload);
+      const response = await api.get(`/learning/enrollments/${id}`, payload);
       return response.data;
     } catch (error) {
       console.error('get enrollment details API error:', error);
@@ -172,10 +185,10 @@ export default {
     }
   },
 
-  async courseEnrollment(payload) {
+  async courseEnrollment(slug, payload) {
     try {
       const response = await api.post(
-        '/learning/courses/{slug}/enroll',
+        `/learning/courses/${slug}/enroll`,
         payload
       );
       return response.data;
@@ -185,10 +198,10 @@ export default {
     }
   },
 
-  async deleteEnrollmentDetails(payload) {
+  async deleteEnrollmentDetails(id, payload) {
     try {
       const response = await api.delete(
-        '/learning/courses/{id}/enroll/',
+        `/learning/courses/${id}/enroll/`,
         payload
       );
       return response.data;
@@ -227,7 +240,7 @@ export default {
   async getCourseQuiz(payload) {
     try {
       const response = await api.get(
-        '/learning/courses/{slug}/quizzes/',
+        `/learning/courses/${slug}/quizzes/`,
         payload
       );
       return response.data;
@@ -239,7 +252,7 @@ export default {
 
   async getCourseQuizDetails(payload) {
     try {
-      const response = await api.get('/learning/quizzes/{id}/', payload);
+      const response = await api.get(`/learning/quizzes/${id}/`, payload);
       return response.data;
     } catch (error) {
       console.error('get course quiz details API error:', error);
@@ -247,10 +260,10 @@ export default {
     }
   },
 
-  async startCourseQuiz(payload) {
+  async startCourseQuiz(id, payload) {
     try {
       const response = await api.post(
-        '/learning/quizzes/{id}/start_attempt/',
+        `/learning/quizzes/${id}/start_attempt/`,
         payload
       );
       return response.data;
@@ -260,10 +273,10 @@ export default {
     }
   },
 
-  async submitCourseQuiz(payload) {
+  async submitCourseQuiz(id, payload) {
     try {
       const response = await api.post(
-        '/learning/quizzes/{id}/submit_attempt/',
+        `/learning/quizzes/${id}/submit_attempt/`,
         payload
       );
       return response.data;
@@ -273,10 +286,10 @@ export default {
     }
   },
 
-  async listLessonComment(payload) {
+  async listLessonComment(id, payload) {
     try {
       const response = await api.get(
-        '/learning/lessons/{id}/comments/',
+        `/learning/lessons/${id}/comments/`,
         payload
       );
       return response.data;
@@ -286,10 +299,10 @@ export default {
     }
   },
 
-  async createLessonComment(payload) {
+  async createLessonComment(id, payload) {
     try {
       const response = await api.post(
-        '/learning/lessons/{id}/comments/',
+        `/learning/lessons/${id}/comments/`,
         payload
       );
       return response.data;
@@ -299,10 +312,10 @@ export default {
     }
   },
 
-  async deleteLessonComment(payload) {
+  async deleteLessonComment(id, payload) {
     try {
       const response = await api.delete(
-        '/learning/courses/{id}/reviews/',
+        `/learning/courses/${id}/reviews/`,
         payload
       );
       return response.data;
@@ -325,19 +338,16 @@ export default {
   //   }
   // },
   async reviewCourse(params = {}) {
-  try {
-    const response = await api.get(
-      `/learning/reviews/`,
-      { params } 
-    );
-    return response.data;
-  } catch (error) {
-    console.error('review API error:', error);
-    throw error;
-  }
-},
+    try {
+      const response = await api.get(`/learning/reviews/`, { params });
+      return response.data;
+    } catch (error) {
+      console.error('review API error:', error);
+      throw error;
+    }
+  },
 
- async getReviewDetails(payload) {
+  async getReviewDetails(id, payload) {
     try {
       const response = await api.get(`/learning/reviews/${id}/`, payload);
       return response.data;
@@ -346,8 +356,6 @@ export default {
       throw error;
     }
   },
- 
-
 
   async createReview(payload) {
     try {
@@ -359,7 +367,7 @@ export default {
     }
   },
 
-  async updateReview(payload) {
+  async updateReview(id, payload) {
     try {
       const response = await api.put(`/learning/reviews/${id}/`, payload);
       return response.data;
@@ -369,9 +377,9 @@ export default {
     }
   },
 
-  async deleteReview(payload) {
+  async deleteReview(id, payload) {
     try {
-      const response = await api.delete('/learning/reviews/{id}/', payload);
+      const response = await api.delete(`/learning/reviews/${id}/`, payload);
       return response.data;
     } catch (error) {
       console.error('update review API error:', error);
@@ -389,9 +397,9 @@ export default {
     }
   },
 
-  async getCertificateDetails(payload) {
+  async getCertificateDetails(id, payload) {
     try {
-      const response = await api.get('/learning/certificates/{id}/', payload);
+      const response = await api.get(`/learning/certificates/${id}/`, payload);
       return response.data;
     } catch (error) {
       console.error('get certificate detail API error:', error);

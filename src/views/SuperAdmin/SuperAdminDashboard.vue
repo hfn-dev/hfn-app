@@ -35,6 +35,10 @@ ChartJS.register(
 
 const active = ref('Dashboard');
 const router = useRouter();
+const MONTHS = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
+];
 
 const dashboardData = reactive({
   stats: [],
@@ -125,7 +129,19 @@ const revenueChartOptions = reactive({
   },
 });
 
-const engagementData = {
+
+const usersByRoleData = reactive({
+  labels: [],
+  datasets: [
+    {
+      label: 'Users by Role',
+      backgroundColor: ['#28a745', '#E87A18', '#007bff', '#ffc107', '#6c757d', '#17a2b8'],
+      data: [],
+    },
+  ],
+});
+
+const engagementData = reactive({
   labels: [],
   datasets: [
     {
@@ -135,9 +151,9 @@ const engagementData = {
       data: [],
     },
   ],
-};
+});
 
-const completionData = {
+const completionData = reactive({
   labels: [],
   datasets: [
     {
@@ -146,9 +162,9 @@ const completionData = {
       data: [],
     },
   ],
-};
+});
 
-const growthData = {
+const growthData = reactive({
   labels: [],
   datasets: [
     {
@@ -160,7 +176,7 @@ const growthData = {
       data: [],
     },
   ],
-};
+});
 
 const barOptions = {
   responsive: true,
@@ -196,61 +212,62 @@ const closeSidebar = () => (showSidebar.value = false);
 onMounted(async () => {
   try {
     loading.value = true;
-
     const dash = await analyticsApi.fetchDashboard();
+
+    if (dash.users_by_role && dash.users_by_role.length > 0) {
+      usersByRoleData.labels = dash.users_by_role.map(item => item.role.charAt(0).toUpperCase() + item.role.slice(1));
+      usersByRoleData.datasets[0].data = dash.users_by_role.map(item => item.count);
+    }
+
+    dashboardData.stats = [
+      { title: 'Total Courses', value: dash.total_courses, change: `${dash.active_courses} Active`, changeColor: 'text-green-600' },
+      { title: 'Total Enrollments', value: dash.total_enrollments, change: `${dash.active_enrollments} Active`, changeColor: 'text-blue-600' },
+      { title: 'New Signups (30 days)', value: dash.new_signups_30_days, change: 'Last 30 days', changeColor: 'text-orange-600' },
+      { title: 'Active Users', value: dash.total_active_users, change: 'Currently active', changeColor: 'text-purple-600' },
+    ];
+
+    const revEntries = Object.entries(dash.monthly_revenue);
+    const topMonthEntry = revEntries.reduce((a, b) => (b[1] > a[1] ? b : a), [MONTHS[0], 0]);
+
+    dashboardData.revenue = {
+      topMonth: { name: topMonthEntry[0], year: new Date().getFullYear() },
+      topYear: { year: new Date().getFullYear(), sales: `$${dash.total_revenue.toLocaleString()}` },
+      bestSeller: {
+        name: dash.most_viewed_courses[0]?.title || 'None',
+        instructor: 'Primary Instructor'
+      }
+    };
+
+    revenueData.labels = MONTHS;
+    revenueData.datasets[0].data = MONTHS.map(m => dash.monthly_revenue[m] || 0);
+
+    engagementData.labels = MONTHS;
+    engagementData.datasets[0].data = MONTHS.map(m => dash.enrollments_by_month[m] || 0);
+
+    completionData.labels = ['Completed', 'In Progress', 'Dropped'];
+    completionData.datasets[0].data = [
+      dash.course_completion_stats.completed_count,
+      dash.course_completion_stats.in_progress_count,
+      dash.course_completion_stats.dropped_count,
+    ];
+
+    growthData.labels = ['Active', 'Expired'];
+    growthData.datasets[0].data = [
+      dash.membership_stats.active_subscriptions,
+      dash.membership_stats.expired_subscriptions,
+    ];
+
+    const maxViews = Math.max(...dash.most_viewed_courses.map(c => c.view_count), 1);
+    dashboardData.mostViewed = dash.most_viewed_courses.map(course => ({
+      name: course.title,
+      value: course.view_count,
+      progress: (course.view_count / maxViews * 100) + '%',
+    }));
 
     dashboardData.courses = dash.time_spent_per_course.map(course => ({
       name: course.course_title,
       enrollments: course.total_time_minutes + ' mins',
     }));
-
-    dashboardData.mostViewed = dash.most_viewed_courses.map(course => ({
-      name: course.title,
-      value: course.view_count,
-      progress: '0%',
-    }));
-
-    dashboardData.stats = [
-      {
-        title: 'Total Courses',
-        value: dash.total_courses,
-        change: `${dash.active_courses} Active`,
-        changeColor: 'text-green-600',
-      },
-      {
-        title: 'Total Enrollments',
-        value: dash.total_enrollments,
-        change: `${dash.active_enrollments} Active`,
-        changeColor: 'text-blue-600',
-      },
-      {
-        title: 'New Signups (30 days)',
-        value: dash.new_signups_30_days,
-        change: 'Last 30 days',
-        changeColor: 'text-orange-600',
-      },
-      {
-        title: 'Active Users',
-        value: dash.total_active_users,
-        change: 'Currently active',
-        changeColor: 'text-purple-600',
-      },
-    ];
-
-    revenueData.labels = Object.keys(dash.monthly_revenue);
-    revenueData.datasets[0].data = Object.values(dash.monthly_revenue);
-
-
-    engagementData.labels = Object.keys(dash.enrollments_by_month);
-    engagementData.datasets[0].data = Object.values(dash.enrollments_by_month);
-
-
-    completionData.labels = ['Completed', 'In Progress', 'Dropped'];
-    completionData.datasets[0].data = [
-      dash.course_completion_stats.completed,
-      dash.course_completion_stats.in_progress,
-      dash.course_completion_stats.dropped,
-    ];
 
   } catch (err) {
     console.error('Failed to load dashboard data', err);
@@ -316,7 +333,7 @@ onMounted(async () => {
             Student Monthly Enrollment
           </h2>
           <div class="h-[300px] w-full">
-            <Bar :data="engagementData" :options="barOptions" />
+            <Bar v-if="!loading" :data="engagementData" :options="barOptions" />
           </div>
         </div>
 
@@ -325,7 +342,7 @@ onMounted(async () => {
             Course Completion
           </h2>
           <div class="h-[300px] w-full">
-            <Pie :data="completionData" :options="pieOptions" />
+            <Pie v-if="!loading" :data="completionData" :options="pieOptions" />
           </div>
         </div>
 
@@ -334,7 +351,7 @@ onMounted(async () => {
             Subscriptions
           </h2>
           <div class="h-[300px] w-full">
-            <Line :data="growthData" :options="lineOptions" />
+            <Line v-if="!loading" :data="growthData" :options="lineOptions" />
           </div>
         </div>
       </div>
@@ -394,7 +411,7 @@ onMounted(async () => {
               </div>
             </div>
             <div class="h-80">
-              <Line :data="revenueData" :options="revenueChartOptions" />
+              <Line v-if="!loading" :data="revenueData" :options="revenueChartOptions" />
             </div>
           </div>
 
@@ -422,16 +439,6 @@ onMounted(async () => {
                 </p>
               </div>
             </div>
-
-            <!-- <div class="bg-white p-6 rounded-xl shadow-lg w-full">
-              <h2 class="text-xl font-semibold mb-4 text-[#006633]">
-                Users by Role
-              </h2>
-
-              <div class="h-[300px] w-full">
-                <Pie v-if="usersByRoleData.datasets.length" :data="usersByRoleData" :options="pieOptions" />
-              </div>
-            </div> -->
 
 
             <div class="highlight-card-wrapper">
@@ -467,6 +474,17 @@ onMounted(async () => {
             </div>
           </div>
         </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg w-full">
+  <h2 class="text-xl font-semibold mb-4 text-[#006633]">
+    Users by Role
+  </h2>
+
+  <div class="h-[300px] w-full">
+    <Pie v-if="!loading && usersByRoleData.datasets[0].data.length" 
+         :data="usersByRoleData" 
+         :options="pieOptions" />
+  </div>
+</div>
       </div>
     </main>
   </div>

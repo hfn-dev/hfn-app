@@ -168,6 +168,8 @@ const routes = [
     name: 'EditorAccount',
     component: EditorAccount,
   },
+
+  //tutor
   {
     path: '/tutor/mycourses',
     name: 'TutorCourseList',
@@ -193,6 +195,8 @@ const routes = [
     name: 'TutorReviews',
     component: TutorReviews,
   },
+
+  //superadmin
   {
     path: '/superadmin/dashboard',
     name: 'SuperAdminDashboard',
@@ -207,11 +211,13 @@ const routes = [
     path: '/superadmin/create-course',
     name: 'SuperAdminCreateCourse',
     component: SuperAdminCreateCourse,
+    props: { mode: 'create' },
   },
   {
     path: '/superadmin/courses/:slug/edit',
     name: 'SuperAdminEditCourse',
     component: SuperAdminCreateCourse,
+    props: { mode: 'edit' },
   },
   {
     path: '/superadmin/members',
