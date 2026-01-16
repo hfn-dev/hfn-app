@@ -10,28 +10,6 @@ const isUploading = ref(false);
 
 const { user, role } = useAuth();
 
-// const fetchUserProfile = async () => {
-//   try {
-//     const data = await authApi.getUser();
-
-//     isOrganization.value = !!data.organization_name;
-
-//     profileImage.value = data.profile || null;
-
-//     if (isOrganization.value) {
-//       orgDetails.name = data.organization_name || data.full_name;
-//       orgDetails.email = data.email;
-//       orgDetails.phone = data.phone_number;
-//     } else {
-//       individualDetails.firstName = data.first_name || "";
-//       individualDetails.lastName = data.last_name || "";
-//       individualDetails.email = data.email || "";
-//       individualDetails.phone = data.phone_number || "";
-//     }
-//   } catch (error) {
-//     console.error("Failed to fetch user profile", error);
-//   }
-// };
 
 const fetchUserProfile = async () => {
   try {
