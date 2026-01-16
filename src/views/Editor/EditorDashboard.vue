@@ -47,7 +47,7 @@ const fetchDashboardAnalytics = async () => {
     statCards.value = [
       {
         title: "Total Visits",
-        value: dashboard.total_visits,
+        value: dashboard.total_page_views,
         change: dashboard.total_visits_change,
         changeColor: dashboard.total_visits_change?.includes("Increase")
           ? "text-[#00cc66]"
@@ -55,13 +55,13 @@ const fetchDashboardAnalytics = async () => {
       },
       {
         title: "Unique Visits",
-        value: dashboard.unique_visits,
+        value: dashboard.total_unique_visitors || 0,
         change: dashboard.unique_visits_change,
         changeColor: "text-[#00cc66]",
       },
       {
         title: "Time Spent on website",
-        value: dashboard.time_spent,
+        value: dashboard.average_session_duration_minutes,
         change: dashboard.time_spent_change,
         changeColor: "text-red-500",
       },
