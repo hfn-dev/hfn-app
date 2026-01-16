@@ -10,6 +10,7 @@ const currentView = ref("manager");
 const activePage = ref(null);
 const activeSection = ref("hero");
 const router = useRouter();
+const hasPages = computed(() => pages.value && pages.value.length > 0);
 
 const pages = ref([]);
 const isLoading = ref(false);
@@ -225,7 +226,23 @@ const toggleVisibility = async (page) => {
         </div> -->
 
         <div class="space-y-3">
+          <div v-if="isLoading" class="text-center text-gray-500 py-10">
+    Loading pages...
+  </div>
+
+  <div
+    v-else-if="!hasPages"
+    class="text-center py-16 bg-gray-50 border border-dashed border-gray-300 rounded-xl"
+  >
+    <h3 class="text-lg font-semibold text-gray-700 mb-2">
+      No pages yet
+    </h3>
+    <p class="text-sm text-gray-500">
+      Pages you create will appear here.
+    </p>
+  </div>
           <div
+            v-else
             v-for="page in pages"
             :key="page.id"
             class="flex items-center justify-between bg-white p-4 rounded-xl shadow-lg border border-gray-100 transform hover:shadow-xl hover:scale-[1.005] transition duration-200"
