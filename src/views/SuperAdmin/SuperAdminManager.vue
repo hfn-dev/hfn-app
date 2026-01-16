@@ -36,9 +36,9 @@ const getStatusBadgeClass = (status) => {
   }
 };
 
-const capitalize = (str) => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};
+// const capitalize = (str) => {
+//   return str.charAt(0).toUpperCase() + str.slice(1);
+// };
 
 const fetchUsers = async () => {
   try {
@@ -196,7 +196,7 @@ const sendInvitation = async (invite, roleKey, index) => {
       surname: invite.surname,
       email: invite.email,
       organization: invite.organization,
-      role: capitalize(roleKey),
+      role: roleKey,
     };
     await accessAPI.createRoleInvite(payload);
     INVITATIONS_DATA.value[roleKey][index].status = 'Sent';
@@ -502,7 +502,7 @@ const resendInvitation = async (inviteId) => {
             >
               <div class="flex justify-between items-center mb-4 border-b pb-3">
                 <h3 class="text-xl font-semibold text-gray-800">
-                  Invitations to {{ capitalize(roleKey) }}
+                  Invitations to {{ roleKey }}
                   <span class="text-gray-500 text-base ml-2"
                     >You have sent
                     {{
