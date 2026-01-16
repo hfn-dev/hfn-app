@@ -312,18 +312,31 @@ export default {
     }
   },
 
-  async reviewCourse(payload) {
-    try {
-      const response = await api.get(
-        '/learning/courses/{slug}/reviews/',
-        payload
-      );
-      return response.data;
-    } catch (error) {
-      console.error('review API error:', error);
-      throw error;
-    }
-  },
+  // async reviewCourse(payload) {
+  //   try {
+  //     const response = await api.get(
+  //       '/learning/courses/{slug}/reviews/',
+  //       payload
+  //     );
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error('review API error:', error);
+  //     throw error;
+  //   }
+  // },
+  async reviewCourse(slug, params = {}) {
+  try {
+    const response = await api.get(
+      `/learning/courses/${slug}/reviews/`,
+      { params } 
+    );
+    return response.data;
+  } catch (error) {
+    console.error('review API error:', error);
+    throw error;
+  }
+},
+
 
   async createReview(payload) {
     try {
