@@ -10,29 +10,29 @@ const isUploading = ref(false);
 
 const { user, role } = useAuth();
 
-
 const fetchUserProfile = async () => {
   try {
     const data = await authApi.getUser();
 
-    isOrganization.value = data.is_organization;
+    isOrganization.value = !!data.organization_name;
 
-    // profileImage.value = data.profile || null;
+    profileImage.value = data.profile || null;
 
-    if (data.is_organization) {
+    if (isOrganization.value) {
       orgDetails.name = data.organization_name || data.full_name;
       orgDetails.email = data.email;
       orgDetails.phone = data.phone_number;
     } else {
-      individualDetails.firstName = data.first_name;
-      individualDetails.lastName = data.last_name;
-      individualDetails.email = data.email;
-      individualDetails.phone = data.phone_number;
+      individualDetails.firstName = data.first_name || "";
+      individualDetails.lastName = data.last_name || "";
+      individualDetails.email = data.email || "";
+      individualDetails.phone = data.phone_number || "";
     }
   } catch (error) {
     console.error("Failed to fetch user profile", error);
   }
 };
+
 
 const onProfileImageSelect = (event) => {
   const file = event.target.files[0];
@@ -81,7 +81,7 @@ onMounted(() => {
 });
 
 
-const isOrganization = ref(true);
+const isOrganization = ref(null);
 const currentView = ref("My Account");
 const activeTab = ref("My Profile");
 const isOrgEditing = ref(false);
