@@ -135,7 +135,7 @@ const individualDetails = reactive({
         </div>
 
         <div v-if="activeTab === 'My Profile'" class="space-y-10">
-          <div v-if="isOrganization" class="p-6 bg-white shadow-lg space-y-8">
+          <div v-if="isOrganization !== null" class="p-6 bg-white shadow-lg space-y-8">
             <h2 class="text-xl font-semibold text-gray-800">
               Profile
             </h2>
@@ -193,7 +193,11 @@ const individualDetails = reactive({
           </div>
 
         </div>
-
+        <div v-if="!isOrganization" class="p-6 bg-white shadow-lg space-y-8">
+  <h2 class="text-xl font-semibold">Individual Profile</h2>
+  <p>Email: {{ individualDetails.email }}</p>
+  <p>Name: {{ individualDetails.firstName }} {{ individualDetails.lastName }}</p>
+  </div>
 
       </div>
 
