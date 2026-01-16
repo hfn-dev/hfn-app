@@ -3,7 +3,7 @@ import api from './axios.js';
 export default {
   async getTickets(payload) {
     try {
-      const response = await api.get('/api/tickets/', payload);
+      const response = await api.get('/tickets/', payload);
       return response.data;
     } catch (error) {
       console.error('Error fetching tickets api:', error);
@@ -13,7 +13,7 @@ export default {
 
   async createTicket(payload) {
     try {
-      const response = await api.post('/api/create/', payload);
+      const response = await api.post('/create/', payload);
       return response.data;
     } catch (error) {
       console.error('Create ticket API error:', error);
@@ -23,7 +23,7 @@ export default {
 
   async viewTicketDetails(params = {}) {
     try {
-      const response = await api.get(`/api/ticket/details/${slug}`, { params });
+      const response = await api.get(`/ticket/details/${slug}`, { params });
       return response.data;
     } catch (error) {
       console.error('View ticket details API error:', error);
@@ -34,7 +34,7 @@ export default {
   async updateTicket(ticketId, payload) {
     try {
       const response = await api.post(
-        `/api/tickets/${ticketId}/update`,
+        `/tickets/${ticketId}/update`,
         payload
       );
       return response.data;
