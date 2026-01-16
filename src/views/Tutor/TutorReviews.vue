@@ -22,7 +22,7 @@ const fetchReviews = async () => {
   loading.value = true;
 
   try {
-    const res = await learningModule.reviewCourse('all', {
+    const res = await learningModule.reviewCourse({
       page: currentPage.value,
       search: searchQuery.value,
       rating: selectedRating.value !== 'all' ? selectedRating.value : undefined,
@@ -78,7 +78,7 @@ const paginatedReviews = computed(() => reviews.value);
 
 const viewReviewDetails = async (review) => {
   try {
-    const res = await learningModule.reviewCourse(review.courseSlug);
+    const res = await learningModule.getReviewDetails(review.courseSlug);
 
     const feedback = res.results.map((r) => ({
       id: r.id,
