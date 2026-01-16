@@ -131,9 +131,7 @@ watch([searchQuery, selectedRating, currentPage], () => {
 <template>
   <div class="flex min-h-screen font-sans">
     <TutorSidebar />
-    <!-- Main Content Area -->
     <main class="flex-1 p-8 overflow-auto bg-white">
-      <!-- Breadcrumbs & Header -->
       <div class="text-sm text-gray-500 mb-6 flex items-center space-x-1">
         <span class="text-[#006633]">Home</span> >
         <span v-if="currentView === 'list'" class="text-gray-700 font-medium"
@@ -167,7 +165,6 @@ watch([searchQuery, selectedRating, currentPage], () => {
         v-if="currentView === 'list'"
         class="bg-white p-6 rounded-xl shadow-lg border border-gray-100"
       >
-        <!-- Search Bar -->
         <div
           class="mb-6 flex items-center max-w-sm border border-gray-300 rounded-lg overflow-hidden bg-white"
         >
@@ -180,7 +177,6 @@ watch([searchQuery, selectedRating, currentPage], () => {
           />
         </div>
 
-        <!-- Reviews Table -->
         <div class="overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -295,7 +291,6 @@ watch([searchQuery, selectedRating, currentPage], () => {
           </table>
         </div>
 
-        <!-- Pagination -->
         <div
           class="pt-4 flex justify-between items-center text-sm font-medium text-gray-600"
         >
@@ -336,7 +331,6 @@ watch([searchQuery, selectedRating, currentPage], () => {
           </h2>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-            <!-- Average Rating Box -->
             <div
               class="flex flex-col items-center justify-center space-y-2 p-6 bg-white rounded-xl border border-gray-200 shadow-sm w-full max-w-xs mx-auto md:mx-0"
             >
@@ -355,7 +349,6 @@ watch([searchQuery, selectedRating, currentPage], () => {
                 :key="dist.stars"
                 class="flex items-center"
               >
-                <!-- Star Count -->
                 <div
                   class="w-49 flex-shrink-0 text-sm font-medium text-gray-700 flex items-center gap-x-2"
                 >
@@ -366,7 +359,6 @@ watch([searchQuery, selectedRating, currentPage], () => {
                   <span>{{ dist.stars }} Star Rating</span>
                 </div>
 
-                <!-- Progress Bar -->
                 <div
                   class="flex-1 mx-4 h-2 bg-pink-50 rounded-full overflow-hidden"
                 >
@@ -376,7 +368,6 @@ watch([searchQuery, selectedRating, currentPage], () => {
                   ></div>
                 </div>
 
-                <!-- Percentage -->
                 <div class="w-10 text-right text-sm font-medium text-gray-600">
                   {{ dist.percentage }}%
                 </div>
@@ -385,7 +376,6 @@ watch([searchQuery, selectedRating, currentPage], () => {
           </div>
         </div>
 
-        <!-- 2. Students Feedback Row -->
         <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
           <div
             class="flex justify-between items-center border-b border-gray-100 pb-2 mb-6"
@@ -406,14 +396,12 @@ watch([searchQuery, selectedRating, currentPage], () => {
             </select>
           </div>
 
-          <!-- Individual Feedback Entries -->
           <div class="space-y-6">
             <div
               v-for="feedback in filteredFeedback"
               :key="feedback.id"
               class="flex space-x-4 border-b border-gray-100 pb-4 last:border-b-0"
             >
-              <!-- Avatar -->
               <img
                 :src="feedback.avatar"
                 :alt="`${feedback.user} Avatar`"
@@ -421,7 +409,6 @@ watch([searchQuery, selectedRating, currentPage], () => {
                 onerror="this.onerror=null;this.src='https://placehold.co/40x40/f1f1f1/888888?text=U'"
               />
 
-              <!-- Content -->
               <div class="flex-1">
                 <div class="flex justify-between items-start mb-1">
                   <span class="font-bold text-gray-800">{{
@@ -442,7 +429,6 @@ watch([searchQuery, selectedRating, currentPage], () => {
             </div>
           </div>
 
-          <!-- Feedback Pagination -->
           <div
             class="pt-4 flex justify-between items-center text-sm font-medium text-gray-600"
           >
