@@ -17,7 +17,7 @@ const fetchUserProfile = async () => {
 
     isOrganization.value = data.is_organization;
 
-    profileImage.value = data.profile || null;
+    // profileImage.value = data.profile || null;
 
     if (data.is_organization) {
       orgDetails.name = data.organization_name || data.full_name;
@@ -39,12 +39,12 @@ const onProfileImageSelect = (event) => {
   if (!file) return;
 
   if (!["image/jpeg", "image/png"].includes(file.type)) {
-    alert("Only JPG and PNG allowed");
+    console.log("Only JPG and PNG allowed");
     return;
   }
 
   if (file.size > 2 * 1024 * 1024) {
-    alert("Max size is 2MB");
+    console.log("Max size is 2MB");
     return;
   }
 
