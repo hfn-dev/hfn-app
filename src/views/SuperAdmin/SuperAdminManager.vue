@@ -7,7 +7,7 @@ const TABS = ['Overview', 'Invitations'];
 const overviewHeaders = ['Name', 'Role', 'Invited On', 'Status'];
 
 const USERS = ref([]);
-const INVITATIONS_DATA = ref({ administrators: [], editors: [], tutors: [] });
+const INVITATIONS_DATA = ref({ admin: [], editor: [], tutor: [] });
 
 const currentTab = ref('Overview');
 const searchTerm = ref('');
@@ -53,10 +53,10 @@ const fetchUsers = async () => {
 };
 
 const ROLE_MAP = {
-  admin: 'administrators',
-  administrator: 'administrators',
-  editor: 'editors',
-  tutor: 'tutors',
+  admin: 'admin',
+  admin: 'administrator',
+  editor: 'editor',
+  tutor: 'tutor',
 };
 
 const fetchInvitations = async () => {
@@ -64,9 +64,9 @@ const fetchInvitations = async () => {
     const data = await accessAPI.listRoleInvites();
 
     const grouped = {
-      administrators: [],
-      editors: [],
-      tutors: [],
+      admin: [],
+      editor: [],
+      tutor: [],
     };
 
     data.forEach((invite) => {
