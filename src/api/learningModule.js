@@ -324,10 +324,10 @@ export default {
   //     throw error;
   //   }
   // },
-  async reviewCourse(slug, params = {}) {
+  async reviewCourse(params = {}) {
   try {
     const response = await api.get(
-      `/learning/courses/${slug}/reviews/`,
+      `/learning/reviews/`,
       { params } 
     );
     return response.data;
@@ -336,6 +336,17 @@ export default {
     throw error;
   }
 },
+
+ async getReviewDetails(payload) {
+    try {
+      const response = await api.get(`/learning/reviews/${id}/`, payload);
+      return response.data;
+    } catch (error) {
+      console.error('update review API error:', error);
+      throw error;
+    }
+  },
+ 
 
 
   async createReview(payload) {
