@@ -36,12 +36,17 @@ const fetchUserEnrollments = async () => {
         : response.data.results || [];
       
       activeCourses.value = userEnrollments.value.filter(
-        enrollment => !enrollment.is_completed && enrollment.completion_percentage < 100
-      );
-      
-      completedCourses.value = userEnrollments.value.filter(
-        enrollment => enrollment.is_completed || enrollment.completion_percentage === 100
-      );
+  enrollment =>
+    enrollment.status === 'active' &&
+    Number(enrollment.progress_percentage) < 100
+);
+
+completedCourses.value = userEnrollments.value.filter(
+  enrollment =>
+    enrollment.status === 'completed' ||
+    Number(enrollment.progress_percentage) === 100
+);
+
       
       console.log('Enrollments loaded:', userEnrollments.value.length);
       console.log('Active courses:', activeCourses.value.length);
