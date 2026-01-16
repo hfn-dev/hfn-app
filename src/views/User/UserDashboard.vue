@@ -229,6 +229,9 @@ onMounted(() => {
               </button>
             </div>
           </div>
+          <div v-else class="text-center py-12 text-gray-500">
+            No data
+          </div>
         </div>
       </section>
       <section class="mt-10 max-w-6xl mx-auto px-4">
@@ -245,7 +248,7 @@ onMounted(() => {
           </select>
         </div>
 
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div v-if="events.length" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div v-for="(event, index) in events" :key="index"
             class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden" :class="{ 'p-0': true }">
             <div class="relative">
@@ -305,13 +308,16 @@ onMounted(() => {
             </div>
           </div>
         </div>
+        <div v-else class="text-center py-16 text-gray-500">
+          No data
+        </div>
       </section>
       <section class="mt-10 mb-16 max-w-6xl mx-auto px-4">
         <h3 class="text-2xl font-sans font-bold text-[#333] text-center mb-10">
           Topics that might interest you
         </h3>
 
-        <div class="grid sm:grid-cols-2 gap-6">
+        <div v-if="topics.length" class="grid sm:grid-cols-2 gap-6">
           <div v-for="(topic, index) in topics" :key="index"
             class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden p-0">
             <div class="grid grid-cols-1 sm:grid-cols-5 h-full">
@@ -358,9 +364,11 @@ onMounted(() => {
             </div>
           </div>
         </div>
+        <div v-else class="text-center py-16 text-gray-500">
+          No data
+        </div>
       </section>
     </div>
-    <!-- Register Event Modal -->
     <div v-if="showRegisterModal" class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
       <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
         <h3 class="text-xl font-bold text-[#333] mb-2">Register for Event</h3>
