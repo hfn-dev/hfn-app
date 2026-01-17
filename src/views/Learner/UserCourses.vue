@@ -176,22 +176,35 @@ const isUserEnrolled = (courseId) => {
   return userEnrollments.value.some(enrollment => enrollment.course?.id === courseId);
 };
 
-const handleCourseAction = async (course) => {
-  if (isUserEnrolled(course.id)) {
-    router.push(`/learning/courses/${course.id || course.slug}`);
-  } else {
-    try {
-      await learningModule.courseEnrollment({
-        slug: course.slug || course.id
-      });
-      toast.success(`Enrolled in "${course.title}" successfully!`);
-      await fetchUserEnrollments();
-    } catch (error) {
-      console.error('Enrollment error:', error);
-      toast.error('Failed to enroll in course');
-    }
+
+const handleCourseAction = async (item) => {
+  const courseData = item.course ? item.course : item;
+  const slug = courseData.slug;
+  const courseId = courseData.id;
+
+  if (!slug) {
+    toast.error('Course identifier missing');
+    return;
+  }
+
+  if (isUserEnrolled(courseId)) {
+    router.push(`/learning/courses/${slug}`);
+    return;
+  }
+
+  try {
+    await learningModule.courseEnrollment(slug);
+    
+    toast.success(`Successfully enrolled in ${courseData.title || 'course'}`);
+    
+    await fetchUserEnrollments(); 
+  } catch (error) {
+    const serverMessage = error.response?.data?.error || error.response?.data?.message;
+    console.error('Enrollment Failed:', serverMessage || error.message);
+    toast.error(serverMessage || 'Server error during enrollment');
   }
 };
+
 
 const getActionButtonText = (course) => {
   return isUserEnrolled(course.id) ? 'Continue Course' : 'Take Course';

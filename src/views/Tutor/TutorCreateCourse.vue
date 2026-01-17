@@ -75,20 +75,6 @@ const pricingAccessForm = ref({
 const categories = ref([]);
 
 
-onMounted(async () => {
-  await fetchCategories();
-
-  if (isCreateMode.value) return;
-
-  try {
-    const course = await learningModule.getCoursesDetails(courseSlug);
-    populateCourse(course);
-  } catch (error) {
-    console.error(error);
-    toast.error('Failed to load course');
-  }
-});
-
 
 const fetchCategories = async () => {
   try {
@@ -145,7 +131,7 @@ const totalDurationHours = computed(() => {
     );
   }, 0);
 
-  return (totalSeconds / 3600).toFixed(2); // Convert seconds to hours
+  return (totalSeconds / 3600).toFixed(2);
 });
 
 const steps = [
@@ -185,17 +171,14 @@ const handleThumbnailUpload = (event) => {
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      // 5MB limit
       toast.error('Image size should be less than 5MB');
       return;
     }
 
     basicInfoForm.value.thumbnail = file;
 
-    // Create preview URL
     const reader = new FileReader();
     reader.onload = (e) => {
-      // You can store the preview URL if needed
       console.log('Thumbnail uploaded:', file.name);
     };
     reader.readAsDataURL(file);
@@ -230,7 +213,6 @@ const removeModule = (id) => {
   curriculumForm.value.modules = curriculumForm.value.modules.filter(
     (m) => m.id !== id
   );
-  // Reorder modules after removal
   curriculumForm.value.modules.forEach((module, index) => {
     module.order = index + 1;
   });
@@ -262,12 +244,10 @@ const saveAndContinue = () => {
       }: ${steps[currentStep.value].title}`
     );
 
-    // Validate current step before continuing
     if (validateCurrentStep()) {
       currentStep.value += 1;
     }
   } else {
-    // Final step - submit course
     submitCourse();
   }
 };
@@ -478,9 +458,7 @@ const handleQuizAdded = () => {
   closeAddQuizDialog();
 };
 
-// --- Course Submission Logic ---
 const prepareCourseData = () => {
-  // Convert form data to API payload
   const payload = {
     title: basicInfoForm.value.title,
     description: basicInfoForm.value.fullOverview,
@@ -625,6 +603,24 @@ const uploadThumbnail = async (courseId) => {
     toast.error('Failed to upload thumbnail');
   }
 };
+
+
+
+onMounted(async () => {
+  await fetchCategories();
+
+  if (isCreateMode.value) return;
+
+  try {
+    const response = await learningModule.getCoursesDetails(courseSlug);
+    const course = response.data; 
+    populateCourse(course);
+  } catch (error) {
+    console.error(error);
+    toast.error('Failed to load course');
+  }
+});
+
 </script>
 
 <template>

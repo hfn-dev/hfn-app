@@ -13,7 +13,7 @@ export default {
 
   async createTicket(payload) {
     try {
-      const response = await api.post('/create/', payload);
+      const response = await api.post('/tickets/', payload);
       return response.data;
     } catch (error) {
       console.error('Create ticket API error:', error);
@@ -33,10 +33,7 @@ export default {
 
   async updateTicket(ticketId, payload) {
     try {
-      const response = await api.post(
-        `/tickets/${ticketId}/update`,
-        payload
-      );
+      const response = await api.patch(`/tickets/${ticketId}/`, payload);
       return response.data;
     } catch (error) {
       console.error('Ticket update API error:', error);
