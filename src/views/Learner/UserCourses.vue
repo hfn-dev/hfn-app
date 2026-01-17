@@ -177,74 +177,34 @@ const isUserEnrolled = (courseId) => {
 };
 
 
-const handleCourseAction = async (course) => {
-  const slug = course.slug || (course.course?.slug);
-  
-  console.log('Enrollment Debug - Course Object:', course); // Check the incoming object
-  console.log('Enrollment Debug - Extracted Slug:', slug);   // Should be a string like "intro-to-health"
+const handleCourseAction = async (item) => {
+  const courseData = item.course ? item.course : item;
+  const slug = courseData.slug;
+  const courseId = courseData.id;
 
-  if (typeof slug !== 'string') {
-    console.error('CRITICAL: Slug is not a string!');
-    return;
-  }
   if (!slug) {
-    toast.error('Cannot enroll: course slug is missing');
+    toast.error('Course identifier missing');
     return;
   }
 
-  if (isUserEnrolled(course.id || course.course?.id)) {
+  if (isUserEnrolled(courseId)) {
     router.push(`/learning/courses/${slug}`);
-  } else {
-    try {
-      await learningModule.courseEnrollment(slug);
-      toast.success(`Enrolled in "${course.title || course.course?.title}" successfully!`);
-      await fetchUserEnrollments();
-    } catch (error) {
-      console.error('Enrollment error:', error);
-      toast.error('Failed to enroll in course');
-    }
+    return;
+  }
+
+  try {
+    await learningModule.courseEnrollment(slug);
+    
+    toast.success(`Successfully enrolled in ${courseData.title || 'course'}`);
+    
+    await fetchUserEnrollments(); 
+  } catch (error) {
+    const serverMessage = error.response?.data?.error || error.response?.data?.message;
+    console.error('Enrollment Failed:', serverMessage || error.message);
+    toast.error(serverMessage || 'Server error during enrollment');
   }
 };
 
-
-
-// const handleCourseAction = async (course) => {
-//   if (isUserEnrolled(course.id)) {
-//     router.push(`/learning/courses/${course.slug || course.id}`);
-//   } else {
-//     try {
-//       const identifier = course.slug || String(course.id);
-      
-//       if (!identifier) {
-//         toast.error('Course identifier not found');
-//         return;
-//       }
-
-//       await learningModule.courseEnrollment(identifier, {}); 
-      
-//       toast.success(`Enrolled in "${course.title}" successfully!`);
-//       await fetchUserEnrollments();
-//     } catch (error) {
-//       console.error('Enrollment error:', error);
-//       toast.error(error.response?.data?.message || 'Failed to enroll in course');
-//     }
-//   }
-// };
-
-// const handleCourseAction = async (course) => {
-//   if (isUserEnrolled(course.id)) {
-//     router.push(`/learning/courses/${course.id || course.slug}`);
-//   } else {
-//     try {
-//       await learningModule.courseEnrollment(course.slug || course.id);
-//       toast.success(`Enrolled in "${course.title}" successfully!`);
-//       await fetchUserEnrollments();
-//     } catch (error) {
-//       console.error('Enrollment error:', error);
-//       toast.error('Failed to enroll in course');
-//     }
-//   }
-// };
 
 const getActionButtonText = (course) => {
   return isUserEnrolled(course.id) ? 'Continue Course' : 'Take Course';

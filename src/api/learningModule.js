@@ -188,9 +188,11 @@ export default {
   },
 
   async courseEnrollment(slug, payload = {}) {
+    const cleanSlug = typeof slug === 'object' ? slug.slug || slug.id : slug;
+
     try {
       const response = await api.post(
-        `/learning/courses/${slug}/enroll`,
+        `/learning/courses/${cleanSlug}/enroll/`,
         payload
       );
       return response.data;
