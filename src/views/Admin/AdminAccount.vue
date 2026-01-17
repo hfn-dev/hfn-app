@@ -2,11 +2,12 @@
 import cert from "@/assets/cert.png";
 import sign from "@/assets/sign.png";
 import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
-import { computed, reactive, ref } from "vue";
+import { computed, reactive, ref, onMounted } from "vue";
 import { useToast } from "@/composables/useToast";
+import accessApi from "@/api/userRegister"
+
 
 const { showToast } = useToast();
-const isOrganization = ref(true);
 const currentView = ref("My Profile");
 const activeTab = ref("My Profile");
 const previewImageUrl = ref(null);
@@ -14,46 +15,78 @@ const uploadedFileName = ref(null);
 const uploadStatus = ref("Awaiting Upload");
 const fileInput = ref(null);
 const profileImageUrl = ref(null);
+const isOrganization = ref(false);
+const signatures = reactive([]);
+const isIndividualEditing = ref(false);
+const isOrgEditing = ref(false);
 
 let nextSignatureId = 3;
-const orgDetails = reactive({
-  name: "Ruthie & Co Nigeria Limited",
-  email: "peterpan@gmail.com.us",
-  phone: "+234 123 456 78",
-  password: "********",
+const profile = reactive({
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  password: "",
+  organizationName: "",
 });
-const orgDetailsKeys = [
-  { key: "name", label: "Name" },
-  { key: "email", label: "Email Address" },
-  { key: "phone", label: "Phone Number" },
-  { key: "password", label: "Password" },
-];
 
-const individualDetails = reactive({
-  firstName: "John",
-  lastName: "Doe",
-  email: "john.doe@example.com",
-  phone: "+1 555 123 4567",
-  password: "********",
-});
-const individualDetailsKeys = [
+const toggleIndividualEdit = () => {
+  if (isIndividualEditing.value) {
+    showToast("Profile updated successfully", "success");
+  }
+  isIndividualEditing.value = !isIndividualEditing.value;
+};
+
+const individualDetailsKeys = computed(() => [
   { key: "firstName", label: "First Name" },
   { key: "lastName", label: "Last Name" },
   { key: "email", label: "Email Address" },
   { key: "phone", label: "Phone Number" },
   { key: "password", label: "Password" },
-];
-
-const invitations = reactive([
-  { id: 1, email: "peterpan@gmail.com", sent: true },
-  { id: 2, email: "", sent: false },
-  { id: 3, email: "", sent: false },
 ]);
+
+const profileKeys = computed(() => {
+  if (isOrganization.value) {
+    return [
+      { key: "organizationName", label: "Organization Name" },
+      { key: "email", label: "Email Address" },
+      { key: "phone", label: "Phone Number" },
+      { key: "password", label: "Password" },
+    ];
+  } else {
+    return [
+      { key: "firstName", label: "First Name" },
+      { key: "lastName", label: "Last Name" },
+      { key: "email", label: "Email Address" },
+      { key: "phone", label: "Phone Number" },
+      { key: "password", label: "Password" },
+    ];
+  }
+});
+
+const invitations = reactive([]);
 
 const sentInvitesCount = computed(
   () => invitations.filter((i) => i.sent).length
 );
 
+
+const fetchProfile = async () => {
+  try {
+    const data = await accessApi.getUser(); 
+    profile.firstName = data.first_name || "";
+    profile.lastName = data.last_name || "";
+    profile.email = data.email || "";
+    profile.phone = data.phone_number || "";
+    profile.organizationName = data.organization_name || ""; 
+    profileImageUrl.value = data.profile || null;
+    
+    isOrganization.value = data.role === 'organization'; 
+  } catch (err) {
+    console.error("Failed to load profile:", err);
+    showToast("Failed to load profile.", "error");
+  }
+};
 
 const handleProfilePicUpload = (event) => {
   const file = event.target.files[0];
@@ -152,20 +185,6 @@ const removeInvitation = (id) => {
   }
 };
 
-const signatures = reactive([
-  {
-    id: 1,
-    name: "Signature 1",
-    date: "Created on October 25, 2025",
-    imageUrl: sign,
-  },
-  {
-    id: 2,
-    name: "Signature 2",
-    date: "Created on October 25, 2025",
-    imageUrl: sign,
-  },
-]);
 
 const addSignature = () => {
   if (!previewImageUrl.value) {
@@ -209,6 +228,11 @@ const downloadSignature = (imageUrl, fileName) => {
   document.body.removeChild(link);
   console.log(`Signature "${fileName}" downloaded.`);
 };
+
+
+onMounted(() => {
+  fetchProfile();
+});
 </script>
 
 <template>
@@ -423,8 +447,7 @@ const downloadSignature = (imageUrl, fileName) => {
                     >
                     <input
                       :type="detail.key === 'password' ? 'password' : 'text'"
-                      v-model="individualDetails[detail.key]"
-                      :disabled="!isIndividualEditing"
+v-model="profile[detail.key]"                      :disabled="!isIndividualEditing"
                       :class="
                         isIndividualEditing
                           ? 'bg-white border border-gray-400 rounded-md p-1.5'

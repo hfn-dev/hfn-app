@@ -14,17 +14,20 @@ import {
   UploadCloud,
 } from 'lucide-vue-next';
 import { computed, onMounted, ref } from 'vue';
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useToast } from 'vue-toastification';
 import AdminSidebar from './AdminSidebar.vue';
 
 const route = useRoute();
 const categories = ref([]);
+const router = useRouter();
+const isLoadingCategories = ref(false);
+const categoryError = ref(null);
 
 const toast = useToast();
 const currentStep = ref(1);
 const slug = route.params.slug;
-
+const mode = route.props?.mode || 'edit';
 const basicInfoForm = ref({
   title: '',
   shortDescription: '',
@@ -103,6 +106,68 @@ const steps = [
   { id: 3, title: 'Pricing & Access' },
   { id: 4, title: 'Preview & Submit' },
 ];
+
+
+const course = ref(null);
+const isLoading = ref(false);
+const error = ref(null);
+
+const fetchCourse = async () => {
+  isLoading.value = true;
+  error.value = null;
+  try {
+    const response = await learningModule.getCoursesDetails(slug);
+    course.value = response.data;
+
+    basicInfoForm.value.title = course.value.title;
+    basicInfoForm.value.shortDescription = course.value.short_description;
+    basicInfoForm.value.category = course.value.category?.id || '';
+    basicInfoForm.value.level = course.value.level;
+    basicInfoForm.value.fullOverview = course.value.description;
+    basicInfoForm.value.learnOutcomes = course.value.learning_outcomes.map((o, i) => ({
+      id: i + 1,
+      text: o,
+      charCount: o.length,
+    }));
+
+    curriculumForm.value.modules = course.value.modules.map((m) => ({
+      ...m,
+      isOpen: false,
+      lessons: m.lessons.map((l) => ({
+        ...l,
+      })),
+    }));
+
+    curriculumForm.value.materialsIncluded = []; 
+    curriculumForm.value.instructorName = course.value.instructor?.first_name || '';
+    curriculumForm.value.briefBiography = course.value.instructor?.biography || '';
+
+    pricingAccessForm.value.courseAccessType = course.value.is_free ? 'free' : 'paid';
+    pricingAccessForm.value.courseVisibility = course.value.status === 'published' ? 'public' : 'private';
+    pricingAccessForm.value.price = parseFloat(course.value.price);
+    pricingAccessForm.value.currency = 'NGN'; 
+  } catch (err) {
+    console.error(err);
+    error.value = 'Failed to load course';
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+const fetchCategories = async () => {
+  isLoadingCategories.value = true;
+  categoryError.value = null;
+
+  try {
+    const response = await learningModule.getCategories();
+    categories.value = response.data; 
+  } catch (err) {
+    console.error('Failed to fetch categories', err);
+    categoryError.value = 'Failed to load categories';
+  } finally {
+    isLoadingCategories.value = false;
+  }
+};
 
 const addOutcome = () => {
   const newId =
@@ -272,91 +337,28 @@ const handleQuizAdded = () => {
 const submitCourse = async () => {
   try {
     const payload = getCoursePayload();
-    const response = await learningModule.createCourses(payload);
-    toast.success('Course Created Successfully!');
-    console.log('Course Created:', response.data);
 
-    resetForms();
-    currentStep.value = 1;
+    let response;
+    if (slug) {
+      response = await learningModule.updateCourses(slug, payload);
+      toast.success('Course Updated Successfully!');
+    } else {
+      response = await learningModule.createCourses(payload);
+      toast.success('Course Created Successfully!');
+      resetForms();
+      currentStep.value = 1;
+    }
+
+    console.log('Course response:', response.data);
   } catch (error) {
-    console.error('Error creating course:', error);
-    toast.error('Failed to create course. Check console for details.');
+    console.error('Course submit error:', error);
+    toast.error('Failed to submit course.');
   }
 };
 
-onMounted(async () => {
-  try {
-    const response = await learningModule.getCategories();
-    categories.value = response.data || [];
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-    toast.error('Failed to load categories');
-  }
-
-  if (slug) {
-    try {
-      const course = await learningModule.getCoursesDetails(slug);
-
-      // Basic Info
-      basicInfoForm.value.title = course.title || '';
-      basicInfoForm.value.shortDescription = course.short_description || '';
-      basicInfoForm.value.category = course.category || 'Nutrition';
-      basicInfoForm.value.level = course.level || 'Beginner';
-      basicInfoForm.value.fullOverview = course.full_overview || '';
-
-      // Duration split into hours, minutes, seconds
-      if (course.duration) {
-        const [hours, minutes, seconds] = course.duration.split(':');
-        basicInfoForm.value.durationHours = hours || '00';
-        basicInfoForm.value.durationMinutes = minutes || '00';
-        basicInfoForm.value.durationSeconds = seconds || '00';
-      }
-
-      // Learn Outcomes
-      basicInfoForm.value.learnOutcomes = course.learn_outcomes?.map((text, index) => ({
-        id: index + 1,
-        text,
-        charCount: text.length,
-      })) || [];
-
-      // Curriculum
-      curriculumForm.value.modules = course.curriculum?.map((module, moduleIndex) => ({
-        id: moduleIndex + 1,
-        title: module.title,
-        resources: module.resources || '',
-        isOpen: false,
-        lessons: module.lessons?.map((lesson, lessonIndex) => ({
-          id: lessonIndex + 1,
-          title: lesson.title,
-          duration: lesson.duration,
-          contentType: lesson.content_type || 'Video File',
-        })) || [],
-      })) || [];
-
-      // Materials
-      curriculumForm.value.materialsIncluded = course.materials_included?.map((text, index) => ({
-        id: index + 1,
-        text,
-        charCount: text.length,
-      })) || [];
-
-      // Instructor
-      curriculumForm.value.instructorName = course.instructor?.name || '';
-      curriculumForm.value.briefBiography = course.instructor?.biography || '';
-
-      // Pricing
-      pricingAccessForm.value.courseAccessType = course.pricing?.access_type || 'paid';
-      pricingAccessForm.value.courseVisibility = course.pricing?.visibility || 'public';
-      pricingAccessForm.value.price = course.pricing?.price || 0;
-      pricingAccessForm.value.currency = course.pricing?.currency || 'NGN';
-      pricingAccessForm.value.discountAmount = course.pricing?.discount_amount || 'none';
-      pricingAccessForm.value.discountAvailability = course.pricing?.discount_availability || 'all';
-
-    } catch (error) {
-      console.error('Error fetching course details:', error);
-      toast.error('Failed to load course data');
-    }
-  }
+onMounted(() => {
+  if (slug) fetchCourse();
+  fetchCategories()
 });
 </script>
 

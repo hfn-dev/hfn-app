@@ -283,12 +283,21 @@ const routes = [
     component: AdminManager,
   },
 
-  {
-    path: '/admin/courses/:slug/edit',
-    name: 'AdminEditCourse',
-    component: AdminCreateCourse,
-    props: true,
-  },
+
+{
+  path: '/admin/courses/:slug/edit',
+  name: 'AdminEditCourse',
+  component: AdminCreateCourse,
+  props: route => ({ slug: route.params.slug, mode: 'edit' }),
+},
+
+{
+  path: '/admin/courses/:slug',
+  name: 'AdminViewCourse',
+  component: AdminCreateCourse,
+  props: route => ({ slug: route.params.slug, mode: 'view' }),
+},
+
 
   //for learners
 

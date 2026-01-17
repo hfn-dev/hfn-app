@@ -1,26 +1,29 @@
 <script setup>
-import dashboardApi from "@/api/dashboard";
+import { default as courseApi, default as learningModule } from "@/api/learningModule";
 import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
-import { computed, onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
-import { useToast } from 'vue-toastification';
-
 import {
-  ChevronLeft,
-  ChevronRight,
   Edit2,
   Eye,
   MoreVertical,
   Plus,
   Search,
-  Trash2,
+  Trash2
 } from "lucide-vue-next";
+import { computed, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+import { useToast } from 'vue-toastification';
 
 const toast = useToast();
 const courseTabs = ref(["Published", "Drafts", "Archived", "Approvals"]);
 const currentTab = ref("Published");
 const router = useRouter();
+const currentSorting = ref('-enrollment_count');
+const currentPage = ref(1);
+const pageSize = ref(10);
+const totalPages = ref(1);
+const totalItems = ref(0);
 
+const searchQuery = ref('');
 const publishedCourses = ref([]);
 const draftCourses = ref([]);
 const archivedCourses = ref([]);
@@ -28,74 +31,61 @@ const approvedCourses = ref([]);
 const isLoading = ref(false);
 const error = ref(null);
 
-const fetchCourseAnalytics = async (ordering = '-enrollment_count') => {
-  isLoading.value = true;
-  error.value = null;
 
+
+const fetchCourses = async () => {
   try {
-    // Use the dashboardApi.fetchCourseAnalytics method
-    const courses = await dashboardApi.fetchCourseAnalytics({ ordering });
+    isLoading.value = true;
+    error.value = null;
 
-    // Transform API response to match component structure
-    publishedCourses.value = courses.map(course => ({
-      id: course.course_id,
-      slug: course.course_slug,
-      title: course.course_title,
-      enrollments: course.total_enrollments,
-      completion: `${course.completion_rate.toFixed(1)}%`,
-      lastUpdate: "Recently updated", // This field might not be in your API response
-      activeStudents: course.active_students,
-      completedStudents: course.completed_students,
-      averageRating: course.average_rating,
-      totalViews: course.total_views,
-      totalTimeHours: course.total_time_hours,
-      completionRate: course.completion_rate
+    const response = await learningModule.getAllCourses({
+      page: currentPage.value,
+      page_size: pageSize.value,
+      search: searchQuery.value,
+      ordering: currentSorting.value,
+      status:
+        currentTab.value === "Published"
+          ? "published"
+          : currentTab.value === "Drafts"
+          ? "draft"
+          : "archived",
+    });
+
+    const courses = response.data;
+
+    const mappedCourses = courses.map(course => ({
+      ...course,
+      enrollments: course.enrollment_count || 0,
+      completionRate: course.completion_rate || 0,
+      averageRating: parseFloat(course.rating_average) || 0,
+      totalViews: course.view_count || 0,
+      activeStudents: course.enrollment_count || 0,
     }));
 
-    // todo API calls
-    draftCourses.value = [];
-    archivedCourses.value = [];
-    approvedCourses.value = [];
-
-    // Update total pages based on response if your API supports pagination
-    // totalPages.value = Math.ceil(courses.length / pageSize);
-
-  } catch (err) {
-    console.error("Error fetching course analytics:", err);
-    error.value = err.response?.data?.detail || "Failed to fetch course data";
-
-    if (err.response?.status === 403) {
-      toast.error("You are not authorized to view course analytics");
+    if (currentTab.value === "Published") {
+      publishedCourses.value = mappedCourses;
+    } else if (currentTab.value === "Drafts") {
+      draftCourses.value = mappedCourses;
     } else {
-      toast.error("Failed to load course data");
+      archivedCourses.value = mappedCourses;
     }
 
-    // Clear data on error
-    publishedCourses.value = [];
+    totalItems.value = mappedCourses.length;
+    totalPages.value = Math.ceil(mappedCourses.length / pageSize.value);
+
+  } catch (err) {
+    console.error('Fetch courses failed', err);
+    error.value = 'Failed to load courses';
   } finally {
     isLoading.value = false;
   }
 };
 
-const handleEditCourse = async (slug) => {
-  try {
-    // Fetch the course details first (if needed for pre-filling the form)
-    const course = await courseApi.getCoursesDetails(slug);
-
-    // Navigate to edit page and pass slug via query or params
-    router.push({ path: `/admin/courses/${slug}/edit` });
-  } catch (err) {
-    console.error('Failed to fetch course for edit', err);
-    toast.error('Failed to load course for editing');
-  }
-};
-
-
 const handleDeleteCourse = async (slug) => {
   if (!confirm("Are you sure you want to delete this course?")) return;
 
   try {
-    await courseApi.deleteCourse(slug); 
+    await courseApi.deleteCourse(slug);
     toast.success('Course deleted successfully');
 
     publishedCourses.value = publishedCourses.value.filter(c => c.slug !== slug);
@@ -108,28 +98,73 @@ const handleDeleteCourse = async (slug) => {
 
 // Handle sorting
 const updateSorting = (ordering) => {
-  fetchCourseAnalytics(ordering);
+  currentSorting.value = ordering;
+  fetchCourses(ordering);
 };
 
-// Handle tab changes
-const handleTabChange = (tab) => {
-  currentTab.value = tab;
+const fetchApprovalCourses = async () => {
+  isLoading.value = true;
+  try {
+    const data = await learningModule.fetchCoursesPendingApproval({
+      page: currentPage.value,
+      search: searchQuery.value
+    });
 
-  switch (tab) {
-    case "Published":
-      fetchCourseAnalytics();
-      break;
-    case "Drafts":
-      //todo dashboardApi.fetchDraftCourses();
-      break;
-    case "Archived":
-      //todo dashboardApi.fetchArchivedCourses();
-      break;
-    case "Approvals":
-      //todo dashboardApi.fetchPendingApprovalCourses();
-      break;
+    approvedCourses.value = data.results;
+totalPages.value = Math.ceil(data.count / pageSize.value);
+  } finally {
+    isLoading.value = false;
   }
 };
+
+const approveCourse = async (slug) => {
+  try {
+    await courseApi.updateCourses(slug, {
+      is_approved: true
+    });
+
+    toast.success("Course approved");
+    fetchApprovalCourses();
+  } catch {
+    toast.error("Approval failed");
+  }
+};
+
+
+const rejectCourse = async (slug) => {
+  try {
+    await courseApi.updateCourses(slug, {
+      is_approved: false,
+      is_published: false
+    });
+
+    toast.success("Course rejected");
+    fetchApprovalCourses();
+  } catch {
+    toast.error("Rejection failed");
+  }
+};
+
+
+// Handle tab changes
+const handleTabChange = async (tab) => {
+  currentTab.value = tab;
+  currentPage.value = 1;
+  searchQuery.value = '';
+
+  await fetchActiveTab();
+};
+
+const fetchActiveTab = async () => {
+  currentPage.value = Math.max(currentPage.value, 1);
+
+  if (currentTab.value === "Approvals") {
+    await fetchApprovalCourses();
+  } else {
+    await fetchCourses();
+  }
+};
+
 
 const isApprovalTab = computed(() => currentTab.value === "Approvals");
 
@@ -158,32 +193,26 @@ const handleAction = (action, slug) => {
   }
 };
 
-const currentPage = ref(1);
-const totalPages = ref(1);
-const searchQuery = ref("");
-
 const goToPage = (page) => {
-  if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page;
-    // Add pagination to API call if needed
-    // fetchCourseAnalytics({ page, ordering: currentSorting.value });
-  }
+  if (page < 1 || page > totalPages.value) return;
+  currentPage.value = page;
+  fetchActiveTab();
 };
+
+
+let searchTimeout = null;
 
 const handleSearch = () => {
-  // Implement search functionality
-  if (searchQuery.value.trim()) {
-    // You might want to add a search parameter to your API
-    // fetchCourseAnalytics({ search: searchQuery.value });
-    toast.info(`Searching for: ${searchQuery.value}`);
-  } else {
-    fetchCourseAnalytics();
-  }
+  clearTimeout(searchTimeout);
+
+  searchTimeout = setTimeout(() => {
+    currentPage.value = 1;
+    fetchActiveTab();
+  }, 400);
 };
 
-// Initialize data
 onMounted(() => {
-  fetchCourseAnalytics();
+  fetchCourses();
 });
 </script>
 
@@ -227,7 +256,7 @@ onMounted(() => {
 
       <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
         <p class="text-red-600 font-medium">{{ error }}</p>
-        <button @click="fetchCourseAnalytics"
+        <button @click="fetchCourses"
           class="mt-4 px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#00994d] transition-colors">
           Retry
         </button>
@@ -278,139 +307,14 @@ onMounted(() => {
           <p>No courses in this category</p>
         </div>
 
-        <!-- <table v-else class="min-w-full divide-y divide-gray-200">
-          <thead>
-            <tr
-              class="bg-[#f0fff0] text-gray-700 uppercase text-sm leading-normal border-b border-[#00cc66]/50"
-            >
-              <th class="py-3 px-3 text-left w-12 rounded-tl-lg">
-                <input type="checkbox" class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]" />
-              </th>
 
-              <th class="py-3 px-3 text-left flex items-center">
-                Course Title
-                <MoreVertical class="w-4 h-4 ml-1 text-gray-500" />
-              </th>
-
-              <template v-if="isApprovalTab">
-                <th class="py-3 px-3 text-left">Created By</th>
-                <th class="py-3 px-3 text-left">Creation Date</th>
-                <th class="py-3 px-3 text-center rounded-tr-lg">Action</th>
-              </template>
-
-<template v-else>
-                <th class="py-3 px-3 text-left flex items-center">
-                  Enrollments
-                  <MoreVertical class="w-4 h-4 ml-1 text-gray-500" />
-                </th>
-                <th class="py-3 px-3 text-left flex items-center">
-                  Completion Rate
-                  <MoreVertical class="w-4 h-4 ml-1 text-gray-500" />
-                </th>
-                <th class="py-3 px-3 text-left flex items-center">
-                  Average Rating
-                  <MoreVertical class="w-4 h-4 ml-1 text-gray-500" />
-                </th>
-                <th class="py-3 px-3 text-left">
-                  Active Students
-                </th>
-              </template>
-
-<th class="py-3 px-3 text-center rounded-tr-lg">Action</th>
-</tr>
-</thead>
-
-<tbody class="text-gray-600 text-sm font-light divide-y divide-gray-100">
-  <tr v-for="course in activeCourses" :key="course.id" class="hover:bg-[#f9fff9] transition-colors">
-    <td class="py-3 px-3">
-      <input type="checkbox" class="h-4 w-4 text-[#00cc66]" />
-    </td>
-
-    <td class="py-3 px-3 font-medium text-[#006633]">
-      {{ course.title }}
-      <div class="text-xs text-gray-500 mt-1">
-        {{ course.totalViews ? `${course.totalViews} views` : 'No views yet' }}
-      </div>
-    </td>
-
-    <template v-if="isApprovalTab">
-                <td class="py-3 px-3">
-                  {{ course.createdBy || "-" }}
-                </td>
-                <td class="py-3 px-3">
-                  {{ course.creationDate || "-" }}
-                </td>
-                <td class="py-3 px-3">
-                  <button
-                    @click="handleAction('Approve', course.id)"
-                    class="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
-                  >
-                    Approve
-                  </button>
-                </td>
-              </template>
-
-    <template v-else>
-                <td class="py-3 px-3 font-semibold">
-                  {{ course.enrollments || 0 }}
-                </td>
-                <td class="py-3 px-3">
-                  <div class="flex items-center">
-                    <div class="w-full bg-gray-200 rounded-full h-2.5 mr-3">
-                      <div 
-                        class="bg-green-600 h-2.5 rounded-full" 
-                        :style="{ width: `${Math.min(course.completionRate || 0, 100)}%` }"
-                      ></div>
-                    </div>
-                    <span
-                      :class="{
-                        'text-green-600 font-semibold': (course.completionRate || 0) >= 80,
-                        'text-orange-500': (course.completionRate || 0) < 50,
-                        'text-blue-600': (course.completionRate || 0) >= 50 && (course.completionRate || 0) < 80
-                      }"
-                    >
-                      {{ course.completion }}
-                    </span>
-                  </div>
-                </td>
-                <td class="py-3 px-3">
-                  <span class="flex items-center">
-                    ⭐ {{ course.averageRating?.toFixed(1) || "0.0" }}
-                  </span>
-                </td>
-                <td class="py-3 px-3">
-                  {{ course.activeStudents || 0 }}
-                </td>
-              </template>
-
-    <td class="py-3 px-3 text-center">
-      <div class="flex item-center justify-center space-x-2">
-        <button @click="handleAction('View', course.id)" class="w-6 h-6 hover:text-blue-500 transition-colors"
-          title="View Course">
-          <Eye class="w-full h-full" />
-        </button>
-        <button @click="handleAction('Edit', course.id)" class="w-6 h-6 hover:text-green-500 transition-colors"
-          title="Edit Course">
-          <Edit2 class="w-full h-full" />
-        </button>
-        <button @click="handleAction('Delete', course.id)" class="w-6 h-6 hover:text-red-500 transition-colors"
-          title="Delete Course">
-          <Trash2 class="w-full h-full" />
-        </button>
-      </div>
-    </td>
-  </tr>
-</tbody>
-</table> -->
         <table v-else class="min-w-full table-fixed divide-y divide-gray-200">
           <thead>
             <tr class="bg-[#f0fff0] text-gray-700 uppercase text-sm leading-normal border-b border-[#00cc66]/50">
-              <!-- Checkbox -->
               <th class="py-3 px-3 text-left w-12 rounded-tl-lg">
                 <input type="checkbox" class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]" />
               </th>
 
-              <!-- Course Title -->
               <th class="py-3 px-3 text-left">
                 <div class="flex items-center gap-1">
                   Course Title
@@ -418,13 +322,11 @@ onMounted(() => {
                 </div>
               </th>
 
-              <!-- Approval tab columns -->
               <template v-if="isApprovalTab">
                 <th class="py-3 px-3 text-left">Created By</th>
                 <th class="py-3 px-3 text-left">Creation Date</th>
               </template>
 
-              <!-- Active tab columns -->
               <template v-else>
                 <th class="py-3 px-3 text-left">
                   <div class="flex items-center gap-1">
@@ -450,7 +352,6 @@ onMounted(() => {
                 <th class="py-3 px-3 text-left">Active Students</th>
               </template>
 
-              <!-- Action -->
               <th class="py-3 px-3 text-center rounded-tr-lg w-32">
                 Action
               </th>
@@ -459,12 +360,10 @@ onMounted(() => {
 
           <tbody class="text-gray-600 text-sm font-light divide-y divide-gray-100">
             <tr v-for="course in activeCourses" :key="course.id" class="hover:bg-[#f9fff9] transition-colors">
-              <!-- Checkbox -->
               <td class="py-3 px-3">
                 <input type="checkbox" class="h-4 w-4 text-[#00cc66]" />
               </td>
 
-              <!-- Course Title -->
               <td class="py-3 px-3 font-medium text-[#006633]">
                 {{ course.title }}
                 <div class="text-xs text-gray-500 mt-1">
@@ -472,7 +371,6 @@ onMounted(() => {
                 </div>
               </td>
 
-              <!-- Approval tab rows -->
               <template v-if="isApprovalTab">
                 <td class="py-3 px-3">
                   {{ course.createdBy || '-' }}
@@ -482,7 +380,6 @@ onMounted(() => {
                 </td>
               </template>
 
-              <!-- Active tab rows -->
               <template v-else>
                 <td class="py-3 px-3 font-semibold">
                   {{ course.enrollments || 0 }}
@@ -515,25 +412,34 @@ onMounted(() => {
                 </td>
               </template>
 
-              <!-- Action buttons -->
               <td class="py-3 px-3 text-center">
-                <div class="flex items-center justify-center gap-2">
-                  <button @click="handleAction('View', course.slug)" class="w-6 h-6 hover:text-blue-500 transition-colors"
-                    title="View Course">
+                <div v-if="isApprovalTab" class="flex items-center justify-center gap-2">
+                  <button @click="approveCourse(course.slug)"
+                    class="px-3 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700">
+                    Approve
+                  </button>
+
+                  <button @click="rejectCourse(course.slug)"
+                    class="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700">
+                    Reject
+                  </button>
+                </div>
+
+                <div v-else class="flex items-center justify-center gap-2">
+                  <button @click="handleAction('View', course.slug)" class="w-6 h-6 hover:text-blue-500">
                     <Eye class="w-full h-full" />
                   </button>
 
-                  <button @click="handleAction('Edit', course.slug)"
-                    class="w-6 h-6 hover:text-green-500 transition-colors" title="Edit Course">
+                  <button @click="handleAction('Edit', course.slug)" class="w-6 h-6 hover:text-green-500">
                     <Edit2 class="w-full h-full" />
                   </button>
 
-                  <button @click="handleAction('Delete', course.slug)"
-                    class="w-6 h-6 hover:text-red-500 transition-colors" title="Delete Course">
+                  <button @click="handleAction('Delete', course.slug)" class="w-6 h-6 hover:text-red-500">
                     <Trash2 class="w-full h-full" />
                   </button>
                 </div>
               </td>
+
             </tr>
           </tbody>
         </table>
@@ -579,21 +485,9 @@ onMounted(() => {
           <div>
             Showing {{ activeCourses.length }} course{{ activeCourses.length !== 1 ? 's' : '' }}
           </div>
-          <div class="flex items-center">
-            <span class="mr-4">Page {{ currentPage }} of {{ totalPages }}</span>
-            <div class="flex space-x-2">
-              <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1"
-                :class="{ 'opacity-50 cursor-not-allowed': currentPage === 1 }"
-                class="p-2 border rounded-full hover:bg-gray-100 transition-colors" title="Previous Page">
-                <ChevronLeft class="w-4 h-4" />
-              </button>
-              <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" :class="{
-                'opacity-50 cursor-not-allowed': currentPage === totalPages,
-              }" class="p-2 border rounded-full hover:bg-gray-100 transition-colors" title="Next Page">
-                <ChevronRight class="w-4 h-4" />
-              </button>
-            </div>
-          </div>
+          <Pagination v-if="totalPages > 1" :current-page="currentPage" :total-pages="totalPages"
+            @page-change="goToPage" />
+
         </div>
       </div>
     </main>

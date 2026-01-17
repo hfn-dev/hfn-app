@@ -68,10 +68,12 @@ export default {
     }
   },
 
-  async getAllCourses(payload) {
+  async getAllCourses(params) {
     try {
-      const response = await api.get('/learning/courses/', payload);
-      return response.data;
+      const response = await api.get('/learning/courses/', {
+        params,
+      });
+      return response;
     } catch (error) {
       console.error('get all courses API error:', error);
       throw error;
@@ -325,18 +327,18 @@ export default {
     }
   },
 
-  // async reviewCourse(payload) {
-  //   try {
-  //     const response = await api.get(
-  //       '/learning/courses/{slug}/reviews/',
-  //       payload
-  //     );
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('review API error:', error);
-  //     throw error;
-  //   }
-  // },
+  async fetchCoursesPendingApproval({ page = 1, search = '' } = {}) {
+    const response = await api.get(`/learning/courses/${slug}/reviews`, {
+      params: {
+        is_approved: false,
+        search,
+        page,
+        page_size: 10,
+      },
+    });
+    return response.data;
+  },
+
   async reviewCourse(params = {}) {
     try {
       const response = await api.get(`/learning/reviews/`, { params });

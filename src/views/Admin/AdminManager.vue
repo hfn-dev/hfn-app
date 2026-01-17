@@ -7,21 +7,41 @@ const TABS = ['Overview', 'Invitations'];
 const overviewHeaders = ['Name', 'Role', 'Invited On', 'Status'];
 const USERS = ref([]);
 
+
+
 const fetchUsers = async () => {
   try {
-    const data = await accessApi.viewAccessLogs();
-    USERS.value = data.map((user) => ({
+    const [logsData, invitesData] = await Promise.all([
+      accessApi.viewAccessLogs(),
+      accessApi.listRoleInvites()
+    ]);
+
+    const existingUsers = logsData.map((user) => ({
       ...user,
       isSelected: false,
     }));
+
+    const pendingInvites = invitesData.map((invite) => ({
+      id: invite.id,
+      name: invite.invited_email, 
+      role: invite.role.charAt(0).toUpperCase() + invite.role.slice(1), 
+      invitedOn: new Date(invite.created_at).toLocaleDateString(),
+      status: invite.status === 'pending' ? 'Pending' : 'Accepted',
+      isSelected: false,
+      isInvite: true 
+    }));
+
+    USERS.value = [...existingUsers, ...pendingInvites];
+
   } catch (error) {
-    console.error('Error fetching users:', error);
+    console.error('Error fetching users/invites:', error);
   }
 };
 
 const INVITATIONS_DATA = ref({
-  editors: [],
-  tutors: [],
+  admin: [],
+  editor: [],
+  tutor: [],
 });
 
 const currentTab = ref('Overview');
@@ -51,9 +71,6 @@ const getStatusBadgeClass = (status) => {
   }
 };
 
-const capitalize = (str) => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};
 
 const filteredUsers = computed(() => {
   if (!searchTerm.value) return USERS.value;
@@ -135,12 +152,38 @@ const addNewInvitation = (roleKey) => {
 
 const loadInvitations = async () => {
   try {
-    const data = await accessApi.listRoleInvites();
-    INVITATIONS_DATA.value = data;
+    const data = await accessApi.listRoleInvites(); 
+
+    const grouped = {
+      admin: [],
+      editor: [],
+      tutor: [],
+      member: [],
+      learner: [],
+    };
+
+    data.forEach((invite) => {
+      const role = invite.role ? invite.role.toLowerCase() : 'others';
+      
+      if (!grouped[role]) grouped[role] = [];
+
+      grouped[role].push({
+        id: invite.id,
+        firstName: '', 
+        surname: '',   
+        email: invite.invited_email || '',
+        organization: '', 
+        status: invite.status === 'pending' ? 'Send' : 'Sent', 
+      });
+    });
+
+    INVITATIONS_DATA.value = grouped;
   } catch (error) {
     console.error('Error fetching invitations:', error);
   }
 };
+
+
 
 const sendInvitation = async (invite, roleKey, index) => {
   if (
@@ -172,7 +215,7 @@ const sendInvitation = async (invite, roleKey, index) => {
 
 onMounted(() => {
   fetchUsers();
-  loadInvitations();
+  // loadInvitations();
 });
 </script>
 
@@ -460,7 +503,7 @@ onMounted(() => {
             >
               <div class="flex justify-between items-center mb-4 border-b pb-3">
                 <h3 class="text-xl font-semibold text-gray-800">
-                  Invitations to {{ capitalize(roleKey) }}
+                  Invitations to {{ roleKey }}
                   <span class="text-gray-500 text-base ml-2"
                     >You have sent
                     {{
