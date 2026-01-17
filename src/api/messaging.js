@@ -323,6 +323,19 @@ export default {
     }
   },
 
+  async searchMembers(query) {
+  try {
+    const response = await api.get('/messaging/connections/directory', {
+      params: { search: query }
+    });
+    return response.results || []; 
+  } catch (err) {
+    console.error('Search members API error:', err);
+    throw err;
+  }
+},
+
+
   async dismissNotification(id) {
     try {
       const response = await api.patch(

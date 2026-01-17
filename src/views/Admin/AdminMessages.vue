@@ -1,7 +1,8 @@
 <script setup>
 import messagingApi from '@/api/messaging.js';
 import AdminSidebar from '@/views/Admin/AdminSidebar.vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import debounce from 'lodash.debounce';
 
 const DARK_GREEN = '#004d33';
 const LIGHT_GREEN = '#f2f9f3';
@@ -15,14 +16,44 @@ const tabs = ['Direct Messages'];
 const directMessages = ref([]);
 const chatMessages = ref([]);
 const selectedUserId = ref(null);
-
 const searchQuery = ref('');
+const searchResults = ref([]);
+const isSearching = ref(false);
+
 
 const filteredDMs = computed(() =>
   directMessages.value.filter((dm) =>
     dm.name.toLowerCase().includes(searchQuery.value.toLowerCase())
   )
 );
+
+const performSearch = debounce(async (query) => {
+  if (!query) {
+    searchResults.value = [];
+    return;
+  }
+
+  try {
+    isSearching.value = true;
+    const results = await messagingApi.searchMembers(query);
+    searchResults.value = results.map(u => ({
+      id: u.id,
+      name: u.full_name,
+      initial: u.full_name
+        .split(' ')
+        .map(n => n[0])
+        .join('')
+        .slice(0, 2),
+      color: 'bg-green-600'
+    }));
+  } catch (err) {
+    console.error(err);
+  } finally {
+    isSearching.value = false;
+  }
+}, 400);
+
+watch(searchQuery, val => performSearch(val));
 
 const loadConversations = async () => {
   try {
@@ -239,45 +270,52 @@ onMounted(() => {
               />
             </div>
 
-            <button
-              v-for="dm in filteredDMs"
-              :key="dm.name"
-              @click="selectDMUser(dm)"
-              class="flex items-center justify-between w-full p-2 rounded-lg transition-colors"
-              :class="
-                isDMActive(dm)
-                  ? 'font-semibold'
-                  : 'hover:bg-gray-50 text-gray-600'
-              "
-              :style="
-                isDMActive(dm.name)
-                  ? { backgroundColor: LIGHT_GREEN, color: DARK_GREEN }
-                  : {}
-              "
-            >
-              <div class="flex items-center">
-                <div
-                  class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm text-white mr-3 flex-shrink-0"
-                  :class="dm.color"
-                >
-                  {{ dm.initial }}
-                </div>
-                {{ dm.name }}
-              </div>
-              <span
-                v-if="dm.count > 0"
-                class="text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full text-white bg-green-700 ml-2"
-              >
-                {{ dm.count }}
-              </span>
-            </button>
+            <div v-if="searchQuery && searchResults.length > 0">
+  <button
+    v-for="user in searchResults"
+    :key="user.id"
+    @click="selectDMUser(user)"
+    class="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-50"
+  >
+    <div class="flex items-center">
+      <div
+        class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm text-white mr-3 flex-shrink-0"
+        :class="user.color"
+      >
+        {{ user.initial }}
+      </div>
+      {{ user.name }}
+    </div>
+  </button>
+</div>
 
-            <p
-              v-if="filteredDMs.length === 0"
-              class="text-gray-400 text-sm mt-3 text-center"
-            >
-              No user found
-            </p>
+<div v-else>
+  <button
+    v-for="dm in filteredDMs"
+    :key="dm.id"
+    @click="selectDMUser(dm)"
+    class="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-50"
+  >
+    <div class="flex items-center">
+      <div
+        class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm text-white mr-3 flex-shrink-0"
+        :class="dm.color"
+      >
+        {{ dm.initial }}
+      </div>
+      {{ dm.name }}
+    </div>
+    <span v-if="dm.count > 0" class="text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full text-white bg-green-700">
+      {{ dm.count }}
+    </span>
+  </button>
+
+  <p v-if="filteredDMs.length === 0" class="text-gray-400 text-sm mt-3 text-center">
+    No user found
+  </p>
+</div>
+
+            
           </div>
 
           <div v-else-if="currentTab === 'Groups'" class="space-y-1">

@@ -178,13 +178,6 @@ const pieOptions = {
 };
 
 
-// const pieOptions = {
-//   responsive: true,
-//   maintainAspectRatio: false,
-//   plugins: {
-//     legend: { position: "bottom" },
-//   },
-// };
 
 const lineOptions = {
   responsive: true,
@@ -195,7 +188,6 @@ const lineOptions = {
   },
 };
 
-// Compute stat cards from API data
 const statCards = computed(() => {
   if (!dashboardData.value) return [];
 
@@ -322,10 +314,10 @@ const topRevenueData = computed(() => {
 const fetchDashboardData = async () => {
   try {
     isLoading.value = true;
-    const response = await dashboardApi.fetchDashboard();
+const data = await dashboardApi.fetchDashboard();
 
-    if (response.data) {
-      dashboardData.value = response.data;
+    if (data) {
+      dashboardData.value = data;
       updateChartData();
     } else {
       toast.error('Failed to load dashboard data');

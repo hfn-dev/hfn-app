@@ -181,14 +181,18 @@ const fetchConnections = async () => {
   isLoading.value.connections = true;
   try {
     const response = await messagingApi.listConnections();
-    connections.value = response.map(conn => ({
-      id: conn.id,
-      name: conn.user.full_name,
-      position: conn.user.title || conn.user.role || 'Member',
-      email: conn.user.email,
-      userId: conn.user.id,
-      initial: (conn.user.first_name?.[0] || '') + (conn.user.last_name?.[0] || '') || '??'
-    }));
+    connections.value = response.results.map(conn => {
+  const otherUserId = conn.sender === currentUserId ? conn.receiver : conn.sender;
+  return {
+    id: conn.id,
+    name: `User ${otherUserId}`, // placeholder name, replace with actual user name from directory
+    position: 'Member',
+    email: '', // optional
+    userId: otherUserId,
+    initial: `U`, // fallback
+  };
+});
+
   } catch (error) {
     console.error('Error fetching connections:', error);
     toast.error('Failed to load connections');
@@ -201,15 +205,16 @@ const fetchNotifications = async () => {
   isLoading.value.notifications = true;
   try {
     const response = await messagingApi.listNotifications({ ordering: '-created_at' });
-    notifications.value = response.map(notif => ({
-      id: notif.id,
-      category: notif.category?.toUpperCase() || 'SYSTEM',
-      time: formatTime(notif.created_at),
-      title: notif.title,
-      body: notif.message,
-      type: notif.requires_action ? 'ACTION' : 'INFO',
-      isRead: notif.is_read
-    }));
+    notifications.value = response.results.map(notif => ({
+  id: notif.id,
+  category: notif.notification_type_display || 'SYSTEM',
+  time: formatTime(notif.created_at),
+  title: notif.notification_type_display,
+  body: notif.message,
+  type: 'INFO', 
+  isRead: notif.is_read
+}));
+
   } catch (error) {
     console.error('Error fetching notifications:', error);
     toast.error('Failed to load notifications');
@@ -231,15 +236,18 @@ const fetchGroups = async () => {
   isLoading.value.groups = true;
   try {
     const response = await messagingApi.listGroups();
-    groups.value = response.map(group => ({
+    const results = response.results || [];
+
+    groups.value = results.map(group => ({
       id: group.id,
       name: group.name,
-      count: group.unread_count || 0,
-      path: group.slug,
-      icon: group.icon,
-      memberCount: group.member_count,
+      count: 0, 
+      path: '',  
+      icon: group.cover_image || '', 
+      memberCount: group.members_count,
       isMember: group.is_member
     }));
+
   } catch (error) {
     console.error('Error fetching groups:', error);
     toast.error('Failed to load groups');
@@ -253,16 +261,17 @@ const fetchConversations = async () => {
   try {
     const response = await messagingApi.getConversations();
     directMessages.value = response.map(conv => ({
-      id: conv.id,
-      name: conv.other_user.full_name,
-      initial: (conv.other_user.first_name?.[0] || '') + (conv.other_user.last_name?.[0] || '') || '??',
-      count: conv.unread_count,
-      path: `dm-${conv.other_user.id}`,
-      color: getRandomColor(),
-      userId: conv.other_user.id,
-      lastMessage: conv.last_message,
-      lastMessageTime: conv.last_message_time
-    }));
+  id: conv.other_user_id, 
+  name: conv.other_user_name || `User ${conv.other_user_id}`, 
+  initial: (conv.other_user_name?.[0] || 'U'), 
+  count: conv.unread_count,
+  path: `dm-${conv.other_user_id}`,
+  color: getRandomColor(),
+  userId: conv.other_user_id,
+  lastMessage: conv.last_message,
+  lastMessageTime: conv.created_at
+}));
+
   } catch (error) {
     console.error('Error fetching conversations:', error);
     toast.error('Failed to load conversations');
@@ -273,22 +282,39 @@ const fetchConversations = async () => {
 
 const fetchMessagesWithUser = async (userId) => {
   if (!userId) return;
-  
+
   isLoading.value.messages = true;
   try {
     const response = await messagingApi.getMessagesWithUser({ user_id: userId });
-    chatMessages.value = response.map(msg => ({
-      id: msg.id,
-      sender: msg.sender.full_name,
-      time: formatTime(msg.created_at),
-      initial: (msg.sender.first_name?.[0] || '') + (msg.sender.last_name?.[0] || '') || '??',
-      color: getColorForUser(msg.sender.id),
-      body: msg.content,
-      type: msg.attachment ? 'file' : 'text',
-      file: msg.attachment?.name,
-      isRead: msg.is_read,
-      senderId: msg.sender.id
-    }));
+
+    const messagesArray = response.results || [];
+
+    chatMessages.value = messagesArray.map(msg => {
+      const senderUser = directoryUsers.value.find(u => u.id === msg.sender)
+                      || connections.value.find(c => c.userId === msg.sender);
+
+      const senderName = senderUser ? (senderUser.name || `${senderUser.firstName} ${senderUser.lastName}`) : `User ${msg.sender}`;
+      
+      const initial = senderUser 
+        ? (senderUser.firstName?.[0] || senderUser.name?.[0] || 'U') + (senderUser.lastName?.[0] || '')
+        : 'U';
+
+      return {
+        id: msg.id,
+        sender: senderName,
+        senderId: msg.sender,
+        time: formatTime(msg.created_at),
+        initial: initial.toUpperCase(),
+        color: getColorForUser(msg.sender),
+        body: msg.content,
+        type: msg.attachment ? 'file' : 'text',
+        file: msg.attachment?.name,
+        isRead: msg.is_read
+      };
+    });
+
+    chatMessages.value.reverse();
+
   } catch (error) {
     console.error('Error fetching messages:', error);
     toast.error('Failed to load messages');
@@ -296,6 +322,7 @@ const fetchMessagesWithUser = async (userId) => {
     isLoading.value.messages = false;
   }
 };
+
 
 const fetchGroupMessages = async (groupId) => {
   if (!groupId) return;
@@ -326,7 +353,9 @@ const fetchGroupMessages = async (groupId) => {
 // Action handlers
 const sendConnectionRequest = async (userId) => {
   try {
-    await messagingApi.sendConnectionRequest({ to_user: userId });
+    if (!userId) throw new Error('User ID is missing');
+
+    await messagingApi.sendConnectionRequest({ receiver_id: userId }); 
     toast.success('Connection request sent');
     
     // Update the user's status in directory
@@ -563,13 +592,11 @@ watch(currentTab, (newTab) => {
   }
 });
 
-// Initialize data on component mount
 onMounted(() => {
   fetchDirectoryUsers('A');
   fetchUnreadCount();
 });
 
-// Poll for new notifications every 30 seconds
 let notificationInterval;
 onMounted(() => {
   notificationInterval = setInterval(() => {
@@ -964,7 +991,6 @@ onUnmounted(() => {
             <p v-else class="text-gray-500">You currently have no active connections.</p>
           </div>
 
-          <!-- Groups/Direct Messages Chat Interface -->
           <div
             v-if="currentTab === 'Groups' || currentTab === 'Direct Messages'"
             class="flex h-[80vh] min-h-[600px] max-w-7xl border border-gray-200 rounded-xl shadow-lg overflow-hidden"
