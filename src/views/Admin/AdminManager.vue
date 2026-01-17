@@ -1,19 +1,17 @@
 <script setup>
-import accessApi from '@/api/accessManagement.js';
-import AdminSidebar from '@/views/Admin/AdminSidebar.vue';
-import { computed, onMounted, ref } from 'vue';
+import accessApi from "@/api/accessManagement.js";
+import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
+import { computed, onMounted, ref } from "vue";
 
-const TABS = ['Overview', 'Invitations'];
-const overviewHeaders = ['Name', 'Role', 'Invited On', 'Status'];
+const TABS = ["Overview", "Invitations"];
+const overviewHeaders = ["Name", "Role", "Invited On", "Status"];
 const USERS = ref([]);
-
-
 
 const fetchUsers = async () => {
   try {
     const [logsData, invitesData] = await Promise.all([
       accessApi.viewAccessLogs(),
-      accessApi.listRoleInvites()
+      accessApi.listRoleInvites(),
     ]);
 
     const existingUsers = logsData.map((user) => ({
@@ -23,18 +21,17 @@ const fetchUsers = async () => {
 
     const pendingInvites = invitesData.map((invite) => ({
       id: invite.id,
-      name: invite.invited_email, 
-      role: invite.role.charAt(0).toUpperCase() + invite.role.slice(1), 
+      name: invite.invited_email,
+      role: invite.role.charAt(0).toUpperCase() + invite.role.slice(1),
       invitedOn: new Date(invite.created_at).toLocaleDateString(),
-      status: invite.status === 'pending' ? 'Pending' : 'Accepted',
+      status: invite.status === "pending" ? "Pending" : "Accepted",
       isSelected: false,
-      isInvite: true 
+      isInvite: true,
     }));
 
     USERS.value = [...existingUsers, ...pendingInvites];
-
   } catch (error) {
-    console.error('Error fetching users/invites:', error);
+    console.error("Error fetching users/invites:", error);
   }
 };
 
@@ -44,33 +41,32 @@ const INVITATIONS_DATA = ref({
   tutor: [],
 });
 
-const currentTab = ref('Overview');
-const searchTerm = ref('');
+const currentTab = ref("Overview");
+const searchTerm = ref("");
 const currentPage = ref(1);
 const itemsPerPage = 8;
 
 const tabs = TABS;
 
 const getRoleBadgeClass = (role) => {
-  if (role.includes('Tutor')) return 'bg-purple-100 text-purple-700';
-  if (role === 'Admin') return 'bg-pink-100 text-pink-700';
-  if (role === 'Editor') return 'bg-blue-100 text-blue-700';
-  return 'bg-gray-100 text-gray-700';
+  if (role.includes("Tutor")) return "bg-purple-100 text-purple-700";
+  if (role === "Admin") return "bg-pink-100 text-pink-700";
+  if (role === "Editor") return "bg-blue-100 text-blue-700";
+  return "bg-gray-100 text-gray-700";
 };
 
 const getStatusBadgeClass = (status) => {
   switch (status) {
-    case 'Accepted':
-      return 'bg-green-100 text-green-700';
-    case 'Pending':
-      return 'bg-orange-100 text-orange-700';
-    case 'Removed':
-      return 'bg-red-100 text-red-700';
+    case "Accepted":
+      return "bg-green-100 text-green-700";
+    case "Pending":
+      return "bg-orange-100 text-orange-700";
+    case "Removed":
+      return "bg-red-100 text-red-700";
     default:
-      return 'bg-gray-100 text-gray-800';
+      return "bg-gray-100 text-gray-800";
   }
 };
-
 
 const filteredUsers = computed(() => {
   if (!searchTerm.value) return USERS.value;
@@ -120,20 +116,20 @@ const goToPage = (page) => {
 
 const changeTab = (tab) => {
   currentTab.value = tab;
-  searchTerm.value = '';
+  searchTerm.value = "";
   currentPage.value = 1;
 };
 
 const handleAction = async (action, user) => {
-  if (action === 'delete') {
+  if (action === "delete") {
     try {
-      await accessApi.removeUserRole({ userId: user.id });
+      await accessApi.removeUserRole({ user_id: user.id });
       USERS.value = USERS.value.filter((u) => u.id !== user.id);
       console.log(`Deleted access for ${user.name}`);
     } catch (error) {
-      console.error('Error removing user role:', error);
+      console.error("Error removing user role:", error);
     }
-  } else if (action === 'view') {
+  } else if (action === "view") {
     console.log(`Viewing removed user ${user.name}`);
   }
 };
@@ -142,17 +138,17 @@ const addNewInvitation = (roleKey) => {
   const newId = Date.now();
   INVITATIONS_DATA.value[roleKey].push({
     id: newId,
-    firstName: '',
-    surname: '',
-    email: '',
-    organization: '',
-    status: 'Send',
+    firstName: "",
+    surname: "",
+    email: "",
+    organization: "",
+    status: "Send",
   });
 };
 
 const loadInvitations = async () => {
   try {
-    const data = await accessApi.listRoleInvites(); 
+    const data = await accessApi.listRoleInvites();
 
     const grouped = {
       admin: [],
@@ -163,27 +159,25 @@ const loadInvitations = async () => {
     };
 
     data.forEach((invite) => {
-      const role = invite.role ? invite.role.toLowerCase() : 'others';
-      
+      const role = invite.role ? invite.role.toLowerCase() : "others";
+
       if (!grouped[role]) grouped[role] = [];
 
       grouped[role].push({
         id: invite.id,
-        firstName: '', 
-        surname: '',   
-        email: invite.invited_email || '',
-        organization: '', 
-        status: invite.status === 'pending' ? 'Send' : 'Sent', 
+        firstName: "",
+        surname: "",
+        email: invite.invited_email || "",
+        organization: "",
+        status: invite.status === "pending" ? "Send" : "Sent",
       });
     });
 
     INVITATIONS_DATA.value = grouped;
   } catch (error) {
-    console.error('Error fetching invitations:', error);
+    console.error("Error fetching invitations:", error);
   }
 };
-
-
 
 const sendInvitation = async (invite, roleKey, index) => {
   if (
@@ -192,7 +186,7 @@ const sendInvitation = async (invite, roleKey, index) => {
     !invite.email ||
     !invite.organization
   ) {
-    console.error('Validation Error: All fields are required.');
+    console.error("Validation Error: All fields are required.");
     return;
   }
 
@@ -206,10 +200,10 @@ const sendInvitation = async (invite, roleKey, index) => {
     };
 
     await accessApi.createRoleInvite(payload);
-    INVITATIONS_DATA.value[roleKey][index].status = 'Sent';
+    INVITATIONS_DATA.value[roleKey][index].status = "Sent";
     console.log(`Invitation sent for ${invite.firstName} ${invite.surname}`);
   } catch (error) {
-    console.error('Error sending invitation:', error);
+    console.error("Error sending invitation:", error);
   }
 };
 
@@ -366,13 +360,16 @@ onMounted(() => {
                       <button
                         @click="
                           handleAction(
-                            user.status === 'Removed' ? 'view' : 'delete',
+                            user.status === 'Removed' ||
+                              user.status === 'Pending'
+                              ? 'view'
+                              : 'delete',
                             user
                           )
                         "
                         :class="[
                           'p-1 rounded-full transition',
-                          user.status === 'Removed'
+                          user.status === 'Removed' || user.status === 'Pending'
                             ? 'text-gray-500 hover:text-indigo-600'
                             : 'text-red-500 hover:text-red-700',
                         ]"
@@ -507,7 +504,7 @@ onMounted(() => {
                   <span class="text-gray-500 text-base ml-2"
                     >You have sent
                     {{
-                      invitationsForRole.filter((inv) => inv.status === 'Sent')
+                      invitationsForRole.filter((inv) => inv.status === "Sent")
                         .length
                     }}
                     Invites</span
