@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, computed } from "vue";
 import authApi from "../../api/userRegister";
 import { useAuth } from "../../store/authStore";
 import EditorSidebar from "./EditorSidebar.vue";
@@ -11,10 +11,30 @@ const isUploading = ref(false);
 const { user, role } = useAuth();
 
 
+const profileFields = computed(() => {
+  if (isOrganization.value) {
+    return [
+      { key: "name", label: "Organization Name", model: orgDetails },
+      { key: "email", label: "Email Address", model: orgDetails },
+      { key: "phone", label: "Phone Number", model: orgDetails },
+      { key: "password", label: "Password", model: orgDetails },
+    ];
+  }
+
+  return [
+    { key: "firstName", label: "First Name", model: individualDetails },
+    { key: "lastName", label: "Last Name", model: individualDetails },
+    { key: "email", label: "Email Address", model: individualDetails },
+    { key: "phone", label: "Phone Number", model: individualDetails },
+    { key: "password", label: "Password", model: individualDetails },
+  ];
+});
+
+
 const fetchUserProfile = async () => {
   try {
     const data = await authApi.getUser();
-    
+
     isOrganization.value = data.role === 'organization' || !!data.organization_name;
 
     profileImage.value = data.profile || null;
@@ -32,7 +52,7 @@ const fetchUserProfile = async () => {
   } catch (error) {
     console.error("Failed to fetch user profile", error);
   }
-};  
+};
 
 
 const onProfileImageSelect = (event) => {
@@ -138,8 +158,9 @@ const individualDetails = reactive({
         <div v-if="activeTab === 'My Profile'" class="space-y-10">
           <div v-if="isOrganization !== null" class="p-6 bg-white shadow-lg space-y-8">
             <h2 class="text-xl font-semibold text-gray-800">
-              Profile
-            </h2>
+  {{ isOrganization ? "Organization Profile" : "My Profile" }}
+</h2>
+
 
             <div class="grid md:grid-cols-2 gap-8">
               <div class="flex flex-col items-center p-6 border border-gray-200 rounded-xl">
@@ -178,13 +199,15 @@ const individualDetails = reactive({
 
               <div class="p-6 rounded-xl shadow-md bg-[#F2F9F3] relative">
                 <div class="space-y-4 text-sm text-gray-700">
-                  <div v-for="detail in orgDetailsKeys" :key="detail.key" class="flex justify-between items-center">
-                    <span class="font-semibold text-gray-600">{{ detail.label }}:</span>
-                    <input :type="detail.key === 'password' ? 'password' : 'text'" v-model="orgDetails[detail.key]"
+                  <div v-for="field in profileFields" :key="field.key" class="flex justify-between items-center">
+                    <span class="font-semibold text-gray-600">
+                      {{ field.label }}:
+                    </span>
+
+                    <input :type="field.key === 'password' ? 'password' : 'text'" v-model="field.model[field.key]"
                       :disabled="!isOrgEditing" :class="isOrgEditing
                         ? 'bg-white border border-gray-400 rounded-md p-1.5'
-                        : 'bg-transparent border-none'
-                        " class="text-right w-2/3 transition duration-150" />
+                        : 'bg-transparent border-none'" class="text-right w-2/3 transition duration-150" />
                   </div>
                 </div>
 
@@ -194,11 +217,7 @@ const individualDetails = reactive({
           </div>
 
         </div>
-        <div v-if="!isOrganization" class="p-6 bg-white shadow-lg space-y-8">
-  <h2 class="text-xl font-semibold">Individual Profile</h2>
-  <p>Email: {{ individualDetails.email }}</p>
-  <p>Name: {{ individualDetails.firstName }} {{ individualDetails.lastName }}</p>
-  </div>
+
 
       </div>
 

@@ -1,8 +1,10 @@
 <script setup>
+import authApi from "@/api/userRegister";
 import cert from "@/assets/cert.png";
 import sign from "@/assets/sign.png";
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import { computed, onMounted, reactive, ref } from "vue";
+
 
 const isOrganization = ref(false);
 const currentView = ref("My Profile");
@@ -15,6 +17,8 @@ const profileImageUrl = ref(null);
 const isLoading = ref(true);
 
 let nextSignatureId = 3;
+const isIndividualEditing = ref(false);
+const isOrgEditing = ref(false);
 
 const individualDetails = reactive({
   firstName: "",
@@ -70,15 +74,16 @@ onMounted(async () => {
       orgDetails.email = userData.email;
       orgDetails.phone = userData.phone_number || "";
     } else {
-      individualDetails.firstName = userData.first_name || userData.full_name?.split(' ')[0] || "";
-      individualDetails.lastName = userData.last_name || userData.full_name?.split(' ')[1] || "";
-      individualDetails.email = userData.email;
+      individualDetails.firstName = userData.first_name || "";
+      individualDetails.lastName = userData.last_name || "";
+      individualDetails.email = userData.email || "";
       individualDetails.phone = userData.phone_number || "";
     }
 
     if (userData.profile_image) {
       profileImageUrl.value = userData.profile_image;
     }
+    profileImageUrl.value = userData.profile || null;
   } catch (error) {
     console.error("Failed to fetch user details:", error);
   } finally {
@@ -105,6 +110,14 @@ const handleProfilePicUpload = (event) => {
     profileImageUrl.value = e.target.result;
   };
   reader.readAsDataURL(file);
+};
+
+const toggleIndividualEdit = () => {
+  isIndividualEditing.value = !isIndividualEditing.value;
+};
+
+const toggleOrgEdit = () => {
+  isOrgEditing.value = !isOrgEditing.value;
 };
 
 const handleFileUpload = (event) => {

@@ -1,7 +1,9 @@
 <script setup>
 import learningModule from '@/api/learningModule.js';
 import TutorSidebar from '@/views/Tutor/TutorSidebar.vue';
-import { onMounted, ref, watch, computed } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+
 
 import {
   ChevronLeft,
@@ -18,7 +20,7 @@ const courseTabs = ref(['Published', 'Drafts', 'Archived', 'Approval']);
 const currentTab = ref('Published');
 const loading = ref(false);
 const searchQuery = ref('');
-
+const router = useRouter()
 const publishedCourses = ref([]);
 const draftCourses = ref([]);
 const archivedCourses = ref([]);
