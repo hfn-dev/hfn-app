@@ -116,6 +116,12 @@ const routes = [
     component: CourseDetails,
   },
   {
+    path: '/learning/courses/:slug',
+    name: 'CourseDetails',
+    component: CourseDetails,
+  },
+
+  {
     path: '/news/:slug',
     name: 'ArticleDetail',
     component: ArticleDetail,

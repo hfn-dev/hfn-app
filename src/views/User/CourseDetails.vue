@@ -1,20 +1,22 @@
 <script setup>
-import learningModule from '@/api/learningModule';
-import courses from '@/assets/courses.jpg';
-import student from '@/assets/student.jpg';
+import learningModule from "@/api/learningModule";
+import courses from "@/assets/courses.jpg";
+import student from "@/assets/student.jpg";
 
-import UserSidebar from '@/components/layout/UserSidebar.vue';
-import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import UserSidebar from "@/components/layout/UserSidebar.vue";
+import { onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
 
-const DARK_GREEN = '#004d33';
-const LIGHT_GREEN = '#f2f9f3';
+const DARK_GREEN = "#004d33";
+const LIGHT_GREEN = "#f2f9f3";
 
-const activeTab = ref('courseInfo');
+const activeTab = ref("courseInfo");
 const activeModule = ref(null);
 
 const route = useRoute();
-const slug = route.params.slug;
+// const slug = route.params.slug;
+const courseParam = route.params.slug || route.params.id;
+
 const loading = ref(true);
 
 const course = ref(null);
@@ -26,17 +28,35 @@ const toggleModule = (moduleId) => {
   activeModule.value = activeModule.value === moduleId ? null : moduleId;
 };
 
+// const fetchCourse = async () => {
+//   try {
+//     loading.value = true;
+//     const data = await learningModule.getCoursesDetails(slug);
+
+//     course.value = data.course;
+//     modules.value = data.modules || [];
+//     instructor.value = data.instructor;
+//     similarCourses.value = data.similar_courses || [];
+//   } catch (err) {
+//     console.error('Failed to load course', err);
+//   } finally {
+//     loading.value = false;
+//   }
+// };
 const fetchCourse = async () => {
   try {
     loading.value = true;
-    const data = await learningModule.getCoursesDetails(slug);
 
-    course.value = data.course;
-    modules.value = data.modules || [];
-    instructor.value = data.instructor;
-    similarCourses.value = data.similar_courses || [];
+    const res = await learningModule.getCoursesDetails(courseParam);
+
+    const payload = res.data;
+
+    course.value = payload.course || payload;
+    modules.value = payload.modules || [];
+    instructor.value = payload.instructor || null;
+    similarCourses.value = payload.similar_courses || [];
   } catch (err) {
-    console.error('Failed to load course', err);
+    console.error("Failed to load course", err);
   } finally {
     loading.value = false;
   }
@@ -376,7 +396,7 @@ onMounted(fetchCourse);
                   <p class="font-bold text-gray-800">
                     {{ instructor?.name }}
                   </p>
-                  <p class="text-sm text-gray-600">{{ instructor.title }}</p>
+                  <p class="text-sm text-gray-600">{{ instructor?.title }}</p>
                 </div>
               </div>
               <p class="text-gray-700 text-sm leading-relaxed">
@@ -389,7 +409,11 @@ onMounted(fetchCourse);
                 What you will learn
               </h3>
               <ul class="space-y-2 text-gray-700 text-sm">
-                <li class="flex items-start">
+                <li
+                  v-for="(outcome, idx) in course?.learning_outcomes"
+                  :key="idx"
+                  class="flex items-start"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="w-5 h-5 mr-2 flex-shrink-0"
@@ -403,60 +427,11 @@ onMounted(fetchCourse);
                   >
                     <polyline points="20 6 9 17 4 12"></polyline>
                   </svg>
-                  Euismod magna id purus eget nunc
-                </li>
-                <li class="flex items-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-5 h-5 mr-2 flex-shrink-0"
-                    :style="{ color: DARK_GREEN }"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                  Condimentum blandit rutrum at mauris enim
-                </li>
-                <li class="flex items-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-5 h-5 mr-2 flex-shrink-0"
-                    :style="{ color: DARK_GREEN }"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                  pulvinar diam metus duis. Euismod magna id
-                </li>
-                <li class="flex items-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-5 h-5 mr-2 flex-shrink-0"
-                    :style="{ color: DARK_GREEN }"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                  Euismod magna id purus eget nunc
+                  {{ outcome }}
                 </li>
               </ul>
             </div>
 
-            <!-- Material Includes -->
             <div class="bg-white rounded-xl shadow-lg p-6">
               <h3 class="text-xl font-bold text-gray-800 mb-4">
                 Material Includes
