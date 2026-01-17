@@ -1,11 +1,47 @@
 <script setup>
+import authApi from "@/api/userRegister";
 import UserSidebar from '@/components/layout/UserSidebar.vue';
-import { computed, reactive, ref, watch } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-const router = useRouter();
 
+
+const router = useRouter();
+const isOrganization = ref(false);
+const orgDetails = reactive({});
+const otherDetails = reactive({});
+const interests = reactive([]);
 const certificateUrl = ref('/sample-certificates.png');
+const isOtherDetailsEditing = ref(false);
+
+const isOrgEditing = ref(false);
+
+const orgDetailsKeys = [
+  { key: 'name', label: 'Name' },
+  { key: 'email', label: 'Email Address' },
+  { key: 'phone', label: 'Phone Number' },
+  { key: 'password', label: 'Password' },
+];
+
+const individualDetails = reactive({
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+});
+
+const isIndividualEditing = ref(false);
+
+const individualDetailsKeys = [
+  { key: 'firstName', label: 'First Name' },
+  { key: 'lastName', label: 'Last Name' },
+  { key: 'email', label: 'Email Address' },
+  { key: 'phone', label: 'Phone Number' },
+  { key: 'password', label: 'Password' },
+];
+
+const currentView = ref('My Profile');
+const activeTab = ref('My Profile');
 
 const viewCertificateInNewTab = () => {
   if (certificateUrl.value) {
@@ -14,37 +50,16 @@ const viewCertificateInNewTab = () => {
 };
 
 const subscription = reactive({
-  expiryDate: '31st December 2025',
-  invoices: [
-    {
-      id: 1,
-      invoiceNo: '001',
-      invoiceDate: 'Monday, December 19 2024',
-      dueDate: 'Monday, December 31 2025',
-      total: '₦200,000.00',
-      status: 'Paid',
-    },
-    {
-      id: 2,
-      invoiceNo: '001',
-      invoiceDate: 'Monday, December 29 2023',
-      dueDate: 'Monday, December 31 2024',
-      total: '₦200,000.00',
-      status: 'Paid',
-    },
-    {
-      id: 3,
-      invoiceNo: '001',
-      invoiceDate: 'Monday, December 01 2022',
-      dueDate: 'Monday, December 31 2023',
-      total: '₦200,000.00',
-      status: 'Paid',
-    },
-  ],
+  hasSubscription: false,
+  type: '',
+  purchasedOn: '',
+  expiryDate: '',
+  invoices: [],
   currentPage: 1,
-  totalPages: 2,
-  totalEntries: 10,
+  totalPages: 1,
+  totalEntries: 0
 });
+
 
 const makePayment = () => {
   router.push({ name: 'UserSubscription' });
@@ -57,9 +72,7 @@ const goToPage = (page) => {
   }
 };
 
-const isOrganization = ref(true);
-const currentView = ref('My Profile');
-const activeTab = ref('My Profile');
+
 
 const navLinks = [
   {
@@ -92,67 +105,14 @@ watch(currentView, (newVal) => {
   if (newVal === 'My Account') activeTab.value = 'My Profile';
 });
 
-const isOrgEditing = ref(false);
-const orgDetails = reactive({
-  name: 'Ruthie & Co Nigeria Limited',
-  email: 'peterpan@gmail.com.us',
-  phone: '+234 123 456 78',
-  password: '********',
-});
-const orgDetailsKeys = [
-  { key: 'name', label: 'Name' },
-  { key: 'email', label: 'Email Address' },
-  { key: 'phone', label: 'Phone Number' },
-  { key: 'password', label: 'Password' },
-];
-
-const isIndividualEditing = ref(false);
-const individualDetails = reactive({
-  firstName: 'John',
-  lastName: 'Doe',
-  email: 'john.doe@example.com',
-  phone: '+1 555 123 4567',
-  password: '********',
-});
-const individualDetailsKeys = [
-  { key: 'firstName', label: 'First Name' },
-  { key: 'lastName', label: 'Last Name' },
-  { key: 'email', label: 'Email Address' },
-  { key: 'phone', label: 'Phone Number' },
-  { key: 'password', label: 'Password' },
-];
-
-const isOtherDetailsEditing = ref(false);
-const otherDetails = reactive({
-  addressLine1: 'Address Line 1',
-  addressLine2: 'Address Line 2',
-  state: 'State',
-  country: 'Country',
-  description: '',
-});
 
 const invitations = reactive([
-  { id: 1, email: 'peterpan@gmail.com', sent: true },
+  { id: 1, email: '', sent: true },
   { id: 2, email: '', sent: false },
   { id: 3, email: '', sent: false },
 ]);
 
-const sentInvitesCount = computed(
-  () => invitations.filter((i) => i.sent).length
-);
 
-const interests = reactive([
-  { id: 10, name: 'Mother', selected: true, isMainCategory: true },
-  { id: 11, name: 'Child', selected: true, isMainCategory: true },
-  { id: 12, name: 'Baby', selected: true, isMainCategory: true },
-  { id: 13, name: 'Pregnancy', selected: true, isMainCategory: true },
-  { id: 1, name: 'Marketing', selected: true, isMainCategory: false },
-  { id: 2, name: 'Gynaecology', selected: true, isMainCategory: false },
-  { id: 3, name: 'Paediatrics', selected: true, isMainCategory: false },
-  { id: 4, name: 'General Health', selected: false, isMainCategory: false },
-  { id: 5, name: 'Insurance', selected: false, isMainCategory: false },
-  { id: 6, name: 'Dentistry', selected: false, isMainCategory: false },
-]);
 
 const selectedInterestsCount = computed(
   () => interests.filter((i) => i.selected && !i.isMainCategory).length
@@ -218,64 +178,83 @@ const toggleInterest = (id) => {
     item.selected = willBeSelected;
   }
 };
+
+const fetchUserData = async () => {
+  try {
+    const res = await authApi.getUser();
+    const data = res;
+
+    // Personal info
+    individualDetails.firstName = data.first_name || '';
+    individualDetails.lastName = data.last_name || '';
+    individualDetails.email = data.email || '';
+    individualDetails.phone = data.phone_number || '';
+
+    if (data.profile) {
+      otherDetails.addressLine1 = data.profile.addressLine1 || '';
+      otherDetails.addressLine2 = data.profile.addressLine2 || '';
+      otherDetails.state = data.profile.state || '';
+      otherDetails.country = data.profile.country || '';
+      otherDetails.description = data.profile.description || '';
+      certificateUrl.value = data.profile.certificateUrl || '';
+      interests.splice(0, interests.length, ...(data.profile.interests || []));
+    }
+
+    subscription.hasSubscription = data.is_membership_active || false;
+    subscription.type = data.membership_type || '';
+    subscription.expiryDate = data.membership_expires_at
+      ? new Date(data.membership_expires_at).toLocaleDateString()
+      : '';
+    subscription.invoices = [];
+  } catch (err) {
+    console.error('Error fetching user data:', err);
+  }
+};
+
+onMounted(() => {
+  fetchUserData();
+});
+
+
 </script>
 
 <template>
-  <div
-    class="flex flex-col lg:flex-row min-h-screen font-sans bg-white border-0"
-  >
-    <UserSidebar
-      class="hidden md:flex"
-      :navLinks="navLinks"
-      @update:view="currentView = $event"
-      :currentView="currentView"
-    />
+  <div class="flex flex-col lg:flex-row min-h-screen font-sans bg-white border-0">
+    <UserSidebar class="hidden md:flex" :navLinks="navLinks" @update:view="currentView = $event"
+      :currentView="currentView" />
 
     <main class="flex-1 p-4 sm:p-8 lg:p-10 max-w-7xl mx-auto w-full">
-      <span class="text-sm text-gray-500"
-        >Home > My Account > {{ activeTab }}</span
-      >
+      <span class="text-sm text-gray-500">Home > My Account > {{ activeTab }}</span>
 
       <header class="mb-8 text-center">
         <h1 class="text-3xl font-bold mt-2 text-gray-800">{{ currentView }}</h1>
       </header>
 
       <div v-if="currentView === 'My Profile'">
-        <div
-          class="flex justify-center border-b border-gray-200 mb-8 space-x-6"
-        >
-          <button
-            @click="activeTab = 'My Profile'"
-            :class="[
-              'py-2 px-1 border-b-2 transition duration-150 font-medium',
-              activeTab === 'My Profile'
-                ? 'border-green-600 text-green-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700',
-            ]"
-          >
+        <div class="flex justify-center border-b border-gray-200 mb-8 space-x-6">
+          <button @click="activeTab = 'My Profile'" :class="[
+            'py-2 px-1 border-b-2 transition duration-150 font-medium',
+            activeTab === 'My Profile'
+              ? 'border-green-600 text-green-600'
+              : 'border-transparent text-gray-500 hover:text-gray-700',
+          ]">
             My Profile
           </button>
-          <button
-            @click="activeTab = 'My Certificate'"
-            :class="[
-              'py-2 px-1 border-b-2 transition duration-150 font-medium',
-              activeTab === 'My Certificate'
-                ? 'border-green-600 text-green-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700',
-            ]"
-          >
+          <button @click="activeTab = 'My Certificate'" :class="[
+            'py-2 px-1 border-b-2 transition duration-150 font-medium',
+            activeTab === 'My Certificate'
+              ? 'border-green-600 text-green-600'
+              : 'border-transparent text-gray-500 hover:text-gray-700',
+          ]">
             My Certificate
           </button>
 
-          <button
-            @click="activeTab = 'Subscription'"
-            :class="[
-              'py-2 px-1 border-b-2 transition duration-150 font-medium',
-              activeTab === 'Subscription'
-                ? 'border-green-600 text-green-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700',
-            ]"
-          >
+          <button @click="activeTab = 'Subscription'" :class="[
+            'py-2 px-1 border-b-2 transition duration-150 font-medium',
+            activeTab === 'Subscription'
+              ? 'border-green-600 text-green-600'
+              : 'border-transparent text-gray-500 hover:text-gray-700',
+          ]">
             Subscription
           </button>
           <!-- <button
@@ -296,25 +275,14 @@ const toggleInterest = (id) => {
             <h2 class="text-xl font-semibold text-gray-800">Profile</h2>
 
             <div class="grid md:grid-cols-2 gap-8">
-              <div
-                class="flex flex-col items-center p-6 border border-gray-200 rounded-xl"
-              >
+              <div class="flex flex-col items-center p-6 border border-gray-200 rounded-xl">
                 <div
-                  class="w-24 h-24 bg-white border border-gray-300 rounded-lg flex items-center justify-center mb-3 shadow-inner"
-                >
-                  <svg
-                    class="w-8 h-8 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    ></path>
+                  class="w-24 h-24 bg-white border border-gray-300 rounded-lg flex items-center justify-center mb-3 shadow-inner">
+                  <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                    </path>
                   </svg>
                 </div>
 
@@ -324,59 +292,36 @@ const toggleInterest = (id) => {
 
                 <div class="flex space-x-3">
                   <button
-                    class="px-4 py-2 text-sm text-green-800 bg-white hover:bg-gray-100 border border-gray-300 rounded-lg shadow-sm transition duration-150"
-                  >
+                    class="px-4 py-2 text-sm text-green-800 bg-white hover:bg-gray-100 border border-gray-300 rounded-lg shadow-sm transition duration-150">
                     Save
                   </button>
-                  <label
-                    for="logoUpload"
-                    class="px-4 py-2 text-sm text-white bg-[#0c6b39] hover:bg-[#09572d] rounded-lg shadow-md cursor-pointer transition duration-150"
-                  >
+                  <label for="logoUpload"
+                    class="px-4 py-2 text-sm text-white bg-[#0c6b39] hover:bg-[#09572d] rounded-lg shadow-md cursor-pointer transition duration-150">
                     Upload
                   </label>
-                  <input
-                    type="file"
-                    id="logoUpload"
-                    class="hidden"
-                    accept=".jpg,.png,.jpeg"
-                  />
+                  <input type="file" id="logoUpload" class="hidden" accept=".jpg,.png,.jpeg" />
                 </div>
               </div>
 
               <div class="p-6 rounded-xl shadow-md bg-[#F2F9F3] relative">
                 <div class="space-y-4 text-sm text-gray-700">
-                  <div
-                    v-for="detail in orgDetailsKeys"
-                    :key="detail.key"
-                    class="flex justify-between items-center"
-                  >
-                    <span class="font-semibold text-gray-600"
-                      >{{ detail.label }}:</span
-                    >
-                    <input
-                      :type="detail.key === 'password' ? 'password' : 'text'"
-                      v-model="orgDetails[detail.key]"
-                      :disabled="detail.key !== 'password' || !isOrgEditing"
-                      :class="[
+                  <div v-for="detail in orgDetailsKeys" :key="detail.key" class="flex justify-between items-center">
+                    <span class="font-semibold text-gray-600">{{ detail.label }}:</span>
+                    <input :type="detail.key === 'password' ? 'password' : 'text'" v-model="orgDetails[detail.key]"
+                      :disabled="detail.key !== 'password' || !isOrgEditing" :class="[
                         'text-right w-2/3 transition duration-150',
                         detail.key === 'password' && isOrgEditing
                           ? 'bg-white border border-gray-400 rounded-md p-1.5'
                           : 'bg-transparent border-none',
-                      ]"
-                    />
+                      ]" />
                   </div>
                 </div>
 
                 <div class="flex justify-end mt-6">
-                  <button
-                    @click="toggleOrgEdit"
-                    :class="
-                      isOrgEditing
-                        ? 'bg-red-600 hover:bg-red-700'
-                        : 'bg-[#0c6b39] hover:bg-[#09572d]'
-                    "
-                    class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150"
-                  >
+                  <button @click="toggleOrgEdit" :class="isOrgEditing
+                      ? 'bg-red-600 hover:bg-red-700'
+                      : 'bg-[#0c6b39] hover:bg-[#09572d]'
+                    " class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150">
                     {{ isOrgEditing ? 'Save Changes' : 'Change Password' }}
                   </button>
                 </div>
@@ -386,28 +331,14 @@ const toggleInterest = (id) => {
             <div class="text-center mt-8 pt-6 border-t border-gray-200">
               <h3 class="text-xl font-bold mb-2 text-gray-800">
                 Your Account is:
-                <span class="text-green-600 bg-green-50 p-3 rounded-md"
-                  >ACTIVE</span
-                >
+                <span class="text-green-600 bg-green-50 p-3 rounded-md">ACTIVE</span>
               </h3>
               <p class="text-gray-600">
                 Your Exclusive Discount Code is:
-                <span
-                  class="font-mono font-bold text-lg text-gray-800 tracking-wider"
-                  >INDISI2345</span
-                >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="inline-block align-text-bottom text-gray-400 ml-1 cursor-pointer"
-                >
+                <span class="font-mono font-bold text-lg text-gray-800 tracking-wider">INDISI2345</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="inline-block align-text-bottom text-gray-400 ml-1 cursor-pointer">
                   <circle cx="12" cy="12" r="10" />
                   <path d="M12 16v-4" />
                   <path d="M12 8h.01" />
@@ -419,39 +350,22 @@ const toggleInterest = (id) => {
           <div v-else class="p-6 bg-white rounded-xl shadow-lg space-y-8">
             <div class="flex justify-between items-center mb-6">
               <h2 class="text-xl font-semibold">My Personal Profile</h2>
-              <button
-                @click="toggleIndividualEdit"
-                :class="
-                  isIndividualEditing
-                    ? 'bg-red-600 hover:bg-red-700'
-                    : 'bg-[#0c6b39] hover:bg-[#09572d]'
-                "
-                class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150"
-              >
+              <button @click="toggleIndividualEdit" :class="isIndividualEditing
+                  ? 'bg-red-600 hover:bg-red-700'
+                  : 'bg-[#0c6b39] hover:bg-[#09572d]'
+                " class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150">
                 {{ isIndividualEditing ? 'Save Changes' : 'Change Password' }}
               </button>
             </div>
 
             <div class="grid md:grid-cols-2 gap-8">
-              <div
-                class="flex flex-col items-center p-6 border border-gray-200 rounded-xl bg-gray-50"
-              >
+              <div class="flex flex-col items-center p-6 border border-gray-200 rounded-xl bg-gray-50">
                 <div
-                  class="w-24 h-24 bg-white border border-gray-300 rounded-full flex items-center justify-center mb-3 shadow-inner"
-                >
-                  <svg
-                    class="w-8 h-8 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    />
+                  class="w-24 h-24 bg-white border border-gray-300 rounded-full flex items-center justify-center mb-3 shadow-inner">
+                  <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                 </div>
 
@@ -461,60 +375,37 @@ const toggleInterest = (id) => {
 
                 <div class="flex space-x-3">
                   <button
-                    class="px-4 py-2 text-sm text-green-800 bg-white hover:bg-gray-100 border border-gray-300 rounded-lg shadow-sm transition duration-150"
-                  >
+                    class="px-4 py-2 text-sm text-green-800 bg-white hover:bg-gray-100 border border-gray-300 rounded-lg shadow-sm transition duration-150">
                     Save
                   </button>
-                  <label
-                    for="profilePicUpload"
-                    class="px-4 py-2 text-sm text-white bg-[#0c6b39] hover:bg-[#09572d] rounded-lg shadow-md cursor-pointer transition duration-150"
-                  >
+                  <label for="profilePicUpload"
+                    class="px-4 py-2 text-sm text-white bg-[#0c6b39] hover:bg-[#09572d] rounded-lg shadow-md cursor-pointer transition duration-150">
                     Upload
                   </label>
-                  <input
-                    type="file"
-                    id="profilePicUpload"
-                    class="hidden"
-                    accept=".jpg,.png,.jpeg"
-                  />
+                  <input type="file" id="profilePicUpload" class="hidden" accept=".jpg,.png,.jpeg" />
                 </div>
               </div>
 
               <div class="p-6 rounded-xl shadow-md bg-[#F2F9F3] relative">
                 <div class="space-y-4 text-sm text-gray-700">
-                  <div
-                    v-for="detail in individualDetailsKeys"
-                    :key="detail.key"
-                    class="flex justify-between items-center"
-                  >
-                    <span class="font-semibold text-gray-600"
-                      >{{ detail.label }}:</span
-                    >
-                    <input
-                      :type="detail.key === 'password' ? 'password' : 'text'"
-                      v-model="individualDetails[detail.key]"
-                      :disabled="
-                        detail.key !== 'password' || !isIndividualEditing
-                      "
-                      :class="[
+                  <div v-for="detail in individualDetailsKeys" :key="detail.key"
+                    class="flex justify-between items-center">
+                    <span class="font-semibold text-gray-600">{{ detail.label }}:</span>
+                    <input :type="detail.key === 'password' ? 'password' : 'text'"
+                      v-model="individualDetails[detail.key]" :disabled="detail.key !== 'password' || !isIndividualEditing
+                        " :class="[
                         'text-right w-2/3 transition duration-150',
                         detail.key === 'password' && isIndividualEditing
                           ? 'bg-white border border-gray-400 rounded-md p-1.5'
                           : 'bg-transparent border-none',
-                      ]"
-                    />
+                      ]" />
                   </div>
                 </div>
                 <div class="flex justify-end mt-6">
-                  <button
-                    @click="toggleIndividualEdit"
-                    :class="
-                      isIndividualEditing
-                        ? 'bg-red-600 hover:bg-red-700'
-                        : 'bg-[#0c6b39] hover:bg-[#09572d]'
-                    "
-                    class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150"
-                  >
+                  <button @click="toggleIndividualEdit" :class="isIndividualEditing
+                      ? 'bg-red-600 hover:bg-red-700'
+                      : 'bg-[#0c6b39] hover:bg-[#09572d]'
+                    " class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150">
                     {{ isIndividualEditing ? 'Save Changes' : 'Edit' }}
                   </button>
                 </div>
@@ -531,85 +422,52 @@ const toggleInterest = (id) => {
           <div class="p-6 bg-white rounded-xl shadow-lg">
             <div class="flex justify-between items-center mb-6">
               <h2 class="text-xl font-semibold">Other Details</h2>
-              <button
-                @click="toggleOtherDetailsEdit"
-                :class="
-                  isOtherDetailsEditing
-                    ? 'bg-red-600 hover:bg-red-700'
-                    : 'bg-[#0c6b39] hover:bg-[#09572d]'
-                "
-                class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150"
-              >
+              <button @click="toggleOtherDetailsEdit" :class="isOtherDetailsEditing
+                  ? 'bg-red-600 hover:bg-red-700'
+                  : 'bg-[#0c6b39] hover:bg-[#09572d]'
+                " class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150">
                 {{ isOtherDetailsEditing ? 'Save Changes' : 'Edit' }}
               </button>
             </div>
             <div class="space-y-4">
-              <input
-                type="text"
-                placeholder="Address Line 1"
-                v-model="otherDetails.addressLine1"
-                :disabled="!isOtherDetailsEditing"
-                :class="
-                  isOtherDetailsEditing
+              <input type="text" placeholder="Address Line 1" v-model="otherDetails.addressLine1"
+                :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
                     ? 'bg-white border-gray-400'
                     : 'bg-gray-50 border-gray-300'
-                "
-                class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150"
-              />
-              <input
-                type="text"
-                placeholder="Address Line 2"
-                v-model="otherDetails.addressLine2"
-                :disabled="!isOtherDetailsEditing"
-                :class="
-                  isOtherDetailsEditing
+                  "
+                class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
+              <input type="text" placeholder="Address Line 2" v-model="otherDetails.addressLine2"
+                :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
                     ? 'bg-white border-gray-400'
                     : 'bg-gray-50 border-gray-300'
-                "
-                class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150"
-              />
+                  "
+                class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <select
-                  v-model="otherDetails.state"
-                  :disabled="!isOtherDetailsEditing"
-                  :class="
-                    isOtherDetailsEditing
-                      ? 'bg-white border-gray-400'
-                      : 'bg-gray-50 border-gray-300'
+                <select v-model="otherDetails.state" :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
+                    ? 'bg-white border-gray-400'
+                    : 'bg-gray-50 border-gray-300'
                   "
-                  class="w-full p-3 border rounded-lg appearance-none focus:ring-primary-green focus:border-primary-green transition duration-150"
-                >
+                  class="w-full p-3 border rounded-lg appearance-none focus:ring-primary-green focus:border-primary-green transition duration-150">
                   <option value="">Select Option (State)</option>
                   <option value="Mock State">Mock State</option>
                 </select>
-                <select
-                  v-model="otherDetails.country"
-                  :disabled="!isOtherDetailsEditing"
-                  :class="
-                    isOtherDetailsEditing
-                      ? 'bg-white border-gray-400'
-                      : 'bg-gray-50 border-gray-300'
+                <select v-model="otherDetails.country" :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
+                    ? 'bg-white border-gray-400'
+                    : 'bg-gray-50 border-gray-300'
                   "
-                  class="w-full p-3 border rounded-lg appearance-none focus:ring-primary-green focus:border-primary-green transition duration-150"
-                >
+                  class="w-full p-3 border rounded-lg appearance-none focus:ring-primary-green focus:border-primary-green transition duration-150">
                   <option value="">Select Option (Country)</option>
                   <option value="Mock Country">Mock Country</option>
                 </select>
               </div>
 
-              <textarea
-                rows="3"
-                placeholder="Brief Description"
-                v-model="otherDetails.description"
-                :disabled="!isOtherDetailsEditing"
-                :class="
-                  isOtherDetailsEditing
+              <textarea rows="3" placeholder="Brief Description" v-model="otherDetails.description"
+                :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
                     ? 'bg-white border-gray-400'
                     : 'bg-gray-50 border-gray-300'
-                "
-                class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green resize-none transition duration-150"
-              ></textarea>
+                  "
+                class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green resize-none transition duration-150"></textarea>
             </div>
           </div>
 
@@ -621,69 +479,32 @@ const toggleInterest = (id) => {
             </p>
 
             <div class="flex flex-wrap gap-3">
-              <button
-                v-for="interest in interests"
-                :key="interest.id"
-                @click="toggleInterest(interest.id)"
-                :disabled="
-                  !interest.selected &&
-                  selectedInterestsCount >= 4 &&
-                  !interest.isMainCategory
-                "
-                :class="{
+              <button v-for="interest in interests" :key="interest.id" @click="toggleInterest(interest.id)" :disabled="!interest.selected &&
+                selectedInterestsCount >= 4 &&
+                !interest.isMainCategory
+                " :class="{
                   'bg-green-100 text-green-700': interest.isMainCategory,
                   'bg-orange-100 text-orange-700 hover:bg-orange-200':
                     interest.selected && !interest.isMainCategory,
                   'bg-gray-100 text-gray-700 hover:bg-gray-200':
                     !interest.selected && !interest.isMainCategory,
                 }"
-                class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-full cursor-pointer transition duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
-              >
+                class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-full cursor-pointer transition duration-150 disabled:opacity-60 disabled:cursor-not-allowed">
                 {{ interest.name }}
-                <svg
-                  v-if="interest.isMainCategory"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="w-4 h-4 ml-2"
-                >
+                <svg v-if="interest.isMainCategory" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                  stroke-linejoin="round" class="w-4 h-4 ml-2">
                   <path d="M20 6 9 17l-5-5" />
                 </svg>
-                <svg
-                  v-else-if="interest.selected"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="w-4 h-4 ml-2"
-                >
+                <svg v-else-if="interest.selected" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                  stroke-linejoin="round" class="w-4 h-4 ml-2">
                   <path d="M18 6 6 18" />
                   <path d="m6 6 12 12" />
                 </svg>
-                <svg
-                  v-else
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="w-4 h-4 ml-2"
-                >
+                <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                  class="w-4 h-4 ml-2">
                   <path d="M5 12h14" />
                   <path d="M12 5v14" />
                 </svg>
@@ -693,16 +514,14 @@ const toggleInterest = (id) => {
         </div>
 
         <div v-else-if="activeTab === 'Subscription'" class="space-y-10">
-          <div
-            class="p-10 bg-[#F2F9F3] rounded-xl shadow-lg text-center border-2 border-green-300"
-          >
+          <div class="p-10 bg-[#F2F9F3] rounded-xl shadow-lg text-center border-2 border-green-300">
             <h3 class="text-3xl font-serif text-[#333] mb-2">
               Subscription Type:
               <span class="text-[#004D33] font-bold">Individual</span>
             </h3>
 
             <p class="text-sm text-gray-700 mb-10">
-              Purchased on <span class="font-medium">31st December 2024</span>
+              Purchased on <span class="font-medium">{{ subscription.purchasedOn }}</span>
             </p>
             <h2 class="text-2xl font-semibold mb-3 text-gray-800">
               Your subscription expires on:
@@ -710,10 +529,8 @@ const toggleInterest = (id) => {
             <p class="text-4xl font-bold text-orange-600 mb-6">
               {{ subscription.expiryDate }}
             </p>
-            <button
-              @click="makePayment"
-              class="px-8 py-3 text-lg text-white bg-[#0c6b39] hover:bg-[#09572d] rounded-lg shadow-md transition duration-150 font-semibold"
-            >
+            <button @click="makePayment"
+              class="px-8 py-3 text-lg text-white bg-[#0c6b39] hover:bg-[#09572d] rounded-lg shadow-md transition duration-150 font-semibold">
               Renew/Upgrade Membership
             </button>
           </div>
@@ -723,124 +540,77 @@ const toggleInterest = (id) => {
               My Invoices
             </h2>
 
-            <div
-              class="flex justify-between items-center mb-4 p-4 bg-gray-50 rounded-t-lg"
-            >
+            <div class="flex justify-between items-center mb-4 p-4 bg-gray-50 rounded-t-lg">
               <p class="text-sm text-gray-700">
                 Showing 1 to {{ subscription.invoices.length }} of
                 {{ subscription.totalEntries }} entries
               </p>
               <div class="relative">
-                <input
-                  type="text"
-                  placeholder="Search"
-                  class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
-                />
-                <svg
-                  class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  ></path>
+                <input type="text" placeholder="Search"
+                  class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500" />
+                <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none"
+                  stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
               </div>
             </div>
 
-            <div
-              class="overflow-x-auto bg-white border border-gray-200 shadow-lg rounded-b-lg"
-            >
+            <div class="overflow-x-auto bg-white border border-gray-200 shadow-lg rounded-b-lg">
               <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                   <tr>
-                    <th
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Invoice #
                       <span class="ml-1 text-gray-400">⋮</span>
                     </th>
-                    <th
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Invoice Date
                       <span class="ml-1 text-gray-400">⋮</span>
                     </th>
-                    <th
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Due Date
                       <span class="ml-1 text-gray-400">⋮</span>
                     </th>
-                    <th
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Total
                       <span class="ml-1 text-gray-400">⋮</span>
                     </th>
-                    <th
-                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status/Action
                       <span class="ml-1 text-gray-400">⋮</span>
                     </th>
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                  <tr
-                    v-for="invoice in subscription.invoices"
-                    :key="invoice.id"
-                  >
-                    <td
-                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
-                    >
+                  <tr v-if="subscription.invoices.length === 0">
+                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                      No invoices yet
+                    </td>
+                  </tr>
+                  <tr v-else v-for="invoice in subscription.invoices" :key="invoice.id">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {{ invoice.invoiceNo }}
                     </td>
-                    <td
-                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                    >
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {{ invoice.invoiceDate }}
                     </td>
-                    <td
-                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                    >
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {{ invoice.dueDate }}
                     </td>
-                    <td
-                      class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
-                    >
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {{ invoice.total }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <span
-                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                      >
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                         {{ invoice.status }}
                       </span>
-                      <a
-                        v-for="invoice in subscription.invoices"
-                        :key="invoice.id"
-                        :href="invoice.downloadUrl"
-                        download
-                        class="ml-4 text-green-600 hover:text-green-900 flex items-center inline-block"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="w-4 h-4 mr-1"
-                        >
+                      <a v-for="invoice in subscription.invoices" :key="invoice.id" :href="invoice.downloadUrl" download
+                        class="ml-4 text-green-600 hover:text-green-900 flex items-center inline-block">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          class="w-4 h-4 mr-1">
                           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                           <polyline points="7 10 12 15 17 10" />
                           <line x1="12" x2="12" y1="15" y2="3" />
@@ -853,50 +623,25 @@ const toggleInterest = (id) => {
               </table>
             </div>
 
-            <div
-              class="flex justify-end items-center mt-4 text-sm text-gray-600"
-            >
+            <div class="flex justify-end items-center mt-4 text-sm text-gray-600">
               <p class="mr-4">
                 Page {{ subscription.currentPage }} of
                 {{ subscription.totalPages }}
               </p>
-              <button
-                @click="goToPage(subscription.currentPage - 1)"
-                :disabled="subscription.currentPage === 1"
-                class="flex items-center text-gray-400 hover:text-gray-600 disabled:opacity-50 mr-2"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
+              <button @click="goToPage(subscription.currentPage - 1)" :disabled="subscription.currentPage === 1"
+                class="flex items-center text-gray-400 hover:text-gray-600 disabled:opacity-50 mr-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="m15 18-6-6 6-6" />
                 </svg>
                 Prev
               </button>
-              <button
-                @click="goToPage(subscription.currentPage + 1)"
+              <button @click="goToPage(subscription.currentPage + 1)"
                 :disabled="subscription.currentPage === subscription.totalPages"
-                class="flex items-center text-gray-400 hover:text-gray-600 disabled:opacity-50"
-              >
+                class="flex items-center text-gray-400 hover:text-gray-600 disabled:opacity-50">
                 Next
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="m9 18 6-6-6-6" />
                 </svg>
               </button>
@@ -904,9 +649,7 @@ const toggleInterest = (id) => {
           </div>
         </div>
         <div v-else-if="activeTab === 'My Certificate'" class="space-y-10">
-          <div
-            class="p-10 bg-white rounded-xl shadow-lg border border-gray-200"
-          >
+          <div class="p-10 bg-white rounded-xl shadow-lg border border-gray-200">
             <h2 class="text-2xl font-semibold mb-4 text-gray-800">
               My Certificate
             </h2>
@@ -917,13 +660,8 @@ const toggleInterest = (id) => {
 
             <!-- Certificate Preview Box -->
             <div
-              class="w-full border border-gray-300 rounded-lg overflow-hidden shadow-md bg-gray-50 flex justify-center items-center h-80"
-            >
-              <iframe
-                v-if="certificateUrl"
-                :src="certificateUrl"
-                class="w-full h-full"
-              ></iframe>
+              class="w-full border border-gray-300 rounded-lg overflow-hidden shadow-md bg-gray-50 flex justify-center items-center h-80">
+              <iframe v-if="certificateUrl" :src="certificateUrl" class="w-full h-full"></iframe>
 
               <div v-else class="text-center text-gray-500">
                 Certificate preview unavailable
@@ -932,29 +670,20 @@ const toggleInterest = (id) => {
 
             <!-- Actions -->
             <div class="mt-6 flex justify-center space-x-4">
-              <a
-                v-if="certificateUrl"
-                :href="certificateUrl"
-                download="certificate.pdf"
-                class="px-6 py-2 bg-[#0c6b39] hover:bg-[#09572d] text-white rounded-lg shadow"
-              >
+              <a v-if="certificateUrl" :href="certificateUrl" download="certificate.pdf"
+                class="px-6 py-2 bg-[#0c6b39] hover:bg-[#09572d] text-white rounded-lg shadow">
                 Download Certificate
               </a>
 
-              <button
-                @click="viewCertificateInNewTab"
-                class="px-6 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100"
-              >
+              <button @click="viewCertificateInNewTab"
+                class="px-6 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100">
                 Open in New Tab
               </button>
             </div>
           </div>
         </div>
 
-        <div
-          v-else
-          class="p-10 text-center bg-white rounded-xl shadow-lg text-gray-500"
-        >
+        <div v-else class="p-10 text-center bg-white rounded-xl shadow-lg text-gray-500">
           <h2 class="text-2xl font-semibold mb-3">
             Content for {{ activeTab }}
           </h2>
@@ -965,10 +694,7 @@ const toggleInterest = (id) => {
         </div>
       </div>
 
-      <div
-        v-else
-        class="p-10 text-center bg-white rounded-xl shadow-lg text-gray-500"
-      >
+      <div v-else class="p-10 text-center bg-white rounded-xl shadow-lg text-gray-500">
         <h2 class="text-2xl font-semibold mb-3">
           Welcome to the {{ currentView }} Page
         </h2>
@@ -998,9 +724,11 @@ const toggleInterest = (id) => {
   background-color: var(--primary-green);
   transition: all 0.2s;
 }
+
 .main-button:hover {
   background-color: var(--sidebar-green-dark);
 }
+
 .org-info-card {
   background-color: var(--light-green-bg);
 }

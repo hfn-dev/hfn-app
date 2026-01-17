@@ -19,15 +19,29 @@ const formData = ref({
 const searchQuery = ref('');
 const tickets = ref([]);
 const filteredTickets = ref([]);
+
+const mapTicket = (t) => ({
+  id: t.id,
+  number: t.ticket_number,
+  userName: t.user_full_name,
+  subject: t.subject,
+  description: t.message,
+  status: t.status,
+  dateCreated: new Date(t.created_at).toLocaleString(),
+  lastUpdate: new Date(t.updated_at).toLocaleString(),
+  update1: t.update1 ?? null,
+});
+
 const fetchTickets = async () => {
   try {
     const data = await ticketApi.getTickets();
-    tickets.value = data;
-    filteredTickets.value = data;
+    tickets.value = data.map(mapTicket);
+    filteredTickets.value = tickets.value;
   } catch (error) {
     console.error('Failed to fetch tickets:', error);
   }
 };
+
 
 const submitTicket = async () => {
   try {
@@ -48,9 +62,13 @@ const viewTicketDetails = async (id) => {
   activeTab.value = 'tickets';
 
   try {
-    const details = await ticketApi.viewTicketDetails(id); // fetch full ticket details
+    const res = await ticketApi.viewTicketDetails(id);
+    const mapped = mapTicket(res);
+
     const index = tickets.value.findIndex((t) => t.id === id);
-    if (index !== -1) tickets.value[index] = details;
+    if (index !== -1) {
+      tickets.value[index] = mapped;
+    }
   } catch (error) {
     console.error('Failed to fetch ticket details:', error);
   }

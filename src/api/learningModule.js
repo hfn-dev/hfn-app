@@ -187,7 +187,7 @@ export default {
     }
   },
 
-  async courseEnrollment(slug, payload) {
+  async courseEnrollment(slug, payload = {}) {
     try {
       const response = await api.post(
         `/learning/courses/${slug}/enroll`,

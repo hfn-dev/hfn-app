@@ -672,7 +672,6 @@ onUnmounted(() => {
         </div>
 
         <div v-else>
-          <!-- Directory Tab - FIXED -->
           <div v-if="currentTab === 'Directory'" class="max-w-7xl bg-white p-6 rounded-xl shadow-lg border border-gray-100">
             <div class="flex justify-between items-center mb-6">
               <div class="relative w-full max-w-sm mr-4">
@@ -723,7 +722,7 @@ onUnmounted(() => {
             </div>
             
             <div v-else>
-              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-6 h-[50vh] overflow-y-auto">
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 min-h-[200px] max-h-[60vh] overflow-y-auto">
                 <div 
                   v-for="(user, index) in directoryUsers" 
                   :key="index" 
@@ -743,7 +742,6 @@ onUnmounted(() => {
                   </div>
                   
                   <div class="mt-2">
-                    <!-- FIXED: Use correct status values from API -->
                     <button 
                       v-if="user.status === 'none'"
                       @click="sendConnectionRequest(user.id)"
@@ -779,7 +777,6 @@ onUnmounted(() => {
                 </div>
               </div>
 
-              <!-- Pagination -->
               <div v-if="directoryUsers.length > 0" class="mt-6 flex justify-between items-center">
                 <div>
                   <span class="text-sm text-gray-500">
@@ -821,8 +818,6 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <!-- Rest of the template remains the same... -->
-          <!-- Notifications Tab -->
           <div v-if="currentTab === 'Notifications'" class="space-y-6 max-w-4xl">
             <div
               v-for="(message, index) in notifications"

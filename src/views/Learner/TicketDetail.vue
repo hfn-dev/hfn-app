@@ -15,6 +15,8 @@ const toast = useToast();
 const emit = defineEmits(['close']);
 const updateText = ref('');
 
+
+
 const submitUpdate = async () => {
   const text = updateText.value.trim();
   if (!text) return;
@@ -34,6 +36,7 @@ const submitUpdate = async () => {
     toast.error('Failed to submit update. Please try again later.');
   }
 };
+
 </script>
 
 <template>
