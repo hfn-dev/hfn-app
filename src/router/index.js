@@ -31,6 +31,7 @@ import TutorCreateCourse from '@/views/Tutor/TutorCreateCourse.vue';
 import TutorDashboard from '@/views/Tutor/TutorDashboard.vue';
 import TutorReviews from '@/views/Tutor/TutorReviews.vue';
 
+import ArticleDetail from '@/views/User/ArticleDetail.vue';
 import CourseDetails from '@/views/User/CourseDetails.vue';
 import MessageNotification from '@/views/User/MessageNotification.vue';
 import MyAccount from '@/views/User/MyAccount.vue';
@@ -38,17 +39,9 @@ import MyLearning from '@/views/User/MyLearning.vue';
 import Support from '@/views/User/Support.vue';
 import UserCourses from '@/views/User/UserCourses.vue';
 import UserDashboard from '@/views/User/UserDashboard.vue';
-import ArticleDetail from '@/views/User/ArticleDetail.vue';
 import UserSubscription from '@/views/User/UserSubscription.vue';
 
 import Publications from '@/views/Publications.vue';
-
-import LearnerMyAccount from '@/views/Learner/MyAccount.vue';
-import MyLearningLearner from '@/views/Learner/MyLearning.vue';
-import LearnerSupport from '@/views/Learner/Support.vue';
-import LearnerCourseDetails from '@/views/Learner/CourseDetails.vue';
-import LearnerCourses from '@/views/Learner/UserCourses.vue';
-
 
 import AdminAccount from '@/views/Admin/AdminAccount.vue';
 import AdminCourseList from '@/views/Admin/AdminCourseList.vue';
@@ -78,8 +71,7 @@ const routes = [
   { path: '/signin', name: 'Signin', component: SignIn },
   { path: '/events', name: 'Events', component: Events },
   { path: '/gallery', name: 'Gallery', component: Gallery },
-    { path: '/publication', name: 'Publications', component: Publications },
-
+  { path: '/publication', name: 'Publications', component: Publications },
 
   { path: '/get-involved', name: 'GetInvolved', component: GetInvolved },
   { path: '/programs', name: 'Programs', component: Programs },
@@ -148,6 +140,8 @@ const routes = [
     name: 'Interest',
     component: Interests,
   },
+
+  //editor
   {
     path: '/editor/signin',
     name: 'EditorSignin',
@@ -168,6 +162,8 @@ const routes = [
     name: 'EditorAccount',
     component: EditorAccount,
   },
+
+  //tutor
   {
     path: '/tutor/mycourses',
     name: 'TutorCourseList',
@@ -193,6 +189,8 @@ const routes = [
     name: 'TutorReviews',
     component: TutorReviews,
   },
+
+  //superadmin
   {
     path: '/superadmin/dashboard',
     name: 'SuperAdminDashboard',
@@ -207,11 +205,13 @@ const routes = [
     path: '/superadmin/create-course',
     name: 'SuperAdminCreateCourse',
     component: SuperAdminCreateCourse,
+    props: { mode: 'create' },
   },
   {
     path: '/superadmin/courses/:slug/edit',
     name: 'SuperAdminEditCourse',
     component: SuperAdminCreateCourse,
+    props: { mode: 'edit' },
   },
   {
     path: '/superadmin/members',
@@ -281,6 +281,13 @@ const routes = [
     path: '/admin/access',
     name: 'AdminManager',
     component: AdminManager,
+  },
+
+  {
+    path: '/admin/courses/:slug/edit',
+    name: 'AdminEditCourse',
+    component: AdminCreateCourse,
+    props: true,
   },
 
   //for learners

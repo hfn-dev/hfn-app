@@ -1,8 +1,8 @@
 <script setup>
-import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
-import { reactive, ref, onMounted, computed } from "vue";
-import { useRouter } from "vue-router";
 import dashboardApi from "@/api/dashboard";
+import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
+import { computed, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import { useToast } from 'vue-toastification';
 
 import {
@@ -42,7 +42,7 @@ const isLoading = ref(true);
 const dashboardData = ref(null);
 
 // Reactive chart data
-const revenueData = reactive({
+const revenueData = ref({
   labels: [],
   datasets: [
     {
@@ -60,7 +60,7 @@ const revenueData = reactive({
   ],
 });
 
-const engagementData = reactive({
+const engagementData = ref({
   labels: [],
   datasets: [
     {
@@ -72,7 +72,7 @@ const engagementData = reactive({
   ],
 });
 
-const completionData = reactive({
+const completionData = ref({
   labels: ["Completed", "In Progress", "Dropped"],
   datasets: [
     {
@@ -83,7 +83,7 @@ const completionData = reactive({
   ],
 });
 
-const growthData = reactive({
+const growthData = ref({
   labels: [],
   datasets: [
     {
@@ -97,7 +97,7 @@ const growthData = reactive({
   ],
 });
 
-const revenueChartOptions = reactive({
+const revenueChartOptions = ref({
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -167,11 +167,24 @@ const barOptions = {
 
 const pieOptions = {
   responsive: true,
-  maintainAspectRatio: false,
   plugins: {
+    tooltip: {
+      callbacks: {
+        label: ctx => `${ctx.label}: ${ctx.raw}%`,
+      },
+    },
     legend: { position: "bottom" },
   },
 };
+
+
+// const pieOptions = {
+//   responsive: true,
+//   maintainAspectRatio: false,
+//   plugins: {
+//     legend: { position: "bottom" },
+//   },
+// };
 
 const lineOptions = {
   responsive: true,
@@ -250,50 +263,53 @@ const summaryData = computed(() => {
 // Compute most viewed courses from API
 const mostViewedCourses = computed(() => {
   if (!dashboardData.value?.most_viewed_courses) return [];
-  
-  return dashboardData.value.most_viewed_courses.map(course => {
-    const maxViews = Math.max(...dashboardData.value.most_viewed_courses.map(c => c.view_count));
-    const progress = maxViews > 0 ? Math.round((course.view_count / maxViews) * 100) : 0;
-    
-    return {
-      name: course.course_title,
-      value: course.view_count?.toLocaleString() || "0",
-      progress: `${progress}%`,
-      course_id: course.course_id
-    };
-  }).slice(0, 9); // Limit to 9 for display
+
+  const maxEnrollments = Math.max(
+    ...dashboardData.value.most_viewed_courses.map(c => c.enrollment_count || 0)
+  );
+
+  return dashboardData.value.most_viewed_courses.map(course => ({
+    name: course.title,
+    value: course.enrollment_count || 0,
+    progress:
+      maxEnrollments > 0
+        ? `${Math.round((course.enrollment_count / maxEnrollments) * 100)}%`
+        : "0%",
+    course_id: course.id,
+  }));
 });
 
 // Compute course data for enrollment visualization
 const courseData = computed(() => {
   if (!dashboardData.value?.most_viewed_courses) return [];
-  
+
   return dashboardData.value.most_viewed_courses.slice(0, 4).map(course => ({
-    name: course.course_title,
-    enrollments: course.view_count || 0,
+    name: course.title,
+    enrollments: course.enrollment_count || 0,
+    course_id: course.id,
   }));
 });
 
 // Compute top revenue months
 const topRevenueData = computed(() => {
   if (!dashboardData.value?.monthly_revenue) return null;
-  
+
   const monthlyData = dashboardData.value.monthly_revenue;
   const entries = Object.entries(monthlyData);
-  
+
   if (entries.length === 0) return null;
-  
+
   // Find top month
   let topMonth = { month: "", revenue: 0 };
   let topYear = { year: 0, total: 0 };
-  
+
   entries.forEach(([month, revenue]) => {
     if (revenue > topMonth.revenue) {
       topMonth = { month, revenue };
     }
     topYear.total += revenue;
   });
-  
+
   return {
     topMonth: topMonth.month,
     topMonthRevenue: topMonth.revenue,
@@ -307,7 +323,7 @@ const fetchDashboardData = async () => {
   try {
     isLoading.value = true;
     const response = await dashboardApi.fetchDashboard();
-    
+
     if (response.data) {
       dashboardData.value = response.data;
       updateChartData();
@@ -326,35 +342,46 @@ const fetchDashboardData = async () => {
 const updateChartData = () => {
   if (!dashboardData.value) return;
 
-  // Update revenue chart
+  // Revenue
   if (dashboardData.value.monthly_revenue) {
-    revenueData.labels = Object.keys(dashboardData.value.monthly_revenue);
-    revenueData.datasets[0].data = Object.values(dashboardData.value.monthly_revenue);
+    revenueData.value = {
+      ...revenueData.value,
+      labels: Object.keys(dashboardData.value.monthly_revenue),
+      datasets: [{
+        ...revenueData.value.datasets[0],
+        data: Object.values(dashboardData.value.monthly_revenue)
+      }]
+    };
   }
 
-  // Update enrollment chart
+  // Enrollments
   if (dashboardData.value.enrollments_by_month) {
-    engagementData.labels = Object.keys(dashboardData.value.enrollments_by_month);
-    engagementData.datasets[0].data = Object.values(dashboardData.value.enrollments_by_month);
+    engagementData.value = {
+      ...engagementData.value,
+      labels: Object.keys(dashboardData.value.enrollments_by_month),
+      datasets: [{
+        ...engagementData.value.datasets[0],
+        data: Object.values(dashboardData.value.enrollments_by_month)
+      }]
+    };
   }
 
-  // Update completion chart
+  // Completion
   if (dashboardData.value.course_completion_stats) {
     const stats = dashboardData.value.course_completion_stats;
-    completionData.datasets[0].data = [
-      stats.completed || 0,
-      stats.in_progress || 0,
-      stats.dropped || 0
-    ];
-  }
-
-  // Update growth chart (using user signups by month)
-  if (dashboardData.value.new_signups_by_month) {
-    growthData.labels = Object.keys(dashboardData.value.new_signups_by_month);
-    growthData.datasets[0].data = Object.values(dashboardData.value.new_signups_by_month);
+    completionData.value = {
+      ...completionData.value,
+      datasets: [{
+        ...completionData.value.datasets[0],
+        data: [
+          Number(stats.completed_count) || 0,
+          Number(stats.in_progress_count) || 0,
+          Number(stats.dropped_count) || 0
+        ]
+      }]
+    };
   }
 };
-
 // On component mount
 onMounted(() => {
   fetchDashboardData();
@@ -369,40 +396,21 @@ const closeSidebar = () => (showSidebar.value = false);
 <template>
   <div class="flex min-h-screen font-sans relative">
     <!-- Mobile sidebar toggle -->
-    <button
-      @click="toggleSidebar"
-      class="lg:hidden fixed top-15 left-0 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"
-        />
+    <button @click="toggleSidebar"
+      class="lg:hidden fixed top-15 left-0 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
       </svg>
     </button>
 
     <!-- SIDEBAR -->
-    <div
-      class="fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:translate-x-0"
-      :class="showSidebar ? 'translate-x-0' : '-translate-x-full'"
-    >
+    <div class="fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:translate-x-0"
+      :class="showSidebar ? 'translate-x-0' : '-translate-x-full'">
       <AdminSidebar @closeSidebar="closeSidebar" />
     </div>
 
     <!-- Overlay for mobile sidebar -->
-    <div
-      v-if="showSidebar"
-      class="fixed inset-0 bg-gray-500 bg-opacity-50 z-30 lg:hidden"
-      @click="closeSidebar"
-    ></div>
+    <div v-if="showSidebar" class="fixed inset-0 bg-gray-500 bg-opacity-50 z-30 lg:hidden" @click="closeSidebar"></div>
 
     <!-- Main content -->
     <main class="flex-1 p-8 overflow-auto bg-white">
@@ -425,16 +433,13 @@ const closeSidebar = () => (showSidebar.value = false);
 
         <!-- Stat Cards -->
         <div class="flex justify-between items-stretch mb-10 space-x-6">
-          <div
-            v-for="(stat, index) in statCards"
-            :key="stat.title"
+          <div v-for="(stat, index) in statCards" :key="stat.title"
             class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
             :class="{
               'rounded-tl-4xl rounded-br-4xl': index === 0,
               'rounded-tl-4xl rounded-br-4xl': index === statCards.length - 1,
               'rounded-tl-4xl rounded-br-4xl': true,
-            }"
-          >
+            }">
             <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
             <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
 
@@ -480,7 +485,7 @@ const closeSidebar = () => (showSidebar.value = false);
             <h2 class="text-xl font-semibold mb-4 text-[#006633]">
               Course Completion
             </h2>
-            <div v-if="completionData.datasets[0].data.some(d => d > 0)" class="h-[300px] w-full">
+            <div v-if="completionData.datasets[0].data.reduce((a, b) => a + b, 0) > 0" class="h-[300px] w-full">
               <Pie :data="completionData" :options="pieOptions" />
             </div>
             <div v-else class="h-[300px] w-full flex items-center justify-center text-gray-500">
@@ -506,14 +511,11 @@ const closeSidebar = () => (showSidebar.value = false);
         <div class="p-6 bg-white rounded-xl mb-8">
           <!-- Summary Cards -->
           <div class="flex justify-between items-stretch mb-8 space-x-6">
-            <div
-              v-for="card in summaryData"
-              :key="card.title"
+            <div v-for="card in summaryData" :key="card.title"
               class="summary-card-alt flex-1 p-6 text-center bg-white shadow-lg relative overflow-hidden group transition-all duration-300"
               :class="{
                 'rounded-tl-4xl rounded-br-4xl': true,
-              }"
-            >
+              }">
               <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
               <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
 
@@ -523,12 +525,10 @@ const closeSidebar = () => (showSidebar.value = false);
                 <span>{{ card.value }}</span>
               </div>
 
-              <p
-                :class="[
-                  card.trendType === 'up' ? 'text-[#00cc66]' : 'text-red-500',
-                  'text-sm font-medium',
-                ]"
-              >
+              <p :class="[
+                card.trendType === 'up' ? 'text-[#00cc66]' : 'text-red-500',
+                'text-sm font-medium',
+              ]">
                 {{ card.trendValue }}
               </p>
             </div>
@@ -540,19 +540,13 @@ const closeSidebar = () => (showSidebar.value = false);
           </h2>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div
-              v-for="course in courseData"
-              :key="course.name"
-              class="course-card"
-            >
+            <div v-for="course in courseData" :key="course.name" class="course-card">
               <div class="flex justify-between items-center mb-1">
                 <p class="text-base font-bold text-gray-800 truncate">
                   {{ course.name }}
                 </p>
-                <button
-                  class="text-xl font-bold text-gray-400 hover:text-gray-600 p-1"
-                  @click="$router.push(`/admin/courses/${course.course_id || '#'}`)"
-                >
+                <button class="text-xl font-bold text-gray-400 hover:text-gray-600 p-1"
+                  @click="$router.push(`/admin/courses/${course.course_id || '#'}`)">
                   &vellip;
                 </button>
               </div>
@@ -570,9 +564,7 @@ const closeSidebar = () => (showSidebar.value = false);
             <div class="bg-white p-6 rounded-lg shadow-sm mb-0">
               <div class="flex justify-between items-start mb-4">
                 <h2 class="text-2xl font-bold text-gray-800">Revenue</h2>
-                <div
-                  class="p-2 border border-gray-300 rounded-md text-sm cursor-pointer flex items-center"
-                >
+                <div class="p-2 border border-gray-300 rounded-md text-sm cursor-pointer flex items-center">
                   Yearly <span class="ml-1 text-xs">⌄</span>
                 </div>
               </div>
@@ -592,7 +584,9 @@ const closeSidebar = () => (showSidebar.value = false);
                   <p class="text-sm text-gray-500 mb-1">Top month</p>
                   <p class="text-3xl font-bold text-[#E87A18]">{{ topRevenueData.topMonth }}</p>
                   <p class="text-xl font-semibold text-[#E87A18] mt-1">
-                    {{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(topRevenueData.topMonthRevenue) }}
+                    {{ new Intl.NumberFormat('en-US', {
+                      style: 'currency', currency: 'USD', maximumFractionDigits: 0
+                    }).format(topRevenueData.topMonthRevenue) }}
                   </p>
                 </div>
               </div>
@@ -603,7 +597,9 @@ const closeSidebar = () => (showSidebar.value = false);
                   <p class="text-sm text-gray-500 mb-1">Top year</p>
                   <p class="text-3xl font-bold text-[#E87A18]">{{ topRevenueData.topYear }}</p>
                   <p class="text-xl font-semibold text-gray-600 mt-1">
-                    {{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(topRevenueData.totalYearRevenue) }}
+                    {{ new Intl.NumberFormat('en-US', {
+                      style: 'currency', currency: 'USD', maximumFractionDigits: 0
+                    }).format(topRevenueData.totalYearRevenue) }}
                   </p>
                 </div>
               </div>
@@ -612,7 +608,8 @@ const closeSidebar = () => (showSidebar.value = false);
               <div class="highlight-card-wrapper" v-if="mostViewedCourses.length > 0">
                 <div class="highlight-card">
                   <p class="text-sm text-gray-500 mb-1">Best Seller</p>
-                  <div class="w-10 h-10 rounded-full mb-1 border-2 border-orange-300 bg-gray-200 flex items-center justify-center">
+                  <div
+                    class="w-10 h-10 rounded-full mb-1 border-2 border-orange-300 bg-gray-200 flex items-center justify-center">
                     <span class="text-gray-600 font-bold">
                       {{ mostViewedCourses[0]?.name?.charAt(0) || 'N' }}
                     </span>
@@ -634,21 +631,13 @@ const closeSidebar = () => (showSidebar.value = false);
               Most Viewed Courses
             </h2>
             <div class="space-y-4">
-              <div
-                v-for="(course, index) in mostViewedCourses"
-                :key="index"
-                class="flex items-center"
-              >
+              <div v-for="(course, index) in mostViewedCourses" :key="index" class="flex items-center">
                 <div
-                  class="relative flex-grow h-8 bg-gradient-to-r from-orange-100 to-orange-200 rounded-lg overflow-hidden"
-                >
-                  <div
-                    class="absolute inset-0 bg-gradient-to-r from-orange-300 to-orange-400 rounded-lg"
-                    :style="{ width: course.progress }"
-                  ></div>
+                  class="relative flex-grow h-8 bg-gradient-to-r from-orange-100 to-orange-200 rounded-lg overflow-hidden">
+                  <div class="absolute inset-0 bg-gradient-to-r from-orange-300 to-orange-400 rounded-lg"
+                    :style="{ width: course.progress }"></div>
                   <p
-                    class="relative z-10 text-sm font-semibold text-gray-800 px-3 py-1 flex justify-between items-center h-full"
-                  >
+                    class="relative z-10 text-sm font-semibold text-gray-800 px-3 py-1 flex justify-between items-center h-full">
                     <span class="truncate">{{ course.name }}</span>
                     <span>{{ course.value }}</span>
                   </p>

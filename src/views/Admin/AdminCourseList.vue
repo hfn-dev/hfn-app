@@ -2,6 +2,7 @@
 import dashboardApi from "@/api/dashboard";
 import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
 import { computed, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import { useToast } from 'vue-toastification';
 
 import {
@@ -18,6 +19,7 @@ import {
 const toast = useToast();
 const courseTabs = ref(["Published", "Drafts", "Archived", "Approvals"]);
 const currentTab = ref("Published");
+const router = useRouter();
 
 const publishedCourses = ref([]);
 const draftCourses = ref([]);
@@ -37,6 +39,7 @@ const fetchCourseAnalytics = async (ordering = '-enrollment_count') => {
     // Transform API response to match component structure
     publishedCourses.value = courses.map(course => ({
       id: course.course_id,
+      slug: course.course_slug,
       title: course.course_title,
       enrollments: course.total_enrollments,
       completion: `${course.completion_rate.toFixed(1)}%`,
@@ -74,6 +77,35 @@ const fetchCourseAnalytics = async (ordering = '-enrollment_count') => {
   }
 };
 
+const handleEditCourse = async (slug) => {
+  try {
+    // Fetch the course details first (if needed for pre-filling the form)
+    const course = await courseApi.getCoursesDetails(slug);
+
+    // Navigate to edit page and pass slug via query or params
+    router.push({ path: `/admin/courses/${slug}/edit` });
+  } catch (err) {
+    console.error('Failed to fetch course for edit', err);
+    toast.error('Failed to load course for editing');
+  }
+};
+
+
+const handleDeleteCourse = async (slug) => {
+  if (!confirm("Are you sure you want to delete this course?")) return;
+
+  try {
+    await courseApi.deleteCourse(slug); 
+    toast.success('Course deleted successfully');
+
+    publishedCourses.value = publishedCourses.value.filter(c => c.slug !== slug);
+  } catch (err) {
+    console.error('Delete course failed', err);
+    toast.error('Failed to delete course');
+  }
+};
+
+
 // Handle sorting
 const updateSorting = (ordering) => {
   fetchCourseAnalytics(ordering);
@@ -109,27 +141,19 @@ const activeCourses = computed(() => {
   return [];
 });
 
-const handleAction = (action, courseId) => {
-  console.log(`${action} course ID: ${courseId}`);
-
+const handleAction = (action, slug) => {
   switch (action) {
-    case 'Approve':
-      toast.success(`Course ${courseId} approved`);
-      break;
-    case 'View':
-      // Navigate to course view
-      toast.info(`Viewing course ${courseId}`);
-      break;
     case 'Edit':
-      // Navigate to course edit
-      toast.info(`Editing course ${courseId}`);
+      router.push(`/admin/courses/${slug}/edit`);
       break;
     case 'Delete':
-      if (confirm(`Are you sure you want to delete course ${courseId}?`)) {
-        toast.info(`Deleting course ${courseId}...`);
-        // Implement delete API call here
-        // Example: dashboardApi.deleteCourse(courseId);
-      }
+      handleDeleteCourse(slug);
+      break;
+    case 'View':
+      router.push(`/admin/courses/${slug}`);
+      break;
+    case 'Approve':
+      toast.success(`Course ${slug} approved`);
       break;
   }
 };
@@ -494,17 +518,17 @@ onMounted(() => {
               <!-- Action buttons -->
               <td class="py-3 px-3 text-center">
                 <div class="flex items-center justify-center gap-2">
-                  <button @click="handleAction('View', course.id)" class="w-6 h-6 hover:text-blue-500 transition-colors"
+                  <button @click="handleAction('View', course.slug)" class="w-6 h-6 hover:text-blue-500 transition-colors"
                     title="View Course">
                     <Eye class="w-full h-full" />
                   </button>
 
-                  <button @click="handleAction('Edit', course.id)"
+                  <button @click="handleAction('Edit', course.slug)"
                     class="w-6 h-6 hover:text-green-500 transition-colors" title="Edit Course">
                     <Edit2 class="w-full h-full" />
                   </button>
 
-                  <button @click="handleAction('Delete', course.id)"
+                  <button @click="handleAction('Delete', course.slug)"
                     class="w-6 h-6 hover:text-red-500 transition-colors" title="Delete Course">
                     <Trash2 class="w-full h-full" />
                   </button>
