@@ -1,8 +1,7 @@
 <script setup>
-
 import pagesApi from "@/api/pageManagement";
 import { useRouter } from "vue-router";
- 
+
 import { computed, onMounted, ref } from "vue";
 import EditorSidebar from "./EditorSidebar.vue";
 
@@ -37,10 +36,9 @@ const newPageTitle = ref("");
 const viewPage = (page) => {
   router.push({
     path: page.slug,
-    query: { preview: "true" }
+    query: { preview: "true" },
   });
 };
-
 
 const uploadSectionImage = async (event, sectionKey) => {
   const file = event.target.files[0];
@@ -54,7 +52,6 @@ const uploadSectionImage = async (event, sectionKey) => {
     console.error("Image upload failed", e);
   }
 };
-
 
 const editPage = (page) => {
   activePage.value = page;
@@ -174,10 +171,9 @@ const toggleVisibility = async (page) => {
   try {
     await pagesApi.updatePageVisibility(page.id, page.isVisible);
   } catch (e) {
-    page.isVisible = !page.isVisible; 
+    page.isVisible = !page.isVisible;
   }
 };
-
 </script>
 
 <template>
@@ -227,20 +223,20 @@ const toggleVisibility = async (page) => {
 
         <div class="space-y-3">
           <div v-if="isLoading" class="text-center text-gray-500 py-10">
-    Loading pages...
-  </div>
+            Loading pages...
+          </div>
 
-  <div
-    v-else-if="!hasPages"
-    class="text-center py-16 bg-gray-50 border border-dashed border-gray-300 rounded-xl"
-  >
-    <h3 class="text-lg font-semibold text-gray-700 mb-2">
-      No pages yet
-    </h3>
-    <p class="text-sm text-gray-500">
-      Pages you create will appear here.
-    </p>
-  </div>
+          <div
+            v-else-if="!hasPages"
+            class="text-center py-16 bg-gray-50 border border-dashed border-gray-300 rounded-xl"
+          >
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">
+              No pages yet
+            </h3>
+            <p class="text-sm text-gray-500">
+              Pages you create will appear here.
+            </p>
+          </div>
           <div
             v-else
             v-for="page in pages"
@@ -251,16 +247,16 @@ const toggleVisibility = async (page) => {
               <span
                 class="px-3 py-1 text-xs font-semibold rounded-full min-w-[70px] text-center cursor-pointer"
                 :class="
-                  page.isVisible
+                  page.is_visible
                     ? 'bg-green-100 text-green-800'
                     : 'bg-red-100 text-red-800'
                 "
                 @click="toggleVisibility(page)"
                 title="Click to toggle visibility"
               >
-                {{ page.isVisible ? "VISIBLE" : "HIDDEN" }}
+                {{ page.is_visible ? "VISIBLE" : "HIDDEN" }}
               </span>
-              <span class="text-gray-700 font-medium">{{ page.title }}</span>
+              <span class="text-gray-700 font-medium">{{ page.page_type }}</span>
             </div>
 
             <div class="flex items-center space-x-3">
