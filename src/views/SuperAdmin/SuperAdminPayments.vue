@@ -1,7 +1,7 @@
 <script setup>
 import analyticsApi from '@/api/dashboard.js';
 import paymentApi from '@/api/payments.js';
-import { useToast } from '@/composables/useToast';
+import { useToast } from 'vue-toastification';
 import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
 import { computed, onMounted, ref, watch } from 'vue';
 
