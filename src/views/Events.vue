@@ -296,7 +296,7 @@
 
 <script setup>
 import awards from "@/assets/awards.png";
-import newEvent from "@/assets/event2026.png";
+import newEvent from "@/assets/events.png";
 import latest from "@/assets/latest_news.png";
 
 const events = [
