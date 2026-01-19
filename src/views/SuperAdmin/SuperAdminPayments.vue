@@ -46,7 +46,7 @@ const fetchPayments = async () => {
   loading.value = true;
   try {
     if (currentTab.value === 'Registration') {
-      registration.value = await paymentApi.getRegistrations();
+      registration.value = await paymentApi.getPaymentList();
     } else {
       purchases.value = await paymentApi.getPurchases();
     }
@@ -277,7 +277,6 @@ watch(currentTab, () => {
   <div class="flex min-h-screen font-sans">
     <SuperAdminSidebar />
     <main class="flex-1 p-8 overflow-auto bg-white">
-      <!-- Breadcrumbs -->
       <div class="text-sm text-gray-500 mb-6">
         <span class="text-[#006633]">Home</span> > Payments
       </div>
@@ -287,7 +286,6 @@ watch(currentTab, () => {
           Payments
         </h1>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <!-- Monthly Revenue Bar Chart -->
           <div class="p-6 bg-white rounded-xl shadow-lg border border-gray-200">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">
               Monthly Revenue Overview
@@ -295,16 +293,13 @@ watch(currentTab, () => {
             <div class="h-64 flex items-end justify-between space-x-2 p-2">
               <div v-for="data in revenueData" :key="data.month"
                 class="flex-1 h-full flex flex-col items-center justify-end group cursor-pointer">
-                <!-- Bar -->
                 <div :style="{ height: getBarHeight(data.amount) }"
                   class="w-8 md:w-10 bg-[#00cc66] rounded-t-lg transition-all duration-300 hover:bg-[#00994d] relative">
-                  <!-- Tooltip/Value -->
                   <span
                     class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-medium text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
                     {{ formatCurrency(data.amount) }}
                   </span>
                 </div>
-                <!-- Label -->
                 <p class="mt-2 text-sm text-gray-600">{{ data.month }}</p>
               </div>
             </div>
