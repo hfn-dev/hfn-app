@@ -74,12 +74,12 @@ const normalizePayment = (item) => {
     id: item.id,
     title: item.user?.full_name || item.user?.email || '—',
     enrollments: item.payment_type_display || '—',
-    completion: item.status_display || '—',
+    completion: item.amount || '—',
     amount: item.amount,
     lastUpdate: item.created_at
       ? new Date(item.created_at).toLocaleDateString()
       : '—',
-    raw: item, // keep original if needed
+    raw: item, 
   };
 };
   
