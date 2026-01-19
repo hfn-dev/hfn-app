@@ -42,18 +42,47 @@ const activeCourses = computed(() => {
 
 });
 
+// const fetchPayments = async () => {
+//   loading.value = true;
+//   try {
+//     if (currentTab.value === 'Registration') {
+//       registration.value = await paymentApi.getPaymentList();
+//     } else {
+//       purchases.value = await paymentApi.getPurchases();
+//     }
+//   } finally {
+//     loading.value = false;
+//   }
+// };
 const fetchPayments = async () => {
   loading.value = true;
   try {
     if (currentTab.value === 'Registration') {
-      registration.value = await paymentApi.getPaymentList();
+      const res = await paymentApi.getPaymentList();
+      registration.value = res.map(normalizePayment);
     } else {
-      purchases.value = await paymentApi.getPurchases();
+      const res = await paymentApi.getPurchases();
+      purchases.value = res.map(normalizePayment);
     }
   } finally {
     loading.value = false;
   }
 };
+
+const normalizePayment = (item) => {
+  return {
+    id: item.id,
+    title: item.user?.full_name || item.user?.email || '—',
+    enrollments: item.payment_type_display || '—',
+    completion: item.status_display || '—',
+    amount: item.amount,
+    lastUpdate: item.created_at
+      ? new Date(item.created_at).toLocaleDateString()
+      : '—',
+    raw: item, // keep original if needed
+  };
+};
+  
 
 const openEditModal = (payment) => {
   selectedPayment.value = { ...payment };
