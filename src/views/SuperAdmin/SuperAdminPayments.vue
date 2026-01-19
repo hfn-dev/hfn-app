@@ -36,10 +36,10 @@ const activeCourses = computed(() => {
     currentTab.value === 'Registration' ? registration.value : purchases.value;
 
   if (!searchQuery.value) return data;
-
   return data.filter((item) =>
-    item.title.toLowerCase().includes(searchQuery.value.toLowerCase())
-  );
+     item.title?.toLowerCase?.().includes(searchQuery.value.toLowerCase())
+);
+
 });
 
 const fetchPayments = async () => {
@@ -429,15 +429,19 @@ watch(currentTab, () => {
                 {{ course.enrollments !== null ? course.enrollments : '-' }}
               </td>
               <td class="py-3 px-3">
-                <span :class="{
-                  'text-green-600 font-semibold':
-                    course.completion.includes('100'),
-                  'text-orange-500':
-                    parseFloat(course.completion) < 50 &&
-                    course.completion !== '-',
-                }">
-                  {{ course.completion }}
-                </span>
+                <span
+  :class="{
+    'text-green-600 font-semibold':
+      course.completion?.includes?.('100'),
+    'text-orange-500':
+      course.completion &&
+      parseFloat(course.completion) < 50 &&
+      course.completion !== '-',
+  }"
+>
+  {{ course.completion ?? '-' }}
+</span>
+
               </td>
               <td class="py-3 px-3">
                 {{ course.lastUpdate }}
