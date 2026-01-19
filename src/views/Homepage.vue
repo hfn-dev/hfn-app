@@ -7,15 +7,19 @@ import health from "@/assets/health.png";
 import hfn_partner from "@/assets/hfn_partner.png";
 import wef from "@/assets/wef.jpg";
 
+import api from "@/api/axios";
 import group1 from "@/assets/group1.png";
 import hba from "@/assets/hba-africa.png";
 import Image from "@/assets/image.jpg";
 import oando from "@/assets/oando_logo.png";
 import pharm from "@/assets/pharm.png";
 import society from "@/assets/society.png";
-
+import { homePageSchema } from "@/schemas/pages/home.schema";
+import { resolveAsset } from "@/utils/assetMap";
 import { onMounted, ref, watch } from "vue";
 
+const pageContent = ref(structuredClone(homePageSchema));
+const pageId = 1;
 const selectedMonth = ref("October 2025");
 
 const allNews = {
@@ -148,7 +152,12 @@ import reagan from "@/assets/reagan.png";
 import HfnCalender from "@/components/layout/HfnCalender.vue";
 
 const executives = [
-  { name: "Mrs. Njide Ndili", position: "President, HFN", role: "Country Director, PharmAccess", image: njide },
+  {
+    name: "Mrs. Njide Ndili",
+    position: "President, HFN",
+    role: "Country Director, PharmAccess",
+    image: njide,
+  },
   {
     name: "Dr. Ayodele Benson-Cole",
     position: "1st Vice President, HFN",
@@ -173,10 +182,18 @@ const executives = [
     role: "Healthcare System Partner – Policy, Roche",
     image: babarinde,
   },
-  { name: "Mr. Reagan Rowland", position: "Treasurer, HFN", role: "Founder/CEO, OneClick Med", image: reagan },
+  {
+    name: "Mr. Reagan Rowland",
+    position: "Treasurer, HFN",
+    role: "Founder/CEO, OneClick Med",
+    image: reagan,
+  },
 ];
 
-onMounted(() => {
+onMounted(async () => {
+  const { data } = await api.get(`/api/pages/${pageId}/`);
+  pageContent.value = data.content || structuredClone(homePageSchema);
+
   const toggles = document.querySelectorAll(".faq-toggle");
   toggles.forEach((toggle) => {
     toggle.addEventListener("click", () => {
@@ -210,43 +227,47 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="relative pt-16 pb-24 lg:pt-32 lg:pb-40 overflow-hidden bg-[#F2F9F3]">
+  <section
+    class="relative pt-16 pb-24 lg:pt-32 lg:pb-40 overflow-hidden bg-[#F2F9F3]"
+  >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="lg:flex lg:items-center">
         <div class="lg:w-1/2">
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-gray-900">
-            <span class="text-orange-600">Healthcare </span>
-            <span class="text-primary"> Advocacy.</span>
+          <h1
+            class="text-5xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-gray-900"
+          >
+            <span class="text-orange-600"
+              >{{ pageContent.hero.titleHighlight }} </span
+            ><br />
+            <span class="text-primary"> {{ pageContent.hero.titleMain }} </span>
           </h1>
           <p class="text-lg text-gray-600 mb-8 max-w-lg">
-            <span class="text-green-600">Healthcare Federation of Nigeria</span>
-            encourage and facilitate opportunities for public-private partnerships and engagement with diverse stakeholders in the healthcare sector.
+            <span class="text-green-600">{{ pageContent.hero.introLine }}</span>
+            {{ pageContent.hero.introText }}
           </p>
           <p class="text-lg text-gray-600 mb-8 max-w-lg">
-            We speak with one voice on behalf of the Nigerian Private Health Sector.
+            {{ pageContent.hero.subText }}
           </p>
-          <RouterLink to="/register"
-            class="inline-block py-3 px-8 bg-primary text-white font-semibold rounded-lg shadow-lg hover:bg-opacity-90 transition duration-300 transform hover:scale-[1.02]">
-            Join the Coalition ->
+          <RouterLink
+            to="/register"
+            class="inline-block py-3 px-8 bg-primary text-white font-semibold rounded-lg shadow-lg hover:bg-opacity-90 transition duration-300 transform hover:scale-[1.02]"
+          >
+            {{ pageContent.hero.ctaText }}
           </RouterLink>
         </div>
 
-        <div class="lg:w-1/2 mt-12 lg:mt-0 lg:ml-12 flex justify-center lg:justify-end">
+        <div
+          class="lg:w-1/2 mt-12 lg:mt-0 lg:ml-12 flex justify-center lg:justify-end"
+        >
           <div
-            class="w-full max-w-md lg:max-w-full h-80 sm:h-96 lg:h-[450px] bg-gray-300 rounded-xl shadow-2xl relative overflow-hidden">
-            <img :src="Image" alt="Medical tools and documents illustrating healthcare leadership"
-              class="absolute inset-0 w-full h-full object-cover" />
-          </div>
-          <!-- <div
-            class="absolute w-[27%] h-[37%] rounded-xl overflow-hidden origin-bottom-right"
-            style="bottom: 0; left: 454px; top: 304px"
+            class="w-full max-w-md lg:max-w-full h-80 sm:h-96 lg:h-[450px] bg-gray-300 rounded-xl shadow-2xl relative overflow-hidden"
           >
             <img
-              :src="print"
-              alt="Slanted overlapping image"
-              class="object-cover w-full h-full"
+              :src="Image"
+              alt="Medical tools and documents illustrating healthcare leadership"
+              class="absolute inset-0 w-full h-full object-cover"
             />
-          </div> -->
+          </div>
         </div>
       </div>
     </div>
@@ -255,40 +276,27 @@ onMounted(() => {
   <div class="py-6 border-b border-gray-200 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-6">
-        <span class="text-lg font-semibold text-gray-500 uppercase tracking-wider">
-          Health Guardians
+        <span
+          class="text-lg font-semibold text-gray-500 uppercase tracking-wider"
+        >
+          {{ pageContent.partners.title }}
         </span>
       </div>
 
-      <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-75">
-        <div class="flex items-center justify-center h-24 w-48">
-          <img :src="pharm" alt="Pharm Logo" class="max-h-full max-w-full object-contain" />
+      <div
+        class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-75"
+      >
+        <div
+          v-for="(logoKey, index) in pageContent.partners.logos"
+          :key="index"
+          class="flex items-center justify-center h-24 w-48"
+        >
+          <img
+            :src="resolveAsset(logoKey)"
+            :alt="logoKey + ' Logo'"
+            class="max-h-full max-w-full object-contain"
+          />
         </div>
-
-        <div class="flex items-center justify-center h-31 w-48">
-          <img :src="society" alt="Society for Family Health Logo" class="max-h-full max-w-full object-contain" />
-        </div>
-
-        <div class="flex items-center justify-center h-24 w-48">
-          <img :src="bridge" alt="Bridge Clinic Logo" class="max-h-full max-w-full object-contain" />
-        </div>
-
-
-        <div class="flex items-center justify-center h-24 w-48">
-          <img :src="emzor" alt="Emzor Logo" class="max-h-full max-w-full object-contain" />
-        </div>
-        <div class="flex items-center justify-center h-24 w-48">
-          <img :src="hba" alt="Health Business Academy Logo" class="max-h-full max-w-full object-contain" />
-        </div>
-
-
-        <div class="flex items-center justify-center h-24 w-48">
-          <img :src="oando" alt="Oando Logo" class="max-h-full max-w-full object-contain" />
-        </div>
-
-
-
-
       </div>
     </div>
   </div>
@@ -296,7 +304,8 @@ onMounted(() => {
   <section class="bg-white py-16 px-6 md:px-12 lg:px-24">
     <div class="text-center mb-10">
       <h2
-        class="text-3xl md:text-4xl font-bold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4">
+        class="text-3xl md:text-4xl font-bold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
+      >
         Our HFN Story
       </h2>
     </div>
@@ -304,12 +313,18 @@ onMounted(() => {
     <div class="grid md:grid-cols-2 gap-10 items-center">
       <div class="relative w-full max-w-2xl mx-auto h-[400px] sm:h-[450px]">
         <div
-          class="absolute inset-x-0 bottom-0 w-[100%] sm:w-[80%] h-[350px] sm:h-[350px] rounded-[30px] overflow-hidden shadow-2xl border-4 border-green-500/50">
-          <img :src="group1" alt="HFN team" class="object-cover w-full h-full" />
+          class="absolute inset-x-0 bottom-0 w-[100%] sm:w-[80%] h-[350px] sm:h-[350px] rounded-[30px] overflow-hidden shadow-2xl border-4 border-green-500/50"
+        >
+          <img
+            :src="group1"
+            alt="HFN team"
+            class="object-cover w-full h-full"
+          />
         </div>
 
         <div
-          class="absolute top-0 right-0 w-[30%] sm:w-[40%] h-[140px] sm:h-[180px] rounded-xl overflow-hidden shadow-2xl border-4 border-green-500">
+          class="absolute top-0 right-0 w-[30%] sm:w-[40%] h-[140px] sm:h-[180px] rounded-xl overflow-hidden shadow-2xl border-4 border-green-500"
+        >
           <img :src="group" alt="HFN team" class="object-cover w-full h-full" />
         </div>
       </div>
@@ -350,9 +365,7 @@ onMounted(() => {
           </div>
           <div>
             <h3 class="text-3xl font-bold text-red-600">50+</h3>
-            <p class="text-green-800 font-semibold">
-              Registered Diasporians
-            </p>
+            <p class="text-green-800 font-semibold">Registered Diasporians</p>
           </div>
         </div>
       </div>
@@ -360,18 +373,20 @@ onMounted(() => {
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
       <div
-        class="flex flex-col sm:flex-row justify-center items-center h-auto sm:h-20 relative rounded-2xl border-2 border-green-50 bg-white shadow-sm px-4 py-3">
-        <!-- Month Selector -->
-        <select v-model="selectedMonth"
-          class="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-700 appearance-none bg-white pr-8 w-full sm:w-auto sm:absolute sm:left-6">
+        class="flex flex-col sm:flex-row justify-center items-center h-auto sm:h-20 relative rounded-2xl border-2 border-green-50 bg-white shadow-sm px-4 py-3"
+      >
+        <select
+          v-model="selectedMonth"
+          class="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-700 appearance-none bg-white pr-8 w-full sm:w-auto sm:absolute sm:left-6"
+        >
           <option>October 2025</option>
           <option>September 2025</option>
           <option>August 2025</option>
         </select>
 
-        <!-- Title -->
         <h2
-          class="text-2xl sm:text-3xl md:text-4xl font-serif font-extrabold text-gray-900 tracking-tight text-center sm:text-left mt-3 sm:mt-0">
+          class="text-2xl sm:text-3xl md:text-4xl font-serif font-extrabold text-gray-900 tracking-tight text-center sm:text-left mt-3 sm:mt-0"
+        >
           HFN News
         </h2>
       </div>
@@ -380,10 +395,18 @@ onMounted(() => {
 
   <section class="bg-[#f6faf8] py-16 px-6 md:px-12 lg:px-24">
     <div class="grid lg:grid-cols-3 gap-8">
-      <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+      <div
+        class="lg:col-span-2 bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100"
+      >
         <div class="relative">
-          <img :src="featured.image" alt="Featured news" class="w-full h-72 object-cover" />
-          <span class="absolute bottom-4 left-4 bg-green-700 text-white text-xs font-semibold px-3 py-1 rounded-full">
+          <img
+            :src="featured.image"
+            alt="Featured news"
+            class="w-full h-72 object-cover"
+          />
+          <span
+            class="absolute bottom-4 left-4 bg-green-700 text-white text-xs font-semibold px-3 py-1 rounded-full"
+          >
             {{ featured.tag }}
           </span>
         </div>
@@ -403,35 +426,45 @@ onMounted(() => {
             {{ featured.description }}
           </p>
 
-          <a href="#"
-            class="inline-flex items-center gap-2 bg-green-700 text-white px-5 py-2 rounded-full font-medium hover:bg-green-800 transition">
+          <a
+            href="#"
+            class="inline-flex items-center gap-2 bg-green-700 text-white px-5 py-2 rounded-full font-medium hover:bg-green-800 transition"
+          >
             Read More <i class="fa-solid fa-arrow-right"></i>
           </a>
         </div>
       </div>
 
       <div class="flex flex-col gap-6">
-        <div v-for="(news, index) in newsList" :key="index"
-          class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200 flex flex-col sm:flex-row transition hover:shadow-md">
-          <!-- Left: Image -->
+        <div
+          v-for="(news, index) in newsList"
+          :key="index"
+          class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200 flex flex-col sm:flex-row transition hover:shadow-md"
+        >
           <div class="relative w-full sm:w-48">
-            <img :src="news.image" alt="News image" class="w-full h-40 sm:h-full object-cover" />
+            <img
+              :src="news.image"
+              alt="News image"
+              class="w-full h-40 sm:h-full object-cover"
+            />
 
-            <!-- Tag on image -->
-            <span class="absolute bottom-3 left-3 bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full"
+            <span
+              class="absolute bottom-3 left-3 bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full"
               :class="{
                 'bg-red-700 text-white': news.tag === 'Health Alert',
                 'bg-orange-600 text-white':
                   news.tag === 'Public Health Stories',
-              }">
+              }"
+            >
               {{ news.tag }}
             </span>
           </div>
 
           <div class="flex flex-col justify-between p-4 flex-1">
             <div>
-              <!-- Date and comments -->
-              <div class="flex items-center text-xs text-orange-600 mb-2 space-x-6">
+              <div
+                class="flex items-center text-xs text-orange-600 mb-2 space-x-6"
+              >
                 <span class="flex items-center gap-1">
                   <i class="fa-regular fa-calendar text-orange-600"></i>
                   {{ news.date }}
@@ -447,13 +480,15 @@ onMounted(() => {
               </p>
             </div>
 
-            <!-- Bottom Tag -->
             <div class="mt-3">
-              <span class="inline-block bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full" :class="{
-                'bg-red-700 text-white': news.tag === 'Health Alert',
-                'bg-orange-600 text-white':
-                  news.tag === 'Public Health Stories',
-              }">
+              <span
+                class="inline-block bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full"
+                :class="{
+                  'bg-red-700 text-white': news.tag === 'Health Alert',
+                  'bg-orange-600 text-white':
+                    news.tag === 'Public Health Stories',
+                }"
+              >
                 {{ news.tag }}
               </span>
             </div>
@@ -468,18 +503,30 @@ onMounted(() => {
   <section class="py-16 bg-white">
     <div class="container mx-auto px-6 text-center">
       <h2
-        class="text-3xl md:text-4xl font-serif mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4">
+        class="text-3xl md:text-4xl font-serif mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
+      >
         HFN Executives
       </h2>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-        <div v-for="(exec, index) in executives" :key="index" class="flex justify-center">
-          <div class="relative w-full max-w-xs aspect-[4/5] rounded-t-[2.5rem] rounded-b-xl overflow-hidden shadow-2xl"
-            style="background-color: #f0f7f5">
-            <img :src="exec.image" :alt="exec.name" class="w-full h-full object-cover object-top" />
+        <div
+          v-for="(exec, index) in executives"
+          :key="index"
+          class="flex justify-center"
+        >
+          <div
+            class="relative w-full max-w-xs aspect-[4/5] rounded-t-[2.5rem] rounded-b-xl overflow-hidden shadow-2xl"
+            style="background-color: #f0f7f5"
+          >
+            <img
+              :src="exec.image"
+              :alt="exec.name"
+              class="w-full h-full object-cover object-top"
+            />
 
             <div
-              class="absolute mb-5 bottom-0 left-1/2 transform -translate-x-1/2 w-[85%] px-4 py-3 rounded-xl border border-green-300 bg-white shadow-xl text-center">
+              class="absolute mb-5 bottom-0 left-1/2 transform -translate-x-1/2 w-[85%] px-4 py-3 rounded-xl border border-green-300 bg-white shadow-xl text-center"
+            >
               <h3 class="text-lg font-bold text-green-700">
                 {{ exec.name }}
               </h3>
@@ -499,7 +546,8 @@ onMounted(() => {
   <section class="py-20 lg:py-28 bg-white" id="faq">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2
-        class="text-3xl text-center md:text-4xl font-serif mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4">
+        class="text-3xl text-center md:text-4xl font-serif mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
+      >
         Frequently Asked Questions (F.A.Q)
       </h2>
 
@@ -507,11 +555,21 @@ onMounted(() => {
         <div class="rounded-xl shadow-lg bg-[#F2F9F3] overflow-hidden">
           <button
             class="faq-toggle w-full flex justify-between items-center p-6 text-lg font-semibold hover:bg-[#F2F9F3] transition duration-150"
-            aria-expanded="false" data-target="faq-1">
-            <span class="text-green-800">What paves the Healthcare Federation of Nigeria (HFN) on?</span>
-            <span class="faq-icon text-primary transform transition-transform duration-300">+</span>
+            aria-expanded="false"
+            data-target="faq-1"
+          >
+            <span class="text-green-800"
+              >What paves the Healthcare Federation of Nigeria (HFN) on?</span
+            >
+            <span
+              class="faq-icon text-primary transform transition-transform duration-300"
+              >+</span
+            >
           </button>
-          <div id="faq-1" class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+          <div
+            id="faq-1"
+            class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out"
+          >
             <p class="px-6 pb-6 pt-0 text-gray-600">
               The HFN is paved on the mission to provide a unified voice for the
               private healthcare sector in Nigeria, fostering collaboration,
@@ -524,11 +582,19 @@ onMounted(() => {
         <div class="rounded-xl shadow-lg bg-[#F2F9F3] overflow-hidden">
           <button
             class="faq-toggle w-full flex justify-between items-center p-6 text-lg font-semibold hover:bg-[#F2F9F3] transition duration-150"
-            aria-expanded="false" data-target="faq-2">
+            aria-expanded="false"
+            data-target="faq-2"
+          >
             <span class="text-green-800">How can I join HFN?</span>
-            <span class="faq-icon text-primary transform transition-transform duration-300">+</span>
+            <span
+              class="faq-icon text-primary transform transition-transform duration-300"
+              >+</span
+            >
           </button>
-          <div id="faq-2" class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+          <div
+            id="faq-2"
+            class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out"
+          >
             <p class="px-6 pb-6 pt-0 text-gray-600">
               Membership is open to all legitimate private sector entities and
               individuals involved in the healthcare value chain, including
@@ -542,11 +608,21 @@ onMounted(() => {
         <div class="rounded-xl shadow-lg bg-[#F2F9F3] overflow-hidden">
           <button
             class="faq-toggle w-full flex justify-between items-center p-6 text-lg font-semibold hover:bg-[#F2F9F3] transition duration-150"
-            aria-expanded="false" data-target="faq-3">
-            <span class="text-green-800">What are the benefits of HFN membership?</span>
-            <span class="faq-icon text-primary transform transition-transform duration-300">+</span>
+            aria-expanded="false"
+            data-target="faq-3"
+          >
+            <span class="text-green-800"
+              >What are the benefits of HFN membership?</span
+            >
+            <span
+              class="faq-icon text-primary transform transition-transform duration-300"
+              >+</span
+            >
           </button>
-          <div id="faq-3" class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+          <div
+            id="faq-3"
+            class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out"
+          >
             <p class="px-6 pb-6 pt-0 text-gray-600">
               Benefits include policy advocacy, networking opportunities with
               key industry leaders, access to exclusive research and reports,
@@ -558,11 +634,19 @@ onMounted(() => {
         <div class="rounded-xl shadow-lg bg-[#F2F9F3] overflow-hidden">
           <button
             class="faq-toggle w-full flex justify-between items-center p-6 text-lg font-semibold hover:bg-[#F2F9F3] transition duration-150"
-            aria-expanded="false" data-target="faq-4">
+            aria-expanded="false"
+            data-target="faq-4"
+          >
             <span class="text-green-800">What does HFN do?</span>
-            <span class="faq-icon text-primary transform transition-transform duration-300">+</span>
+            <span
+              class="faq-icon text-primary transform transition-transform duration-300"
+              >+</span
+            >
           </button>
-          <div id="faq-4" class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+          <div
+            id="faq-4"
+            class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out"
+          >
             <p class="px-6 pb-6 pt-0 text-gray-600">
               Healthcare Federation Of Nigeria is independent of any
               governmental/political ideology, economic interest, religious

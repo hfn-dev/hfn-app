@@ -1,9 +1,10 @@
 <script setup>
-import { ref, onMounted, computed, reactive,  watch } from "vue";
-import { useRouter } from "vue-router";
 import learningModule from "@/api/learningModule.js";
-import { useToast } from 'vue-toastification';
+import paymentApi from '@/api/payments.js';
 import UserSidebar from "@/components/layout/UserSidebar.vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useRouter } from "vue-router";
+import { useToast } from 'vue-toastification';
 
 import user from "@/assets/user.png";
 import user1 from "@/assets/user1.png";
@@ -48,6 +49,16 @@ const fetchUserProfile = async () => {
     console.error('Error fetching user profile:', error);
   }
 };
+
+const userRole = computed(() => {
+  try {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    return user.role || user.user_type || null;
+  } catch {
+    return null;
+  }
+});
+
 
 // Fetch categories (course tracks)
 const fetchCategories = async () => {
@@ -176,22 +187,77 @@ const isUserEnrolled = (courseId) => {
   return userEnrollments.value.some(enrollment => enrollment.course?.id === courseId);
 };
 
+// const handleCourseAction = async (course) => {
+//   if (isUserEnrolled(course.id)) {
+//     router.push(`/learning/courses/${course.id || course.slug}`);
+//   } else {
+//     try {
+//       await learningModule.courseEnrollment({
+//         slug: course.slug || course.id
+//       });
+//       toast.success(`Enrolled in "${course.title}" successfully!`);
+//       await fetchUserEnrollments();
+//     } catch (error) {
+//       console.error('Enrollment error:', error);
+//       toast.error('Failed to enroll in course');
+//     }
+//   }
+// };
+
 const handleCourseAction = async (course) => {
   if (isUserEnrolled(course.id)) {
     router.push(`/learning/courses/${course.id || course.slug}`);
-  } else {
-    try {
-      await learningModule.courseEnrollment({
-        slug: course.slug || course.id
-      });
-      toast.success(`Enrolled in "${course.title}" successfully!`);
-      await fetchUserEnrollments();
-    } catch (error) {
-      console.error('Enrollment error:', error);
-      toast.error('Failed to enroll in course');
-    }
+    return;
   }
+
+  if (userRole.value === 'member') {
+    router.push(`/learning/courses/${course.id || course.slug}`);
+    return;
+  }
+
+  if (userRole.value === 'learner') {
+
+    if (course.is_free) {
+      try {
+        await learningModule.courseEnrollment({
+          slug: course.slug || course.id
+        });
+        toast.success(`Enrolled in "${course.title}" successfully!`);
+        await fetchUserEnrollments();
+      } catch (error) {
+        console.error('Enrollment error:', error);
+        toast.error('Failed to enroll in course');
+      }
+      return;
+    }
+
+    try {
+      const payload = {
+        payment_type: 'subscription',
+        subscription_id: 0, 
+        course_id: course.id,
+        payment_method: 'cash',
+      };
+
+      const response = await paymentApi.coursePayment(payload);
+      console.log('Payment intent:', response);
+
+      toast.success('Payment initiated. Redirecting to payment...');
+
+      // OPTIONAL redirect
+      // router.push({ name: 'CoursePayment', params: { intentId: response.id } });
+
+    } catch (error) {
+      console.error('Payment initiation error:', error);
+      toast.error('Failed to initiate payment');
+    }
+
+    return;
+  }
+
+  toast.error('You are not allowed to take this course.');
 };
+
 
 const getActionButtonText = (course) => {
   return isUserEnrolled(course.id) ? 'Continue Course' : 'Take Course';

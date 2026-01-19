@@ -1,8 +1,9 @@
 <script setup>
 import pagesApi from "@/api/pageManagement";
+import { pageSchemas } from "@/schemas/pageSchemas";
 import { useRouter } from "vue-router";
 
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import EditorSidebar from "./EditorSidebar.vue";
 
 const currentView = ref("manager");
@@ -10,6 +11,7 @@ const activePage = ref(null);
 const activeSection = ref("hero");
 const router = useRouter();
 const hasPages = computed(() => pages.value && pages.value.length > 0);
+const currentSectionData = ref(null);
 
 const pages = ref([]);
 const isLoading = ref(false);
@@ -17,7 +19,38 @@ const isLoading = ref(false);
 const fetchPages = async () => {
   isLoading.value = true;
   try {
-    pages.value = await pagesApi.listPages();
+    const rawPages = await pagesApi.listPages();
+
+    // pages.value = rawPages.map((page) => {
+    //   const schema = pageSchemas[page.page_type];
+
+    //   const content =
+    //     typeof page.content === "object" && Object.keys(page.content).length
+    //       ? page.content
+    //       : structuredClone(schema);
+
+    //   return {
+    //     ...page,
+    //     title: page.page_type_display,
+    //     slug: `/${page.page_type}`,
+    //     sections: content,
+    //   };
+    // });
+    pages.value = rawPages.map((page) => {
+      const schema = pageSchemas[page.page_type.toLowerCase()];
+
+      const content =
+        page.content && Object.keys(page.content).some((k) => k !== "id")
+          ? page.content
+          : structuredClone(schema);
+
+      return {
+        ...page,
+        title: page.page_type_display,
+        slug: `/${page.page_type}`,
+        sections: content,
+      };
+    });
   } catch (e) {
     console.error("Failed to load pages", e);
   } finally {
@@ -27,9 +60,10 @@ const fetchPages = async () => {
 
 onMounted(fetchPages);
 
-const sectionKeys = computed(() =>
-  Object.keys(activePage.value?.sections || pages.value[0].sections)
-);
+const sectionKeys = computed(() => {
+  if (!activePage.value?.sections) return [];
+  return Object.keys(activePage.value.sections);
+});
 
 const newPageTitle = ref("");
 
@@ -68,13 +102,6 @@ const deletePage = (id) => {
   console.log(`Confirmation bypassed. Deleting page with ID ${id}...`);
   pages.value = pages.value.filter((page) => page.id !== id);
 };
-
-const currentSectionData = computed(() => {
-  if (activePage.value && activePage.value.sections) {
-    return activePage.value.sections[activeSection.value] || {};
-  }
-  return {};
-});
 
 const addNewSection = () => {
   console.log("Simulating 'Add New Section' action.");
@@ -152,8 +179,17 @@ const deleteFaq = (faqId) => {
 };
 
 const saveChanges = async () => {
+  if (activePage.value && activeSection.value) {
+    activePage.value.sections[activeSection.value] = currentSectionData.value;
+  }
+
   try {
-    await pagesApi.updatePage(activePage.value.id, activePage.value);
+    await pagesApi.updatePage(activePage.value.id, {
+      status: activePage.value.status,
+      is_visible: activePage.value.is_visible,
+      content: activePage.value.sections,
+    });
+
     goBackToManager();
   } catch (e) {
     console.error("Failed to save page", e);
@@ -165,6 +201,22 @@ const breadcrumbViewName = computed(() => {
   if (currentView.value === "editor") return `Edit: ${activePage.value.title}`;
   return "Page Manager";
 });
+
+watch(
+  [activePage, activeSection],
+  () => {
+    if (!activePage.value) return;
+
+    const section = activePage.value.sections?.[activeSection.value];
+
+    currentSectionData.value =
+      section ??
+      structuredClone(
+        pageSchemas[activePage.value.page_type]?.[activeSection.value] ?? {}
+      );
+  },
+  { immediate: true }
+);
 
 const toggleVisibility = async (page) => {
   page.isVisible = !page.isVisible;
@@ -201,26 +253,6 @@ const toggleVisibility = async (page) => {
           </h1>
         </div>
 
-        <!-- <div
-          class="mb-8 p-4 bg-white rounded-lg shadow-sm border border-gray-200"
-        >
-          <div class="flex items-center space-x-4">
-            <input
-              v-model="newPageTitle"
-              type="text"
-              placeholder="Add New Page (e.g., 'New Page Title')"
-              class="flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-150"
-            />
-            <button
-              @click="addPage"
-              :disabled="!newPageTitle.trim()"
-              class="bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200 shadow-md"
-            >
-              Add Page
-            </button>
-          </div>
-        </div> -->
-
         <div class="space-y-3">
           <div v-if="isLoading" class="text-center text-gray-500 py-10">
             Loading pages...
@@ -256,7 +288,9 @@ const toggleVisibility = async (page) => {
               >
                 {{ page.is_visible ? "VISIBLE" : "HIDDEN" }}
               </span>
-              <span class="text-gray-700 font-medium">{{ page.page_type }}</span>
+              <span class="text-gray-700 font-medium">{{
+                page.page_type
+              }}</span>
             </div>
 
             <div class="flex items-center space-x-3">
@@ -337,25 +371,6 @@ const toggleVisibility = async (page) => {
           <h1 class="text-3xl font-bold text-gray-800">
             {{ activePage.title }}
           </h1>
-          <!-- <button
-            @click="addNewSection"
-            class="bg-green-800 text-white px-4 py-2 rounded-2xl hover:bg-green-900 transition duration-200 shadow-md flex items-center space-x-2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            <span>Add New Section</span>
-          </button> -->
         </div>
 
         <div
@@ -388,9 +403,13 @@ const toggleVisibility = async (page) => {
               Preview
             </div>
             <img
-              :src="currentSectionData.previewUrl || hero"
+              v-if="
+                currentSectionData?.previewUrl || currentSectionData?.heroImage
+              "
+              :src="
+                currentSectionData.previewUrl ?? currentSectionData.heroImage
+              "
               alt="Section Preview"
-              class="w-3/4 rounded-lg shadow-md"
             />
           </div>
 
@@ -562,7 +581,7 @@ const toggleVisibility = async (page) => {
                     >Title</label
                   >
                   <input
-                    v-model="currentSectionData.title"
+                    v-model="currentSectionData.titleHighlight"
                     type="text"
                     class="w-full text-lg border-none focus:ring-0 p-0 m-0"
                     placeholder="Enter section title"
@@ -588,7 +607,7 @@ const toggleVisibility = async (page) => {
                     >CTA</label
                   >
                   <input
-                    v-model="currentSectionData.cta"
+                    v-model="currentSectionData.ctaText"
                     type="text"
                     class="w-full text-base border-none focus:ring-0 p-0 m-0"
                     placeholder="Enter Call to Action text"
