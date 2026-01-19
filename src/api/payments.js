@@ -26,17 +26,17 @@ export default {
   },
 
   async broadcastToUnpaid(payload) {
-    const { data } = await api.post('/payment/broadcast/unpaid', payload);
+    const { data } = await api.post('/payment/broadcast/unpaid/', payload);
     return data;
   },
 
   async coursePayment(payload) {
-    const { data } = await api.post('/payment/course_intent', payload);
+    const { data } = await api.post('/payment/course_intent/', payload);
     return data;
   },
 
   async memberPayment(payload) {
-    const { data } = await api.post('/payment/membership_intent', payload);
+    const { data } = await api.post('/payment/membership_intent/', payload);
     return data;
   },
 };
