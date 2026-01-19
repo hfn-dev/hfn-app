@@ -100,12 +100,7 @@ import reagan from "@/assets/reagan.png";
                   access to finance for the private sector, all in collaboration
                   with the public sector.</span>
               </h3>
-              <!-- <p class="text-lg text-gray-700">
-                Healthcare Federation of Nigeria is independent of any
-                governmental/political ideology, economic interest, religious
-                affiliation; and is mainly funded by our membership and
-                volitional donations from well-meaning Nigerians.
-              </p> -->
+              
             </div>
 
             <div>
@@ -115,12 +110,7 @@ import reagan from "@/assets/reagan.png";
                   coverage
                   through private sector activation.</span>
               </h3>
-              <!-- <p class="text-lg text-gray-700">
-                This is anchored on the simple conclusion that, if life is basic
-                and healthcare caters to life, then the Healthcare Federation of
-                Nigeria should have no overarching motive for advocating better
-                healthcare in Nigeria than human life
-              </p> -->
+              
             </div>
           </div>
         </div>

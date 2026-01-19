@@ -1,6 +1,10 @@
 import api from './axios.js';
 
 export default {
+  async getPaymentList(params = {}) {
+    const { data } = await api.get('/payment/', { params });
+    return data;
+  },
   async getRegistrations(params = {}) {
     const { data } = await api.get('/payment/registration/', { params });
     return data;
@@ -23,6 +27,16 @@ export default {
 
   async broadcastToUnpaid(payload) {
     const { data } = await api.post('/payment/broadcast/unpaid', payload);
+    return data;
+  },
+
+  async coursePayment(payload) {
+    const { data } = await api.post('/payment/course_intent', payload);
+    return data;
+  },
+
+  async memberPayment(payload) {
+    const { data } = await api.post('/payment/membership_intent', payload);
     return data;
   },
 };
