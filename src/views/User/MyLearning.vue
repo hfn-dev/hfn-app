@@ -1,6 +1,7 @@
 <script setup>
 import learningModule from '@/api/learningModule.js';
-import UserSidebar from '@/components/layout/UserSidebar.vue';
+// import UserSidebar from '@/components/layout/UserSidebar.vue';
+import LearnerSidebar from '../Learner/LearnerSidebar.vue';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
@@ -152,7 +153,7 @@ onMounted(() => {
 <template>
   <div class="min-h-screen bg-gray-50 flex flex-col">
     <div class="flex flex-grow">
-      <UserSidebar />
+      <LearnerSidebar />
 
       <main class="flex-grow p-4 md:p-8 lg:p-12">
         <div class="flex justify-center w-full items-center mb-8">
