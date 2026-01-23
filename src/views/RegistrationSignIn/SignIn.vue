@@ -309,12 +309,7 @@ const handleForgotPassword = () => {
           </router-link>
         </div>
 
-        <div class="text-center text-xs text-gray-500 mt-4">
-          <p class="mb-1">Demo accounts (for testing only):</p>
-          <p class="mb-1">• admin@example.com / admin123</p>
-          <p class="mb-1">• editor@example.com / editor123</p>
-          <p>• member@example.com / member123</p>
-        </div>
+        
       </div>
     </div>
   </div>
