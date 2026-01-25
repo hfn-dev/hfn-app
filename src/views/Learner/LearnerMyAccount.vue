@@ -1,9 +1,25 @@
 <script setup>
-import { computed, reactive, ref, watch } from 'vue';
+import usersApi from '@/api/userRegister';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import LearnerSidebar from './LearnerSidebar.vue';
 
+
 const router = useRouter();
+const user = ref(null)
+const loading = ref(true)
+
+
+onMounted(async () => {
+  try {
+    const res = await usersApi.getUser()
+    user.value = res.data
+  } catch (e) {
+    console.error('Failed to load user', e)
+  } finally {
+    loading.value = false
+  }
+})
 
 const certificateUrl = ref('/sample-certificates.png');
 
@@ -13,38 +29,15 @@ const viewCertificateInNewTab = () => {
   }
 };
 
-const subscription = reactive({
-  expiryDate: '31st December 2025',
-  invoices: [
-    {
-      id: 1,
-      invoiceNo: '001',
-      invoiceDate: 'Monday, December 19 2024',
-      dueDate: 'Monday, December 31 2025',
-      total: '₦200,000.00',
-      status: 'Paid',
-    },
-    {
-      id: 2,
-      invoiceNo: '001',
-      invoiceDate: 'Monday, December 29 2023',
-      dueDate: 'Monday, December 31 2024',
-      total: '₦200,000.00',
-      status: 'Paid',
-    },
-    {
-      id: 3,
-      invoiceNo: '001',
-      invoiceDate: 'Monday, December 01 2022',
-      dueDate: 'Monday, December 31 2023',
-      total: '₦200,000.00',
-      status: 'Paid',
-    },
-  ],
+const subscription = computed(() => ({
+  type: user.value?.membership_type || 'None',
+  expiresAt: user.value?.membership_expires_at,
+  isActive: user.value?.is_membership_active,
+  invoices: [],
+  totalPages: 1,
   currentPage: 1,
-  totalPages: 2,
-  totalEntries: 10,
-});
+}))
+
 
 const makePayment = () => {
   router.push({ name: 'UserSubscription' });
@@ -60,33 +53,6 @@ const goToPage = (page) => {
 const isOrganization = ref(true);
 const currentView = ref('My Profile');
 const activeTab = ref('My Profile');
-
-// const navLinks = [
-//   {
-//     name: 'Dashboard',
-//     icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
-//   },
-//   {
-//     name: 'My Learning',
-//     icon: 'M12 6.253v13M3.475 12h17.052M18.82 8.16l-1.397 1.5M5.18 8.16l1.397 1.5',
-//   },
-//   {
-//     name: 'Messages',
-//     icon: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z',
-//   },
-//   {
-//     name: 'My Account',
-//     icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
-//   },
-//   {
-//     name: 'Support',
-//     icon: 'M18.364 5.636l-1.414 1.414M16 12a4 4 0 10-8 0 4 4 0 008 0zM12 1v2M12 19v2M5.636 18.364l1.414-1.414M19 12h2M3 12h2M5.636 5.636l1.414 1.414M18.364 18.364l-1.414-1.414',
-//   },
-//   {
-//     name: 'Logout',
-//     icon: 'M11 16l-4-4m0 0l4-4m-4 4h14M3 12h2a2 2 0 002-2V6a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H9a2 2 0 00-2 2v-4',
-//   },
-// ];
 
 const navLinks = [
   
@@ -138,13 +104,15 @@ const orgDetailsKeys = [
 ];
 
 const isIndividualEditing = ref(false);
-const individualDetails = reactive({
+const individualDetails = ref({
   firstName: '',
   lastName: '',
   email: '',
   phone: '',
   password: '********',
-});
+})
+
+
 const individualDetailsKeys = [
   { key: 'firstName', label: 'First Name' },
   { key: 'lastName', label: 'Last Name' },
@@ -170,23 +138,6 @@ const invitations = reactive([
 
 const sentInvitesCount = computed(
   () => invitations.filter((i) => i.sent).length
-);
-
-const interests = reactive([
-  { id: 10, name: 'Mother', selected: true, isMainCategory: true },
-  { id: 11, name: 'Child', selected: true, isMainCategory: true },
-  { id: 12, name: 'Baby', selected: true, isMainCategory: true },
-  { id: 13, name: 'Pregnancy', selected: true, isMainCategory: true },
-  { id: 1, name: 'Marketing', selected: true, isMainCategory: false },
-  { id: 2, name: 'Gynaecology', selected: true, isMainCategory: false },
-  { id: 3, name: 'Paediatrics', selected: true, isMainCategory: false },
-  { id: 4, name: 'General Health', selected: false, isMainCategory: false },
-  { id: 5, name: 'Insurance', selected: false, isMainCategory: false },
-  { id: 6, name: 'Dentistry', selected: false, isMainCategory: false },
-]);
-
-const selectedInterestsCount = computed(
-  () => interests.filter((i) => i.selected && !i.isMainCategory).length
 );
 
 const toggleOrgEdit = () => {
@@ -249,6 +200,18 @@ const toggleInterest = (id) => {
     item.selected = willBeSelected;
   }
 };
+
+watch(user, (u) => {
+  if (!u) return
+  individualDetails.value = {
+    firstName: u.first_name ?? '',
+    lastName: u.last_name ?? '',
+    email: u.email ?? '',
+    phone: u.phone_number ?? '',
+    password: '********',
+  }
+}, { immediate: true })
+
 </script>
 
 <template>
@@ -309,17 +272,7 @@ const toggleInterest = (id) => {
           >
             Subscription
           </button>
-          <!-- <button
-            @click="activeTab = 'Settings'"
-            :class="[
-              'py-2 px-1 border-b-2 transition duration-150 font-medium',
-              activeTab === 'Settings'
-                ? 'border-green-600 text-green-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700',
-            ]"
-          >
-            Settings
-          </button> -->
+          
         </div>
 
         <div v-if="activeTab === 'My Profile'" class="space-y-10">
@@ -417,9 +370,13 @@ const toggleInterest = (id) => {
             <div class="text-center mt-8 pt-6 border-t border-gray-200">
               <h3 class="text-xl font-bold mb-2 text-gray-800">
                 Your Account is:
-                <span class="text-green-600 bg-green-50 p-3 rounded-md"
-                  >ACTIVE</span
-                >
+                <span
+  :class="user?.is_active ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50'"
+  class="p-3 rounded-md font-semibold"
+>
+  {{ user?.is_active ? 'ACTIVE' : 'INACTIVE' }}
+</span>
+
               </h3>
               <p class="text-gray-600">
                 Your Exclusive Discount Code is:
@@ -729,11 +686,11 @@ const toggleInterest = (id) => {
           >
             <h3 class="text-3xl font-serif text-[#333] mb-2">
               Subscription Type:
-              <span class="text-[#004D33] font-bold">Individual</span>
+              <span class="text-[#004D33] font-bold">{{ subscription.type }}</span>
             </h3>
 
             <p class="text-sm text-gray-700 mb-10">
-              Purchased on <span class="font-medium">31st December 2024</span>
+              Purchased on <span class="font-medium">{{ new Date(subscription.expiresAt).toLocaleDateString() }}</span>
             </p>
             <h2 class="text-2xl font-semibold mb-3 text-gray-800">
               Your subscription expires on:
