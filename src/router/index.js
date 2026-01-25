@@ -58,6 +58,11 @@ import AdminMessages from '@/views/Admin/AdminMessages.vue';
 import AdminPayments from '@/views/Admin/AdminPayments.vue';
 import Events from '@/views/Events.vue';
 import Gallery from '@/views/Gallery.vue';
+import LearnerCourseDetails from '@/views/Learner/LearnerCourseDetails.vue';
+import LearnerMyAccount from '@/views/Learner/LearnerMyAccount.vue';
+import LearnerSupport from '@/views/Learner/LearnerSupport.vue';
+import LearnerUserCourses from '@/views/Learner/LearnerUserCourses.vue';
+import MyLearningLearner from '@/views/Learner/MyLearningLearner.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import About from '../views/About.vue';
 import Homepage from '../views/Homepage.vue';
@@ -317,30 +322,30 @@ const routes = [
   //for learners
 
   {
-    path: "/learner/dashboard",
-    name: "MyLearningLearner",
-    component: LearnersLearning,
+    path: '/learner/dashboard',
+    name: 'MyLearningLearner',
+    component: MyLearningLearner,
   },
 
   {
-    path: "/learner/courses",
-    name: "LearnerCourses",
-    component: LearnerCourses,
+    path: '/learner/courses',
+    name: 'LearnerCourses',
+    component: LearnerUserCourses,
   },
   {
-    path: "/course/:id",
-    name: "LearnerCourseDetails",
+    path: '/course/:id',
+    name: 'LearnerCourseDetails',
     component: LearnerCourseDetails,
   },
 
   {
-    path: "/learner/account",
-    name: "LearnerMyAccount",
-    component: LearnerAccount,
+    path: '/learner/account',
+    name: 'LearnerMyAccount',
+    component: LearnerMyAccount,
   },
   {
-    path: "/learner/support",
-    name: "LearnerSupport",
+    path: '/learner/support',
+    name: 'LearnerSupport',
     component: LearnerSupport,
   },
 ];
