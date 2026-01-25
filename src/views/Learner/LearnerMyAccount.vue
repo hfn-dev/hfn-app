@@ -125,9 +125,9 @@ watch(currentView, (newVal) => {
 
 const isOrgEditing = ref(false);
 const orgDetails = reactive({
-  name: 'Ruthie & Co Nigeria Limited',
-  email: 'peterpan@gmail.com.us',
-  phone: '+234 123 456 78',
+  name: '',
+  email: '',
+  phone: '',
   password: '********',
 });
 const orgDetailsKeys = [
@@ -139,10 +139,10 @@ const orgDetailsKeys = [
 
 const isIndividualEditing = ref(false);
 const individualDetails = reactive({
-  firstName: 'John',
-  lastName: 'Doe',
-  email: 'john.doe@example.com',
-  phone: '+1 555 123 4567',
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
   password: '********',
 });
 const individualDetailsKeys = [
