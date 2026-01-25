@@ -311,6 +311,7 @@ const toggleVisibility = async (page) => {
               {{ type.toUpperCase() }}
             </option>
           </select>
+          <p> Create page by selecting page type</p>
         </div>
 
         <div class="space-y-3">
