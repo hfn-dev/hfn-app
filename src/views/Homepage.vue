@@ -72,7 +72,7 @@ const allNews = {
     newsList: [
       {
         image: pharm,
-        tag: "Programs & Initiatives",
+        tag: "Programs & Initiative",
         date: "September 15, 2025",
         comments: 4,
         description:

@@ -38,11 +38,15 @@ const fetchPages = async () => {
     // });
     pages.value = rawPages.map((page) => {
       const schema = pageSchemas[page.page_type.toLowerCase()];
+      const content = structuredClone(schema);
 
-      const content =
-        page.content && Object.keys(page.content).some((k) => k !== "id")
-          ? page.content
-          : structuredClone(schema);
+      if (page.content && typeof page.content === 'object' && Object.keys(page.content).length > 0) {
+        for (const sectionKey in schema) {
+          if (page.content[sectionKey]) {
+            content[sectionKey] = { ...schema[sectionKey], ...page.content[sectionKey] };
+          }
+        }
+      }
 
       return {
         ...page,
@@ -572,7 +576,7 @@ const toggleVisibility = async (page) => {
             </button>
           </div>
 
-          <div v-if="activeSection === 'hero'">
+          <div v-if="activePage.page_type.toLowerCase() === 'home' && activeSection === 'hero'">
             <div class="flex space-x-6">
               <div class="w-3/5 space-y-6">
                 <div class="border border-gray-300 rounded-lg p-3 space-y-2">
@@ -686,6 +690,136 @@ const toggleVisibility = async (page) => {
                         />
                       </svg>
                     </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'hero'">
+            <div class="flex space-x-6">
+              <div class="w-3/5 space-y-6">
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                    >Title</label
+                  >
+                  <input
+                    v-model="currentSectionData.title"
+                    type="text"
+                    class="w-full text-lg border-none focus:ring-0 p-0 m-0"
+                    placeholder="Enter section title"
+                  />
+                </div>
+
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                    >Subtitle</label
+                  >
+                  <input
+                    v-model="currentSectionData.subtitle"
+                    type="text"
+                    class="w-full text-base border-none focus:ring-0 p-0 m-0"
+                    placeholder="Enter subtitle"
+                  />
+                </div>
+
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                    >Description</label
+                  >
+                  <textarea
+                    v-model="currentSectionData.description"
+                    rows="5"
+                    class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+                    placeholder="Enter description"
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="w-2/5 space-y-6">
+                <div
+                  class="border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center bg-white shadow-inner"
+                >
+                  <div
+                    class="bg-red-50 h-40 w-full mb-4 border border-dashed border-gray-400 rounded-lg flex flex-col items-center justify-center text-center"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-8 w-8 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                      />
+                    </svg>
+                    <span class="text-sm text-gray-600 mt-2">Image Upload</span>
+                  </div>
+                  <div class="text-xs text-gray-500 space-y-1 w-full">
+                    <p class="font-semibold">Image Requirements:</p>
+                    <ul class="list-disc list-inside space-y-0">
+                      <li>File types: jpeg, jpg, png.</li>
+                      <li>File size: not more than 1MB.</li>
+                      <li>Dimensions: 1024x1024px.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div v-else-if="activeSection === 'missionVision'">
+            <div class="space-y-6">
+              <div class="border border-gray-300 rounded-lg p-4">
+                <h3 class="text-lg font-semibold mb-4">Our Mission</h3>
+                <div class="space-y-4">
+                  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                    <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
+                    <input
+                      v-model="currentSectionData.mission.title"
+                      type="text"
+                      class="w-full text-base border-none focus:ring-0 p-0 m-0"
+                      placeholder="Enter mission title"
+                    />
+                  </div>
+                  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                    <label class="block text-xs font-semibold uppercase text-gray-500">Text</label>
+                    <textarea
+                      v-model="currentSectionData.mission.text"
+                      rows="4"
+                      class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+                      placeholder="Enter mission text"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="border border-gray-300 rounded-lg p-4">
+                <h3 class="text-lg font-semibold mb-4">Our Vision</h3>
+                <div class="space-y-4">
+                  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                    <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
+                    <input
+                      v-model="currentSectionData.vision.title"
+                      type="text"
+                      class="w-full text-base border-none focus:ring-0 p-0 m-0"
+                      placeholder="Enter vision title"
+                    />
+                  </div>
+                  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                    <label class="block text-xs font-semibold uppercase text-gray-500">Text</label>
+                    <textarea
+                      v-model="currentSectionData.vision.text"
+                      rows="4"
+                      class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+                      placeholder="Enter vision text"
+                    ></textarea>
                   </div>
                 </div>
               </div>
