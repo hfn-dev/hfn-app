@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
+import eventThumb3 from "@/assets/event2026.png";
 
 import eventThumb2 from "@/assets/hands.png";
 import eventThumb from "@/assets/latest_news.png";
@@ -7,8 +8,6 @@ import eventThumb from "@/assets/latest_news.png";
 const today = new Date();
 const activeDate = ref(new Date(today.getFullYear(), today.getMonth(), 1));
 const sortBy = ref("All");
-
-
 
 
 function closeModal() {
@@ -51,6 +50,18 @@ const events = ref([
       "How AI is transforming diagnostics, telemedicine and patient triage in Nigeria.",
     details:
       "A panel of clinicians, technologists and regulators will explore practical AI adoption paths, data governance and pilot programs for automated diagnostics.",
+  },
+  {
+    id: 4,
+    title: "2026 HFN Annual Conference",
+    date: "2026-03-04",
+    time: "10:00 AM",
+    tag: "Conference",
+    image: eventThumb3,
+    excerpt:
+      "Join HFN 2026 to explore bold private‑sector solutions driving healthcare financing and Universal Health Coverage in Nigeria.",
+    details:
+      "The Healthcare Federation of Nigeria (HFN) invites you to the HFN Annual Conference 2026, Nigeria’s premier gathering of private-sector healthcare leaders, policymakers, financiers, innovators, and development partners.",
   },
 ]);
 

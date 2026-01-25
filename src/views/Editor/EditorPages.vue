@@ -16,26 +16,58 @@ const currentSectionData = ref(null);
 const pages = ref([]);
 const isLoading = ref(false);
 
+const availablePageTypes = computed(() =>
+  Object.keys(pageSchemas)
+);
+
+
+const createPage = async (pageType) => {
+  try {
+    const schema = pageSchemas[pageType];
+
+    if (!schema) {
+      console.error(`No schema found for page type: ${pageType}`);
+      return;
+    }
+
+    const exists = pages.value.some(
+      (p) => p.page_type.toLowerCase() === pageType.toLowerCase()
+    );
+
+    if (exists) {
+      alert(`${pageType} page already exists`);
+      return;
+    }
+
+
+    const payload = {
+      page_type: pageType,
+      status: "draft",
+      is_visible: false,
+      content: structuredClone(schema),
+    };
+
+    const newPage = await pagesApi.createPage(payload);
+
+    const normalizedPage = {
+      ...newPage,
+      title: newPage.page_type_display ?? pageType,
+      slug: `/${pageType}`,
+      sections: structuredClone(schema),
+    };
+
+    pages.value.push(normalizedPage);
+    editPage(normalizedPage);
+  } catch (e) {
+    console.error("Failed to create page", e);
+  }
+};
+
 const fetchPages = async () => {
   isLoading.value = true;
   try {
     const rawPages = await pagesApi.listPages();
 
-    // pages.value = rawPages.map((page) => {
-    //   const schema = pageSchemas[page.page_type];
-
-    //   const content =
-    //     typeof page.content === "object" && Object.keys(page.content).length
-    //       ? page.content
-    //       : structuredClone(schema);
-
-    //   return {
-    //     ...page,
-    //     title: page.page_type_display,
-    //     slug: `/${page.page_type}`,
-    //     sections: content,
-    //   };
-    // });
     pages.value = rawPages.map((page) => {
       const schema = pageSchemas[page.page_type.toLowerCase()];
       const content = structuredClone(schema);
@@ -182,21 +214,27 @@ const deleteFaq = (faqId) => {
   }
 };
 
-const saveChanges = async () => {
-  if (activePage.value && activeSection.value) {
-    activePage.value.sections[activeSection.value] = currentSectionData.value;
-  }
 
+
+const saveChanges = async () => {
   try {
-    await pagesApi.updatePage(activePage.value.id, {
-      status: activePage.value.status,
-      is_visible: activePage.value.is_visible,
-      content: activePage.value.sections,
-    });
+    const payload = {
+      content: {
+        [activeSection.value]: currentSectionData.value
+      }
+    };
+
+    await pagesApi.partialUpdatePage(
+      activePage.value.page_type,
+      payload
+    );
+
+    activePage.value.sections[activeSection.value] =
+      structuredClone(currentSectionData.value);
 
     goBackToManager();
   } catch (e) {
-    console.error("Failed to save page", e);
+    console.error("Failed to save section", e);
   }
 };
 
@@ -223,13 +261,14 @@ watch(
 );
 
 const toggleVisibility = async (page) => {
-  page.isVisible = !page.isVisible;
+  page.is_visible = !page.is_visible;
   try {
-    await pagesApi.updatePageVisibility(page.id, page.isVisible);
+    await pagesApi.updatePageVisibility(page.id, page.is_visible);
   } catch (e) {
-    page.isVisible = !page.isVisible;
+    page.is_visible = !page.is_visible;
   }
 };
+
 </script>
 
 <template>
@@ -255,6 +294,24 @@ const toggleVisibility = async (page) => {
           <h1 class="text-3xl font-bold text-gray-800 text-center">
             Page Manager
           </h1>
+        </div>
+        <div class="flex items-center space-x-3 mb-6">
+          <select
+            @change="createPage($event.target.value)"
+            class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
+          >
+            <option value="" disabled selected>
+              Select page type
+            </option>
+            <option
+              v-for="type in availablePageTypes"
+              :key="type"
+              :value="type"
+            >
+              {{ type.toUpperCase() }}
+            </option>
+          </select>
+          <p> Create page by selecting page type</p>
         </div>
 
         <div class="space-y-3">

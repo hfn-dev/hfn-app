@@ -11,7 +11,6 @@ export const resourcesPageSchema = {
 
     newsletterSection: {
       title: 'Newsletter',
-      // 4-column grid items
       items: [
         {
           id: 1,
@@ -33,7 +32,26 @@ export const resourcesPageSchema = {
           commentCount: 2,
           downloadUrl: '/downloads/newsletters/digital-health.pdf',
         },
-        // ... more newsletter items
+        {
+          id: 3,
+          title: 'Solar-Powered Clinics in Kaduna',
+          excerpt:
+            'In collaboration with donor agencies, HFN supported Kaduna’s investment in solar-powered clinics, ensuring sustainable and reliable care in rural communities.',
+          image: 'newsletter.png',
+          date: 'October 24, 2025',
+          commentCount: 2,
+          downloadUrl: '#',
+        },
+        {
+          id: 4,
+          title: 'HFN at World Economic Forum Health Innovators Group',
+          excerpt:
+            'A delegation from HFN joined the World Economic Forum’s Health Innovators Group to discuss equitable access to care, technology-driven solutions, and investment opportunities for Africa.',
+          image: 'newsletter.png',
+          date: 'October 24, 2025',
+          commentCount: 2,
+          downloadUrl: '#',
+        },
       ],
       pagination: {
         currentPage: 1,
@@ -44,7 +62,6 @@ export const resourcesPageSchema = {
     publicationsSection: {
       title: 'Publications',
       backgroundColor: '#F2F9F3',
-      // 3-column grid items
       items: [
         {
           id: 1,

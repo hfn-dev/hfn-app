@@ -16,7 +16,6 @@ export const getInvolvedPageSchema = {
         "Our Partners support HFN in the medium and long term via our specially designed offerings, including:"
       ],
       
-      // Grid items for partnership types
       offerings: [
         {
           id: "event-sponsorship",
