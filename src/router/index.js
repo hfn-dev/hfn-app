@@ -33,10 +33,15 @@ import TutorReviews from '@/views/Tutor/TutorReviews.vue';
 
 import ArticleDetail from '@/views/User/ArticleDetail.vue';
 import CourseDetails from '@/views/User/CourseDetails.vue';
+import LearnerCourseDetails from '@/views/Learner/LearnerCourseDetails.vue';
 import MessageNotification from '@/views/User/MessageNotification.vue';
 import MyAccount from '@/views/User/MyAccount.vue';
 import MyLearning from '@/views/User/MyLearning.vue';
+import LearnersLearning from '@/views/Learner/LearnersLearning.vue';
+import LearnerCourses from '@/views/Learner/LearnerCourses.vue';
+import LearnerAccount from '@/views/Learner/LearnerAccount.vue';
 import Support from '@/views/User/Support.vue';
+import LearnerSupport from '@/views/Learner/LearnerSupport.vue';
 import UserCourses from '@/views/User/UserCourses.vue';
 import UserDashboard from '@/views/User/UserDashboard.vue';
 import UserSubscription from '@/views/User/UserSubscription.vue';
@@ -64,254 +69,254 @@ import Homepage from '../views/Homepage.vue';
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
+    path: "/",
+    name: "Home",
     component: Homepage,
   },
-  { path: '/about', name: 'About', component: About },
-  { path: '/blog', name: 'Blog', component: Blog },
-  { path: '/membership', name: 'Membership', component: Membership },
-  { path: '/contact', name: 'Contact', component: Contact },
-  { path: '/register', name: 'Register', component: Register },
-  { path: '/signin', name: 'Signin', component: SignIn },
-  { path: '/events', name: 'Events', component: Events },
-  { path: '/gallery', name: 'Gallery', component: Gallery },
-  { path: '/publication', name: 'Publications', component: Publications },
+  { path: "/about", name: "About", component: About },
+  { path: "/blog", name: "Blog", component: Blog },
+  { path: "/membership", name: "Membership", component: Membership },
+  { path: "/contact", name: "Contact", component: Contact },
+  { path: "/register", name: "Register", component: Register },
+  { path: "/signin", name: "Signin", component: SignIn },
+  { path: "/events", name: "Events", component: Events },
+  { path: "/gallery", name: "Gallery", component: Gallery },
+  { path: "/publication", name: "Publications", component: Publications },
 
-  { path: '/get-involved', name: 'GetInvolved', component: GetInvolved },
-  { path: '/programs', name: 'Programs', component: Programs },
-  { path: '/news', name: 'NewsAdvocacy', component: NewsAdvocacy },
+  { path: "/get-involved", name: "GetInvolved", component: GetInvolved },
+  { path: "/programs", name: "Programs", component: Programs },
+  { path: "/news", name: "NewsAdvocacy", component: NewsAdvocacy },
 
-  { path: '/resources', name: 'Resources', component: Resources },
+  { path: "/resources", name: "Resources", component: Resources },
 
   {
-    path: '/blog/:id',
-    name: 'BlogDetails',
+    path: "/blog/:id",
+    name: "BlogDetails",
     component: BlogDetails,
     props: true,
   },
   {
-    path: '/signinverification',
-    name: 'SigninVerification',
+    path: "/signinverification",
+    name: "SigninVerification",
     component: SigninVerification,
   },
   {
-    path: '/user/messages',
-    name: 'UserMessage',
+    path: "/user/messages",
+    name: "UserMessage",
     component: MessageNotification,
   },
   {
-    path: '/user/mylearning',
-    name: 'MyLearning',
+    path: "/user/mylearning",
+    name: "MyLearning",
     component: MyLearning,
   },
   {
-    path: '/user/dashboard',
-    name: 'UserDasboard',
+    path: "/user/dashboard",
+    name: "UserDasboard",
     component: UserDashboard,
   },
   {
-    path: '/user/courses',
-    name: 'UserCourses',
+    path: "/user/courses",
+    name: "UserCourses",
     component: UserCourses,
   },
   {
-    path: '/course/:id',
-    name: 'CourseDetails',
+    path: "/course/:id",
+    name: "CourseDetails",
     component: CourseDetails,
   },
   {
-    path: '/learning/courses/:slug',
-    name: 'CourseDetails',
+    path: "/learning/courses/:slug",
+    name: "CourseDetails",
     component: CourseDetails,
   },
 
   {
-    path: '/news/:slug',
-    name: 'ArticleDetail',
+    path: "/news/:slug",
+    name: "ArticleDetail",
     component: ArticleDetail,
   },
   {
-    path: '/user/account',
-    name: 'UserAccount',
+    path: "/user/account",
+    name: "UserAccount",
     component: MyAccount,
   },
   {
-    path: '/user/support',
-    name: 'UserSupport',
+    path: "/user/support",
+    name: "UserSupport",
     component: Support,
   },
   {
-    path: '/user/subscription',
-    name: 'UserSubscription',
+    path: "/user/subscription",
+    name: "UserSubscription",
     component: UserSubscription,
   },
   {
-    path: '/user/interests',
-    name: 'Interest',
+    path: "/user/interests",
+    name: "Interest",
     component: Interests,
   },
 
   //editor
   {
-    path: '/editor/signin',
-    name: 'EditorSignin',
+    path: "/editor/signin",
+    name: "EditorSignin",
     component: Signin,
   },
   {
-    path: '/editor/dashboard',
-    name: 'EditorDashboard',
+    path: "/editor/dashboard",
+    name: "EditorDashboard",
     component: EditorDashboard,
   },
   {
-    path: '/editor/pages',
-    name: 'EditorPages',
+    path: "/editor/pages",
+    name: "EditorPages",
     component: EditorPages,
   },
   {
-    path: '/editor/account',
-    name: 'EditorAccount',
+    path: "/editor/account",
+    name: "EditorAccount",
     component: EditorAccount,
   },
 
   //tutor
   {
-    path: '/tutor/mycourses',
-    name: 'TutorCourseList',
+    path: "/tutor/mycourses",
+    name: "TutorCourseList",
     component: TutorCourseList,
   },
   {
-    path: '/tutor/create-course',
-    name: 'TutorCreateCourse',
+    path: "/tutor/create-course",
+    name: "TutorCreateCourse",
     component: TutorCreateCourse,
   },
   {
-    path: '/tutor/courses/:slug/edit',
-    name: 'TutorEditCourse',
+    path: "/tutor/courses/:slug/edit",
+    name: "TutorEditCourse",
     component: TutorCreateCourse,
   },
 
   {
-    path: '/tutor/courses/:slug',
-    name: 'PreviewCourse',
+    path: "/tutor/courses/:slug",
+    name: "PreviewCourse",
     component: TutorCreateCourse,
   },
   {
-    path: '/tutor/dashboard',
-    name: 'TutorDashboard',
+    path: "/tutor/dashboard",
+    name: "TutorDashboard",
     component: TutorDashboard,
   },
   {
-    path: '/tutor/reviews',
-    name: 'TutorReviews',
+    path: "/tutor/reviews",
+    name: "TutorReviews",
     component: TutorReviews,
   },
 
   //superadmin
   {
-    path: '/superadmin/dashboard',
-    name: 'SuperAdminDashboard',
+    path: "/superadmin/dashboard",
+    name: "SuperAdminDashboard",
     component: SuperAdminDashboard,
   },
   {
-    path: '/superadmin/courses',
-    name: 'SuperAdminCourseList',
+    path: "/superadmin/courses",
+    name: "SuperAdminCourseList",
     component: SuperAdminCourseList,
   },
   {
-    path: '/superadmin/create-course',
-    name: 'SuperAdminCreateCourse',
+    path: "/superadmin/create-course",
+    name: "SuperAdminCreateCourse",
     component: SuperAdminCreateCourse,
-    props: { mode: 'create' },
+    props: { mode: "create" },
   },
   {
-    path: '/superadmin/courses/:slug/edit',
-    name: 'SuperAdminEditCourse',
+    path: "/superadmin/courses/:slug/edit",
+    name: "SuperAdminEditCourse",
     component: SuperAdminCreateCourse,
-    props: { mode: 'edit' },
+    props: { mode: "edit" },
   },
   {
-    path: '/superadmin/members',
-    name: 'SuperAdminMembers',
+    path: "/superadmin/members",
+    name: "SuperAdminMembers",
     component: SuperAdminMembers,
   },
   {
-    path: '/superadmin/account',
-    name: 'SuperAdminAccount',
+    path: "/superadmin/account",
+    name: "SuperAdminAccount",
     component: SuperAdminAccount,
   },
   {
-    path: '/superadmin/access',
-    name: 'SuperAdminManager',
+    path: "/superadmin/access",
+    name: "SuperAdminManager",
     component: SuperAdminManager,
   },
   {
-    path: '/superadmin/payments',
-    name: 'SuperAdminPayments',
+    path: "/superadmin/payments",
+    name: "SuperAdminPayments",
     component: SuperAdminPayments,
   },
   {
-    path: '/superadmin/messages',
-    name: 'SuperAdminMessages',
+    path: "/superadmin/messages",
+    name: "SuperAdminMessages",
     component: SuperAdminMessages,
   },
 
   //For Admin
   {
-    path: '/admin/dashboard',
-    name: 'AdminDashboard',
+    path: "/admin/dashboard",
+    name: "AdminDashboard",
     component: AdminDashboard,
   },
   {
-    path: '/admin/courses',
-    name: 'AdminCourseList',
+    path: "/admin/courses",
+    name: "AdminCourseList",
     component: AdminCourseList,
   },
   {
-    path: '/admin/create-course',
-    name: 'AdminCreateCourse',
+    path: "/admin/create-course",
+    name: "AdminCreateCourse",
     component: AdminCreateCourse,
   },
 
   {
-    path: '/admin/account',
-    name: 'AdminAccount',
+    path: "/admin/account",
+    name: "AdminAccount",
     component: AdminAccount,
   },
 
   {
-    path: '/admin/payments',
-    name: 'AdminPayments',
+    path: "/admin/payments",
+    name: "AdminPayments",
     component: AdminPayments,
   },
   {
-    path: '/admin/messages',
-    name: 'AdminMessages',
+    path: "/admin/messages",
+    name: "AdminMessages",
     component: AdminMessages,
   },
   {
-    path: '/admin/members',
-    name: 'AdminMembers',
+    path: "/admin/members",
+    name: "AdminMembers",
     component: AdminMembers,
   },
   {
-    path: '/admin/access',
-    name: 'AdminManager',
+    path: "/admin/access",
+    name: "AdminManager",
     component: AdminManager,
   },
 
   {
-    path: '/admin/courses/:slug/edit',
-    name: 'AdminEditCourse',
+    path: "/admin/courses/:slug/edit",
+    name: "AdminEditCourse",
     component: AdminCreateCourse,
-    props: (route) => ({ slug: route.params.slug, mode: 'edit' }),
+    props: (route) => ({ slug: route.params.slug, mode: "edit" }),
   },
 
   {
-    path: '/admin/courses/:slug',
-    name: 'AdminViewCourse',
+    path: "/admin/courses/:slug",
+    name: "AdminViewCourse",
     component: AdminCreateCourse,
-    props: (route) => ({ slug: route.params.slug, mode: 'view' }),
+    props: (route) => ({ slug: route.params.slug, mode: "view" }),
   },
 
   //for learners
