@@ -1,6 +1,6 @@
 import bridge from '@/assets/bridge.png';
 import emzor from '@/assets/emzor.png';
-import event from '@/assets/hfn-news7.png';
+import event from '@/assets/hfn-news7.PNG';
 import group from '@/assets/group.png';
 import health from '@/assets/hfn-news5.png';
 import hfn_partner from '@/assets/hfn_partner.png';
