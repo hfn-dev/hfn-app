@@ -34,7 +34,7 @@ const createEvent = async () => {
     price: eventForm.value.is_free ? null : eventForm.value.price,
   };
 
-  await eventsApi.createEvent(payload);
+  await eventsApi.createCalenderEvent(payload);
   await fetchEvents();
 
   Object.assign(eventForm.value, {
