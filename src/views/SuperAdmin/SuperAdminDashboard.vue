@@ -219,12 +219,20 @@ onMounted(async () => {
       usersByRoleData.datasets[0].data = dash.users_by_role.map(item => item.count);
     }
 
+    // dashboardData.stats = [
+    //   { title: 'Total Courses', value: dash.total_courses, change: `${dash.active_courses} Active`, changeColor: 'text-green-600' },
+    //   { title: 'Total Enrollments', value: dash.total_enrollments, change: `${dash.active_enrollments} Active`, changeColor: 'text-blue-600' },
+    //   { title: 'New Signups (30 days)', value: dash.new_signups_30_days, change: 'Last 30 days', changeColor: 'text-orange-600' },
+    //   { title: 'Active Users', value: dash.total_active_users, change: 'Currently active', changeColor: 'text-purple-600' },
+    // ];
     dashboardData.stats = [
-      { title: 'Total Courses', value: dash.total_courses, change: `${dash.active_courses} Active`, changeColor: 'text-green-600' },
-      { title: 'Total Enrollments', value: dash.total_enrollments, change: `${dash.active_enrollments} Active`, changeColor: 'text-blue-600' },
-      { title: 'New Signups (30 days)', value: dash.new_signups_30_days, change: 'Last 30 days', changeColor: 'text-orange-600' },
-      { title: 'Active Users', value: dash.total_active_users, change: 'Currently active', changeColor: 'text-purple-600' },
-    ];
+  { title: 'Total Page Views', value: dash.total_page_views, change: '', changeColor: 'text-gray-500' },
+  { title: 'Unique Visitors', value: dash.total_unique_visitors, change: '', changeColor: 'text-gray-500' },
+  { title: 'Bounce Rate', value: dash.bounce_rate.toFixed(2) + '%', change: '', changeColor: 'text-gray-500' },
+  { title: 'Average Session (min)', value: dash.average_session_duration_minutes.toFixed(2), change: '', changeColor: 'text-gray-500' },
+  { title: 'New Signups (30 days)', value: dash.new_signups_30_days, change: 'Last 30 days', changeColor: 'text-orange-600' },
+  { title: 'Active Users', value: dash.total_active_users, change: 'Currently active', changeColor: 'text-purple-600' },
+];
 
     const revEntries = Object.entries(dash.monthly_revenue);
     const topMonthEntry = revEntries.reduce((a, b) => (b[1] > a[1] ? b : a), [MONTHS[0], 0]);
