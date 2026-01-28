@@ -31,6 +31,17 @@ export default {
     }
   },
 
+  async createCalenderEvent() {
+    try {
+      const response = await api.post(`/events/`, {});
+      return response.data;
+    } catch (error) {
+      console.error('Create event API error:', error);
+      throw error;
+    }
+  },
+
+
   async updateEvent(id, payload) {
     try {
       const response = await api.patch(`/events/events/${id}/`, payload);
