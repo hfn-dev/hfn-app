@@ -20,28 +20,27 @@ const availablePageTypes = computed(() =>
   Object.keys(pageSchemas)
 );
 
-
-const createPage = async (pageType) => {
+const createPage = async (pageName) => {
   try {
-    const schema = pageSchemas[pageType];
+    const pageType = pageName
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-");
 
-    if (!schema) {
-      console.error(`No schema found for page type: ${pageType}`);
-      return;
-    }
+    const schema = pageSchemas.others;
 
     const exists = pages.value.some(
-      (p) => p.page_type.toLowerCase() === pageType.toLowerCase()
+      (p) => p.page_type === pageType
     );
 
     if (exists) {
-      alert(`${pageType} page already exists`);
+      console.log(`${pageName} page already exists`);
       return;
     }
 
-
     const payload = {
-      page_type: pageType,
+      page_type: 'others', 
+      name: pageName,
       status: "draft",
       is_visible: false,
       content: structuredClone(schema),
@@ -49,15 +48,14 @@ const createPage = async (pageType) => {
 
     const newPage = await pagesApi.createPage(payload);
 
-    const normalizedPage = {
+    pages.value.push({
       ...newPage,
-      title: newPage.page_type_display ?? pageType,
+      title: newPage.name,
       slug: `/${pageType}`,
       sections: structuredClone(schema),
-    };
+    });
 
-    pages.value.push(normalizedPage);
-    editPage(normalizedPage);
+    editPage(newPage);
   } catch (e) {
     console.error("Failed to create page", e);
   }
@@ -82,8 +80,8 @@ const fetchPages = async () => {
 
       return {
         ...page,
-        title: page.page_type_display,
-        slug: `/${page.page_type}`,
+        title: page.name ?? page.page_type_display,
+        slug: `/${(page.name ?? page.page_type).toLowerCase().replace(/\s+/g, "-")}`,
         sections: content,
       };
     });
