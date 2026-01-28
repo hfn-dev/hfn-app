@@ -4,7 +4,7 @@ import event from '@/assets/hfn-news7.PNG';
 import group from '@/assets/group.png';
 import health from '@/assets/hfn-news5.PNG';
 import hfn_partner from '@/assets/hfn_partner.png';
-import wef from '@/assets/hfn-news6.png';
+import wef from '@/assets/hfn-news6.PNG';
 
 import hba from '@/assets/hba-africa.png';
 import oando from '@/assets/oando_logo.png';
