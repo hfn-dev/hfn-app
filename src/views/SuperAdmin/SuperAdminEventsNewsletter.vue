@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import eventsApi from '@/api/eventsApi';
+import eventsApi from '@/api/events.js';
 import uploadsApi from '@/api/contentUploadsApi';
 
 /* ================= EVENTS ================= */
