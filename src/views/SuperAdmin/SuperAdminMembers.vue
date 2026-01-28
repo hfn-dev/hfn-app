@@ -531,6 +531,8 @@ watch(
 </template>
 
 <style scoped>
+@reference "tailwindcss";
+
 .filter {
   @apply px-3 py-2 border rounded-lg text-sm focus:ring-[#00cc66];
 }
