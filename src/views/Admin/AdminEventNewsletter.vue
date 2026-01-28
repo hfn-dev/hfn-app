@@ -1,7 +1,7 @@
 <script setup>
 import uploadsApi from "@/api/contentUploadsApi";
 import eventsApi from "@/api/events.js";
-import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
+import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
 import { onMounted, ref } from "vue";
 
 const events = ref([]);
@@ -109,7 +109,7 @@ onMounted(() => {
 
 <template>
   <div class="flex min-h-screen font-sans">
-    <SuperAdminSidebar />
+    <AdminSidebar />
 
     <main class="flex-1 p-6 overflow-auto bg-gray-50">
       <div class="max-w-7xl mx-auto">

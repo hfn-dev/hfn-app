@@ -20,7 +20,6 @@ import {
 } from "chart.js";
 import { Bar, Line, Pie } from "vue-chartjs";
 
-// check if admin to access. 
 
 ChartJS.register(
   Title,
@@ -41,7 +40,6 @@ const active = ref("Dashboard");
 const isLoading = ref(true);
 const dashboardData = ref(null);
 
-// Reactive chart data
 const revenueData = ref({
   labels: [],
   datasets: [
@@ -220,7 +218,6 @@ const statCards = computed(() => {
   ];
 });
 
-// Compute summary data from API
 const summaryData = computed(() => {
   if (!dashboardData.value) return [];
 
@@ -252,7 +249,6 @@ const summaryData = computed(() => {
   ];
 });
 
-// Compute most viewed courses from API
 const mostViewedCourses = computed(() => {
   if (!dashboardData.value?.most_viewed_courses) return [];
 
@@ -271,7 +267,6 @@ const mostViewedCourses = computed(() => {
   }));
 });
 
-// Compute course data for enrollment visualization
 const courseData = computed(() => {
   if (!dashboardData.value?.most_viewed_courses) return [];
 
@@ -282,7 +277,6 @@ const courseData = computed(() => {
   }));
 });
 
-// Compute top revenue months
 const topRevenueData = computed(() => {
   if (!dashboardData.value?.monthly_revenue) return null;
 
@@ -291,7 +285,6 @@ const topRevenueData = computed(() => {
 
   if (entries.length === 0) return null;
 
-  // Find top month
   let topMonth = { month: "", revenue: 0 };
   let topYear = { year: 0, total: 0 };
 
@@ -305,12 +298,11 @@ const topRevenueData = computed(() => {
   return {
     topMonth: topMonth.month,
     topMonthRevenue: topMonth.revenue,
-    topYear: "2024", // Default to current year or from API
+    topYear: "2024", 
     totalYearRevenue: topYear.total,
   };
 });
 
-// Fetch dashboard data
 const fetchDashboardData = async () => {
   try {
     isLoading.value = true;
@@ -330,7 +322,6 @@ const data = await dashboardApi.fetchDashboard();
   }
 };
 
-// Update chart data from API response
 const updateChartData = () => {
   if (!dashboardData.value) return;
 
@@ -374,12 +365,10 @@ const updateChartData = () => {
     };
   }
 };
-// On component mount
 onMounted(() => {
   fetchDashboardData();
 });
 
-// Toggle sidebar for mobile
 const showSidebar = ref(false);
 const toggleSidebar = () => (showSidebar.value = !showSidebar.value);
 const closeSidebar = () => (showSidebar.value = false);
@@ -387,7 +376,6 @@ const closeSidebar = () => (showSidebar.value = false);
 
 <template>
   <div class="flex min-h-screen font-sans relative">
-    <!-- Mobile sidebar toggle -->
     <button @click="toggleSidebar"
       class="lg:hidden fixed top-15 left-0 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -395,25 +383,19 @@ const closeSidebar = () => (showSidebar.value = false);
       </svg>
     </button>
 
-    <!-- SIDEBAR -->
     <div class="fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:translate-x-0"
       :class="showSidebar ? 'translate-x-0' : '-translate-x-full'">
       <AdminSidebar @closeSidebar="closeSidebar" />
     </div>
 
-    <!-- Overlay for mobile sidebar -->
     <div v-if="showSidebar" class="fixed inset-0 bg-gray-500 bg-opacity-50 z-30 lg:hidden" @click="closeSidebar"></div>
 
-    <!-- Main content -->
     <main class="flex-1 p-8 overflow-auto bg-white">
-      <!-- Loading state -->
       <div v-if="isLoading" class="flex justify-center items-center h-64">
         <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#00cc66]"></div>
       </div>
 
-      <!-- Dashboard content -->
       <div v-else>
-        <!-- Header -->
         <div class="mb-8">
           <h1 class="text-4xl font-extrabold text-[#E87A18]">
             Welcome Admin!
@@ -423,7 +405,6 @@ const closeSidebar = () => (showSidebar.value = false);
           </p>
         </div>
 
-        <!-- Stat Cards -->
         <div class="flex justify-between items-stretch mb-10 space-x-6">
           <div v-for="(stat, index) in statCards" :key="stat.title"
             class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
@@ -457,22 +438,19 @@ const closeSidebar = () => (showSidebar.value = false);
           </div>
         </div>
 
-        <!-- Charts Section -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <!-- Student Monthly Enrollment -->
           <div class="bg-white p-6 rounded-xl shadow-lg lg:col-span-3">
             <h2 class="text-xl font-semibold mb-4 text-[#006633]">
-              Student Monthly Enrollment
+              Membership Monthly Registrations
             </h2>
             <div v-if="engagementData.labels.length > 0" class="h-[300px] w-full">
               <Bar :data="engagementData" :options="barOptions" />
             </div>
             <div v-else class="h-[300px] w-full flex items-center justify-center text-gray-500">
-              No enrollment data available
+              No registration data available
             </div>
           </div>
 
-          <!-- Course Completion -->
           <div class="bg-white p-6 rounded-xl shadow-lg w-full">
             <h2 class="text-xl font-semibold mb-4 text-[#006633]">
               Course Completion
@@ -485,7 +463,6 @@ const closeSidebar = () => (showSidebar.value = false);
             </div>
           </div>
 
-          <!-- User Growth -->
           <div class="bg-white p-6 rounded-xl shadow-lg w-full">
             <h2 class="text-xl font-semibold mb-4 text-[#006633]">
               New User Signups
@@ -499,9 +476,7 @@ const closeSidebar = () => (showSidebar.value = false);
           </div>
         </div>
 
-        <!-- Summary Stats and Top Courses -->
         <div class="p-6 bg-white rounded-xl mb-8">
-          <!-- Summary Cards -->
           <div class="flex justify-between items-stretch mb-8 space-x-6">
             <div v-for="card in summaryData" :key="card.title"
               class="summary-card-alt flex-1 p-6 text-center bg-white shadow-lg relative overflow-hidden group transition-all duration-300"
@@ -526,7 +501,6 @@ const closeSidebar = () => (showSidebar.value = false);
             </div>
           </div>
 
-          <!-- Top Courses by Enrollment -->
           <h2 class="text-xl font-semibold text-gray-800 mb-4">
             Most Enrolled Courses
           </h2>
@@ -549,9 +523,7 @@ const closeSidebar = () => (showSidebar.value = false);
           </div>
         </div>
 
-        <!-- Revenue Section -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 p-6 bg-white rounded-lg">
-          <!-- Revenue Chart -->
           <div class="lg:col-span-2">
             <div class="bg-white p-6 rounded-lg shadow-sm mb-0">
               <div class="flex justify-between items-start mb-4">
@@ -568,9 +540,7 @@ const closeSidebar = () => (showSidebar.value = false);
               </div>
             </div>
 
-            <!-- Revenue Highlights -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-0 mt-[-10px]">
-              <!-- Top Month -->
               <div class="highlight-card-wrapper border-r border-orange-100" v-if="topRevenueData">
                 <div class="highlight-card">
                   <p class="text-sm text-gray-500 mb-1">Top month</p>
@@ -583,7 +553,6 @@ const closeSidebar = () => (showSidebar.value = false);
                 </div>
               </div>
 
-              <!-- Top Year -->
               <div class="highlight-card-wrapper border-r border-orange-100" v-if="topRevenueData">
                 <div class="highlight-card">
                   <p class="text-sm text-gray-500 mb-1">Top year</p>
@@ -596,7 +565,6 @@ const closeSidebar = () => (showSidebar.value = false);
                 </div>
               </div>
 
-              <!-- Best Seller -->
               <div class="highlight-card-wrapper" v-if="mostViewedCourses.length > 0">
                 <div class="highlight-card">
                   <p class="text-sm text-gray-500 mb-1">Best Seller</p>
@@ -617,7 +585,6 @@ const closeSidebar = () => (showSidebar.value = false);
             </div>
           </div>
 
-          <!-- Most Viewed Courses Sidebar -->
           <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-sm h-fit">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">
               Most Viewed Courses

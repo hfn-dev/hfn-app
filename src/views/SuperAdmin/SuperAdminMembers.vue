@@ -1,8 +1,8 @@
 <script setup>
-import analyticsApi from '@/api/dashboard.js';
-import membershipAPI from '@/api/membership.js';
-import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
-import { computed, onMounted, watch } from 'vue';
+import analyticsApi from "@/api/dashboard.js";
+import membershipAPI from "@/api/membership.js";
+import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
+import { computed, onMounted, watch } from "vue";
 
 import {
   ChevronLeft,
@@ -12,46 +12,45 @@ import {
   MoreVertical,
   Search,
   Trash2,
-} from 'lucide-vue-next';
-import { ref } from 'vue';
-  
+} from "lucide-vue-next";
+import { ref } from "vue";
+
 const showAddMemberModal = ref(false);
 const membershipTypes = ref([]);
 
 const filters = ref({
-  membership_type: '',
-  role: '',
-  status: '',
-  payment_method: '',
+  membership_type: "",
+  role: "",
+  status: "",
+  payment_method: "",
 });
-  
+
 const newMemberForm = ref({
-  name: '',
-  email: '',
-  phone: '',
-  membership_type: '',
-  role: '',
-  payment_method: '',
+  name: "",
+  email: "",
+  phone: "",
+  membership_type: "",
+  role: "",
+  payment_method: "",
 });
 
 const resetFilters = () => {
   filters.value = {
-    membership_type: '',
-    role: '',
-    status: '',
-    payment_method: '',
+    membership_type: "",
+    role: "",
+    status: "",
+    payment_method: "",
   };
-  searchTerm.value = '';
+  searchTerm.value = "";
   currentPage.value = 1;
   fetchMembers();
 };
-  
 
-const courseTabs = ref(['Published', 'Drafts', 'Archived']);
-const currentTab = ref('Published');
+const courseTabs = ref(["Published", "Drafts", "Archived"]);
+const currentTab = ref("Published");
 const members = ref([]);
 const itemsPerPage = 10;
-const searchTerm = ref('');
+const searchTerm = ref("");
 const statCards = ref([]);
 
 const currentPage = ref(1);
@@ -63,56 +62,56 @@ const loadMembershipAnalytics = async () => {
 
     statCards.value = [
       {
-        title: 'Total Members',
+        title: "Total Members",
         value: data.total_members ?? 0,
-        change: '',
-        changeColor: 'text-blue-300',
+        change: "",
+        changeColor: "text-blue-300",
       },
       {
-        title: 'Total New Members',
+        title: "Total New Members",
         value: data.new_members ?? 0,
-        change: '',
-        changeColor: 'text-[#00cc66]',
+        change: "",
+        changeColor: "text-[#00cc66]",
       },
       {
-        title: 'Total Corporate',
+        title: "Total Corporate",
         value: data.corporate ?? 0,
-        change: '',
-        changeColor: 'text-gray-500',
+        change: "",
+        changeColor: "text-gray-500",
       },
       {
-        title: 'Total Individual',
+        title: "Total Individual",
         value: data.individual ?? 0,
-        change: '',
-        changeColor: 'text-gray-500',
+        change: "",
+        changeColor: "text-gray-500",
       },
       {
-        title: 'Multinationals',
+        title: "Multinationals",
         value: data.multinationals ?? 0,
-        change: '',
-        changeColor: 'text-gray-500',
+        change: "",
+        changeColor: "text-gray-500",
       },
       {
-        title: 'Diaspora',
+        title: "Diaspora",
         value: data.diaspora ?? 0,
-        change: '',
-        changeColor: 'text-[#00cc66]',
+        change: "",
+        changeColor: "text-[#00cc66]",
       },
       {
-        title: 'Health Guardians',
+        title: "Health Guardians",
         value: data.health_guardians ?? 0,
-        change: '',
-        changeColor: 'text-blue-300',
+        change: "",
+        changeColor: "text-blue-300",
       },
       {
-        title: 'Total Associations',
+        title: "Total Associations",
         value: data.associations ?? 0,
-        change: '',
-        changeColor: 'text-gray-500',
+        change: "",
+        changeColor: "text-gray-500",
       },
     ];
   } catch (error) {
-    console.error('Failed to load membership analytics', error);
+    console.error("Failed to load membership analytics", error);
   }
 };
 
@@ -138,18 +137,17 @@ const submitNewMember = async () => {
 
     // Reset form
     newMemberForm.value = {
-      name: '',
-      email: '',
-      phone: '',
-      membership_type: '',
-      role: '',
-      payment_method: '',
+      name: "",
+      email: "",
+      phone: "",
+      membership_type: "",
+      role: "",
+      payment_method: "",
     };
   } catch (error) {
-    console.error('Failed to add member', error);
+    console.error("Failed to add member", error);
   }
 };
-  
 
 const fetchMembers = async () => {
   try {
@@ -159,7 +157,7 @@ const fetchMembers = async () => {
     members.value = data.results || data.data || [];
     totalPages.value = data.count ? Math.ceil(data.count / itemsPerPage) : 1;
   } catch (error) {
-    console.error('Failed to fetch members', error);
+    console.error("Failed to fetch members", error);
   }
 };
 
@@ -167,9 +165,9 @@ const loadMembershipTypes = async () => {
   try {
     membershipTypes.value = await membershipAPI.listMembershipTypes();
   } catch (e) {
-    console.error('Failed to load membership types', e);
+    console.error("Failed to load membership types", e);
   }
-};  
+};
 
 onMounted(() => {
   fetchMembers();
@@ -179,14 +177,14 @@ onMounted(() => {
 
 const handleAction = async (action, memberId) => {
   try {
-    if (action === 'Delete') {
+    if (action === "Delete") {
       await membershipAPI.deleteApplication(memberId);
       members.value = members.value.filter((m) => m.id !== memberId);
-    } else if (action === 'Edit') {
+    } else if (action === "Edit") {
       console.log(`Edit member ID: ${memberId}`);
-    } else if (action === 'View') {
+    } else if (action === "View") {
       const data = await membershipAPI.getApplication(memberId);
-      console.log('Member Details:', data);
+      console.log("Member Details:", data);
     }
   } catch (error) {
     console.error(`${action} failed for member ${memberId}:`, error);
@@ -206,9 +204,9 @@ const filteredMembers = computed(() => {
   const term = searchTerm.value.toLowerCase();
   return list.filter(
     (m) =>
-      (m.name || '').toLowerCase().includes(term) ||
-      (m.category || '').toLowerCase().includes(term) ||
-      ((m.lastPayment || '')).toLowerCase().includes(term)
+      (m.name || "").toLowerCase().includes(term) ||
+      (m.category || "").toLowerCase().includes(term) ||
+      (m.lastPayment || "").toLowerCase().includes(term)
   );
 });
 
@@ -227,7 +225,6 @@ watch(
   },
   { deep: true }
 );
-  
 </script>
 
 <template>
@@ -277,16 +274,20 @@ watch(
         </div>
       </div>
 
-      <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+      <div
+        class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4"
+      >
         <button
-  @click="showAddMemberModal = true"
-  class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#005528]"
->
-  + Add Member
-</button>
+          @click="showAddMemberModal = true"
+          class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#005528] flex-shrink-0"
+        >
+          + Add Member
+        </button>
 
-        <div class="flex justify-end mb-6">
-          <div class="relative w-full max-w-sm">
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:gap-3 flex-wrap w-full md:w-auto"
+        >
+          <div class="relative w-full sm:w-64">
             <Search
               class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
             />
@@ -297,48 +298,51 @@ watch(
               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors"
             />
           </div>
-          <div class="flex gap-3 flex-wrap">
-    <select v-model="filters.membership_type" class="filter">
-      <option value="">All Memberships</option>
-      <option
-        v-for="type in membershipTypes"
-        :key="type.id"
-        :value="type.id"
-      >
-        {{ type.name }}
-      </option>
-    </select>
 
-    <select v-model="filters.role" class="filter">
-      <option value="">All Roles</option>
-      <option value="individual">Individual</option>
-      <option value="corporate">Corporate</option>
-      <option value="admin">Admin</option>
-    </select>
+          <select v-model="filters.membership_type" class="filter">
+            <option value="">All Memberships</option>
+            <option
+              v-for="type in membershipTypes"
+              :key="type.id"
+              :value="type.id"
+            >
+              {{ type.name }}
+            </option>
+          </select>
 
-    <select v-model="filters.status" class="filter">
-      <option value="">All Status</option>
-      <option value="approved">Approved</option>
-      <option value="pending">Pending</option>
-      <option value="rejected">Rejected</option>
-    </select>
+          <select v-model="filters.role" class="filter">
+            <option value="">All Roles</option>
+            <option value="individual">Admin</option>
+            <option value="corporate">Member</option>
+            <option value="admin">Learner</option>
+            <option value="admin">Tutor</option>
+          </select>
 
-    <select v-model="filters.payment_method" class="filter">
-      <option value="">All Payments</option>
-      <option value="card">Card</option>
-      <option value="transfer">Transfer</option>
-      <option value="cash">Cash</option>
-    </select>
+          <select v-model="filters.status" class="filter">
+            <option value="">All Status</option>
+            <option value="approved">Approved</option>
+            <option value="pending">Pending</option>
+            <option value="rejected">Rejected</option>
+          </select>
 
-    <button
-      @click="resetFilters"
-      class="px-3 py-2 border rounded-lg text-sm hover:bg-gray-100"
-    >
-      Reset
-    </button>
-  </div>
+          <select v-model="filters.payment_method" class="filter">
+            <option value="">All Payments</option>
+            <option value="card">Card</option>
+            <option value="transfer">Transfer</option>
+            <option value="cash">Cash</option>
+          </select>
+
+          <button
+            @click="resetFilters"
+            class="px-3 py-2 border rounded-lg text-sm hover:bg-gray-100"
+          >
+            Reset
+          </button>
         </div>
+      </div>
 
+      <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+        
         <table class="min-w-full divide-y divide-gray-200">
           <thead>
             <tr
@@ -397,13 +401,17 @@ watch(
                 {{ member.name }}
               </td>
               <td class="py-3 px-3">
-                {{ member.enrollments !== null ? member.enrollments : '-' }}
+                {{ member.enrollments !== null ? member.enrollments : "-" }}
               </td>
               <td class="py-3 px-3">
                 <span
                   :class="{
-                    'text-green-600 font-semibold': (member.completion || '').toString().includes('100'),
-                    'text-orange-500': Number.parseFloat(member.completion) < 50 && member.completion !== '-',
+                    'text-green-600 font-semibold': (member.completion || '')
+                      .toString()
+                      .includes('100'),
+                    'text-orange-500':
+                      Number.parseFloat(member.completion) < 50 &&
+                      member.completion !== '-',
                   }"
                 >
                   {{ member.completion }}
@@ -470,63 +478,72 @@ watch(
       </div>
     </main>
     <div
-  v-if="showAddMemberModal"
-  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
->
-  <div class="bg-white w-full max-w-lg rounded-xl p-6 shadow-lg">
-    <h2 class="text-xl font-bold mb-4 text-gray-800">
-      Add New Member
-    </h2>
+      v-if="showAddMemberModal"
+      class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+    >
+      <div class="bg-white w-full max-w-lg rounded-xl p-6 shadow-lg">
+        <h2 class="text-xl font-bold mb-4 text-gray-800">Add New Member</h2>
 
-    <form @submit.prevent="submitNewMember" class="space-y-4">
-      <input v-model="newMemberForm.name" placeholder="Full Name" class="input" />
-      <input v-model="newMemberForm.email" placeholder="Email" class="input" />
-      <input v-model="newMemberForm.phone" placeholder="Phone Number" class="input" />
+        <form @submit.prevent="submitNewMember" class="space-y-4">
+          <input
+            v-model="newMemberForm.name"
+            placeholder="Full Name"
+            class="input"
+          />
+          <input
+            v-model="newMemberForm.email"
+            placeholder="Email"
+            class="input"
+          />
+          <input
+            v-model="newMemberForm.phone"
+            placeholder="Phone Number"
+            class="input"
+          />
 
-      <select v-model="newMemberForm.membership_type" class="input">
-        <option disabled value="">Select Membership Type</option>
-        <option
-          v-for="type in membershipTypes"
-          :key="type.id"
-          :value="type.id"
-        >
-          {{ type.name }}
-        </option>
-      </select>
+          <select v-model="newMemberForm.membership_type" class="input">
+            <option disabled value="">Select Membership Type</option>
+            <option
+              v-for="type in membershipTypes"
+              :key="type.id"
+              :value="type.id"
+            >
+              {{ type.name }}
+            </option>
+          </select>
 
-      <select v-model="newMemberForm.role" class="input">
-        <option disabled value="">Select Role</option>
-        <option value="individual">Individual</option>
-        <option value="corporate">Corporate</option>
-        <option value="admin">Admin</option>
-      </select>
+          <select v-model="newMemberForm.role" class="input">
+            <option disabled value="">Select Role</option>
+            <option value="individual">Individual</option>
+            <option value="corporate">Corporate</option>
+            <option value="admin">Admin</option>
+          </select>
 
-      <select v-model="newMemberForm.payment_method" class="input">
-        <option disabled value="">Payment Method</option>
-        <option value="card">Card</option>
-        <option value="transfer">Bank Transfer</option>
-        <option value="cash">Cash</option>
-      </select>
+          <select v-model="newMemberForm.payment_method" class="input">
+            <option disabled value="">Payment Method</option>
+            <option value="card">Card</option>
+            <option value="transfer">Bank Transfer</option>
+            <option value="cash">Cash</option>
+          </select>
 
-      <div class="flex justify-end space-x-3 pt-4">
-        <button
-          type="button"
-          @click="showAddMemberModal = false"
-          class="px-4 py-2 border rounded-lg"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          class="px-4 py-2 bg-[#006633] text-white rounded-lg"
-        >
-          Add Member
-        </button>
+          <div class="flex justify-end space-x-3 pt-4">
+            <button
+              type="button"
+              @click="showAddMemberModal = false"
+              class="px-4 py-2 border rounded-lg"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="px-4 py-2 bg-[#006633] text-white rounded-lg"
+            >
+              Add Member
+            </button>
+          </div>
+        </form>
       </div>
-    </form>
-  </div>
-</div>
-
+    </div>
   </div>
 </template>
 

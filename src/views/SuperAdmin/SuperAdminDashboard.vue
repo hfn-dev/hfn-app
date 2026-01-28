@@ -1,9 +1,9 @@
 <script setup>
-import analyticsApi from '@/api/dashboard.js';
-import assets from '@/assets/assets.png';
-import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
-import { onMounted, reactive, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import analyticsApi from "@/api/dashboard.js";
+import assets from "@/assets/assets.png";
+import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
+import { onMounted, reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 
 import {
   ArcElement,
@@ -17,8 +17,8 @@ import {
   PointElement,
   Title,
   Tooltip,
-} from 'chart.js';
-import { Bar, Line, Pie } from 'vue-chartjs';
+} from "chart.js";
+import { Bar, Line, Pie } from "vue-chartjs";
 
 ChartJS.register(
   Title,
@@ -33,11 +33,21 @@ ChartJS.register(
   Filler
 );
 
-const active = ref('Dashboard');
+const active = ref("Dashboard");
 const router = useRouter();
 const MONTHS = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 const dashboardData = reactive({
@@ -72,21 +82,22 @@ const error = ref(null);
 // });
 const revenueData = reactive({
   labels: MONTHS,
-  datasets: [{
-    label: 'Revenue',
-    backgroundColor: 'rgba(0, 204, 102, 0.3)',
-    borderColor: '#00cc66',
-    pointBackgroundColor: '#00cc66',
-    pointBorderColor: '#fff',
-    pointHoverBackgroundColor: '#fff',
-    pointHoverBorderColor: '#00cc66',
-    data: [],
-    fill: true,
-    tension: 0.4,
-  }],
+  datasets: [
+    {
+      label: "Revenue",
+      backgroundColor: "rgba(0, 204, 102, 0.3)",
+      borderColor: "#00cc66",
+      pointBackgroundColor: "#00cc66",
+      pointBorderColor: "#fff",
+      pointHoverBackgroundColor: "#fff",
+      pointHoverBorderColor: "#00cc66",
+      data: [],
+      fill: true,
+      tension: 0.4,
+    },
+  ],
 });
 
-  
 const revenueChartOptions = reactive({
   responsive: true,
   maintainAspectRatio: false,
@@ -97,14 +108,14 @@ const revenueChartOptions = reactive({
     tooltip: {
       callbacks: {
         label: function (context) {
-          let label = context.dataset.label || '';
+          let label = context.dataset.label || "";
           if (label) {
-            label += ': ';
+            label += ": ";
           }
           if (context.parsed.y !== null) {
-            label += new Intl.NumberFormat('en-US', {
-              style: 'currency',
-              currency: 'USD',
+            label += new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
               maximumFractionDigits: 0,
             }).format(context.parsed.y);
           }
@@ -129,7 +140,7 @@ const revenueChartOptions = reactive({
       ticks: {
         callback: function (value) {
           if (value >= 1000) {
-            return value / 1000 + 'k';
+            return value / 1000 + "k";
           }
           return value;
         },
@@ -139,19 +150,25 @@ const revenueChartOptions = reactive({
       },
       grid: {
         borderDash: [5, 5],
-        color: 'rgba(0,0,0,0.1)',
+        color: "rgba(0,0,0,0.1)",
       },
     },
   },
 });
 
-
 const usersByRoleData = reactive({
   labels: [],
   datasets: [
     {
-      label: 'Users by Role',
-      backgroundColor: ['#28a745', '#E87A18', '#007bff', '#ffc107', '#6c757d', '#17a2b8'],
+      label: "Users by Role",
+      backgroundColor: [
+        "#28a745",
+        "#E87A18",
+        "#007bff",
+        "#ffc107",
+        "#6c757d",
+        "#17a2b8",
+      ],
       data: [],
     },
   ],
@@ -161,8 +178,8 @@ const engagementData = reactive({
   labels: [],
   datasets: [
     {
-      label: 'Engagement',
-      backgroundColor: '#28a745',
+      label: "Engagement",
+      backgroundColor: "#28a745",
       borderRadius: 8,
       data: [],
     },
@@ -173,8 +190,8 @@ const completionData = reactive({
   labels: [],
   datasets: [
     {
-      label: 'Course Completion',
-      backgroundColor: ['#28a745', '#ffb300', '#ff5252'],
+      label: "Course Completion",
+      backgroundColor: ["#28a745", "#ffb300", "#ff5252"],
       data: [],
     },
   ],
@@ -194,15 +211,17 @@ const completionData = reactive({
 //   ],
 // });
 const growthData = reactive({
-  labels: ['Active', 'Expired'],
-  datasets: [{
-    label: 'Memberships',
-    borderColor: '#fdc700',
-    backgroundColor: '#fdc7008a',
-    fill: true,
-    tension: 0.4,
-    data: [],
-  }],
+  labels: ["Active", "Expired"],
+  datasets: [
+    {
+      label: "Memberships",
+      borderColor: "#fdc700",
+      backgroundColor: "#fdc7008a",
+      fill: true,
+      tension: 0.4,
+      data: [],
+    },
+  ],
 });
 const barOptions = {
   responsive: true,
@@ -218,7 +237,7 @@ const pieOptions = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
-    legend: { position: 'bottom' },
+    legend: { position: "bottom" },
   },
 };
 
@@ -241,8 +260,12 @@ onMounted(async () => {
     const dash = await analyticsApi.fetchDashboard();
 
     if (dash.users_by_role && dash.users_by_role.length > 0) {
-      usersByRoleData.labels = dash.users_by_role.map(item => item.role.charAt(0).toUpperCase() + item.role.slice(1));
-      usersByRoleData.datasets[0].data = dash.users_by_role.map(item => item.count);
+      usersByRoleData.labels = dash.users_by_role.map(
+        (item) => item.role.charAt(0).toUpperCase() + item.role.slice(1)
+      );
+      usersByRoleData.datasets[0].data = dash.users_by_role.map(
+        (item) => item.count
+      );
     }
 
     // dashboardData.stats = [
@@ -252,59 +275,101 @@ onMounted(async () => {
     //   { title: 'Active Users', value: dash.total_active_users, change: 'Currently active', changeColor: 'text-purple-600' },
     // ];
     dashboardData.stats = [
-  { title: 'Total Page Views', value: dash.total_page_views, change: '', changeColor: 'text-gray-500' },
-  { title: 'Unique Visitors', value: dash.total_unique_visitors, change: '', changeColor: 'text-gray-500' },
-  { title: 'Bounce Rate', value: dash.bounce_rate.toFixed(2) + '%', change: '', changeColor: 'text-gray-500' },
-  { title: 'Average Session (min)', value: dash.average_session_duration_minutes.toFixed(2), change: '', changeColor: 'text-gray-500' },
-  { title: 'New Signups (30 days)', value: dash.new_signups_30_days, change: 'Last 30 days', changeColor: 'text-orange-600' },
-  { title: 'Active Users', value: dash.total_active_users, change: 'Currently active', changeColor: 'text-purple-600' },
-];
+      {
+        title: "Total Page Views",
+        value: dash.total_page_views,
+        change: "",
+        changeColor: "text-gray-500",
+      },
+      {
+        title: "Unique Visitors",
+        value: dash.total_unique_visitors,
+        change: "",
+        changeColor: "text-gray-500",
+      },
+      {
+        title: "Bounce Rate",
+        value: dash.bounce_rate.toFixed(2) + "%",
+        change: "",
+        changeColor: "text-gray-500",
+      },
+      {
+        title: "Average Session (min)",
+        value: dash.average_session_duration_minutes.toFixed(2),
+        change: "",
+        changeColor: "text-gray-500",
+      },
+      {
+        title: "New Signups (30 days)",
+        value: dash.new_signups_30_days,
+        change: "Last 30 days",
+        changeColor: "text-orange-600",
+      },
+      {
+        title: "Active Users",
+        value: dash.total_active_users,
+        change: "Currently active",
+        changeColor: "text-purple-600",
+      },
+    ];
 
     revenueData.labels = MONTHS;
-    revenueData.datasets[0].data = MONTHS.map(m => dash.monthly_revenue[m] || 0);
+    revenueData.datasets[0].data = MONTHS.map(
+      (m) => dash.monthly_revenue[m] || 0
+    );
 
     const revEntries = Object.entries(dash.monthly_revenue);
-    const topMonthEntry = revEntries.reduce((a, b) => (b[1] > a[1] ? b : a), [MONTHS[0], 0]);
+    const topMonthEntry = revEntries.reduce(
+      (a, b) => (b[1] > a[1] ? b : a),
+      [MONTHS[0], 0]
+    );
 
     dashboardData.revenue = {
       topMonth: { name: topMonthEntry[0], year: new Date().getFullYear() },
-      topYear: { year: new Date().getFullYear(), sales: `$${dash.total_revenue.toLocaleString()}` },
+      topYear: {
+        year: new Date().getFullYear(),
+        sales: `$${dash.total_revenue.toLocaleString()}`,
+      },
       bestSeller: {
-        name: dash.most_viewed_courses[0]?.title || 'None',
-        instructor: 'Primary Instructor'
-      }
+        name: dash.most_viewed_courses[0]?.title || "None",
+        instructor: "Primary Instructor",
+      },
     };
 
     engagementData.labels = MONTHS;
-    engagementData.datasets[0].data = MONTHS.map(m => dash.enrollments_by_month[m] || 0);
+    engagementData.datasets[0].data = MONTHS.map(
+      (m) => dash.enrollments_by_month[m] || 0
+    );
 
-    completionData.labels = ['Completed', 'In Progress', 'Dropped'];
+    completionData.labels = ["Completed", "In Progress", "Dropped"];
     completionData.datasets[0].data = [
       dash.course_completion_stats.completed_count,
       dash.course_completion_stats.in_progress_count,
       dash.course_completion_stats.dropped_count,
     ];
 
-    growthData.labels = ['Active', 'Expired'];
+    growthData.labels = ["Active", "Expired"];
     growthData.datasets[0].data = [
       dash.membership_stats.active_subscriptions,
       dash.membership_stats.expired_subscriptions,
     ];
 
-    const maxViews = Math.max(...dash.most_viewed_courses.map(c => c.view_count), 1);
-    dashboardData.mostViewed = dash.most_viewed_courses.map(course => ({
+    const maxViews = Math.max(
+      ...dash.most_viewed_courses.map((c) => c.view_count),
+      1
+    );
+    dashboardData.mostViewed = dash.most_viewed_courses.map((course) => ({
       name: course.title,
       value: course.view_count,
-      progress: (course.view_count / maxViews * 100) + '%',
+      progress: (course.view_count / maxViews) * 100 + "%",
     }));
 
-    dashboardData.courses = dash.time_spent_per_course.map(course => ({
+    dashboardData.courses = dash.time_spent_per_course.map((course) => ({
       name: course.course_title,
-      enrollments: course.total_time_minutes + ' mins',
+      enrollments: course.total_time_minutes + " mins",
     }));
-
   } catch (err) {
-    console.error('Failed to load dashboard data', err);
+    console.error("Failed to load dashboard data", err);
     error.value = err;
   } finally {
     loading.value = false;
@@ -314,19 +379,38 @@ onMounted(async () => {
 
 <template>
   <div class="flex min-h-screen font-sans relative">
-    <button @click="toggleSidebar"
-      class="lg:hidden fixed top-15 left-0 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+    <button
+      @click="toggleSidebar"
+      class="lg:hidden fixed top-15 left-0 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        />
       </svg>
     </button>
 
-    <div class="fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:translate-x-0"
-      :class="showSidebar ? 'translate-x-0' : '-translate-x-full'">
+    <div
+      class="fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:translate-x-0"
+      :class="showSidebar ? 'translate-x-0' : '-translate-x-full'"
+    >
       <SuperAdminSidebar @closeSidebar="closeSidebar" />
     </div>
 
-    <div v-if="showSidebar" class="fixed inset-0 bg-gray bg-opacity-10 z-30 lg:hidden" @click="closeSidebar"></div>
+    <div
+      v-if="showSidebar"
+      class="fixed inset-0 bg-gray bg-opacity-10 z-30 lg:hidden"
+      @click="closeSidebar"
+    ></div>
     <main class="flex-1 p-8 overflow-auto bg-white">
       <div class="mb-8">
         <h1 class="text-4xl font-extrabold text-[#E87A18]">
@@ -338,11 +422,15 @@ onMounted(async () => {
       </div>
 
       <div class="flex justify-between items-stretch mb-10 space-x-6">
-        <div v-for="(stat, index) in dashboardData.stats" :key="stat.title"
+        <div
+          v-for="(stat, index) in dashboardData.stats"
+          :key="stat.title"
           class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
           :class="{
-            'rounded-tl-4xl rounded-br-4xl': index === 0 || index === dashboardData.stats.length - 1,
-          }">
+            'rounded-tl-4xl rounded-br-4xl':
+              index === 0 || index === dashboardData.stats.length - 1,
+          }"
+        >
           <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
           <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
 
@@ -350,7 +438,8 @@ onMounted(async () => {
 
           <div class="text-4xl font-bold text-gray-800 mb-1">
             <span v-if="stat.stars">
-              <span class="text-[#ff9900]">★★★★</span><span class="text-gray-300">★</span>
+              <span class="text-[#ff9900]">★★★★</span
+              ><span class="text-gray-300">★</span>
             </span>
             <span v-else>{{ stat.value }}</span>
           </div>
@@ -364,7 +453,7 @@ onMounted(async () => {
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div class="bg-white p-6 rounded-xl shadow-lg lg:col-span-3">
           <h2 class="text-xl font-semibold mb-4 text-[#006633]">
-            Student Monthly Enrollment
+            Members Monthly Registration
           </h2>
           <div class="h-[300px] w-full">
             <Bar v-if="!loading" :data="engagementData" :options="barOptions" />
@@ -373,12 +462,26 @@ onMounted(async () => {
 
         <div class="bg-white p-6 rounded-xl shadow-lg w-full">
           <h2 class="text-xl font-semibold mb-4 text-[#006633]">
+            Users by Role
+          </h2>
+
+          <div class="h-[300px] w-full">
+            <Pie
+              v-if="!loading && usersByRoleData.datasets[0].data.length"
+              :data="usersByRoleData"
+              :options="pieOptions"
+            />
+          </div>
+        </div>
+
+        <!-- <div class="bg-white p-6 rounded-xl shadow-lg w-full">
+          <h2 class="text-xl font-semibold mb-4 text-[#006633]">
             Course Completion
           </h2>
           <div class="h-[300px] w-full">
             <Pie v-if="!loading" :data="completionData" :options="pieOptions" />
           </div>
-        </div>
+        </div> -->
 
         <div class="bg-white p-6 rounded-xl shadow-lg w-full">
           <h2 class="text-xl font-semibold mb-4 text-[#006633]">
@@ -391,11 +494,14 @@ onMounted(async () => {
       </div>
       <div class="p-6 bg-white rounded-xl">
         <div class="flex justify-between items-stretch mb-8 space-x-6">
-          <div v-for="card in dashboardData.summary" :key="card.title"
+          <div
+            v-for="card in dashboardData.summary"
+            :key="card.title"
             class="summary-card-alt flex-1 p-6 text-center bg-white shadow-lg relative overflow-hidden group transition-all duration-300"
             :class="{
               'rounded-tl-4xl rounded-br-4xl': true,
-            }">
+            }"
+          >
             <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
             <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
 
@@ -405,26 +511,34 @@ onMounted(async () => {
               <span>{{ card.value }}</span>
             </div>
 
-            <p :class="[
-              card.trendType === 'up' ? 'text-[#00cc66]' : 'text-red-500',
-              'text-sm font-medium',
-            ]">
+            <p
+              :class="[
+                card.trendType === 'up' ? 'text-[#00cc66]' : 'text-red-500',
+                'text-sm font-medium',
+              ]"
+            >
               {{ card.trendValue }}
             </p>
           </div>
         </div>
 
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">
+        <!-- <h2 class="text-xl font-semibold text-gray-800 mb-4">
           Most Viewed Courses
         </h2>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div v-for="course in dashboardData.courses" :key="course.name" class="course-card">
+          <div
+            v-for="course in dashboardData.courses"
+            :key="course.name"
+            class="course-card"
+          >
             <div class="flex justify-between items-center mb-1">
               <p class="text-base font-bold text-gray-800">
                 {{ course.name }}
               </p>
-              <button class="text-xl font-bold text-gray-400 hover:text-gray-600 p-1">
+              <button
+                class="text-xl font-bold text-gray-400 hover:text-gray-600 p-1"
+              >
                 &vellip;
               </button>
             </div>
@@ -432,20 +546,28 @@ onMounted(async () => {
               Enrollments: {{ course.enrollments }}
             </p>
           </div>
-        </div>
+        </div> -->
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 p-6 bg-white rounded-lg">
-        <div class="lg:col-span-2">
+      <div
+        class="grid grid-cols-1 gap-8 p-6 bg-white rounded-lg"
+      >
+        <div class="col-span-1">
           <div class="bg-white p-6 rounded-lg shadow-sm mb-0">
             <div class="flex justify-between items-start mb-4">
               <h2 class="text-2xl font-bold text-gray-800">Revenue</h2>
-              <div class="p-2 border border-gray-300 rounded-md text-sm cursor-pointer flex items-center">
+              <div
+                class="p-2 border border-gray-300 rounded-md text-sm cursor-pointer flex items-center"
+              >
                 Yearly <span class="ml-1 text-xs">⌄</span>
               </div>
             </div>
             <div class="h-80">
-              <Line v-if="!loading" :data="revenueData" :options="revenueChartOptions" />
+              <Line
+                v-if="!loading"
+                :data="revenueData"
+                :options="revenueChartOptions"
+              />
             </div>
           </div>
 
@@ -454,10 +576,10 @@ onMounted(async () => {
               <div class="highlight-card">
                 <p class="text-sm text-gray-500 mb-1">Top month</p>
                 <p class="text-3xl font-bold text-[#E87A18]">
-                  {{ dashboardData.revenue.topMonth?.name || 'N/A' }}
+                  {{ dashboardData.revenue.topMonth?.name || "N/A" }}
                 </p>
                 <p class="text-xl font-semibold text-[#E87A18] mt-1">
-                  {{ dashboardData.revenue.topMonth?.year || 'N/A' }}
+                  {{ dashboardData.revenue.topMonth?.year || "N/A" }}
                 </p>
               </div>
             </div>
@@ -466,59 +588,60 @@ onMounted(async () => {
               <div class="highlight-card">
                 <p class="text-sm text-gray-500 mb-1">Top year</p>
                 <p class="text-3xl font-bold text-[#E87A18]">
-                  {{ dashboardData.revenue.topYear?.year || 'N/A' }}
+                  {{ dashboardData.revenue.topYear?.year || "N/A" }}
                 </p>
                 <p class="text-xl font-semibold text-gray-600 mt-1">
-                  {{ dashboardData.revenue.topYear?.sales || 'N/A' }}
+                  {{ dashboardData.revenue.topYear?.sales || "N/A" }}
                 </p>
               </div>
             </div>
 
-
             <div class="highlight-card-wrapper">
               <div class="highlight-card">
                 <p class="text-sm text-gray-500 mb-1">Best Seller</p>
-                <img :src="assets" alt="Instructor" class="w-10 h-10 rounded-full mb-1 border-2 border-orange-300" />
+                <img
+                  :src="assets"
+                  alt="Instructor"
+                  class="w-10 h-10 rounded-full mb-1 border-2 border-orange-300"
+                />
                 <p class="text-lg font-bold text-gray-800">
-                  {{ dashboardData.revenue.bestSeller?.name || 'N/A' }}
+                  {{ dashboardData.revenue.bestSeller?.name || "N/A" }}
                 </p>
                 <p class="text-sm text-gray-600">
-                  {{ dashboardData.revenue.bestSeller?.instructor || 'N/A' }}
+                  {{ dashboardData.revenue.bestSeller?.instructor || "N/A" }}
                 </p>
               </div>
             </div>
           </div>
         </div>
-        <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-sm h-fit">
+        <!-- <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-sm h-fit">
           <h2 class="text-xl font-semibold text-gray-800 mb-4">
             Most Viewed Courses
           </h2>
           <div class="space-y-4">
-            <div v-for="(course, index) in dashboardData.mostViewed" :key="index" class="flex items-center">
+            <div
+              v-for="(course, index) in dashboardData.mostViewed"
+              :key="index"
+              class="flex items-center"
+            >
               <div
-                class="relative flex-grow h-8 bg-gradient-to-r from-orange-100 to-orange-200 rounded-lg overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-r from-orange-300 to-orange-400 rounded-lg"
-                  :style="{ width: course.progress }"></div>
+                class="relative flex-grow h-8 bg-gradient-to-r from-orange-100 to-orange-200 rounded-lg overflow-hidden"
+              >
+                <div
+                  class="absolute inset-0 bg-gradient-to-r from-orange-300 to-orange-400 rounded-lg"
+                  :style="{ width: course.progress }"
+                ></div>
                 <p
-                  class="relative z-10 text-sm font-semibold text-gray-800 px-3 py-1 flex justify-between items-center h-full">
+                  class="relative z-10 text-sm font-semibold text-gray-800 px-3 py-1 flex justify-between items-center h-full"
+                >
                   <span>{{ course.name }}</span>
                   <span>{{ course.value }}</span>
                 </p>
               </div>
             </div>
           </div>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow-lg w-full">
-  <h2 class="text-xl font-semibold mb-4 text-[#006633]">
-    Users by Role
-  </h2>
-
-  <div class="h-[300px] w-full">
-    <Pie v-if="!loading && usersByRoleData.datasets[0].data.length" 
-         :data="usersByRoleData" 
-         :options="pieOptions" />
-  </div>
-</div>
+        </div> -->
+        
       </div>
     </main>
   </div>
@@ -559,7 +682,7 @@ onMounted(async () => {
 }
 
 .summary-card-corrected::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -10px;
   left: -10px;
@@ -574,7 +697,7 @@ onMounted(async () => {
 }
 
 .summary-card-corrected::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -10px;
   right: -10px;
