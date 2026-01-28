@@ -1,7 +1,7 @@
 <script setup>
 import api from "@/api/axios";
 import group from "@/assets/group.png";
-import group1 from "@/assets/hfn-news.png";
+import group1 from "@/assets/hfn-news.PNG";
 import Image from "@/assets/image.jpg";
 import HfnCalender from "@/components/layout/HfnCalender.vue";
 import { homePageSchema } from "@/schemas/pages/home.schema";
