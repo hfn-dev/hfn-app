@@ -2,7 +2,7 @@
 import analyticsApi from '@/api/dashboard.js';
 import membershipAPI from '@/api/membership.js';
 import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, watch } from 'vue';
 
 import {
   ChevronLeft,
@@ -14,6 +14,38 @@ import {
   Trash2,
 } from 'lucide-vue-next';
 import { ref } from 'vue';
+  
+const showAddMemberModal = ref(false);
+const membershipTypes = ref([]);
+
+const filters = ref({
+  membership_type: '',
+  role: '',
+  status: '',
+  payment_method: '',
+});
+  
+const newMemberForm = ref({
+  name: '',
+  email: '',
+  phone: '',
+  membership_type: '',
+  role: '',
+  payment_method: '',
+});
+
+const resetFilters = () => {
+  filters.value = {
+    membership_type: '',
+    role: '',
+    status: '',
+    payment_method: '',
+  };
+  searchTerm.value = '';
+  currentPage.value = 1;
+  fetchMembers();
+};
+  
 
 const courseTabs = ref(['Published', 'Drafts', 'Archived']);
 const currentTab = ref('Published');
@@ -84,12 +116,46 @@ const loadMembershipAnalytics = async () => {
   }
 };
 
+const submitNewMember = async () => {
+  try {
+    const payload = {
+      name: newMemberForm.value.name,
+      email: newMemberForm.value.email,
+      phone: newMemberForm.value.phone,
+      membership_type: newMemberForm.value.membership_type,
+      role: newMemberForm.value.role,
+      payment_method: newMemberForm.value.payment_method,
+    };
+
+    const application = await membershipAPI.createApplication(payload);
+
+    await membershipAPI.approveApplication(application.id, {
+      approved_by_admin: true,
+    });
+
+    showAddMemberModal.value = false;
+    fetchMembers();
+
+    // Reset form
+    newMemberForm.value = {
+      name: '',
+      email: '',
+      phone: '',
+      membership_type: '',
+      role: '',
+      payment_method: '',
+    };
+  } catch (error) {
+    console.error('Failed to add member', error);
+  }
+};
+  
+
 const fetchMembers = async () => {
   try {
     const data = await membershipAPI.listApplications({
       page: currentPage.value,
     });
-    // Ensure we always have an array, even if API returns unexpected shape
     members.value = data.results || data.data || [];
     totalPages.value = data.count ? Math.ceil(data.count / itemsPerPage) : 1;
   } catch (error) {
@@ -97,9 +163,18 @@ const fetchMembers = async () => {
   }
 };
 
+const loadMembershipTypes = async () => {
+  try {
+    membershipTypes.value = await membershipAPI.listMembershipTypes();
+  } catch (e) {
+    console.error('Failed to load membership types', e);
+  }
+};  
+
 onMounted(() => {
   fetchMembers();
   loadMembershipAnalytics();
+  loadMembershipTypes();
 });
 
 const handleAction = async (action, memberId) => {
@@ -143,6 +218,16 @@ const paginatedMembers = computed(() => {
   const end = start + itemsPerPage;
   return list.slice(start, end);
 });
+
+watch(
+  [searchTerm, filters, currentPage],
+  () => {
+    currentPage.value = 1;
+    fetchMembers();
+  },
+  { deep: true }
+);
+  
 </script>
 
 <template>
@@ -193,6 +278,13 @@ const paginatedMembers = computed(() => {
       </div>
 
       <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+        <button
+  @click="showAddMemberModal = true"
+  class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#005528]"
+>
+  + Add Member
+</button>
+
         <div class="flex justify-end mb-6">
           <div class="relative w-full max-w-sm">
             <Search
@@ -205,6 +297,46 @@ const paginatedMembers = computed(() => {
               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors"
             />
           </div>
+          <div class="flex gap-3 flex-wrap">
+    <select v-model="filters.membership_type" class="filter">
+      <option value="">All Memberships</option>
+      <option
+        v-for="type in membershipTypes"
+        :key="type.id"
+        :value="type.id"
+      >
+        {{ type.name }}
+      </option>
+    </select>
+
+    <select v-model="filters.role" class="filter">
+      <option value="">All Roles</option>
+      <option value="individual">Individual</option>
+      <option value="corporate">Corporate</option>
+      <option value="admin">Admin</option>
+    </select>
+
+    <select v-model="filters.status" class="filter">
+      <option value="">All Status</option>
+      <option value="approved">Approved</option>
+      <option value="pending">Pending</option>
+      <option value="rejected">Rejected</option>
+    </select>
+
+    <select v-model="filters.payment_method" class="filter">
+      <option value="">All Payments</option>
+      <option value="card">Card</option>
+      <option value="transfer">Transfer</option>
+      <option value="cash">Cash</option>
+    </select>
+
+    <button
+      @click="resetFilters"
+      class="px-3 py-2 border rounded-lg text-sm hover:bg-gray-100"
+    >
+      Reset
+    </button>
+  </div>
         </div>
 
         <table class="min-w-full divide-y divide-gray-200">
@@ -337,7 +469,72 @@ const paginatedMembers = computed(() => {
         </div>
       </div>
     </main>
+    <div
+  v-if="showAddMemberModal"
+  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+>
+  <div class="bg-white w-full max-w-lg rounded-xl p-6 shadow-lg">
+    <h2 class="text-xl font-bold mb-4 text-gray-800">
+      Add New Member
+    </h2>
+
+    <form @submit.prevent="submitNewMember" class="space-y-4">
+      <input v-model="newMemberForm.name" placeholder="Full Name" class="input" />
+      <input v-model="newMemberForm.email" placeholder="Email" class="input" />
+      <input v-model="newMemberForm.phone" placeholder="Phone Number" class="input" />
+
+      <select v-model="newMemberForm.membership_type" class="input">
+        <option disabled value="">Select Membership Type</option>
+        <option
+          v-for="type in membershipTypes"
+          :key="type.id"
+          :value="type.id"
+        >
+          {{ type.name }}
+        </option>
+      </select>
+
+      <select v-model="newMemberForm.role" class="input">
+        <option disabled value="">Select Role</option>
+        <option value="individual">Individual</option>
+        <option value="corporate">Corporate</option>
+        <option value="admin">Admin</option>
+      </select>
+
+      <select v-model="newMemberForm.payment_method" class="input">
+        <option disabled value="">Payment Method</option>
+        <option value="card">Card</option>
+        <option value="transfer">Bank Transfer</option>
+        <option value="cash">Cash</option>
+      </select>
+
+      <div class="flex justify-end space-x-3 pt-4">
+        <button
+          type="button"
+          @click="showAddMemberModal = false"
+          class="px-4 py-2 border rounded-lg"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="px-4 py-2 bg-[#006633] text-white rounded-lg"
+        >
+          Add Member
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+@reference "tailwindcss";
+
+.filter {
+  @apply px-3 py-2 border rounded-lg text-sm focus:ring-[#00cc66];
+}
+</style>
+

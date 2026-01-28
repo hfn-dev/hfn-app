@@ -53,24 +53,40 @@ const dashboardData = reactive({
 const loading = ref(true);
 const error = ref(null);
 
+// const revenueData = reactive({
+//   labels: [],
+//   datasets: [
+//     {
+//       label: 'Revenue',
+//       backgroundColor: 'rgba(0, 204, 102, 0.3)',
+//       borderColor: '#00cc66',
+//       pointBackgroundColor: '#00cc66',
+//       pointBorderColor: '#fff',
+//       pointHoverBackgroundColor: '#fff',
+//       pointHoverBorderColor: '#00cc66',
+//       data: [],
+//       fill: true,
+//       tension: 0.4,
+//     },
+//   ],
+// });
 const revenueData = reactive({
-  labels: [],
-  datasets: [
-    {
-      label: 'Revenue',
-      backgroundColor: 'rgba(0, 204, 102, 0.3)',
-      borderColor: '#00cc66',
-      pointBackgroundColor: '#00cc66',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: '#00cc66',
-      data: [],
-      fill: true,
-      tension: 0.4,
-    },
-  ],
+  labels: MONTHS,
+  datasets: [{
+    label: 'Revenue',
+    backgroundColor: 'rgba(0, 204, 102, 0.3)',
+    borderColor: '#00cc66',
+    pointBackgroundColor: '#00cc66',
+    pointBorderColor: '#fff',
+    pointHoverBackgroundColor: '#fff',
+    pointHoverBorderColor: '#00cc66',
+    data: [],
+    fill: true,
+    tension: 0.4,
+  }],
 });
 
+  
 const revenueChartOptions = reactive({
   responsive: true,
   maintainAspectRatio: false,
@@ -164,20 +180,30 @@ const completionData = reactive({
   ],
 });
 
+// const growthData = reactive({
+//   labels: [],
+//   datasets: [
+//     {
+//       label: 'Students',
+//       borderColor: '#fdc700',
+//       backgroundColor: '#fdc7008a',
+//       fill: true,
+//       tension: 0.4,
+//       data: [],
+//     },
+//   ],
+// });
 const growthData = reactive({
-  labels: [],
-  datasets: [
-    {
-      label: 'Students',
-      borderColor: '#fdc700',
-      backgroundColor: '#fdc7008a',
-      fill: true,
-      tension: 0.4,
-      data: [],
-    },
-  ],
+  labels: ['Active', 'Expired'],
+  datasets: [{
+    label: 'Memberships',
+    borderColor: '#fdc700',
+    backgroundColor: '#fdc7008a',
+    fill: true,
+    tension: 0.4,
+    data: [],
+  }],
 });
-
 const barOptions = {
   responsive: true,
   maintainAspectRatio: false,
@@ -219,12 +245,23 @@ onMounted(async () => {
       usersByRoleData.datasets[0].data = dash.users_by_role.map(item => item.count);
     }
 
+    // dashboardData.stats = [
+    //   { title: 'Total Courses', value: dash.total_courses, change: `${dash.active_courses} Active`, changeColor: 'text-green-600' },
+    //   { title: 'Total Enrollments', value: dash.total_enrollments, change: `${dash.active_enrollments} Active`, changeColor: 'text-blue-600' },
+    //   { title: 'New Signups (30 days)', value: dash.new_signups_30_days, change: 'Last 30 days', changeColor: 'text-orange-600' },
+    //   { title: 'Active Users', value: dash.total_active_users, change: 'Currently active', changeColor: 'text-purple-600' },
+    // ];
     dashboardData.stats = [
-      { title: 'Total Courses', value: dash.total_courses, change: `${dash.active_courses} Active`, changeColor: 'text-green-600' },
-      { title: 'Total Enrollments', value: dash.total_enrollments, change: `${dash.active_enrollments} Active`, changeColor: 'text-blue-600' },
-      { title: 'New Signups (30 days)', value: dash.new_signups_30_days, change: 'Last 30 days', changeColor: 'text-orange-600' },
-      { title: 'Active Users', value: dash.total_active_users, change: 'Currently active', changeColor: 'text-purple-600' },
-    ];
+  { title: 'Total Page Views', value: dash.total_page_views, change: '', changeColor: 'text-gray-500' },
+  { title: 'Unique Visitors', value: dash.total_unique_visitors, change: '', changeColor: 'text-gray-500' },
+  { title: 'Bounce Rate', value: dash.bounce_rate.toFixed(2) + '%', change: '', changeColor: 'text-gray-500' },
+  { title: 'Average Session (min)', value: dash.average_session_duration_minutes.toFixed(2), change: '', changeColor: 'text-gray-500' },
+  { title: 'New Signups (30 days)', value: dash.new_signups_30_days, change: 'Last 30 days', changeColor: 'text-orange-600' },
+  { title: 'Active Users', value: dash.total_active_users, change: 'Currently active', changeColor: 'text-purple-600' },
+];
+
+    revenueData.labels = MONTHS;
+    revenueData.datasets[0].data = MONTHS.map(m => dash.monthly_revenue[m] || 0);
 
     const revEntries = Object.entries(dash.monthly_revenue);
     const topMonthEntry = revEntries.reduce((a, b) => (b[1] > a[1] ? b : a), [MONTHS[0], 0]);
@@ -237,9 +274,6 @@ onMounted(async () => {
         instructor: 'Primary Instructor'
       }
     };
-
-    revenueData.labels = MONTHS;
-    revenueData.datasets[0].data = MONTHS.map(m => dash.monthly_revenue[m] || 0);
 
     engagementData.labels = MONTHS;
     engagementData.datasets[0].data = MONTHS.map(m => dash.enrollments_by_month[m] || 0);

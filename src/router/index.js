@@ -25,6 +25,7 @@ import SuperAdminManager from '@/views/SuperAdmin/SuperAdminManager.vue';
 import SuperAdminMembers from '@/views/SuperAdmin/SuperAdminMembers.vue';
 import SuperAdminMessages from '@/views/SuperAdmin/SuperAdminMessages.vue';
 import SuperAdminPayments from '@/views/SuperAdmin/SuperAdminPayments.vue';
+import SuperAdminEventsNewsletter from '@/views/SuperAdmin/SuperAdminEventsNewsletter.vue';
 
 import TutorCourseList from '@/views/Tutor/TutorCourseList.vue';
 import TutorCreateCourse from '@/views/Tutor/TutorCreateCourse.vue';
@@ -258,6 +259,12 @@ const routes = [
     name: "SuperAdminMessages",
     component: SuperAdminMessages,
   },
+  {
+    path: "/superadmin/events",
+    name: "SuperAdminEventsNewsletter",
+    component: SuperAdminEventsNewsletter,
+  },
+
 
   //For Admin
   {
