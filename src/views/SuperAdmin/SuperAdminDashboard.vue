@@ -53,24 +53,40 @@ const dashboardData = reactive({
 const loading = ref(true);
 const error = ref(null);
 
+// const revenueData = reactive({
+//   labels: [],
+//   datasets: [
+//     {
+//       label: 'Revenue',
+//       backgroundColor: 'rgba(0, 204, 102, 0.3)',
+//       borderColor: '#00cc66',
+//       pointBackgroundColor: '#00cc66',
+//       pointBorderColor: '#fff',
+//       pointHoverBackgroundColor: '#fff',
+//       pointHoverBorderColor: '#00cc66',
+//       data: [],
+//       fill: true,
+//       tension: 0.4,
+//     },
+//   ],
+// });
 const revenueData = reactive({
-  labels: [],
-  datasets: [
-    {
-      label: 'Revenue',
-      backgroundColor: 'rgba(0, 204, 102, 0.3)',
-      borderColor: '#00cc66',
-      pointBackgroundColor: '#00cc66',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: '#00cc66',
-      data: [],
-      fill: true,
-      tension: 0.4,
-    },
-  ],
+  labels: MONTHS,
+  datasets: [{
+    label: 'Revenue',
+    backgroundColor: 'rgba(0, 204, 102, 0.3)',
+    borderColor: '#00cc66',
+    pointBackgroundColor: '#00cc66',
+    pointBorderColor: '#fff',
+    pointHoverBackgroundColor: '#fff',
+    pointHoverBorderColor: '#00cc66',
+    data: [],
+    fill: true,
+    tension: 0.4,
+  }],
 });
 
+  
 const revenueChartOptions = reactive({
   responsive: true,
   maintainAspectRatio: false,
@@ -164,20 +180,30 @@ const completionData = reactive({
   ],
 });
 
+// const growthData = reactive({
+//   labels: [],
+//   datasets: [
+//     {
+//       label: 'Students',
+//       borderColor: '#fdc700',
+//       backgroundColor: '#fdc7008a',
+//       fill: true,
+//       tension: 0.4,
+//       data: [],
+//     },
+//   ],
+// });
 const growthData = reactive({
-  labels: [],
-  datasets: [
-    {
-      label: 'Students',
-      borderColor: '#fdc700',
-      backgroundColor: '#fdc7008a',
-      fill: true,
-      tension: 0.4,
-      data: [],
-    },
-  ],
+  labels: ['Active', 'Expired'],
+  datasets: [{
+    label: 'Memberships',
+    borderColor: '#fdc700',
+    backgroundColor: '#fdc7008a',
+    fill: true,
+    tension: 0.4,
+    data: [],
+  }],
 });
-
 const barOptions = {
   responsive: true,
   maintainAspectRatio: false,
@@ -234,6 +260,9 @@ onMounted(async () => {
   { title: 'Active Users', value: dash.total_active_users, change: 'Currently active', changeColor: 'text-purple-600' },
 ];
 
+    revenueData.labels = MONTHS;
+    revenueData.datasets[0].data = MONTHS.map(m => dash.monthly_revenue[m] || 0);
+
     const revEntries = Object.entries(dash.monthly_revenue);
     const topMonthEntry = revEntries.reduce((a, b) => (b[1] > a[1] ? b : a), [MONTHS[0], 0]);
 
@@ -245,9 +274,6 @@ onMounted(async () => {
         instructor: 'Primary Instructor'
       }
     };
-
-    revenueData.labels = MONTHS;
-    revenueData.datasets[0].data = MONTHS.map(m => dash.monthly_revenue[m] || 0);
 
     engagementData.labels = MONTHS;
     engagementData.datasets[0].data = MONTHS.map(m => dash.enrollments_by_month[m] || 0);
