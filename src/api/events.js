@@ -44,7 +44,7 @@ export default {
 
   async updateEvent(id, payload) {
     try {
-      const response = await api.patch(`/events/events/${id}/`, payload);
+      const response = await api.put(`/events/${id}/`, payload);
       return response.data;
     } catch (error) {
       console.error('Update event API error:', error);
