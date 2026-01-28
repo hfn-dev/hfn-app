@@ -89,7 +89,6 @@ const fetchMembers = async () => {
     const data = await membershipAPI.listApplications({
       page: currentPage.value,
     });
-    // Ensure we always have an array, even if API returns unexpected shape
     members.value = data.results || data.data || [];
     totalPages.value = data.count ? Math.ceil(data.count / itemsPerPage) : 1;
   } catch (error) {
@@ -193,6 +192,13 @@ const paginatedMembers = computed(() => {
       </div>
 
       <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+        <button
+  @click="showAddMemberModal = true"
+  class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#005528]"
+>
+  + Add Member
+</button>
+
         <div class="flex justify-end mb-6">
           <div class="relative w-full max-w-sm">
             <Search
