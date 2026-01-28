@@ -2,7 +2,7 @@
 import analyticsApi from '@/api/dashboard.js';
 import membershipAPI from '@/api/membership.js';
 import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, watch } from 'vue';
 
 import {
   ChevronLeft,
@@ -18,6 +18,13 @@ import { ref } from 'vue';
 const showAddMemberModal = ref(false);
 const membershipTypes = ref([]);
 
+const filters = ref({
+  membership_type: '',
+  role: '',
+  status: '',
+  payment_method: '',
+});
+  
 const newMemberForm = ref({
   name: '',
   email: '',
@@ -26,6 +33,19 @@ const newMemberForm = ref({
   role: '',
   payment_method: '',
 });
+
+const resetFilters = () => {
+  filters.value = {
+    membership_type: '',
+    role: '',
+    status: '',
+    payment_method: '',
+  };
+  searchTerm.value = '';
+  currentPage.value = 1;
+  fetchMembers();
+};
+  
 
 const courseTabs = ref(['Published', 'Drafts', 'Archived']);
 const currentTab = ref('Published');
@@ -198,6 +218,16 @@ const paginatedMembers = computed(() => {
   const end = start + itemsPerPage;
   return list.slice(start, end);
 });
+
+watch(
+  [searchTerm, filters, currentPage],
+  () => {
+    currentPage.value = 1;
+    fetchMembers();
+  },
+  { deep: true }
+);
+  
 </script>
 
 <template>
@@ -267,6 +297,46 @@ const paginatedMembers = computed(() => {
               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors"
             />
           </div>
+          <div class="flex gap-3 flex-wrap">
+    <select v-model="filters.membership_type" class="filter">
+      <option value="">All Memberships</option>
+      <option
+        v-for="type in membershipTypes"
+        :key="type.id"
+        :value="type.id"
+      >
+        {{ type.name }}
+      </option>
+    </select>
+
+    <select v-model="filters.role" class="filter">
+      <option value="">All Roles</option>
+      <option value="individual">Individual</option>
+      <option value="corporate">Corporate</option>
+      <option value="admin">Admin</option>
+    </select>
+
+    <select v-model="filters.status" class="filter">
+      <option value="">All Status</option>
+      <option value="approved">Approved</option>
+      <option value="pending">Pending</option>
+      <option value="rejected">Rejected</option>
+    </select>
+
+    <select v-model="filters.payment_method" class="filter">
+      <option value="">All Payments</option>
+      <option value="card">Card</option>
+      <option value="transfer">Transfer</option>
+      <option value="cash">Cash</option>
+    </select>
+
+    <button
+      @click="resetFilters"
+      class="px-3 py-2 border rounded-lg text-sm hover:bg-gray-100"
+    >
+      Reset
+    </button>
+  </div>
         </div>
 
         <table class="min-w-full divide-y divide-gray-200">
@@ -460,4 +530,9 @@ const paginatedMembers = computed(() => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.filter {
+  @apply px-3 py-2 border rounded-lg text-sm focus:ring-[#00cc66];
+}
+</style>
+
