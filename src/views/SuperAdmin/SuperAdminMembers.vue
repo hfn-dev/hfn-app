@@ -14,6 +14,18 @@ import {
   Trash2,
 } from 'lucide-vue-next';
 import { ref } from 'vue';
+  
+const showAddMemberModal = ref(false);
+const membershipTypes = ref([]);
+
+const newMemberForm = ref({
+  name: '',
+  email: '',
+  phone: '',
+  membership_type: '',
+  role: '',
+  payment_method: '',
+});
 
 const courseTabs = ref(['Published', 'Drafts', 'Archived']);
 const currentTab = ref('Published');
@@ -84,6 +96,41 @@ const loadMembershipAnalytics = async () => {
   }
 };
 
+const submitNewMember = async () => {
+  try {
+    const payload = {
+      name: newMemberForm.value.name,
+      email: newMemberForm.value.email,
+      phone: newMemberForm.value.phone,
+      membership_type: newMemberForm.value.membership_type,
+      role: newMemberForm.value.role,
+      payment_method: newMemberForm.value.payment_method,
+    };
+
+    const application = await membershipAPI.createApplication(payload);
+
+    await membershipAPI.approveApplication(application.id, {
+      approved_by_admin: true,
+    });
+
+    showAddMemberModal.value = false;
+    fetchMembers();
+
+    // Reset form
+    newMemberForm.value = {
+      name: '',
+      email: '',
+      phone: '',
+      membership_type: '',
+      role: '',
+      payment_method: '',
+    };
+  } catch (error) {
+    console.error('Failed to add member', error);
+  }
+};
+  
+
 const fetchMembers = async () => {
   try {
     const data = await membershipAPI.listApplications({
@@ -96,9 +143,18 @@ const fetchMembers = async () => {
   }
 };
 
+const loadMembershipTypes = async () => {
+  try {
+    membershipTypes.value = await membershipAPI.listMembershipTypes();
+  } catch (e) {
+    console.error('Failed to load membership types', e);
+  }
+};  
+
 onMounted(() => {
   fetchMembers();
   loadMembershipAnalytics();
+  loadMembershipTypes();
 });
 
 const handleAction = async (action, memberId) => {
@@ -343,6 +399,64 @@ const paginatedMembers = computed(() => {
         </div>
       </div>
     </main>
+    <div
+  v-if="showAddMemberModal"
+  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+>
+  <div class="bg-white w-full max-w-lg rounded-xl p-6 shadow-lg">
+    <h2 class="text-xl font-bold mb-4 text-gray-800">
+      Add New Member
+    </h2>
+
+    <form @submit.prevent="submitNewMember" class="space-y-4">
+      <input v-model="newMemberForm.name" placeholder="Full Name" class="input" />
+      <input v-model="newMemberForm.email" placeholder="Email" class="input" />
+      <input v-model="newMemberForm.phone" placeholder="Phone Number" class="input" />
+
+      <select v-model="newMemberForm.membership_type" class="input">
+        <option disabled value="">Select Membership Type</option>
+        <option
+          v-for="type in membershipTypes"
+          :key="type.id"
+          :value="type.id"
+        >
+          {{ type.name }}
+        </option>
+      </select>
+
+      <select v-model="newMemberForm.role" class="input">
+        <option disabled value="">Select Role</option>
+        <option value="individual">Individual</option>
+        <option value="corporate">Corporate</option>
+        <option value="admin">Admin</option>
+      </select>
+
+      <select v-model="newMemberForm.payment_method" class="input">
+        <option disabled value="">Payment Method</option>
+        <option value="card">Card</option>
+        <option value="transfer">Bank Transfer</option>
+        <option value="cash">Cash</option>
+      </select>
+
+      <div class="flex justify-end space-x-3 pt-4">
+        <button
+          type="button"
+          @click="showAddMemberModal = false"
+          class="px-4 py-2 border rounded-lg"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="px-4 py-2 bg-[#006633] text-white rounded-lg"
+        >
+          Add Member
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
   </div>
 </template>
 
