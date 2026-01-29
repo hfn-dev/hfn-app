@@ -1,3 +1,4 @@
+<template>
 <div class="max-w-lg mx-auto bg-white p-8 rounded-xl shadow">
   <h2 class="text-2xl font-bold mb-4">Complete Registration</h2>
 
@@ -13,3 +14,33 @@
     Pay & Complete Registration
   </button>
 </div>
+</template>  
+
+<script>
+
+const joinNow = async () => {
+  if (isSubmitting.value) return;
+
+  isSubmitting.value = true;
+
+  try {
+    const payload = {
+      payment_type: "subscription",
+      subscription_id: 0,
+      course_id: 0,
+      payment_method: "cash",
+    };
+
+    const response = await paymentApi.memberPayment(payload);
+
+    console.log("Payment intent created:", response);
+  } catch (error) {
+    console.error("Failed to initiate membership payment", error);
+  } finally {
+    isSubmitting.value = false;
+  }
+};
+
+  
+  
+</script>  
