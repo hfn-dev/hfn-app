@@ -294,10 +294,15 @@ const toggleDropdown = (title) => {
               <path d="m21 21-4.3-4.3" />
             </svg>
           </div>
-          <button :style="{ backgroundColor: DARK_GREEN }"
-            class="w-full px-6 py-3 font-bold text-white rounded-lg shadow-lg hover:opacity-90 transition-all duration-200">
-            Login/Sign up
-          </button>
+          <RouterLink
+            to="/register"
+            @click="isMobileMenuOpen = false"
+            :style="{ backgroundColor: DARK_GREEN }"
+            class="block w-full text-center px-6 py-3 font-bold text-white rounded-lg shadow-lg hover:opacity-90 transition-all duration-200"
+          >
+            Login/Signup
+          </RouterLink>
+
         </div>
       </div>
     </div>
