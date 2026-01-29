@@ -60,8 +60,8 @@ const getCoursePayload = () => {
       lessons: module.lessons.map((lesson) => ({
         title: lesson.title,
         duration: lesson.duration,
-        contentType: lesson.contentType || 'Video File',
-        contentFile: lesson.contentFile,
+        contentType: lesson.contentType,
+        content: lesson.content,
       })),
       quizzes: module.quizzes || [],
       resources: module.resources,
@@ -226,6 +226,9 @@ const lessonForm = ref({
   durationMinutes: '00',
   durationSeconds: '00',
   contentType: 'Select Option',
+  textContent: '',
+  externalLink: '',
+  contentFile: null,   
 });
 
 const currentModuleId = ref(null);
@@ -282,7 +285,11 @@ const handleLessonAdded = () => {
     title: lessonForm.value.title,
     duration: `${lessonForm.value.durationHours}:${lessonForm.value.durationMinutes}:${lessonForm.value.durationSeconds}`,
     contentType: lessonForm.value.contentType,
-    contentFile: lessonForm.value.contentFile,
+    content: {
+    text: lessonForm.value.textContent || null,
+    link: lessonForm.value.externalLink || null,
+    file: lessonForm.value.contentFile || null,
+  },
   };
 
   module.lessons.push(lessonData);
@@ -582,21 +589,60 @@ onMounted(() => {
             </div>
           </div>
 
-          <div v-if="modalType === 'lesson'">
+          <div v-if="modalType === 'lesson'" class="space-y-4">
+            <!-- Lesson title -->
             <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">Lesson Title</label>
-              <input type="text" v-model="lessonForm.title" placeholder="Sample Text"
-                class="w-full p-2 border border-gray-200 rounded-md text-sm focus:ring-1 focus:ring-[#006633] outline-none" />
+              <label class="block text-sm font-medium">Lesson Title</label>
+              <input
+                v-model="lessonForm.title"
+                type="text"
+                class="w-full border rounded-md px-3 py-2"
+                required
+              />
             </div>
-
+          
             <div>
-              <label class="block text-xs font-medium text-gray-500 mb-1">Content Type</label>
-              <select v-model="lessonForm.contentType" class="w-full p-2 border border-gray-200 rounded-md text-sm bg-white focus:ring-1 focus:ring-[#006633] outline-none">
-                <option disabled value="Select Option">Select Option</option>
-                <option>Video File</option>
-                <option>PDF Document</option>
-                <option>External Link</option>
+              <label class="block text-sm font-medium">Content Type</label>
+              <select
+                v-model="lessonForm.contentType"
+                class="w-full border rounded-md px-3 py-2"
+                required
+              >
+                <option disabled value="">Select type</option>
+                <option value="video">Video</option>
+                <option value="pdf">PDF</option>
+                <option value="text">Text</option>
+                <option value="link">External Link</option>
               </select>
+            </div>
+          
+            <textarea
+              v-if="lessonForm.contentType === 'text'"
+              v-model="lessonForm.textContent"
+              rows="4"
+              class="w-full border rounded-md px-3 py-2"
+              placeholder="Lesson content..."
+            />
+          
+            <input
+              v-if="lessonForm.contentType === 'link'"
+              v-model="lessonForm.externalLink"
+              type="url"
+              class="w-full border rounded-md px-3 py-2"
+              placeholder="https://..."
+            />
+          
+            <input
+              v-if="lessonForm.contentType === 'video' || lessonForm.contentType === 'pdf'"
+              type="file"
+              @change="handleFileUpload"
+              class="w-full"
+            />
+          
+            <div class="flex gap-2">
+              <input v-model="lessonForm.durationHours" placeholder="HH" class="w-1/3 border px-2 py-1" />
+              <input v-model="lessonForm.durationMinutes" placeholder="MM" class="w-1/3 border px-2 py-1" />
+              <input v-model="lessonForm.durationSeconds" placeholder="SS" class="w-1/3 border px-2 py-1" />
             </div>
           </div>
 
