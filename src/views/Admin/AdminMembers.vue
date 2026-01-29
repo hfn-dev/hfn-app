@@ -18,6 +18,7 @@ import { useRouter } from "vue-router";
 
 const statusFilter = ref("");
 const categoryFilter = ref("");
+const membershipTypes = ref([]);
 
 const router = useRouter();
 const isEditOpen = ref(false);
@@ -230,9 +231,20 @@ const saveEdit = async () => {
   }
 };
 
+const loadMembershipTypes = async () => {
+  try {
+    const data = await membershipApi.listMembershipTypes();
+    membershipTypes.value = data.results; 
+  } catch (error) {
+    console.error("Failed to load membership types", error);
+  }
+};
+  
+
 onMounted(() => {
   loadMembershipAnalytics();
   loadMembers();
+  loadMembershipTypes();
 });
 </script>
 
