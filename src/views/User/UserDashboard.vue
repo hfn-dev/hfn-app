@@ -22,6 +22,7 @@ const getEmbedUrl = (youtubeUrl) => {
   const videoId = url.searchParams.get("v");
   return `https://www.youtube.com/embed/${videoId}`;
 };
+  
 
 const videos = ref([
   {
@@ -58,6 +59,46 @@ const videos = ref([
   },
 ]);
 
+
+const dummyEvents = [
+  {
+    slug: "dummy-1",
+    title: "HFN Healthcare Policy Roundtable",
+    image: "https://via.placeholder.com/600x400?text=HFN+Event",
+    tag: "Programs & Initiatives",
+    description:
+      "A strategic discussion on strengthening Nigeria’s healthcare policy framework.",
+    date: "Oct 20, 2025",
+    time: "10:00 AM",
+    location: "Lagos, Nigeria",
+    buttonText: "Coming Soon",
+  },
+  {
+    slug: "dummy-2",
+    title: "Medical Innovation & Investment Forum",
+    image: "https://via.placeholder.com/600x400?text=HFN+Event",
+    tag: "Health Alert",
+    description:
+      "Exploring investment opportunities in local pharmaceutical manufacturing.",
+    date: "Nov 12, 2025",
+    time: "9:00 AM",
+    location: "Abuja, Nigeria",
+    buttonText: "Coming Soon",
+  },
+  {
+    slug: "dummy-3",
+    title: "HFN End-of-Year Stakeholders Summit",
+    image: "https://via.placeholder.com/600x400?text=HFN+Event",
+    tag: "Programs & Initiatives",
+    description:
+      "Annual summit bringing together key healthcare stakeholders.",
+    date: "Dec 5, 2025",
+    time: "11:00 AM",
+    location: "Hybrid Event",
+    buttonText: "Coming Soon",
+  },
+];
+  
 const downloadMinutes = async () => {
   downloadingMinutes.value = true;
   minutesError.value = null;
@@ -134,6 +175,28 @@ const fetchNewsletters = async () => {
   }
 };
 
+// const fetchEvents = async () => {
+//   try {
+//     const data = await eventsApi.listEvents({
+//       status: "upcoming",
+//       ordering: "start_datetime",
+//       limit: 6,
+//     });
+//     events.value = data.results.map((event) => ({
+//       slug: event.slug,
+//       title: event.title,
+//       image: event.banner_image,
+//       tag: event.event_type,
+//       description: event.description,
+//       date: new Date(event.start_datetime).toLocaleDateString(),
+//       time: new Date(event.start_datetime).toLocaleTimeString(),
+//       location: event.location,
+//       buttonText: event.is_free ? "Register Free" : "Buy Ticket",
+//     }));
+//   } catch (error) {
+//     console.error("Failed to fetch events:", error);
+//   }
+// };
 const fetchEvents = async () => {
   try {
     const data = await eventsApi.listEvents({
@@ -141,19 +204,25 @@ const fetchEvents = async () => {
       ordering: "start_datetime",
       limit: 6,
     });
-    events.value = data.results.map((event) => ({
-      slug: event.slug,
-      title: event.title,
-      image: event.banner_image,
-      tag: event.event_type,
-      description: event.description,
-      date: new Date(event.start_datetime).toLocaleDateString(),
-      time: new Date(event.start_datetime).toLocaleTimeString(),
-      location: event.location,
-      buttonText: event.is_free ? "Register Free" : "Buy Ticket",
-    }));
+
+    if (data.results?.length) {
+      events.value = data.results.map((event) => ({
+        slug: event.slug,
+        title: event.title,
+        image: event.banner_image,
+        tag: event.event_type,
+        description: event.description,
+        date: new Date(event.start_datetime).toLocaleDateString(),
+        time: new Date(event.start_datetime).toLocaleTimeString(),
+        location: event.location,
+        buttonText: event.is_free ? "Register Free" : "Buy Ticket",
+      }));
+    } else {
+      events.value = dummyEvents;
+    }
   } catch (error) {
     console.error("Failed to fetch events:", error);
+    events.value = dummyEvents;
   }
 };
 
