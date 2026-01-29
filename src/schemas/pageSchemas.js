@@ -41,11 +41,11 @@ export const pageSchemas = {
       body: 'The Healthcare Federation of Nigeria (HFN) is the umbrella body for private healthcare stakeholders in Nigeria, representing the interests of health professionals, companies, investors, associations, and institutions. HFN provides members with access to advocacy platforms, strategic collaborations, knowledge-sharing, and investment opportunities aimed at building a stronger, more resilient health system.',
       stats: [
         { label: 'Vision', value: '1' },
-        { label: 'Registered Health Guardians', value: '100+' },
-        { label: 'Partners', value: '10+' },
-        { label: 'Projects Executed', value: '104' },
-        { label: "Patient's assistance", value: '1200' },
-        { label: 'Registered Diasporians', value: '50+' },
+        { label: 'Registered Health Guardians', value: '6+' },
+        { label: 'Partners', value: '5+' },
+        { label: 'Projects Executed', value: '10' },
+        { label: "Patient's assistance", value: '20' },
+        { label: 'Registered Diasporians', value: '5+' },
       ],
     },
 
