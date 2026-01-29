@@ -1,28 +1,29 @@
 import bridge from '@/assets/bridge.png';
 import emzor from '@/assets/emzor.png';
-import event from '@/assets/hfn-news7.PNG';
 import group from '@/assets/group.png';
 import health from '@/assets/hfn-news5.PNG';
-import hfn_partner from '@/assets/hfn_partner.png';
 import wef from '@/assets/hfn-news6.PNG';
+import event from '@/assets/hfn-news7.PNG';
+import hfn_partner from '@/assets/hfn_partner.png';
 
 import hba from '@/assets/hba-africa.png';
 import oando from '@/assets/oando_logo.png';
 import pharm from '@/assets/pharm.png';
 import society from '@/assets/society.png';
 
-import ayodele from "@/assets/ayodele.png";
-import babarinde from "@/assets/babarinde.png";
-import chinyere from "@/assets/chinyere.png";
-import jennifer from "@/assets/jennifer.png";
-import njide from "@/assets/njide.png";
-import reagan from "@/assets/reagan.png";
+import ayodele from '@/assets/ayodele.png';
+import babarinde from '@/assets/babarinde.png';
+import chinyere from '@/assets/chinyere.png';
+import jennifer from '@/assets/jennifer.png';
+import njide from '@/assets/njide.png';
+import reagan from '@/assets/reagan.png';
 
 export const homePageSchema = {
   hero: {
     titleHighlight: 'Healthcare',
     titleMain: 'Advocacy.',
-    introLine: 'We speak with one voice on behalf of the Nigerian Private Health Sector.',
+    introLine:
+      'We speak with one voice on behalf of the Nigerian Private Health Sector.',
     introText:
       'The private health sector provides over 60% of healthcare to Nigerians.',
     subText:
@@ -40,13 +41,14 @@ export const homePageSchema = {
   story: {
     title: 'Our HFN Story',
     body: 'The Healthcare Federation of Nigeria (HFN) is the umbrella body for private healthcare stakeholders in Nigeria, representing the interests of health professionals, companies, investors, associations, and institutions. HFN provides members with access to advocacy platforms, strategic collaborations, knowledge-sharing, and investment opportunities aimed at building a stronger, more resilient health system.',
+
     stats: [
       { label: 'Vision', value: '1' },
-      { label: 'Registered Health Guardians', value: '100+' },
-      { label: 'Partners', value: '10+' },
-      { label: 'Projects Executed', value: '104' },
-      { label: "Patient's assistance", value: '1200' },
-      { label: 'Registered Diasporians', value: '50+' },
+      { label: 'Registered Health Guardians', value: '6+' },
+      { label: 'Partners', value: '5+' },
+      { label: 'Projects Executed', value: '10' },
+      { label: "Patient's assistance", value: '20' },
+      { label: 'Registered Diasporians', value: '5+' },
     ],
   },
 

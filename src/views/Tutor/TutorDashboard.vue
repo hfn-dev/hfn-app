@@ -1,7 +1,7 @@
 <script setup>
 import analyticsService from '@/api/dashboard.js';
 import TutorSidebar from '@/views/Tutor/TutorSidebar.vue';
-import { ref, onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import {
@@ -260,7 +260,7 @@ onMounted(async () => {
     <TutorSidebar />
     <main class="flex-1 p-8 overflow-auto bg-white">
       <div class="mb-8">
-        <h1 class="text-4xl font-extrabold text-[#E87A18]">Welcome HBC!</h1>
+        <h1 class="text-4xl font-extrabold text-[#E87A18]">Welcome HBA!</h1>
         <p class="text-gray-700 mt-2">
           Here is how your courses are performing today.
         </p>

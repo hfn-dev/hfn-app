@@ -1,10 +1,10 @@
 <script setup>
 import eventsApi from "@/api/events.js";
+import memberApi from "@/api/memberResources.js";
 import newsApi from "@/api/newsModule.js";
 import authApi from "@/api/userRegister.js";
 import UserSidebar from "@/components/layout/UserSidebar.vue";
-import { onMounted, computed, ref } from "vue";
-import memberApi from "@/api/memberResources.js";
+import { computed, onMounted, ref } from "vue";
 
 const resources = ref([]);
 const searchQuery = ref("");
@@ -28,11 +28,11 @@ const getEmbedUrl = (youtubeUrl) => {
   const videoId = url.searchParams.get("v");
   return `https://www.youtube.com/embed/${videoId}`;
 };
-  
 
 const videos = ref([
   {
-    title: "NEW TAX LAWS AND IT'S IMPLICATIONS FOR PRIVATE HEALTHCARE PROVIDERS",
+    title:
+      "NEW TAX LAWS AND IT'S IMPLICATIONS FOR PRIVATE HEALTHCARE PROVIDERS",
     url: "https://www.youtube.com/watch?v=Usug5WLXWRM",
   },
   {
@@ -40,7 +40,8 @@ const videos = ref([
     url: "https://www.youtube.com/watch?v=GAxo0PH39Sc",
   },
   {
-    title: "CNBC AFRICA: FOCUS ON HEALTHCARE FEDERATION OF NIGERIA AND MEDICAL TOURISM",
+    title:
+      "CNBC AFRICA: FOCUS ON HEALTHCARE FEDERATION OF NIGERIA AND MEDICAL TOURISM",
     url: "https://www.youtube.com/watch?v=mld2SRRMO18",
   },
   {
@@ -48,7 +49,8 @@ const videos = ref([
     url: "https://www.youtube.com/watch?v=ihiq1lI5ghY",
   },
   {
-    title: "FG PLEDGES SUPPORT FUNDING FOR LOCAL MANUFACTURES OF PHARMACUETICALS",
+    title:
+      "FG PLEDGES SUPPORT FUNDING FOR LOCAL MANUFACTURES OF PHARMACUETICALS",
     url: "https://www.youtube.com/watch?v=tTrGFKvevFs",
   },
   {
@@ -65,20 +67,23 @@ const videos = ref([
   },
 ]);
 
- const dummyResources = [
+const dummyResources = [
   {
     id: "dummy-1",
     title: "HFN Annual Healthcare Report 2025",
     type: "report",
-    description: "Comprehensive report on Nigeria's healthcare sector performance in 2025",
-    file_url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+    description:
+      "Comprehensive report on Nigeria's healthcare sector performance in 2025",
+    file_url:
+      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
   },
   {
     id: "dummy-2",
     title: "HFN Policy Brief – Health Financing",
     type: "publication",
     description: "Insights into healthcare financing strategies and reforms",
-    file_url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+    file_url:
+      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
   },
   {
     id: "dummy-3",
@@ -92,7 +97,8 @@ const videos = ref([
     title: "Healthcare Innovation Document",
     type: "document",
     description: "Whitepaper on new innovations in healthcare",
-    file_url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+    file_url:
+      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
   },
 ];
 
@@ -107,7 +113,7 @@ const fetchResources = async () => {
   } finally {
     loadingResources.value = false;
   }
-}; 
+};
 
 const dummyEvents = [
   {
@@ -139,15 +145,13 @@ const dummyEvents = [
     title: "HFN End-of-Year Stakeholders Summit",
     image: "https://via.placeholder.com/600x400?text=HFN+Event",
     tag: "Programs & Initiatives",
-    description:
-      "Annual summit bringing together key healthcare stakeholders.",
+    description: "Annual summit bringing together key healthcare stakeholders.",
     date: "Dec 5, 2025",
     time: "11:00 AM",
     location: "Hybrid Event",
     buttonText: "Coming Soon",
   },
 ];
-
 
 const downloadMinutes = async () => {
   downloadingMinutes.value = true;
@@ -287,8 +291,9 @@ const fetchTopics = async () => {
 
 const filteredResources = computed(() => {
   return resources.value.filter((item) => {
-    const matchesSearch =
-      item.title.toLowerCase().includes(searchQuery.value.toLowerCase());
+    const matchesSearch = item.title
+      .toLowerCase()
+      .includes(searchQuery.value.toLowerCase());
 
     const matchesType =
       selectedType.value === "all" || item.type === selectedType.value;
@@ -296,7 +301,6 @@ const filteredResources = computed(() => {
     return matchesSearch && matchesType;
   });
 });
-  
 
 onMounted(() => {
   fetchNewsletters();
@@ -304,7 +308,6 @@ onMounted(() => {
   fetchTopics();
   fetchUser();
   fetchResources();
-
 });
 </script>
 
@@ -336,30 +339,28 @@ onMounted(() => {
               >
                 <div class="absolute top-2 left-2"></div>
                 <div
-  class="relative w-16 h-16 mb-4 flex items-center justify-center bg-red-50 rounded-lg border border-red-200"
->
-  <!-- PDF Icon -->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    class="w-10 h-10 text-red-600"
-    fill="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path
-      d="M6 2h7l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 1.5V8h4.5L13 3.5z"
-    />
-    <text
-      x="6"
-      y="19"
-      font-size="6"
-      fill="white"
-      font-weight="bold"
-    >
-      PDF
-    </text>
-  </svg>
-</div>
-
+                  class="relative w-16 h-16 mb-4 flex items-center justify-center bg-red-50 rounded-lg border border-red-200"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-10 h-10 text-red-600"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M6 2h7l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 1.5V8h4.5L13 3.5z"
+                    />
+                    <text
+                      x="6"
+                      y="19"
+                      font-size="6"
+                      fill="white"
+                      font-weight="bold"
+                    >
+                      PDF
+                    </text>
+                  </svg>
+                </div>
 
                 <p class="text-sm font-semibold text-[#333] mt-2 leading-none">
                   Meeting Minutes
@@ -423,120 +424,109 @@ onMounted(() => {
             </div>
 
             <div class="order-1 md:order-2">
-              <h4 class="text-4xl font-extrabold text-[#333] mb-4 leading-snug">
+              <!-- <h4 class="text-md font-extrabold text-[#333] mb-4 leading-snug">
                 {{ newsletters[0].title }}
-              </h4>
-              <p class="text-lg text-gray-700 mb-6">
+              </h4> -->
+              <p class="text-md text-gray-700 mb-6">
                 {{ newsletters[0].description_short }}
               </p>
-              <ul
-                class="list-disc list-inside text-gray-700 space-y-1 mb-8 pl-4"
-              >
-                <li>Unlocking Nigeria’s Healthcare Value Chain.</li>
-                <li>Policy Partnership in Action -The HFN–PVAC MOU.</li>
-                <li>
-                  Collaborating on policy reforms that incentivize local
-                  manufacturing and investment.
-                </li>
-              </ul>
+              
               <router-link
-  :to="`/news/${newsletters[0].slug}`"
-  class="inline-block bg-[#004D33] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#006644] transition duration-300"
->
-  Read More
-</router-link>
-
+                :to="`/news/${newsletters[0].slug}`"
+                class="inline-block bg-[#004D33] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#006644] transition duration-300"
+              >
+                Read More
+              </router-link>
             </div>
           </div>
           <div v-else class="text-center py-12 text-gray-500">No data</div>
         </div>
       </section>
       <section class="mt-16 max-w-6xl mx-auto px-4">
-  <h3 class="text-3xl font-bold text-[#333] text-center mb-8">
-    Resources & Publications
-  </h3>
+        <h3 class="text-3xl font-bold text-[#333] text-center mb-8">
+          Resources & Publications
+        </h3>
 
-  <!-- Search & Filter -->
-  <div class="flex flex-col sm:flex-row gap-4 mb-8">
-    <input
-      v-model="searchQuery"
-      type="text"
-      placeholder="Search documents, news, publications..."
-      class="flex-1 border border-gray-300 rounded-lg px-4 py-3 focus:ring-[#004D33] focus:border-[#004D33]"
-    />
+        <div class="flex flex-col sm:flex-row gap-4 mb-8">
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search documents, news, publications..."
+            class="flex-1 border border-gray-300 rounded-lg px-4 py-3 focus:ring-[#004D33] focus:border-[#004D33]"
+          />
 
-    <select
-      v-model="selectedType"
-      class="border border-gray-300 rounded-lg px-4 py-3 text-sm"
-    >
-      <option value="all">All</option>
-      <option value="document">Documents</option>
-      <option value="news">News</option>
-      <option value="publication">Publications</option>
-      <option value="report">Reports</option>
-    </select>
-  </div>
-
-  <!-- Results -->
-  <div v-if="filteredResources.length" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    <div
-      v-for="item in filteredResources"
-      :key="item.id"
-      class="bg-white rounded-xl border border-gray-200 shadow-md p-6 flex flex-col"
-    >
-      <!-- Icon -->
-      <div class="flex items-center gap-3 mb-4">
-        <div
-          class="w-10 h-10 flex items-center justify-center rounded-lg"
-          :class="{
-            'bg-red-100 text-red-600': item.type === 'report',
-            'bg-blue-100 text-blue-600': item.type === 'publication',
-            'bg-green-100 text-green-600': item.type === 'document',
-            'bg-orange-100 text-orange-600': item.type === 'news',
-          }"
-        >
-          📄
+          <select
+            v-model="selectedType"
+            class="border border-gray-300 rounded-lg px-4 py-3 text-sm"
+          >
+            <option value="all">All</option>
+            <option value="document">Documents</option>
+            <option value="news">News</option>
+            <option value="publication">Publications</option>
+            <option value="report">Reports</option>
+          </select>
         </div>
 
-        <span class="text-xs font-semibold uppercase text-gray-500">
-          {{ item.type }}
-        </span>
-      </div>
-
-      <h4 class="font-semibold text-[#333] mb-2">
-        {{ item.title }}
-      </h4>
-
-      <p class="text-sm text-gray-600 mb-4 line-clamp-3">
-        {{ item.description || "No description available." }}
-      </p>
-
-      <!-- Actions -->
-      <div class="mt-auto">
-        <a
-          v-if="item.file_url"
-          :href="item.file_url"
-          target="_blank"
-          class="inline-flex items-center text-green-700 font-medium hover:underline"
+        <div
+          v-if="filteredResources.length"
+          class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          Download →
-        </a>
+          <div
+            v-for="item in filteredResources"
+            :key="item.id"
+            class="bg-white rounded-xl border border-gray-200 shadow-md p-6 flex flex-col"
+          >
+            <div class="flex items-center gap-3 mb-4">
+              <div
+                class="w-10 h-10 flex items-center justify-center rounded-lg"
+                :class="{
+                  'bg-red-100 text-red-600': item.type === 'report',
+                  'bg-blue-100 text-blue-600': item.type === 'publication',
+                  'bg-green-100 text-green-600': item.type === 'document',
+                  'bg-orange-100 text-orange-600': item.type === 'news',
+                }"
+              >
+                📄
+              </div>
 
-        <router-link
-          v-else-if="item.slug"
-          :to="`/news/${item.slug}`"
-          class="inline-flex items-center text-green-700 font-medium hover:underline"
-        >
-          Read →
-        </router-link>
-      </div>
-    </div>
-  </div>
+              <span class="text-xs font-semibold uppercase text-gray-500">
+                {{ item.type }}
+              </span>
+            </div>
 
-  <div v-else class="text-center py-16 text-gray-500">
-    No resources found
-  </div>
-</section>
+            <h4 class="font-semibold text-[#333] mb-2">
+              {{ item.title }}
+            </h4>
+
+            <p class="text-sm text-gray-600 mb-4 line-clamp-3">
+              {{ item.description || "No description available." }}
+            </p>
+
+            <div class="mt-auto">
+              <a
+                v-if="item.file_url"
+                :href="item.file_url"
+                target="_blank"
+                class="inline-flex items-center text-green-700 font-medium hover:underline"
+              >
+                Download →
+              </a>
+
+              <router-link
+                v-else-if="item.slug"
+                :to="`/news/${item.slug}`"
+                class="inline-flex items-center text-green-700 font-medium hover:underline"
+              >
+                Read →
+              </router-link>
+            </div>
+          </div>
+        </div>
+
+        <div v-else class="text-center py-16 text-gray-500">
+          No resources found
+        </div>
+      </section>
 
       <section class="mt-10 max-w-6xl mx-auto px-4">
         <h3 class="text-3xl font-sans font-bold text-[#333] text-center mb-6">

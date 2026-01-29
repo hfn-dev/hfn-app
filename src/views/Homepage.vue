@@ -1,7 +1,7 @@
 <script setup>
 import api from "@/api/axios";
-import group from "@/assets/group.png";
-import group1 from "@/assets/hfn-news.PNG";
+// import group from "@/assets/group.png";
+// import group1 from "@/assets/hfn-news.PNG";
 import Image from "@/assets/image.jpg";
 import HfnCalender from "@/components/layout/HfnCalender.vue";
 import { homePageSchema } from "@/schemas/pages/home.schema";
@@ -10,7 +10,8 @@ import { computed, onMounted, ref } from "vue";
 
 
 const faqs = computed(() => pageContent.value.faqs);
-
+const group = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715465/1feebd03da9f660dfb6e3f79b696f544_L_rxf7mk.jpg';
+const group1 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715461/7a49b291438247a3694ae6d80802eedb_S_o4nz0r.jpg';
 const activeFaq = ref(null);
 
 const toggleFaq = (index) => {
@@ -163,6 +164,7 @@ onMounted(async () => {
           <img
             :src="group1"
             alt="HFN team"
+            loading="lazy"
             class="object-cover w-full h-full"
           />
         </div>
@@ -170,7 +172,7 @@ onMounted(async () => {
         <div
           class="absolute top-0 right-0 w-[30%] sm:w-[40%] h-[140px] sm:h-[180px] rounded-xl overflow-hidden shadow-2xl border-4 border-green-500"
         >
-          <img :src="group" alt="HFN team" class="object-cover w-full h-full" />
+          <img :src="group" loading="lazy" alt="HFN team" class="object-cover w-full h-full" />
         </div>
       </div>
 
