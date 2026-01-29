@@ -19,7 +19,7 @@
 <script>
 import paymentApi from "@/api/payments";
 
-const joinNow = async () => {
+const payNow = async () => {
   if (isSubmitting.value) return;
 
   isSubmitting.value = true;
