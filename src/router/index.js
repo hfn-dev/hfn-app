@@ -8,7 +8,7 @@ import GetInvolved from '@/views/GetInvolved.vue';
 import NewsAdvocacy from '@/views/NewsAdvocacy.vue';
 import Programs from '@/views/Programs.vue';
 import Resources from '@/views/Resources.vue';
-import Payment from '@/views/RegistrationSignin/Payment.vue';
+import Payment from '@/views/RegistrationSignIn/Payment.vue';
 
 import EditorPages from '@/views/Editor/EditorPages.vue';
 import Signin from '@/views/Editor/Signin.vue';
