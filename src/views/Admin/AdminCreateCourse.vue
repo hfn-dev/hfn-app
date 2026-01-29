@@ -638,12 +638,6 @@ onMounted(() => {
               @change="handleFileUpload"
               class="w-full"
             />
-          
-            <div class="flex gap-2">
-              <input v-model="lessonForm.durationHours" placeholder="HH" class="w-1/3 border px-2 py-1" />
-              <input v-model="lessonForm.durationMinutes" placeholder="MM" class="w-1/3 border px-2 py-1" />
-              <input v-model="lessonForm.durationSeconds" placeholder="SS" class="w-1/3 border px-2 py-1" />
-            </div>
           </div>
 
           <div>
@@ -695,7 +689,7 @@ onMounted(() => {
       <label class="block text-sm font-medium text-gray-700 mb-1">Module Title</label>
       <input 
         type="text" 
-        placeholder="Sample" 
+        placeholder="Enter Title" 
         class="w-full p-2.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#006633] outline-none"
       />
     </div>
