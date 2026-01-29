@@ -34,7 +34,7 @@ export const homePageSchema = {
 
   partners: {
     title: 'Health Guardians',
-    logos: ['pharm', 'society', 'bridge', 'emzor', 'hba', 'oando'],
+    logos: ['pharm', 'society', 'bridge', 'emzor', 'hba'],
   },
 
   story: {
