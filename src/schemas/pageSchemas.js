@@ -43,9 +43,9 @@ export const pageSchemas = {
         { label: 'Vision', value: '1' },
         { label: 'Registered Health Guardians', value: '6+' },
         { label: 'Partners', value: '5+' },
-        { label: 'Projects Executed', value: '10' },
-        { label: "Patient's assistance", value: '20' },
-        { label: 'Registered Diasporians', value: '5+' },
+        // { label: 'Projects Executed', value: '10' },
+        // { label: "Patient's assistance", value: '20' },
+        // { label: 'Registered Diasporians', value: '5+' },
       ],
     },
 
