@@ -330,8 +330,7 @@ onMounted(async () => {
       <h2
         class="text-3xl md:text-4xl font-serif mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
       >
-          {{ pageContent.executives.title }}
-
+          Our Executives
       </h2>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
