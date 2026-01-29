@@ -3,7 +3,13 @@ import eventsApi from "@/api/events.js";
 import newsApi from "@/api/newsModule.js";
 import authApi from "@/api/userRegister.js";
 import UserSidebar from "@/components/layout/UserSidebar.vue";
-import { onMounted, ref } from "vue";
+import { onMounted, computed, ref } from "vue";
+import memberApi from "@/api/memberResources.js";
+
+const resources = ref([]);
+const searchQuery = ref("");
+const selectedType = ref("all");
+const loadingResources = ref(false);
 
 const newsletters = ref([]);
 const events = ref([]);
@@ -22,6 +28,7 @@ const getEmbedUrl = (youtubeUrl) => {
   const videoId = url.searchParams.get("v");
   return `https://www.youtube.com/embed/${videoId}`;
 };
+  
 
 const videos = ref([
   {
@@ -57,6 +64,90 @@ const videos = ref([
     url: "https://www.youtube.com/watch?v=rEqwcBARMMo",
   },
 ]);
+
+ const dummyResources = [
+  {
+    id: "dummy-1",
+    title: "HFN Annual Healthcare Report 2025",
+    type: "report",
+    description: "Comprehensive report on Nigeria's healthcare sector performance in 2025",
+    file_url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+  },
+  {
+    id: "dummy-2",
+    title: "HFN Policy Brief – Health Financing",
+    type: "publication",
+    description: "Insights into healthcare financing strategies and reforms",
+    file_url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+  },
+  {
+    id: "dummy-3",
+    title: "HFN Newsletter – October Edition",
+    type: "news",
+    description: "Highlights from HFN activities in October 2025",
+    slug: "dummy-newsletter-october",
+  },
+  {
+    id: "dummy-4",
+    title: "Healthcare Innovation Document",
+    type: "document",
+    description: "Whitepaper on new innovations in healthcare",
+    file_url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+  },
+];
+
+const fetchResources = async () => {
+  loadingResources.value = true;
+  try {
+    const data = await memberApi.listResources();
+    resources.value = data && data.length ? data : dummyResources;
+  } catch (err) {
+    console.error("Failed to load resources", err);
+    resources.value = dummyResources;
+  } finally {
+    loadingResources.value = false;
+  }
+}; 
+
+const dummyEvents = [
+  {
+    slug: "dummy-1",
+    title: "HFN Healthcare Policy Roundtable",
+    image: "https://via.placeholder.com/600x400?text=HFN+Event",
+    tag: "Programs & Initiatives",
+    description:
+      "A strategic discussion on strengthening Nigeria’s healthcare policy framework.",
+    date: "Oct 20, 2025",
+    time: "10:00 AM",
+    location: "Lagos, Nigeria",
+    buttonText: "Coming Soon",
+  },
+  {
+    slug: "dummy-2",
+    title: "Medical Innovation & Investment Forum",
+    image: "https://via.placeholder.com/600x400?text=HFN+Event",
+    tag: "Health Alert",
+    description:
+      "Exploring investment opportunities in local pharmaceutical manufacturing.",
+    date: "Nov 12, 2025",
+    time: "9:00 AM",
+    location: "Abuja, Nigeria",
+    buttonText: "Coming Soon",
+  },
+  {
+    slug: "dummy-3",
+    title: "HFN End-of-Year Stakeholders Summit",
+    image: "https://via.placeholder.com/600x400?text=HFN+Event",
+    tag: "Programs & Initiatives",
+    description:
+      "Annual summit bringing together key healthcare stakeholders.",
+    date: "Dec 5, 2025",
+    time: "11:00 AM",
+    location: "Hybrid Event",
+    buttonText: "Coming Soon",
+  },
+];
+
 
 const downloadMinutes = async () => {
   downloadingMinutes.value = true;
@@ -134,6 +225,28 @@ const fetchNewsletters = async () => {
   }
 };
 
+// const fetchEvents = async () => {
+//   try {
+//     const data = await eventsApi.listEvents({
+//       status: "upcoming",
+//       ordering: "start_datetime",
+//       limit: 6,
+//     });
+//     events.value = data.results.map((event) => ({
+//       slug: event.slug,
+//       title: event.title,
+//       image: event.banner_image,
+//       tag: event.event_type,
+//       description: event.description,
+//       date: new Date(event.start_datetime).toLocaleDateString(),
+//       time: new Date(event.start_datetime).toLocaleTimeString(),
+//       location: event.location,
+//       buttonText: event.is_free ? "Register Free" : "Buy Ticket",
+//     }));
+//   } catch (error) {
+//     console.error("Failed to fetch events:", error);
+//   }
+// };
 const fetchEvents = async () => {
   try {
     const data = await eventsApi.listEvents({
@@ -141,19 +254,25 @@ const fetchEvents = async () => {
       ordering: "start_datetime",
       limit: 6,
     });
-    events.value = data.results.map((event) => ({
-      slug: event.slug,
-      title: event.title,
-      image: event.banner_image,
-      tag: event.event_type,
-      description: event.description,
-      date: new Date(event.start_datetime).toLocaleDateString(),
-      time: new Date(event.start_datetime).toLocaleTimeString(),
-      location: event.location,
-      buttonText: event.is_free ? "Register Free" : "Buy Ticket",
-    }));
+
+    if (data.results?.length) {
+      events.value = data.results.map((event) => ({
+        slug: event.slug,
+        title: event.title,
+        image: event.banner_image,
+        tag: event.event_type,
+        description: event.description,
+        date: new Date(event.start_datetime).toLocaleDateString(),
+        time: new Date(event.start_datetime).toLocaleTimeString(),
+        location: event.location,
+        buttonText: event.is_free ? "Register Free" : "Buy Ticket",
+      }));
+    } else {
+      events.value = dummyEvents;
+    }
   } catch (error) {
     console.error("Failed to fetch events:", error);
+    events.value = dummyEvents;
   }
 };
 
@@ -166,11 +285,26 @@ const fetchTopics = async () => {
   }
 };
 
+const filteredResources = computed(() => {
+  return resources.value.filter((item) => {
+    const matchesSearch =
+      item.title.toLowerCase().includes(searchQuery.value.toLowerCase());
+
+    const matchesType =
+      selectedType.value === "all" || item.type === selectedType.value;
+
+    return matchesSearch && matchesType;
+  });
+});
+  
+
 onMounted(() => {
   fetchNewsletters();
   fetchEvents();
   fetchTopics();
   fetchUser();
+  fetchResources();
+
 });
 </script>
 
@@ -201,7 +335,31 @@ onMounted(() => {
                 class="w-40 md:w-48 p-6 bg-white border border-green-100 rounded-lg flex flex-col items-center justify-center relative"
               >
                 <div class="absolute top-2 left-2"></div>
-                <div class="relative w-16 h-16 mb-4"></div>
+                <div
+  class="relative w-16 h-16 mb-4 flex items-center justify-center bg-red-50 rounded-lg border border-red-200"
+>
+  <!-- PDF Icon -->
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="w-10 h-10 text-red-600"
+    fill="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      d="M6 2h7l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 1.5V8h4.5L13 3.5z"
+    />
+    <text
+      x="6"
+      y="19"
+      font-size="6"
+      fill="white"
+      font-weight="bold"
+    >
+      PDF
+    </text>
+  </svg>
+</div>
+
 
                 <p class="text-sm font-semibold text-[#333] mt-2 leading-none">
                   Meeting Minutes
@@ -281,16 +439,105 @@ onMounted(() => {
                   manufacturing and investment.
                 </li>
               </ul>
-              <button
-                class="bg-[#004D33] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#006644] transition duration-300"
-              >
-                Read More
-              </button>
+              <router-link
+  :to="`/news/${newsletters[0].slug}`"
+  class="inline-block bg-[#004D33] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#006644] transition duration-300"
+>
+  Read More
+</router-link>
+
             </div>
           </div>
           <div v-else class="text-center py-12 text-gray-500">No data</div>
         </div>
       </section>
+      <section class="mt-16 max-w-6xl mx-auto px-4">
+  <h3 class="text-3xl font-bold text-[#333] text-center mb-8">
+    Resources & Publications
+  </h3>
+
+  <!-- Search & Filter -->
+  <div class="flex flex-col sm:flex-row gap-4 mb-8">
+    <input
+      v-model="searchQuery"
+      type="text"
+      placeholder="Search documents, news, publications..."
+      class="flex-1 border border-gray-300 rounded-lg px-4 py-3 focus:ring-[#004D33] focus:border-[#004D33]"
+    />
+
+    <select
+      v-model="selectedType"
+      class="border border-gray-300 rounded-lg px-4 py-3 text-sm"
+    >
+      <option value="all">All</option>
+      <option value="document">Documents</option>
+      <option value="news">News</option>
+      <option value="publication">Publications</option>
+      <option value="report">Reports</option>
+    </select>
+  </div>
+
+  <!-- Results -->
+  <div v-if="filteredResources.length" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div
+      v-for="item in filteredResources"
+      :key="item.id"
+      class="bg-white rounded-xl border border-gray-200 shadow-md p-6 flex flex-col"
+    >
+      <!-- Icon -->
+      <div class="flex items-center gap-3 mb-4">
+        <div
+          class="w-10 h-10 flex items-center justify-center rounded-lg"
+          :class="{
+            'bg-red-100 text-red-600': item.type === 'report',
+            'bg-blue-100 text-blue-600': item.type === 'publication',
+            'bg-green-100 text-green-600': item.type === 'document',
+            'bg-orange-100 text-orange-600': item.type === 'news',
+          }"
+        >
+          📄
+        </div>
+
+        <span class="text-xs font-semibold uppercase text-gray-500">
+          {{ item.type }}
+        </span>
+      </div>
+
+      <h4 class="font-semibold text-[#333] mb-2">
+        {{ item.title }}
+      </h4>
+
+      <p class="text-sm text-gray-600 mb-4 line-clamp-3">
+        {{ item.description || "No description available." }}
+      </p>
+
+      <!-- Actions -->
+      <div class="mt-auto">
+        <a
+          v-if="item.file_url"
+          :href="item.file_url"
+          target="_blank"
+          class="inline-flex items-center text-green-700 font-medium hover:underline"
+        >
+          Download →
+        </a>
+
+        <router-link
+          v-else-if="item.slug"
+          :to="`/news/${item.slug}`"
+          class="inline-flex items-center text-green-700 font-medium hover:underline"
+        >
+          Read →
+        </router-link>
+      </div>
+    </div>
+  </div>
+
+  <div v-else class="text-center py-16 text-gray-500">
+    No resources found
+  </div>
+</section>
+
       <section class="mt-10 max-w-6xl mx-auto px-4">
         <h3 class="text-3xl font-sans font-bold text-[#333] text-center mb-6">
           Upcoming Events
