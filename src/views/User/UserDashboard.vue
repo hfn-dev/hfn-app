@@ -3,7 +3,13 @@ import eventsApi from "@/api/events.js";
 import newsApi from "@/api/newsModule.js";
 import authApi from "@/api/userRegister.js";
 import UserSidebar from "@/components/layout/UserSidebar.vue";
-import { onMounted, ref } from "vue";
+import { onMounted, computed, ref } from "vue";
+import memberApi from "@/api/memberResources.js";
+
+const resources = ref([]);
+const searchQuery = ref("");
+const selectedType = ref("all");
+const loadingResources = ref(false);
 
 const newsletters = ref([]);
 const events = ref([]);
@@ -98,6 +104,19 @@ const dummyEvents = [
     buttonText: "Coming Soon",
   },
 ];
+
+
+const fetchResources = async () => {
+  loadingResources.value = true;
+  try {
+    const data = await memberApi.listResources();
+    resources.value = data;
+  } catch (err) {
+    console.error("Failed to load resources", err);
+  } finally {
+    loadingResources.value = false;
+  }
+};
   
 const downloadMinutes = async () => {
   downloadingMinutes.value = true;
@@ -235,11 +254,26 @@ const fetchTopics = async () => {
   }
 };
 
+const filteredResources = computed(() => {
+  return resources.value.filter((item) => {
+    const matchesSearch =
+      item.title.toLowerCase().includes(searchQuery.value.toLowerCase());
+
+    const matchesType =
+      selectedType.value === "all" || item.type === selectedType.value;
+
+    return matchesSearch && matchesType;
+  });
+});
+  
+
 onMounted(() => {
   fetchNewsletters();
   fetchEvents();
   fetchTopics();
   fetchUser();
+  fetchResources();
+
 });
 </script>
 
@@ -386,6 +420,93 @@ onMounted(() => {
           <div v-else class="text-center py-12 text-gray-500">No data</div>
         </div>
       </section>
+      <section class="mt-16 max-w-6xl mx-auto px-4">
+  <h3 class="text-3xl font-bold text-[#333] text-center mb-8">
+    Resources & Publications
+  </h3>
+
+  <!-- Search & Filter -->
+  <div class="flex flex-col sm:flex-row gap-4 mb-8">
+    <input
+      v-model="searchQuery"
+      type="text"
+      placeholder="Search documents, news, publications..."
+      class="flex-1 border border-gray-300 rounded-lg px-4 py-3 focus:ring-[#004D33] focus:border-[#004D33]"
+    />
+
+    <select
+      v-model="selectedType"
+      class="border border-gray-300 rounded-lg px-4 py-3 text-sm"
+    >
+      <option value="all">All</option>
+      <option value="document">Documents</option>
+      <option value="news">News</option>
+      <option value="publication">Publications</option>
+      <option value="report">Reports</option>
+    </select>
+  </div>
+
+  <!-- Results -->
+  <div v-if="filteredResources.length" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div
+      v-for="item in filteredResources"
+      :key="item.id"
+      class="bg-white rounded-xl border border-gray-200 shadow-md p-6 flex flex-col"
+    >
+      <!-- Icon -->
+      <div class="flex items-center gap-3 mb-4">
+        <div
+          class="w-10 h-10 flex items-center justify-center rounded-lg"
+          :class="{
+            'bg-red-100 text-red-600': item.type === 'report',
+            'bg-blue-100 text-blue-600': item.type === 'publication',
+            'bg-green-100 text-green-600': item.type === 'document',
+            'bg-orange-100 text-orange-600': item.type === 'news',
+          }"
+        >
+          📄
+        </div>
+
+        <span class="text-xs font-semibold uppercase text-gray-500">
+          {{ item.type }}
+        </span>
+      </div>
+
+      <h4 class="font-semibold text-[#333] mb-2">
+        {{ item.title }}
+      </h4>
+
+      <p class="text-sm text-gray-600 mb-4 line-clamp-3">
+        {{ item.description || "No description available." }}
+      </p>
+
+      <!-- Actions -->
+      <div class="mt-auto">
+        <a
+          v-if="item.file_url"
+          :href="item.file_url"
+          target="_blank"
+          class="inline-flex items-center text-green-700 font-medium hover:underline"
+        >
+          Download →
+        </a>
+
+        <router-link
+          v-else-if="item.slug"
+          :to="`/news/${item.slug}`"
+          class="inline-flex items-center text-green-700 font-medium hover:underline"
+        >
+          Read →
+        </router-link>
+      </div>
+    </div>
+  </div>
+
+  <div v-else class="text-center py-16 text-gray-500">
+    No resources found
+  </div>
+</section>
+
       <section class="mt-10 max-w-6xl mx-auto px-4">
         <h3 class="text-3xl font-sans font-bold text-[#333] text-center mb-6">
           Upcoming Events
