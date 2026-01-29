@@ -3,7 +3,8 @@ import paymentApi from "@/api/payments";
 import handsJoining from "@/assets/handsJoining.jpg";
 import logo from "@/assets/logo.png";
 import { computed, ref } from "vue";
-// import { useRouter } from vue-router;
+import { useRouter } from "vue-router";
+
 
 // const router = useRouter()  
 const isSubmitting = ref(false);
