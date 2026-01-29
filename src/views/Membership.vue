@@ -5,7 +5,8 @@ import logo from "@/assets/logo.png";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
-const router = useRouter()  
+
+// const router = useRouter()  
 const isSubmitting = ref(false);
 
 // const joinNow = async () => {

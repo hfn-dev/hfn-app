@@ -601,8 +601,8 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
+<!-- <style scoped>
 .input {
   @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors;
 }
-</style>
+</style> -->

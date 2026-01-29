@@ -596,7 +596,7 @@ onMounted(async () => {
               </div>
             </div>
 
-            <div class="highlight-card-wrapper">
+            <!-- <div class="highlight-card-wrapper">
               <div class="highlight-card">
                 <p class="text-sm text-gray-500 mb-1">Best Seller</p>
                 <img
@@ -611,7 +611,7 @@ onMounted(async () => {
                   {{ dashboardData.revenue.bestSeller?.instructor || "N/A" }}
                 </p>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
         <!-- <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-sm h-fit">
