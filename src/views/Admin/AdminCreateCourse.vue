@@ -500,7 +500,7 @@ onMounted(() => {
             Curriculum Builder
           </h2>
           <p class="text-gray-600 mb-8">
-            Add the course modules and lesson content.
+            Add the course modules and lesson contents.
           </p>
 
           
