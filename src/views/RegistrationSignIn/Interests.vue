@@ -79,52 +79,31 @@
 </template>
 
 <script setup>
-import aboutImage from '@/assets/interest.png';
-import paediatrics from '@/assets/paediatrics.jpg';
-import gynaecology from '@/assets/gynaecology.jpg';
-import pharmacy from '@/assets/pharmacy.jpg';
-import healthcare from '@/assets/healthcare.jpg';
-import physiology from '@/assets/physiology.jpg';
-import infants from '@/assets/infants.jpg';
   
 import UserSidebar from '@/components/layout/UserSidebar.vue';
+import {
+  Briefcase,
+  GraduationCap,
+  Landmark,
+  Megaphone,
+  MessageSquare,
+  Scale,
+  Users,
+  Wallet
+} from 'lucide-vue-next';
 import { ref } from "vue";
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const categories = [
-  {
-    title: "Governance",
-    image: paediatrics,
-  },
-  {
-    title: "Advocacy",
-    image: gynaecology,
-  },
-  {
-    title: "Training",
-    image: aboutImage,
-  },
-  {
-    title: "Finance",
-    image: pharmacy,
-  },
-  {
-    title: "Business",
-    image: aboutImage,
-  },
-  {
-    title: "Mobilization",
-    image: healthcare,
-  },
-  {
-    title: "Policy Advocacy",
-    image: infants,
-  },
-  {
-    title: "Public Engagement",
-    image: physiology,
-  },
+  { title: "Governance", icon: Landmark },
+  { title: "Advocacy", icon: Megaphone },
+  { title: "Training", icon: GraduationCap },
+  { title: "Finance", icon: Wallet },
+  { title: "Business", icon: Briefcase },
+  { title: "Mobilization", icon: Users },
+  { title: "Policy Advocacy", icon: Scale },
+  { title: "Public Engagement", icon: MessageSquare },
 ];
 
 const selectedCategories = ref([]);

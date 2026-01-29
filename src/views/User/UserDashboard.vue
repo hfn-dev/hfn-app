@@ -1,9 +1,9 @@
 <script setup>
-import eventsApi from '@/api/events.js';
-import newsApi from '@/api/newsModule.js';
-import authApi from '@/api/userRegister.js';
-import UserSidebar from '@/components/layout/UserSidebar.vue';
-import { onMounted, ref } from 'vue';
+import eventsApi from "@/api/events.js";
+import newsApi from "@/api/newsModule.js";
+import authApi from "@/api/userRegister.js";
+import UserSidebar from "@/components/layout/UserSidebar.vue";
+import { onMounted, ref } from "vue";
 
 const newsletters = ref([]);
 const events = ref([]);
@@ -12,10 +12,51 @@ const showRegisterModal = ref(false);
 const selectedEvent = ref(null);
 const registering = ref(false);
 const registerError = ref(null);
-const user = ref({ name: '' });
+const user = ref({ name: "" });
 const downloadingMinutes = ref(false);
 const minutesError = ref(null);
 const latestMinutes = ref(null);
+
+const getEmbedUrl = (youtubeUrl) => {
+  const url = new URL(youtubeUrl);
+  const videoId = url.searchParams.get("v");
+  return `https://www.youtube.com/embed/${videoId}`;
+};
+
+const videos = ref([
+  {
+    title: "NEW TAX LAWS AND IT'S IMPLICATIONS FOR PRIVATE HEALTHCARE PROVIDERS",
+    url: "https://www.youtube.com/watch?v=Usug5WLXWRM",
+  },
+  {
+    title: "HFN WOMEN'S FORUM WEBINAR - HER VOICE, HER INNOVATION",
+    url: "https://www.youtube.com/watch?v=GAxo0PH39Sc",
+  },
+  {
+    title: "CNBC AFRICA: FOCUS ON HEALTHCARE FEDERATION OF NIGERIA AND MEDICAL TOURISM",
+    url: "https://www.youtube.com/watch?v=mld2SRRMO18",
+  },
+  {
+    title: "HIGHLIGHTS FROM HFN CONFERENCE 2025",
+    url: "https://www.youtube.com/watch?v=ihiq1lI5ghY",
+  },
+  {
+    title: "FG PLEDGES SUPPORT FUNDING FOR LOCAL MANUFACTURES OF PHARMACUETICALS",
+    url: "https://www.youtube.com/watch?v=tTrGFKvevFs",
+  },
+  {
+    title: "HFN SEEKS PARTNERSHIP WITH FG ON ADVANCING HEALTHCARE",
+    url: "https://www.youtube.com/watch?v=qmPRjXnEU58",
+  },
+  {
+    title: "HFN HOST HISTORIC HIGH-LEVEL DIALOGUE ON HEALTHCARE REFORMS",
+    url: "https://www.youtube.com/watch?v=S9dd1S7Xbk0",
+  },
+  {
+    title: "HFN OFFICE OPENING AND 3D HUB LAUNCH",
+    url: "https://www.youtube.com/watch?v=rEqwcBARMMo",
+  },
+]);
 
 const downloadMinutes = async () => {
   downloadingMinutes.value = true;
@@ -24,18 +65,18 @@ const downloadMinutes = async () => {
   try {
     const response = await newsApi.downloadMinutes();
 
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = response.file_url;
-    link.download = response.filename || 'HFN-Meeting-Minutes.pdf';
+    link.download = response.filename || "HFN-Meeting-Minutes.pdf";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 
-    const blob = new Blob([response], { type: 'application/pdf' });
+    const blob = new Blob([response], { type: "application/pdf" });
     const url = window.URL.createObjectURL(blob);
     window.open(url);
   } catch (err) {
-    minutesError.value = 'Failed to download minutes';
+    minutesError.value = "Failed to download minutes";
   } finally {
     downloadingMinutes.value = false;
   }
@@ -61,9 +102,9 @@ const confirmRegistration = async () => {
   try {
     await eventsApi.createEvent(selectedEvent.value.slug);
     closeRegisterModal();
-    console.log('Successfully registered for event');
+    console.log("Successfully registered for event");
   } catch (err) {
-    registerError.value = 'Failed to register for event';
+    registerError.value = "Failed to register for event";
   } finally {
     registering.value = false;
   }
@@ -74,7 +115,7 @@ const fetchUser = async () => {
     const data = await authApi.getUser();
     user.value = data;
   } catch (error) {
-    console.error('Failed to fetch user info:', error);
+    console.error("Failed to fetch user info:", error);
   }
 };
 
@@ -89,15 +130,15 @@ const fetchNewsletters = async () => {
       slug: item.slug,
     }));
   } catch (error) {
-    console.error('Failed to fetch newsletters:', error);
+    console.error("Failed to fetch newsletters:", error);
   }
 };
 
 const fetchEvents = async () => {
   try {
     const data = await eventsApi.listEvents({
-      status: 'upcoming',
-      ordering: 'start_datetime',
+      status: "upcoming",
+      ordering: "start_datetime",
       limit: 6,
     });
     events.value = data.results.map((event) => ({
@@ -109,10 +150,10 @@ const fetchEvents = async () => {
       date: new Date(event.start_datetime).toLocaleDateString(),
       time: new Date(event.start_datetime).toLocaleTimeString(),
       location: event.location,
-      buttonText: event.is_free ? 'Register Free' : 'Buy Ticket',
+      buttonText: event.is_free ? "Register Free" : "Buy Ticket",
     }));
   } catch (error) {
-    console.error('Failed to fetch events:', error);
+    console.error("Failed to fetch events:", error);
   }
 };
 
@@ -121,7 +162,7 @@ const fetchTopics = async () => {
     const data = await newsApi.listArticles({ limit: 4 });
     topics.value = data;
   } catch (error) {
-    console.error('Failed to fetch topics:', error);
+    console.error("Failed to fetch topics:", error);
   }
 };
 
@@ -143,17 +184,22 @@ onMounted(() => {
       </h2>
       <p class="text-[#555] mt-1">Stay up to date with the latest on HFN</p>
 
-      <div class="w-screen py-16 shadow-inner relative left-1/2 right-1/2 -mx-[50vw]"
-        :style="{ backgroundColor: '#F8F3EE' }">
+      <div
+        class="w-screen py-16 shadow-inner relative left-1/2 right-1/2 -mx-[50vw]"
+        :style="{ backgroundColor: '#F8F3EE' }"
+      >
         <section class="max-w-6xl mx-auto px-6 text-center">
           <h3 class="text-3xl font-serif text-[#333] mb-8">
             Missed the Last HFN Meeting?
           </h3>
 
           <div class="mb-8 flex justify-center">
-            <div class="p-4 border border-gray-200 rounded-xl bg-white shadow-md">
+            <div
+              class="p-4 border border-gray-200 rounded-xl bg-white shadow-md"
+            >
               <div
-                class="w-40 md:w-48 p-6 bg-white border border-green-100 rounded-lg flex flex-col items-center justify-center relative">
+                class="w-40 md:w-48 p-6 bg-white border border-green-100 rounded-lg flex flex-col items-center justify-center relative"
+              >
                 <div class="absolute top-2 left-2"></div>
                 <div class="relative w-16 h-16 mb-4"></div>
 
@@ -165,15 +211,11 @@ onMounted(() => {
             </div>
           </div>
 
-          <!-- <a
-            href="[Link_to_your_PDF]"
-            download
-            class="inline-block bg-[#004D33] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#006644] transition shadow-lg"
+          <button
+            @click="downloadMinutes"
+            :disabled="downloadingMinutes"
+            class="inline-flex items-center gap-2 bg-[#004D33] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#006644] transition shadow-lg disabled:opacity-60"
           >
-            Download Minutes
-          </a> -->
-          <button @click="downloadMinutes" :disabled="downloadingMinutes"
-            class="inline-flex items-center gap-2 bg-[#004D33] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#006644] transition shadow-lg disabled:opacity-60">
             <span v-if="downloadingMinutes">Downloading…</span>
             <span v-else>Download Minutes</span>
           </button>
@@ -181,17 +223,25 @@ onMounted(() => {
           <p v-if="minutesError" class="text-red-600 text-sm mt-3">
             {{ minutesError }}
           </p>
-          <RouterLink to="/publication" class="inline-flex items-center ml-4 gap-2 px-5 py-3 mt-3
-         border border-green-700 text-green-700
-         rounded-lg font-semibold
-         hover:bg-green-900 hover:text-white
-         transition">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          <RouterLink
+            to="/publication"
+            class="inline-flex items-center ml-4 gap-2 px-5 py-3 mt-3 border border-green-700 text-green-700 rounded-lg font-semibold hover:bg-green-900 hover:text-white transition"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 4v16m8-8H4"
+              />
             </svg>
             See Publications
           </RouterLink>
-
         </section>
       </div>
       <section class="mt-10 max-w-6xl mx-auto px-4">
@@ -200,11 +250,17 @@ onMounted(() => {
         </h3>
 
         <div class="bg-white rounded-xl overflow-hidden shadow-lg p-6 md:p-10">
-          <div v-if="newsletters.length" class="grid md:grid-cols-2 gap-8 items-center">
+          <div
+            v-if="newsletters.length"
+            class="grid md:grid-cols-2 gap-8 items-center"
+          >
             <div class="order-2 md:order-1">
               <div class="w-full relative">
-                <img :src="newsletters[0].image" :alt="newsletters[0].title"
-                  class="w-full h-auto rounded-xl shadow-lg border-2 border-gray-100" />
+                <img
+                  :src="newsletters[0].image"
+                  :alt="newsletters[0].title"
+                  class="w-full h-auto rounded-xl shadow-lg border-2 border-gray-100"
+                />
               </div>
             </div>
 
@@ -215,7 +271,9 @@ onMounted(() => {
               <p class="text-lg text-gray-700 mb-6">
                 {{ newsletters[0].description_short }}
               </p>
-              <ul class="list-disc list-inside text-gray-700 space-y-1 mb-8 pl-4">
+              <ul
+                class="list-disc list-inside text-gray-700 space-y-1 mb-8 pl-4"
+              >
                 <li>Unlocking Nigeria’s Healthcare Value Chain.</li>
                 <li>Policy Partnership in Action -The HFN–PVAC MOU.</li>
                 <li>
@@ -224,14 +282,13 @@ onMounted(() => {
                 </li>
               </ul>
               <button
-                class="bg-[#004D33] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#006644] transition duration-300">
+                class="bg-[#004D33] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#006644] transition duration-300"
+              >
                 Read More
               </button>
             </div>
           </div>
-          <div v-else class="text-center py-12 text-gray-500">
-            No data
-          </div>
+          <div v-else class="text-center py-12 text-gray-500">No data</div>
         </div>
       </section>
       <section class="mt-10 max-w-6xl mx-auto px-4">
@@ -241,23 +298,38 @@ onMounted(() => {
 
         <div class="flex justify-start mb-8">
           <select
-            class="border border-gray-300 rounded-lg p-2 text-sm font-medium text-gray-700 focus:ring-[#004D33] focus:border-[#004D33]">
+            class="border border-gray-300 rounded-lg p-2 text-sm font-medium text-gray-700 focus:ring-[#004D33] focus:border-[#004D33]"
+          >
             <option>October 2025</option>
             <option>November 2025</option>
             <option>December 2025</option>
           </select>
         </div>
 
-        <div v-if="events.length" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div v-for="(event, index) in events" :key="index"
-            class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden" :class="{ 'p-0': true }">
+        <div
+          v-if="events.length"
+          class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          <div
+            v-for="(event, index) in events"
+            :key="index"
+            class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
+            :class="{ 'p-0': true }"
+          >
             <div class="relative">
-              <img :src="event.image" :alt="event.title" class="w-full h-48 object-cover rounded-t-xl" />
+              <img
+                :src="event.image"
+                :alt="event.title"
+                class="w-full h-48 object-cover rounded-t-xl"
+              />
 
-              <span class="absolute bottom-0 left-0 px-3 py-1 text-xs font-semibold text-white rounded-tr-lg" :class="{
-                'bg-green-700': event.tag === 'Programs & Initiatives',
-                'bg-red-700': event.tag === 'Health Alert',
-              }">
+              <span
+                class="absolute bottom-0 left-0 px-3 py-1 text-xs font-semibold text-white rounded-tr-lg"
+                :class="{
+                  'bg-green-700': event.tag === 'Programs & Initiatives',
+                  'bg-red-700': event.tag === 'Health Alert',
+                }"
+              >
                 {{ event.tag }}
               </span>
             </div>
@@ -267,50 +339,78 @@ onMounted(() => {
                 {{ event.description }}
               </p>
 
-              <div class="flex flex-wrap justify-between items-center text-sm text-gray-500 mb-4 space-y-1">
+              <div
+                class="flex flex-wrap justify-between items-center text-sm text-gray-500 mb-4 space-y-1"
+              >
                 <div class="flex items-center text-orange-600">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1 fill-current" viewBox="0 0 24 24">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4 mr-1 fill-current"
+                    viewBox="0 0 24 24"
+                  >
                     <path
-                      d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 18H5V8h14v13z" />
+                      d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 18H5V8h14v13z"
+                    />
                   </svg>
                   <span class="text-xs">{{ event.date }}</span>
                 </div>
 
-                <div v-if="event.time" class="flex items-center text-orange-600">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1 fill-current" viewBox="0 0 24 24">
+                <div
+                  v-if="event.time"
+                  class="flex items-center text-orange-600"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4 mr-1 fill-current"
+                    viewBox="0 0 24 24"
+                  >
                     <path
-                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm.8 14.8l-4.4-4.4L12 11.2V6h2v6h5.2l-1.6 1.6 4.4 4.4L12.8 20.8 12 20l-1.6 1.6z" />
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm.8 14.8l-4.4-4.4L12 11.2V6h2v6h5.2l-1.6 1.6 4.4 4.4L12.8 20.8 12 20l-1.6 1.6z"
+                    />
                   </svg>
                   <span class="text-xs">{{ event.time }}</span>
                 </div>
 
                 <div v-if="event.views" class="flex items-center text-red-600">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1 fill-current" viewBox="0 0 24 24">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4 mr-1 fill-current"
+                    viewBox="0 0 24 24"
+                  >
                     <path
-                      d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                      d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+                    />
                   </svg>
                   <span class="text-xs">{{ event.views }} Views</span>
                 </div>
               </div>
 
-              <div v-if="event.location" class="flex items-center text-sm text-green-700 mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1 fill-current" viewBox="0 0 24 24">
+              <div
+                v-if="event.location"
+                class="flex items-center text-sm text-green-700 mb-6"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-4 h-4 mr-1 fill-current"
+                  viewBox="0 0 24 24"
+                >
                   <path
-                    d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                    d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                  />
                 </svg>
                 <span class="font-medium text-xs">{{ event.location }}</span>
               </div>
 
-              <button @click="openRegisterModal(event)"
-                class="w-full mt-4 bg-[#004D33] text-white px-4 py-3 rounded-lg font-medium hover:bg-[#006644] transition">
+              <button
+                @click="openRegisterModal(event)"
+                class="w-full mt-4 bg-[#004D33] text-white px-4 py-3 rounded-lg font-medium hover:bg-[#006644] transition"
+              >
                 {{ event.buttonText }}
               </button>
             </div>
           </div>
         </div>
-        <div v-else class="text-center py-16 text-gray-500">
-          No data
-        </div>
+        <div v-else class="text-center py-16 text-gray-500">No data</div>
       </section>
       <section class="mt-10 mb-16 max-w-6xl mx-auto px-4">
         <h3 class="text-2xl font-sans font-bold text-[#333] text-center mb-10">
@@ -318,36 +418,61 @@ onMounted(() => {
         </h3>
 
         <div v-if="topics.length" class="grid sm:grid-cols-2 gap-6">
-          <div v-for="(topic, index) in topics" :key="index"
-            class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden p-0">
+          <div
+            v-for="(topic, index) in topics"
+            :key="index"
+            class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden p-0"
+          >
             <div class="grid grid-cols-1 sm:grid-cols-5 h-full">
               <div
-                class="relative col-span-2 h-full min-h-[150px] flex flex-col justify-end p-4 bg-gray-50 rounded-l-2xl border-r-2 border-dashed border-gray-200">
-                <img :src="topic.visualImage" :alt="'Visual for ' + topic.tag"
-                  class="absolute inset-0 w-full h-full object-cover" aria-hidden="true" />
-                <div class="absolute inset-0 flex items-center justify-center opacity-70"></div>
+                class="relative col-span-2 h-full min-h-[150px] flex flex-col justify-end p-4 bg-gray-50 rounded-l-2xl border-r-2 border-dashed border-gray-200"
+              >
+                <img
+                  :src="topic.visualImage"
+                  :alt="'Visual for ' + topic.tag"
+                  class="absolute inset-0 w-full h-full object-cover"
+                  aria-hidden="true"
+                />
+                <div
+                  class="absolute inset-0 flex items-center justify-center opacity-70"
+                ></div>
 
-                <span class="text-xs font-semibold px-3 py-1 text-white rounded-lg shadow-md z-10"
-                  :style="{ backgroundColor: topic.tagColor || '#ff6600' }">
-                  {{ topic.tag || 'Public Health Stories' }}
+                <span
+                  class="text-xs font-semibold px-3 py-1 text-white rounded-lg shadow-md z-10"
+                  :style="{ backgroundColor: topic.tagColor || '#ff6600' }"
+                >
+                  {{ topic.tag || "Public Health Stories" }}
                 </span>
               </div>
 
               <div class="col-span-3 p-5 flex flex-col justify-between">
                 <div>
-                  <div class="flex items-center space-x-4 text-xs font-medium mb-3">
+                  <div
+                    class="flex items-center space-x-4 text-xs font-medium mb-3"
+                  >
                     <span class="flex items-center text-orange-600">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1 fill-current" viewBox="0 0 24 24">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 mr-1 fill-current"
+                        viewBox="0 0 24 24"
+                      >
                         <path
-                          d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 18H5V8h14v13z" />
+                          d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 18H5V8h14v13z"
+                        />
                       </svg>
-                      {{ topic.date || 'October 10, 2025' }}
+                      {{ topic.date || "October 10, 2025" }}
                     </span>
                     <span class="flex items-center text-orange-600">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1 fill-current" viewBox="0 0 24 24">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 mr-1 fill-current"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                        />
                       </svg>
-                      {{ topic.comments || '0 Comments' }}
+                      {{ topic.comments || "0 Comments" }}
                     </span>
                   </div>
 
@@ -356,20 +481,59 @@ onMounted(() => {
                   </p>
                 </div>
 
-                <router-link :to="`/news/${topic.slug}`"
-                  class="text-sm font-medium text-green-700 hover:text-green-800 transition self-start mt-2">
+                <router-link
+                  :to="`/news/${topic.slug}`"
+                  class="text-sm font-medium text-green-700 hover:text-green-800 transition self-start mt-2"
+                >
                   Read more...
                 </router-link>
               </div>
             </div>
           </div>
         </div>
-        <div v-else class="text-center py-16 text-gray-500">
-          No data
+        <div v-else class="text-center py-16 text-gray-500">No data</div>
+      </section>
+      <section class="mt-16 max-w-6xl mx-auto px-4">
+        <h3 class="text-3xl font-sans font-bold text-[#333] text-center mb-10">
+          HFN Video Updates
+        </h3>
+
+        <div
+          v-if="videos.length"
+          class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          <div
+            v-for="(video, index) in videos"
+            :key="index"
+            class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
+          >
+            <div class="aspect-video bg-black">
+              <iframe
+                class="w-full h-full"
+                :src="getEmbedUrl(video.url)"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
+
+            <div class="p-4">
+              <h4 class="font-semibold text-[#333] mb-2">
+                {{ video.title }}
+              </h4>
+            </div>
+          </div>
+        </div>
+
+        <div v-else class="text-center py-12 text-gray-500">
+          No videos available
         </div>
       </section>
     </div>
-    <div v-if="showRegisterModal" class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
+    <div
+      v-if="showRegisterModal"
+      class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
+    >
       <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
         <h3 class="text-xl font-bold text-[#333] mb-2">Register for Event</h3>
 
@@ -382,13 +546,19 @@ onMounted(() => {
         </div>
 
         <div class="flex gap-3">
-          <button @click="closeRegisterModal" class="flex-1 border border-gray-300 rounded-lg py-2">
+          <button
+            @click="closeRegisterModal"
+            class="flex-1 border border-gray-300 rounded-lg py-2"
+          >
             Cancel
           </button>
 
-          <button @click="confirmRegistration" :disabled="registering"
-            class="flex-1 bg-[#004D33] text-white rounded-lg py-2 font-semibold hover:bg-[#006644]">
-            {{ registering ? 'Registering…' : 'Confirm' }}
+          <button
+            @click="confirmRegistration"
+            :disabled="registering"
+            class="flex-1 bg-[#004D33] text-white rounded-lg py-2 font-semibold hover:bg-[#006644]"
+          >
+            {{ registering ? "Registering…" : "Confirm" }}
           </button>
         </div>
       </div>
