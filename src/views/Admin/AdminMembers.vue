@@ -15,6 +15,9 @@ import {
 } from 'lucide-vue-next';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+  
+const statusFilter = ref('');      
+const categoryFilter = ref('');     
 
 const router = useRouter();
 const isEditOpen = ref(false);
@@ -27,6 +30,16 @@ const statCards = ref([]);
 const members = ref([]);
 const activeCourses = computed(() => members.value);
 const searchTerm = ref('');
+
+
+
+const membershipCategories = [
+  { label: 'All', value: '' },
+  { label: 'Individual', value: 'individual' },
+  { label: 'Corporate', value: 'corporate' },
+  { label: 'Diaspora', value: 'diaspora' },
+];
+
 
 const loadMembershipAnalytics = async () => {
   try {
@@ -92,6 +105,8 @@ const loadMembers = async () => {
     const data = await membershipApi.listSubscriptions({
       page: currentPage.value,
       search: searchTerm.value,
+      status: statusFilter.value,
+      category: categoryFilter.value,
     });
 
     members.value = data.results.map((item) => ({
@@ -227,6 +242,28 @@ onMounted(() => {
 
       <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
         <div class="flex justify-end mb-6">
+          <div class="flex gap-3">
+    <select
+      v-model="categoryFilter"
+      @change="loadMembers"
+      class="border rounded-lg px-3 py-2 text-sm"
+    >
+      <option value="">All Categories</option>
+      <option value="individual">Individual</option>
+      <option value="corporate">Corporate</option>
+      <option value="diaspora">Diaspora</option>
+    </select>
+
+    <select
+      v-model="statusFilter"
+      @change="loadMembers"
+      class="border rounded-lg px-3 py-2 text-sm"
+    >
+      <option value="">All Status</option>
+      <option value="active">Active</option>
+      <option value="inactive">Inactive</option>
+    </select>
+  </div>
           <div class="relative w-full max-w-sm">
             <Search
               class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
