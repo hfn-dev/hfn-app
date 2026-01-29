@@ -63,6 +63,18 @@ const events = ref([
     details:
       "The Healthcare Federation of Nigeria (HFN) invites you to the HFN Annual Conference 2026, Nigeria’s premier gathering of private-sector healthcare leaders, policymakers, financiers, innovators, and development partners.",
   },
+  {
+    id: 5,
+    title: "2026 HFN Annual Conference",
+    date: "2026-03-05",
+    time: "10:00 AM",
+    tag: "Conference",
+    image: eventThumb3,
+    excerpt:
+      "Join HFN 2026 to explore bold private‑sector solutions driving healthcare financing and Universal Health Coverage in Nigeria.",
+    details:
+      "The Healthcare Federation of Nigeria (HFN) invites you to the HFN Annual Conference 2026, Nigeria’s premier gathering of private-sector healthcare leaders, policymakers, financiers, innovators, and development partners.",
+  },
 ]);
 
 const year = computed(() => activeDate.value.getFullYear());
