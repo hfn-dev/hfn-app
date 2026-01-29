@@ -374,11 +374,13 @@ onMounted(() => {
                   manufacturing and investment.
                 </li>
               </ul>
-              <button
-                class="bg-[#004D33] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#006644] transition duration-300"
-              >
-                Read More
-              </button>
+              <router-link
+  :to="`/news/${newsletters[0].slug}`"
+  class="inline-block bg-[#004D33] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#006644] transition duration-300"
+>
+  Read More
+</router-link>
+
             </div>
           </div>
           <div v-else class="text-center py-12 text-gray-500">No data</div>
