@@ -33,11 +33,22 @@
                 : 'border-gray-100',
             ]"
           >
-            <div class="h-40 rounded-t-lg bg-gray-100 mb-2">
-              <img
-                :src="category.image"
-                :alt="category.title"
-                class="w-full h-full object-cover rounded-t-lg"
+            <div
+              class="h-40 flex items-center justify-center rounded-t-lg mb-2"
+              :class="
+                selectedCategories.includes(category.title)
+                  ? 'bg-green-50'
+                  : 'bg-gray-50'
+              "
+            >
+              <component
+                :is="category.icon"
+                class="w-14 h-14"
+                :class="
+                  selectedCategories.includes(category.title)
+                    ? 'text-green-600'
+                    : 'text-gray-400'
+                "
               />
             </div>
 
@@ -79,8 +90,7 @@
 </template>
 
 <script setup>
-  
-import UserSidebar from '@/components/layout/UserSidebar.vue';
+import UserSidebar from "@/components/layout/UserSidebar.vue";
 import {
   Briefcase,
   GraduationCap,
@@ -89,10 +99,10 @@ import {
   MessageSquare,
   Scale,
   Users,
-  Wallet
-} from 'lucide-vue-next';
+  Wallet,
+} from "lucide-vue-next";
 import { ref } from "vue";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 const categories = [
