@@ -38,8 +38,30 @@ onMounted(async () => {
   }
 });
 
+// const page = computed(() => {
+//   return pageFromApi.value || aboutPageSchema;
+// });
 const page = computed(() => {
-  return pageFromApi.value || aboutPageSchema;
+  return {
+    ...aboutPageSchema,
+    ...(pageFromApi.value || {}),
+    hero: {
+      ...aboutPageSchema.hero,
+      ...(pageFromApi.value?.hero || {}),
+    },
+    story: {
+      ...aboutPageSchema.story,
+      ...(pageFromApi.value?.story || {}),
+    },
+    ctaSection: {
+      ...aboutPageSchema.ctaSection,
+      ...(pageFromApi.value?.ctaSection || {}),
+    },
+    leadership: {
+      ...aboutPageSchema.leadership,
+      ...(pageFromApi.value?.leadership || {}),
+    },
+  };
 });
 
 const resolveImage = (image) => imageMap[image] || image;
