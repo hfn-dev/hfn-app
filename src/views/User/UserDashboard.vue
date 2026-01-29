@@ -105,8 +105,9 @@ const fetchResources = async () => {
     console.error("Failed to load resources", err);
     resources.value = dummyResources;
   } finally {
-    loadingResources.value =
- 
+    loadingResources.value = false;
+  }
+}; 
 
 const dummyEvents = [
   {
