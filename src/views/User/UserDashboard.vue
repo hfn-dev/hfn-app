@@ -65,6 +65,48 @@ const videos = ref([
   },
 ]);
 
+ const dummyResources = [
+  {
+    id: "dummy-1",
+    title: "HFN Annual Healthcare Report 2025",
+    type: "report",
+    description: "Comprehensive report on Nigeria's healthcare sector performance in 2025",
+    file_url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+  },
+  {
+    id: "dummy-2",
+    title: "HFN Policy Brief – Health Financing",
+    type: "publication",
+    description: "Insights into healthcare financing strategies and reforms",
+    file_url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+  },
+  {
+    id: "dummy-3",
+    title: "HFN Newsletter – October Edition",
+    type: "news",
+    description: "Highlights from HFN activities in October 2025",
+    slug: "dummy-newsletter-october",
+  },
+  {
+    id: "dummy-4",
+    title: "Healthcare Innovation Document",
+    type: "document",
+    description: "Whitepaper on new innovations in healthcare",
+    file_url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+  },
+];
+
+const fetchResources = async () => {
+  loadingResources.value = true;
+  try {
+    const data = await memberApi.listResources();
+    resources.value = data && data.length ? data : dummyResources;
+  } catch (err) {
+    console.error("Failed to load resources", err);
+    resources.value = dummyResources;
+  } finally {
+    loadingResources.value =
+ 
 
 const dummyEvents = [
   {
