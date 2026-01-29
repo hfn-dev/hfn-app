@@ -1,9 +1,9 @@
 <script setup>
-import analyticsApi from '@/api/dashboard.js';
-import membershipApi from '@/api/membership.js';
+import analyticsApi from "@/api/dashboard.js";
+import membershipApi from "@/api/membership.js";
 
-import { useToast } from '@/composables/useToast';
-import AdminSidebar from '@/views/Admin/AdminSidebar.vue';
+import { useToast } from "@/composables/useToast";
+import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
 import {
   ChevronLeft,
   ChevronRight,
@@ -12,34 +12,84 @@ import {
   MoreVertical,
   Search,
   Trash2,
-} from 'lucide-vue-next';
-import { computed, onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
-  
-const statusFilter = ref('');      
-const categoryFilter = ref('');     
+} from "lucide-vue-next";
+import { computed, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+
+const statusFilter = ref("");
+const categoryFilter = ref("");
 
 const router = useRouter();
 const isEditOpen = ref(false);
 const editingSubscription = ref(null);
 const selectedType = ref(null);
 const toast = useToast();
-const courseTabs = ref(['Published', 'Drafts', 'Archived']);
-const currentTab = ref('Published');
+const courseTabs = ref(["Published", "Drafts", "Archived"]);
+const currentTab = ref("Published");
 const statCards = ref([]);
 const members = ref([]);
 const activeCourses = computed(() => members.value);
-const searchTerm = ref('');
-
-
+const searchTerm = ref("");
 
 const membershipCategories = [
-  { label: 'All', value: '' },
-  { label: 'Individual', value: 'individual' },
-  { label: 'Corporate', value: 'corporate' },
-  { label: 'Diaspora', value: 'diaspora' },
+  { label: "All", value: "" },
+  { label: "Individual", value: "individual" },
+  { label: "Corporate", value: "corporate" },
+  { label: "Diaspora", value: "diaspora" },
 ];
 
+const showAddMemberModal = ref(false);
+
+const newMemberForm = ref({
+  name: "",
+  email: "",
+  phone: "",
+  membership_type: "",
+  role: "",
+  payment_method: "",
+});
+
+const submitNewMember = async () => {
+  try {
+    const payload = {
+      name: newMemberForm.value.name,
+      email: newMemberForm.value.email,
+      phone: newMemberForm.value.phone,
+      membership_type: newMemberForm.value.membership_type,
+      role: newMemberForm.value.role,
+      payment_method: newMemberForm.value.payment_method,
+    };
+
+    const application = await membershipApi.createApplication(payload);
+
+    await membershipApi.approveApplication(application.id, {
+      approved_by_admin: true,
+    });
+
+    showAddMemberModal.value = false;
+    await loadMembers(); // refresh table
+
+    // Reset form
+    newMemberForm.value = {
+      name: "",
+      email: "",
+      phone: "",
+      membership_type: "",
+      role: "",
+      payment_method: "",
+    };
+  } catch (error) {
+    console.error("Failed to add member", error);
+  }
+};
+
+const resetFilters = () => {
+  searchTerm.value = "";
+  statusFilter.value = "";
+  categoryFilter.value = "";
+  currentPage.value = 1;
+  loadMembers();
+};
 
 const loadMembershipAnalytics = async () => {
   try {
@@ -47,56 +97,56 @@ const loadMembershipAnalytics = async () => {
 
     statCards.value = [
       {
-        title: 'Total Members',
+        title: "Total Members",
         value: data.total_members ?? 0,
-        change: '',
-        changeColor: 'text-blue-300',
+        change: "",
+        changeColor: "text-blue-300",
       },
       {
-        title: 'Total New Members',
+        title: "Total New Members",
         value: data.new_members ?? 0,
-        change: '',
-        changeColor: 'text-[#00cc66]',
+        change: "",
+        changeColor: "text-[#00cc66]",
       },
       {
-        title: 'Total Corporate',
+        title: "Total Corporate",
         value: data.corporate ?? 0,
-        change: '',
-        changeColor: 'text-gray-500',
+        change: "",
+        changeColor: "text-gray-500",
       },
       {
-        title: 'Total Individual',
+        title: "Total Individual",
         value: data.individual ?? 0,
-        change: '',
-        changeColor: 'text-gray-500',
+        change: "",
+        changeColor: "text-gray-500",
       },
       {
-        title: 'Multinationals',
+        title: "Multinationals",
         value: data.multinationals ?? 0,
-        change: '',
-        changeColor: 'text-gray-500',
+        change: "",
+        changeColor: "text-gray-500",
       },
       {
-        title: 'Diaspora',
+        title: "Diaspora",
         value: data.diaspora ?? 0,
-        change: '',
-        changeColor: 'text-[#00cc66]',
+        change: "",
+        changeColor: "text-[#00cc66]",
       },
       {
-        title: 'Health Guardians',
+        title: "Health Guardians",
         value: data.health_guardians ?? 0,
-        change: '',
-        changeColor: 'text-blue-300',
+        change: "",
+        changeColor: "text-blue-300",
       },
       {
-        title: 'Total Associations',
+        title: "Total Associations",
         value: data.associations ?? 0,
-        change: '',
-        changeColor: 'text-gray-500',
+        change: "",
+        changeColor: "text-gray-500",
       },
     ];
   } catch (error) {
-    console.error('Failed to load membership analytics', error);
+    console.error("Failed to load membership analytics", error);
   }
 };
 
@@ -111,44 +161,37 @@ const loadMembers = async () => {
 
     members.value = data.results.map((item) => ({
       id: item.id,
-      title: item.user?.full_name || '—',
-      enrollments: item.membership_type?.name || '—',
-      completion: item.last_payment_date || '—',
-      lastUpdate: item.status === 'active' ? 'Active' : 'Inactive',
+      title: item.user?.full_name || "—",
+      enrollments: item.membership_type?.name || "—",
+      completion: item.last_payment_date || "—",
+      lastUpdate: item.status === "active" ? "Active" : "Inactive",
     }));
 
     totalPages.value = Math.ceil(data.count / 10);
   } catch (error) {
-    console.error('Failed to load members', error);
+    console.error("Failed to load members", error);
   }
 };
 
-// const activeCourses = computed(() => {
-//   if (currentTab.value === 'Published') return publishedCourses.value;
-//   if (currentTab.value === 'Drafts') return draftCourses.value;
-//   if (currentTab.value === 'Archived') return archivedCourses.value;
-//   return [];
-// });
-
 const handleAction = (action, member) => {
-  if (action === 'View') {
+  if (action === "View") {
     router.push(`/admin/members/${member.id}`);
   }
 
-  if (action === 'Edit') {
+  if (action === "Edit") {
     editingSubscription.value = { ...member };
     selectedType.value = member.membershipTypeId;
     isEditOpen.value = true;
   }
 
-  if (action === 'Delete') {
+  if (action === "Delete") {
     cancelSubscription(member.id);
   }
 };
 
 const cancelSubscription = async (id) => {
   const confirmCancel = confirm(
-    'Are you sure you want to cancel this subscription?'
+    "Are you sure you want to cancel this subscription?"
   );
 
   if (!confirmCancel) return;
@@ -157,7 +200,7 @@ const cancelSubscription = async (id) => {
     await membershipApi.cancelSubscription(id);
     await loadMembers(); // refresh list
   } catch (error) {
-    console.error('Failed to cancel subscription', error);
+    console.error("Failed to cancel subscription", error);
   }
 };
 
@@ -183,7 +226,7 @@ const saveEdit = async () => {
 
     await loadMembers(); // refresh table
   } catch (error) {
-    console.error('Failed to update subscription', error);
+    console.error("Failed to update subscription", error);
   }
 };
 
@@ -241,39 +284,62 @@ onMounted(() => {
       </div>
 
       <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
-        <div class="flex justify-end mb-6">
-          <div class="flex gap-3">
-    <select
-      v-model="categoryFilter"
-      @change="loadMembers"
-      class="border rounded-lg px-3 py-2 text-sm"
-    >
-      <option value="">All Categories</option>
-      <option value="individual">Individual</option>
-      <option value="corporate">Corporate</option>
-      <option value="diaspora">Diaspora</option>
-    </select>
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-lg font-semibold text-gray-800">Members List</h2>
 
-    <select
-      v-model="statusFilter"
-      @change="loadMembers"
-      class="border rounded-lg px-3 py-2 text-sm"
-    >
-      <option value="">All Status</option>
-      <option value="active">Active</option>
-      <option value="inactive">Inactive</option>
-    </select>
-  </div>
+          <button
+            @click="showAddMemberModal = true"
+            class="px-5 py-2 rounded-full bg-[#006633] text-white text-sm font-medium hover:bg-[#004d26] transition"
+          >
+            + Add Member
+          </button>
+        </div>
+
+        <div class="flex flex-wrap gap-3 items-center justify-between mb-6">
+          <div class="flex gap-3">
+            <select
+              v-model="categoryFilter"
+              class="border rounded-lg px-3 py-2 text-sm"
+            >
+              <option value="">All Categories</option>
+              <option value="individual">Individual</option>
+              <option value="corporate">Corporate</option>
+              <option value="diaspora">Diaspora</option>
+            </select>
+
+            <select
+              v-model="statusFilter"
+              class="border rounded-lg px-3 py-2 text-sm"
+            >
+              <option value="">All Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+
+            <button
+              @click="loadMembers"
+              class="px-4 py-2 rounded-lg bg-[#00cc66] text-white text-sm"
+            >
+              Apply
+            </button>
+
+            <button
+              @click="resetFilters"
+              class="px-4 py-2 rounded-lg border text-sm"
+            >
+              Reset
+            </button>
+          </div>
+
           <div class="relative w-full max-w-sm">
             <Search
-              class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+              class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
             />
             <input
-              type="text"
               v-model="searchTerm"
-              @input="loadMembers"
-              placeholder="Search..."
-              class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors"
+              @keyup.enter="loadMembers"
+              placeholder="Search by name..."
+              class="w-full pl-10 pr-4 py-2 border rounded-lg"
             />
           </div>
         </div>
@@ -336,7 +402,7 @@ onMounted(() => {
                 {{ course.title }}
               </td>
               <td class="py-3 px-3">
-                {{ course.enrollments !== null ? course.enrollments : '-' }}
+                {{ course.enrollments !== null ? course.enrollments : "-" }}
               </td>
               <td class="py-3 px-3">
                 <span
@@ -465,7 +531,78 @@ onMounted(() => {
         </div>
       </div>
     </main>
+    <div
+      v-if="showAddMemberModal"
+      class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+    >
+      <div class="bg-white w-full max-w-lg rounded-xl p-6 shadow-lg">
+        <h2 class="text-xl font-bold mb-4 text-gray-800">Add New Member</h2>
+
+        <form @submit.prevent="submitNewMember" class="space-y-4">
+          <input
+            v-model="newMemberForm.name"
+            placeholder="Full Name"
+            class="input"
+          />
+          <input
+            v-model="newMemberForm.email"
+            placeholder="Email"
+            class="input"
+          />
+          <input
+            v-model="newMemberForm.phone"
+            placeholder="Phone Number"
+            class="input"
+          />
+
+          <select v-model="newMemberForm.membership_type" class="input">
+            <option disabled value="">Select Membership Type</option>
+            <option
+              v-for="type in membershipTypes"
+              :key="type.id"
+              :value="type.id"
+            >
+              {{ type.name }}
+            </option>
+          </select>
+
+          <select v-model="newMemberForm.role" class="input">
+            <option disabled value="">Select Role</option>
+            <option value="individual">Individual</option>
+            <option value="corporate">Corporate</option>
+            <option value="admin">Admin</option>
+          </select>
+
+          <select v-model="newMemberForm.payment_method" class="input">
+            <option disabled value="">Payment Method</option>
+            <option value="card">Card</option>
+            <option value="transfer">Bank Transfer</option>
+            <option value="cash">Cash</option>
+          </select>
+
+          <div class="flex justify-end space-x-3 pt-4">
+            <button
+              type="button"
+              @click="showAddMemberModal = false"
+              class="px-4 py-2 border rounded-lg"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="px-4 py-2 bg-[#006633] text-white rounded-lg"
+            >
+              Add Member
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.input {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors;
+}
+</style>
