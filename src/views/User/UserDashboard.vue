@@ -201,7 +201,31 @@ onMounted(() => {
                 class="w-40 md:w-48 p-6 bg-white border border-green-100 rounded-lg flex flex-col items-center justify-center relative"
               >
                 <div class="absolute top-2 left-2"></div>
-                <div class="relative w-16 h-16 mb-4"></div>
+                <div
+  class="relative w-16 h-16 mb-4 flex items-center justify-center bg-red-50 rounded-lg border border-red-200"
+>
+  <!-- PDF Icon -->
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="w-10 h-10 text-red-600"
+    fill="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      d="M6 2h7l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 1.5V8h4.5L13 3.5z"
+    />
+    <text
+      x="6"
+      y="19"
+      font-size="6"
+      fill="white"
+      font-weight="bold"
+    >
+      PDF
+    </text>
+  </svg>
+</div>
+
 
                 <p class="text-sm font-semibold text-[#333] mt-2 leading-none">
                   Meeting Minutes
