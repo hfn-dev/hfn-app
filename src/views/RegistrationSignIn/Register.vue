@@ -340,7 +340,7 @@ const changeTab = (tab) => {
         <button
           class="flex items-center justify-center w-full py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition duration-150 mb-6 shadow-sm"
         >
-          <svg
+          <!-- <svg
             class="w-5 h-5 mr-3"
             viewBox="0 0 48 48"
             fill="none"
@@ -362,8 +362,12 @@ const changeTab = (tab) => {
               fill="#1976D2"
               d="M24 8.75c3.27 0 6.27.79 8.94 2.164l5.48-5.354C34.78 3.518 29.593 1 24 1 18.96 1 14.28 2.872 10.667 6.036l4.029 3.833C17.31 8.5 20.59 7.75 24 7.75z"
             />
-          </svg>
-          Sign up with Google
+          </svg> -->
+          <router-link
+            to="/signin"
+            class="text-green-700 font-semibold hover:text-green-800 transition duration-150"
+            >Sign in here</router-link
+          >
         </button>
 
         <div class="text-center text-gray-400 mb-6">OR</div>

@@ -186,36 +186,82 @@ const lineOptions = {
   },
 };
 
+
 const statCards = computed(() => {
   if (!dashboardData.value) return [];
 
   return [
     {
-      title: "Total Courses",
-      value: dashboardData.value.total_courses || 0,
-      change: "Active",
+      title: "Page Views",
+      value: dashboardData.value.total_page_views?.toLocaleString() || "0",
+      change: "All time",
       changeColor: "text-[#00cc66]",
     },
     {
-      title: "Active Courses",
-      value: dashboardData.value.active_courses || 0,
-      change: `${Math.round(((dashboardData.value.active_courses || 0) / (dashboardData.value.total_courses || 1)) * 100)}%`,
+      title: "Unique Visitors",
+      value: dashboardData.value.total_unique_visitors?.toLocaleString() || "0",
+      change: "All time",
       changeColor: "text-[#00cc66]",
     },
     {
-      title: "Total Enrollments",
-      value: dashboardData.value.total_enrollments || 0,
-      change: dashboardData.value.active_enrollments ? `${dashboardData.value.active_enrollments} Active` : "0 Active",
+      title: "Bounce Rate",
+      value: `${dashboardData.value.bounce_rate?.toFixed(1) || 0}%`,
+      change:
+        dashboardData.value.bounce_rate < 40
+          ? "Healthy"
+          : "Needs improvement",
+      changeColor:
+        dashboardData.value.bounce_rate < 40
+          ? "text-[#00cc66]"
+          : "text-red-500",
+    },
+    {
+      title: "Avg Session",
+      value: `${dashboardData.value.average_session_duration_minutes?.toFixed(1) || 0} mins`,
+      change: "Per visit",
       changeColor: "text-[#00cc66]",
     },
     {
-      title: "Average Rating",
-      value: dashboardData.value.average_course_rating?.toFixed(1) || "0.0",
-      stars: true,
-      change: "Based on all courses",
-      changeColor: "text-gray-500",
+      title: "Active Users",
+      value: dashboardData.value.total_active_users || 0,
+      change: "Currently active",
+      changeColor: "text-[#00cc66]",
+    },
+    {
+      title: "Total Revenue",
+      value: new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      }).format(dashboardData.value.total_revenue || 0),
+      change: "All time",
+      changeColor: "text-[#E87A18]",
     },
   ];
+});
+
+const usersByRoleData = computed(() => {
+  if (!dashboardData.value?.users_by_role) return {
+    labels: [],
+    datasets: [],
+  };
+
+  return {
+    labels: dashboardData.value.users_by_role.map(r => r.role),
+    datasets: [
+      {
+        data: dashboardData.value.users_by_role.map(r => r.count),
+        backgroundColor: [
+          "#00cc66",
+          "#E87A18",
+          "#006633",
+          "#ffb300",
+          "#ff5252",
+          "#8884d8",
+        ],
+      },
+    ],
+  };
 });
 
 const summaryData = computed(() => {
@@ -349,6 +395,19 @@ const updateChartData = () => {
     };
   }
 
+  // Growth (New users)
+if (dashboardData.value.new_users_by_month) {
+  growthData.value = {
+    ...growthData.value,
+    labels: Object.keys(dashboardData.value.new_users_by_month),
+    datasets: [{
+      ...growthData.value.datasets[0],
+      data: Object.values(dashboardData.value.new_users_by_month),
+    }]
+  };
+}
+
+
   // Completion
   if (dashboardData.value.course_completion_stats) {
     const stats = dashboardData.value.course_completion_stats;
@@ -365,6 +424,26 @@ const updateChartData = () => {
     };
   }
 };
+
+const membershipCards = computed(() => {
+  const stats = dashboardData.value?.membership_stats || {};
+
+  return [
+    {
+      title: "Active Subscriptions",
+      value: stats.active_subscriptions || 0,
+    },
+    {
+      title: "Expired Subscriptions",
+      value: stats.expired_subscriptions || 0,
+    },
+    {
+      title: "Total Subscriptions",
+      value: stats.total_subscriptions || 0,
+    },
+  ];
+});
+
 onMounted(() => {
   fetchDashboardData();
 });
@@ -451,17 +530,19 @@ const closeSidebar = () => (showSidebar.value = false);
             </div>
           </div>
 
-          <div class="bg-white p-6 rounded-xl shadow-lg w-full">
-            <h2 class="text-xl font-semibold mb-4 text-[#006633]">
-              Course Completion
-            </h2>
-            <div v-if="completionData.datasets[0].data.reduce((a, b) => a + b, 0) > 0" class="h-[300px] w-full">
-              <Pie :data="completionData" :options="pieOptions" />
-            </div>
-            <div v-else class="h-[300px] w-full flex items-center justify-center text-gray-500">
-              No completion data available
-            </div>
-          </div>
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+  <h2 class="text-xl font-semibold text-gray-800 mb-4">
+    Users by Role
+  </h2>
+
+  <div v-if="usersByRoleData.labels.length" class="h-72">
+    <Pie :data="usersByRoleData" />
+  </div>
+
+  <p v-else class="text-sm text-gray-400 text-center">
+    No role data available
+  </p>
+</div>
 
           <div class="bg-white p-6 rounded-xl shadow-lg w-full">
             <h2 class="text-xl font-semibold mb-4 text-[#006633]">
@@ -501,7 +582,24 @@ const closeSidebar = () => (showSidebar.value = false);
             </div>
           </div>
 
-          <h2 class="text-xl font-semibold text-gray-800 mb-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+  <div
+    v-for="(card, index) in membershipCards"
+    :key="index"
+    class="bg-white p-5 rounded-xl shadow-sm border border-gray-100"
+  >
+    <p class="text-sm text-gray-500 mb-1">
+      {{ card.title }}
+    </p>
+
+    <p class="text-3xl font-bold text-gray-800">
+      {{ card.value }}
+    </p>
+  </div>
+</div>
+
+
+          <!-- <h2 class="text-xl font-semibold text-gray-800 mb-4">
             Most Enrolled Courses
           </h2>
 
@@ -520,11 +618,11 @@ const closeSidebar = () => (showSidebar.value = false);
                 Enrollments: {{ course.enrollments.toLocaleString() }}
               </p>
             </div>
-          </div>
+          </div> -->
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 p-6 bg-white rounded-lg">
-          <div class="lg:col-span-2">
+        <div class="grid grid-cols-1 gap-8 p-6 bg-white rounded-lg">
+          <div class="col-span-1">
             <div class="bg-white p-6 rounded-lg shadow-sm mb-0">
               <div class="flex justify-between items-start mb-4">
                 <h2 class="text-2xl font-bold text-gray-800">Revenue</h2>
@@ -585,7 +683,7 @@ const closeSidebar = () => (showSidebar.value = false);
             </div>
           </div>
 
-          <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-sm h-fit">
+          <!-- <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-sm h-fit">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">
               Most Viewed Courses
             </h2>
@@ -606,7 +704,7 @@ const closeSidebar = () => (showSidebar.value = false);
             <div v-if="mostViewedCourses.length === 0" class="text-center text-gray-500 py-8">
               No course view data available
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </main>
