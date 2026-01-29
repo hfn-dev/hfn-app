@@ -300,7 +300,7 @@ const toggleDropdown = (title) => {
             :style="{ backgroundColor: DARK_GREEN }"
             class="block w-full text-center px-6 py-3 font-bold text-white rounded-lg shadow-lg hover:opacity-90 transition-all duration-200"
           >
-            Login / Sign up
+            Login/Signup
           </RouterLink>
 
         </div>
