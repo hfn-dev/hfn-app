@@ -416,9 +416,14 @@ const submitCourse = async () => {
 };
 
 onMounted(() => {
-  if (slug) fetchCourse();
+  if (slug) {
+    fetchCourse();
+  } else {
+    if (curriculumForm.value.modules.length === 0) addModule();
+  }
   fetchCategories();
 });
+  
 </script>
 
 <template>
@@ -952,6 +957,14 @@ onMounted(() => {
               </select>
             </div>
           </div>
+          <div class="mb-6">
+              <button
+                @click="addModule"
+                class="px-4 py-2 bg-[#00cc66] text-white rounded hover:bg-[#00994d]"
+              >
+                Add Module
+              </button>
+            </div>
 
           
           <div class="mt-8 pt-4 border-t border-gray-200">
@@ -1257,6 +1270,13 @@ onMounted(() => {
                       v-if="module.isOpen"
                       class="p-4 bg-white border-t border-gray-100"
                     >
+                      <button type="button" @click="openAddLessonDialog(module.id)" class="px-3 py-1 border rounded">
+                        Add Lesson
+                      </button>
+                    
+                      <button type="button" @click="openAddQuizDialog(module.id)" class="px-3 py-1 border rounded">
+                        Add Quiz
+                      </button>
                       <div
                         v-for="lesson in module.lessons"
                         :key="lesson.id"
