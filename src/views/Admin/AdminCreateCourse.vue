@@ -1,18 +1,6 @@
 <script setup>
 import learningModule from '@/api/learningModule';
 import courses from '@/assets/courses.jpg';
-import {
-  Book,
-  Check,
-  ChevronDown,
-  DollarSign,
-  Edit2,
-  Lock,
-  Minimize2,
-  Plus,
-  Trash2,
-  UploadCloud,
-} from 'lucide-vue-next';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from "vue-router";
 import { useToast } from 'vue-toastification';
@@ -228,6 +216,7 @@ const goBack = () => {
 
 const isLessonDialogOpen = ref(false);
 const isQuizDialogOpen = ref(false);
+const modalType = ref('lesson'); // 'lesson' or 'quiz' for dynamic button text
 
 const lessonForm = ref({
   title: '',
@@ -241,6 +230,7 @@ const currentModuleId = ref(null);
 
 const openAddLessonDialog = (moduleId) => {
   currentModuleId.value = moduleId;
+  modalType.value = 'lesson';
   isLessonDialogOpen.value = true;
 };
 
@@ -297,6 +287,7 @@ const handleLessonAdded = () => {
 };
 
 const openAddQuizDialog = () => {
+  modalType.value = 'quiz';
   isQuizDialogOpen.value = true;
 };
 
@@ -512,7 +503,9 @@ onMounted(() => {
             Add the course modules and lesson content.
           </p>
 
-          <div class="space-y-4 mb-8">
+          
+
+          <!-- <div class="space-y-4 mb-8">
             <div v-for="module in curriculumForm.modules" :key="module.id"
               class="border border-gray-200 rounded-lg shadow-sm overflow-hidden">
               <div @click="toggleModule(module)"
@@ -649,8 +642,157 @@ onMounted(() => {
                 </div>
               </div>
             </div>
+          </div> -->
+
+  <div class="mb-8 max-w-2xl mx-auto">
+    <div class="grid grid-cols-12 gap-4 items-start">
+      <div class="col-span-4 flex justify-end pr-4">
+        <span class="text-[#E67E22] font-bold text-2xl italic">Preview</span>
+      </div>
+
+      <div class="col-span-8 border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+        <div class="bg-[#E9F5EE] p-3 flex justify-between items-center border-b border-gray-200">
+          <span class="font-semibold text-gray-700 text-sm">Module One: Meanings and Definitions</span>
+          <ChevronDown class="w-4 h-4 text-gray-500" />
+        </div>
+        <div class="bg-white p-0">
+          <div class="flex justify-between items-center p-3 border-b border-gray-50 text-xs">
+            <span class="text-gray-600">Lesson 1: What is Naturopathy?</span>
+            <span class="text-gray-400">10:20</span>
+          </div>
+          <div class="flex justify-between items-center p-3 border-b border-gray-50 text-xs text-gray-600">
+            <span>Lesson 2: Lorem</span>
+            <span class="text-gray-400">22:20</span>
+          </div>
+          <div class="p-3 text-xs text-gray-600">
+            <span>Additional Resources</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div v-if="isQuizDialogOpen || isLessonDialogOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-transparent p-4">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-lg overflow-hidden">
+      <div class="p-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ modalType === 'lesson' ? 'Add Lesson' : 'Add Quiz' }}</h3>
+        
+        <form @submit.prevent="handleQuizAdded" class="space-y-4">
+          <div v-if="modalType === 'quiz'">
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Quiz Title</label>
+              <input type="text" placeholder="Sample Text"
+                class="w-full p-2 border border-gray-200 rounded-md text-sm focus:ring-1 focus:ring-[#006633] outline-none" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Quiz Type</label>
+              <select class="w-full p-2 border border-gray-200 rounded-md text-sm bg-white focus:ring-1 focus:ring-[#006633] outline-none">
+                <option>Select Option</option>
+              </select>
+            </div>
+
+            <div class="flex justify-center py-2">
+              <button type="button" class="text-[#006633] text-sm font-medium flex items-center">
+                Add Question? <Plus class="w-4 h-4 ml-1" />
+              </button>
+            </div>
           </div>
 
+          <div v-if="modalType === 'lesson'">
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Lesson Title</label>
+              <input type="text" v-model="lessonForm.title" placeholder="Sample Text"
+                class="w-full p-2 border border-gray-200 rounded-md text-sm focus:ring-1 focus:ring-[#006633] outline-none" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-gray-500 mb-1">Content Type</label>
+              <select v-model="lessonForm.contentType" class="w-full p-2 border border-gray-200 rounded-md text-sm bg-white focus:ring-1 focus:ring-[#006633] outline-none">
+                <option disabled value="Select Option">Select Option</option>
+                <option>Video File</option>
+                <option>PDF Document</option>
+                <option>External Link</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">Estimated Duration</label>
+            <div class="flex items-center space-x-2">
+              <div class="flex items-center space-x-1 flex-1">
+                <input type="text" placeholder="00" class="w-full p-2 border border-gray-200 rounded-md text-center text-sm" />
+                <span class="text-xs text-gray-400">Hours</span>
+              </div>
+              <div class="flex items-center space-x-1 flex-1">
+                <input type="text" placeholder="00" class="w-full p-2 border border-gray-200 rounded-md text-center text-sm" />
+                <span class="text-xs text-gray-400">Minutes</span>
+              </div>
+              <div class="flex items-center space-x-1 flex-1">
+                <input type="text" placeholder="00" class="w-full p-2 border border-gray-200 rounded-md text-center text-sm" />
+                <span class="text-xs text-gray-400">Seconds</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">Quiz Type</label>
+            <select class="w-full p-2 border border-gray-200 rounded-md text-sm bg-white focus:ring-1 focus:ring-[#006633] outline-none">
+              <option>Select Option</option>
+            </select>
+          </div>
+
+          <div class="flex justify-center py-2">
+            <button type="button" class="text-[#006633] text-sm font-medium flex items-center">
+              Add Question? <Plus class="w-4 h-4 ml-1" />
+            </button>
+          </div>
+
+          <div class="flex justify-end space-x-3 pt-4">
+            <button type="submit" class="px-6 py-2 bg-[#006633] text-white rounded text-sm font-medium hover:bg-[#004d26]">
+              {{ modalType === 'lesson' ? 'Add Lesson' : 'Create Quiz' }}
+            </button>
+            <button type="button" @click="modalType === 'lesson' ? closeAddLessonDialog() : closeAddQuizDialog()" class="px-6 py-2 border border-gray-200 rounded text-gray-600 text-sm font-medium hover:bg-gray-50">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-6 mb-6">
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Module Title</label>
+      <input 
+        type="text" 
+        placeholder="Sample" 
+        class="w-full p-2.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#006633] outline-none"
+      />
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Module Number</label>
+      <select class="w-full p-2.5 border border-gray-300 rounded-md bg-white focus:ring-1 focus:ring-[#006633] outline-none">
+        <option>Select Option</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-6 mb-12">
+    <button 
+      type="button"
+      @click="openAddLessonDialog"
+      class="w-full py-3 border border-gray-300 rounded-md text-gray-700 font-medium flex items-center justify-center hover:bg-gray-50 transition"
+    >
+      Add Lesson <Plus class="w-4 h-4 ml-2" />
+    </button>
+    <button 
+      type="button"
+      @click="openAddQuizDialog"
+      class="w-full py-3 border border-gray-300 rounded-md text-gray-700 font-medium flex items-center justify-center hover:bg-gray-50 transition"
+    >
+      Add Quiz <Plus class="w-4 h-4 ml-2" />
+    </button>
+  </div>
           <div class="mt-8 pt-4 border-t border-gray-200">
             <div class="flex justify-between items-center mb-4">
               <h3 class="text-lg font-semibold text-gray-800">
@@ -699,7 +841,6 @@ onMounted(() => {
             </div>
           </div>
         </div>
-
         <div v-if="currentStep === 3">
           <div class="flex justify-between items-start mb-10">
             <h2 class="text-2xl font-semibold text-gray-800 border-b pb-2">
