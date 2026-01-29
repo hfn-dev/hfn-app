@@ -17,6 +17,7 @@
 </template>  
 
 <script>
+import paymentApi from "@/api/payments";
 
 const joinNow = async () => {
   if (isSubmitting.value) return;
