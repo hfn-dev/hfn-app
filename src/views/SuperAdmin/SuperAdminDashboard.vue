@@ -417,7 +417,7 @@ onMounted(async () => {
           Welcome Super Admin!
         </h1>
         <p class="text-gray-700 mt-2">
-          Here is how your courses are performing today.
+          
         </p>
       </div>
 
