@@ -22,11 +22,11 @@ export const homePageSchema = {
   hero: {
     titleHighlight: 'Healthcare',
     titleMain: 'Advocacy.',
-    introLine: 'Healthcare Federation of Nigeria',
+    introLine: 'We speak with one voice on behalf of the Nigerian Private Health Sector.',
     introText:
-      'encourage and facilitate opportunities for public-private partnerships and engagement with diverse stakeholders in the healthcare sector.',
+      'The private health sector provides over 60% of healthcare to Nigerians.',
     subText:
-      'We speak with one voice on behalf of the Nigerian Private Health Sector.',
+      'We facilitate regular strategic dialogues between the private sector and government to promote the development of beneficial healthcare sector policies.',
     ctaText: 'Join the Coalition ->',
     ctaLink: '/register',
     heroImage: 'hero-main',
