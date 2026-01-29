@@ -1,4 +1,4 @@
-import api from "@/api";
+import api from "./axios.js";
 
 export default {
   listResources() {
