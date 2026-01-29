@@ -149,18 +149,6 @@ const dummyEvents = [
 ];
 
 
-const fetchResources = async () => {
-  loadingResources.value = true;
-  try {
-    const data = await memberApi.listResources();
-    resources.value = data;
-  } catch (err) {
-    console.error("Failed to load resources", err);
-  } finally {
-    loadingResources.value = false;
-  }
-};
-  
 const downloadMinutes = async () => {
   downloadingMinutes.value = true;
   minutesError.value = null;
