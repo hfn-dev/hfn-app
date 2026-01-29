@@ -61,7 +61,9 @@ const getCoursePayload = () => {
         title: lesson.title,
         duration: lesson.duration,
         contentType: lesson.contentType || 'Video File',
+        contentFile: lesson.contentFile,
       })),
+      quizzes: module.quizzes || [],
       resources: module.resources,
     })),
     materialsIncluded: curriculumForm.value.materialsIncluded.map(
@@ -280,6 +282,7 @@ const handleLessonAdded = () => {
     title: lessonForm.value.title,
     duration: `${lessonForm.value.durationHours}:${lessonForm.value.durationMinutes}:${lessonForm.value.durationSeconds}`,
     contentType: lessonForm.value.contentType,
+    contentFile: lessonForm.value.contentFile,
   };
 
   module.lessons.push(lessonData);
@@ -320,10 +323,29 @@ const discountStatus = computed(() => {
       : 'None';
 });
 
-const handleQuizAdded = () => {
-  console.log('New Quiz Added (Placeholder Action)');
-  closeAddQuizDialog();
+const addModule = () => {
+  curriculumForm.value.modules.push({
+    id: Date.now(),
+    title: 'New Module',
+    isOpen: true,
+    lessons: [],
+    quizzes: [], 
+    resources: []
+  });
 };
+
+const handleQuizAdded = () => {
+  const module = curriculumForm.value.modules.find(m => m.id === currentModuleId.value);
+  if (module) {
+    module.quizzes.push({
+      id: Date.now(),
+      title: quizForm.value.title,
+      questions: []
+    });
+    closeAddQuizDialog();
+    toast.success('Quiz added to module');
+  }
+};  
 
 const submitCourse = async () => {
   try {
@@ -505,145 +527,7 @@ onMounted(() => {
 
           
 
-          <!-- <div class="space-y-4 mb-8">
-            <div v-for="module in curriculumForm.modules" :key="module.id"
-              class="border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-              <div @click="toggleModule(module)"
-                class="flex items-center justify-between p-4 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
-                <div class="font-semibold text-gray-700">
-                  {{ module.title }}
-                </div>
-                <ChevronDown :class="{ 'transform rotate-180': module.isOpen }"
-                  class="w-5 h-5 text-gray-500 transition-transform" />
-              </div>
-
-              <div v-if="module.isOpen" class="p-4 bg-white border-t border-gray-100">
-                <div v-for="lesson in module.lessons" :key="lesson.id"
-                  class="flex justify-between items-center py-2 border-b last:border-b-0">
-                  <div class="flex items-center text-gray-600">
-                    <Book class="w-4 h-4 mr-3 text-[#006633]" />
-                    <span>{{ lesson.title }}</span>
-                  </div>
-                  <div class="flex items-center space-x-4">
-                    <span class="text-sm text-gray-500">{{
-                      lesson.duration
-                    }}</span>
-                    <Edit2 class="w-4 h-4 text-blue-500 hover:text-blue-700 cursor-pointer" />
-                    <Trash2 class="w-4 h-4 text-red-500 hover:text-red-700 cursor-pointer" />
-                  </div>
-                </div>
-
-                <div class="flex items-center justify-between mt-4">
-                  <div class="flex space-x-3 items-center w-full max-w-sm">
-                    <input type="text" v-model="curriculumForm.newLessonTitle" placeholder="Lesson Title"
-                      class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border text-sm" />
-                    <button type="button" @click="openAddLessonDialog(module.id)"
-                      class="flex items-center px-3 py-1 bg-[#00cc66] text-white rounded-md text-sm hover:bg-[#00994d]">
-                      <Plus class="w-4 h-4 mr-1" /> Add Lesson
-                    </button>
-                  </div>
-
-                  <button type="button" @click="openAddQuizDialog"
-                    class="flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium">
-                    <Plus class="w-4 h-4 mr-1" /> Add Quiz
-                  </button>
-                </div>
-                <div v-if="isLessonDialogOpen"
-                  class="fixed inset-0 bg-gray-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4">
-                  <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg">
-                    <h2 class="text-xl font-bold mb-4">Add Lesson</h2>
-
-                    <form @submit.prevent="handleLessonAdded">
-                      <div class="mb-4">
-                        <label for="lesson-title" class="text-sm text-gray-700">Course Title</label>
-                        <input type="text" id="lesson-title" v-model="lessonForm.title" placeholder="Sample Text"
-                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66] focus:ring-[#00cc66]"
-                          required />
-                      </div>
-
-                      <div class="mb-4">
-                        <label class="block text-sm text-gray-700">Estimated Duration</label>
-                        <div class="flex space-x-2 mt-1 items-center">
-                          <input type="number" placeholder="00" v-model="lessonForm.durationHours" min="0" max="99"
-                            class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center" />
-                          <span class="text-sm">Hours</span>
-                          <input type="number" placeholder="00" v-model="lessonForm.durationMinutes" min="0" max="59"
-                            class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center" />
-                          <span class="text-sm">Minutes</span>
-                          <input type="number" placeholder="00" v-model="lessonForm.durationSeconds" min="0" max="59"
-                            class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center" />
-                          <span class="text-sm">Seconds</span>
-                        </div>
-                      </div>
-
-                      <div class="mb-4">
-                        <label for="content-type" class="block text-sm text-gray-700">Upload Content Type</label>
-                        <select id="content-type" v-model="lessonForm.contentType"
-                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66] focus:ring-[#00cc66]"
-                          required>
-                          <option disabled value="Select Option">
-                            Select Option
-                          </option>
-                          <option>Video File</option>
-                          <option>PDF Document</option>
-                          <option>External Link</option>
-                        </select>
-                      </div>
-
-                      <div
-                        class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer mb-6 hover:border-[#00cc66] transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none"
-                          viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                        </svg>
-                        <p class="mt-1 text-sm text-gray-600">Upload Content</p>
-                      </div>
-
-                      <div class="flex justify-end space-x-3">
-                        <button type="button" @click="closeAddLessonDialog"
-                          class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
-                          Cancel
-                        </button>
-                        <button type="submit" class="px-4 py-2 bg-[#00cc66] text-white rounded-md hover:bg-[#00994d]">
-                          Add Lesson
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-
-                <div v-if="isQuizDialogOpen"
-                  class="fixed inset-0 bg-gray-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4">
-                  <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
-                    <h2 class="text-xl font-bold mb-4">Add Quiz</h2>
-                    <p class="text-gray-600 mb-6">
-                      This is a placeholder for the "Add Quiz" configuration
-                      form.
-                    </p>
-
-                    <div class="mb-4">
-                      <label for="quiz-title" class="text-sm text-gray-700">Quiz Title</label>
-                      <input type="text" id="quiz-title" placeholder="e.g., Chapter 1 Assessment"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" />
-                    </div>
-
-                    <div class="flex justify-end space-x-3">
-                      <button type="button" @click="closeAddQuizDialog"
-                        class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
-                        Cancel
-                      </button>
-                      <button type="button" @click="handleQuizAdded"
-                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800">
-                        Create Quiz
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
-
+          
   <div class="mb-8 max-w-2xl mx-auto">
     <div class="grid grid-cols-12 gap-4 items-start">
       <div class="col-span-4 flex justify-end pr-4">
