@@ -7,8 +7,8 @@ import EditorDashboard from '@/views/Editor/EditorDashboard.vue';
 import GetInvolved from '@/views/GetInvolved.vue';
 import NewsAdvocacy from '@/views/NewsAdvocacy.vue';
 import Programs from '@/views/Programs.vue';
-import Resources from '@/views/Resources.vue';
 import Payment from '@/views/RegistrationSignIn/Payment.vue';
+import Resources from '@/views/Resources.vue';
 
 import EditorPages from '@/views/Editor/EditorPages.vue';
 import Signin from '@/views/Editor/Signin.vue';
@@ -64,6 +64,7 @@ import MyLearningLearner from '@/views/Learner/MyLearningLearner.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import About from '../views/About.vue';
 import Homepage from '../views/Homepage.vue';
+import GalleryDetail from '@/views/GalleryDetail.vue';
 
 const routes = [
   {
@@ -89,9 +90,15 @@ const routes = [
   { path: '/resources', name: 'Resources', component: Resources },
 
   {
-    path: '/blog/:id',
+    path: '/blog/:slug',
     name: 'BlogDetails',
     component: BlogDetails,
+    props: true,
+  },
+  {
+    path: '/gallery/:slug',
+    name: 'GalleryDetail',
+    component: GalleryDetail,
     props: true,
   },
   {

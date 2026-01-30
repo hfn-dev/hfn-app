@@ -58,37 +58,46 @@ export const homePageSchema = {
     months: {
       'December 2025': {
         featured: {
+          title: 'Driving Nigeria Toward Universal Health Coverage: A Landmark HFN–NHIA Private Sector Roundtable, theme: Leveraging the Private Sector to Accelerate Health Insurance Coverage in Nigeria',
+          slug: 'hfn-nhia-private-sector-roundtable',
           image: hfn_partner,
+          title: '',
           tag: 'Programs & Initiatives',
           date: 'December 1, 2025',
           comments: 0,
           description:
-            'The Healthcare Federation of Nigeria (HFN), in partnership with the  National Health Insurance Authority (NHIA),hosted a high-impact Private Sector Roundtable Breakfast Meeting today in Lagos. More than a stakeholder engagement, the event marked a decisive step in reshaping Nigeria’s health insurance landscape, uniting participants around one shared ambition: accelerating coverage through bold private sector leadership.',
+            'Healthcare Federation of Nigeria (HFN), in partnership with the  National Health Insurance Authority (NHIA),hosted a high-impact Private Sector Roundtable Breakfast Meeting today in Lagos. More than a stakeholder engagement, the event marked a decisive step in reshaping Nigeria’s health insurance landscape, uniting participants around one shared ambition: accelerating coverage through bold private sector leadership.',
         },
         newsList: [
           {
+            title: 'Driving the Digital Health Agenda Forward at #GDHF2025',
+            slug: 'digital-health-agenda-gdhf-2025',
             image: health,
             tag: 'Programs & Initiatives',
             date: 'December 15, 2025',
-            comments: 12,
+            comments: 0,
             description:
-              'Driving the Digital Health Agenda Forward at #GDHF2025.',
+              'At the Global Digital Health Forum 2025 in Nairobi, the President Healthcare Federation of Nigeria and Country Director PharmAccess Nigeria, Njide Ndili, a Founding Member of the Digital Transformation for Health Lab(DTH-Lab), delivered a powerful keynote on Digital Determinants of Health Framework. Her presentation underscored a critical message: digital systems are no longer optional layers in health; they are now core determinants that shape equity, access, safety, and well-being.',
           },
           {
+            title: 'NCDC Private Sector Engagement Roundtable on National Health Security',
+            slug: 'ncdc-private-sector-engagement',
             image: wef,
             tag: 'Health Alert',
             date: 'December 5, 2025',
-            comments: 5,
+            comments: 0,
             description:
               'The Nigeria Centre for Disease Control and Prevention (NCDC) convened a high-level Private Sector Engagement Roundtable focused on strengthening national health security through strategic collaboration. Healthcare Federation of Nigeria(HFN) was duly represented by Dr Benson Ayodele Cole(First Vice President 1), Mr Olufemi Akingbade(Executive Secretary), and Uchechi Amiloat the session.',
           },
           {
+            title: 'The Digital Health Revolution – Unlocking Investment in Africa’s HealthTech Ecosystem',
+            slug: 'the-digital-health-revolution',
             image: event,
             tag: 'Public Health Stories',
             date: 'December 10, 2025',
-            comments: 10,
+            comments: 0,
             description:
-              'The Digital Health Revolution is reshaping how Africa delivers, finances, and experiences healthcare. To unlock real investment in the continent’s HealthTech ecosystem, innovators, providers, regulators, and funders must align behind a shared transformation agenda. Digital innovation is no longer optional; it’s a strategic imperative for achieving Universal Health Coverage (UHC).',
+              'The Digital Health Revolution is reshaping how Africa delivers, finances, and experiences healthcare. To unlock real investment in the continent’s HealthTech ecosystem, innovators, providers, regulators, and funders must align behind a shared transformation agenda. Digital innovation is no longer optional; it’s a strategic imperative for achieving Universal Health Coverage (UHC). At the World Health Expo Leaders Africa in Accra, Njide Ndili, President HFN and Country Director PharmAccess Nigeria, joined a high-level panel on “The Digital Health Revolution – Unlocking Investment in Africa’s HealthTech Ecosystem.',
           },
         ],
       },
@@ -97,7 +106,7 @@ export const homePageSchema = {
           image: group,
           tag: 'Health Policy',
           date: 'September 18, 2025',
-          comments: 7,
+          comments: 0,
           description:
             'HFN met with the Federal Ministry of Health to discuss strengthening healthcare policy frameworks.',
         },
@@ -106,7 +115,7 @@ export const homePageSchema = {
             image: pharm,
             tag: 'Programs & Initiatives',
             date: 'September 15, 2025',
-            comments: 4,
+            comments: 0,
             description:
               'HFN continues its collaboration with pharmaceutical partners to ensure access to quality medicines.',
           },
@@ -114,7 +123,7 @@ export const homePageSchema = {
             image: oando,
             tag: 'Health Alert',
             date: 'September 10, 2025',
-            comments: 6,
+            comments: 0,
             description:
               'Oando Foundation and HFN partner to improve workplace health and wellness programs.',
           },
@@ -122,7 +131,7 @@ export const homePageSchema = {
             image: hba,
             tag: 'Public Health Stories',
             date: 'September 2, 2025',
-            comments: 3,
+            comments: 0,
             description:
               'HFN hosted a national workshop on healthcare business sustainability strategies.',
           },
@@ -133,7 +142,7 @@ export const homePageSchema = {
           image: emzor,
           tag: 'Programs & Initiatives',
           date: 'August 20, 2025',
-          comments: 3,
+          comments: 0,
           description:
             'HFN collaborated with Emzor Pharmaceuticals to discuss the future of local drug production.',
         },
@@ -142,7 +151,7 @@ export const homePageSchema = {
             image: society,
             tag: 'Health Alert',
             date: 'August 18, 2025',
-            comments: 2,
+            comments: 0,
             description:
               'Society for Family Health and HFN partner to improve primary care delivery systems.',
           },
@@ -150,17 +159,18 @@ export const homePageSchema = {
             image: bridge,
             tag: 'Public Health Stories',
             date: 'August 12, 2025',
-            comments: 1,
+            comments: 0,
             description:
               'Bridge Clinic joins HFN network to promote advanced fertility care across Nigeria.',
           },
           {
+            title: 'INAUGURATION OF THE IMPLEMENTATION COMMITTEE FOR THE NATIONAL STAKEHOLDERS DIALOGUE ON POWER IN THE HEALTH SECTOR',
             image: health,
             tag: 'Programs & Initiatives',
             date: 'August 5, 2025',
-            comments: 4,
+            comments: 0,
             description:
-              'HFN launched its Healthcare Innovation Accelerator to support health-tech startups.',
+              'This committee is tasked with convening a National Stakeholders Dialogue, implementing key recommendations, and mobilizing resources for the sustainable electrification of healthcare facilities. The committee, chaired by the Honourable Minister of State for Health, includes distinguished members such as: Dr. Babatunde Ipaye (Vice Chairman), Mrs. Njide Ndili (President of HFN), representatives from the Ministry of Health, Ministry of Power, NPHCDA, REA, NSIA, World Bank, WHO, UNDP, Global Fund, CHAI, PharmAccess, and NESG. This initiative is a major step toward ensuring uninterrupted power for better healthcare delivery in Nigeria! In line with our mandate to represent the private sector, HFN will be conducting a survey to gain deeper insights into the power challenges faced by our members. This initiative is a major step toward ensuring uninterrupted power for better healthcare delivery in Nigeria! In line with our mandate to represent the private sector, HFN will be conducting a survey to gain deeper insights into the power challenges faced by our members.',
           },
         ],
       },
@@ -168,7 +178,7 @@ export const homePageSchema = {
   },
   executives: [
     {
-      name: 'Mrs. Njide Ndili',
+      name: 'Njide Ndili',
       position: 'President, HFN',
       role: 'Country Director, PharmAccess',
       image: njide,
@@ -186,19 +196,19 @@ export const homePageSchema = {
       image: jennifer,
     },
     {
-      name: 'Mrs. Chinyere Okorocha',
+      name: 'Chinyere Okorocha',
       position: 'Public Relations Secretary, HFN',
       role: 'Head of Sectors, Jackson, Etti & Edu',
       image: chinyere,
     },
     {
-      name: 'Mr. Olayode Babarinde',
+      name: 'Olayode Babarinde',
       position: 'Financial Secretary, HFN',
       role: 'Healthcare System Partner – Policy, Roche',
       image: babarinde,
     },
     {
-      name: 'Mr. Reagan Rowland',
+      name: 'Reagan Rowland',
       position: 'Treasurer, HFN',
       role: 'Founder/CEO, OneClick Med',
       image: reagan,

@@ -61,13 +61,13 @@ const navLinks = [
   { title: "Home", path: "/", hasDropdown: false },
   { title: "About Us", path: "/about", hasDropdown: false },
   {
-    title: "Latest Updates",
-    path: "/blog",
+    title: "News & Updates",
+    path: "#",
     hasDropdown: true,
     dropdownItems: [
       { title: "Programs & Initiatives", path: "/programs" },
-      { title: "News & Advocacy", path: "/news" },
-      { title: "Resources", path: "/resources" },
+      { title: "Latest News", path: "/news" },
+      { title: "Newsletters", path: "/newsletters" },
       { title: "Events", path: "/events" },
       { title: "Gallery", path: "/gallery" },
 
@@ -76,11 +76,12 @@ const navLinks = [
   },
   {
     title: "Membership",
-    path: "/membership",
+    path: "#",
     hasDropdown: true,
     dropdownItems: [
       { title: "Member Area", path: "/membership" },
       { title: "Get Involved", path: "/get-involved" },
+      { title: "Resources", path: "/resources" },
     ],
 
   },

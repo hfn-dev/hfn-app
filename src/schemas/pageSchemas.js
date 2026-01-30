@@ -166,7 +166,7 @@ export const pageSchemas = {
     },
     executives: [
       {
-        name: 'Mrs. Njide Ndili',
+        name: 'Njide Ndili',
         position: 'President, HFN',
         role: 'Country Director, PharmAccess',
         image: njide,
@@ -184,19 +184,19 @@ export const pageSchemas = {
         image: jennifer,
       },
       {
-        name: 'Mrs. Chinyere Okorocha',
+        name: 'Chinyere Okorocha',
         position: 'Public Relations Secretary, HFN',
         role: 'Head of Sectors, Jackson, Etti & Edu',
         image: chinyere,
       },
       {
-        name: 'Mr. Olayode Babarinde',
+        name: 'Olayode Babarinde',
         position: 'Financial Secretary, HFN',
         role: 'Healthcare System Partner – Policy, Roche',
         image: babarinde,
       },
       {
-        name: 'Mr. Reagan Rowland',
+        name: 'Reagan Rowland',
         position: 'Treasurer, HFN',
         role: 'Founder/CEO, OneClick Med',
         image: reagan,
@@ -359,15 +359,15 @@ export const pageSchemas = {
 
     contactDetails: {
       address: {
-        text: '109A, Awolowo Road, Ikoyi, Opposite Standard Chartered Bank, Lagos.',
+        text: '109, Awolowo Road, Ikoyi, Opposite Standard Chartered Bank, Lagos.',
         googleMapsUrl: 'https://maps.google.com/...',
       },
       emails: [
         { label: 'General Inquiries', address: 'info@hfnigeria.com' },
-        {
-          label: 'Executive Secretary',
-          address: 'executivesecretary@hfnigeria.com',
-        },
+        // {
+        //   label: 'Executive Secretary',
+        //   address: 'executivesecretary@hfnigeria.com',
+        // },
       ],
       phone: '+234 803 975 3274',
       socialMedia: [

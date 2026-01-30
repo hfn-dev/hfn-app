@@ -9,7 +9,7 @@
             <h1
               class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight"
             >
-              <span class="text-green-700">Upcoming Events</span>
+              <span class="text-green-700">Events/Engagements</span>
               <br />
               <span class="text-gray-900"
                 >Speaking with one voice for the private health sector</span
@@ -44,7 +44,7 @@
 
     <section class="container mx-auto px-4 md:px-8 py-8">
       <h3 class="text-2xl font-semibold text-gray-800 mb-6">
-        Find your next event
+        Find event
       </h3>
 
       <div
@@ -297,8 +297,9 @@
 <script setup>
 import awards from "@/assets/awards.png";
 import newEvent from "@/assets/events.png";
-import latest from "@/assets/latest_news.png";
+// import latest from "@/assets/latest_news.png";
 
+const latest = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769716176/dc2a1ae8ac60464700aa7be25ea2c408_L_dt5us8.jpg';
 const events = [
   {
     title: "2026 HFN Annual Conference",

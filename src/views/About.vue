@@ -241,7 +241,7 @@ const resolveImage = (image) => imageMap[image] || image;
                 </div>
 
                 <div class="lg:col-span-8 text-gray-700">
-                  <h4 class="font-bold text-xl mb-4">Biography</h4>
+                  <h4 class="font-bold text-xl mb-4"></h4>
                   <p class="mb-6 text-lg">{{ exec.bio }}</p>
 
                   <h4 class="font-bold text-xl mb-2">Words on Marble…</h4>

@@ -164,7 +164,7 @@ import globe from "@/assets/globe.png";
               ></path>
             </svg>
             <p class="text-gray-700 text-base">
-              109A, Awolowo Road, Ikoyi, Opposite Standard Chartered Bank,
+              109, Awolowo Road, Ikoyi, Opposite Standard Chartered Bank,
               Lagos.
             </p>
           </div>
@@ -186,7 +186,7 @@ import globe from "@/assets/globe.png";
             </svg>
             <p class="text-gray-700 text-base">info@hfnigeria.com</p>
           </div>
-          <div class="flex items-center">
+          <!-- <div class="flex items-center">
             <svg
               class="w-6 h-6 mr-3 text-green-700 flex-shrink-0"
               fill="none"
@@ -203,7 +203,7 @@ import globe from "@/assets/globe.png";
             </svg>
             <p class="text-gray-700 text-base break-all">executivesecretary@hfnigeria.com</p>
 
-          </div>
+          </div> -->
 
           <div class="flex items-center">
             <svg

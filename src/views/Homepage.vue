@@ -253,12 +253,13 @@ onMounted(async () => {
             {{ featured.description }}
           </p>
 
-          <a
-            href="#"
-            class="inline-flex items-center gap-2 bg-green-700 text-white px-5 py-2 rounded-full font-medium hover:bg-green-800 transition"
-          >
-            Read More <i class="fa-solid fa-arrow-right"></i>
-          </a>
+          <RouterLink
+  :to="`/blog/${featured.slug}`"
+  class="inline-flex items-center gap-2 bg-green-700 text-white px-5 py-2 rounded-full font-medium hover:bg-green-800 transition"
+>
+  Read More <i class="fa-solid fa-arrow-right"></i>
+</RouterLink>
+
         </div>
       </div>
 

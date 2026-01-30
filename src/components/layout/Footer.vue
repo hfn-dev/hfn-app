@@ -66,7 +66,7 @@ const currentYear = new Date().getFullYear();
               <a
                 href="mailto:info@hfnnigeria.com"
                 class="hover:text-green-700 transition"
-                >info@hfnnigeria.com</a
+                >info@hfnigeria.com</a
               >
             </div>
 

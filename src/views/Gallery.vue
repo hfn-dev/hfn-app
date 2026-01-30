@@ -5,9 +5,9 @@
         <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between">
           <div class="lg:w-1/2 mb-8 lg:mb-0">
             <h1 class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
-              <span class="text-green-700">Event Gallery</span>
+              <span class="text-green-700">Relive Our Moments</span>
               <br>
-              <span class="text-gray-900">Relive Our Moments</span>
+              <span class="text-gray-900"></span>
             </h1>
             <p class="mt-4 text-gray-600 max-w-lg">
               Explore the highlights of our past conferences, workshops, and community engagements. 
@@ -52,14 +52,16 @@
 
     <section class="container mx-auto px-4 md:px-8 py-12">
       <div class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-        <div
-          v-for="(item, index) in galleryItems"
-          :key="index"
-          class="break-inside-avoid group relative overflow-hidden rounded-xl bg-gray-100 transition-all duration-300 hover:shadow-2xl"
-        >
+        <router-link
+  v-for="item in galleryItems"
+  :key="item.slug"
+  :to="`/gallery/${item.slug}`"
+  class="block break-inside-avoid group relative overflow-hidden rounded-xl bg-gray-100 transition-all duration-300 hover:shadow-2xl"
+>
+
           <div class="relative overflow-hidden">
             <img
-              :src="item.image"
+              :src="item.cover"
               :alt="item.title"
               class="w-full object-cover transition duration-500 group-hover:scale-110"
             />
@@ -78,7 +80,8 @@
               </div>
             </div>
           </div>
-        </div>
+        </router-link>
+
       </div>
 
       <div class="mt-16 text-center">
@@ -92,44 +95,63 @@
 
 <script setup>
 import awards from "@/assets/awards.png";
-import latest from "@/assets/latest_news.png";
+// import latest from "@/assets/latest_news.png";
+
+const event = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739050/850a9bd13a177b57467b2c6d7c3dfec3_L_g8tmki.jpg';
+const event1 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739050/646e54f3224499907f10b9e476e85f82_S_xa0w1q.jpg';
+const event2 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739049/1327d600f17579e414edbf44c080e3b5_L_1_p2vdpq.jpg';
+const event3 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739049/47ed312dbee39b4feb4a261300270374_M_1_jqdrbm.jpg';
+const event4 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739049/176305b02b8b14f75f2e6c696c06f6d6_M_fyowa4.jpg';
+const latest = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769738844/675362aef61a36df3271398e6ff1e414_S_c6duhw.jpg';
 
 const galleryItems = [
   {
+    slug: "digital-skills-bootcamp-2025",
     title: "Digital Skills Bootcamp 2025",
     category: "Workshop",
     date: "November 20, 2025",
-    image: awards, 
+    cover: awards, 
+    images: [event, event1, event2, event3],
   },
   {
+    slug: "women-in-tech-summit",
     title: "Women in Tech Summit",
     category: "Conference",
     date: "December 5, 2025",
-    image: latest,
+    cover: latest,
+    images: [event, event1, event2, event3],
   },
   {
+    slug: "community-outreach-lagos",
     title: "Community Outreach Lagos",
     category: "Social",
     date: "October 12, 2025",
-    image: awards,
+    cover: event1,
+    images: [event, event1, event2, event3],
   },
   {
+    slug: "health-wellness-webinar",
     title: "Health & Wellness Webinar",
     category: "Webinar",
     date: "January 12, 2026",
-    image: latest,
+    cover: event2,
+    images: [event, event1, event2, event3],
   },
   {
+    slug: "annual-leadership-awards",
     title: "Annual Leadership Awards",
     category: "Gala",
     date: "December 20, 2025",
-    image: awards,
+    cover: event3,
+    images: [event, event1, event2, event3],
   },
   {
+    slug: "tech-innovation-expo",
     title: "Tech Innovation Expo",
     category: "Conference",
     date: "March 15, 2026",
-    image: latest,
+    cover: event,
+    images: [event, event1, event2, event3],
   },
 ];
 </script>

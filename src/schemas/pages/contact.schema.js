@@ -50,15 +50,15 @@ export const contactPageSchema = {
 
     contactDetails: {
       address: {
-        text: '109A, Awolowo Road, Ikoyi, Opposite Standard Chartered Bank, Lagos.',
+        text: '109, Awolowo Road, Ikoyi, Opposite Standard Chartered Bank, Lagos.',
         googleMapsUrl: 'https://maps.google.com/...',
       },
       emails: [
         { label: 'General Inquiries', address: 'info@hfnigeria.com' },
-        {
-          label: 'Executive Secretary',
-          address: 'executivesecretary@hfnigeria.com',
-        },
+        // {
+        //   label: 'Executive Secretary',
+        //   address: 'executivesecretary@hfnigeria.com',
+        // },
       ],
       phone: '+234 803 975 3274',
       socialMedia: [

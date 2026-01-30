@@ -268,6 +268,25 @@ const categories = ref([
     ],
   },
   {
+    name: "Association",
+    description: "For registered professional or trade associations",
+    plans: [
+      {
+        title: "Association Member",
+        price: "₦150,000 per year",
+        audience: "Ideal for professional bodies",
+        benefits: [
+          "Advocacy/Public-Private Engagement project",
+          "Networking/High Profile Breakfast Meetings",
+          "Access to Finance",
+          "Promotion & Brand Visibility",
+          "Access to Industry Information for Members Only",
+          "Partnership & Engagement with International Organizations",
+        ],
+      },
+    ],
+  },
+  {
     name: "Corporate",
     description: "Ideal for private and insurance companies",
     plans: [
@@ -307,25 +326,7 @@ const categories = ref([
       },
     ],
   },
-  {
-    name: "Association",
-    description: "For registered professional or trade associations",
-    plans: [
-      {
-        title: "Association Member",
-        price: "₦150,000 per year",
-        audience: "Ideal for professional bodies",
-        benefits: [
-          "Advocacy/Public-Private Engagement project",
-          "Networking/High Profile Breakfast Meetings",
-          "Access to Finance",
-          "Promotion & Brand Visibility",
-          "Access to Industry Information for Members Only",
-          "Partnership & Engagement with International Organizations",
-        ],
-      },
-    ],
-  },
+  
   {
     name: "Diaspora",
     description:
@@ -362,10 +363,10 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
             class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4"
           >
             <span class="text-orange-500 block"
-              >Unite. Influence. Transform.</span
+              >Engagement. Access. Quality.</span
             >
             <span class="text-green-700 block mt-2"
-              >A digital coalition driving policy and innovation.</span
+              >A coalition driving policy and innovation.</span
             >
           </h2>
           <p class="mt-6 text-lg text-gray-600 max-w-xl">
@@ -482,7 +483,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
             <button
               v-for="tab in tabs"
               :key="tab.id"
-              @click="activeTab = tab.id"
+              @mouseenter="activeTab = tab.id"
               :class="[
                 'relative w-[200px] h-[200px] p-3 shadow-sm flex flex-col justify-center text-left transition-all duration-300 transform',
                 'rounded-tr-[30px] rounded-bl-[30px]',

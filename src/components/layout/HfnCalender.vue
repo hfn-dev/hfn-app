@@ -1,14 +1,13 @@
 <script setup>
 import { computed, ref } from "vue";
 import eventThumb3 from "@/assets/event2026.png";
-
 import eventThumb2 from "@/assets/hands.png";
 import eventThumb from "@/assets/latest_news.png";
 
 const today = new Date();
 const activeDate = ref(new Date(today.getFullYear(), today.getMonth(), 1));
 const sortBy = ref("All");
-
+const eventThumb4 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769716174/f5b95525832f3712e665bb57dba370d3_XS_yrppya.jpg';
 
 function closeModal() {
   selectedEvent.value = null;
@@ -69,7 +68,7 @@ const events = ref([
     date: "2026-03-05",
     time: "10:00 AM",
     tag: "Conference",
-    image: eventThumb3,
+    image: eventThumb4,
     excerpt:
       "Join HFN 2026 to explore bold private‑sector solutions driving healthcare financing and Universal Health Coverage in Nigeria.",
     details:
