@@ -214,7 +214,7 @@ onMounted(async () => {
         <h2
           class="text-2xl sm:text-3xl md:text-4xl font-serif font-extrabold text-gray-900 tracking-tight text-center sm:text-left mt-3 sm:mt-0"
         >
-          {{ pageContent.news.title }}
+          Our Latest Update
         </h2>
       </div>
     </div>
