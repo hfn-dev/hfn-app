@@ -209,7 +209,7 @@ export const homePageSchema = {
     {
       question: 'What paves the Healthcare Federation of Nigeria (HFN) on?',
       answer:
-        'The HFN is paved on the mission to provide a unified voice for the private healthcare sector in Nigeria, fostering collaboration, promoting best practices, and driving policy change to achieve universal health coverage.',
+        'HFN is paved on the mission to provide a unified voice for the private healthcare sector in Nigeria, fostering collaboration, promoting best practices, and driving policy change to achieve universal health coverage.',
     },
     {
       question: 'How can I join HFN?',
