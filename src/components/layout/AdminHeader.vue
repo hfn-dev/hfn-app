@@ -40,17 +40,54 @@ const handleLinkClick = (path) => {
 
 const isLinkActive = (path) => path === currentPath.value;
 
+const openDropdown = ref(null); 
+
+const toggleNavDropdown = (title) => {
+  openDropdown.value = openDropdown.value === title ? null : title;
+};
+
 const navLinks = [
   { title: "Home", path: "/", hasDropdown: false },
   { title: "About Us", path: "/about", hasDropdown: false },
-  { title: "Latest Updates", path: "/blog", hasDropdown: true },
-  { title: "Membership", path: "/membership", hasDropdown: true },
+  {
+    title: "Latest Updates",
+    
+    hasDropdown: true,
+    dropdownItems: [
+      { title: "Programs & Initiatives", path: "/programs" },
+      { title: "Latest News", path: "/news" },
+      { title: "Newsletters", path: "/newsletters" },
+      { title: "Events", path: "/events" },
+      { title: "Gallery", path: "/gallery" },
+    ],
+  },
+  {
+    title: "Membership",
+    
+    hasDropdown: true,
+    dropdownItems: [
+      { title: "Member Area", path: "/membership" },
+      { title: "Get Involved", path: "/get-involved" },
+      { title: "Resources", path: "/resources" },
+    ],
+  },
   { title: "Contact Us", path: "/contact", hasDropdown: false },
 ];
+// const navLinks = [
+//   { title: "Home", path: "/", hasDropdown: false },
+//   { title: "About Us", path: "/about", hasDropdown: false },
+//   { title: "Latest Updates", path: "/blog", hasDropdown: true },
+//   { title: "Membership", path: "/membership", hasDropdown: true },
+//   { title: "Contact Us", path: "/contact", hasDropdown: false },
+// ];
 
 const isUserDropdownOpen = ref(false);
 const userDropdownRef = ref(null);
-const toggleDropdown = () => {
+// const toggleDropdown = () => {
+//   isUserDropdownOpen.value = !isUserDropdownOpen.value;
+// };
+
+const toggleUserDropdown = () => {
   isUserDropdownOpen.value = !isUserDropdownOpen.value;
 };
 
@@ -139,7 +176,7 @@ onUnmounted(() => {
         </RouterLink>
       </div>
 
-      <div class="hidden lg:flex items-center space-x-4">
+      <!-- <div class="hidden lg:flex items-center space-x-4">
         <RouterLink
           v-for="link in navLinks"
           :key="link.title"
@@ -183,8 +220,37 @@ onUnmounted(() => {
             <path d="m6 9 6 6 6-6" />
           </svg>
         </RouterLink>
-      </div>
+      </div> -->
+      <div class="hidden lg:flex items-center space-x-2 xl:space-x-4">
+  <div v-for="link in navLinks" :key="link.title" class="relative group">
+    <RouterLink 
+      :to="link.path" 
+      @click="handleLinkClick(link.path)"
+      class="flex items-center px-4 py-3 font-semibold transition-all duration-200 rounded-lg whitespace-nowrap"
+      :class="[
+        isLinkActive(link.path)
+          ? 'bg-[#f2f9f3] text-[#004d33] shadow-sm'
+          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
+      ]"
+    >
+      {{ link.title }}
+      <svg v-if="link.hasDropdown" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180">
+        <path d="m6 9 6 6 6-6" />
+      </svg>
+    </RouterLink>
 
+    <div v-if="link.hasDropdown"
+      class="absolute left-0 mt-2 w-56 bg-white border border-gray-100 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-20">
+      <RouterLink v-for="item in link.dropdownItems" :key="item.title" :to="item.path"
+        class="block px-4 py-2 text-sm text-gray-700 hover:bg-[#F2F9F3] hover:text-[#004d33]"
+        @click="handleLinkClick(item.path)">
+        {{ item.title }}
+      </RouterLink>
+    </div>
+  </div>
+</div>
       <div class="hidden lg:flex items-center space-x-4">
         <button
           class="p-2 text-gray-500 hover:text-gray-900 rounded-full hover:bg-gray-100 transition"
@@ -206,7 +272,7 @@ onUnmounted(() => {
           </svg>
         </button>
 
-        <div ref="userDropdownRef" class="relative cursor-pointer" @click.stop="toggleDropdown">
+        <div ref="userDropdownRef" class="relative cursor-pointer" @click.stop="toggleUserDropdown">
           <div
             :style="{
               backgroundColor: ACTIVE_BG_COLOR,
