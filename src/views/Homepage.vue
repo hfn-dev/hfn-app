@@ -135,7 +135,7 @@ onMounted(async () => {
         <div
           v-for="(logoKey, index) in pageContent.partners.logos"
           :key="index"
-          class="flex items-center justify-center h-28 w-49"
+          class="flex items-center justify-center h-48 w-59"
         >
           <img
             :src="resolveAsset(logoKey)"

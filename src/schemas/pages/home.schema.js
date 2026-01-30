@@ -9,7 +9,7 @@ import hfn_partner from '@/assets/hfn_partner.png';
 import hba from '@/assets/hba-africa.png';
 import oando from '@/assets/oando_logo.png';
 import pharm from '@/assets/pharm.png';
-import society from '@/assets/society.png';
+// import society from '@/assets/society.png';
 
 import ayodele from '@/assets/ayodele.png';
 import babarinde from '@/assets/babarinde.png';
@@ -18,6 +18,8 @@ import jennifer from '@/assets/jennifer.png';
 import njide from '@/assets/njide.png';
 import reagan from '@/assets/reagan.png';
 
+
+const society = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769734457/Society_For_Family_Health_Logo_1_a5qcrp.png';
 export const homePageSchema = {
   hero: {
     titleHighlight: 'Healthcare',
@@ -46,9 +48,9 @@ export const homePageSchema = {
       { label: 'Vision', value: '1' },
       { label: 'Registered Health Guardians', value: '6+' },
       { label: 'Partners', value: '5+' },
-      { label: 'Projects Executed', value: '10' },
-      { label: "Patient's assistance", value: '20' },
-      { label: 'Registered Diasporians', value: '5+' },
+      // { label: 'Projects Executed', value: '10' },
+      // { label: "Patient's assistance", value: '20' },
+      // { label: 'Registered Diasporians', value: '5+' },
     ],
   },
 

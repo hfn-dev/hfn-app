@@ -1,5 +1,5 @@
 <script setup>
-import hfn_logo from "@/assets/hfn-health.png";
+// import hfn_logo from "@/assets/hfn-health.png";
 import { useAuth } from "@/store/authStore";
 import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -8,7 +8,7 @@ const route = useRoute();
 
 const DARK_GREEN = "#004d33";
 const ACTIVE_BG_COLOR = "#F2F9F3";
-
+const hfn_logo = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769734458/Untitled_design_zuolwv.png';
 const currentPath = ref(route.path)
 const { user, isAuthenticated, logout, role } = useAuth();
 const isMobileMenuOpen = ref(false);
@@ -125,7 +125,7 @@ const toggleDropdown = (title) => {
     <nav class="flex items-center justify-between p-4 lg:px-8 max-w-7xl mx-auto">
       <div class="flex items-center flex-shrink-0">
         <RouterLink to="/" @click="handleLinkClick('/')" class="cursor-pointer">
-          <img :src="hfn_logo" alt="HFN Logo" class="w-54 h-auto mr-3 flex-shrink-0" />
+          <img :src="hfn_logo" alt="HFN Logo" class="w-40 h-auto mr-3 flex-shrink-0" />
         </RouterLink>
       </div>
 

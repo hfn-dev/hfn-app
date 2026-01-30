@@ -13,8 +13,11 @@ import njide from '@/assets/njide.png';
 import oando from '@/assets/oando_logo.png';
 import pharm from '@/assets/pharm.png';
 import reagan from '@/assets/reagan.png';
-import society from '@/assets/society.png';
+// import society from '@/assets/society.png';
 import wef from '@/assets/wef.jpg';
+
+
+const society = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769734457/Society_For_Family_Health_Logo_1_a5qcrp.png';
 
 export const pageSchemas = {
   home: {
@@ -43,9 +46,9 @@ export const pageSchemas = {
         { label: 'Vision', value: '1' },
         { label: 'Registered Health Guardians', value: '6+' },
         { label: 'Partners', value: '5+' },
-        { label: 'Projects Executed', value: '10' },
-        { label: "Patient's assistance", value: '20' },
-        { label: 'Registered Diasporians', value: '5+' },
+        // { label: 'Projects Executed', value: '10' },
+        // { label: "Patient's assistance", value: '20' },
+        // { label: 'Registered Diasporians', value: '5+' },
       ],
     },
 

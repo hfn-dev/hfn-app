@@ -1,12 +1,15 @@
 <script setup>
-import hfn_logo from "@/assets/hfn-health.png";
+// import hfn_logo from "@/assets/hfn-health.png";
 import { useAuth } from "@/store/authStore";
 import { onMounted } from "vue";
 
 import { computed, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+
+
 const router = useRouter();
 const route = useRoute();
+const hfn_logo = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769734458/Untitled_design_zuolwv.png';
 
 const DARK_GREEN = "#004d33";
 const ACTIVE_BG_COLOR = "#f2f9f3";
@@ -131,7 +134,7 @@ onUnmounted(() => {
           <img
             :src="hfn_logo"
             alt="HFN Logo"
-            class="w-54 h-auto mr-3 flex-shrink-0"
+            class="w-40 h-auto mr-3 flex-shrink-0"
           />
         </RouterLink>
       </div>
