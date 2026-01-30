@@ -6,8 +6,20 @@ import Image from "@/assets/image.jpg";
 import HfnCalender from "@/components/layout/HfnCalender.vue";
 import { homePageSchema } from "@/schemas/pages/home.schema";
 import { resolveAsset } from "@/utils/assetMap";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, onUnmounted  } from "vue";
 
+const heroSlides = [
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715465/1feebd03da9f660dfb6e3f79b696f544_L_rxf7mk.jpg",
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769716176/f01ce502715837920e87942116372980_M_jb2p23.jpg",
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769734457/Society_For_Family_Health_Logo_1_a5qcrp.png",
+];
+
+const activeSlide = ref(0);
+let interval = null;
+
+onUnmounted(() => {
+  clearInterval(interval);
+});  
 
 const faqs = computed(() => pageContent.value.faqs);
 const group = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715465/1feebd03da9f660dfb6e3f79b696f544_L_rxf7mk.jpg';
@@ -37,6 +49,10 @@ const selectedMonth = ref(Object.keys(homePageSchema.news.months)[0]);
 
 
 onMounted(async () => {
+  interval = setInterval(() => {
+    activeSlide.value =
+      (activeSlide.value + 1) % heroSlides.length;
+  }, 5000);
   const { data } = await api.get(`/api/pages/${pageId}/`);
   pageContent.value = data.content || structuredClone(homePageSchema);
 
@@ -73,51 +89,71 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section
-    class="relative pt-16 pb-24 lg:pt-32 lg:pb-40 overflow-hidden bg-[#F2F9F3]"
-  >
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="lg:flex lg:items-center">
-        <div class="lg:w-1/2">
-          <h1
-            class="text-5xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-gray-900"
-          >
-            <span class="text-orange-600"
-              >{{ pageContent.hero.titleHighlight }} </span
-            ><br />
-            <span class="text-primary"> {{ pageContent.hero.titleMain }} </span>
-          </h1>
-          <p class="text-lg text-gray-600 mb-8 max-w-lg">
-            <span class="text-green-600">{{ pageContent.hero.introLine }}</span>
-            {{ pageContent.hero.introText }}
-          </p>
-          <p class="text-lg text-gray-600 mb-8 max-w-lg">
-            {{ pageContent.hero.subText }}
-          </p>
-          <RouterLink
-            to="/register"
-            class="inline-block py-3 px-8 bg-primary text-white font-semibold rounded-lg shadow-lg hover:bg-opacity-90 transition duration-300 transform hover:scale-[1.02]"
-          >
-            {{ pageContent.hero.ctaText }}
-          </RouterLink>
-        </div>
+  <section class="relative h-[90vh] min-h-[650px] overflow-hidden">
+  <!-- SLIDES -->
+  <div class="absolute inset-0">
+    <transition-group name="fade">
+      <img
+        v-for="(slide, index) in heroSlides"
+        v-show="index === activeSlide"
+        :key="slide"
+        :src="slide"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+    </transition-group>
 
-        <div
-          class="lg:w-1/2 mt-12 lg:mt-0 lg:ml-12 flex justify-center lg:justify-end"
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black/50"></div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="relative z-10 h-full flex items-center">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+      <div class="lg:w-1/2 text-white">
+        <h1
+          class="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight mb-6"
         >
-          <div
-            class="w-full max-w-md lg:max-w-full h-80 sm:h-96 lg:h-[450px] bg-gray-300 rounded-xl shadow-2xl relative overflow-hidden"
-          >
-            <img
-              :src="Image"
-              alt="Medical tools and documents illustrating healthcare leadership"
-              class="absolute inset-0 w-full h-full object-cover"
-            />
-          </div>
-        </div>
+          <span class="text-orange-400">
+            {{ pageContent.hero.titleHighlight }}
+          </span>
+          <br />
+          <span class="text-white">
+            {{ pageContent.hero.titleMain }}
+          </span>
+        </h1>
+
+        <p class="text-lg mb-6 max-w-xl">
+          <span class="text-green-300 font-semibold">
+            {{ pageContent.hero.introLine }}
+          </span>
+          {{ pageContent.hero.introText }}
+        </p>
+
+        <p class="text-lg mb-10 max-w-xl">
+          {{ pageContent.hero.subText }}
+        </p>
+
+        <RouterLink
+          :to="pageContent.hero.ctaLink"
+          class="inline-flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white px-8 py-4 rounded-xl font-semibold shadow-xl transition"
+        >
+          {{ pageContent.hero.ctaText }}
+        </RouterLink>
       </div>
     </div>
-  </section>
+  </div>
+
+  <!-- INDICATORS -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+    <button
+      v-for="(_, index) in heroSlides"
+      :key="index"
+      class="w-3 h-3 rounded-full transition"
+      :class="activeSlide === index ? 'bg-white' : 'bg-white/40'"
+      @click="activeSlide = index"
+    />
+  </div>
+</section>
 
   <div class="py-6 border-b border-gray-200 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -429,4 +465,13 @@ onMounted(async () => {
 .container {
   max-width: 1100px;
 }
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s ease-in-out;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}  
 </style>
