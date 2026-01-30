@@ -119,7 +119,7 @@ const dummyEvents = [
   {
     slug: "dummy-1",
     title: "HFN Healthcare Policy Roundtable",
-    image: "https://via.placeholder.com/600x400?text=HFN+Event",
+    image: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769773394/2_dyphjj.png",
     tag: "Programs & Initiatives",
     description:
       "A strategic discussion on strengthening Nigeria’s healthcare policy framework.",
@@ -129,9 +129,9 @@ const dummyEvents = [
     buttonText: "Coming Soon",
   },
   {
-    slug: "dummy-2",
+    slug: "Medical-nnovation-investment-forum",
     title: "Medical Innovation & Investment Forum",
-    image: "https://via.placeholder.com/600x400?text=HFN+Event",
+    image: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769801324/37a077342a5babe5ea57edba2f8b97d5_M_wvfvsf.jpg",
     tag: "Health Alert",
     description:
       "Exploring investment opportunities in local pharmaceutical manufacturing.",
@@ -141,9 +141,9 @@ const dummyEvents = [
     buttonText: "Coming Soon",
   },
   {
-    slug: "dummy-3",
+    slug: "hfn-end-of-year-stakeholders-summit",
     title: "HFN End-of-Year Stakeholders Summit",
-    image: "https://via.placeholder.com/600x400?text=HFN+Event",
+    image: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739050/850a9bd13a177b57467b2c6d7c3dfec3_L_g8tmki.jpg",
     tag: "Programs & Initiatives",
     description: "Annual summit bringing together key healthcare stakeholders.",
     date: "Dec 5, 2025",
@@ -214,12 +214,31 @@ const fetchUser = async () => {
   }
 };
 
+// const fetchNewsletters = async () => {
+//   try {
+//     const data = await newsApi.getFeaturedArticles();
+//     newsletters.value = data.map((item) => ({
+//       title: item.title,
+//       image: item.featured_image,
+//       description_short: item.excerpt,
+//       date: item.publish_date,
+//       slug: item.slug,
+//     }));
+//   } catch (error) {
+//     console.error("Failed to fetch newsletters:", error);
+//   }
+// };
+const fixImageUrl = (url) => {
+  if (!url) return "";
+  return url.replace("http://", "https://");
+};
+
 const fetchNewsletters = async () => {
   try {
     const data = await newsApi.getFeaturedArticles();
     newsletters.value = data.map((item) => ({
       title: item.title,
-      image: item.featured_image,
+      image: fixImageUrl(item.featured_image),
       description_short: item.excerpt,
       date: item.publish_date,
       slug: item.slug,

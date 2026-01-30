@@ -126,7 +126,7 @@ const toggleDropdown = (title) => {
     <nav class="flex items-center justify-between p-4 lg:px-8 max-w-7xl mx-auto">
       <div class="flex items-center flex-shrink-0">
         <RouterLink to="/" @click="handleLinkClick('/')" class="cursor-pointer">
-          <img :src="hfn_logo" alt="HFN Logo" class="w-20 h-auto mr-3 flex-shrink-0" />
+          <img :src="hfn_logo" alt="HFN Logo" class="w-15 h-auto mr-3 flex-shrink-0" />
         </RouterLink>
       </div>
 

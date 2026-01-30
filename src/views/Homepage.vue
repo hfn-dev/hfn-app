@@ -2,15 +2,55 @@
 import api from "@/api/axios";
 // import group from "@/assets/group.png";
 // import group1 from "@/assets/hfn-news.PNG";
-import Image from "@/assets/image.jpg";
 import HfnCalender from "@/components/layout/HfnCalender.vue";
 import { homePageSchema } from "@/schemas/pages/home.schema";
 import { resolveAsset } from "@/utils/assetMap";
-import { computed, onMounted, ref, onUnmounted } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
+
+import {
+  HandRaisedIcon,
+  LightBulbIcon,
+  ScaleIcon,
+  UserGroupIcon,
+} from "@heroicons/vue/24/outline";
+
+const actionRef = ref(null);
+const isVisible = ref(false);
+const sectionRef = ref(null);
+const actions = [
+  {
+    title: "Policy Advocacy",
+    description:
+      "We engage policymakers to shape evidence-based reforms that enable effective regulation, sustainable financing, and private sector participation in health system strengthening.",
+    icon: ScaleIcon,
+    // tags: ['Regulation', 'Financing', 'Reform'],
+  },
+  {
+    title: "Stakeholder Convening",
+    description:
+      "We bring together private sector actors, government institutions, and development partners to align priorities, share knowledge, and drive collective action.",
+    icon: UserGroupIcon,
+    // tags: ['Collaboration', 'Alignment', 'Action'],
+  },
+  {
+    title: "Sector Intelligence",
+    description:
+      "We generate insights, reports, and high-level dialogues that inform policy decisions, investment, and strategic engagement across the health sector.",
+    icon: LightBulbIcon,
+    // tags: ['Data', 'Insights', 'Investment'],
+  },
+  {
+    title: "Public–Private Collaboration",
+    description:
+      "We support partnerships that leverage private sector capacity to improve service delivery, emergency care, and access to quality healthcare.",
+    icon: HandRaisedIcon,
+    // tags: ['Service Delivery', 'Partnerships', 'Access'],
+  },
+];
 
 const heroSlides = [
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769773405/1_1_uebqmc.jpg",
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769773394/2_dyphjj.png",
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769801024/2_evqlkd.jpg",
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769773393/3_nvepaa.jpg",
 ];
 
@@ -20,14 +60,12 @@ let interval = null;
 onUnmounted(() => {
   clearInterval(interval);
 });
-
 const faqs = computed(() => pageContent.value.faqs);
 const group =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715465/1feebd03da9f660dfb6e3f79b696f544_L_rxf7mk.jpg";
 const group1 =
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769716176/f01ce502715837920e87942116372980_M_jb2p23.jpg";
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769801806/IMG_8324_vikc7v.jpg";
 const activeFaq = ref(null);
-
 const toggleFaq = (index) => {
   activeFaq.value = activeFaq.value === index ? null : index;
 };
@@ -49,6 +87,19 @@ const pageId = 1;
 const selectedMonth = ref(Object.keys(homePageSchema.news.months)[0]);
 
 onMounted(async () => {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        isVisible.value = true;
+        observer.unobserve(entries[0].target);
+      }
+    },
+    { threshold: 0.2 }
+  );
+
+  if (sectionRef.value) {
+    observer.observe(sectionRef.value);
+  }
   interval = setInterval(() => {
     activeSlide.value = (activeSlide.value + 1) % heroSlides.length;
   }, 5000);
@@ -109,7 +160,7 @@ onMounted(async () => {
           <h1
             class="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight mb-6"
           >
-            <span class="text-orange-400">
+            <span class="text-white-400">
               {{ pageContent.hero.titleHighlight }}
             </span>
             <br />
@@ -119,7 +170,7 @@ onMounted(async () => {
           </h1>
 
           <p class="text-lg mb-6 max-w-xl">
-            <span class="text-green-300 font-semibold">
+            <span class="text-white-300 font-semibold">
               {{ pageContent.hero.introLine }}
             </span>
             {{ pageContent.hero.introText }}
@@ -149,34 +200,303 @@ onMounted(async () => {
       />
     </div>
   </section>
-
-  <div class="py-6 border-b border-gray-200 bg-white">
+  <!-- <section class="relative py-20 overflow-hidden bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-6">
-        <span
-          class="text-lg font-semibold text-gray-500 uppercase tracking-wider"
-        >
-          {{ pageContent.partners.title }}
-        </span>
-      </div>
+      <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+        
+        <div class="relative w-full lg:w-1/2">
+          <div class="relative z-10 w-full aspect-square md:aspect-[4/5] overflow-hidden shadow-2xl transition-transform duration-700 hover:rotate-2" 
+               style="border-radius: 100px 0 100px 0;">
+            <img 
+              src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80" 
+              alt="Nigerian Healthcare" 
+              class="w-full h-full object-cover"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#004d33]/60 to-transparent"></div>
+          </div>
+          
+          <div class="absolute -bottom-6 -right-6 z-20 bg-white p-6 shadow-xl rounded-2xl border-l-4 border-[#004d33] animate-bounce-slow">
+            <p class="text-3xl font-black text-[#004d33]">6+</p>
+            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Health Guardians</p>
+          </div>
+          
+          <div class="absolute -top-10 -left-10 w-40 h-40 bg-[#f2f9f3] rounded-full -z-0"></div>
+        </div>
 
-      <div
-        class="flex flex-wrap justify-center items-center gap-8 md:gap-16"
-      >
+        <div class="w-full lg:w-1/2 space-y-8">
+          <div class="inline-flex items-center space-x-2">
+            <span class="w-10 h-[2px] bg-[#004d33]"></span>
+            <span class="text-[#004d33] font-black uppercase tracking-[0.3em] text-xs">Who We Are</span>
+          </div>
+
+          <h2 class="text-4xl md:text-5xl font-black text-gray-900 leading-tight">
+            Strengthening Nigeria's <br/>
+            <span class="text-[#004d33]">Healthcare Ecosystem.</span>
+          </h2>
+
+          <div class="space-y-6">
+            <p class="text-lg text-gray-600 leading-relaxed font-medium">
+              The Healthcare Federation of Nigeria (HFN) is a 
+              <span class="text-gray-900 font-bold">coalition of private healthcare stakeholders</span> 
+              committed to strengthening Nigeria’s health system through strategic advocacy and leadership.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="flex items-start gap-4 p-4 rounded-xl bg-[#f2f9f3]/50 border border-transparent hover:border-[#004d33]/20 transition-all">
+                <div class="w-10 h-10 rounded-lg bg-[#004d33] flex items-center justify-center text-white shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4-4-4"/><path d="M3 3v18h18"/></svg>
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-900">Unified Platform</h4>
+                  <p class="text-xs text-gray-500">Engaging government and influencing health policy.</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4 p-4 rounded-xl bg-[#f2f9f3]/50 border border-transparent hover:border-[#004d33]/20 transition-all">
+                <div class="w-10 h-10 rounded-lg bg-[#004d33] flex items-center justify-center text-white shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div>
+                  <h4 class="font-bold text-gray-900">Universal Progress</h4>
+                  <p class="text-xs text-gray-500">Accelerating progress toward Universal Health Coverage.</p>
+                </div>
+              </div>
+            </div>
+
+            <button class="group flex items-center gap-3 bg-[#004d33] text-white px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-green-900/20 transition-all transform hover:-translate-y-1">
+              Read Our Full Story
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section> -->
+  <section ref="sectionRef" class="relative py-20 overflow-hidden bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
         <div
-          v-for="(logoKey, index) in pageContent.partners.logos"
-          :key="index"
-          class="flex items-center justify-center h-48 w-59"
+          class="relative w-full lg:w-1/2 transition-all duration-1000 ease-out"
+          :class="
+            isVisible
+              ? 'opacity-100 translate-x-0'
+              : 'opacity-0 -translate-x-20'
+          "
         >
-          <img
-            :src="resolveAsset(logoKey)"
-            :alt="logoKey + ' Logo'"
-            class="max-h-full max-w-full object-contain"
-          />
+          <div
+            class="relative z-10 w-full aspect-square md:aspect-[4/5] overflow-hidden shadow-2xl hover:rotate-2 transition-transform duration-700"
+            style="border-radius: 100px 0 100px 0"
+          >
+            <img
+              src="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769803836/1_hkuaio.jpg"
+              class="w-full h-full object-cover"
+            />
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-[#004d33]/60 to-transparent"
+            ></div>
+          </div>
+
+          <div
+            class="absolute -bottom-6 -right-6 z-20 bg-white p-6 shadow-xl rounded-2xl border-l-4 border-[#004d33] animate-bounce-slow"
+          >
+            <p class="text-3xl font-black text-[#004d33]">6+</p>
+            <p
+              class="text-xs font-bold text-gray-500 uppercase tracking-widest"
+            >
+              Health Guardians
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="w-full lg:w-1/2 space-y-8 transition-all duration-1000 delay-300 ease-out"
+          :class="
+            isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20'
+          "
+        >
+          <div class="inline-flex items-center space-x-2">
+            <span class="w-10 h-[2px] bg-[#004d33]"></span>
+            <span
+              class="text-[#004d33] font-black uppercase tracking-[0.3em] text-xs"
+              >Who We Are</span
+            >
+          </div>
+
+          <h2
+            class="text-4xl md:text-5xl font-black text-gray-900 leading-tight"
+          >
+            Strengthening Nigeria's <br />
+            <span class="text-green-700">Healthcare Ecosystem.</span>
+          </h2>
+
+          <div class="space-y-6">
+            <p class="text-lg text-gray-600 leading-relaxed font-medium">
+              Healthcare Federation of Nigeria (HFN) is a
+              <span class="text-green-700 font-bold"
+                >coalition of private healthcare stakeholders</span
+              >
+              committed to strengthening Nigeria’s health system through
+              strategic advocacy, collaboration, and private sector leadership.
+              HFN serves as a unified platform for engaging government,
+              influencing health policy, and enabling private sector
+              contributions that expand access, improve quality, and accelerate
+              progress toward Universal Health Coverage.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="feature-card">
+                <div class="icon-box">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="m12 14 4-4-4-4" />
+                    <path d="M3 3v18h18" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="font-bold text-green-700 text-sm">
+                    Unified Platform
+                  </h4>
+                  <p
+                    class="text-[10px] text-gray-500 uppercase font-bold tracking-tighter"
+                  >
+                    Engagement & Policy
+                  </p>
+                </div>
+              </div>
+
+              <div class="feature-card">
+                <div class="icon-box">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 class="font-bold text-green-700 text-sm">
+                    Universal Progress
+                  </h4>
+                  <p
+                    class="text-[10px] text-gray-500 uppercase font-bold tracking-tighter"
+                  >
+                    Universal Coverage
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <button class="cta-button group">
+              Read Our Full Story
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="transition-transform group-hover:translate-x-2"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
+  <section ref="actionRef" class="py-24 bg-[#F2F9F3] relative overflow-hidden">
+    <div
+      class="absolute top-0 right-0 text-[15rem] font-black text-white leading-none -z-0 opacity-40 translate-y-20 select-none"
+    >
+      ACTION
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 relative z-10">
+      <div class="text-center mb-16 space-y-4">
+        <h2
+          class="text-green-700 font-black uppercase tracking-[0.4em] text-xs"
+        >
+          Our Core Mandate
+        </h2>
+        <h3 class="text-4xl md:text-5xl font-black text-gray-900">
+          What We Do
+        </h3>
+        <p class="max-w-2xl mx-auto text-gray-600 leading-relaxed font-medium">
+          Driving measurable change in Nigeria's healthcare landscape through
+          four strategic pillars.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div
+          v-for="(action, index) in actions"
+          :key="index"
+          class="group relative bg-white p-8 md:p-10 rounded-[2.5rem] border border-white shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden translate-y-10 opacity-0"
+          :class="{ 'animate-reveal': isVisible }"
+          :style="{ 'animation-delay': `${index * 150}ms` }"
+        >
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-transparent via-[#f2f9f3]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+          ></div>
+
+          <div class="relative z-10 flex flex-col h-full">
+            <div class="flex items-start justify-between mb-6">
+              <div
+                class="w-16 h-16 rounded-2xl bg-green-700 flex items-center justify-center text-white shadow-lg group-hover:rotate-6 transition-transform duration-500"
+              >
+                <component :is="action.icon" class="w-8 h-8" />
+              </div>
+              <span
+                class="text-5xl font-black text-[#004d33]/5 select-none group-hover:text-[#004d33]/10 transition-colors"
+                >0{{ index + 1 }}</span
+              >
+            </div>
+
+            <h4 class="text-2xl font-black text-gray-900 mb-4">
+              {{ action.title }}
+            </h4>
+            <p class="text-gray-600 leading-relaxed font-medium">
+              {{ action.description }}
+            </p>
+
+            <div class="mt-8 flex flex-wrap gap-2">
+              <span
+                v-for="tag in action.tags"
+                :key="tag"
+                class="px-3 py-1 bg-[#F2F9F3] text-[#004d33] text-[10px] font-bold uppercase tracking-wider rounded-full"
+              >
+                {{ tag }}
+              </span>
+            </div>
+          </div>
+
+          <div class="sweep"></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section class="bg-white py-16 px-6 md:px-12 lg:px-24">
     <div class="text-center mb-10">
@@ -361,8 +681,6 @@ onMounted(async () => {
     </div>
   </section>
 
-  <HfnCalender id="calendar" />
-
   <section class="py-16 bg-white">
     <div class="container mx-auto px-6 text-center">
       <h2
@@ -405,6 +723,77 @@ onMounted(async () => {
       </div>
     </div>
   </section>
+
+  <div class="py-6 border-b border-gray-200 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-6">
+        <span
+          class="text-lg font-semibold text-gray-500 uppercase tracking-wider"
+        >
+          {{ pageContent.partners.title }}
+        </span>
+      </div>
+
+      <div class="flex flex-wrap justify-center items-center gap-5 md:gap-10">
+        <div
+          v-for="(logoKey, index) in pageContent.partners.logos"
+          :key="index"
+          class="flex items-center justify-center h-48 w-49"
+        >
+          <img
+            :src="resolveAsset(logoKey)"
+            :alt="logoKey + ' Logo'"
+            class="max-h-full max-w-full object-contain"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <HfnCalender id="calendar" />
+
+  <!-- <section class="py-16 bg-white">
+    <div class="container mx-auto px-6 text-center">
+      <h2
+        class="text-3xl md:text-4xl font-serif mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
+      >
+        Our Executives
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div
+          v-for="(exec, index) in executives"
+          :key="index"
+          class="flex justify-center"
+        >
+          <div
+            class="relative w-full max-w-xs aspect-[4/5] rounded-t-[2.5rem] rounded-b-xl overflow-hidden shadow-2xl"
+            style="background-color: #f0f7f5"
+          >
+            <img
+              :src="exec.image"
+              :alt="exec.name"
+              class="w-full h-full object-cover object-top"
+            />
+
+            <div
+              class="absolute mb-5 bottom-0 left-1/2 transform -translate-x-1/2 w-[85%] px-4 py-3 rounded-xl border border-green-300 bg-white shadow-xl text-center"
+            >
+              <h3 class="text-lg font-bold text-green-700">
+                {{ exec.name }}
+              </h3>
+              <p class="text-sm text-gray-700">
+                {{ exec.position }}
+              </p>
+              <p class="text-sm text-gray-700">
+                {{ exec.role }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
 
   <!-- <section class="py-20 lg:py-28 bg-white" id="faq">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -451,9 +840,108 @@ onMounted(async () => {
       </div>
     </div>
   </section> -->
+  <section class="relative py-20 px-4">
+    <div
+      class="max-w-6xl mx-auto relative overflow-hidden rounded-[4rem] bg-[#004d33] p-8 md:p-20 shadow-2xl group"
+    >
+      <div class="absolute inset-0 z-0 opacity-20">
+        <div
+          v-for="n in 8"
+          :key="n"
+          class="particle text-white"
+          :style="{ '--d': n * 2 + 's', '--x': n * 10 + '%' }"
+        ></div>
+      </div>
+
+      <div
+        class="absolute -top-24 -right-24 w-96 h-96 bg-green-400 rounded-full blur-[120px] opacity-20 group-hover:opacity-40 transition-opacity duration-1000"
+      ></div>
+
+      <div
+        class="relative z-10 flex flex-col items-center text-center space-y-8"
+      >
+        <div
+          class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 animate-pulse"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+            />
+          </svg>
+        </div>
+
+        <div class="max-w-3xl space-y-4">
+          <h2 class="text-3xl md:text-5xl font-black text-white leading-tight">
+            Make a Tangible Difference
+          </h2>
+          <p
+            class="text-lg md:text-xl text-green-100/80 font-medium leading-relaxed"
+          >
+            Support advocacy and collaboration that strengthen Nigeria’s
+            healthcare system.
+          </p>
+        </div>
+
+        <button
+          class="relative group/btn overflow-hidden bg-white px-12 py-5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300"
+        >
+          <div
+            class="absolute inset-0 bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"
+          ></div>
+          <span
+            class="relative z-10 text-[#004d33] group-hover/btn:text-white font-black text-lg flex items-center gap-3"
+          >
+            Donate Now
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="transition-transform group-hover/btn:translate-x-1"
+            >
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </span>
+        </button>
+
+        <div
+          class="pt-4 flex items-center gap-6 opacity-60 grayscale hover:grayscale-0 transition-all duration-500"
+        >
+          <p
+            class="text-[10px] text-white font-bold tracking-[0.2em] uppercase"
+          >
+            Secure Donation via
+          </p>
+          <div class="flex gap-4">
+            <div class="w-8 h-8 rounded bg-white/20"></div>
+            <div class="w-8 h-8 rounded bg-white/20"></div>
+            <div class="w-8 h-8 rounded bg-white/20"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <style scoped>
+@import "tailwindcss";
+
 .line-clamp-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -472,5 +960,88 @@ onMounted(async () => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+@keyframes bounce-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+.animate-bounce-slow {
+  animation: bounce-slow 4s ease-in-out infinite;
+}
+
+.feature-card {
+  @apply flex items-center gap-4 p-5 rounded-2xl bg-[#f2f9f3]/70 border border-white hover:border-[#004d33]/20 hover:bg-white hover:shadow-xl hover:shadow-green-900/5 transition-all duration-500;
+}
+
+.icon-box {
+  @apply w-12 h-12 rounded-xl bg-[#004d33] flex items-center justify-center text-white shrink-0 shadow-lg shadow-green-900/20;
+}
+
+.cta-button {
+  @apply flex items-center gap-3 bg-green-700 text-white px-10 py-5 rounded-full font-bold shadow-lg shadow-green-900/20 hover:shadow-green-900/40 transition-all transform hover:-translate-y-1 active:scale-95;
+}
+
+@keyframes bounce-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+.animate-bounce-slow {
+  animation: bounce-slow 4s ease-in-out infinite;
+}
+
+.animate-reveal {
+  animation: revealUp 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes revealUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sweep {
+  @apply absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-[-25deg] transition-all duration-1000 ease-in-out;
+}
+
+.group:hover .sweep {
+  left: 100%;
+}
+
+.particle {
+  position: absolute;
+  bottom: -20px;
+  left: var(--x);
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  animation: rise 5s infinite linear;
+  animation-delay: var(--d);
+}
+
+@keyframes rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-300px) scale(0);
+    opacity: 0;
+  }
 }
 </style>
