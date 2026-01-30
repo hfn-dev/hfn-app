@@ -6,7 +6,7 @@ import Image from "@/assets/image.jpg";
 import HfnCalender from "@/components/layout/HfnCalender.vue";
 import { homePageSchema } from "@/schemas/pages/home.schema";
 import { resolveAsset } from "@/utils/assetMap";
-import { computed, onMounted, ref, onUnmounted  } from "vue";
+import { computed, onMounted, ref, onUnmounted } from "vue";
 
 const heroSlides = [
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769773405/1_1_uebqmc.jpg",
@@ -19,11 +19,13 @@ let interval = null;
 
 onUnmounted(() => {
   clearInterval(interval);
-});  
+});
 
 const faqs = computed(() => pageContent.value.faqs);
-const group = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715465/1feebd03da9f660dfb6e3f79b696f544_L_rxf7mk.jpg';
-const group1 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769716176/f01ce502715837920e87942116372980_M_jb2p23.jpg';
+const group =
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715465/1feebd03da9f660dfb6e3f79b696f544_L_rxf7mk.jpg";
+const group1 =
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769716176/f01ce502715837920e87942116372980_M_jb2p23.jpg";
 const activeFaq = ref(null);
 
 const toggleFaq = (index) => {
@@ -42,16 +44,13 @@ const newsList = computed(
 
 const executives = computed(() => pageContent.value.executives);
 
-
 const pageContent = ref(structuredClone(homePageSchema));
 const pageId = 1;
 const selectedMonth = ref(Object.keys(homePageSchema.news.months)[0]);
 
-
 onMounted(async () => {
   interval = setInterval(() => {
-    activeSlide.value =
-      (activeSlide.value + 1) % heroSlides.length;
+    activeSlide.value = (activeSlide.value + 1) % heroSlides.length;
   }, 5000);
   const { data } = await api.get(`/api/pages/${pageId}/`);
   pageContent.value = data.content || structuredClone(homePageSchema);
@@ -90,66 +89,66 @@ onMounted(async () => {
 
 <template>
   <section class="relative h-[90vh] min-h-[650px] overflow-hidden">
-  <div class="absolute inset-0">
-    <transition-group name="fade">
-      <img
-        v-for="(slide, index) in heroSlides"
-        v-show="index === activeSlide"
-        :key="slide"
-        :src="slide"
-        class="absolute inset-0 w-full h-full object-cover"
-      />
-    </transition-group>
+    <div class="absolute inset-0">
+      <transition-group name="fade">
+        <img
+          v-for="(slide, index) in heroSlides"
+          v-show="index === activeSlide"
+          :key="slide"
+          :src="slide"
+          class="absolute inset-0 w-full h-full object-cover"
+        />
+      </transition-group>
 
-    <div class="absolute inset-0 bg-black/50"></div>
-  </div>
+      <div class="absolute inset-0 bg-black/50"></div>
+    </div>
 
-  <div class="relative z-10 h-full flex items-center">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
-      <div class="lg:w-1/2 text-white">
-        <h1
-          class="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight mb-6"
-        >
-          <span class="text-orange-400">
-            {{ pageContent.hero.titleHighlight }}
-          </span>
-          <br />
-          <span class="text-white">
-            {{ pageContent.hero.titleMain }}
-          </span>
-        </h1>
+    <div class="relative z-10 h-full flex items-center">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+        <div class="lg:w-1/2 text-white">
+          <h1
+            class="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight mb-6"
+          >
+            <span class="text-orange-400">
+              {{ pageContent.hero.titleHighlight }}
+            </span>
+            <br />
+            <span class="text-white">
+              {{ pageContent.hero.titleMain }}
+            </span>
+          </h1>
 
-        <p class="text-lg mb-6 max-w-xl">
-          <span class="text-green-300 font-semibold">
-            {{ pageContent.hero.introLine }}
-          </span>
-          {{ pageContent.hero.introText }}
-        </p>
+          <p class="text-lg mb-6 max-w-xl">
+            <span class="text-green-300 font-semibold">
+              {{ pageContent.hero.introLine }}
+            </span>
+            {{ pageContent.hero.introText }}
+          </p>
 
-        <p class="text-lg mb-10 max-w-xl">
-          {{ pageContent.hero.subText }}
-        </p>
+          <p class="text-lg mb-10 max-w-xl">
+            {{ pageContent.hero.subText }}
+          </p>
 
-        <RouterLink
-          :to="pageContent.hero.ctaLink"
-          class="inline-flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white px-8 py-4 rounded-xl font-semibold shadow-xl transition"
-        >
-          {{ pageContent.hero.ctaText }}
-        </RouterLink>
+          <RouterLink
+            :to="pageContent.hero.ctaLink"
+            class="inline-flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white px-8 py-4 rounded-xl font-semibold shadow-xl transition"
+          >
+            {{ pageContent.hero.ctaText }}
+          </RouterLink>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20">
-    <button
-      v-for="(_, index) in heroSlides"
-      :key="index"
-      class="w-3 h-3 rounded-full transition"
-      :class="activeSlide === index ? 'bg-white' : 'bg-white/40'"
-      @click="activeSlide = index"
-    />
-  </div>
-</section>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+      <button
+        v-for="(_, index) in heroSlides"
+        :key="index"
+        class="w-3 h-3 rounded-full transition"
+        :class="activeSlide === index ? 'bg-white' : 'bg-white/40'"
+        @click="activeSlide = index"
+      />
+    </div>
+  </section>
 
   <div class="py-6 border-b border-gray-200 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -162,7 +161,7 @@ onMounted(async () => {
       </div>
 
       <div
-        class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-75"
+        class="flex flex-wrap justify-center items-center gap-8 md:gap-16"
       >
         <div
           v-for="(logoKey, index) in pageContent.partners.logos"
@@ -204,7 +203,12 @@ onMounted(async () => {
         <div
           class="absolute top-0 right-0 w-[30%] sm:w-[40%] h-[140px] sm:h-[180px] rounded-xl overflow-hidden shadow-2xl border-4 border-green-500"
         >
-          <img :src="group" loading="lazy" alt="HFN team" class="object-cover w-full h-full" />
+          <img
+            :src="group"
+            loading="lazy"
+            alt="HFN team"
+            class="object-cover w-full h-full"
+          />
         </div>
       </div>
 
@@ -286,12 +290,11 @@ onMounted(async () => {
           </p>
 
           <RouterLink
-  :to="`/blog/${featured.slug}`"
-  class="inline-flex items-center gap-2 bg-green-700 text-white px-5 py-2 rounded-full font-medium hover:bg-green-800 transition"
->
-  Read More <i class="fa-solid fa-arrow-right"></i>
-</RouterLink>
-
+            :to="`/blog/${featured.slug}`"
+            class="inline-flex items-center gap-2 bg-green-700 text-white px-5 py-2 rounded-full font-medium hover:bg-green-800 transition"
+          >
+            Read More <i class="fa-solid fa-arrow-right"></i>
+          </RouterLink>
         </div>
       </div>
 
@@ -365,7 +368,7 @@ onMounted(async () => {
       <h2
         class="text-3xl md:text-4xl font-serif mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
       >
-          Our Executives
+        Our Executives
       </h2>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -403,7 +406,7 @@ onMounted(async () => {
     </div>
   </section>
 
-  <section class="py-20 lg:py-28 bg-white" id="faq">
+  <!-- <section class="py-20 lg:py-28 bg-white" id="faq">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2
         class="text-3xl text-center md:text-4xl font-serif mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
@@ -447,7 +450,7 @@ onMounted(async () => {
       </div>
       </div>
     </div>
-  </section>
+  </section> -->
 </template>
 
 <style scoped>
@@ -469,5 +472,5 @@ onMounted(async () => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-}  
+}
 </style>

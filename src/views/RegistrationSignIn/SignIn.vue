@@ -1,6 +1,6 @@
 <script setup>
 import userRegister from "@/api/userRegister";
-import registerImage from '@/assets/register.jpg';
+// import registerImage from '@/assets/register.jpg';
 import { useAuth } from '@/store/authStore';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -13,6 +13,7 @@ const isLoading = ref(false);
 const router = useRouter();
 const toast = useToast();
 const { login } = useAuth();
+const registerImage = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769798445/HFN_Office_h0se9v.jpg';
 
 const handleSignIn = async () => {
   if (!username.value.trim()) {

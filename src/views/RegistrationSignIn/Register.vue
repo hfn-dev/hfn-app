@@ -1,5 +1,5 @@
 <script setup>
-import registerImage from "@/assets/register.jpg";
+// import registerImage from "@/assets/register.jpg";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from 'vue-toastification';
@@ -7,7 +7,7 @@ import userRegister from "@/api/userRegister";
 
 const router = useRouter();
 const toast = useToast();
-
+const registerImage = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769798445/HFN_Office_h0se9v.jpg';
 const form = ref({
   firstName: "",
   otherName: "",
