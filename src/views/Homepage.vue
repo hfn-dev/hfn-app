@@ -90,7 +90,6 @@ onMounted(async () => {
 
 <template>
   <section class="relative h-[90vh] min-h-[650px] overflow-hidden">
-  <!-- SLIDES -->
   <div class="absolute inset-0">
     <transition-group name="fade">
       <img
@@ -102,11 +101,9 @@ onMounted(async () => {
       />
     </transition-group>
 
-    <!-- Overlay -->
     <div class="absolute inset-0 bg-black/50"></div>
   </div>
 
-  <!-- CONTENT -->
   <div class="relative z-10 h-full flex items-center">
     <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
       <div class="lg:w-1/2 text-white">
@@ -143,7 +140,6 @@ onMounted(async () => {
     </div>
   </div>
 
-  <!-- INDICATORS -->
   <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20">
     <button
       v-for="(_, index) in heroSlides"
