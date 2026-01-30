@@ -171,7 +171,7 @@ onUnmounted(() => {
           <img
             :src="hfn_logo"
             alt="HFN Logo"
-            class="w-40 h-auto mr-3 flex-shrink-0"
+            class="w-30 h-auto mr-3 flex-shrink-0"
           />
         </RouterLink>
       </div>
