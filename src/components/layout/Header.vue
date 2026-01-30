@@ -65,7 +65,7 @@ const navLinks = [
     
     hasDropdown: true,
     dropdownItems: [
-      { title: "Programs & Initiatives", path: "/programs" },
+      // { title: "Programs & Initiatives", path: "/programs" },
       { title: "Latest News", path: "/news" },
       { title: "Newsletters", path: "/newsletters" },
       { title: "Events", path: "/events" },
