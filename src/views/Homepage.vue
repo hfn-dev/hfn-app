@@ -9,9 +9,9 @@ import { resolveAsset } from "@/utils/assetMap";
 import { computed, onMounted, ref, onUnmounted  } from "vue";
 
 const heroSlides = [
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715465/1feebd03da9f660dfb6e3f79b696f544_L_rxf7mk.jpg",
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769716176/f01ce502715837920e87942116372980_M_jb2p23.jpg",
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769734457/Society_For_Family_Health_Logo_1_a5qcrp.png",
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769773405/1_1_uebqmc.jpg",
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769773394/2_dyphjj.png",
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769773393/3_nvepaa.jpg",
 ];
 
 const activeSlide = ref(0);
