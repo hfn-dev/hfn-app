@@ -13,7 +13,7 @@
               >Governance & Leadership</span
             >
             <span class="text-green-700 block mt-2"
-              >A coalition driving policy and innovation.</span
+              >A coalition driving policy and innovation</span
             >
           </h2>
           <p class="mt-6 text-lg text-gray-600 max-w-xl">
@@ -118,7 +118,7 @@ const executives = [
     name: 'Njide Ndili',
     role: 'President',
     profile: 'Country Director, PharmAccess',
-    image: 'url_here'
+    image: 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769899022/njide_lhvqcg.png'
   },
   {
     name: 'Dr. Benson Ayodele-Cole',
@@ -130,25 +130,25 @@ const executives = [
     name: 'Jennifer Anyanti, FAPH',
     role: '2nd Vice President',
     profile: 'Deputy Managing Director, Society for Family Health',
-    image: 'url_here'
+    image: 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769899021/jennifer_end3ff.png'
   },
   {
     name: 'Olayode Babarinde',
     role: 'Financial Secretary',
     profile: 'Healthcare System Partner – Policy, Roche',
-    image: 'url_here'
+    image: 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769899021/babarinde_ruezpz.png'
   },
   {
     name: 'Chinyere Okorocha',
     role: 'Public Relations Secretary',
     profile: 'Head of Sectors, Jackson, Etti & Edu',
-    image: 'url_here'
+    image: 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769899021/chinyere_wltjdz.png'
   },
   {
-    name: 'Mr. Reagan Rowland',
+    name: 'Reagan Rowland',
     role: 'Treasurer',
     profile: 'Founder/CEO, OneClick Med',
-    image: 'url_here'
+    image: 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769899022/reagan_llp53y.png'
   }
 ];
 </script>

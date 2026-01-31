@@ -62,7 +62,7 @@ const navLinks = [
     dropdownItems: [
       // { title: "Programs & Initiatives", path: "/programs" },
       { title: "Latest News", path: "/news" },
-      { title: "Newsletters", path: "/newsletters" },
+      { title: "Newsletters", path: "/resources" },
       { title: "Events", path: "/events" },
       { title: "Gallery", path: "/gallery" },
     ],
@@ -74,7 +74,6 @@ const navLinks = [
     dropdownItems: [
       { title: "Member Area", path: "/membership" },
       { title: "Get Involved", path: "/get-involved" },
-      { title: "Resources", path: "/resources" },
     ],
   },
   { title: "Contact Us", path: "/contact", hasDropdown: false },

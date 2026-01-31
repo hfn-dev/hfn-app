@@ -549,7 +549,7 @@ onMounted(() => {
 
       <section class="mt-10 max-w-6xl mx-auto px-4">
         <h3 class="text-3xl font-sans font-bold text-[#333] text-center mb-6">
-          Upcoming Events
+          Our Events
         </h3>
 
         <div class="flex justify-start mb-8">

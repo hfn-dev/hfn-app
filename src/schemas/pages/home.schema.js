@@ -184,7 +184,7 @@ export const homePageSchema = {
       image: njide,
     },
     {
-      name: 'Dr. Ayodele Benson-Cole',
+      name: 'Dr. Benson Ayodele-Cole',
       position: '1st Vice President, HFN',
       role: 'CEO, Benson Coleman & Associates',
       image: ayodele,

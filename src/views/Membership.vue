@@ -1,6 +1,7 @@
 <script setup>
-import handsJoining from "@/assets/handsJoining.jpg";
+// import handsJoining from "@/assets/handsJoining.jpg";
 import { computed, ref } from "vue";
+import membership from "@/assets/membership.jpg";
 
 
 // const router = useRouter()  
@@ -360,10 +361,10 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
             class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4"
           >
             <span class="text-orange-500 block"
-              >Engagement. Access. Quality.</span
+              >Engagement Access Quality</span
             >
             <span class="text-green-700 block mt-2"
-              >A coalition driving policy and innovation.</span
+              >A coalition driving policy and innovation</span
             >
           </h2>
           <p class="mt-6 text-lg text-gray-600 max-w-xl">
@@ -380,7 +381,7 @@ sector-wide collaborations that shape Nigeria’s healthcare landscape.
             class="relative w-[320px] h-[240px] sm:w-[400px] sm:h-[300px] lg:w-[500px] lg:h-[375px] rounded-[30px] overflow-hidden shadow-2xl"
           >
             <img
-              :src="handsJoining"
+              :src="membership"
               alt="Diverse hands joining in a heart shape, symbolizing unity and healthcare"
               class="object-cover w-full h-full"
             />

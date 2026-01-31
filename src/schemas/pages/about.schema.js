@@ -42,17 +42,17 @@ export const aboutPageSchema = {
         themeColor: '#f0f7f5',
         borderColor: 'border-green-300',
         textColor: 'text-green-700',
-        bio: 'Mrs. Njide Ndili is a seasoned healthcare leader with over two decades of experience in hospital administration, healthcare policy, and organizational development. Her passion for strengthening healthcare systems has driven her to lead several transformational initiatives focused on patient care, operational efficiency, and workforce training. A graduate of Business Administration with advanced studies in Healthcare Management, Mrs. Ndili has worked with both public and private health institutions to improve service delivery standards. She is deeply committed to mentoring young healthcare professionals and fostering collaborations that advance sustainable healthcare practices in Nigeria and beyond.',
+        bio: 'Njide Ndili is the Nigeria Country Director at PharmAccess, an international organisation that leverages digital innovation and market-based solutions to strengthen health systems across sub-Saharan Africa. PharmAccess works across both the demand and supply sides of healthcare to improve access, quality, and financial protection. She serves as President of the Healthcare Federation of Nigeria (HFN), where she leads private sector advocacy and engagement to advance policy reforms and strengthen Nigeria’s healthcare system. Njide is also a founding member of the Digital Transformation for Health Lab, which identifies and supports digital technologies that accelerate progress toward Universal Health Coverage, particularly in low- and middle-income countries. In addition, she serves on the Steering Committee of the Nigerian Economic Summit Group (NESG) Health Policy Commission. Njide holds an MSc in Health Economics, Policy, and Management from the London School of Economics, an Advanced Management Programme (AMP) from INSEAD, an MBA from the University of Houston, a Postgraduate Diploma in Finance, and a BSc in Computer Science.',
         quote:
           'True leadership in healthcare is measured not by titles, but by the lives we touch and the systems we transform.',
         socials: [
-          { platform: 'linkedin', url: 'https://linkedin.com/' },
+          { platform: 'linkedin', url: 'https://www.linkedin.com/in/njide-ndili/' },
           { platform: 'twitter', url: 'https://twitter.com/' },
           { platform: 'instagram', url: 'https://instagram.com/' },
         ],
       },
       {
-        name: 'Dr. Benson Ayodele Cole',
+        name: 'Dr. Ayodele Benson-Cole',
         position: '1st Vice-President, HFN',
         organization: 'CEO, Benson Coleman & Associates',
         image: 'ayodele.png',
@@ -63,7 +63,7 @@ export const aboutPageSchema = {
         quote:
           'Medicine is not just about curing the sick; it is about inspiring hope, preserving dignity, and leading with compassion.',
         socials: [
-          { platform: 'linkedin', url: 'https://linkedin.com/' },
+          { platform: 'linkedin', url: 'https://www.linkedin.com/in/ayodele-cole-benson-93b79027/' },
           { platform: 'twitter', url: 'https://twitter.com/' },
           { platform: 'instagram', url: 'https://instagram.com/' },
         ],
@@ -80,7 +80,7 @@ export const aboutPageSchema = {
         quote:
           'When we uplift communities through healthcare, we heal not just individuals but the future of our nation.',
         socials: [
-          { platform: 'linkedin', url: 'https://linkedin.com/' },
+          { platform: 'linkedin', url: 'https://www.linkedin.com/in/jennifer-anyanti/' },
           { platform: 'twitter', url: 'https://twitter.com/' },
           { platform: 'instagram', url: 'https://instagram.com/' },
         ],
@@ -97,7 +97,7 @@ export const aboutPageSchema = {
         quote:
           'When people understand healthcare, they make choices that transform lives — communication is the heartbeat of progress.',
         socials: [
-          { platform: 'linkedin', url: 'https://linkedin.com/' },
+          { platform: 'linkedin', url: 'https://www.linkedin.com/in/chinyere-okorocha-a1bb19bb/' },
           { platform: 'twitter', url: 'https://twitter.com/' },
           { platform: 'instagram', url: 'https://instagram.com/' },
         ],
@@ -114,7 +114,7 @@ export const aboutPageSchema = {
         quote:
           'Financial integrity in healthcare is not just about numbers — it’s about ensuring every naira spent saves a life.',
         socials: [
-          { platform: 'linkedin', url: 'https://linkedin.com/' },
+          { platform: 'linkedin', url: 'https://www.linkedin.com/in/olayode-babarinde-26863276/' },
           { platform: 'twitter', url: 'https://twitter.com/' },
           { platform: 'instagram', url: 'https://instagram.com/' },
         ],
@@ -131,7 +131,7 @@ export const aboutPageSchema = {
         quote:
           'Transparency is the foundation upon which trust and progress in healthcare are built.',
         socials: [
-          { platform: 'linkedin', url: 'https://linkedin.com/' },
+          { platform: 'linkedin', url: 'https://www.linkedin.com/in/reagan-rowland/' },
           { platform: 'twitter', url: 'https://twitter.com/' },
           { platform: 'instagram', url: 'https://instagram.com/' },
         ],
