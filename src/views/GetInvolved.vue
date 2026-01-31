@@ -228,8 +228,7 @@ healthcare system.
 <script setup>
 import { ref } from "vue";
 
-import latest from "@/assets/latest_news.png";
-
+const latest = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769892500/Women_gnwotm.jpg';
 const showDonateModal = ref(false);
 
 const donationOptions = [
