@@ -175,11 +175,14 @@
           class="border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition duration-300"
         >
           <div class="relative h-48">
+            
+
             <img
-              :src="newEvent"
-              alt="Event image"
-              class="w-full h-full object-cover brightness-[0.7] transition duration-300"
-            />
+  :src="event.image"
+  alt="Event image"
+  class="w-full h-full object-cover brightness-[0.7] transition duration-300"
+/>
+
 
             <span
               class="absolute top-4 left-4 px-3 py-1 bg-white text-green-700 text-xs font-semibold rounded-full shadow-md"
@@ -290,6 +293,44 @@
         </div>
       </div>
     </section>
+    <section class="container mx-auto px-4 md:px-8 py-14">
+  <h3 class="text-2xl font-semibold text-gray-800 mb-8">
+    Past Events
+  </h3>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div
+      v-for="(event, index) in pastEvents"
+      :key="index"
+      class="border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition"
+    >
+      <img
+        :src="event.image"
+        class="w-full h-48 object-cover"
+        alt="Past event"
+      />
+
+      <div class="p-5">
+        <span class="text-xs font-semibold text-green-700 uppercase">
+          {{ event.category }}
+        </span>
+
+        <h4 class="text-lg font-bold text-gray-900 mt-2">
+          {{ event.title }}
+        </h4>
+
+        <p class="text-sm text-orange-600 mt-1">
+          {{ event.date }}
+        </p>
+
+        <p class="text-sm text-gray-600 mt-3">
+          <span class="font-semibold">Theme:</span> {{ event.theme }}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
   </div>
 </template>
 
@@ -337,4 +378,34 @@ const events = [
     registerLink: "https://tix.africa/discover/2026-hfn-annual-conference",
   },
 ];
+
+  const pastEvents = [
+  {
+    title: "HFN Healthcare Leadership Conference 2025",
+    category: "Conference",
+    date: "June 2, 2025",
+    theme:
+      "Accelerating UHC and Health Sovereignty Through Public-Private Integration",
+    image: hfn2025,
+  },
+  {
+    title:
+      "High-Level Roundtable on Local Manufacturing of Medicines in Nigeria",
+    category: "Roundtable",
+    date: "October 22, 2025",
+    theme:
+      "Strengthening Local Pharmaceutical Manufacturing for Sustainable Health Security in Africa",
+    image: roundtable2025,
+  },
+  {
+    title: "HFN–NHIA Private Sector Roundtable Breakfast Meeting",
+    category: "Roundtable",
+    date: "December 1, 2025",
+    theme:
+      "Leveraging Private Sector to Accelerate Health Insurance Coverage in Nigeria",
+    image: breakfast2025,
+  },
+];
+
+
 </script>
