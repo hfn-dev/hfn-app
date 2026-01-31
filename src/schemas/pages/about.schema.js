@@ -4,9 +4,9 @@ export const aboutPageSchema = {
     titleMain: 'Healthcare in Nigeria.',
     descriptionTop: 'Healthcare Federation of Nigeria ',
     descriptionText:
-      'core objective is to champion, protect, promote and represent the interests of private health/medical professionals, including their businesses and associations and those of their partners in the Nigerian Health Sector.',
+      'is a coalition of private healthcare sector stakeholders committed to strengthening Nigeria’s healthcare system through strategic advocacy, collaboration, and private sector leadership.',
     descriptionBottom:
-      'To support the financing of healthcare by driving policy change to make healthcare assets suitable for investments and to develop investable assets in healthcare.',
+      '',
     ctaLabel: 'Join the Coalition ->',
     ctaLink: '/register',
     image: 'map.jpg',
@@ -17,17 +17,17 @@ export const aboutPageSchema = {
     sectionTitle: 'About Us',
     image: 'about-us.png',
     paragraphs: [
-      "HFN is a coalition of stakeholders in the private healthcare sector. It is an apolitical, non-partisan, nonprofit organization aiming to collectively advocate for improving Nigeria's private health sector. Committed to advancing the quality of healthcare services, HFN catalyzes collaboration and innovation in the Nigerian healthcare industry.",
-      'Our core objective is to discuss, consult and act as a negotiating body with the Government of Nigeria on matters of policy in the interest of the private health sector and drive the development of policies that will support private development by working directly with the registrars.',
+      "HFN serves as a unified platform through which private sector actors engage government, influence health policy, and contribute to system-wide reforms that expand access, improve quality, and advance Universal Health Coverage.",
+      'We are an apolitical, non-partisan, and non-profit organisation, independent of political, religious, or commercial interests, and driven by the shared goal of building a resilient, inclusive, and sustainable health system for all Nigerians.',
     ],
     mission:
-      'is centered on advocacy, capacity building, and improving access to finance for the private sector, all in collaboration with the public sector.',
+      'To strengthen Nigeria’s private health sector through advocacy, stakeholder convening, capacity building, and improved access to finance, in collaboration with the public sector.',
     vision:
-      'is to support the achievement of universal healthcare coverage through private sector activation.',
+      'To support the achievement of Universal Health Coverage through the activation and empowerment of the private health sector.',
   },
 
   ctaSection: {
-    title: 'Why join HFN?',
+    title: 'What We Do',
     image: 'partnership-01.png',
   },
 
