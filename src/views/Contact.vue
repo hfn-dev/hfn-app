@@ -1,26 +1,24 @@
 <script setup>
 import globe from "@/assets/globe.png";
-
 </script>
 
 <template>
   <section class="bg-[#F2F9F3] py-16 lg:py-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
+      <!-- <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
         <div class="mb-12 lg:mb-0">
           <h2
             class="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 text-orange-500"
           >
-            Let's keep in touch!
+            Get in touch with <br />
+            Healthcare Federation of Nigeria
           </h2>
-          <p class="mt-2 text-xl font-semibold text-green-700">
-            Healthcare Federation of Nigeria would love to hear from you.
+          <p class="mt-2 text-xl font-semibold text-gray-500">
+            Healthcare Federation of Nigeria (HFN) welcomes enquiries from
+            members, partners, policymakers, development organisations, media,
+            and individuals interested in engaging with our work.
           </p>
-          <p class="mt-6 text-lg text-gray-600 max-w-xl">
-            For any inquiries, partnerships, or further information on how we
-            can work together to improve healthcare in Nigeria, feel free to
-            reach out to us through any of the following contact options.
-          </p>
+          <p class="mt-6 text-lg text-gray-600 max-w-xl"></p>
         </div>
 
         <div class="flex justify-center lg:justify-end">
@@ -34,7 +32,44 @@ import globe from "@/assets/globe.png";
             />
           </div>
         </div>
+      </div> -->
+      <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center py-16">
+    <div class="mb-12 lg:mb-0">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-100 mb-6">
+        <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
+        <span class="text-orange-600 text-xs font-bold uppercase tracking-widest">Connect With Us</span>
       </div>
+
+      <h2 class="text-4xl lg:text-6xl font-black mb-6 text-[#004d33] leading-[1.1]">
+        Get in touch with <br />
+        <span class="text-gray-900">HFN Nigeria</span>
+      </h2>
+
+      <p class="mt-2 text-lg md:text-xl font-medium text-gray-600 leading-relaxed border-l-4 border-[#004d33] pl-6">
+        Healthcare Federation of Nigeria (HFN) welcomes enquiries from members, partners, policymakers, development organisations, media, and individuals interested in engaging with our work.
+
+      </p>
+      
+      <div class="mt-8 flex items-center gap-4">
+        <div class="flex -space-x-3">
+          <div v-for="i in 3" :key="i" class="w-10 h-10 rounded-full border-2 border-white bg-gray-200"></div>
+        </div>
+        <p class="text-sm text-gray-500 font-semibold">Our team typically responds within 24 hours.</p>
+      </div>
+    </div>
+
+    <div class="flex justify-center lg:justify-end relative">
+      <div class="absolute inset-0 bg-[#004d33] opacity-5 blur-[100px] rounded-full"></div>
+      
+      <div class="relative w-full max-w-[500px] aspect-square rounded-[3rem] overflow-hidden shadow-2xl flex items-center justify-center p-8 bg-white border border-gray-50 group">
+        <img
+          :src="globe"
+          alt="Global connectivity"
+          class="object-contain w-full h-full group-hover:scale-110 transition-transform duration-1000 ease-out"
+        />
+      </div>
+    </div>
+  </div>
     </div>
   </section>
   <section class="py-16 sm:py-24 bg-white">
@@ -45,12 +80,11 @@ import globe from "@/assets/globe.png";
         >
           Contact Us
         </h2>
-        <p class="text-gray-500 max-w-2xl mx-auto mt-10">
-          We are here to help!
+        <p class="text-gray-500 max-w-2xl mx-auto mt-5">
           <br class="hidden sm:block" />
-          Whether you have a question about our service, need assistance with
-          your account, or want to provide feedback, our team is ready to assist
-          you.
+          Whether you are seeking information about membership, partnerships,
+          events, advocacy, or general enquiries, our team is available to
+          assist.
         </p>
       </div>
 
@@ -164,8 +198,7 @@ import globe from "@/assets/globe.png";
               ></path>
             </svg>
             <p class="text-gray-700 text-base">
-              109, Awolowo Road, Ikoyi, Opposite Standard Chartered Bank,
-              Lagos.
+              109, Awolowo Road, Ikoyi, Opposite Standard Chartered Bank, Lagos.
             </p>
           </div>
 
@@ -240,7 +273,6 @@ import globe from "@/assets/globe.png";
               </svg>
               Connect With Us
             </h3>
-            
           </div>
 
           <div

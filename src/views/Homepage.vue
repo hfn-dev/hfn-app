@@ -33,7 +33,7 @@ const actions = [
     // tags: ['Collaboration', 'Alignment', 'Action'],
   },
   {
-    title: "Sector Intelligence",
+    title: "Sector Intelligence & Thought Leadership",
     description:
       "We generate insights, reports, and high-level dialogues that inform policy decisions, investment, and strategic engagement across the health sector.",
     icon: LightBulbIcon,
