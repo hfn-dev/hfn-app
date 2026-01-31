@@ -1,28 +1,40 @@
 <template>
   <div class="bg-[#f8fdf9] min-h-screen">
     
-    <section class="relative py-24 bg-[#004d33] overflow-hidden">
-      <div class="absolute inset-0 opacity-10">
-        <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
-        <div class="absolute bottom-0 right-0 w-96 h-96 bg-orange-400 rounded-full translate-x-1/2 translate-y-1/2 blur-3xl"></div>
-      </div>
-
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="flex flex-col items-center text-center">
-          <nav class="flex mb-4 text-orange-400 text-xs font-black uppercase tracking-[0.3em]">
-            <span>About Us</span>
-            <span class="mx-2 text-white/30">/</span>
-            <span class="text-white">Governance</span>
-          </nav>
-          <h1 class="text-4xl md:text-7xl font-black text-white mb-6 tracking-tight">
-            Governance & <span class="text-orange-400">Leadership</span>
-          </h1>
-          <p class="max-w-2xl text-green-100/80 text-lg md:text-xl font-medium leading-relaxed">
-            HFN is guided by a Board of Trustees and an Executive Committee providing strategic oversight and leadership for Nigeria’s private health sector.
+    
+    <section class="bg-[#F2F9F3] py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
+        <div class="mb-12 lg:mb-0">
+          <h2
+            class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4"
+          >
+            <span class="text-orange-500 block"
+              >Governance & Leadership</span
+            >
+            <span class="text-green-700 block mt-2"
+              >A coalition driving policy and innovation.</span
+            >
+          </h2>
+          <p class="mt-6 text-lg text-gray-600 max-w-xl">
+           HFN is guided by a Board of Trustees and an Executive Committee providing strategic oversight and leadership for Nigeria’s private health sector.
           </p>
         </div>
+
+        <div class="flex justify-center lg:justify-end">
+          <div
+            class="relative w-[320px] h-[240px] sm:w-[400px] sm:h-[300px] lg:w-[500px] lg:h-[375px] rounded-[30px] overflow-hidden shadow-2xl"
+          >
+            <img
+              :src="handsJoining"
+              alt="Diverse hands joining in a heart shape, symbolizing unity and healthcare"
+              class="object-cover w-full h-full"
+            />
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
+  </section>
 
     <section class="py-24 max-w-7xl mx-auto px-4">
       <div class="flex items-center gap-4 mb-16">
