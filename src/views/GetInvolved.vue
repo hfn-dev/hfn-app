@@ -14,9 +14,10 @@
               <span class="text-gray-900">Beyond Membership</span>
             </h1>
             <p class="mt-4 text-gray-600 max-w-lg">
-              Partner with us to build a stronger, healthier Nigeria through
-              innovation, advocacy, and collaboration. Together, we can make
-              quality healthcare accessible to every citizen.
+              Healthcare Federation of Nigeria (HFN) provides multiple pathways for individuals,
+organisations, and partners to support and engage with our work strengthening Nigeria’s
+healthcare system.
+              
             </p>
           </div>
 
