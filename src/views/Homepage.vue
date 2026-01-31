@@ -403,7 +403,7 @@ onMounted(async () => {
               </div>
             </div>
 
-            <button class="cta-button group">
+            <RouterLink to="/about" class="cta-button group">
               Read Our Full Story
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -420,7 +420,7 @@ onMounted(async () => {
                 <path d="M5 12h14" />
                 <path d="m12 5 7 7-7 7" />
               </svg>
-            </button>
+            </RouterLink>
           </div>
         </div>
       </div>
