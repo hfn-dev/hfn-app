@@ -9,9 +9,9 @@
             <h1
               class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight"
             >
-              <span class="text-green-700">Join the Movement</span>
+              <span class="text-green-700">Engage With HFN</span>
               <br />
-              <span class="text-gray-900">Transform Healthcare in Nigeria</span>
+              <span class="text-gray-900">Beyond Membership</span>
             </h1>
             <p class="mt-4 text-gray-600 max-w-lg">
               Partner with us to build a stronger, healthier Nigeria through
