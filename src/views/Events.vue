@@ -339,6 +339,7 @@
 import awards from "@/assets/awards.png";
 import newEvent from "@/assets/events.png";
 // import latest from "@/assets/latest_news.png";
+  const event = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769883047/events-CNRYrGt8_trfhaz.png';
   const breakfast2025 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769881263/1758712162657_yclv7p.jpg';
   const roundtable2025 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769881265/1764355254559_g2wv3t.jpg';
 const hfn2025 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769881267/1746181486545_mtao0s.jpg';
@@ -351,6 +352,7 @@ const events = [
     time: "10:00 AM",
     location: "Lagos Oriental Hotel Lagos, LA",
     frequency: "Free for Members",
+    image: event,
     description:
       "Join HFN 2026 to explore bold private‑sector solutions driving healthcare financing and Universal Health Coverage in Nigeria.",
     registerLink:
@@ -363,6 +365,7 @@ const events = [
     time: "10:00 AM",
     location: "Lagos Oriental Hotel Lagos, LA",
     frequency: "Dollar Payment",
+    image: event,
     description:
       "Join HFN 2026 to explore bold private‑sector solutions driving healthcare financing and Universal Health Coverage in Nigeria.",
     registerLink:
@@ -375,6 +378,7 @@ const events = [
     time: "10:00 AM",
     location: "Lagos Oriental Hotel Lagos, LA",
     frequency: "Naira Payment",
+    image: event,
     description:
       "Join HFN 2026 to explore bold private‑sector solutions driving healthcare financing and Universal Health Coverage in Nigeria.",
     registerLink: "https://tix.africa/discover/2026-hfn-annual-conference",
