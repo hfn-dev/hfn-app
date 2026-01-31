@@ -65,7 +65,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import About from '../views/About.vue';
 import Homepage from '../views/Homepage.vue';
 import GalleryDetail from '@/views/GalleryDetail.vue';
-
+import Governance from '@/views/Governance.vue';
+  
 const routes = [
   {
     path: '/',
@@ -80,6 +81,7 @@ const routes = [
   { path: '/signin', name: 'Signin', component: SignIn },
   { path: '/events', name: 'Events', component: Events },
   { path: '/gallery', name: 'Gallery', component: Gallery },
+  { path: '/governance', name: 'Governance', component: Governance },
   { path: '/publication', name: 'Publications', component: Publications },
   { path: '/registration-payment', name: 'Payment', component: Payment },
 
