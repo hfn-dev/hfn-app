@@ -370,9 +370,11 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
             >
           </h2>
           <p class="mt-6 text-lg text-gray-600 max-w-xl">
-            Within the professional network, HFN offers access to a secure
-            member directory that shapes industry dialogue, and tap into
-            exclusive, high-impact collaborations.
+            Membership of the Healthcare Federation of Nigeria (HFN) provides access to a trusted
+professional network that strengthens private sector participation in policy, investment, and
+health system reform.
+HFN members engage through structured advocacy platforms, strategic partnerships, and
+sector-wide collaborations that shape Nigeria’s healthcare landscape.
           </p>
         </div>
 
