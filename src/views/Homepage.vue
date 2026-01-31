@@ -327,7 +327,7 @@ onMounted(async () => {
             class="text-4xl md:text-5xl font-black text-gray-900 leading-tight"
           >
             Strengthening Nigeria's <br />
-            <span class="text-green-700">Healthcare Ecosystem.</span>
+            <span class="text-green-700">Healthcare System</span>
           </h2>
 
           <div class="space-y-6">
@@ -499,15 +499,15 @@ onMounted(async () => {
   </section>
 
   <section class="bg-white py-16 px-6 md:px-12 lg:px-24">
-    <div class="text-center mb-10">
+    <!-- <div class="text-center mb-10">
       <h2
         class="text-3xl md:text-4xl font-bold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
       >
         {{ pageContent.story.title }}
       </h2>
-    </div>
+    </div> -->
 
-    <div class="grid md:grid-cols-2 gap-10 items-center">
+    <!-- <div class="grid md:grid-cols-2 gap-10 items-center">
       <div class="relative w-full max-w-2xl mx-auto h-[400px] sm:h-[450px]">
         <div
           class="absolute inset-x-0 bottom-0 w-[100%] sm:w-[80%] h-[350px] sm:h-[350px] rounded-[30px] overflow-hidden shadow-2xl border-4 border-green-500/50"
@@ -552,7 +552,7 @@ onMounted(async () => {
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
       <div
