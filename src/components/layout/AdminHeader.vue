@@ -48,7 +48,13 @@ const toggleNavDropdown = (title) => {
 
 const navLinks = [
   { title: "Home", path: "/", hasDropdown: false },
-  { title: "About Us", path: "/about", hasDropdown: false },
+  { title: "About Us", path: "/about", hasDropdown: true,
+  dropdownItems: [
+      
+      { title: "Governance", path: "/governance" },
+
+    ],
+  },
   {
     title: "Latest Updates",
     
