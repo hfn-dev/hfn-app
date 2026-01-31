@@ -1,9 +1,6 @@
 <script setup>
-import paymentApi from "@/api/payments";
 import handsJoining from "@/assets/handsJoining.jpg";
-import logo from "@/assets/logo.png";
 import { computed, ref } from "vue";
-import { useRouter } from "vue-router";
 
 
 // const router = useRouter()  
@@ -395,7 +392,7 @@ sector-wide collaborations that shape Nigeria’s healthcare landscape.
   <section class="py-10 sm:py-24 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2
-        class="text-3xl px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md sm:text-4xl font-serif font-extrabold text-gray-900 text-center mb-12"
+        class="text-3xl px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md sm:text-4xl font-sans font-extrabold text-gray-900 text-center mb-12"
       >
         Membership Categories
       </h2>

@@ -345,7 +345,7 @@ onMounted(() => {
         :style="{ backgroundColor: '#F8F3EE' }"
       >
         <section class="max-w-6xl mx-auto px-6 text-center">
-          <h3 class="text-3xl font-serif text-[#333] mb-8">
+          <h3 class="text-3xl font-sans text-[#333] mb-8">
             Missed the Last HFN Meeting?
           </h3>
 

@@ -727,7 +727,7 @@ const toggleInterest = (id) => {
           <div
             class="p-10 bg-[#F2F9F3] rounded-xl shadow-lg text-center border-2 border-green-300"
           >
-            <h3 class="text-3xl font-serif text-[#333] mb-2">
+            <h3 class="text-3xl font-sans text-[#333] mb-2">
               Subscription Type:
               <span class="text-[#004D33] font-bold">Individual</span>
             </h3>

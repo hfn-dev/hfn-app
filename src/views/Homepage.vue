@@ -568,7 +568,7 @@ onMounted(async () => {
         </select>
 
         <h2
-          class="text-2xl sm:text-3xl md:text-4xl font-serif font-extrabold text-gray-900 tracking-tight text-center sm:text-left mt-3 sm:mt-0"
+          class="text-2xl sm:text-3xl md:text-4xl font-sans font-extrabold text-gray-900 tracking-tight text-center sm:text-left mt-3 sm:mt-0"
         >
           Our Latest Update
         </h2>
@@ -684,7 +684,7 @@ onMounted(async () => {
   <section class="py-16 bg-white">
     <div class="container mx-auto px-6 text-center">
       <h2
-        class="text-3xl md:text-4xl font-serif mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
+        class="text-3xl md:text-4xl font-sans mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
       >
         Our Executives
       </h2>
@@ -755,7 +755,7 @@ onMounted(async () => {
   <!-- <section class="py-16 bg-white">
     <div class="container mx-auto px-6 text-center">
       <h2
-        class="text-3xl md:text-4xl font-serif mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
+        class="text-3xl md:text-4xl font-sans mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
       >
         Our Executives
       </h2>
@@ -798,7 +798,7 @@ onMounted(async () => {
   <!-- <section class="py-20 lg:py-28 bg-white" id="faq">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2
-        class="text-3xl text-center md:text-4xl font-serif mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
+        class="text-3xl text-center md:text-4xl font-sans mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
       >
         Frequently Asked Questions (F.A.Q)
       </h2>
@@ -984,7 +984,14 @@ onMounted(async () => {
 }
 
 .cta-button {
-  @apply flex items-center gap-3 bg-green-700 text-white px-10 py-5 rounded-full font-bold shadow-lg shadow-green-900/20 hover:shadow-green-900/40 transition-all transform hover:-translate-y-1 active:scale-95;
+  @apply inline-flex items-center gap-2
+         bg-green-700 text-white
+         px-5 py-2.5
+         rounded-full
+         font-semibold text-sm
+         shadow-md shadow-green-900/20
+         hover:shadow-green-900/40
+         transition-all transform hover:-translate-y-0.5 active:scale-95;
 }
 
 @keyframes bounce-slow {
