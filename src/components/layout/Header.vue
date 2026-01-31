@@ -59,7 +59,14 @@ const isLinkActive = (path) => {
 
 const navLinks = [
   { title: "Home", path: "/", hasDropdown: false },
-  { title: "About Us", path: "/about", hasDropdown: false },
+  { title: "About Us", path: "/about", hasDropdown: true,
+     
+  dropdownItems: [
+      
+      { title: "Governance", path: "/governance" },
+
+    ],
+  },
   {
     title: "News & Updates",
     
