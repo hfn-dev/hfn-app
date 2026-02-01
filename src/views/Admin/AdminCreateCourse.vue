@@ -1,21 +1,38 @@
 <script setup>
-import learningModule from "@/api/learningModule";
+import courseApi from "@/api/learningModule.js";
 import courses from "@/assets/courses.jpg";
-import { computed, onMounted, ref } from "vue";
+import {
+  Check,
+  ChevronDown,
+  DollarSign,
+  Lock,
+  Minimize2,
+  Plus,
+  Trash2,
+  UploadCloud,
+} from "lucide-vue-next";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
+import draggable from "vuedraggable";
 import AdminSidebar from "./AdminSidebar.vue";
 
-const route = useRoute();
+const activeModuleId = ref(null);
 const categories = ref([]);
-const router = useRouter();
-const isLoadingCategories = ref(false);
-const categoryError = ref(null);
+const loadingCategories = ref(false);
+
+const route = useRoute();
+const props = defineProps({
+  mode: {
+    type: String,
+    default: "create", // create | edit | view
+  },
+});
 
 const toast = useToast();
+const router = useRouter();
 const currentStep = ref(1);
-const slug = route.params.slug;
-const mode = route.props?.mode || "edit";
+
 const basicInfoForm = ref({
   title: "",
   shortDescription: "",
@@ -31,11 +48,28 @@ const basicInfoForm = ref({
 const curriculumForm = ref({
   modules: [],
   newLessonTitle: "",
-  newModuleNumber: "",
   materialsIncluded: [],
   instructorName: "",
   briefBiography: "",
 });
+
+const fetchCategories = async () => {
+  loadingCategories.value = true;
+  try {
+    const res = await courseApi.getCategories();
+    categories.value = res.data?.results || res.data || [];
+  } catch (err) {
+    console.error("Failed to fetch categories", err);
+    toast.error("Failed to load categories");
+  } finally {
+    loadingCategories.value = false;
+  }
+};
+
+const openAddLessonDialog = (moduleId) => {
+  activeModuleId.value = moduleId;
+  isLessonDialogOpen.value = true;
+};
 
 const pricingAccessForm = ref({
   courseAccessType: "paid",
@@ -46,43 +80,28 @@ const pricingAccessForm = ref({
   discountAvailability: "all",
 });
 
-const getCoursePayload = () => {
-  return {
-    title: basicInfoForm.value.title,
-    shortDescription: basicInfoForm.value.shortDescription,
-    category: basicInfoForm.value.category,
-    level: basicInfoForm.value.level,
-    fullOverview: basicInfoForm.value.fullOverview,
-    duration: `${basicInfoForm.value.durationHours}:${basicInfoForm.value.durationMinutes}:${basicInfoForm.value.durationSeconds}`,
-    learnOutcomes: basicInfoForm.value.learnOutcomes.map((o) => o.text),
-    curriculum: curriculumForm.value.modules.map((module) => ({
-      title: module.title,
-      lessons: module.lessons.map((lesson) => ({
-        title: lesson.title,
-        duration: lesson.duration,
-        contentType: lesson.contentType,
-        content: lesson.content,
-      })),
-      quizzes: module.quizzes || [],
-      resources: module.resources,
-    })),
-    materialsIncluded: curriculumForm.value.materialsIncluded.map(
-      (m) => m.text
-    ),
-    instructor: {
-      name: curriculumForm.value.instructorName,
-      biography: curriculumForm.value.briefBiography,
-    },
-    pricing: {
-      accessType: pricingAccessForm.value.courseAccessType,
-      visibility: pricingAccessForm.value.courseVisibility,
-      price: pricingAccessForm.value.price,
-      currency: pricingAccessForm.value.currency,
-      discountAmount: pricingAccessForm.value.discountAmount,
-      discountAvailability: pricingAccessForm.value.discountAvailability,
-    },
-  };
-};
+const pricingStatus = computed(() => {
+  const access = pricingAccessForm.value.courseAccessType;
+  if (access === "free") return { main: "Free", sub: "Public Access" };
+  if (access === "paid")
+    return {
+      main: "Paid Only",
+      sub: `${
+        pricingAccessForm.value.currency
+      } ${pricingAccessForm.value.price.toLocaleString("en-US")}`,
+    };
+  if (access === "membership")
+    return { main: "Members Only", sub: "Subscription" };
+  return { main: "Unknown", sub: "" };
+});
+
+const discountStatus = computed(() => {
+  return pricingAccessForm.value.discountAvailability === "all"
+    ? "All"
+    : pricingAccessForm.value.discountAvailability === "members_only"
+    ? "Members Only"
+    : "None";
+});
 
 const totalLessons = computed(() => {
   return curriculumForm.value.modules.reduce((count, module) => {
@@ -90,85 +109,12 @@ const totalLessons = computed(() => {
   }, 0);
 });
 
-const handleFileUpload = (e) => {
-  const file = e.target.files[0];
-  lessonForm.value.contentFile = file;
-};
-
 const steps = [
   { id: 1, title: "Basic Information" },
   { id: 2, title: "Curriculum Builder" },
   { id: 3, title: "Pricing & Access" },
-  { id: 4, title: "Preview & Submit" },
+  { id: 4, title: "Preview & Publish" },
 ];
-
-const course = ref(null);
-const isLoading = ref(false);
-const error = ref(null);
-
-const fetchCourse = async () => {
-  isLoading.value = true;
-  error.value = null;
-  try {
-    const response = await learningModule.getCoursesDetails(slug);
-    course.value = response.data;
-
-    basicInfoForm.value.title = course.value.title;
-    basicInfoForm.value.shortDescription = course.value.short_description;
-    basicInfoForm.value.category = course.value.category?.id || "";
-    basicInfoForm.value.level = course.value.level;
-    basicInfoForm.value.fullOverview = course.value.description;
-    basicInfoForm.value.learnOutcomes = course.value.learning_outcomes.map(
-      (o, i) => ({
-        id: i + 1,
-        text: o,
-        charCount: o.length,
-      })
-    );
-
-    curriculumForm.value.modules = course.value.modules.map((m) => ({
-      ...m,
-      isOpen: false,
-      lessons: m.lessons.map((l) => ({
-        ...l,
-      })),
-    }));
-
-    curriculumForm.value.materialsIncluded = [];
-    curriculumForm.value.instructorName =
-      course.value.instructor?.first_name || "";
-    curriculumForm.value.briefBiography =
-      course.value.instructor?.biography || "";
-
-    pricingAccessForm.value.courseAccessType = course.value.is_free
-      ? "free"
-      : "paid";
-    pricingAccessForm.value.courseVisibility =
-      course.value.status === "published" ? "public" : "private";
-    pricingAccessForm.value.price = parseFloat(course.value.price);
-    pricingAccessForm.value.currency = "NGN";
-  } catch (err) {
-    console.error(err);
-    error.value = "Failed to load course";
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-const fetchCategories = async () => {
-  isLoadingCategories.value = true;
-  categoryError.value = null;
-
-  try {
-    const response = await learningModule.getCategories();
-    categories.value = response.data;
-  } catch (err) {
-    console.error("Failed to fetch categories", err);
-    categoryError.value = "Failed to load categories";
-  } finally {
-    isLoadingCategories.value = false;
-  }
-};
 
 const addOutcome = () => {
   const newId =
@@ -177,17 +123,15 @@ const addOutcome = () => {
       : 1;
   basicInfoForm.value.learnOutcomes.push({
     id: newId,
-    text: "What you will teach in this course...",
+    text: "",
     charCount: 0,
   });
 };
-
 const removeOutcome = (id) => {
   basicInfoForm.value.learnOutcomes = basicInfoForm.value.learnOutcomes.filter(
     (o) => o.id !== id
   );
 };
-
 const updateCharCount = (outcome) => {
   outcome.charCount = outcome.text.length;
 };
@@ -202,7 +146,7 @@ const addMaterial = () => {
       : 1;
   curriculumForm.value.materialsIncluded.push({
     id: newId,
-    text: "What materials are included...",
+    text: "",
     charCount: 0,
   });
 };
@@ -214,49 +158,46 @@ const updateMaterialCharCount = (material) => {
   material.charCount = material.text.length;
 };
 
-const saveAndContinue = () => {
+const saveAndContinue = async () => {
   if (currentStep.value < 4) {
     currentStep.value += 1;
   } else {
-    submitCourse();
+    await submitCourse();
   }
 };
 
 const goBack = () => {
-  if (currentStep.value > 1) currentStep.value -= 1;
-  else toast.success("Navigating back to My Courses list (Simulated).");
+  if (currentStep.value > 1) {
+    console.log(
+      `Going back to Step ${currentStep.value - 1}: ${
+        steps[currentStep.value - 2].title
+      }`
+    );
+    currentStep.value -= 1;
+  } else {
+    toast.success("Navigating back to My Courses list.");
+  }
 };
 
 const isLessonDialogOpen = ref(false);
 const isQuizDialogOpen = ref(false);
-const modalType = ref("lesson"); // 'lesson' or 'quiz' for dynamic button text
 
 const lessonForm = ref({
   title: "",
-  durationHours: "00",
-  durationMinutes: "00",
-  durationSeconds: "00",
-  contentType: "Select Option",
-  textContent: "",
-  externalLink: "",
-  contentFile: null,
+  contentType: "",
+  videoUrl: "",
+  videoSource: "url",
+  videoFile: null,
+  articleContent: "",
+  documentFile: null,
+  liveDate: "",
+  liveLink: "",
+  durationHours: 0,
+  durationMinutes: 0,
+  durationSeconds: 0,
+
+  isPreview: false,
 });
-
-const currentModuleId = ref(null);
-
-const openAddLessonDialog = (moduleId) => {
-  currentModuleId.value = moduleId;
-  modalType.value = "lesson";
-  isLessonDialogOpen.value = true;
-  isQuizDialogOpen.value = false;
-};
-
-const openAddQuizDialog = (moduleId) => {
-  currentModuleId.value = moduleId;
-  modalType.value = "quiz";
-  isQuizDialogOpen.value = true;
-  isLessonDialogOpen.value = false;
-};
 
 const closeAddLessonDialog = () => {
   isLessonDialogOpen.value = false;
@@ -273,157 +214,300 @@ const resetLessonForm = () => {
   };
 };
 
-const resetForms = () => {
-  basicInfoForm.value = { ...basicInfoForm.value, learnOutcomes: [] };
-  curriculumForm.value = {
-    modules: [],
-    newLessonTitle: "",
-    newModuleNumber: "",
-    materialsIncluded: [],
-    instructorName: "",
-    briefBiography: "",
-  };
-  pricingAccessForm.value = {
-    courseAccessType: "paid",
-    courseVisibility: "public",
-    price: 0,
-    currency: "NGN",
-    discountAmount: "none",
-    discountAvailability: "all",
-  };
+const quizForm = ref({
+  title: "",
+  questions: [],
+  newQuestion: "",
+});
+
+const addQuizQuestion = () => {
+  if (!quizForm.value.newQuestion.trim()) return;
+
+  quizForm.value.questions.push({
+    id: Date.now(),
+    text: quizForm.value.newQuestion,
+  });
+
+  quizForm.value.newQuestion = "";
 };
+
+const removeQuizQuestion = (id) => {
+  quizForm.value.questions = quizForm.value.questions.filter(
+    (q) => q.id !== id
+  );
+};
+
+const handleQuizAdded = () => {
+  const module = curriculumForm.value.modules.find(
+    (m) => m.id === activeModuleId.value
+  );
+
+  if (!module) return;
+
+  module.quizzes.push({
+    id: Date.now(),
+    title: quizForm.value.title,
+    questions: quizForm.value.questions,
+  });
+
+  quizForm.value.title = "";
+  quizForm.value.questions = [];
+  quizForm.value.newQuestion = "";
+
+  closeAddQuizDialog();
+};
+
+watch(
+  () => lessonForm.value.contentType,
+  () => {
+    lessonForm.value.videoUrl = "";
+    lessonForm.value.videoFile = null;
+    lessonForm.value.videoSource = "url";
+    lessonForm.value.articleContent = "";
+    lessonForm.value.documentFile = null;
+    lessonForm.value.liveDate = "";
+    lessonForm.value.liveLink = "";
+  }
+);
 
 const handleLessonAdded = () => {
   const module = curriculumForm.value.modules.find(
-    (m) => m.id === currentModuleId.value
+    (m) => m.id === activeModuleId.value
   );
-  if (!module) return toast.error("Module not found.");
 
-  const lessonData = {
+  if (!module) return;
+
+  module.lessons.push({
     id: Date.now(),
     title: lessonForm.value.title,
-    duration: `${lessonForm.value.durationHours}:${lessonForm.value.durationMinutes}:${lessonForm.value.durationSeconds}`,
-    contentType: lessonForm.value.contentType,
-    content: {
-      text: lessonForm.value.textContent || null,
-      link: lessonForm.value.externalLink || null,
-      file: lessonForm.value.contentFile || null,
+    content_type: lessonForm.value.contentType,
+    duration: {
+      hours: Number(lessonForm.value.durationHours),
+      minutes: Number(lessonForm.value.durationMinutes),
+      seconds: Number(lessonForm.value.durationSeconds),
     },
-  };
+    video_url:
+      lessonForm.value.contentType === "video"
+        ? lessonForm.value.videoUrl || ""
+        : null,
 
-  module.lessons.push(lessonData);
+    article_content: lessonForm.value.articleContent,
+    document_file: lessonForm.value.documentFile,
+
+    live_class:
+      lessonForm.value.contentType === "live"
+        ? {
+            date: lessonForm.value.liveDate,
+            link: lessonForm.value.liveLink,
+          }
+        : null,
+    is_preview: false,
+  });
+
   closeAddLessonDialog();
+};
+
+const openAddQuizDialog = () => {
+  isQuizDialogOpen.value = true;
 };
 
 const closeAddQuizDialog = () => {
   isQuizDialogOpen.value = false;
 };
 
-const pricingStatus = computed(() => {
-  const access = pricingAccessForm.value.courseAccessType;
-  const visibility = pricingAccessForm.value.courseVisibility;
+const totalDurationHours =
+  Number(basicInfoForm.value.durationHours) +
+  Number(basicInfoForm.value.durationMinutes) / 60 +
+  Number(basicInfoForm.value.durationSeconds) / 3600;
 
-  if (access === "free") return { main: "Free", sub: "Public Access" };
-  if (access === "paid")
-    return {
-      main: "Paid Only",
-      sub: `${
-        pricingAccessForm.value.currency
-      } ${pricingAccessForm.value.price.toLocaleString("en-US")}`,
-    };
-  if (access === "membership")
-    return { main: "Members Only", sub: "Subscription" };
+const buildPayload = () => ({
+  title: basicInfoForm.value.title,
+  short_description: basicInfoForm.value.shortDescription,
+  description: basicInfoForm.value.fullOverview,
+  category: basicInfoForm.value.category,
+  level: basicInfoForm.value.level,
 
-  return { main: "Unknown", sub: "" };
+  duration: totalDurationHours,
+
+  learning_outcomes: basicInfoForm.value.learnOutcomes.map((o) => o.text),
+
+  modules: curriculumForm.value.modules.map((module) => ({
+    title: module.title,
+    description: module.description,
+    resources: module.resources,
+
+    lessons: module.lessons.map((lesson) => {
+      const lessonPayload = {
+        title: lesson.title,
+        content_type: lesson.content_type,
+        duration: lesson.duration,
+        is_preview: lesson.is_preview,
+      };
+
+      if (lesson.content_type === "video") {
+        lessonPayload.video_url = lesson.video_url?.url || lesson.video_url;
+      }
+
+      if (lesson.content_type === "text") {
+        lessonPayload.article_content = lesson.article_content || "";
+      }
+
+      return lessonPayload;
+    }),
+  })),
+
+  materials: curriculumForm.value.materialsIncluded.map((m) => m.text),
+
+  instructor: {
+    name: curriculumForm.value.instructorName,
+    bio: curriculumForm.value.briefBiography,
+  },
+
+  pricing: {
+    access_type: pricingAccessForm.value.courseAccessType,
+    visibility: pricingAccessForm.value.courseVisibility,
+    price:
+      pricingAccessForm.value.courseAccessType === "free"
+        ? 0
+        : pricingAccessForm.value.price,
+
+    is_free: pricingAccessForm.value.courseAccessType === "free",
+
+    currency: pricingAccessForm.value.currency,
+    discount_amount: pricingAccessForm.value.discountAmount,
+    discount_availability: pricingAccessForm.value.discountAvailability,
+  },
+
+  status: "draft",
+  created_by_role: "super_admin",
 });
 
-const discountStatus = computed(() => {
-  return pricingAccessForm.value.discountAvailability === "all"
-    ? "All"
-    : pricingAccessForm.value.discountAvailability === "members_only"
-    ? "Members Only"
-    : "None";
-});
+const activeModule = computed(() =>
+  curriculumForm.value.modules.find((m) => m.id === activeModuleId.value)
+);
 
 const addModule = () => {
-  curriculumForm.value.modules.push({
+  const newModule = {
     id: Date.now(),
-    title: "New Module",
-    isOpen: true,
+    title: `Module ${curriculumForm.value.modules.length + 1}`,
+    description: "",
     lessons: [],
     quizzes: [],
-    resources: [],
-  });
-};
-
-const quizForm = ref({
-  title: "",
-  type: "",
-  questions: [],
-});
-
-const addQuizQuestion = () => {
-  quizForm.value.questions.push({
-    id: Date.now(),
-    question: "",
-    type: "multiple_choice",
-    options: [],
-    correctAnswer: null,
-  });
-};
-
-const handleQuizAdded = () => {
-  const module = curriculumForm.value.modules.find(
-    (m) => m.id === currentModuleId.value
-  );
-
-  if (!module) return toast.error("Please select a module first");
-
-  const newQuiz = {
-    id: Date.now(),
-    title: quizForm.value.title,
-    type: quizForm.value.type,
-    questions: [...quizForm.value.questions],
+    resources: "",
+    isOpen: true,
   };
 
-  module.quizzes.push(newQuiz);
+  curriculumForm.value.modules.forEach((m) => (m.isOpen = false));
 
-  quizForm.value = { title: "", type: "", questions: [] };
-  closeAddQuizDialog();
-  toast.success("Quiz added to module");
+  curriculumForm.value.modules.push(newModule);
+  activeModuleId.value = newModule.id;
+};
+
+const removeModule = (moduleId) => {
+  curriculumForm.value.modules = curriculumForm.value.modules.filter(
+    (m) => m.id !== moduleId
+  );
+
+  if (activeModuleId.value === moduleId) {
+    activeModuleId.value = curriculumForm.value.modules[0]?.id || null;
+  }
+};
+
+const removeLesson = (moduleId, lessonId) => {
+  const module = curriculumForm.value.modules.find((m) => m.id === moduleId);
+
+  if (!module) return;
+
+  module.lessons = module.lessons.filter((l) => l.id !== lessonId);
 };
 
 const submitCourse = async () => {
   try {
-    const payload = getCoursePayload();
+    const payload = buildPayload();
 
-    let response;
-    if (slug) {
-      response = await learningModule.updateCourses(slug, payload);
-      toast.success("Course Updated Successfully!");
+    if (props.mode === "edit") {
+      await courseApi.updateCourse(route.params.slug, payload);
+      toast.success("Course updated successfully");
     } else {
-      response = await learningModule.createCourses(payload);
-      toast.success("Course Created Successfully!");
-      resetForms();
-      currentStep.value = 1;
+      await courseApi.createCourses(payload);
+      toast.success("Course created successfully");
     }
 
-    console.log("Course response:", response.data);
-  } catch (error) {
-    console.error("Course submit error:", error);
-    toast.error("Failed to submit course.");
+    router.push("/superadmin/courses");
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to save course");
   }
 };
 
-onMounted(() => {
-  if (slug) {
-    fetchCourse();
-  } else {
-    if (curriculumForm.value.modules.length === 0) addModule();
+const hydrateCurriculum = (backendCurriculum) => {
+  curriculumForm.value.modules = backendCurriculum.map((module) => ({
+    id: Date.now() + Math.random(),
+    title: module.title,
+    description: module.description,
+    resources: module.resources,
+    isOpen: false,
+
+    lessons: module.lessons.map((lesson) => ({
+      id: Date.now() + Math.random(),
+      title: lesson.title,
+      content_type: lesson.content_type,
+      duration: lesson.duration,
+      video_url: lesson.video_url,
+      article_content: lesson.article_content,
+      is_preview: lesson.is_preview,
+    })),
+  }));
+};
+
+watch(
+  () => currentStep.value,
+  (step) => {
+    if (step === 2 && curriculumForm.value.modules.length === 0) {
+      curriculumForm.value.modules.push({
+        id: Date.now(),
+        title: "Module 1",
+        description: "",
+        lessons: [],
+        quizzes: [],
+        resources: "",
+        isOpen: true,
+      });
+
+      activeModuleId.value = curriculumForm.value.modules[0].id;
+    }
   }
-  fetchCategories();
+);
+
+onMounted(async () => {
+  await fetchCategories();
+
+  if (props.mode === "edit") {
+    const res = await courseApi.getCourseBySlug(route.params.slug);
+    const course = res.data;
+
+    basicInfoForm.value.title = course.title;
+    basicInfoForm.value.shortDescription = course.short_description;
+    basicInfoForm.value.fullOverview = course.overview;
+    basicInfoForm.value.category = course.category?.slug;
+    basicInfoForm.value.level = course.level;
+
+    hydrateCurriculum(course.curriculum);
+  }
+
+  if (props.mode === "view") {
+    const res = await courseApi.getCourseBySlug(route.params.slug);
+    const course = res.data;
+
+    basicInfoForm.value.title = course.title;
+    basicInfoForm.value.shortDescription = course.short_description;
+    basicInfoForm.value.fullOverview = course.overview;
+    basicInfoForm.value.category = course.category?.slug;
+    basicInfoForm.value.level = course.level;
+
+    hydrateCurriculum(course.curriculum);
+  }
 });
-  
 </script>
 
 <template>
@@ -495,7 +579,7 @@ onMounted(() => {
                   type="text"
                   id="course-title"
                   v-model="basicInfoForm.title"
-                  placeholder="Enter Text"
+                  placeholder="Enter Title"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
                 />
               </div>
@@ -510,7 +594,7 @@ onMounted(() => {
                   type="text"
                   id="short-description"
                   v-model="basicInfoForm.shortDescription"
-                  placeholder="Enter Text"
+                  placeholder="Enter Description"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
                 />
               </div>
@@ -527,12 +611,20 @@ onMounted(() => {
                     v-model="basicInfoForm.category"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border bg-white"
                   >
+                    <option value="" disabled>
+                      {{
+                        loadingCategories
+                          ? "Loading categories..."
+                          : "Select category"
+                      }}
+                    </option>
+
                     <option
-                      v-for="cat in categories"
-                      :key="cat.id"
-                      :value="cat.name"
+                      v-for="category in categories"
+                      :key="category.id"
+                      :value="category.id"
                     >
-                      {{ cat.name }}
+                      {{ category.icon }} {{ category.name }}
                     </option>
                   </select>
                 </div>
@@ -545,11 +637,12 @@ onMounted(() => {
                   <select
                     id="level"
                     v-model="basicInfoForm.level"
+                    placeholder="Select level"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border bg-white"
                   >
-                    <option value="Beginner">Beginner</option>
-                    <option value="Intermediate">Intermediate</option>
-                    <option value="Advanced">Advanced</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
                   </select>
                 </div>
               </div>
@@ -574,7 +667,7 @@ onMounted(() => {
               id="full-overview"
               rows="4"
               v-model="basicInfoForm.fullOverview"
-              placeholder="Enter Text"
+              placeholder="Enter Overview"
               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border resize-none"
             ></textarea>
           </div>
@@ -667,306 +760,165 @@ onMounted(() => {
             Curriculum Builder
           </h2>
           <p class="text-gray-600 mb-8">
-            Add the course modules and lesson contents.
+            Add the course modules and lesson content.
           </p>
 
-          <div class="mb-8 max-w-2xl mx-auto">
-            <div class="grid grid-cols-12 gap-4 items-start">
-              <div class="col-span-4 flex justify-end pr-4">
-                <span class="text-[#E67E22] font-bold text-2xl italic"
-                  >Preview</span
-                >
-              </div>
+          <div class="mb-12 flex items-start gap-12">
+            <div
+              class="text-[#E67E22] text-4xl font-sans italic pt-8 select-none"
+            >
+              Preview
+            </div>
 
+            <div class="flex-1">
               <div
-                class="col-span-8 border border-gray-200 rounded-lg overflow-hidden shadow-sm"
+                v-for="module in curriculumForm.modules"
+                :key="module.id"
+                class="border border-gray-200 rounded-xl shadow-sm bg-white overflow-hidden w-full"
               >
                 <div
-                  class="bg-[#E9F5EE] p-3 flex justify-between items-center border-b border-gray-200"
+                  @click="toggleModule(module)"
+                  class="bg-[#F1F8F4] p-5 flex justify-between items-center border-b border-gray-100 cursor-pointer"
                 >
-                  <span class="font-semibold text-gray-700 text-sm"
-                    >Module One: Meanings and Definitions</span
-                  >
-                  <ChevronDown class="w-4 h-4 text-gray-500" />
-                </div>
-                <div class="bg-white p-0">
-                  <div
-                    class="flex justify-between items-center p-3 border-b border-gray-50 text-xs"
-                  >
-                    <span class="text-gray-600"
-                      >Lesson 1: What is Naturopathy?</span
+                  <span class="font-bold text-gray-800 text-lg">
+                    {{ module.title || "Untitled Module" }}
+                  </span>
+                  <div class="flex items-center gap-3">
+                    <button
+                      v-if="curriculumForm.modules.length > 1"
+                      @click.stop="removeModule(module.id)"
+                      class="text-red-500 hover:text-red-700"
+                      title="Delete module"
                     >
-                    <span class="text-gray-400">10:20</span>
-                  </div>
-                  <div
-                    class="flex justify-between items-center p-3 border-b border-gray-50 text-xs text-gray-600"
-                  >
-                    <span>Lesson 2: Lorem</span>
-                    <span class="text-gray-400">22:20</span>
-                  </div>
-                  <div class="p-3 text-xs text-gray-600">
-                    <span>Additional Resources</span>
+                      <Trash2 class="w-4 h-4" />
+                    </button>
+
+                    <ChevronDown
+                      @click="toggleModule(module)"
+                      class="w-5 h-5 text-gray-400 transition-transform cursor-pointer"
+                      :class="{ 'rotate-180': module.isOpen }"
+                    />
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div
-            v-if="isQuizDialogOpen || isLessonDialogOpen"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-transparent p-4"
-          >
-            <div
-              class="bg-white rounded-lg shadow-xl w-full max-w-lg overflow-hidden"
-            >
-              <div class="p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                  {{ modalType === "lesson" ? "Add Lesson" : "Add Quiz" }}
-                </h3>
 
-                <form
-                  @submit.prevent="
-                    modalType === 'lesson'
-                      ? handleLessonAdded()
-                      : handleQuizAdded()
+                <div
+                  v-if="
+                    module.isOpen &&
+                    module.lessons.length === 0 &&
+                    module.quizzes.length === 0
                   "
-                  class="space-y-4"
+                  class="p-8 text-center text-gray-400 italic"
                 >
-                  <div v-if="modalType === 'quiz'">
-                    <div>
-                      <label
-                        class="block text-xs font-medium text-gray-500 mb-1"
-                        >Quiz Title</label
+                  No lessons or quizzes added to this module yet.
+                </div>
+
+                <div v-if="module.isOpen">
+                  <draggable
+                    v-model="module.lessons"
+                    item-key="id"
+                    handle=".drag-handle"
+                    animation="200"
+                  >
+                    <template #item="{ element: lesson }">
+                      <div
+                        class="flex items-center justify-between p-4 border-b last:border-0 bg-white hover:bg-gray-50 transition-colors"
                       >
-                      <input
-                        type="text"
-                         v-model="quizForm.title"
-                        placeholder="Enter Text"
-                        class="w-full p-2 border border-gray-200 rounded-md text-sm focus:ring-1 focus:ring-[#006633] outline-none"
-                      />
-                    </div>
+                        <div class="flex items-center gap-4">
+                          <span
+                            class="drag-handle cursor-grab text-gray-300 hover:text-gray-500 text-xl"
+                          >
+                            ⋮⋮
+                          </span>
+                          <span class="text-base text-gray-700 font-medium">
+                            {{ lesson.title }}
+                          </span>
+                        </div>
 
-                    <div
-                      v-for="(q, index) in quizForm.questions"
-                      :key="q.id"
-                      class="border rounded-md p-3 space-y-2"
-                    >
-                      <label class="text-xs font-medium text-gray-500">
-                        Question {{ index + 1 }}
-                      </label>
-
-                      <input
-                        v-model="q.question"
-                        type="text"
-                        placeholder="Enter question"
-                        class="w-full p-2 border rounded-md text-sm"
-                      />
-
-                      <select
-                        v-model="q.type"
-                        class="w-full p-2 border rounded-md text-sm bg-white"
-                      >
-                        <option value="multiple_choice">Multiple Choice</option>
-                        <option value="true_false">True / False</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label
-                        class="block text-xs font-medium text-gray-500 mb-1"
-                        >Quiz Type</label
-                      >
-                      <select
-                        v-model="quizForm.type"
-                        class="w-full p-2 border border-gray-200 rounded-md text-sm bg-white focus:ring-1 focus:ring-[#006633] outline-none"
-                      >
-                        <option>Select Option</option>
-                        <option value="graded">Graded Quiz</option>
-                        <option value="practice">Practice Quiz</option>
-                      </select>
-                    </div>
-
-                    <div class="flex justify-center py-2">
-                      <button
-                        type="button"
-                        @click="addQuizQuestion"
-                        class="text-[#006633] text-sm font-medium flex items-center"
-                      >
-                        Add Question? <Plus class="w-4 h-4 ml-1" />
-                      </button>
-                    </div>
-                  </div>
-
-                  <div v-if="modalType === 'lesson'" class="space-y-4">
-                    <div>
-                      <label class="block text-sm font-medium"
-                        >Lesson Title</label
-                      >
-                      <input
-                        v-model="lessonForm.title"
-                        type="text"
-                        class="w-full border rounded-md px-3 py-2"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label class="block text-sm font-medium"
-                        >Content Type</label
-                      >
-                      <select
-                        v-model="lessonForm.contentType"
-                        class="w-full border rounded-md px-3 py-2"
-                        required
-                      >
-                        <option disabled value="">Select type</option>
-                        <option value="video">Video</option>
-                        <option value="pdf">PDF</option>
-                        <option value="text">Text</option>
-                        <option value="link">External Link</option>
-                      </select>
-                    </div>
-
-                    <textarea
-                      v-if="lessonForm.contentType === 'text'"
-                      v-model="lessonForm.textContent"
-                      rows="4"
-                      class="w-full border rounded-md px-3 py-2"
-                      placeholder="Lesson content..."
-                    />
-
-                    <input
-                      v-if="lessonForm.contentType === 'link'"
-                      v-model="lessonForm.externalLink"
-                      type="url"
-                      class="w-full border rounded-md px-3 py-2"
-                      placeholder="https://..."
-                    />
-
-                    <input
-                      v-if="
-                        lessonForm.contentType === 'video' ||
-                        lessonForm.contentType === 'pdf'
-                      "
-                      type="file"
-                      @change="handleFileUpload"
-                      class="w-full"
-                    />
-                  </div>
-
-                  <div>
-                    <label class="block text-xs font-medium text-gray-500 mb-1"
-                      >Estimated Duration</label
-                    >
-                    <div class="flex items-center space-x-2">
-                      <div class="flex items-center space-x-1 flex-1">
-                        <input
-                          type="text"
-                          placeholder="00"
-                          class="w-full p-2 border border-gray-200 rounded-md text-center text-sm"
-                        />
-                        <span class="text-xs text-gray-400">Hours</span>
+                        <span
+                          class="text-sm font-sans text-gray-400 bg-gray-50 px-2 py-1 rounded"
+                        >
+                          {{
+                            lesson.duration.hours > 0
+                              ? lesson.duration.hours + "h"
+                              : ""
+                          }}
+                          {{ lesson.duration.minutes }}m
+                        </span>
+                        <button
+                          @click.stop="removeLesson(module.id, lesson.id)"
+                          class="text-red-500 hover:text-red-700"
+                          title="Delete lesson"
+                        >
+                          <Trash2 class="w-4 h-4" />
+                        </button>
                       </div>
-                      <div class="flex items-center space-x-1 flex-1">
-                        <input
-                          type="text"
-                          placeholder="00"
-                          class="w-full p-2 border border-gray-200 rounded-md text-center text-sm"
-                        />
-                        <span class="text-xs text-gray-400">Minutes</span>
-                      </div>
-                      <div class="flex items-center space-x-1 flex-1">
-                        <input
-                          type="text"
-                          placeholder="00"
-                          class="w-full p-2 border border-gray-200 rounded-md text-center text-sm"
-                        />
-                        <span class="text-xs text-gray-400">Seconds</span>
-                      </div>
-                    </div>
-                  </div>
+                    </template>
+                  </draggable>
+                </div>
 
-                  <div>
-                    <label class="block text-xs font-medium text-gray-500 mb-1"
-                      >Quiz Type</label
-                    >
-                    <select
-                      v-model="quizForm.type"
-                      class="w-full p-2 border border-gray-200 rounded-md text-sm bg-white focus:ring-1 focus:ring-[#006633] outline-none"
-                    >
-                      <option>Select Option</option>
-                      <option value="graded">Graded Quiz</option>
-                      <option value="practice">Practice Quiz</option>
-                    </select>
-                  </div>
+                <div
+                  v-for="quiz in module.quizzes"
+                  :key="quiz.id"
+                  class="p-4 border-t bg-blue-50/30 flex items-center gap-3 text-blue-700 font-semibold"
+                >
+                  <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  Quiz: {{ quiz.title }}
+                </div>
 
-                  <div class="flex justify-center py-2">
-                    <button
-                      type="button"
-                      @click="addQuizQuestion"
-                      class="text-[#006633] text-sm font-medium flex items-center"
-                    >
-                      Add Question? <Plus class="w-4 h-4 ml-1" />
-                    </button>
-                  </div>
-
-                  <div class="flex justify-end space-x-3 pt-4">
-                    <button
-                      type="submit"
-                      class="px-6 py-2 bg-[#006633] text-white rounded text-sm font-medium hover:bg-[#004d26]"
-                    >
-                      {{
-                        modalType === "lesson" ? "Add Lesson" : "Create Quiz"
-                      }}
-                    </button>
-                    <button
-                      type="button"
-                      @click="
-                        modalType === 'lesson'
-                          ? closeAddLessonDialog()
-                          : closeAddQuizDialog()
-                      "
-                      class="px-6 py-2 border border-gray-200 rounded text-gray-600 text-sm font-medium hover:bg-gray-50"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </form>
+                <div class="p-3 bg-gray-50/50 text-xs text-gray-400 text-right">
+                  Module Preview Mode
+                </div>
               </div>
             </div>
           </div>
 
           <div class="grid grid-cols-2 gap-6 mb-6">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1"
+            <div class="space-y-1">
+              <label class="text-xs font-medium text-gray-500"
                 >Module Title</label
               >
               <input
                 type="text"
                 placeholder="Enter Title"
-                class="w-full p-2.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#006633] outline-none"
+                v-model="activeModule.title"
+                class="w-full border-b border-gray-300 py-2 outline-none focus:border-[#006633]"
+                :disabled="!activeModule"
               />
             </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1"
-                >Module Number</label
-              >
-              <select
-                class="w-full p-2.5 border border-gray-300 rounded-md bg-white focus:ring-1 focus:ring-[#006633] outline-none"
-              >
-                <option>Select Option</option>
-              </select>
-            </div>
-          </div>
-          <div class="mb-6">
+            <div class="space-y-1">
               <button
-                @click="addModule"
-                class="px-4 py-2 bg-[#00cc66] text-white rounded hover:bg-[#00994d]"
+                @click="addModule()"
+                class="w-full border border-dashed border-[#006633] py-2 rounded text-[#006633] text-sm font-medium hover:bg-green-50 transition"
               >
-                Add Module
+                + Add New Module
               </button>
             </div>
+          </div>
 
-          
+          <div class="grid grid-cols-2 gap-4 mb-10">
+            <button
+              @click="
+                openAddLessonDialog(
+                  activeModuleId || curriculumForm.modules[0]?.id
+                )
+              "
+              class="border border-gray-200 rounded py-2 text-[#006633] text-sm font-medium flex items-center justify-center gap-2 hover:bg-gray-50"
+            >
+              Add Lesson <Plus class="w-4 h-4" />
+            </button>
+
+            <button
+              @click="
+                activeModuleId =
+                  activeModuleId || curriculumForm.modules[0]?.id;
+                openAddQuizDialog();
+              "
+              class="border border-gray-200 rounded py-2 text-[#006633] text-sm font-medium flex items-center justify-center gap-2 hover:bg-gray-50"
+            >
+              Add Quiz <Plus class="w-4 h-4" />
+            </button>
+          </div>
+
           <div class="mt-8 pt-4 border-t border-gray-200">
             <div class="flex justify-between items-center mb-4">
               <h3 class="text-lg font-semibold text-gray-800">
@@ -1042,12 +994,238 @@ onMounted(() => {
                 id="biography"
                 rows="3"
                 v-model="curriculumForm.briefBiography"
-                placeholder="Sample text about the instructor, their experience, and credentials."
+                placeholder="Enter Bio"
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border resize-none"
               ></textarea>
             </div>
           </div>
+          <div
+            v-if="isLessonDialogOpen"
+            class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4"
+          >
+            <div class="bg-white w-full max-w-lg rounded-xl p-6 shadow-xl">
+              <h3 class="text-lg font-semibold mb-4">Add Lesson</h3>
+
+              <form @submit.prevent="handleLessonAdded" class="space-y-4">
+                <div>
+                  <label class="text-sm text-gray-600">Lesson Title</label>
+                  <input
+                    v-model="lessonForm.title"
+                    class="w-full border rounded p-2"
+                    required
+                  />
+                </div>
+
+                <div class="flex gap-2">
+                  <input
+                    type="number"
+                    v-model="lessonForm.durationHours"
+                    placeholder="HH"
+                    class="w-1/3 border rounded p-2"
+                  />
+                  <input
+                    type="number"
+                    v-model="lessonForm.durationMinutes"
+                    placeholder="MM"
+                    class="w-1/3 border rounded p-2"
+                  />
+                  <input
+                    type="number"
+                    v-model="lessonForm.durationSeconds"
+                    placeholder="SS"
+                    class="w-1/3 border rounded p-2"
+                  />
+                </div>
+
+                <select
+                  v-model="lessonForm.contentType"
+                  class="w-full border rounded px-3 py-2 text-sm"
+                >
+                  <option value="" disabled>Select content type</option>
+                  <option value="video">Video</option>
+                  <option value="text">Article</option>
+                  <option value="document">Document</option>
+                  <option value="live">Live Class</option>
+                </select>
+                <div
+                  v-if="lessonForm.contentType === 'video'"
+                  class="space-y-3"
+                >
+                  <label class="block text-xs font-medium">Video Source</label>
+
+                  <div class="flex gap-4 text-sm">
+                    <label class="flex items-center gap-1">
+                      <input
+                        type="radio"
+                        value="url"
+                        v-model="lessonForm.videoSource"
+                      />
+                      Video URL
+                    </label>
+
+                    <label class="flex items-center gap-1">
+                      <input
+                        type="radio"
+                        value="file"
+                        v-model="lessonForm.videoSource"
+                      />
+                      Upload Video
+                    </label>
+                  </div>
+
+                  <div v-if="lessonForm.videoSource === 'url'">
+                    <input
+                      v-model="lessonForm.videoUrl"
+                      type="url"
+                      placeholder="https://youtube.com/..."
+                      class="w-full border rounded px-3 py-2 text-sm"
+                    />
+                  </div>
+
+                  <div v-if="lessonForm.videoSource === 'file'">
+                    <input
+                      type="file"
+                      accept="video/*"
+                      @change="
+                        (e) => (lessonForm.videoFile = e.target.files[0])
+                      "
+                      class="w-full text-sm"
+                    />
+                    <p class="text-xs text-gray-400 mt-1">
+                      MP4, MOV • max size depends on server
+                    </p>
+                  </div>
+                </div>
+
+                <div v-if="lessonForm.contentType === 'text'">
+                  <label class="block text-xs font-medium mb-1"
+                    >Article Content</label
+                  >
+                  <textarea
+                    v-model="lessonForm.articleContent"
+                    rows="5"
+                    placeholder="Write lesson content..."
+                    class="w-full border rounded px-3 py-2 text-sm"
+                  ></textarea>
+                </div>
+                <div v-if="lessonForm.contentType === 'document'">
+                  <label class="block text-xs font-medium mb-1"
+                    >Upload Document</label
+                  >
+                  <input
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    @change="
+                      (e) => (lessonForm.documentFile = e.target.files[0])
+                    "
+                    class="w-full text-sm"
+                  />
+                </div>
+                <div v-if="lessonForm.contentType === 'live'" class="space-y-3">
+                  <div>
+                    <label class="block text-xs font-medium mb-1"
+                      >Class Date</label
+                    >
+                    <input
+                      v-model="lessonForm.liveDate"
+                      type="datetime-local"
+                      class="w-full border rounded px-3 py-2 text-sm"
+                    />
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium mb-1"
+                      >Meeting Link</label
+                    >
+                    <input
+                      v-model="lessonForm.liveLink"
+                      type="url"
+                      placeholder="Zoom / Google Meet link"
+                      class="w-full border rounded px-3 py-2 text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4">
+                  <button
+                    type="button"
+                    @click="closeAddLessonDialog"
+                    class="px-4 py-2 border rounded"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    class="px-4 py-2 bg-[#00cc66] text-white rounded"
+                  >
+                    Add Lesson
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div
+            v-if="isQuizDialogOpen"
+            class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4"
+          >
+            <div class="bg-white w-full max-w-md rounded-xl p-6 shadow-xl">
+              <h3 class="text-lg font-semibold mb-4">Add Quiz</h3>
+
+              <input
+                v-model="quizForm.title"
+                placeholder="Quiz title"
+                class="w-full border rounded p-2 mb-4"
+              />
+
+              <div class="flex gap-2 mb-3">
+                <input
+                  v-model="quizForm.newQuestion"
+                  placeholder="Enter quiz question"
+                  class="flex-1 border rounded p-2"
+                />
+                <button
+                  type="button"
+                  @click="addQuizQuestion"
+                  class="px-3 bg-[#00cc66] text-white rounded"
+                >
+                  Add
+                </button>
+              </div>
+
+              <ul class="space-y-2 mb-4">
+                <li
+                  v-for="q in quizForm.questions"
+                  :key="q.id"
+                  class="flex justify-between items-center bg-gray-50 px-3 py-2 rounded text-sm"
+                >
+                  <span>{{ q.text }}</span>
+                  <button
+                    @click="removeQuizQuestion(q.id)"
+                    class="text-red-500 text-xs"
+                  >
+                    Remove
+                  </button>
+                </li>
+              </ul>
+
+              <div class="flex justify-end gap-3">
+                <button
+                  @click="closeAddQuizDialog"
+                  class="px-4 py-2 border rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  @click="handleQuizAdded"
+                  class="px-4 py-2 bg-[#006633] text-white rounded"
+                >
+                  Add Quiz
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
+
         <div v-if="currentStep === 3">
           <div class="flex justify-between items-start mb-10">
             <h2 class="text-2xl font-semibold text-gray-800 border-b pb-2">
@@ -1270,13 +1448,6 @@ onMounted(() => {
                       v-if="module.isOpen"
                       class="p-4 bg-white border-t border-gray-100"
                     >
-                      <button type="button" @click="openAddLessonDialog(module.id)" class="px-3 py-1 border rounded">
-                        Add Lesson
-                      </button>
-                    
-                      <button type="button" @click="openAddQuizDialog(module.id)" class="px-3 py-1 border rounded">
-                        Add Quiz
-                      </button>
                       <div
                         v-for="lesson in module.lessons"
                         :key="lesson.id"
@@ -1286,30 +1457,14 @@ onMounted(() => {
                           <Minimize2 class="w-3 h-3 mr-2 text-gray-400" />
                           <span>{{ lesson.title }}</span>
                         </div>
-                        <span class="text-xs text-gray-500">{{
-                          lesson.duration
-                        }}</span>
+                        <span class="text-xs text-gray-500"
+                          >{{ lesson.duration.hours }}h
+                          {{ lesson.duration.minutes }}m
+                        </span>
                       </div>
                       <p class="text-sm font-medium text-[#006633] mt-2">
                         {{ module.resources }}
                       </p>
-                    </div>
-                    <div class="flex gap-2">
-                      <button
-                        type="button"
-                        @click="openAddLessonDialog(module.id)"
-                        class="px-3 py-1 border rounded"
-                      >
-                        Add Lesson
-                      </button>
-
-                      <button
-                        type="button"
-                        @click="openAddQuizDialog(module.id)"
-                        class="px-3 py-1 border rounded"
-                      >
-                        Add Quiz
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -1460,7 +1615,7 @@ onMounted(() => {
             Back
           </button>
           <button
-            @click="currentStep < 4 ? saveAndContinue() : submitCourse()"
+            @click="saveAndContinue"
             class="px-6 py-2 bg-[#00cc66] text-white rounded-lg font-medium hover:bg-[#00994d] transition-colors shadow-md"
           >
             {{ currentStep < 4 ? "Save & Continue" : "Submit Course" }}
