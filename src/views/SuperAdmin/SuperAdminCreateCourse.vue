@@ -382,8 +382,6 @@ const buildPayload = () => ({
   created_by_role: "super_admin",
 });
 
-
-
 const activeModule = computed(() =>
   curriculumForm.value.modules.find((m) => m.id === activeModuleId.value)
 );

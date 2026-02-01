@@ -1,10 +1,9 @@
 <script setup>
-import learningModule from '@/api/learningModule.js';
-import TutorSidebar from '@/views/Tutor/TutorSidebar.vue';
-import { computed, onMounted, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
-
-
+import learningModule from "@/api/learningModule.js";
+import TutorSidebar from "@/views/Tutor/TutorSidebar.vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useRouter } from "vue-router";
+import ConfirmModal from "@/components/layout/ConfirmModal.vue";
 import {
   ChevronLeft,
   ChevronRight,
@@ -14,23 +13,23 @@ import {
   Plus,
   Search,
   Trash2,
-} from 'lucide-vue-next';
+} from "lucide-vue-next";
 
-const courseTabs = ref(['Published', 'Drafts', 'Archived', 'Approval']);
-const currentTab = ref('Published');
+const courseTabs = ref(["Published", "Drafts", "Archived", "Approval"]);
+const currentTab = ref("Published");
 const loading = ref(false);
-const searchQuery = ref('');
-const router = useRouter()
+const searchQuery = ref("");
+const router = useRouter();
 const publishedCourses = ref([]);
 const draftCourses = ref([]);
 const archivedCourses = ref([]);
 const approvalCourses = ref([]);
 
 const activeCourses = computed(() => {
-  if (currentTab.value === 'Published') return publishedCourses.value;
-  if (currentTab.value === 'Drafts') return draftCourses.value;
-  if (currentTab.value === 'Archived') return archivedCourses.value;
-  if (currentTab.value === 'Approval') return approvalCourses.value;
+  if (currentTab.value === "Published") return publishedCourses.value;
+  if (currentTab.value === "Drafts") return draftCourses.value;
+  if (currentTab.value === "Archived") return archivedCourses.value;
+  if (currentTab.value === "Approval") return approvalCourses.value;
 
   return [];
 });
@@ -40,7 +39,7 @@ const mapCourse = (course) => ({
   slug: course.slug,
   title: course.title,
   enrollments: course.enrollments ?? null,
-  completion: course.completion_rate ? `${course.completion_rate}%` : '-',
+  completion: course.completion_rate ? `${course.completion_rate}%` : "-",
   lastUpdate: new Date(course.updated_at).toLocaleDateString(),
   approvalStatus: course.approval_status, // Approved | Pending | Declined
   status: course.status, // published | draft | archived | approval
@@ -57,27 +56,27 @@ const fetchCourses = async () => {
 
     const courses = (res.results || res.data || []).map(mapCourse);
 
-    if (currentTab.value === 'Published') publishedCourses.value = courses;
-    if (currentTab.value === 'Drafts') draftCourses.value = courses;
-    if (currentTab.value === 'Archived') archivedCourses.value = courses;
-    if (currentTab.value === 'Approval') approvalCourses.value = courses;
+    if (currentTab.value === "Published") publishedCourses.value = courses;
+    if (currentTab.value === "Drafts") draftCourses.value = courses;
+    if (currentTab.value === "Archived") archivedCourses.value = courses;
+    if (currentTab.value === "Approval") approvalCourses.value = courses;
   } catch (err) {
-    console.error('Failed to fetch courses', err);
+    console.error("Failed to fetch courses", err);
   } finally {
     loading.value = false;
   }
 };
 
 const handleAction = async (action, course) => {
-  if (action === 'View') {
+  if (action === "View") {
     router.push(`/tutor/courses/${course.slug}`);
   }
 
-  if (action === 'Edit') {
+  if (action === "Edit") {
     router.push(`/tutor/courses/${course.slug}/edit`);
   }
 
-  if (action === 'Delete') {
+  if (action === "Delete") {
     await handleDelete(course.slug);
   }
 };
@@ -92,7 +91,7 @@ const goToPage = (page) => {
 };
 
 const handleDelete = async (slug) => {
-  const confirmDelete = confirm('Are you sure you want to delete this course?');
+  const confirmDelete = confirm("Are you sure you want to delete this course?");
 
   if (!confirmDelete) return;
 
@@ -110,8 +109,43 @@ const handleDelete = async (slug) => {
       (c) => c.slug !== slug
     );
   } catch (err) {
-    console.error('Delete failed', err);
-    alert('Failed to delete course');
+    console.error("Delete failed", err);
+    alert("Failed to delete course");
+  }
+};
+
+const showDeleteModal = ref(false);
+const courseToDelete = ref(null);
+
+const openDeleteModal = (course) => {
+  courseToDelete.value = course;
+  showDeleteModal.value = true;
+};
+
+const confirmDeleteCourse = async () => {
+  if (!courseToDelete.value) return;
+
+  try {
+    await learningModule.deleteCourse(courseToDelete.value.slug);
+
+    publishedCourses.value = publishedCourses.value.filter(
+      (c) => c.slug !== courseToDelete.value.slug
+    );
+    draftCourses.value = draftCourses.value.filter(
+      (c) => c.slug !== courseToDelete.value.slug
+    );
+    archivedCourses.value = archivedCourses.value.filter(
+      (c) => c.slug !== courseToDelete.value.slug
+    );
+    approvalCourses.value = approvalCourses.value.filter(
+      (c) => c.slug !== courseToDelete.value.slug
+    );
+
+    courseToDelete.value = null;
+    showDeleteModal.value = false;
+  } catch (err) {
+    console.error("Delete failed", err);
+    alert("Failed to delete course");
   }
 };
 
@@ -131,7 +165,6 @@ watch(searchQuery, () => {
   <div class="flex min-h-screen font-sans">
     <TutorSidebar />
     <main class="flex-1 p-8 overflow-auto bg-white">
-      <!-- Breadcrumbs -->
       <div class="text-sm text-gray-500 mb-6">
         <span class="text-[#006633]">Home</span> > My Courses
       </div>
@@ -263,7 +296,7 @@ watch(searchQuery, () => {
               <template v-else>
                 <!-- Enrollments Column -->
                 <td class="py-3 px-3">
-                  {{ course.enrollments !== null ? course.enrollments : '-' }}
+                  {{ course.enrollments !== null ? course.enrollments : "-" }}
                 </td>
                 <!-- Completion Rate Column -->
                 <td class="py-3 px-3">
@@ -302,7 +335,7 @@ watch(searchQuery, () => {
                     />
                   </button>
                   <button
-                    @click="handleAction('Delete', course)"
+                    @click="openDeleteModal(course)"
                     class="w-6 h-6 transform hover:text-red-500 hover:scale-110 transition-transform p-0.5"
                   >
                     <Trash2
@@ -315,7 +348,6 @@ watch(searchQuery, () => {
           </tbody>
         </table>
 
-        <!-- Pagination -->
         <div class="flex justify-end items-center mt-6 text-sm text-gray-600">
           <span class="mr-4">Page {{ currentPage }} of {{ totalPages }}</span>
           <div class="flex space-x-2">
@@ -340,6 +372,13 @@ watch(searchQuery, () => {
           </div>
         </div>
       </div>
+      <ConfirmModal
+        v-if="showDeleteModal"
+        title="Delete Course"
+        message="Are you sure you want to delete this course?"
+        @confirm="confirmDeleteCourse"
+        @cancel="showDeleteModal = false"
+      />
     </main>
   </div>
 </template>
