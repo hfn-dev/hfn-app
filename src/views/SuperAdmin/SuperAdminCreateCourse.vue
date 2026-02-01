@@ -25,7 +25,7 @@ const route = useRoute();
 const props = defineProps({
   mode: {
     type: String,
-    default: "create", // create | edit
+    default: "create", // create | edit | view
   },
 });
 
@@ -485,6 +485,19 @@ onMounted(async () => {
   await fetchCategories();
 
   if (props.mode === "edit") {
+    const res = await courseApi.getCourseBySlug(route.params.slug);
+    const course = res.data;
+
+    basicInfoForm.value.title = course.title;
+    basicInfoForm.value.shortDescription = course.short_description;
+    basicInfoForm.value.fullOverview = course.overview;
+    basicInfoForm.value.category = course.category?.slug;
+    basicInfoForm.value.level = course.level;
+
+    hydrateCurriculum(course.curriculum);
+  }
+
+  if (props.mode === "view") {
     const res = await courseApi.getCourseBySlug(route.params.slug);
     const course = res.data;
 

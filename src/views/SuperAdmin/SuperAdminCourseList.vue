@@ -15,6 +15,7 @@ import {
   Search,
   Trash2,
 } from 'lucide-vue-next';
+import ConfirmModal from '@/components/layout/ConfirmModal.vue';
 
 const courseTabs = ref(['Published', 'Drafts', 'Archived', 'Approvals']);
 const currentTab = ref('Published');
@@ -22,6 +23,8 @@ const router = useRouter();
 const courses = ref([]);
 const loading = ref(false);
 const searchQuery = ref('');
+const isConfirmModalOpen = ref(false); 
+let courseToDelete = null; 
 
 const tabStatusMap = {
   Published: 'published',
@@ -61,7 +64,7 @@ const isApprovalTab = computed(() => currentTab.value === 'Approvals');
 const handleAction = async (action, course) => {
   switch (action) {
     case 'View':
-      router.push(`/superadmin/courses/${course.slug}`);
+      router.push(`/superadmin/courses/${course.slug}/view`);
       break;
 
     case 'Edit':
@@ -69,9 +72,8 @@ const handleAction = async (action, course) => {
       break;
 
     case 'Delete':
-      if (!confirm('Delete this course?')) return;
-      await courseApi.deleteCourse(course.id);
-      fetchCourses();
+      courseToDelete = course;
+  isConfirmModalOpen.value = true;
       break;
 
     case 'Approve':
@@ -80,6 +82,24 @@ const handleAction = async (action, course) => {
       break;
   }
 };
+
+
+const confirmDelete = async () => {
+  if (!courseToDelete) return;
+
+  try {
+    await courseApi.deleteCourse(courseToDelete.slug);
+    fetchCourses(); // refresh the table
+    courseToDelete = null;
+    isConfirmModalOpen.value = false;
+  } catch (err) {
+    console.error(err);
+    isConfirmModalOpen.value = false;
+    courseToDelete = null;
+    console.log('Failed to delete course');
+  }
+};
+
 
 const currentPage = ref(1);
 const totalPages = 2;
@@ -316,6 +336,13 @@ onMounted(fetchCourses);
           </div>
         </div>
       </div>
+      <ConfirmModal
+  v-if="isConfirmModalOpen"
+  title="Delete Course"
+  message="Are you sure you want to delete this course?"
+  @confirm="confirmDelete"
+  @cancel="() => { isConfirmModalOpen = false; courseToDelete = null; }"
+/>
     </main>
   </div>
 </template>

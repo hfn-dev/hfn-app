@@ -244,6 +244,12 @@ const routes = [
     props: { mode: 'edit' },
   },
   {
+    path: '/superadmin/courses/:slug/view',
+    name: 'SuperAdminViewCourse',
+    component: SuperAdminCreateCourse,
+    props: { mode: 'view' },
+  },
+  {
     path: '/superadmin/members',
     name: 'SuperAdminMembers',
     component: SuperAdminMembers,
