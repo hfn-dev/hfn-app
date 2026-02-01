@@ -1,23 +1,21 @@
 <script setup>
-import courseApi from '@/api/learningModule.js';
-import courses from '@/assets/courses.jpg';
+import courseApi from "@/api/learningModule.js";
+import courses from "@/assets/courses.jpg";
 import {
-  Book,
   Check,
   ChevronDown,
   DollarSign,
-  Edit2,
   Lock,
   Minimize2,
   Plus,
   Trash2,
   UploadCloud,
-} from 'lucide-vue-next';
-import { computed, onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { useToast } from 'vue-toastification';
-import SuperAdminSidebar from './SuperAdminSidebar.vue';
-
+} from "lucide-vue-next";
+import { computed, onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useToast } from "vue-toastification";
+import draggable from "vuedraggable";
+import SuperAdminSidebar from "./SuperAdminSidebar.vue";
 
 const activeModuleId = ref(null);
 const categories = ref([]);
@@ -27,7 +25,7 @@ const route = useRoute();
 const props = defineProps({
   mode: {
     type: String,
-    default: 'create', // create | edit
+    default: "create", // create | edit
   },
 });
 
@@ -36,23 +34,23 @@ const router = useRouter();
 const currentStep = ref(1);
 
 const basicInfoForm = ref({
-  title: '',
-  shortDescription: '',
-  category: '',
-  level: '',
-  fullOverview: '',
-  durationHours: '00',
-  durationMinutes: '00',
-  durationSeconds: '00',
+  title: "",
+  shortDescription: "",
+  category: "",
+  level: "",
+  fullOverview: "",
+  durationHours: "00",
+  durationMinutes: "00",
+  durationSeconds: "00",
   learnOutcomes: [],
 });
 
 const curriculumForm = ref({
   modules: [],
-  newLessonTitle: '',
+  newLessonTitle: "",
   materialsIncluded: [],
-  instructorName: '',
-  briefBiography: '',
+  instructorName: "",
+  briefBiography: "",
 });
 
 const fetchCategories = async () => {
@@ -61,14 +59,12 @@ const fetchCategories = async () => {
     const res = await courseApi.getCategories();
     categories.value = res.data?.results || res.data || [];
   } catch (err) {
-    console.error('Failed to fetch categories', err);
-    toast.error('Failed to load categories');
+    console.error("Failed to fetch categories", err);
+    toast.error("Failed to load categories");
   } finally {
     loadingCategories.value = false;
   }
 };
-
-
 
 const openAddLessonDialog = (moduleId) => {
   activeModuleId.value = moduleId;
@@ -76,34 +72,35 @@ const openAddLessonDialog = (moduleId) => {
 };
 
 const pricingAccessForm = ref({
-  courseAccessType: 'paid',
-  courseVisibility: 'public',
+  courseAccessType: "paid",
+  courseVisibility: "public",
   price: 0,
-  currency: 'NGN',
-  discountAmount: 'none',
-  discountAvailability: 'all',
+  currency: "NGN",
+  discountAmount: "none",
+  discountAvailability: "all",
 });
 
 const pricingStatus = computed(() => {
   const access = pricingAccessForm.value.courseAccessType;
-  if (access === 'free') return { main: 'Free', sub: 'Public Access' };
-  if (access === 'paid')
+  if (access === "free") return { main: "Free", sub: "Public Access" };
+  if (access === "paid")
     return {
-      main: 'Paid Only',
-      sub: `${pricingAccessForm.value.currency
-        } ${pricingAccessForm.value.price.toLocaleString('en-US')}`,
+      main: "Paid Only",
+      sub: `${
+        pricingAccessForm.value.currency
+      } ${pricingAccessForm.value.price.toLocaleString("en-US")}`,
     };
-  if (access === 'membership')
-    return { main: 'Members Only', sub: 'Subscription' };
-  return { main: 'Unknown', sub: '' };
+  if (access === "membership")
+    return { main: "Members Only", sub: "Subscription" };
+  return { main: "Unknown", sub: "" };
 });
 
 const discountStatus = computed(() => {
-  return pricingAccessForm.value.discountAvailability === 'all'
-    ? 'All'
-    : pricingAccessForm.value.discountAvailability === 'members_only'
-      ? 'Members Only'
-      : 'None';
+  return pricingAccessForm.value.discountAvailability === "all"
+    ? "All"
+    : pricingAccessForm.value.discountAvailability === "members_only"
+    ? "Members Only"
+    : "None";
 });
 
 const totalLessons = computed(() => {
@@ -113,10 +110,10 @@ const totalLessons = computed(() => {
 });
 
 const steps = [
-  { id: 1, title: 'Basic Information' },
-  { id: 2, title: 'Curriculum Builder' },
-  { id: 3, title: 'Pricing & Access' },
-  { id: 4, title: 'Preview & Publish' },
+  { id: 1, title: "Basic Information" },
+  { id: 2, title: "Curriculum Builder" },
+  { id: 3, title: "Pricing & Access" },
+  { id: 4, title: "Preview & Publish" },
 ];
 
 const addOutcome = () => {
@@ -126,7 +123,7 @@ const addOutcome = () => {
       : 1;
   basicInfoForm.value.learnOutcomes.push({
     id: newId,
-    text: '',
+    text: "",
     charCount: 0,
   });
 };
@@ -149,7 +146,7 @@ const addMaterial = () => {
       : 1;
   curriculumForm.value.materialsIncluded.push({
     id: newId,
-    text: '',
+    text: "",
     charCount: 0,
   });
 };
@@ -172,12 +169,13 @@ const saveAndContinue = async () => {
 const goBack = () => {
   if (currentStep.value > 1) {
     console.log(
-      `Going back to Step ${currentStep.value - 1}: ${steps[currentStep.value - 2].title
+      `Going back to Step ${currentStep.value - 1}: ${
+        steps[currentStep.value - 2].title
       }`
     );
     currentStep.value -= 1;
   } else {
-    toast.success('Navigating back to My Courses list.');
+    toast.success("Navigating back to My Courses list.");
   }
 };
 
@@ -185,13 +183,21 @@ const isLessonDialogOpen = ref(false);
 const isQuizDialogOpen = ref(false);
 
 const lessonForm = ref({
-  title: '',
-  durationHours: '00',
-  durationMinutes: '00',
-  durationSeconds: '00',
-  contentType: '',
-});
+  title: "",
+  contentType: "",
+  videoUrl: "",
+  videoSource: "url",
+  videoFile: null,
+  articleContent: "",
+  documentFile: null,
+  liveDate: "",
+  liveLink: "",
+  durationHours: 0,
+  durationMinutes: 0,
+  durationSeconds: 0,
 
+  isPreview: false,
+});
 
 const closeAddLessonDialog = () => {
   isLessonDialogOpen.value = false;
@@ -200,17 +206,73 @@ const closeAddLessonDialog = () => {
 
 const resetLessonForm = () => {
   lessonForm.value = {
-    title: '',
-    durationHours: '00',
-    durationMinutes: '00',
-    durationSeconds: '00',
-    contentType: 'Select Option',
+    title: "",
+    durationHours: "00",
+    durationMinutes: "00",
+    durationSeconds: "00",
+    contentType: "Select Option",
   };
 };
 
+const quizForm = ref({
+  title: "",
+  questions: [],
+  newQuestion: "",
+});
+
+const addQuizQuestion = () => {
+  if (!quizForm.value.newQuestion.trim()) return;
+
+  quizForm.value.questions.push({
+    id: Date.now(),
+    text: quizForm.value.newQuestion,
+  });
+
+  quizForm.value.newQuestion = "";
+};
+
+const removeQuizQuestion = (id) => {
+  quizForm.value.questions = quizForm.value.questions.filter(
+    (q) => q.id !== id
+  );
+};
+
+const handleQuizAdded = () => {
+  const module = curriculumForm.value.modules.find(
+    (m) => m.id === activeModuleId.value
+  );
+
+  if (!module) return;
+
+  module.quizzes.push({
+    id: Date.now(),
+    title: quizForm.value.title,
+    questions: quizForm.value.questions,
+  });
+
+  quizForm.value.title = "";
+  quizForm.value.questions = [];
+  quizForm.value.newQuestion = "";
+
+  closeAddQuizDialog();
+};
+
+watch(
+  () => lessonForm.value.contentType,
+  () => {
+    lessonForm.value.videoUrl = "";
+    lessonForm.value.videoFile = null;
+    lessonForm.value.videoSource = "url";
+    lessonForm.value.articleContent = "";
+    lessonForm.value.documentFile = null;
+    lessonForm.value.liveDate = "";
+    lessonForm.value.liveLink = "";
+  }
+);
+
 const handleLessonAdded = () => {
   const module = curriculumForm.value.modules.find(
-    m => m.id === activeModuleId.value
+    (m) => m.id === activeModuleId.value
   );
 
   if (!module) return;
@@ -224,8 +286,21 @@ const handleLessonAdded = () => {
       minutes: Number(lessonForm.value.durationMinutes),
       seconds: Number(lessonForm.value.durationSeconds),
     },
-    video_url: '',
-    article_content: '',
+    video_url:
+      lessonForm.value.contentType === "video"
+        ? lessonForm.value.videoUrl || ""
+        : null,
+
+    article_content: lessonForm.value.articleContent,
+    document_file: lessonForm.value.documentFile,
+
+    live_class:
+      lessonForm.value.contentType === "live"
+        ? {
+            date: lessonForm.value.liveDate,
+            link: lessonForm.value.liveLink,
+          }
+        : null,
     is_preview: false,
   });
 
@@ -240,43 +315,48 @@ const closeAddQuizDialog = () => {
   isQuizDialogOpen.value = false;
 };
 
-const handleQuizAdded = () => {
-  console.log('New Quiz Added (Placeholder Action)');
-  closeAddQuizDialog();
-};
-
+const totalDurationHours =
+  Number(basicInfoForm.value.durationHours) +
+  Number(basicInfoForm.value.durationMinutes) / 60 +
+  Number(basicInfoForm.value.durationSeconds) / 3600;
 
 const buildPayload = () => ({
   title: basicInfoForm.value.title,
   short_description: basicInfoForm.value.shortDescription,
-  overview: basicInfoForm.value.fullOverview,
+  description: basicInfoForm.value.fullOverview,
   category: basicInfoForm.value.category,
   level: basicInfoForm.value.level,
 
-  duration: {
-    hours: basicInfoForm.value.durationHours,
-    minutes: basicInfoForm.value.durationMinutes,
-    seconds: basicInfoForm.value.durationSeconds,
-  },
+  duration: totalDurationHours,
 
-  learning_outcomes: basicInfoForm.value.learnOutcomes.map(o => o.text),
+  learning_outcomes: basicInfoForm.value.learnOutcomes.map((o) => o.text),
 
-  curriculum: curriculumForm.value.modules.map(module => ({
+  modules: curriculumForm.value.modules.map((module) => ({
     title: module.title,
     description: module.description,
     resources: module.resources,
 
-    lessons: module.lessons.map(lesson => ({
-      title: lesson.title,
-      content_type: lesson.content_type,
-      duration: lesson.duration,
-      video_url: lesson.video_url,
-      article_content: lesson.article_content,
-      is_preview: lesson.is_preview,
-    })),
+    lessons: module.lessons.map((lesson) => {
+      const lessonPayload = {
+        title: lesson.title,
+        content_type: lesson.content_type,
+        duration: lesson.duration,
+        is_preview: lesson.is_preview,
+      };
+
+      if (lesson.content_type === "video") {
+        lessonPayload.video_url = lesson.video_url?.url || lesson.video_url;
+      }
+
+      if (lesson.content_type === "text") {
+        lessonPayload.article_content = lesson.article_content || "";
+      }
+
+      return lessonPayload;
+    }),
   })),
 
-  materials: curriculumForm.value.materialsIncluded.map(m => m.text),
+  materials: curriculumForm.value.materialsIncluded.map((m) => m.text),
 
   instructor: {
     name: curriculumForm.value.instructorName,
@@ -286,99 +366,91 @@ const buildPayload = () => ({
   pricing: {
     access_type: pricingAccessForm.value.courseAccessType,
     visibility: pricingAccessForm.value.courseVisibility,
-    price: pricingAccessForm.value.price,
+    price:
+      pricingAccessForm.value.courseAccessType === "free"
+        ? 0
+        : pricingAccessForm.value.price,
+
+    is_free: pricingAccessForm.value.courseAccessType === "free",
+
     currency: pricingAccessForm.value.currency,
     discount_amount: pricingAccessForm.value.discountAmount,
     discount_availability: pricingAccessForm.value.discountAvailability,
   },
 
-  status: 'draft', // or 'published'
-  created_by_role: 'super_admin',
+  status: "draft",
+  created_by_role: "super_admin",
 });
 
 
 
+const activeModule = computed(() =>
+  curriculumForm.value.modules.find((m) => m.id === activeModuleId.value)
+);
 
 const addModule = () => {
-  curriculumForm.value.modules.push({
+  const newModule = {
     id: Date.now(),
-    title: '',
-    description: '',
+    title: `Module ${curriculumForm.value.modules.length + 1}`,
+    description: "",
     lessons: [],
-    resources: '',
+    quizzes: [],
+    resources: "",
     isOpen: true,
-  });
+  };
+
+  curriculumForm.value.modules.forEach((m) => (m.isOpen = false));
+
+  curriculumForm.value.modules.push(newModule);
+  activeModuleId.value = newModule.id;
 };
 
 const removeModule = (moduleId) => {
   curriculumForm.value.modules = curriculumForm.value.modules.filter(
     (m) => m.id !== moduleId
   );
+
+  if (activeModuleId.value === moduleId) {
+    activeModuleId.value = curriculumForm.value.modules[0]?.id || null;
+  }
 };
-
-const addLessonToModule = (moduleId, lessonForm) => {
-  const module = curriculumForm.value.modules.find(
-    (m) => m.id === moduleId
-  );
-
-  if (!module) return;
-
-  module.lessons.push({
-    id: Date.now(),
-    title: lessonForm.title,
-    content_type: lessonForm.contentType,
-    duration: {
-      hours: lessonForm.hours || 0,
-      minutes: lessonForm.minutes || 0,
-      seconds: lessonForm.seconds || 0,
-    },
-    video_url: lessonForm.videoUrl || '',
-    article_content: lessonForm.articleContent || '',
-    is_preview: lessonForm.isPreview || false,
-  });
-};
-
 
 const removeLesson = (moduleId, lessonId) => {
-  const module = curriculumForm.value.modules.find(
-    (m) => m.id === moduleId
-  );
+  const module = curriculumForm.value.modules.find((m) => m.id === moduleId);
 
   if (!module) return;
 
   module.lessons = module.lessons.filter((l) => l.id !== lessonId);
 };
 
-
 const submitCourse = async () => {
   try {
     const payload = buildPayload();
 
-    if (props.mode === 'edit') {
+    if (props.mode === "edit") {
       await courseApi.updateCourse(route.params.slug, payload);
-      toast.success('Course updated successfully');
+      toast.success("Course updated successfully");
     } else {
       await courseApi.createCourses(payload);
-      toast.success('Course created successfully');
+      toast.success("Course created successfully");
     }
 
-    router.push('/superadmin/courses');
+    router.push("/superadmin/courses");
   } catch (err) {
     console.error(err);
-    toast.error('Failed to save course');
+    toast.error("Failed to save course");
   }
 };
 
-
 const hydrateCurriculum = (backendCurriculum) => {
-  curriculumForm.value.modules = backendCurriculum.map(module => ({
+  curriculumForm.value.modules = backendCurriculum.map((module) => ({
     id: Date.now() + Math.random(),
     title: module.title,
     description: module.description,
     resources: module.resources,
     isOpen: false,
 
-    lessons: module.lessons.map(lesson => ({
+    lessons: module.lessons.map((lesson) => ({
       id: Date.now() + Math.random(),
       title: lesson.title,
       content_type: lesson.content_type,
@@ -390,12 +462,29 @@ const hydrateCurriculum = (backendCurriculum) => {
   }));
 };
 
+watch(
+  () => currentStep.value,
+  (step) => {
+    if (step === 2 && curriculumForm.value.modules.length === 0) {
+      curriculumForm.value.modules.push({
+        id: Date.now(),
+        title: "Module 1",
+        description: "",
+        lessons: [],
+        quizzes: [],
+        resources: "",
+        isOpen: true,
+      });
 
+      activeModuleId.value = curriculumForm.value.modules[0].id;
+    }
+  }
+);
 
 onMounted(async () => {
   await fetchCategories();
 
-  if (props.mode === 'edit') {
+  if (props.mode === "edit") {
     const res = await courseApi.getCourseBySlug(route.params.slug);
     const course = res.data;
 
@@ -408,7 +497,6 @@ onMounted(async () => {
     hydrateCurriculum(course.curriculum);
   }
 });
-
 </script>
 
 <template>
@@ -420,30 +508,43 @@ onMounted(async () => {
         <span class="text-gray-700 font-medium">Create New Course</span>
       </div>
 
-      <h1 class="text-4xl font-bold text-gray-800 mb-8 border-b border-gray-200 pb-4">
+      <h1
+        class="text-4xl font-bold text-gray-800 mb-8 border-b border-gray-200 pb-4"
+      >
         Create New Course
       </h1>
 
       <div class="flex justify-between items-start mb-12 relative">
         <div class="absolute top-4 left-1/4 right-1/4 h-1 bg-gray-300"></div>
-        <div class="absolute top-4 h-1 bg-[#00cc66] transition-all duration-500" :style="{
-          width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
-          left: '25%',
-        }"></div>
+        <div
+          class="absolute top-4 h-1 bg-[#00cc66] transition-all duration-500"
+          :style="{
+            width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
+            left: '25%',
+          }"
+        ></div>
 
-        <div v-for="step in steps" :key="step.id" class="flex flex-col items-center z-10 w-1/4">
+        <div
+          v-for="step in steps"
+          :key="step.id"
+          class="flex flex-col items-center z-10 w-1/4"
+        >
           <div
             class="w-8 h-8 rounded-full flex items-center justify-center text-white font-semibold mb-2 transition-colors duration-300"
             :class="{
               'bg-[#00cc66]': step.id <= currentStep,
               'bg-gray-400': step.id > currentStep,
-            }">
+            }"
+          >
             {{ step.id }}
           </div>
-          <span class="text-sm text-center transition-colors duration-300" :class="{
-            'text-[#006633] font-semibold': step.id === currentStep,
-            'text-gray-600': step.id !== currentStep,
-          }">
+          <span
+            class="text-sm text-center transition-colors duration-300"
+            :class="{
+              'text-[#006633] font-semibold': step.id === currentStep,
+              'text-gray-600': step.id !== currentStep,
+            }"
+          >
             {{ step.title }}
           </span>
         </div>
@@ -458,48 +559,87 @@ onMounted(async () => {
           <div class="flex flex-col lg:flex-row gap-8">
             <div class="flex-1 space-y-6">
               <div>
-                <label for="course-title" class="block text-sm font-medium text-gray-700">Course Title</label>
-                <input type="text" id="course-title" v-model="basicInfoForm.title" placeholder="Sample Text"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border" />
+                <label
+                  for="course-title"
+                  class="block text-sm font-medium text-gray-700"
+                  >Course Title</label
+                >
+                <input
+                  type="text"
+                  id="course-title"
+                  v-model="basicInfoForm.title"
+                  placeholder="Enter Title"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
+                />
               </div>
 
               <div>
-                <label for="short-description" class="block text-sm font-medium text-gray-700">Short Description</label>
-                <input type="text" id="short-description" v-model="basicInfoForm.shortDescription"
-                  placeholder="Sample Text"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border" />
+                <label
+                  for="short-description"
+                  class="block text-sm font-medium text-gray-700"
+                  >Short Description</label
+                >
+                <input
+                  type="text"
+                  id="short-description"
+                  v-model="basicInfoForm.shortDescription"
+                  placeholder="Enter Description"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
+                />
               </div>
 
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
-                  <select id="category" v-model="basicInfoForm.category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm
-         focus:border-[#00cc66] focus:ring-[#00cc66]
-         p-2 border bg-white">
+                  <label
+                    for="category"
+                    class="block text-sm font-medium text-gray-700"
+                    >Category</label
+                  >
+                  <select
+                    id="category"
+                    v-model="basicInfoForm.category"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border bg-white"
+                  >
                     <option value="" disabled>
-                      {{ loadingCategories ? 'Loading categories...' : 'Select category' }}
+                      {{
+                        loadingCategories
+                          ? "Loading categories..."
+                          : "Select category"
+                      }}
                     </option>
 
-                    <option v-for="category in categories" :key="category.id" :value="category.slug">
+                    <option
+                      v-for="category in categories"
+                      :key="category.id"
+                      :value="category.id"
+                    >
                       {{ category.icon }} {{ category.name }}
                     </option>
                   </select>
-
                 </div>
                 <div>
-                  <label for="level" class="block text-sm font-medium text-gray-700">Level</label>
-                  <select id="level" v-model="basicInfoForm.level"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border bg-white">
-                    <option value="Beginner">Beginner</option>
-                    <option value="Intermediate">Intermediate</option>
-                    <option value="Advanced">Advanced</option>
+                  <label
+                    for="level"
+                    class="block text-sm font-medium text-gray-700"
+                    >Level</label
+                  >
+                  <select
+                    id="level"
+                    v-model="basicInfoForm.level"
+                    placeholder="Select level"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border bg-white"
+                  >
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
                   </select>
                 </div>
               </div>
             </div>
 
             <div
-              class="lg:w-1/3 flex flex-col items-center justify-center p-6 border-2 border-gray-300 border-dashed rounded-xl bg-gray-50 h-56">
+              class="lg:w-1/3 flex flex-col items-center justify-center p-6 border-2 border-gray-300 border-dashed rounded-xl bg-gray-50 h-56"
+            >
               <UploadCloud class="w-10 h-10 text-gray-400 mb-3" />
               <p class="text-sm text-gray-600 font-medium">Thumbnail Upload</p>
               <p class="text-xs text-gray-500 mt-1">PNG, JPG up to 5MB</p>
@@ -507,27 +647,56 @@ onMounted(async () => {
           </div>
 
           <div class="mt-6">
-            <label for="full-overview" class="block text-sm font-medium text-gray-700">Full Course Overview</label>
-            <textarea id="full-overview" rows="4" v-model="basicInfoForm.fullOverview" placeholder="Sample Text"
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border resize-none"></textarea>
+            <label
+              for="full-overview"
+              class="block text-sm font-medium text-gray-700"
+              >Full Course Overview</label
+            >
+            <textarea
+              id="full-overview"
+              rows="4"
+              v-model="basicInfoForm.fullOverview"
+              placeholder="Enter Overview"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border resize-none"
+            ></textarea>
           </div>
 
           <div class="mt-6">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Estimated Duration</label>
+            <label class="block text-sm font-medium text-gray-700 mb-2"
+              >Estimated Duration</label
+            >
             <div class="flex space-x-4">
               <div class="flex flex-col items-center">
-                <input type="number" v-model="basicInfoForm.durationHours" placeholder="00" min="0" max="99"
-                  class="w-16 text-center rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border" />
+                <input
+                  type="number"
+                  v-model="basicInfoForm.durationHours"
+                  placeholder="00"
+                  min="0"
+                  max="99"
+                  class="w-16 text-center rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
+                />
                 <span class="text-xs text-gray-500 mt-1">Hours</span>
               </div>
               <div class="flex flex-col items-center">
-                <input type="number" v-model="basicInfoForm.durationMinutes" placeholder="00" min="0" max="59"
-                  class="w-16 text-center rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border" />
+                <input
+                  type="number"
+                  v-model="basicInfoForm.durationMinutes"
+                  placeholder="00"
+                  min="0"
+                  max="59"
+                  class="w-16 text-center rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
+                />
                 <span class="text-xs text-gray-500 mt-1">Minutes</span>
               </div>
               <div class="flex flex-col items-center">
-                <input type="number" v-model="basicInfoForm.durationSeconds" placeholder="00" min="0" max="59"
-                  class="w-16 text-center rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border" />
+                <input
+                  type="number"
+                  v-model="basicInfoForm.durationSeconds"
+                  placeholder="00"
+                  min="0"
+                  max="59"
+                  class="w-16 text-center rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
+                />
                 <span class="text-xs text-gray-500 mt-1">Seconds</span>
               </div>
             </div>
@@ -538,21 +707,38 @@ onMounted(async () => {
               <h3 class="text-lg font-semibold text-gray-800">
                 What users will learn
               </h3>
-              <button @click="addOutcome" type="button"
-                class="flex items-center text-[#00cc66] hover:text-[#00994d] text-sm font-medium">
+              <button
+                @click="addOutcome"
+                type="button"
+                class="flex items-center text-[#00cc66] hover:text-[#00994d] text-sm font-medium"
+              >
                 <Plus class="w-4 h-4 mr-1" /> Add new
               </button>
             </div>
 
-            <div v-for="(outcome, index) in basicInfoForm.learnOutcomes" :key="outcome.id"
-              class="flex items-center mb-3">
+            <div
+              v-for="(outcome, index) in basicInfoForm.learnOutcomes"
+              :key="outcome.id"
+              class="flex items-center mb-3"
+            >
               <span class="w-4 text-gray-500 mr-3 text-sm font-medium">{{
                 index + 1
               }}</span>
-              <input type="text" v-model="outcome.text" @input="updateCharCount(outcome)" maxlength="120"
-                class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border" />
-              <span class="text-xs text-gray-500 w-12 text-right ml-2">{{ outcome.charCount }}/120</span>
-              <button @click="removeOutcome(outcome.id)" type="button" class="ml-4 text-red-500 hover:text-red-700">
+              <input
+                type="text"
+                v-model="outcome.text"
+                @input="updateCharCount(outcome)"
+                maxlength="120"
+                class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
+              />
+              <span class="text-xs text-gray-500 w-12 text-right ml-2"
+                >{{ outcome.charCount }}/120</span
+              >
+              <button
+                @click="removeOutcome(outcome.id)"
+                type="button"
+                class="ml-4 text-red-500 hover:text-red-700"
+              >
                 <Trash2 class="w-5 h-5" />
               </button>
             </div>
@@ -566,143 +752,160 @@ onMounted(async () => {
             Add the course modules and lesson content.
           </p>
 
-          <div class="space-y-4 mb-8">
-            <div v-for="module in curriculumForm.modules" :key="module.id"
-              class="border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-              <div @click="toggleModule(module)"
-                class="flex items-center justify-between p-4 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
-                <div class="font-semibold text-gray-700">
-                  {{ module.title }}
-                </div>
-                <ChevronDown :class="{ 'transform rotate-180': module.isOpen }"
-                  class="w-5 h-5 text-gray-500 transition-transform" />
-              </div>
+          <div class="mb-12 flex items-start gap-12">
+            <div
+              class="text-[#E67E22] text-4xl font-sans italic pt-8 select-none"
+            >
+              Preview
+            </div>
 
-              <div v-if="module.isOpen" class="p-4 bg-white border-t border-gray-100">
-                <div v-for="lesson in module.lessons" :key="lesson.id"
-                  class="flex justify-between items-center py-2 border-b last:border-b-0">
-                  <div class="flex items-center text-gray-600">
-                    <Book class="w-4 h-4 mr-3 text-[#006633]" />
-                    <span>{{ lesson.title }}</span>
-                  </div>
-                  <div class="flex items-center space-x-4">
-                    <span class="text-sm text-gray-500">{{ lesson.duration.hours }}h
-                      {{ lesson.duration.minutes }}m
-                    </span>
-                    <Edit2 class="w-4 h-4 text-blue-500 hover:text-blue-700 cursor-pointer" />
-                    <Trash2 class="w-4 h-4 text-red-500 hover:text-red-700 cursor-pointer" />
-                  </div>
-                </div>
-
-                <div class="flex items-center justify-between mt-4">
-                  <div class="flex space-x-3 items-center w-full max-w-sm">
-                    <input type="text" v-model="curriculumForm.newLessonTitle" placeholder="Lesson Title"
-                      class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border text-sm" />
-                    <button type="button" @click="openAddLessonDialog(module.id)"
-                      class="flex items-center px-3 py-1 bg-[#00cc66] text-white rounded-md text-sm hover:bg-[#00994d]">
-                      <Plus class="w-4 h-4 mr-1" /> Add Lesson
+            <div class="flex-1">
+              <div
+                v-for="module in curriculumForm.modules"
+                :key="module.id"
+                class="border border-gray-200 rounded-xl shadow-sm bg-white overflow-hidden w-full"
+              >
+                <div
+                  @click="toggleModule(module)"
+                  class="bg-[#F1F8F4] p-5 flex justify-between items-center border-b border-gray-100 cursor-pointer"
+                >
+                  <span class="font-bold text-gray-800 text-lg">
+                    {{ module.title || "Untitled Module" }}
+                  </span>
+                  <div class="flex items-center gap-3">
+                    <button
+                      v-if="curriculumForm.modules.length > 1"
+                      @click.stop="removeModule(module.id)"
+                      class="text-red-500 hover:text-red-700"
+                      title="Delete module"
+                    >
+                      <Trash2 class="w-4 h-4" />
                     </button>
+
+                    <ChevronDown
+                      @click="toggleModule(module)"
+                      class="w-5 h-5 text-gray-400 transition-transform cursor-pointer"
+                      :class="{ 'rotate-180': module.isOpen }"
+                    />
                   </div>
-
-                  <button type="button" @click="openAddQuizDialog"
-                    class="flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium">
-                    <Plus class="w-4 h-4 mr-1" /> Add Quiz
-                  </button>
                 </div>
-                <div v-if="isLessonDialogOpen"
-                  class="fixed inset-0 bg-gray-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4">
-                  <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg">
-                    <h2 class="text-xl font-bold mb-4">Add Lesson</h2>
 
-                    <form @submit.prevent="handleLessonAdded">
-                      <div class="mb-4">
-                        <label for="lesson-title" class="text-sm text-gray-700">Course Title</label>
-                        <input type="text" id="lesson-title" v-model="lessonForm.title" placeholder="Sample Text"
-                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66] focus:ring-[#00cc66]"
-                          required />
-                      </div>
+                <div
+                  v-if="
+                    module.isOpen &&
+                    module.lessons.length === 0 &&
+                    module.quizzes.length === 0
+                  "
+                  class="p-8 text-center text-gray-400 italic"
+                >
+                  No lessons or quizzes added to this module yet.
+                </div>
 
-                      <div class="mb-4">
-                        <label class="block text-sm text-gray-700">Estimated Duration</label>
-                        <div class="flex space-x-2 mt-1 items-center">
-                          <input type="number" placeholder="00" v-model="lessonForm.durationHours" min="0" max="99"
-                            class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center" />
-                          <span class="text-sm">Hours</span>
-                          <input type="number" placeholder="00" v-model="lessonForm.durationMinutes" min="0" max="59"
-                            class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center" />
-                          <span class="text-sm">Minutes</span>
-                          <input type="number" placeholder="00" v-model="lessonForm.durationSeconds" min="0" max="59"
-                            class="w-1/4 rounded-md border-gray-300 shadow-sm p-2 border text-center" />
-                          <span class="text-sm">Seconds</span>
-                        </div>
-                      </div>
-
-                      <div class="mb-4">
-                        <label for="content-type" class="block text-sm text-gray-700">Upload Content Type</label>
-                        <select id="content-type" v-model="lessonForm.contentType"
-                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66] focus:ring-[#00cc66]"
-                          required>
-                          <option disabled value="Select Option">
-                            Select Option
-                          </option>
-                          <option>Video File</option>
-                          <option>PDF Document</option>
-                          <option>External Link</option>
-                        </select>
-                      </div>
-
+                <div v-if="module.isOpen">
+                  <draggable
+                    v-model="module.lessons"
+                    item-key="id"
+                    handle=".drag-handle"
+                    animation="200"
+                  >
+                    <template #item="{ element: lesson }">
                       <div
-                        class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer mb-6 hover:border-[#00cc66] transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none"
-                          viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                        </svg>
-                        <p class="mt-1 text-sm text-gray-600">Upload Content</p>
-                      </div>
+                        class="flex items-center justify-between p-4 border-b last:border-0 bg-white hover:bg-gray-50 transition-colors"
+                      >
+                        <div class="flex items-center gap-4">
+                          <span
+                            class="drag-handle cursor-grab text-gray-300 hover:text-gray-500 text-xl"
+                          >
+                            ⋮⋮
+                          </span>
+                          <span class="text-base text-gray-700 font-medium">
+                            {{ lesson.title }}
+                          </span>
+                        </div>
 
-                      <div class="flex justify-end space-x-3">
-                        <button type="button" @click="closeAddLessonDialog"
-                          class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
-                          Cancel
-                        </button>
-                        <button type="submit" class="px-4 py-2 bg-[#00cc66] text-white rounded-md hover:bg-[#00994d]">
-                          Add Lesson
+                        <span
+                          class="text-sm font-sans text-gray-400 bg-gray-50 px-2 py-1 rounded"
+                        >
+                          {{
+                            lesson.duration.hours > 0
+                              ? lesson.duration.hours + "h"
+                              : ""
+                          }}
+                          {{ lesson.duration.minutes }}m
+                        </span>
+                        <button
+                          @click.stop="removeLesson(module.id, lesson.id)"
+                          class="text-red-500 hover:text-red-700"
+                          title="Delete lesson"
+                        >
+                          <Trash2 class="w-4 h-4" />
                         </button>
                       </div>
-                    </form>
-                  </div>
+                    </template>
+                  </draggable>
                 </div>
 
-                <div v-if="isQuizDialogOpen"
-                  class="fixed inset-0 bg-gray-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4">
-                  <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
-                    <h2 class="text-xl font-bold mb-4">Add Quiz</h2>
-                    <p class="text-gray-600 mb-6">
-                      This is a placeholder for the "Add Quiz" configuration
-                      form.
-                    </p>
+                <div
+                  v-for="quiz in module.quizzes"
+                  :key="quiz.id"
+                  class="p-4 border-t bg-blue-50/30 flex items-center gap-3 text-blue-700 font-semibold"
+                >
+                  <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  Quiz: {{ quiz.title }}
+                </div>
 
-                    <div class="mb-4">
-                      <label for="quiz-title" class="text-sm text-gray-700">Quiz Title</label>
-                      <input type="text" id="quiz-title" placeholder="e.g., Chapter 1 Assessment"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" />
-                    </div>
-
-                    <div class="flex justify-end space-x-3">
-                      <button type="button" @click="closeAddQuizDialog"
-                        class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
-                        Cancel
-                      </button>
-                      <button type="button" @click="handleQuizAdded"
-                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800">
-                        Create Quiz
-                      </button>
-                    </div>
-                  </div>
+                <div class="p-3 bg-gray-50/50 text-xs text-gray-400 text-right">
+                  Module Preview Mode
                 </div>
               </div>
             </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-6 mb-6">
+            <div class="space-y-1">
+              <label class="text-xs font-medium text-gray-500"
+                >Module Title</label
+              >
+              <input
+                type="text"
+                placeholder="Enter Title"
+                v-model="activeModule.title"
+                class="w-full border-b border-gray-300 py-2 outline-none focus:border-[#006633]"
+                :disabled="!activeModule"
+              />
+            </div>
+            <div class="space-y-1">
+              <button
+                @click="addModule()"
+                class="w-full border border-dashed border-[#006633] py-2 rounded text-[#006633] text-sm font-medium hover:bg-green-50 transition"
+              >
+                + Add New Module
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 mb-10">
+            <button
+              @click="
+                openAddLessonDialog(
+                  activeModuleId || curriculumForm.modules[0]?.id
+                )
+              "
+              class="border border-gray-200 rounded py-2 text-[#006633] text-sm font-medium flex items-center justify-center gap-2 hover:bg-gray-50"
+            >
+              Add Lesson <Plus class="w-4 h-4" />
+            </button>
+
+            <button
+              @click="
+                activeModuleId =
+                  activeModuleId || curriculumForm.modules[0]?.id;
+                openAddQuizDialog();
+              "
+              class="border border-gray-200 rounded py-2 text-[#006633] text-sm font-medium flex items-center justify-center gap-2 hover:bg-gray-50"
+            >
+              Add Quiz <Plus class="w-4 h-4" />
+            </button>
           </div>
 
           <div class="mt-8 pt-4 border-t border-gray-200">
@@ -710,21 +913,38 @@ onMounted(async () => {
               <h3 class="text-lg font-semibold text-gray-800">
                 What materials are included:
               </h3>
-              <button @click="addMaterial" type="button"
-                class="flex items-center text-[#00cc66] hover:text-[#00994d] text-sm font-medium">
+              <button
+                @click="addMaterial"
+                type="button"
+                class="flex items-center text-[#00cc66] hover:text-[#00994d] text-sm font-medium"
+              >
                 <Plus class="w-4 h-4 mr-1" /> Add new
               </button>
             </div>
 
-            <div v-for="(material, index) in curriculumForm.materialsIncluded" :key="material.id"
-              class="flex items-center mb-3">
+            <div
+              v-for="(material, index) in curriculumForm.materialsIncluded"
+              :key="material.id"
+              class="flex items-center mb-3"
+            >
               <span class="w-4 text-gray-500 mr-3 text-sm font-medium">{{
                 index + 1
               }}</span>
-              <input type="text" v-model="material.text" @input="updateMaterialCharCount(material)" maxlength="120"
-                class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border" />
-              <span class="text-xs text-gray-500 w-12 text-right ml-2">{{ material.charCount }}/120</span>
-              <button @click="removeMaterial(material.id)" type="button" class="ml-4 text-red-500 hover:text-red-700">
+              <input
+                type="text"
+                v-model="material.text"
+                @input="updateMaterialCharCount(material)"
+                maxlength="120"
+                class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
+              />
+              <span class="text-xs text-gray-500 w-12 text-right ml-2"
+                >{{ material.charCount }}/120</span
+              >
+              <button
+                @click="removeMaterial(material.id)"
+                type="button"
+                class="ml-4 text-red-500 hover:text-red-700"
+              >
                 <Trash2 class="w-5 h-5" />
               </button>
             </div>
@@ -739,17 +959,258 @@ onMounted(async () => {
             </p>
 
             <div class="mb-4">
-              <label for="instructor-name" class="block text-sm font-medium text-gray-700">Instructor's Full Name
-                (Include title(s))</label>
-              <input type="text" id="instructor-name" v-model="curriculumForm.instructorName" placeholder="Dr. Jane Doe"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border" />
+              <label
+                for="instructor-name"
+                class="block text-sm font-medium text-gray-700"
+                >Instructor's Full Name (Include title(s))</label
+              >
+              <input
+                type="text"
+                id="instructor-name"
+                v-model="curriculumForm.instructorName"
+                placeholder="Dr. Jane Doe"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
+              />
             </div>
 
             <div>
-              <label for="biography" class="block text-sm font-medium text-gray-700">Brief Biography</label>
-              <textarea id="biography" rows="3" v-model="curriculumForm.briefBiography"
-                placeholder="Sample text about the instructor, their experience, and credentials."
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border resize-none"></textarea>
+              <label
+                for="biography"
+                class="block text-sm font-medium text-gray-700"
+                >Brief Biography</label
+              >
+              <textarea
+                id="biography"
+                rows="3"
+                v-model="curriculumForm.briefBiography"
+                placeholder="Enter Bio"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border resize-none"
+              ></textarea>
+            </div>
+          </div>
+          <div
+            v-if="isLessonDialogOpen"
+            class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4"
+          >
+            <div class="bg-white w-full max-w-lg rounded-xl p-6 shadow-xl">
+              <h3 class="text-lg font-semibold mb-4">Add Lesson</h3>
+
+              <form @submit.prevent="handleLessonAdded" class="space-y-4">
+                <div>
+                  <label class="text-sm text-gray-600">Lesson Title</label>
+                  <input
+                    v-model="lessonForm.title"
+                    class="w-full border rounded p-2"
+                    required
+                  />
+                </div>
+
+                <div class="flex gap-2">
+                  <input
+                    type="number"
+                    v-model="lessonForm.durationHours"
+                    placeholder="HH"
+                    class="w-1/3 border rounded p-2"
+                  />
+                  <input
+                    type="number"
+                    v-model="lessonForm.durationMinutes"
+                    placeholder="MM"
+                    class="w-1/3 border rounded p-2"
+                  />
+                  <input
+                    type="number"
+                    v-model="lessonForm.durationSeconds"
+                    placeholder="SS"
+                    class="w-1/3 border rounded p-2"
+                  />
+                </div>
+
+                <select
+                  v-model="lessonForm.contentType"
+                  class="w-full border rounded px-3 py-2 text-sm"
+                >
+                  <option value="" disabled>Select content type</option>
+                  <option value="video">Video</option>
+                  <option value="text">Article</option>
+                  <option value="document">Document</option>
+                  <option value="live">Live Class</option>
+                </select>
+                <div
+                  v-if="lessonForm.contentType === 'video'"
+                  class="space-y-3"
+                >
+                  <label class="block text-xs font-medium">Video Source</label>
+
+                  <div class="flex gap-4 text-sm">
+                    <label class="flex items-center gap-1">
+                      <input
+                        type="radio"
+                        value="url"
+                        v-model="lessonForm.videoSource"
+                      />
+                      Video URL
+                    </label>
+
+                    <label class="flex items-center gap-1">
+                      <input
+                        type="radio"
+                        value="file"
+                        v-model="lessonForm.videoSource"
+                      />
+                      Upload Video
+                    </label>
+                  </div>
+
+                  <div v-if="lessonForm.videoSource === 'url'">
+                    <input
+                      v-model="lessonForm.videoUrl"
+                      type="url"
+                      placeholder="https://youtube.com/..."
+                      class="w-full border rounded px-3 py-2 text-sm"
+                    />
+                  </div>
+
+                  <div v-if="lessonForm.videoSource === 'file'">
+                    <input
+                      type="file"
+                      accept="video/*"
+                      @change="
+                        (e) => (lessonForm.videoFile = e.target.files[0])
+                      "
+                      class="w-full text-sm"
+                    />
+                    <p class="text-xs text-gray-400 mt-1">
+                      MP4, MOV • max size depends on server
+                    </p>
+                  </div>
+                </div>
+
+                <div v-if="lessonForm.contentType === 'text'">
+                  <label class="block text-xs font-medium mb-1"
+                    >Article Content</label
+                  >
+                  <textarea
+                    v-model="lessonForm.articleContent"
+                    rows="5"
+                    placeholder="Write lesson content..."
+                    class="w-full border rounded px-3 py-2 text-sm"
+                  ></textarea>
+                </div>
+                <div v-if="lessonForm.contentType === 'document'">
+                  <label class="block text-xs font-medium mb-1"
+                    >Upload Document</label
+                  >
+                  <input
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    @change="
+                      (e) => (lessonForm.documentFile = e.target.files[0])
+                    "
+                    class="w-full text-sm"
+                  />
+                </div>
+                <div v-if="lessonForm.contentType === 'live'" class="space-y-3">
+                  <div>
+                    <label class="block text-xs font-medium mb-1"
+                      >Class Date</label
+                    >
+                    <input
+                      v-model="lessonForm.liveDate"
+                      type="datetime-local"
+                      class="w-full border rounded px-3 py-2 text-sm"
+                    />
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium mb-1"
+                      >Meeting Link</label
+                    >
+                    <input
+                      v-model="lessonForm.liveLink"
+                      type="url"
+                      placeholder="Zoom / Google Meet link"
+                      class="w-full border rounded px-3 py-2 text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4">
+                  <button
+                    type="button"
+                    @click="closeAddLessonDialog"
+                    class="px-4 py-2 border rounded"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    class="px-4 py-2 bg-[#00cc66] text-white rounded"
+                  >
+                    Add Lesson
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div
+            v-if="isQuizDialogOpen"
+            class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4"
+          >
+            <div class="bg-white w-full max-w-md rounded-xl p-6 shadow-xl">
+              <h3 class="text-lg font-semibold mb-4">Add Quiz</h3>
+
+              <input
+                v-model="quizForm.title"
+                placeholder="Quiz title"
+                class="w-full border rounded p-2 mb-4"
+              />
+
+              <div class="flex gap-2 mb-3">
+                <input
+                  v-model="quizForm.newQuestion"
+                  placeholder="Enter quiz question"
+                  class="flex-1 border rounded p-2"
+                />
+                <button
+                  type="button"
+                  @click="addQuizQuestion"
+                  class="px-3 bg-[#00cc66] text-white rounded"
+                >
+                  Add
+                </button>
+              </div>
+
+              <ul class="space-y-2 mb-4">
+                <li
+                  v-for="q in quizForm.questions"
+                  :key="q.id"
+                  class="flex justify-between items-center bg-gray-50 px-3 py-2 rounded text-sm"
+                >
+                  <span>{{ q.text }}</span>
+                  <button
+                    @click="removeQuizQuestion(q.id)"
+                    class="text-red-500 text-xs"
+                  >
+                    Remove
+                  </button>
+                </li>
+              </ul>
+
+              <div class="flex justify-end gap-3">
+                <button
+                  @click="closeAddQuizDialog"
+                  class="px-4 py-2 border rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  @click="handleQuizAdded"
+                  class="px-4 py-2 bg-[#006633] text-white rounded"
+                >
+                  Add Quiz
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -760,21 +1221,29 @@ onMounted(async () => {
               Pricing and Access
             </h2>
 
-            <div class="space-y-2 text-right p-3 border border-gray-200 rounded-lg bg-gray-50">
+            <div
+              class="space-y-2 text-right p-3 border border-gray-200 rounded-lg bg-gray-50"
+            >
               <div class="flex items-center justify-end">
-                <DollarSign v-if="pricingAccessForm.courseAccessType === 'paid'" class="w-4 h-4 text-[#006633] mr-1" />
-                <Lock v-else-if="
-                  pricingAccessForm.courseAccessType === 'membership'
-                " class="w-4 h-4 text-blue-500 mr-1" />
+                <DollarSign
+                  v-if="pricingAccessForm.courseAccessType === 'paid'"
+                  class="w-4 h-4 text-[#006633] mr-1"
+                />
+                <Lock
+                  v-else-if="
+                    pricingAccessForm.courseAccessType === 'membership'
+                  "
+                  class="w-4 h-4 text-blue-500 mr-1"
+                />
                 <span class="text-sm text-gray-500">{{
                   pricingStatus.main
                 }}</span>
               </div>
               <div class="font-bold text-lg text-gray-800">
                 {{
-                  pricingAccessForm.courseAccessType === 'paid'
+                  pricingAccessForm.courseAccessType === "paid"
                     ? pricingStatus.sub
-                    : 'Access Policy'
+                    : "Access Policy"
                 }}
               </div>
               <div class="text-xs text-gray-500">
@@ -792,9 +1261,16 @@ onMounted(async () => {
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
             <div>
-              <label for="access-type" class="block text-sm font-medium text-gray-700">Course Access Type</label>
-              <select id="access-type" v-model="pricingAccessForm.courseAccessType"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border bg-white">
+              <label
+                for="access-type"
+                class="block text-sm font-medium text-gray-700"
+                >Course Access Type</label
+              >
+              <select
+                id="access-type"
+                v-model="pricingAccessForm.courseAccessType"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border bg-white"
+              >
                 <option value="paid">Paid</option>
                 <option value="free">Free</option>
                 <option value="membership">Membership/Subscription</option>
@@ -802,9 +1278,16 @@ onMounted(async () => {
             </div>
 
             <div>
-              <label for="visibility" class="block text-sm font-medium text-gray-700">Course Visibility</label>
-              <select id="visibility" v-model="pricingAccessForm.courseVisibility"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border bg-white">
+              <label
+                for="visibility"
+                class="block text-sm font-medium text-gray-700"
+                >Course Visibility</label
+              >
+              <select
+                id="visibility"
+                v-model="pricingAccessForm.courseVisibility"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border bg-white"
+              >
                 <option value="public">Public</option>
                 <option value="private">Private (Link only)</option>
                 <option value="members_only">Members Only</option>
@@ -812,17 +1295,31 @@ onMounted(async () => {
             </div>
 
             <div v-if="pricingAccessForm.courseAccessType === 'paid'">
-              <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+              <label for="price" class="block text-sm font-medium text-gray-700"
+                >Price</label
+              >
               <div class="relative mt-1">
-                <input type="number" id="price" v-model="pricingAccessForm.price" placeholder="10,000.00"
-                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border" />
+                <input
+                  type="number"
+                  id="price"
+                  v-model="pricingAccessForm.price"
+                  placeholder="10,000.00"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
+                />
               </div>
             </div>
 
             <div v-if="pricingAccessForm.courseAccessType === 'paid'">
-              <label for="currency" class="block text-sm font-medium text-gray-700">Currency</label>
-              <select id="currency" v-model="pricingAccessForm.currency"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border bg-white">
+              <label
+                for="currency"
+                class="block text-sm font-medium text-gray-700"
+                >Currency</label
+              >
+              <select
+                id="currency"
+                v-model="pricingAccessForm.currency"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border bg-white"
+              >
                 <option value="NGN">NGN - Nigerian Naira</option>
                 <option value="USD">USD - US Dollar</option>
                 <option value="GBP">GBP - British Pound</option>
@@ -830,9 +1327,16 @@ onMounted(async () => {
             </div>
 
             <div>
-              <label for="discount-amount" class="block text-sm font-medium text-gray-700">Discount Amount</label>
-              <select id="discount-amount" v-model="pricingAccessForm.discountAmount"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border bg-white">
+              <label
+                for="discount-amount"
+                class="block text-sm font-medium text-gray-700"
+                >Discount Amount</label
+              >
+              <select
+                id="discount-amount"
+                v-model="pricingAccessForm.discountAmount"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border bg-white"
+              >
                 <option value="none">Select Option (No Discount)</option>
                 <option value="10%">10% Off</option>
                 <option value="20%">20% Off</option>
@@ -841,10 +1345,16 @@ onMounted(async () => {
             </div>
 
             <div>
-              <label for="discount-availability" class="block text-sm font-medium text-gray-700">Discount
-                Availability</label>
-              <select id="discount-availability" v-model="pricingAccessForm.discountAvailability"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border bg-white">
+              <label
+                for="discount-availability"
+                class="block text-sm font-medium text-gray-700"
+                >Discount Availability</label
+              >
+              <select
+                id="discount-availability"
+                v-model="pricingAccessForm.discountAvailability"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border bg-white"
+              >
                 <option value="all">All</option>
                 <option value="members_only">Members Only</option>
                 <option value="new_users">New Users Only</option>
@@ -863,8 +1373,14 @@ onMounted(async () => {
 
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2 space-y-8">
-              <div class="w-full h-80 bg-gray-100 rounded-xl overflow-hidden shadow-md relative">
-                <img :src="courses" alt="Course" class="w-full h-full object-cover" />
+              <div
+                class="w-full h-80 bg-gray-100 rounded-xl overflow-hidden shadow-md relative"
+              >
+                <img
+                  :src="courses"
+                  alt="Course"
+                  class="w-full h-full object-cover"
+                />
                 <div class="absolute inset-0 bg-black/20 flex items-end p-6">
                   <h3 class="text-3xl font-bold text-white leading-tight">
                     {{ basicInfoForm.title }}
@@ -873,7 +1389,9 @@ onMounted(async () => {
               </div>
 
               <div>
-                <h4 class="text-xl font-semibold text-gray-800 mb-3 border-b pb-1">
+                <h4
+                  class="text-xl font-semibold text-gray-800 mb-3 border-b pb-1"
+                >
                   Course Description
                 </h4>
                 <p class="text-gray-600 leading-relaxed whitespace-pre-wrap">
@@ -882,34 +1400,54 @@ onMounted(async () => {
               </div>
 
               <div>
-                <h4 class="text-xl font-semibold text-gray-800 mb-3 border-b pb-1">
+                <h4
+                  class="text-xl font-semibold text-gray-800 mb-3 border-b pb-1"
+                >
                   Course Content
                 </h4>
-                <div class="text-sm text-gray-500 mb-4 flex justify-between items-center">
+                <div
+                  class="text-sm text-gray-500 mb-4 flex justify-between items-center"
+                >
                   <span>Lesson {{ totalLessons }} of 34</span>
-                  <span>{{ basicInfoForm.durationHours }}h
-                    {{ basicInfoForm.durationMinutes }}m Complete</span>
+                  <span
+                    >{{ basicInfoForm.durationHours }}h
+                    {{ basicInfoForm.durationMinutes }}m Complete</span
+                  >
                 </div>
 
                 <div class="space-y-3">
-                  <div v-for="module in curriculumForm.modules" :key="module.id"
-                    class="border border-gray-200 rounded-lg overflow-hidden transition-all duration-300">
-                    <div @click="toggleModule(module)"
-                      class="flex items-center justify-between p-4 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <div
+                    v-for="module in curriculumForm.modules"
+                    :key="module.id"
+                    class="border border-gray-200 rounded-lg overflow-hidden transition-all duration-300"
+                  >
+                    <div
+                      @click="toggleModule(module)"
+                      class="flex items-center justify-between p-4 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                    >
                       <span class="font-semibold text-gray-700">{{
                         module.title
                       }}</span>
-                      <ChevronDown :class="{ 'transform rotate-180': module.isOpen }"
-                        class="w-5 h-5 text-gray-500 transition-transform" />
+                      <ChevronDown
+                        :class="{ 'transform rotate-180': module.isOpen }"
+                        class="w-5 h-5 text-gray-500 transition-transform"
+                      />
                     </div>
-                    <div v-if="module.isOpen" class="p-4 bg-white border-t border-gray-100">
-                      <div v-for="lesson in module.lessons" :key="lesson.id"
-                        class="flex justify-between items-center py-1.5 text-sm text-gray-600">
+                    <div
+                      v-if="module.isOpen"
+                      class="p-4 bg-white border-t border-gray-100"
+                    >
+                      <div
+                        v-for="lesson in module.lessons"
+                        :key="lesson.id"
+                        class="flex justify-between items-center py-1.5 text-sm text-gray-600"
+                      >
                         <div class="flex items-center">
                           <Minimize2 class="w-3 h-3 mr-2 text-gray-400" />
                           <span>{{ lesson.title }}</span>
                         </div>
-                        <span class="text-xs text-gray-500">{{ lesson.duration.hours }}h
+                        <span class="text-xs text-gray-500"
+                          >{{ lesson.duration.hours }}h
                           {{ lesson.duration.minutes }}m
                         </span>
                       </div>
@@ -923,12 +1461,17 @@ onMounted(async () => {
             </div>
 
             <div class="lg:col-span-1 space-y-8">
-              <div class="p-6 bg-[#f0fff0] border border-[#00cc66] rounded-xl shadow-lg text-center">
+              <div
+                class="p-6 bg-[#f0fff0] border border-[#00cc66] rounded-xl shadow-lg text-center"
+              >
                 <div class="text-4xl font-extrabold text-[#006633]">
                   {{ pricingAccessForm.currency }}
-                  {{ pricingAccessForm.price.toLocaleString('en-US') }}
+                  {{ pricingAccessForm.price.toLocaleString("en-US") }}
                 </div>
-                <p v-if="pricingAccessForm.discountAmount !== 'none'" class="text-sm text-gray-600 mt-1">
+                <p
+                  v-if="pricingAccessForm.discountAmount !== 'none'"
+                  class="text-sm text-gray-600 mt-1"
+                >
                   Get {{ pricingAccessForm.discountAmount }} off exclusive to
                   HFN Members.
                 </p>
@@ -938,91 +1481,134 @@ onMounted(async () => {
               </div>
 
               <div>
-                <h4 class="text-xl font-semibold text-gray-800 mb-3 border-b pb-1">
+                <h4
+                  class="text-xl font-semibold text-gray-800 mb-3 border-b pb-1"
+                >
                   About the Instructor
                 </h4>
                 <div class="flex items-center mb-3">
-                  <img src="https://placehold.co/60x60/cccccc/333333?text=User" alt="Instructor Image"
-                    class="w-12 h-12 rounded-full mr-4 object-cover" />
+                  <img
+                    src="https://placehold.co/60x60/cccccc/333333?text=User"
+                    alt="Instructor Image"
+                    class="w-12 h-12 rounded-full mr-4 object-cover"
+                  />
                   <span class="font-bold text-lg text-gray-700">{{
                     curriculumForm.instructorName
                   }}</span>
                 </div>
-                <p class="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">
+                <p
+                  class="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap"
+                >
                   {{ curriculumForm.briefBiography }}
                 </p>
               </div>
 
               <div>
-                <h4 class="text-xl font-semibold text-gray-800 mb-3 border-b pb-1">
+                <h4
+                  class="text-xl font-semibold text-gray-800 mb-3 border-b pb-1"
+                >
                   What you will learn
                 </h4>
                 <ul class="space-y-2">
-                  <li v-for="outcome in basicInfoForm.learnOutcomes" :key="outcome.id"
-                    class="flex items-start text-gray-600 text-sm">
-                    <Check class="w-4 h-4 text-[#006633] mr-2 flex-shrink-0 mt-1" />
+                  <li
+                    v-for="outcome in basicInfoForm.learnOutcomes"
+                    :key="outcome.id"
+                    class="flex items-start text-gray-600 text-sm"
+                  >
+                    <Check
+                      class="w-4 h-4 text-[#006633] mr-2 flex-shrink-0 mt-1"
+                    />
                     <span>{{ outcome.text }}</span>
                   </li>
                 </ul>
               </div>
 
               <div>
-                <h4 class="text-xl font-semibold text-gray-800 mb-3 border-b pb-1">
+                <h4
+                  class="text-xl font-semibold text-gray-800 mb-3 border-b pb-1"
+                >
                   Material Includes:
                 </h4>
                 <ul class="space-y-2">
                   <li class="flex items-start text-gray-600 text-sm">
-                    <Check class="w-4 h-4 text-[#006633] mr-2 flex-shrink-0 mt-1" />
+                    <Check
+                      class="w-4 h-4 text-[#006633] mr-2 flex-shrink-0 mt-1"
+                    />
                     {{ basicInfoForm.durationHours }} Hours on-demand video.
                   </li>
                   <li class="flex items-start text-gray-600 text-sm">
-                    <Check class="w-4 h-4 text-[#006633] mr-2 flex-shrink-0 mt-1" />
+                    <Check
+                      class="w-4 h-4 text-[#006633] mr-2 flex-shrink-0 mt-1"
+                    />
                     Unlimited access.
                   </li>
                   <li class="flex items-start text-gray-600 text-sm">
-                    <Check class="w-4 h-4 text-[#006633] mr-2 flex-shrink-0 mt-1" />
+                    <Check
+                      class="w-4 h-4 text-[#006633] mr-2 flex-shrink-0 mt-1"
+                    />
                     Accessible on mobile and desktop.
                   </li>
-                  <li v-for="material in curriculumForm.materialsIncluded" :key="material.id"
-                    class="flex items-start text-gray-600 text-sm">
-                    <Check class="w-4 h-4 text-[#006633] mr-2 flex-shrink-0 mt-1" />
+                  <li
+                    v-for="material in curriculumForm.materialsIncluded"
+                    :key="material.id"
+                    class="flex items-start text-gray-600 text-sm"
+                  >
+                    <Check
+                      class="w-4 h-4 text-[#006633] mr-2 flex-shrink-0 mt-1"
+                    />
                     <span>{{ material.text }}</span>
                   </li>
                 </ul>
               </div>
 
               <div>
-                <h4 class="text-xl font-semibold text-gray-800 mb-3 border-b pb-1">
+                <h4
+                  class="text-xl font-semibold text-gray-800 mb-3 border-b pb-1"
+                >
                   Requirements
                 </h4>
                 <ul class="space-y-2">
                   <li class="flex items-start text-gray-600 text-sm">
-                    <Check class="w-4 h-4 text-[#006633] mr-2 flex-shrink-0 mt-1" />
+                    <Check
+                      class="w-4 h-4 text-[#006633] mr-2 flex-shrink-0 mt-1"
+                    />
                     Beginner (No prior knowledge required).
                   </li>
                 </ul>
               </div>
 
-              <button @click="goBack"
-                class="w-full px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors">
+              <button
+                @click="goBack"
+                class="w-full px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+              >
                 Edit
               </button>
-              <button @click="saveAndContinue"
-                class="w-full px-6 py-2 bg-[#00cc66] text-white rounded-lg font-medium hover:bg-[#00994d] transition-colors shadow-md">
+              <button
+                @click="saveAndContinue"
+                class="w-full px-6 py-2 bg-[#00cc66] text-white rounded-lg font-medium hover:bg-[#00994d] transition-colors shadow-md"
+              >
                 Submit
               </button>
             </div>
           </div>
         </div>
 
-        <div v-if="currentStep < 4" class="flex justify-end space-x-4 pt-8 border-t border-gray-200">
-          <button @click="goBack"
-            class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors">
+        <div
+          v-if="currentStep < 4"
+          class="flex justify-end space-x-4 pt-8 border-t border-gray-200"
+        >
+          <button
+            @click="goBack"
+            class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+          >
             Back
           </button>
-          <button @click="saveAndContinue"
-            class="px-6 py-2 bg-[#00cc66] text-white rounded-lg font-medium hover:bg-[#00994d] transition-colors shadow-md">
-            {{ currentStep < 4 ? 'Save & Continue' : 'Submit Course' }} </button>
+          <button
+            @click="saveAndContinue"
+            class="px-6 py-2 bg-[#00cc66] text-white rounded-lg font-medium hover:bg-[#00994d] transition-colors shadow-md"
+          >
+            {{ currentStep < 4 ? "Save & Continue" : "Submit Course" }}
+          </button>
         </div>
       </div>
     </main>
@@ -1037,13 +1623,13 @@ input:focus {
   box-shadow: 0 0 0 1px #00cc66 !important;
 }
 
-input[type='number']::-webkit-inner-spin-button,
-input[type='number']::-webkit-outer-spin-button {
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-input[type='number'] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 
