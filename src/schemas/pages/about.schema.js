@@ -1,7 +1,7 @@
 export const aboutPageSchema = {
   hero: {
     titleHighlight: 'Championing',
-    titleMain: 'Healthcare in Nigeria.',
+    titleMain: 'Healthcare in Nigeria',
     descriptionTop: 'Healthcare Federation of Nigeria ',
     descriptionText:
       'is a coalition of private healthcare sector stakeholders committed to strengthening Nigeria’s healthcare system through strategic advocacy, collaboration, and private sector leadership.',
