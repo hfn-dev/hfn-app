@@ -100,7 +100,7 @@
               facilities.
             </p>
             <a
-              href="#"
+              href="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067783/hfn-report_roundtable-on-local-manufacturing_esqq68.pdf"
               class="inline-block justify-center bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors"
               >Download</a
             >
