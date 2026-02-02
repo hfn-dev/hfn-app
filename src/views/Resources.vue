@@ -426,7 +426,56 @@
 import hands from "@/assets/hands.png";
 import latest from "@/assets/latest_news.png";
 import newsletter from "@/assets/newsletter.png";
+
+  const getPdfPreview = (url) => {
+  return url.replace(".pdf", ".jpg");
+};
 </script>
+
+const publications = [
+  {
+    title: "Strengthening Emergency Healthcare in Nigeria through Partnership",
+    description: "HFN and the Federal Ministry of Health jointly announced a new partnership model to enhance emergency medical infrastructure across Nigeria’s six geopolitical zones.",
+    pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf"
+  },
+  {
+    title: "Policy Framework for Health Technology Adoption",
+    description: "HFN’s Policy and Advocacy team released a new white paper encouraging structured regulation and faster adoption of digital health tools in clinical settings.",
+    pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf"
+  },
+  {
+    title: "Public-Private Dialogue on Universal Health Coverage (UHC)",
+    description: "Stakeholders met in Abuja to evaluate funding mechanisms and policy frameworks driving Nigeria’s progress toward universal access to affordable healthcare.",
+    pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf"
+  }
+];
+
+const newsletters = [
+  {
+    date: "October 24, 2025",
+    comments: 2,
+    text: "The Lagos State Ministry of Health has partnered with private hospitals to enhance emergency response times across key districts. This initiative, supported by HFN, ensures faster patient care.",
+    pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067783/hfn-report_roundtable-on-local-manufacturing_esqq68.pdf"
+  },
+  {
+    date: "October 24, 2025",
+    comments: 0,
+    text: "The Healthcare Federation of Nigeria convened stakeholders from public and private sectors to discuss frameworks for digital health transformation, data management, and interoperability standards.",
+    pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-2---2025_jfakrt.pdf"
+  },
+  {
+    date: "October 24, 2025",
+    comments: 2,
+    text: "In collaboration with donor agencies, HFN supported Kaduna’s investment in solar-powered clinics, ensuring sustainable and reliable care in rural communities.",
+    pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-4_2024_rqpvhf.pdf"
+  },
+  {
+    date: "October 24, 2025",
+    comments: 2,
+    text: "A delegation from HFN joined the World Economic Forum’s Health Innovators Group to discuss equitable access to care and technology-driven solutions for Africa.",
+    pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-4_2024_rqpvhf.pdf"
+  }
+];
 
 <style scoped>
 </style>
