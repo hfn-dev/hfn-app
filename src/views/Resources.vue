@@ -217,7 +217,7 @@
               reliable care in rural communities.
             </p>
             <a
-              href="#"
+              href="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-4_2024_rqpvhf.pdf"
               class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors"
               >Download</a
             >
@@ -276,7 +276,7 @@
               Africa.
             </p>
             <a
-              href="#"
+              href="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-4_2024_rqpvhf.pdf"
               class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors"
               >Download</a
             >
