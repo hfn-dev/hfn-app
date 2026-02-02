@@ -104,6 +104,40 @@
         </a>
       </div>
 
+      <section class="max-w-7xl mx-auto mb-20">
+  <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">
+    Video Updates
+  </h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div
+      v-for="(video, index) in videos"
+      :key="index"
+      class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden"
+    >
+      <div class="aspect-video bg-black">
+        <iframe
+          class="w-full h-full"
+          :src="getEmbedUrl(video.url)"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+
+      <div class="p-4">
+        <p class="text-sm text-orange-500 mb-1">
+          {{ video.date }}
+        </p>
+        <h4 class="font-semibold text-gray-800">
+          {{ video.title }}
+        </h4>
+      </div>
+    </div>
+  </div>
+</section>
+
+
       <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">Policy & Advocacy</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16 py-10 px-10 bg-[#F2F9F3] rounded-3xl">
@@ -183,6 +217,31 @@ const group1 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769716176
 const hands = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715465/1feebd03da9f660dfb6e3f79b696f544_L_rxf7mk.jpg';
 const hands1 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769716174/f5b95525832f3712e665bb57dba370d3_XS_yrppya.jpg';
 const hands2 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769716176/dc2a1ae8ac60464700aa7be25ea2c408_L_dt5us8.jpg';
+
+
+const videos = [
+  {
+    title: "HFN Healthcare Policy Roundtable",
+    date: "October 20, 2025",
+    url: "https://www.youtube.com/watch?v=Usug5WLXWRM",
+  },
+  {
+    title: "HFN Women’s Forum – Innovation & Leadership",
+    date: "September 18, 2025",
+    url: "https://www.youtube.com/watch?v=GAxo0PH39Sc",
+  },
+  {
+    title: "HFN Conference 2025 Highlights",
+    date: "August 5, 2025",
+    url: "https://www.youtube.com/watch?v=ihiq1lI5ghY",
+  },
+];
+
+const getEmbedUrl = (youtubeUrl) => {
+  const url = new URL(youtubeUrl);
+  const videoId = url.searchParams.get("v");
+  return `https://www.youtube.com/embed/${videoId}`;
+};  
 </script>
 
 <style scoped>
