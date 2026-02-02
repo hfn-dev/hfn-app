@@ -13,7 +13,7 @@
               >Governance & Leadership</span
             >
             <span class="text-green-700 block mt-2"
-              >A coalition driving policy and innovation</span
+              ></span
             >
           </h2>
           <p class="mt-6 text-lg text-gray-600 max-w-xl">
