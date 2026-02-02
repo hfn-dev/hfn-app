@@ -50,7 +50,7 @@
             </p>
             <button @click="showDonateModal = true" class="group flex items-center px-8 py-3 bg-green-700 text-white rounded-xl font-bold hover:bg-green-800 transition-all">
               Donate Now
-              <span class="ml-2 group-hover:translate-x-1 transition-transform">➡️</span>
+              <span class="ml-2 group-hover:translate-x-1 transition-transform"></span>
             </button>
           </div>
           <div class="md:w-1/3 bg-green-50 p-8 rounded-2xl border-l-4 border-green-700">
@@ -80,7 +80,7 @@
               Sponsorship of HFN conferences, roundtables, and stakeholder dialogues attended by policymakers, private sector leaders, and development partners.
             </p>
             <button @click="contactEmail" class="text-green-700 font-bold hover:underline flex items-center">
-              ➡️ Contact Us to Explore Partnerships
+              Contact Us to Explore Partnerships
             </button>
           </div>
 
@@ -93,7 +93,7 @@
               Collaboration on policy dialogues, capacity-building programmes, and sector initiatives aligned with shared objectives.
             </p>
             <button @click="contactEmail" class="text-green-700 font-bold hover:underline flex items-center">
-              ➡️ Contact Us to Explore Partnerships
+              Contact Us to Explore Partnerships
             </button>
           </div>
         </div>
@@ -106,7 +106,7 @@
             HFN events provide opportunities for organisations to showcase products, services, and innovations to a targeted audience of healthcare decision-makers. Exhibitor packages are available for selected events.
           </p>
           <button @click="contactEmail" class="text-green-700 font-bold hover:underline">
-            ➡️ Contact Us for Exhibitor Opportunities
+            Contact Us for Exhibitor Opportunities
           </button>
         </div>
 
@@ -116,7 +116,7 @@
             HFN offers limited advertising opportunities across its communication platforms, including its newsletter and selected publications, subject to editorial review.
           </p>
           <button @click="contactEmail" class="text-green-700 font-bold hover:underline">
-            ➡️ Contact Us for Advertising Enquiries
+            Contact Us for Advertising Enquiries
           </button>
         </div>
       </div>
@@ -129,7 +129,7 @@
             HFN welcomes volunteers who wish to contribute time and expertise to support events, research, communications, and sector engagement activities. Volunteer opportunities are periodic and role-specific.
           </p>
           <button class="bg-white text-green-900 px-10 py-3 rounded-xl font-bold hover:bg-green-50 transition-colors">
-            ➡️ Sign Up to Volunteer
+            Sign Up to Volunteer
           </button>
         </div>
         <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-green-800 rounded-full opacity-50"></div>
