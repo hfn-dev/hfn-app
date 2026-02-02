@@ -83,7 +83,7 @@
                class="flex flex-col sm:flex-row gap-8 p-8 rounded-[2.5rem] bg-[#f8fdf9] border border-gray-50 hover:bg-white hover:shadow-xl transition-all group">
             
             <div class="w-full sm:w-44 h-56 rounded-[2rem] overflow-hidden bg-gray-200 shrink-0 shadow-md">
-               <img :src="exec.image" :alt="exec.name" class="w-full h-full object-top group-hover:scale-110 transition-transform duration-700" />
+               <img :src="exec.image" :alt="exec.name" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700" />
             </div>
 
             <div class="flex flex-col justify-center">
