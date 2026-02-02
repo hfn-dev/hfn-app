@@ -289,7 +289,7 @@
       >
         <span class="text-sm">Page 1 of 2</span>
         <a
-          href="#"
+          href="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf"
           class="flex items-center space-x-1 text-green-700 hover:underline"
         >
           <span>Next</span>
@@ -336,7 +336,7 @@
           </p>
 
           <a
-            href="#"
+            href="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf"
             class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors w-autoq"
             >Download</a
           >
@@ -362,7 +362,7 @@
             health tools in clinical settings.
           </p>
           <a
-            href="#"
+            href="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf"
             class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors w-auto"
             >Download</a
           >
@@ -389,7 +389,7 @@
           </p>
 
           <a
-            href="#"
+            href="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf"
             class="bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors w-auto"
             >Download</a
           >
