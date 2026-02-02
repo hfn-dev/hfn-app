@@ -1,225 +1,153 @@
 <template>
-  <div class="get-involved-page font-sans bg-white">
-    <section class="bg-green-50 pt-10 pb-16">
-      <div class="container mx-auto px-4 md:px-8">
-        <div
-          class="flex flex-col lg:flex-row items-start lg:items-center justify-between"
-        >
-          <div class="lg:w-1/2 mb-8 lg:mb-0">
-            <h1
-              class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight"
-            >
-              <span class="text-green-700">Engage With HFN</span>
+  <div class="get-involved-page font-sans bg-white overflow-x-hidden">
+    <section class="bg-[#f2f9f3] pt-12 pb-20 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-1/3 h-full bg-green-100/50 skew-x-12 translate-x-1/2"></div>
+      
+      <div class="container mx-auto px-4 md:px-8 relative z-10">
+        <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+          <div class="lg:w-1/2">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
+              Engage With <span class="text-green-700">HFN</span>
               <br />
-              <span class="text-gray-900">Beyond Membership</span>
+              <span class="text-gray-800 text-3xl md:text-4xl font-semibold">Beyond Membership</span>
             </h1>
-            <p class="mt-4 text-gray-600 max-w-lg">
+            <p class="mt-6 text-gray-600 text-lg max-w-lg leading-relaxed">
               Healthcare Federation of Nigeria (HFN) provides multiple pathways for individuals,
-organisations, and partners to support and engage with our work strengthening Nigeria’s
-healthcare system.
-              
+              organisations, and partners to support and engage with our work strengthening Nigeria’s
+              healthcare system.
             </p>
           </div>
 
-          <div
-            class="lg:w-1/2 flex justify-center w-full h-64 sm:h-80 lg:h-96 relative"
-          >
-            <img
-              :src="latest"
-              alt="Get involved"
-              class="object-cover w-full h-full rounded-lg"
-            />
+          <div class="lg:w-1/2 w-full">
+            <div class="relative h-64 sm:h-80 lg:h-[400px] overflow-hidden rounded-2xl shadow-xl border-4 border-white">
+              <img :src="latest" alt="HFN Impact" class="object-cover w-full h-full" />
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <main class="container mx-auto px-4 md:px-8 py-16">
-      <h2 class="text-4xl font-bold text-gray-900 text-center mb-16">
-        Get Involved
-      </h2>
+      
+      <section class="mb-24">
+        <div class="flex flex-col md:flex-row gap-12 items-center bg-white p-8 md:p-12 rounded-3xl border border-gray-100 shadow-sm">
+          <div class="md:w-2/3">
+            <div class="flex items-center space-x-3 mb-4">
+              <span class="bg-green-700 text-white p-2 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </span>
+              <h3 class="text-3xl font-bold text-gray-900">Donations</h3>
+            </div>
+            <h4 class="text-xl font-semibold text-green-700 mb-4">Support HFN’s advocacy and sector-strengthening work</h4>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              HFN welcomes contributions that support our work in policy advocacy, stakeholder convening, research, and public–private collaboration.
+            </p>
+            <p class="text-gray-600 mb-6 leading-relaxed">
+              Contributions help sustain HFN’s role as a credible platform for private sector engagement in health system reform. 
+              <span class="block mt-2 text-sm italic text-gray-500">Contributions are voluntary and support institutional activities aligned with HFN’s mission.</span>
+            </p>
+            <button @click="showDonateModal = true" class="group flex items-center px-8 py-3 bg-green-700 text-white rounded-xl font-bold hover:bg-green-800 transition-all">
+              Donate Now
+              <span class="ml-2 group-hover:translate-x-1 transition-transform">➡️</span>
+            </button>
+          </div>
+          <div class="md:w-1/3 bg-green-50 p-8 rounded-2xl border-l-4 border-green-700">
+            <p class="text-green-800 font-medium italic">
+              "Your contribution helps us drive evidence-based reforms and build a more resilient healthcare ecosystem in Nigeria."
+            </p>
+          </div>
+        </div>
+      </section>
 
-      <hr class="border-gray-200 mb-12" />
-      <section class="mb-20">
-        <h3 class="text-2xl font-semibold text-gray-800 mb-4">Donate</h3>
-        <p class="text-gray-600 mb-4 max-w-4xl">
-          HFN welcomes donations to support our work advancing healthcare.
-        </p>
-        <p class="text-gray-600 mb-8 max-w-4xl">
-          Every contribution helps enable us to share knowledge and foster
-          collaboration amongst our global network of healthcare professionals,
-          improving patient outcomes for better lives. Whether you’d like to
-          make a one-off gift or set up a regular payment, it’s easy to donate
-          online. Click the button to get started.
-        </p>
-        <div class="flex justify-center">
-          <button
-            @click="showDonateModal = true"
-            class="px-8 py-3 bg-green-700 text-white rounded-xl shadow-lg hover:bg-green-800 transition duration-150 font-bold"
-          >
-            Donate Now
+      <section class="mb-24">
+        <div class="text-center mb-12">
+          <h3 class="text-3xl font-bold text-gray-900">Partnerships & Sponsorships</h3>
+          <p class="text-green-700 font-semibold mt-2">Partner with HFN</p>
+          <p class="text-gray-600 max-w-2xl mx-auto mt-4">
+            HFN works with local and international partners to deliver high-impact convenings, dialogues, and sector initiatives.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="bg-white border border-gray-100 p-8 rounded-2xl shadow-sm hover:border-green-200 transition-all">
+            <h4 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+              <span class="w-2 h-2 bg-green-700 rounded-full mr-3"></span>
+              Event Sponsorships
+            </h4>
+            <p class="text-gray-600 mb-6 text-sm md:text-base leading-relaxed">
+              Sponsorship of HFN conferences, roundtables, and stakeholder dialogues attended by policymakers, private sector leaders, and development partners.
+            </p>
+            <button @click="contactEmail" class="text-green-700 font-bold hover:underline flex items-center">
+              ➡️ Contact Us to Explore Partnerships
+            </button>
+          </div>
+
+          <div class="bg-white border border-gray-100 p-8 rounded-2xl shadow-sm hover:border-green-200 transition-all">
+            <h4 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+              <span class="w-2 h-2 bg-green-700 rounded-full mr-3"></span>
+              Programme & Initiative Support
+            </h4>
+            <p class="text-gray-600 mb-6 text-sm md:text-base leading-relaxed">
+              Collaboration on policy dialogues, capacity-building programmes, and sector initiatives aligned with shared objectives.
+            </p>
+            <button @click="contactEmail" class="text-green-700 font-bold hover:underline flex items-center">
+              ➡️ Contact Us to Explore Partnerships
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <div class="bg-gray-50 p-8 rounded-3xl">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Exhibitor Opportunities</h3>
+          <p class="text-gray-600 mb-6 leading-relaxed">
+            HFN events provide opportunities for organisations to showcase products, services, and innovations to a targeted audience of healthcare decision-makers. Exhibitor packages are available for selected events.
+          </p>
+          <button @click="contactEmail" class="text-green-700 font-bold hover:underline">
+            ➡️ Contact Us for Exhibitor Opportunities
           </button>
         </div>
-      </section>
 
-      <section class="mb-16">
-        <h3 class="text-2xl font-semibold text-gray-800 mb-4">Partnerships</h3>
-        <p class="text-gray-600 mb-4 max-w-4xl">
-          Healthcare Federation Of Nigeria is independent of any
-          government/political ideology, economic interest, religious
-          affiliation, and is mainly funded by our membership and volitional
-          donations from well-meaning Nigerians.
-        </p>
-        <p class="text-gray-600 mb-6 max-w-4xl">
-          This vision is anchored on a "patient-centric" approach to policy
-          advocacy which is our driving force. This is anchored on the simple
-          conclusion that, if life is basic and fundamental, there is no reason
-          why the patient should suffer due to a faulty health system. We are
-          the voice for advocating better healthcare in Nigeria that human life.
-        </p>
-        <p class="text-gray-600 max-w-4xl font-semibold">
-          Our Partners support HFN in the medium and long term via our specially
-          designed offerings, including:
-        </p>
-      </section>
-
-      <section class="mb-20">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div
-            class="border rounded-lg py-6 shadow-md bg-white hover:shadow-xl transition duration-300"
-          >
-            <h4 class="text-xl font-bold text-gray-900 mb-3 text-center">
-              Event Sponsorship
-            </h4>
-            <p
-              class="text-gray-600 text-sm mb-6 h-52 overflow-hidden bg-[#E87A1814] p-3"
-            >
-              HFN hosts over 10 events every year, attracting top policy makers,
-              both physical and online. Sponsors can select from our various
-              events and external delegates via different packages. This is a
-              unique opportunity to identify opportunities that align with your
-              brand.
-              <span class="block mt-2 font-medium"
-                >To learn more about this programme, please contact our
-                partnership team</span
-              >
-            </p>
-            <div class="flex justify-center">
-              <button
-                class="px-6 py-2 bg-green-700 text-white rounded-xl hover:bg-green-800 transition duration-150 text-sm font-semibold"
-              >
-                Contact Us
-              </button>
-            </div>
-          </div>
-
-          <div
-            class="border rounded-lg py-6 shadow-md bg-white hover:shadow-xl transition duration-300"
-          >
-            <h4 class="text-xl font-bold text-gray-900 mb-3 text-center">
-              Exhibitor Stands
-            </h4>
-            <p
-              class="text-gray-600 text-sm mb-6 h-52 overflow-hidden bg-[#E87A1814] p-3"
-            >
-              This is an excellent way to showcase your brand directly to
-              healthcare providers, key decision-makers and stakeholders within
-              the healthcare sector. At various events, we can also offer
-              exclusive packages.
-              <span class="block mt-2 font-medium"
-                >For further details, contact our team</span
-              >
-            </p>
-            <div class="flex justify-center">
-              <button
-                class="px-6 py-2 bg-green-700 text-white rounded-xl hover:bg-green-800 transition duration-150 text-sm font-semibold"
-              >
-                Contact Us
-              </button>
-            </div>
-          </div>
-
-          <div
-            class="border rounded-lg py-6 shadow-md bg-white hover:shadow-xl transition duration-300"
-          >
-            <h4 class="text-xl font-bold text-gray-900 mb-3 text-center">
-              Advertisements
-            </h4>
-            <p
-              class="text-gray-600 text-sm mb-6 h-52 overflow-hidden bg-[#E87A1814] p-3"
-            >
-              Our Quarterly Newsletter is distributed to all our members and to
-              various categories of healthcare professions. We accept
-              advertisements ranging from a half page to double page spreads,
-              subject to editorial approval by the secretary.
-              <span class="block mt-2 font-medium"
-                >For pricing, contact our team.</span
-              >
-            </p>
-            <div class="flex justify-center">
-              <button
-                class="px-6 py-2 bg-green-700 text-white rounded-xl hover:bg-green-800 transition duration-150 text-sm font-semibold"
-              >
-                Contact Us
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="py-10 px-10 rounded-3xl bg-[#F2F9F3]">
-        <h3 class="text-2xl font-semibold text-gray-800 mb-4">Volunteer</h3>
-        <p class="text-gray-600 mb-4 max-w-4xl">
-          Whether in logistics, community outreach, or event support, there’s
-          always a role for you.
-        </p>
-        <p class="text-gray-600 mb-8 max-w-4xl">
-          Join our network of passionate volunteers working together to improve
-          healthcare outcomes in Nigeria.
-        </p>
-        <div class="flex justify-center">
-          <button
-            class="px-8 py-3 bg-green-700 text-white rounded-xl shadow-lg hover:bg-green-800 transition duration-150 font-bold"
-          >
-            Sign Up Now
+        <div class="bg-gray-50 p-8 rounded-3xl">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">Advertising & Visibility</h3>
+          <p class="text-gray-600 mb-6 leading-relaxed">
+            HFN offers limited advertising opportunities across its communication platforms, including its newsletter and selected publications, subject to editorial review.
+          </p>
+          <button @click="contactEmail" class="text-green-700 font-bold hover:underline">
+            ➡️ Contact Us for Advertising Enquiries
           </button>
         </div>
+      </div>
+
+      <section class="bg-green-900 text-white rounded-[2rem] p-10 md:p-16 relative overflow-hidden">
+        <div class="relative z-10">
+          <h3 class="text-3xl font-bold mb-4">Volunteering</h3>
+          <p class="text-green-100 text-xl font-medium mb-6">Support HFN programmes and events</p>
+          <p class="text-green-100/80 mb-8 max-w-3xl leading-relaxed">
+            HFN welcomes volunteers who wish to contribute time and expertise to support events, research, communications, and sector engagement activities. Volunteer opportunities are periodic and role-specific.
+          </p>
+          <button class="bg-white text-green-900 px-10 py-3 rounded-xl font-bold hover:bg-green-50 transition-colors">
+            ➡️ Sign Up to Volunteer
+          </button>
+        </div>
+        <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-green-800 rounded-full opacity-50"></div>
       </section>
     </main>
-  </div>
-  <div
-    v-if="showDonateModal"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
-  >
-    <div class="bg-white w-full max-w-2xl rounded-2xl p-6 relative">
-      <button
-        @click="showDonateModal = false"
-        class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-      >
-        ✕
-      </button>
 
-      <h3 class="text-2xl font-bold text-gray-900 mb-2 text-center">
-        What would you like to donate for?
-      </h3>
-      <p class="text-gray-600 text-center mb-6">
-        Choose how you want your contribution to make an impact.
-      </p>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <button
-          v-for="option in donationOptions"
-          :key="option.key"
-          @click="selectDonation(option)"
-          class="border rounded-xl p-4 text-left hover:border-green-700 hover:bg-green-50 transition"
-        >
-          <h4 class="font-semibold text-gray-900 mb-1">
-            {{ option.title }}
-          </h4>
-          <p class="text-sm text-gray-600">
-            {{ option.description }}
-          </p>
-        </button>
+    <div v-if="showDonateModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+      <div class="bg-white w-full max-w-2xl rounded-2xl p-8 relative animate-in fade-in zoom-in duration-300">
+        <button @click="showDonateModal = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl">✕</button>
+        <h3 class="text-2xl font-bold text-gray-900 mb-2 text-center">Support HFN's Mission</h3>
+        <p class="text-gray-600 text-center mb-8">Choose a contribution category</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <button v-for="option in donationOptions" :key="option.key" @click="selectDonation(option)"
+            class="border-2 border-gray-100 rounded-xl p-5 text-left hover:border-green-700 hover:bg-green-50 transition-all">
+            <h4 class="font-bold text-gray-900 mb-1">{{ option.title }}</h4>
+            <p class="text-xs text-gray-500 leading-relaxed">{{ option.description }}</p>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -232,30 +160,18 @@ const latest = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769892500
 const showDonateModal = ref(false);
 
 const donationOptions = [
-  {
-    key: "emergency",
-    title: "Emergency Healthcare Fund",
-    description: "Support rapid response and lifesaving emergency care.",
-  },
-  {
-    key: "training",
-    title: "Medical Training & Capacity Building",
-    description: "Help train healthcare workers and first responders.",
-  },
-  {
-    key: "research",
-    title: "Research & Policy Advocacy",
-    description: "Support evidence-based healthcare reforms.",
-  },
-  {
-    key: "general",
-    title: "General Donation",
-    description: "Support all HFN programs where the need is greatest.",
-  },
+  { key: "advocacy", title: "Policy Advocacy", description: "Supporting HFN’s work in legislative and policy reforms." },
+  { key: "research", title: "Research & Insights", description: "Funding for healthcare sector research and data gathering." },
+  { key: "convening", title: "Stakeholder Convening", description: "Supporting dialogues between public and private health sectors." },
+  { key: "general", title: "General Support", description: "Contributions toward institutional mission-aligned activities." },
 ];
 
 const selectDonation = (option) => {
-  console.log("Selected donation:", option.key);
+  console.log("Donation selected:", option.key);
   showDonateModal.value = false;
 };
-</script>   
+
+const contactEmail = () => {
+  window.location.href = "mailto:partnerships@hfnigeria.com";
+};
+</script>
