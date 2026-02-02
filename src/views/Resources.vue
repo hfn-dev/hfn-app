@@ -39,6 +39,54 @@
       <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">
         Newsletters
       </h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-7xl mx-auto mb-16">
+      <div v-for="(item, index) in newsletters" :key="index" 
+           class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 flex flex-col">
+        
+        <div class="relative group h-60 overflow-hidden bg-gray-100">
+           <img
+            :src="getPdfPreview(item.pdfUrl)"
+            alt="Newsletter Preview"
+            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            @error="(e) => e.target.src = newsletter_placeholder" 
+          />
+          <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+             <span class="text-white bg-green-700 px-3 py-1 rounded text-xs">View Document</span>
+          </div>
+        </div>
+
+        <div class="p-6 flex-grow flex flex-col">
+          <p class="text-sm text-orange-500 mb-4 flex items-center space-x-4">
+            <span class="flex items-center">
+              {{ item.date }}
+            </span>
+            </p>
+          <p class="text-gray-700 text-base mb-4 flex-grow">
+            {{ item.text }}
+          </p>
+          
+          <div class="mt-auto pt-4 flex space-x-2">
+            <a
+              :href="item.pdfUrl"
+              download
+              target="_blank"
+              class="flex-1 text-center bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors"
+            >
+              Download PDF
+            </a>
+            
+            <a
+              :href="item.pdfUrl"
+              target="_blank"
+              class="p-2 border border-gray-300 rounded-full hover:bg-gray-50 transition-colors"
+              title="Open in browser"
+            >
+              <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
 
       <div class="max-w-7xl mx-auto mb-8">
         <h2 class="text-3xl font-bold text-gray-900 mb-12"></h2>
