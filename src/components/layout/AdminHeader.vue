@@ -38,7 +38,19 @@ const handleLinkClick = (path) => {
   isMobileMenuOpen.value = false;
 };
 
-const isLinkActive = (path) => path === currentPath.value;
+// const isLinkActive = (path) => path === currentPath.value;
+
+const isLinkActive = (link) => {
+  if (link.path !== '#' && link.path === currentPath.value) {
+    return true;
+  }
+  
+  if (link.hasDropdown && link.dropdownItems) {
+    return link.dropdownItems.some(item => item.path === currentPath.value);
+  }
+  
+  return false;
+};
 
 const openDropdown = ref(null); 
 
