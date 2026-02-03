@@ -44,19 +44,22 @@
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
         <div class="lg:col-span-3 flex justify-center mb-10">
-          <div class="group relative w-full max-w-md bg-white p-8 rounded-[3.5rem] shadow-2xl border-2 border-orange-400/20 transform hover:-translate-y-2 transition-all duration-500">
-             <div class="absolute -top-5 left-1/2 -translate-x-1/2 bg-orange-400 text-white px-8 py-2 rounded-full text-xs font-black uppercase tracking-widest shadow-lg z-20">
-                Chair
-             </div>
-             <div class="aspect-square rounded-[2.5rem] overflow-hidden bg-gray-100 mb-6 border-4 border-[#f2f9f3]">
-                <img :src="chairImage" alt="Bola Adesola" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-             </div>
-             <div class="text-center">
-               <h3 class="text-3xl font-black text-[#004d33]">Bola Adesola</h3>
-               <p class="text-orange-600 font-bold text-sm uppercase tracking-[0.2em] mt-2">Chair, Board of Trustees</p>
-             </div>
-          </div>
-        </div>
+  <RouterLink :to="`/team/${slugify('Bola Adesola')}`" class="group relative w-full max-w-md">
+    <div class="bg-white p-8 rounded-[3.5rem] shadow-2xl border-2 border-orange-400/20 transform hover:-translate-y-2 transition-all duration-500">
+      <div class="absolute -top-5 left-1/2 -translate-x-1/2 bg-orange-400 text-white px-8 py-2 rounded-full text-xs font-black uppercase tracking-widest shadow-lg z-20">
+        Chair
+      </div>
+      <div class="aspect-square rounded-[2.5rem] overflow-hidden bg-gray-100 mb-6 border-4 border-[#f2f9f3]">
+        <img :src="chairImage" alt="Bola Adesola" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+      </div>
+      <div class="text-center">
+        <h3 class="text-3xl font-black text-[#004d33]">Bola Adesola</h3>
+        <p class="text-orange-600 font-bold text-sm uppercase tracking-[0.2em] mt-2">Chair, Board of Trustees</p>
+      </div>
+    </div>
+  </RouterLink>
+</div>
+        
 
         <div v-for="trustee in trustees" :key="trustee.name">
   <RouterLink :to="`/team/${slugify(trustee.name)}`">
