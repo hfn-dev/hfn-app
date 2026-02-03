@@ -229,8 +229,7 @@ const newsletters = [
   {
     date: "October 24, 2025",
     comments: 0,
-    text: "As we step into 2025 with hope and determination, the Healthcare Federation of Nigeria (HFN) is delighted to present our Q4 2024 newsletter—a reflection of the strides we made in the final quarter of the year. This period was marked by notable collaborations, policy advancements, and landmark events, each
-contributing to our shared mission of achieving Universal Health Coverage (UHC).",
+    text: "As we step into 2025 with hope and determination, the Healthcare Federation of Nigeria (HFN) is delighted to present our Q4 2024 newsletter—a reflection of the strides we made in the final quarter of the year. This period was marked by notable collaborations, policy advancements, and landmark events, each contributing to our shared mission of achieving Universal Health Coverage (UHC).",
     pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-4_2024_rqpvhf.pdf"
   },
   {
