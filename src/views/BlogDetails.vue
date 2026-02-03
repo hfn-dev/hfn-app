@@ -128,16 +128,26 @@
 import { homePageSchema } from '@/schemas/pages/home.schema';
 import { computed } from 'vue';
 import { useRoute } from "vue-router";
+import { newsPageSchema } from '@/schemas/pages/news.schema';
 
 const route = useRoute();
 // const blogId = route.params.id;
 const slug = route.params.slug;
-const allBlogs = Object.values(homePageSchema.news.months)
-  .flatMap(month => [month.featured, ...month.newsList]);
+
+const allBlogs = [
+  ...newsPageSchema.news.latestNewsSection.articles,
+  ...newsPageSchema.news.policyAdvocacySection.updates,
+];
 
 const blog = computed(() =>
   allBlogs.find(item => item.slug === slug)
-);
+);  
+// const allBlogs = Object.values(homePageSchema.news.months)
+//   .flatMap(month => [month.featured, ...month.newsList]);
+
+// const blog = computed(() =>
+//   allBlogs.find(item => item.slug === slug)
+// );
 // const blog = ref({
 //   title: 'Strengthening Emergency Healthcare in Nigeria through Partnership.',
 //   tag: 'Progress & Education',
