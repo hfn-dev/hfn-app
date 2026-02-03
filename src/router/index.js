@@ -65,6 +65,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import About from '../views/About.vue';
 import Homepage from '../views/Homepage.vue';
 import GalleryDetail from '@/views/GalleryDetail.vue';
+import TeamDetail from '@/views/TeamDetail.vue';
 import Governance from '@/views/Governance.vue';
   
 const routes = [
@@ -95,6 +96,12 @@ const routes = [
     path: '/blog/:slug',
     name: 'BlogDetails',
     component: BlogDetails,
+    props: true,
+  },
+  {
+    path: '/team/:slug',
+    name: 'TeamDetail',
+    component: TeamDetail,
     props: true,
   },
   {
