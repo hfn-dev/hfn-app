@@ -23,6 +23,7 @@ export const newsPageSchema = {
           date: 'October 24, 2025',
           commentCount: 2,
           link: '/news/lagos-emergency-partnership',
+          slug: 'lagos-emergency-partnership'
         },
         {
           id: 2,
@@ -33,6 +34,7 @@ export const newsPageSchema = {
           date: 'October 24, 2025',
           commentCount: 2,
           link: '/news/digital-health-convention',
+          slug: 'stakeholder-convention-on-digital'
         },
         {
           id: 3,
@@ -43,6 +45,7 @@ export const newsPageSchema = {
           date: 'October 24, 2025',
           commentCount: 2,
           link: '/news/kaduna-solar-clinics',
+          slug: 'solar-powered-clinics-initiative'
         },
         {
           id: 4,
@@ -53,6 +56,7 @@ export const newsPageSchema = {
           date: 'October 24, 2025',
           commentCount: 2,
           link: '/news/wef-health-innovators',
+          slug: 'hfn-delegation-at-world'
         },
       ],
       pagination: {
