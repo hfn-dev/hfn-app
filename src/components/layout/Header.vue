@@ -69,7 +69,7 @@ const navLinks = [
   },
   {
     title: "News & Updates",
-    
+    path: "#",
     hasDropdown: true,
     dropdownItems: [
       // { title: "Programs & Initiatives", path: "/programs" },
@@ -83,7 +83,7 @@ const navLinks = [
   },
   {
     title: "Membership",
-    
+    path: "#",
     hasDropdown: true,
     dropdownItems: [
       { title: "Member Area", path: "/membership" },
