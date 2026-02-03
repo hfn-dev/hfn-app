@@ -84,22 +84,27 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div v-for="exec in executives" :key="exec.name" 
-               class="flex flex-col sm:flex-row gap-8 p-8 rounded-[2.5rem] bg-[#f8fdf9] border border-gray-50 hover:bg-white hover:shadow-xl transition-all group">
-            
-            <div class="w-full sm:w-44 h-56 rounded-[2rem] overflow-hidden bg-gray-200 shrink-0 shadow-md">
-               <img :src="exec.image" :alt="exec.name" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700" />
-            </div>
+  <RouterLink 
+    v-for="exec in executives" 
+    :key="exec.name" 
+    :to="`/team/${slugify(exec.name)}`"
+    class="flex flex-col sm:flex-row gap-8 p-8 rounded-[2.5rem] bg-[#f8fdf9] border border-gray-50 hover:bg-white hover:shadow-xl transition-all group"
+  >
+    <div class="w-full sm:w-44 h-56 rounded-[2rem] overflow-hidden bg-gray-200 shrink-0 shadow-md">
+       <img :src="exec.image" :alt="exec.name" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700" />
+    </div>
 
-            <div class="flex flex-col justify-center">
-              <h4 class="text-2xl font-black text-gray-900 leading-tight">{{ exec.name }}</h4>
-              <p class="text-orange-500 font-bold text-[10px] uppercase tracking-[0.2em] mt-1 mb-4">{{ exec.role }}</p>
-              <p class="text-gray-600 text-sm leading-relaxed font-medium italic">
-                {{ exec.profile }}
-              </p>
-            </div>
-          </div>
-        </div>
+    <div class="flex flex-col justify-center text-left">
+      <h4 class="text-2xl font-black text-gray-900 leading-tight">{{ exec.name }}</h4>
+      <p class="text-orange-500 font-bold text-[10px] uppercase tracking-[0.2em] mt-1 mb-4">{{ exec.role }}</p>
+      <p class="text-gray-600 text-sm leading-relaxed font-medium italic">
+        {{ exec.profile }}
+      </p>
+    </div>
+  </RouterLink>
+</div>
+
+        
       </div>
     </section>
   </div>
