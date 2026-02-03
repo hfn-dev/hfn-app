@@ -189,9 +189,7 @@
  
 import wef from "@/assets/wef.jpg";
 import { newsPageSchema } from '@/schemas/pages/news.schema';
-import event from '@/assets/event.png'
-import group from '@/assets/group.png'
-import group1 from '@/assets/group1.png'
+
 
 const imageMap = {
   'event.png': event,
