@@ -69,3 +69,27 @@
     <router-link to="/leadership" class="mt-4 text-green-700 underline">Return to Directory</router-link>
   </div>
 </template>
+
+<script setup>
+
+  // Inside your Detail Page <script setup>
+const chair = { 
+  name: 'Bola Adesola', 
+  title: 'Chair, Board of Trustees', 
+  image: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Bola_Adesola_lr8vif.png",
+  profile: `Insert full bio here...` 
+};
+
+// Combine everything for the finder to work
+const allMembers = [
+  chair,
+  ...trustees,
+  ...executives.map(e => ({ 
+    ...e, 
+    title: e.role, // Convert 'role' to 'title' so the template displays it correctly
+    description: e.profile // Use their short profile as the description if no long bio exists
+  }))
+];
+
+const member = allMembers.find(m => slugify(m.name) === slug);
+</script>
