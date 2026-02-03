@@ -233,10 +233,10 @@ const newsletters = [
     pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-4_2024_rqpvhf.pdf"
   },
   {
-    date: "February 27, 2025",
+    date: "October 8, 2025",
     comments: 0,
-    text: "The 2025 Annual General Conference of the Healthcare Federation of Nigeria (HFN) was a landmark gathering convened to commemorate a decade of transformative advocacy, sectoral leadership, and policy influence by the private healthcare sector in Nigeria.",
-    pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067793/2025-hfn-conference-report_hapfj9.pdf"
+    text: "As we reflect on the fourth quarter of 2025, we are pleased to share the progress and successes, shaping our ongoing initiatives. Your unwavering support and active engagement continue to reinforce a shared vision for a stronger, more resilient healthcare system in Nigeria. Together, we are not just recording achievements, we are shaping the future of healthcare.",
+    pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067786/2025-hfn-quarterly-newsletter-q4_gd0aj6.pdf"
   }
 ];
   
