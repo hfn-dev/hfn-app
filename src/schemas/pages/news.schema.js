@@ -23,7 +23,8 @@ export const newsPageSchema = {
           date: 'October 24, 2025',
           commentCount: 2,
           link: '/news/lagos-emergency-partnership',
-          slug: 'lagos-emergency-partnership'
+          slug: 'lagos-emergency-partnership',
+          tag: 'News'
         },
         {
           id: 2,
@@ -34,7 +35,8 @@ export const newsPageSchema = {
           date: 'October 24, 2025',
           commentCount: 2,
           link: '/news/digital-health-convention',
-          slug: 'stakeholder-convention-on-digital'
+          slug: 'stakeholder-convention-on-digital',
+          tag: 'News'
         },
         {
           id: 3,
@@ -45,7 +47,8 @@ export const newsPageSchema = {
           date: 'October 24, 2025',
           commentCount: 2,
           link: '/news/kaduna-solar-clinics',
-          slug: 'solar-powered-clinics-initiative'
+          slug: 'solar-powered-clinics-initiative',
+          tag: 'News'
         },
         {
           id: 4,
@@ -56,7 +59,8 @@ export const newsPageSchema = {
           date: 'October 24, 2025',
           commentCount: 2,
           link: '/news/wef-health-innovators',
-          slug: 'hfn-delegation-at-world'
+          slug: 'hfn-delegation-at-world',
+          tag: 'News'
         },
       ],
       pagination: {
@@ -77,7 +81,8 @@ export const newsPageSchema = {
             'HFN and the Federal Ministry of Health jointly announced a new partnership model to enhance emergency medical infrastructure across Nigeria’s six geopolitical zones.',
           image: 'hands.png',
           link: '#',
-          slug: 'strengthening-emergency-healthcare'
+          slug: 'strengthening-emergency-healthcare',
+          tag: 'News'
         },
         {
           id: 2,
@@ -86,7 +91,8 @@ export const newsPageSchema = {
             'HFN’s Policy and Advocacy team released a new white paper encouraging structured regulation and faster adoption of digital health tools in clinical settings.',
           image: 'hands.png',
           link: '#',
-          slug: 'policy-framework-for-health'
+          slug: 'policy-framework-for-health',
+          tag: 'News'
         },
         {
           id: 3,
@@ -95,7 +101,8 @@ export const newsPageSchema = {
             'Stakeholders met in Abuja to evaluate funding mechanisms and policy frameworks driving Nigeria’s progress toward universal access to affordable healthcare.',
           image: 'hands.png',
           link: '#',
-          slug: 'public-private-dialogue'
+          slug: 'public-private-dialogue',
+          tag: 'News'
         },
       ],
       pagination: {
