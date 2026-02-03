@@ -197,19 +197,19 @@ import newsletter from "@/assets/newsletter.png";
 
 const publications = [
   {
-    title: "Strengthening Emergency Healthcare in Nigeria through Partnership",
-    description: "HFN and the Federal Ministry of Health jointly announced a new partnership model to enhance emergency medical infrastructure across Nigeria’s six geopolitical zones.",
+    title: "Transforming Nigeria’s Healthcare Landscape Through Strategic Advocacy and Private Sector Leadership",
+    description: "HFN is uniquely positioned to leverage its deep understanding of both the healthcare sector and the policy landscape to facilitate transformative change. We have the expertise to connect public and private sectors, mobilize financing, and advocate for reforms that drive long-term, sustainable growth in the healthcare industry.",
     pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf"
   },
   {
-    title: "Policy Framework for Health Technology Adoption",
-    description: "HFN’s Policy and Advocacy team released a new white paper encouraging structured regulation and faster adoption of digital health tools in clinical settings.",
-    pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf"
+    title: "THE HEALTHCARE FEDERATION OF NIGERIA In partnership with WHX Lagos",
+    description: "The 2025 Healthcare Leadership Conference hosted by the Healthcare Federation of Nigeria (HFN), in partnership with WHX Lagos, themed “Accelerating UHC and Health Sovereignty: Scaling Up Best Practices Through Public-Private Integration,” convened distinguished leaders, policymakers, and system innovators to advance Nigeria’s journey toward Universal Health Coverage (UHC) and health sovereignty. The conference delivered not just vision, but actionable roadmaps.",
+    pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067796/2025-hfn-hlc-report_fyxosp.pdf"
   },
   {
-    title: "Public-Private Dialogue on Universal Health Coverage (UHC)",
-    description: "Stakeholders met in Abuja to evaluate funding mechanisms and policy frameworks driving Nigeria’s progress toward universal access to affordable healthcare.",
-    pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf"
+    title: "Expanding Access to Quality Healthcare: Transforming Nigeria through Innovation, Partnership, and Sustainability",
+    description: "The 2025 Annual General Conference of the Healthcare Federation of Nigeria (HFN) was a landmark gathering convened to commemorate a decade of transformative advocacy, sectoral leadership, and policy influence by the private healthcare sector in Nigeria.",
+    pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067793/2025-hfn-conference-report_hapfj9.pdf"
   }
 ];
 
