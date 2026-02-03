@@ -233,9 +233,9 @@ const newsletters = [
     pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-4_2024_rqpvhf.pdf"
   },
   {
-    date: "October 24, 2025",
+    date: "February 27, 2025",
     comments: 0,
-    text: "A delegation from HFN joined the World Economic Forum’s Health Innovators Group to discuss equitable access to care and technology-driven solutions for Africa.",
+    text: "The 2025 Annual General Conference of the Healthcare Federation of Nigeria (HFN) was a landmark gathering convened to commemorate a decade of transformative advocacy, sectoral leadership, and policy influence by the private healthcare sector in Nigeria.",
     pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067793/2025-hfn-conference-report_hapfj9.pdf"
   }
 ];
