@@ -58,16 +58,21 @@
           </div>
         </div>
 
-        <div v-for="trustee in trustees" :key="trustee.name" 
-             class="bg-white p-6 rounded-[3rem] shadow-lg border border-gray-50 hover:shadow-2xl transition-all group">
-          <div class="aspect-[4/5] rounded-[2rem] overflow-hidden bg-gray-100 mb-6">
-             <img :src="trustee.image" :alt="trustee.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-          </div>
-          <div class="text-center">
-            <h4 class="text-xl font-black text-gray-900">{{ trustee.name }}</h4>
-            <p class="text-gray-500 font-bold text-xs uppercase tracking-widest mt-1">{{ trustee.title }}</p>
-          </div>
-        </div>
+        <div v-for="trustee in trustees" :key="trustee.name">
+  <RouterLink :to="`/team/${slugify(trustee.name)}`">
+    <div class="bg-white p-6 rounded-[3rem] shadow-lg border border-gray-50 hover:shadow-2xl transition-all group">
+      <div class="aspect-[4/5] rounded-[2rem] overflow-hidden bg-gray-100 mb-6">
+        <img :src="trustee.image" :alt="trustee.name"
+             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+      </div>
+      <div class="text-center">
+        <h4 class="text-xl font-black text-gray-900">{{ trustee.name }}</h4>
+        <p class="text-gray-500 font-bold text-xs uppercase tracking-widest mt-1">{{ trustee.title }}</p>
+      </div>
+    </div>
+  </RouterLink>
+</div>
+
       </div>
     </section>
 
@@ -101,8 +106,14 @@
 </template>
 
 <script setup>
-// You can import images here or use URLs
-  const handsJoining = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769896360/IMG_9238_vxq385.jpg';
+
+const slugify = (name) =>
+  name
+    .toLowerCase()
+    .replace(/ /g, '-')
+    .replace(/[^\w-]+/g, '');
+  
+const handsJoining = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769896360/IMG_9238_vxq385.jpg';
 const chairImage = "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Bola_Adesola_lr8vif.png";
 
 const trustees = [
