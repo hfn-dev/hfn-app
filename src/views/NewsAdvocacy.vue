@@ -39,62 +39,40 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto mb-16">
-        <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-          <img :src="event" alt="News Headline" class="w-full h-60 object-contain"/>
-          <div class="p-6">
-            <p class="text-sm text-orange-500 mb-4 flex items-center space-x-4">
-              <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h8M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> October 24, 2025</span>
-              <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg> 2 Comments</span>
-            </p>
-            <p class="text-gray-700 text-base mb-4">
-              The Lagos State Ministry of Health has partnered with private hospitals to enhance emergency response times across key districts. This initiative, supported by HFN, ensures faster patient care and improved coordination among healthcare facilities.
-            </p>
-            <a href="#" class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors">Read More</a>
-          </div>
-        </div>
+  <div
+    v-for="article in articles"
+    :key="article.id"
+    class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
+  >
+    <img
+      :src="article.image"
+      alt="News Headline"
+      class="w-full h-60 object-contain"
+    />
 
-        <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-          <img :src="group" alt="News Headline" class="w-full h-60 object-contain"/>
-          <div class="p-6">
-            <p class="text-sm text-orange-500 mb-4 flex items-center space-x-4">
-              <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h8M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> October 24, 2025</span>
-              <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg> 2 Comments</span>
-            </p>
-            <p class="text-gray-700 text-base mb-4">
-              The Healthcare Federation of Nigeria convened stakeholders from public and private sectors to discuss frameworks for digital health transformation, data management, and interoperability standards.
-            </p>
-            <a href="#" class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors">Read More</a>
-          </div>
-        </div>
+    <div class="p-6">
+      <p class="text-sm text-orange-500 mb-4 flex items-center space-x-4">
+        <span class="flex items-center">
+          {{ article.date }}
+        </span>
+        <span class="flex items-center">
+          {{ article.commentCount }} Comments
+        </span>
+      </p>
 
-         <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-          <img :src="group1" alt="News Headline" class="w-full h-60 object-contain"/>
-          <div class="p-6">
-            <p class="text-sm text-orange-500 mb-4 flex items-center space-x-4">
-              <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h8M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> October 24, 2025</span>
-              <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg> 2 Comments</span>
-            </p>
-            <p class="text-gray-700 text-base mb-4">
-              In collaboration with donor agencies, HFN supported Kaduna’s investment in solar-powered clinics, ensuring sustainable and reliable care in rural communities.
-            </p>
-            <a href="#" class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors">Read More</a>
-          </div>
-        </div>
+      <p class="text-gray-700 text-base mb-4">
+        {{ article.excerpt }}
+      </p>
 
-        <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-          <img :src="wef" alt="News Headline" class="w-full h-60 object-contain"/>
-          <div class="p-6">
-            <p class="text-sm text-orange-500 mb-4 flex items-center space-x-4">
-              <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h8M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> October 24, 2025</span>
-              <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg> 2 Comments</span>
-            </p>
-            <p class="text-gray-700 text-base mb-4">
-              A delegation from HFN joined the World Economic Forum’s Health Innovators Group to discuss equitable access to care, technology-driven solutions, and investment opportunities for Africa.
-            </p>
-            <a href="#" class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors">Read More</a>
-          </div>
-        </div>
-      </div>
+      <RouterLink
+        :to="`/blog/${article.slug}`"
+        class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors"
+      >
+        Read More
+      </RouterLink>
+    </div>
+  </div>
+</div>
 
       <div class="flex justify-center items-center space-x-4 text-gray-600 mb-20">
         <span class="text-sm">Page 1 of 2</span>
