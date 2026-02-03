@@ -45,10 +45,10 @@
     class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
   >
     <img
-      :src="article.image"
-      alt="News Headline"
-      class="w-full h-60 object-contain"
-    />
+  :src="imageMap[article.image]"
+  class="w-full h-60 object-contain"
+/>
+
 
     <div class="p-6">
       <p class="text-sm text-orange-500 mb-4 flex items-center space-x-4">
@@ -189,7 +189,17 @@
  
 import wef from "@/assets/wef.jpg";
 import { newsPageSchema } from '@/schemas/pages/news.schema';
+import event from '@/assets/event.png'
+import group from '@/assets/group.png'
+import group1 from '@/assets/group1.png'
+import wef from '@/assets/wef.jpg'
 
+const imageMap = {
+  'event.png': event,
+  'group.png': group,
+  'group1.png': group1,
+  'wef.jpg': wef,
+}
 const articles = newsPageSchema.news.latestNewsSection.articles;
 
 
