@@ -549,48 +549,7 @@ const resolveImage = (image) => imageMap[image] || image;
       </div>
     </section>
 
-    <section class="pb-24 px-4">
-      <div
-        class="max-w-7xl mx-auto bg-[#f2f9f3] rounded-[4rem] p-12 md:p-20 relative overflow-hidden"
-      >
-        <div
-          class="absolute top-10 right-10 w-32 h-32 bg-[#004d33]/5 rounded-full blur-3xl"
-        ></div>
-
-        <div class="relative z-10 grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <h2 class="text-4xl font-black text-[#004d33] mb-6">
-              Our Commitment
-            </h2>
-            <p class="text-gray-600 text-lg mb-8">
-              HFN remains committed to advancing a health system where every
-              Nigerian has access to quality, affordable healthcare.
-            </p>
-            <button
-              class="px-10 py-4 bg-[#004d33] text-white rounded-full font-bold shadow-lg hover:shadow-green-900/20 transition-all"
-            >
-              Join the Movement
-            </button>
-          </div>
-
-          <div class="space-y-4">
-            <div
-              v-for="(goal, i) in commitmentGoals"
-              :key="i"
-              class="bg-white p-6 rounded-[2rem] shadow-sm flex items-center gap-6 border border-white hover:border-[#004d33]/10 transition-all"
-            >
-              <span class="text-3xl font-black text-[#004d33]/20"
-                >0{{ i + 1 }}</span
-              >
-              <p class="font-bold text-gray-800 text-lg tracking-tight">
-                {{ goal }}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
+    
     <section class="bg-white py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-10">
@@ -719,93 +678,48 @@ const resolveImage = (image) => imageMap[image] || image;
         </div>
       </div>
     </section>
-    <section class="bg-white sm:py-16 lg:py-12">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div>
-          <div
-            class="w-full px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-50 bg-white shadow-md text-center"
-          >
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">
-              {{ page.leadership.title }}
+    <section class="pb-24 px-4">
+      <div
+        class="max-w-7xl mx-auto bg-[#f2f9f3] rounded-[4rem] p-12 md:p-20 relative overflow-hidden"
+      >
+        <div
+          class="absolute top-10 right-10 w-32 h-32 bg-[#004d33]/5 rounded-full blur-3xl"
+        ></div>
+
+        <div class="relative z-10 grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 class="text-4xl font-black text-[#004d33] mb-6">
+              Our Commitment
             </h2>
+            <p class="text-gray-600 text-lg mb-8">
+              HFN remains committed to advancing a health system where every
+              Nigerian has access to quality, affordable healthcare.
+            </p>
+            <button
+              class="px-10 py-4 bg-[#004d33] text-white rounded-full font-bold shadow-lg hover:shadow-green-900/20 transition-all"
+            >
+              Join the Movement
+            </button>
           </div>
-        </div>
-        <section class="bg-white py-16 sm:py-24">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="space-y-20">
-              <div
-                v-for="(exec, index) in page.leadership.executives"
-                :key="exec.name"
-                class="lg:grid lg:grid-cols-12 lg:gap-12 items-start mb-24"
+
+          <div class="space-y-4">
+            <div
+              v-for="(goal, i) in commitmentGoals"
+              :key="i"
+              class="bg-white p-6 rounded-[2rem] shadow-sm flex items-center gap-6 border border-white hover:border-[#004d33]/10 transition-all"
+            >
+              <span class="text-3xl font-black text-[#004d33]/20"
+                >0{{ i + 1 }}</span
               >
-                <div
-                  class="lg:col-span-4 flex justify-center"
-                  :class="index % 2 ? 'lg:order-2' : ''"
-                >
-                  <div class="flex flex-col items-center gap-4">
-                    <div
-                      class="relative max-w-xs aspect-[4/5] rounded-t-[2.5rem] rounded-b-xl overflow-hidden shadow-2xl"
-                      :style="{ backgroundColor: exec.themeColor }"
-                    >
-                      <img
-                        :src="resolveImage(exec.image)"
-                        class="w-full h-full object-cover"
-                      />
-
-                      <div
-                        class="absolute bottom-3 left-1/2 transform -translate-x-1/2 w-[85%] px-3 py-3 rounded-xl border bg-white shadow-xl text-center"
-                        :class="exec.borderColor"
-                      >
-                        <p class="text-xs font-medium">{{ exec.position }}</p>
-                        <p class="text-xs">{{ exec.organization }}</p>
-                      </div>
-                    </div>
-
-                    <h3
-                      class="mt-2 text-lg font-semibold text-center tracking-wide"
-                      :class="exec.textColor"
-                    >
-                      {{ exec.name }}
-                    </h3>
-                    <div v-if="exec.socials?.length" class="flex gap-3 mt-2">
-                      <a
-                        v-for="(social, idx) in exec.socials"
-                        :key="idx"
-                        :href="social.url"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="text-gray-500 hover:text-green-700 transition"
-                      >
-                        <i
-                          v-if="social.platform === 'linkedin'"
-                          class="fab fa-linkedin fa-lg"
-                        ></i>
-                        <i
-                          v-else-if="social.platform === 'twitter'"
-                          class="fab fa-twitter fa-lg"
-                        ></i>
-                        <i
-                          v-else-if="social.platform === 'instagram'"
-                          class="fab fa-instagram fa-lg"
-                        ></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="lg:col-span-8 text-gray-700">
-                  <h4 class="font-bold text-xl mb-4"></h4>
-                  <p class="mb-6 text-lg">{{ exec.bio }}</p>
-
-                  <h4 class="font-bold text-xl mb-2">Words on Marble…</h4>
-                  <p class="italic text-lg">"{{ exec.quote }}"</p>
-                </div>
-              </div>
+              <p class="font-bold text-gray-800 text-lg tracking-tight">
+                {{ goal }}
+              </p>
             </div>
           </div>
-        </section>
+        </div>
       </div>
     </section>
+
   </div>
 </template>
 
