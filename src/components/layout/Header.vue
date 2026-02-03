@@ -374,7 +374,7 @@ const toggleDropdown = (title) => {
       </div>
       
       <div class="flex flex-col p-4 space-y-2">
-        <div v-for="link in navLinks" :key="link.title">
+        <!-- <div v-for="link in navLinks" :key="link.title">
           <div
             v-if="!link.hasDropdown"
             class="flex items-center justify-between p-3 border-b border-gray-100 transition-colors cursor-pointer"
@@ -440,7 +440,60 @@ const toggleDropdown = (title) => {
               </RouterLink>
             </div>
           </div>
+        </div> -->
+        <div v-for="link in navLinks" :key="link.title">
+        
+        <div v-if="!link.hasDropdown"
+          class="flex items-center justify-between p-3 border-b border-gray-100 transition-colors cursor-pointer"
+          :class="[isLinkActive(link) ? 'bg-[#F2F9F3] text-[#004d33]' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50']">
+          <RouterLink :to="link.path" class="block w-full" @click="handleLinkClick(link.path)">{{ link.title }}</RouterLink>
         </div>
+
+        <div v-else class="border-b border-gray-100">
+          <div class="flex items-center justify-between transition-colors"
+            :class="[(isLinkActive(link) || openDropdown === link.title) ? 'bg-[#F2F9F3] text-[#004d33]' : 'text-gray-600']">
+            
+            <template v-if="link.path !== '#'">
+              <RouterLink 
+                :to="link.path" 
+                class="flex-grow p-3 font-semibold" 
+                @click="handleLinkClick(link.path)"
+              >
+                {{ link.title }}
+              </RouterLink>
+            </template>
+            <template v-else>
+              <button 
+                class="flex-grow text-left p-3 font-semibold" 
+                @click="toggleDropdown(link.title)"
+              >
+                {{ link.title }}
+              </button>
+            </template>
+
+            <button 
+              class="p-3 border-l border-gray-100/50" 
+              @click="toggleDropdown(link.title)"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" :class="['w-5 h-5 transition-transform duration-200', openDropdown === link.title ? 'rotate-180 text-[#004d33]' : 'text-gray-400']">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+          </div>
+
+          <div v-if="openDropdown === link.title" class="pl-6 pr-4 pb-2 bg-gray-50 space-y-2">
+            <RouterLink 
+              v-for="item in link.dropdownItems" 
+              :key="item.title" 
+              :to="item.path" 
+              class="block py-3 text-sm text-gray-700 border-b border-gray-100 last:border-0 hover:text-[#004d33]" 
+              @click="handleLinkClick(item.path)"
+            >
+              {{ item.title }}
+            </RouterLink>
+          </div>
+        </div>
+      </div>
 
         <div class="mt-4 pt-4 border-t border-gray-200 space-y-4">
           <div class="relative">
