@@ -478,7 +478,6 @@ import newsletter from "@/assets/newsletter.png";
   const getPdfPreview = (url) => {
   return url.replace(".pdf", ".jpg");
 };
-</script>
 
 const publications = [
   {
@@ -524,6 +523,9 @@ const newsletters = [
     pdfUrl: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-4_2024_rqpvhf.pdf"
   }
 ];
+  
+</script>
+
 
 <style scoped>
 </style>
