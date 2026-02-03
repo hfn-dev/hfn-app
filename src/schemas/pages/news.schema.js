@@ -77,6 +77,7 @@ export const newsPageSchema = {
             'HFN and the Federal Ministry of Health jointly announced a new partnership model to enhance emergency medical infrastructure across Nigeria’s six geopolitical zones.',
           image: 'hands.png',
           link: '#',
+          slug: 'strengthening-emergency-healthcare'
         },
         {
           id: 2,
@@ -85,6 +86,7 @@ export const newsPageSchema = {
             'HFN’s Policy and Advocacy team released a new white paper encouraging structured regulation and faster adoption of digital health tools in clinical settings.',
           image: 'hands.png',
           link: '#',
+          slug: 'policy-framework-for-health'
         },
         {
           id: 3,
@@ -93,6 +95,7 @@ export const newsPageSchema = {
             'Stakeholders met in Abuja to evaluate funding mechanisms and policy frameworks driving Nigeria’s progress toward universal access to affordable healthcare.',
           image: 'hands.png',
           link: '#',
+          slug: 'public-private-dialogue'
         },
       ],
       pagination: {
