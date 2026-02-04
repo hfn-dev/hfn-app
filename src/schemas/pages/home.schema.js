@@ -73,7 +73,7 @@ export const homePageSchema = {
             title: 'Driving the Digital Health Agenda Forward at #GDHF2025',
             slug: 'digital-health-agenda-gdhf-2025',
             image: health,
-            tag: 'Programs & Initiatives',
+            tag: 'Programs',
             date: 'December 15, 2025',
             comments: 0,
             description:
