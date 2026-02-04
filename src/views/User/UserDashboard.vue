@@ -214,20 +214,7 @@ const fetchUser = async () => {
   }
 };
 
-// const fetchNewsletters = async () => {
-//   try {
-//     const data = await newsApi.getFeaturedArticles();
-//     newsletters.value = data.map((item) => ({
-//       title: item.title,
-//       image: item.featured_image,
-//       description_short: item.excerpt,
-//       date: item.publish_date,
-//       slug: item.slug,
-//     }));
-//   } catch (error) {
-//     console.error("Failed to fetch newsletters:", error);
-//   }
-// };
+
 const fixImageUrl = (url) => {
   if (!url) return "";
   return url.replace("http://", "https://");
@@ -248,28 +235,6 @@ const fetchNewsletters = async () => {
   }
 };
 
-// const fetchEvents = async () => {
-//   try {
-//     const data = await eventsApi.listEvents({
-//       status: "upcoming",
-//       ordering: "start_datetime",
-//       limit: 6,
-//     });
-//     events.value = data.results.map((event) => ({
-//       slug: event.slug,
-//       title: event.title,
-//       image: event.banner_image,
-//       tag: event.event_type,
-//       description: event.description,
-//       date: new Date(event.start_datetime).toLocaleDateString(),
-//       time: new Date(event.start_datetime).toLocaleTimeString(),
-//       location: event.location,
-//       buttonText: event.is_free ? "Register Free" : "Buy Ticket",
-//     }));
-//   } catch (error) {
-//     console.error("Failed to fetch events:", error);
-//   }
-// };
 const fetchEvents = async () => {
   try {
     const data = await eventsApi.listEvents({
@@ -299,15 +264,34 @@ const fetchEvents = async () => {
   }
 };
 
+// const fetchTopics = async () => {
+//   try {
+//     const data = await newsApi.listArticles({ limit: 4 });
+//     topics.value = data;
+//   } catch (error) {
+//     console.error("Failed to fetch topics:", error);
+//   }
+// };
 const fetchTopics = async () => {
   try {
     const data = await newsApi.listArticles({ limit: 4 });
-    topics.value = data;
+    topics.value = data.map(item => ({
+      ...item,
+      visualImage: fixImageUrl(item.featured_image),
+      description: item.excerpt,
+      date: new Date(item.publish_date).toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      }),
+      tag: "Public Health Stories", 
+      tagColor: "#ff6600",
+      comments: "0 Comments"
+    }));
   } catch (error) {
     console.error("Failed to fetch topics:", error);
   }
 };
-
 const filteredResources = computed(() => {
   return resources.value.filter((item) => {
     const matchesSearch = item.title
@@ -684,7 +668,7 @@ onMounted(() => {
                 class="relative col-span-2 h-full min-h-[150px] flex flex-col justify-end p-4 bg-gray-50 rounded-l-2xl border-r-2 border-dashed border-gray-200"
               >
                 <img
-                  :src="topic.visualImage"
+                  :src="fixImageUrl(topic.featured_image)"
                   :alt="'Visual for ' + topic.tag"
                   class="absolute inset-0 w-full h-full object-cover"
                   aria-hidden="true"

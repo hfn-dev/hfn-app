@@ -1,10 +1,10 @@
 <script setup>
+import userRegister from "@/api/userRegister";
 import registerImage from '@/assets/register.jpg';
 import { useAuth } from '@/store/authStore';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
-import userRegister from "@/api/userRegister";
 
 const router = useRouter();
 const toast = useToast();
@@ -113,19 +113,14 @@ const handleVerification = async () => {
       const successMsg = response.messages?.[0] || "Email verified successfully!";
       toast.success(successMsg);
 
-      // Clear saved email and navigate to sign-in immediately
       localStorage.removeItem("pendingVerificationEmail");
       router.push('/signin');
       return;
     } else {
-      // Handle API errors (invalid/expired code)
       const errorMessage = response.messages?.[0] || "Verification failed.";
       toast.error(errorMessage);
 
-      // If resend is suggested, enable resend button
       if (response.actions_required?.includes("resend_email_verification")) {
-        // The user might need to resend, but we keep the timer running
-        // The resend button will be enabled when timer expires
       }
     }
     
@@ -322,7 +317,6 @@ const handleResend = async () => {
   height: 100%;
 }
 
-/* Auto-fill styling */
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus {

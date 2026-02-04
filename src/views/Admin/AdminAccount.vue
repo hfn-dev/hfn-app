@@ -4,8 +4,7 @@ import sign from "@/assets/sign.png";
 import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
 import { computed, reactive, ref, onMounted } from "vue";
 import { useToast } from "@/composables/useToast";
-import accessApi from "@/api/userRegister"
-
+import accessApi from "@/api/userRegister";
 
 const { showToast } = useToast();
 const currentView = ref("My Profile");
@@ -70,18 +69,17 @@ const sentInvitesCount = computed(
   () => invitations.filter((i) => i.sent).length
 );
 
-
 const fetchProfile = async () => {
   try {
-    const data = await accessApi.getUser(); 
+    const data = await accessApi.getUser();
     profile.firstName = data.first_name || "";
     profile.lastName = data.last_name || "";
     profile.email = data.email || "";
     profile.phone = data.phone_number || "";
-    profile.organizationName = data.organization_name || ""; 
+    profile.organizationName = data.organization_name || "";
     profileImageUrl.value = data.profile || null;
-    
-    isOrganization.value = data.role === 'organization'; 
+
+    isOrganization.value = data.role === "organization";
   } catch (err) {
     console.error("Failed to load profile:", err);
     showToast("Failed to load profile.", "error");
@@ -128,7 +126,10 @@ const handleFileUpload = (event) => {
     ].includes(file.type) &&
     file.type !== ""
   ) {
-    showToast("Invalid file type. Please upload a zip, rar, jpg, or png file.", "error");
+    showToast(
+      "Invalid file type. Please upload a zip, rar, jpg, or png file.",
+      "error"
+    );
     clearPreview();
     uploadStatus.value = "Invalid file type";
     return;
@@ -185,7 +186,6 @@ const removeInvitation = (id) => {
   }
 };
 
-
 const addSignature = () => {
   if (!previewImageUrl.value) {
     alert("Please upload a valid image file first to add a signature.");
@@ -228,7 +228,6 @@ const downloadSignature = (imageUrl, fileName) => {
   document.body.removeChild(link);
   console.log(`Signature "${fileName}" downloaded.`);
 };
-
 
 onMounted(() => {
   fetchProfile();
@@ -447,7 +446,8 @@ onMounted(() => {
                     >
                     <input
                       :type="detail.key === 'password' ? 'password' : 'text'"
-v-model="profile[detail.key]"                      :disabled="!isIndividualEditing"
+                      v-model="profile[detail.key]"
+                      :disabled="!isIndividualEditing"
                       :class="
                         isIndividualEditing
                           ? 'bg-white border border-gray-400 rounded-md p-1.5'

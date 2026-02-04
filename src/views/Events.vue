@@ -43,9 +43,7 @@
     <hr class="border-gray-200" />
 
     <section class="container mx-auto px-4 md:px-8 py-8">
-      <h3 class="text-2xl font-semibold text-gray-800 mb-6">
-        Find event
-      </h3>
+      <h3 class="text-2xl font-semibold text-gray-800 mb-6">Find event</h3>
 
       <div
         class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 items-stretch sm:items-center"
@@ -175,14 +173,11 @@
           class="border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition duration-300"
         >
           <div class="relative h-48">
-            
-
             <img
-  :src="event.image"
-  alt="Event image"
-  class="w-full h-full object-cover brightness-[0.7] transition duration-300"
-/>
-
+              :src="event.image"
+              alt="Event image"
+              class="w-full h-full object-cover brightness-[0.7] transition duration-300"
+            />
 
             <span
               class="absolute top-4 left-4 px-3 py-1 bg-white text-green-700 text-xs font-semibold rounded-full shadow-md"
@@ -294,43 +289,40 @@
       </div>
     </section>
     <section class="container mx-auto px-4 md:px-8 py-14">
-  <h3 class="text-2xl font-semibold text-gray-800 mb-8">
-    Past Events
-  </h3>
+      <h3 class="text-2xl font-semibold text-gray-800 mb-8">Past Events</h3>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    <div
-      v-for="(event, index) in pastEvents"
-      :key="index"
-      class="border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition"
-    >
-      <img
-        :src="event.image"
-        class="w-full h-48 object-cover"
-        alt="Past event"
-      />
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div
+          v-for="(event, index) in pastEvents"
+          :key="index"
+          class="border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition"
+        >
+          <img
+            :src="event.image"
+            class="w-full h-48 object-cover"
+            alt="Past event"
+          />
 
-      <div class="p-5">
-        <span class="text-xs font-semibold text-green-700 uppercase">
-          {{ event.category }}
-        </span>
+          <div class="p-5">
+            <span class="text-xs font-semibold text-green-700 uppercase">
+              {{ event.category }}
+            </span>
 
-        <h4 class="text-lg font-bold text-gray-900 mt-2">
-          {{ event.title }}
-        </h4>
+            <h4 class="text-lg font-bold text-gray-900 mt-2">
+              {{ event.title }}
+            </h4>
 
-        <p class="text-sm text-orange-600 mt-1">
-          {{ event.date }}
-        </p>
+            <p class="text-sm text-orange-600 mt-1">
+              {{ event.date }}
+            </p>
 
-        <p class="text-sm text-gray-600 mt-3">
-          <span class="font-semibold">Theme:</span> {{ event.theme }}
-        </p>
+            <p class="text-sm text-gray-600 mt-3">
+              <span class="font-semibold">Theme:</span> {{ event.theme }}
+            </p>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
-
+    </section>
   </div>
 </template>
 
@@ -339,11 +331,16 @@
 import awards from "@/assets/awards.png";
 import newEvent from "@/assets/events.png";
 // import latest from "@/assets/latest_news.png";
-  const event = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769883047/events-CNRYrGt8_trfhaz.png';
-  const breakfast2025 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769881263/1758712162657_yclv7p.jpg';
-  const roundtable2025 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769881265/1764355254559_g2wv3t.jpg';
-const hfn2025 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769881267/1746181486545_mtao0s.jpg';
-const latest = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770045591/243A7993_wxlzkg.jpg';
+const event =
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769883047/events-CNRYrGt8_trfhaz.png";
+const breakfast2025 =
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769881263/1758712162657_yclv7p.jpg";
+const roundtable2025 =
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769881265/1764355254559_g2wv3t.jpg";
+const hfn2025 =
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769881267/1746181486545_mtao0s.jpg";
+const latest =
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770045591/243A7993_wxlzkg.jpg";
 const events = [
   {
     title: "2026 HFN Annual Conference",
@@ -385,7 +382,7 @@ const events = [
   },
 ];
 
-  const pastEvents = [
+const pastEvents = [
   {
     title: "HFN Healthcare Leadership Conference 2025",
     category: "Conference",
@@ -412,6 +409,4 @@ const events = [
     image: breakfast2025,
   },
 ];
-
-
 </script>

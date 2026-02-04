@@ -3,8 +3,7 @@
 import { computed, ref } from "vue";
 import membership from "@/assets/membership.jpg";
 
-
-// const router = useRouter()  
+// const router = useRouter()
 const isSubmitting = ref(false);
 
 // const joinNow = async () => {
@@ -32,7 +31,7 @@ const isSubmitting = ref(false);
 
 const joinNow = () => {
   router.push("/register");
-};  
+};
 
 const tabs = [
   {
@@ -324,7 +323,7 @@ const categories = ref([
       },
     ],
   },
-  
+
   {
     name: "Diaspora",
     description:
@@ -353,125 +352,129 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
 </script>
 
 <template>
-  <section class="bg-[#F2F9F3] py-16 lg:py-24">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
-        <div class="mb-12 lg:mb-0">
-          <h2
-            class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4"
-          >
-            <span class="text-orange-500 block"
-              >Engagement Access Quality</span
+  <div>
+    <section class="bg-[#F2F9F3] py-16 lg:py-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
+          <div class="mb-12 lg:mb-0">
+            <h2
+              class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4"
             >
-            <span class="text-green-700 block mt-2"
-              >A coalition driving policy and innovation</span
-            >
-          </h2>
-          <p class="mt-6 text-lg text-gray-600 max-w-xl">
-            Membership of the Healthcare Federation of Nigeria (HFN) provides access to a trusted
-professional network that strengthens private sector participation in policy, investment, and
-health system reform.
-HFN members engage through structured advocacy platforms, strategic partnerships, and
-sector-wide collaborations that shape Nigeria’s healthcare landscape.
-          </p>
-        </div>
-
-        <div class="flex justify-center lg:justify-end">
-          <div
-            class="relative w-[320px] h-[240px] sm:w-[400px] sm:h-[300px] lg:w-[500px] lg:h-[375px] rounded-[30px] overflow-hidden shadow-2xl"
-          >
-            <img
-              :src="membership"
-              alt="Diverse hands joining in a heart shape, symbolizing unity and healthcare"
-              class="object-cover w-full h-full"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section class="py-10 sm:py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2
-        class="text-3xl px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md sm:text-4xl font-sans font-extrabold text-gray-900 text-center mb-12"
-      >
-        Membership Categories
-      </h2>
-
-      <div class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
-        <div class="flex flex-wrap justify-center space-x-2 sm:space-x-4 mb-8">
-          <button
-            v-for="category in categories"
-            :key="category.name"
-            @click="activeCategory = category"
-            :class="[
-              'px-5 py-2 rounded-lg font-medium transition duration-200 ease-in-out whitespace-nowrap',
-              activeCategory.name === category.name
-                ? 'bg-green-700 text-white shadow-md'
-                : 'bg-white text-gray-700 border border-gray-300 hover:border-green-700 hover:text-green-700',
-            ]"
-          >
-            {{ category.name }}
-          </button>
-        </div>
-
-        <div
-          class="p-6 sm:p-10 rounded-[30px] border-2 border-green-200 bg-white shadow-xl flex flex-col gap-6"
-        >
-          <div class="text-center mb-6">
-            <p class="text-3xl font-extrabold text-green-700">
-              {{ activePlan.price }}
+              <span class="text-orange-500 block"
+                >Engagement Access Quality</span
+              >
+              <span class="text-green-700 block mt-2"
+                >A coalition driving policy and innovation</span
+              >
+            </h2>
+            <p class="mt-6 text-lg text-gray-600 max-w-xl">
+              Membership of the Healthcare Federation of Nigeria (HFN) provides
+              access to a trusted professional network that strengthens private
+              sector participation in policy, investment, and health system
+              reform. HFN members engage through structured advocacy platforms,
+              strategic partnerships, and sector-wide collaborations that shape
+              Nigeria’s healthcare landscape.
             </p>
           </div>
 
-          <h3 class="text-2xl font-bold text-center text-gray-900 -mt-4">
-            {{ activeCategory.name }} Membership
-          </h3>
-
-          <div class="benefits-section p-6 rounded-xl">
-            <h5
-              class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2 border-gray-300"
+          <div class="flex justify-center lg:justify-end">
+            <div
+              class="relative w-[320px] h-[240px] sm:w-[400px] sm:h-[300px] lg:w-[500px] lg:h-[375px] rounded-[30px] overflow-hidden shadow-2xl"
             >
-              Benefits to Members
-            </h5>
-            <ul class="space-y-3 text-gray-700 text-base">
-              <li
-                v-for="(benefit, i) in activePlan.benefits"
-                :key="i"
-                class="flex items-start"
-              >
-                <svg
-                  class="w-5 h-5 mr-3 text-green-700 flex-shrink-0 mt-0.5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2.5"
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                <span class="text-gray-700">{{ benefit }}</span>
-              </li>
-            </ul>
-          </div>
-
-          <div class="text-center mt-4">
-            <button
-              @click="joinNow"
-              :disabled="isSubmitting"
-              class="inline-flex items-center justify-center px-10 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-green-800 hover:bg-green-900 transition transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              <span v-if="!isSubmitting">Join Now</span>
-              <span v-else>Processing...</span>
-            </button>
+              <img
+                :src="membership"
+                alt="Diverse hands joining in a heart shape, symbolizing unity and healthcare"
+                class="object-cover w-full h-full"
+              />
+            </div>
           </div>
         </div>
       </div>
-      <!-- <section class="bg-white">
+    </section>
+    <section class="py-10 sm:py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2
+          class="text-3xl px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md sm:text-4xl font-sans font-extrabold text-gray-900 text-center mb-12"
+        >
+          Membership Categories
+        </h2>
+
+        <div class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+          <div
+            class="flex flex-wrap justify-center space-x-2 sm:space-x-4 mb-8"
+          >
+            <button
+              v-for="category in categories"
+              :key="category.name"
+              @click="activeCategory = category"
+              :class="[
+                'px-5 py-2 rounded-lg font-medium transition duration-200 ease-in-out whitespace-nowrap',
+                activeCategory.name === category.name
+                  ? 'bg-green-700 text-white shadow-md'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:border-green-700 hover:text-green-700',
+              ]"
+            >
+              {{ category.name }}
+            </button>
+          </div>
+
+          <div
+            class="p-6 sm:p-10 rounded-[30px] border-2 border-green-200 bg-white shadow-xl flex flex-col gap-6"
+          >
+            <div class="text-center mb-6">
+              <p class="text-3xl font-extrabold text-green-700">
+                {{ activePlan.price }}
+              </p>
+            </div>
+
+            <h3 class="text-2xl font-bold text-center text-gray-900 -mt-4">
+              {{ activeCategory.name }} Membership
+            </h3>
+
+            <div class="benefits-section p-6 rounded-xl">
+              <h5
+                class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2 border-gray-300"
+              >
+                Benefits to Members
+              </h5>
+              <ul class="space-y-3 text-gray-700 text-base">
+                <li
+                  v-for="(benefit, i) in activePlan.benefits"
+                  :key="i"
+                  class="flex items-start"
+                >
+                  <svg
+                    class="w-5 h-5 mr-3 text-green-700 flex-shrink-0 mt-0.5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2.5"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  <span class="text-gray-700">{{ benefit }}</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="text-center mt-4">
+              <button
+                @click="joinNow"
+                :disabled="isSubmitting"
+                class="inline-flex items-center justify-center px-10 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-green-800 hover:bg-green-900 transition transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                <span v-if="!isSubmitting">Join Now</span>
+                <span v-else>Processing...</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- <section class="bg-white">
         <div class="max-w-6xl mx-auto px-6">
           <h2 class="text-2xl font-semibold text-gray-800 mb-10">
             HFN Members enjoy…
@@ -547,8 +550,9 @@ sector-wide collaborations that shape Nigeria’s healthcare landscape.
           </div>
         </div>
       </section> -->
-    </div>
-  </section>
+      </div>
+    </section>
+  </div>
 </template>
 
 <style scoped>

@@ -52,7 +52,7 @@ const navLinks = [
     icon: "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2",
   },
   {
-    title: "Events",
+    title: "Events & Newsletter",
     path: "/superadmin/events",
   icon: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8z",
   },

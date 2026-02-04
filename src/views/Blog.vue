@@ -5,919 +5,937 @@ import latest from "@/assets/latest_news.png";
 </script>
 
 <template>
-  <section style="background-color: #E87A1814">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-      <div class="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
-        <div class="lg:col-span-6 mb-10 lg:mb-0">
-          <h1 class="text-5xl font-extrabold leading-tight">
-            <span class="text-orange-600">Stay up-to-date</span>
-            <span class="text-green-800 block mt-2"
-              >with the latest health updates</span
+  <div>
+    <section style="background-color: #e87a1814">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div class="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
+          <div class="lg:col-span-6 mb-10 lg:mb-0">
+            <h1 class="text-5xl font-extrabold leading-tight">
+              <span class="text-orange-600">Stay up-to-date</span>
+              <span class="text-green-800 block mt-2"
+                >with the latest health updates</span
+              >
+            </h1>
+
+            <p class="mt-6 max-w-lg text-lg text-gray-700">
+              We strive to enhance healthcare metrics and foster an environment
+              for affordable, high-quality healthcare access for all Nigerians.
+            </p>
+          </div>
+
+          <div class="lg:col-span-6 flex justify-center lg:justify-end">
+            <div
+              class="relative w-full max-w-5xl overflow-hidden rounded-3xl p-3"
             >
-          </h1>
-
-          <p class="mt-6 max-w-lg text-lg text-gray-700">
-            We strive to enhance healthcare metrics and foster an environment
-            for affordable, high-quality healthcare access for all Nigerians.
-          </p>
-        </div>
-
-        <div class="lg:col-span-6 flex justify-center lg:justify-end">
-          <div
-            class="relative w-full max-w-5xl overflow-hidden rounded-3xl p-3"
-          >
-            <img
-              :src="latest"
-              alt="HFN conference and networking"
-              class="w-full h-full object-cover rounded-2xl"
-            />
+              <img
+                :src="latest"
+                alt="HFN conference and networking"
+                class="w-full h-full object-cover rounded-2xl"
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="bg-white py-16 sm:py-24">
-    <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="lg:grid lg:grid-cols-12 lg:gap-6">
-        <div class="lg:col-span-8">
-          <div class="mb-10">
-            <h2
-              class="text-3xl text-center sm:text-4xl px-4 py-4 font-extrabold text-gray-900 mb-6 rounded-2xl border-2 border-green-50 bg-white shadow-md"
-            >
-              Upcoming Events
-            </h2>
+    <section class="bg-white py-16 sm:py-24">
+      <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="lg:grid lg:grid-cols-12 lg:gap-6">
+          <div class="lg:col-span-8">
+            <div class="mb-10">
+              <h2
+                class="text-3xl text-center sm:text-4xl px-4 py-4 font-extrabold text-gray-900 mb-6 rounded-2xl border-2 border-green-50 bg-white shadow-md"
+              >
+                Upcoming Events
+              </h2>
 
-            <select
-              class="p-3 border rounded-xl border-gray-300 text-sm text-gray-700 focus:ring-green-500 focus:border-green-500"
-            >
-              <option>October 2025</option>
-              <option>November 2025</option>
-              <option>December 2025</option>
-            </select>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div
-              class="relative overflow-hidden shadow-lg pb-4"
-              style="
-                border-radius: 2rem;
-                border: 1px solid #e0f2e0;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-              "
-            >
-              <div class="relative aspect-[3/2] bg-gray-50 mb-3">
-                <img
-                  :src="hands"
-                  alt="Event graphic"
-                  class="w-full h-full object-cover"
-                />
-
-                <span
-                  class="absolute bottom-[-5px] left-0 bg-green-700 text-white text-xs px-3 py-1 rounded-full"
-                >
-                  Programs & Initiatives
-                </span>
-              </div>
-
-              <div class="p-5 pt-0">
-                <p class="text-sm text-gray-700 mb-4 leading-relaxed">
-                  Join our “Community Health Awareness Week,” where medical
-                  professionals and volunteers offer free health screenings,
-                  wellness talks, and preventive care education. This program
-                  aims to improve early detection of lifestyle diseases such as
-                  hypertension and diabetes across local communities.
-                </p>
-
-                <div class="space-y-2 mb-6">
-                  <p class="text-sm text-gray-700 flex items-center space-x-2">
-                    <svg
-                      class="w-4 h-4 text-orange-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span class="font-semibold text-orange-400"
-                      >October 10, 2025</span
-                    >
-                  </p>
-
-                  <p class="text-sm text-gray-700 flex items-center space-x-2">
-                    <svg
-                      class="w-4 h-4 text-orange-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span class="font-semibold text-orange-400">10am</span>
-                  </p>
-
-                  <p class="text-sm text-gray-700 flex items-center space-x-2">
-                    <svg
-                      class="w-4 h-4 text-orange-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span class="text-orange-400"
-                      >No 12 Ifeanyi str, Ikeja Lagos</span
-                    >
-                  </p>
-                </div>
-
-                <a
-                  href="#"
-                  class="inline-flex items-center justify-center w-full px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition"
-                >
-                  Register Now
-                  <svg
-                    class="w-5 h-5 ml-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    ></path>
-                  </svg>
-                </a>
-              </div>
+              <select
+                class="p-3 border rounded-xl border-gray-300 text-sm text-gray-700 focus:ring-green-500 focus:border-green-500"
+              >
+                <option>October 2025</option>
+                <option>November 2025</option>
+                <option>December 2025</option>
+              </select>
             </div>
 
-            <div
-              class="relative overflow-hidden shadow-lg pb-4"
-              style="
-                border-radius: 2rem;
-                border: 1px solid #e0f2e0;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-              "
-            >
-              <div class="relative aspect-[3/2] bg-gray-50 mb-3">
-                <img
-                  :src="hands"
-                  alt="Event graphic"
-                  class="w-full h-full object-cover"
-                />
-
-                <span
-                  class="absolute bottom-[-5px] left-0 bg-green-700 text-white text-xs px-3 py-1 rounded-full"
-                >
-                  Programs & Initiatives
-                </span>
-              </div>
-
-              <div class="p-5 pt-0">
-                <p class="text-sm text-gray-700 mb-4 leading-relaxed">
-                  Our “Healthy Mothers, Healthy Nation” initiative focuses on
-                  maternal and child healthcare through accessible antenatal
-                  services, nutrition education, and support for safe deliveries
-                  in underserved areas. Be part of the movement to reduce
-                  maternal mortality in Nigeria.
-                </p>
-
-                <div class="space-y-2 mb-6">
-                  <p class="text-sm text-gray-700 flex items-center space-x-2">
-                    <svg
-                      class="w-4 h-4 text-orange-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span class="font-semibold text-orange-400"
-                      >October 10, 2025</span
-                    >
-                  </p>
-
-                  <p class="text-sm text-gray-700 flex items-center space-x-2">
-                    <svg
-                      class="w-4 h-4 text-orange-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span class="font-semibold text-orange-400">10am</span>
-                  </p>
-
-                  <p class="text-sm text-gray-700 flex items-center space-x-2">
-                    <svg
-                      class="w-4 h-4 text-orange-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span class="text-orange-400"
-                      >No 12 Ifeanyi str, Ikeja Lagos</span
-                    >
-                  </p>
-                </div>
-
-                <a
-                  href="#"
-                  class="inline-flex items-center justify-center w-full px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition"
-                >
-                  Register Now
-                  <svg
-                    class="w-5 h-5 ml-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    ></path>
-                  </svg>
-                </a>
-              </div>
-            </div>
-            <div
-              class="relative overflow-hidden shadow-lg pb-4"
-              style="
-                border-radius: 2rem;
-                border: 1px solid #e0f2e0;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-              "
-            >
-              <div class="relative aspect-[3/2] bg-gray-50 mb-3">
-                <img
-                  :src="hands"
-                  alt="Event graphic"
-                  class="w-full h-full object-cover"
-                />
-                <span
-                  class="absolute bottom-[-5px] left-0 bg-red-900 text-white text-xs px-3 py-1 rounded-full"
-                >
-                  Health Alert
-                </span>
-              </div>
-
-              <div class="p-3">
-                <p
-                  class="text-sm text-gray-500 mb-1 flex items-center justify-between"
-                >
-                  <span class="font-semibold text-orange-400"
-                    >October 10, 2025</span
-                  >
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div
+                class="relative overflow-hidden shadow-lg pb-4"
+                style="
+                  border-radius: 2rem;
+                  border: 1px solid #e0f2e0;
+                  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                "
+              >
+                <div class="relative aspect-[3/2] bg-gray-50 mb-3">
+                  <img
+                    :src="hands"
+                    alt="Event graphic"
+                    class="w-full h-full object-cover"
+                  />
 
                   <span
-                    class="flex items-center gap-1 text-orange-400 font-semibold"
+                    class="absolute bottom-[-5px] left-0 bg-green-700 text-white text-xs px-3 py-1 rounded-full"
                   >
+                    Programs & Initiatives
+                  </span>
+                </div>
+
+                <div class="p-5 pt-0">
+                  <p class="text-sm text-gray-700 mb-4 leading-relaxed">
+                    Join our “Community Health Awareness Week,” where medical
+                    professionals and volunteers offer free health screenings,
+                    wellness talks, and preventive care education. This program
+                    aims to improve early detection of lifestyle diseases such
+                    as hypertension and diabetes across local communities.
+                  </p>
+
+                  <div class="space-y-2 mb-6">
+                    <p
+                      class="text-sm text-gray-700 flex items-center space-x-2"
+                    >
+                      <svg
+                        class="w-4 h-4 text-orange-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
+                      <span class="font-semibold text-orange-400"
+                        >October 10, 2025</span
+                      >
+                    </p>
+
+                    <p
+                      class="text-sm text-gray-700 flex items-center space-x-2"
+                    >
+                      <svg
+                        class="w-4 h-4 text-orange-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
+                      <span class="font-semibold text-orange-400">10am</span>
+                    </p>
+
+                    <p
+                      class="text-sm text-gray-700 flex items-center space-x-2"
+                    >
+                      <svg
+                        class="w-4 h-4 text-orange-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
+                      <span class="text-orange-400"
+                        >No 12 Ifeanyi str, Ikeja Lagos</span
+                      >
+                    </p>
+                  </div>
+
+                  <a
+                    href="#"
+                    class="inline-flex items-center justify-center w-full px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition"
+                  >
+                    Register Now
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="w-4 h-4 text-orange-400"
+                      class="w-5 h-5 ml-2"
                       fill="none"
-                      viewBox="0 0 24 24"
                       stroke="currentColor"
-                      stroke-width="2"
+                      viewBox="0 0 24 24"
                     >
                       <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        d="M7 8h10M7 12h5m-5 4h8m4 0V8a2 2 0 00-2-2H7l-4 4v8a2 2 0 002 2h12z"
-                      />
+                        stroke-width="2"
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      ></path>
                     </svg>
-                    20 Views
-                  </span>
-                </p>
-
-                <p class="text-sm text-gray-700 mb-16 leading-relaxed">
-                  Public health experts have reported a rise in seasonal flu
-                  cases. We advise all residents to get vaccinated, maintain
-                  proper hygiene, and avoid self-medication. Stay informed and
-                  contact your healthcare provider for any flu-like symptoms.
-                  HFN extends heartfelt appreciation to its Health Guardians, partners, and sponsors whose unwavering support made this dialogue a success.
-
-
-                </p>
-                <RouterLink
-                  :to="{ name: 'BlogDetails', params: { id: 1 } }"
-                  class="inline-flex items-center justify-center px-9 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition"
-                >
-                  Read More ->
-                </RouterLink>
+                  </a>
+                </div>
               </div>
+
+              <div
+                class="relative overflow-hidden shadow-lg pb-4"
+                style="
+                  border-radius: 2rem;
+                  border: 1px solid #e0f2e0;
+                  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                "
+              >
+                <div class="relative aspect-[3/2] bg-gray-50 mb-3">
+                  <img
+                    :src="hands"
+                    alt="Event graphic"
+                    class="w-full h-full object-cover"
+                  />
+
+                  <span
+                    class="absolute bottom-[-5px] left-0 bg-green-700 text-white text-xs px-3 py-1 rounded-full"
+                  >
+                    Programs & Initiatives
+                  </span>
+                </div>
+
+                <div class="p-5 pt-0">
+                  <p class="text-sm text-gray-700 mb-4 leading-relaxed">
+                    Our “Healthy Mothers, Healthy Nation” initiative focuses on
+                    maternal and child healthcare through accessible antenatal
+                    services, nutrition education, and support for safe
+                    deliveries in underserved areas. Be part of the movement to
+                    reduce maternal mortality in Nigeria.
+                  </p>
+
+                  <div class="space-y-2 mb-6">
+                    <p
+                      class="text-sm text-gray-700 flex items-center space-x-2"
+                    >
+                      <svg
+                        class="w-4 h-4 text-orange-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
+                      <span class="font-semibold text-orange-400"
+                        >October 10, 2025</span
+                      >
+                    </p>
+
+                    <p
+                      class="text-sm text-gray-700 flex items-center space-x-2"
+                    >
+                      <svg
+                        class="w-4 h-4 text-orange-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
+                      <span class="font-semibold text-orange-400">10am</span>
+                    </p>
+
+                    <p
+                      class="text-sm text-gray-700 flex items-center space-x-2"
+                    >
+                      <svg
+                        class="w-4 h-4 text-orange-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
+                      <span class="text-orange-400"
+                        >No 12 Ifeanyi str, Ikeja Lagos</span
+                      >
+                    </p>
+                  </div>
+
+                  <a
+                    href="#"
+                    class="inline-flex items-center justify-center w-full px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition"
+                  >
+                    Register Now
+                    <svg
+                      class="w-5 h-5 ml-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      ></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+              <div
+                class="relative overflow-hidden shadow-lg pb-4"
+                style="
+                  border-radius: 2rem;
+                  border: 1px solid #e0f2e0;
+                  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                "
+              >
+                <div class="relative aspect-[3/2] bg-gray-50 mb-3">
+                  <img
+                    :src="hands"
+                    alt="Event graphic"
+                    class="w-full h-full object-cover"
+                  />
+                  <span
+                    class="absolute bottom-[-5px] left-0 bg-red-900 text-white text-xs px-3 py-1 rounded-full"
+                  >
+                    Health Alert
+                  </span>
+                </div>
+
+                <div class="p-3">
+                  <p
+                    class="text-sm text-gray-500 mb-1 flex items-center justify-between"
+                  >
+                    <span class="font-semibold text-orange-400"
+                      >October 10, 2025</span
+                    >
+
+                    <span
+                      class="flex items-center gap-1 text-orange-400 font-semibold"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4 text-orange-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M7 8h10M7 12h5m-5 4h8m4 0V8a2 2 0 00-2-2H7l-4 4v8a2 2 0 002 2h12z"
+                        />
+                      </svg>
+                      20 Views
+                    </span>
+                  </p>
+
+                  <p class="text-sm text-gray-700 mb-16 leading-relaxed">
+                    Public health experts have reported a rise in seasonal flu
+                    cases. We advise all residents to get vaccinated, maintain
+                    proper hygiene, and avoid self-medication. Stay informed and
+                    contact your healthcare provider for any flu-like symptoms.
+                    HFN extends heartfelt appreciation to its Health Guardians,
+                    partners, and sponsors whose unwavering support made this
+                    dialogue a success.
+                  </p>
+                  <RouterLink
+                    :to="{ name: 'BlogDetails', params: { id: 1 } }"
+                    class="inline-flex items-center justify-center px-9 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition"
+                  >
+                    Read More ->
+                  </RouterLink>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="flex items-center justify-center mt-12 text-gray-600 text-sm"
+            >
+              <span class="mr-3">Page 1 of 2</span>
+              <a
+                href="#"
+                class="flex items-center space-x-1 hover:text-green-700 transition"
+              >
+                <span>Next</span>
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  ></path>
+                </svg>
+              </a>
             </div>
           </div>
 
           <div
-            class="flex items-center justify-center mt-12 text-gray-600 text-sm"
+            class="lg:col-span-4 mt-12 lg:mt-0 bg-[#f0fdf499] border-white rounded-2xl p-3"
           >
-            <span class="mr-3">Page 1 of 2</span>
-            <a
-              href="#"
-              class="flex items-center space-x-1 hover:text-green-700 transition"
+            <h2
+              class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-8 pt-5"
             >
-              <span>Next</span>
-              <svg
-                class="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 5l7 7-7 7"
-                ></path>
-              </svg>
-            </a>
-          </div>
-        </div>
+              Latest Updates
+            </h2>
 
-        <div
-          class="lg:col-span-4 mt-12 lg:mt-0 bg-[#f0fdf499] border-white rounded-2xl p-3"
-        >
-          <h2
-            class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-8 pt-5"
-          >
-            Latest Updates
-          </h2>
-
-          <div class="space-y-8">
-            <div class="flex space-x-4 bg-white p-2 border-white rounded-xl">
-              <div
-                class="w-20 h-20 flex-shrink-0 relative overflow-hidden rounded-xl border border-gray-200"
-                style="background-color: #f0f7f5"
-              >
-                <img
-                  :src="awards"
-                  alt="Update thumbnail"
-                  class="w-full h-full object-cover"
-                />
-
-                <span
-                  class="absolute bottom-[-1px] left-1/2 transform -translate-x-1/2 bg-green-700 text-white text-[0.6rem] px-3 py-1 rounded-full whitespace-nowrap font-medium"
-                  style="box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)"
-                >
-                  Programs & Initiatives
-                </span>
-
-                <span
-                  class="absolute top-0 right-0 bg-red-600 text-white text-xs px-1 py-0.5 rounded-bl-md"
-                >
-                  SAVE
-                </span>
-              </div>
-              <div>
-                <p
-                  class="text-xs text-gray-500 mb-1 flex items-center space-x-3"
-                >
-                  <span
-                    class="flex items-center space-x-1 text-orange-600 font-semibold"
-                  >
-                    <svg
-                      class="w-3 h-3"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span>October 10, 2025</span>
-                  </span>
-                  <span class="flex items-center space-x-1 text-orange-600">
-                    <svg
-                      class="w-3 h-3"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.722-1.353l-2.035.795a1 1 0 01-1.222-1.222l.795-2.035A8.841 8.841 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM10 5a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 100-2h-3.586l.293-.293a1 1 0 00-1.414-1.414L9 7.586V6a1 1 0 00-1-1z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span>0 Comments</span>
-                  </span>
-                </p>
-                <p class="text-sm text-gray-700 mb-1 leading-tight">
-                  Our telemedicine platform now connects patients with certified
-                  doctors 24/7. Consultations can be booked online, and
-                  prescriptions are delivered directly to your preferred
-                  pharmacy for convenience and safety.
-                </p>
-                <a
-                  href="#"
-                  class="text-xs text-green-700 font-semibold hover:text-green-600 transition"
-                  >Read more...</a
-                >
-              </div>
-            </div>
-
-            <div class="flex space-x-4 bg-white p-2 border-white rounded-xl">
-              <div
-                class="w-20 h-20 flex-shrink-0 relative overflow-hidden rounded-xl border border-gray-200"
-                style="background-color: #f0f7f5"
-              >
-                <img
-                  :src="awards"
-                  alt="Update thumbnail"
-                  class="w-full h-full object-cover"
-                />
-                <span
-                  class="absolute bottom-[-1px] left-1/2 transform -translate-x-1/2 bg-custom-maroon text-white text-[0.6rem] px-3 py-1 rounded-full whitespace-nowrap font-medium"
-                  style="
-                    background-color: #9d1c44;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-                  "
-                >
-                  Health Alert
-                </span>
-              </div>
-
-              <div>
-                <p
-                  class="text-xs text-gray-500 mb-1 flex items-center space-x-3"
-                >
-                  <span
-                    class="flex items-center space-x-1 text-orange-600 font-semibold"
-                  >
-                    <svg
-                      class="w-3 h-3"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span>October 10, 2025</span>
-                  </span>
-                  <span class="flex items-center space-x-1 text-orange-600">
-                    <svg
-                      class="w-3 h-3"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.722-1.353l-2.035.795a1 1 0 01-1.222-1.222l.795-2.035A8.841 8.841 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM10 5a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 100-2h-3.586l.293-.293a1 1 0 00-1.414-1.414L9 7.586V6a1 1 0 00-1-1z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span>0 Comments</span>
-                  </span>
-                </p>
-                <p class="text-sm text-gray-700 mb-1 leading-tight">
-                  In collaboration with local NGOs, we’ve launched a vaccination
-                  outreach program to ensure every child has access to essential
-                  immunizations. Let’s work together to protect our future
-                  generations.
-                </p>
-                <a
-                  href="#"
-                  class="text-xs text-green-700 font-semibold hover:text-green-600 transition"
-                  >Read more...</a
-                >
-              </div>
-            </div>
-            <div class="flex space-x-4 bg-white p-2 border-white rounded-xl">
-              <div
-                class="w-20 h-20 flex-shrink-0 relative overflow-hidden rounded-xl border border-gray-200"
-                style="background-color: #f0f7f5"
-              >
-                <img
-                  :src="awards"
-                  alt="Update thumbnail"
-                  class="w-full h-full object-cover"
-                />
-                <span
-                  class="absolute bottom-[-1px] left-1/2 transform -translate-x-1/2 bg-custom-maroon text-white text-[0.6rem] px-3 py-1 rounded-full whitespace-nowrap font-medium"
-                  style="
-                    background-color: #9d1c44;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-                  "
-                >
-                  Health Alert
-                </span>
-              </div>
-
-              <div>
-                <p
-                  class="text-xs text-gray-500 mb-1 flex items-center space-x-3"
-                >
-                  <span
-                    class="flex items-center space-x-1 text-orange-600 font-semibold"
-                  >
-                    <svg
-                      class="w-3 h-3"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span>October 10, 2025</span>
-                  </span>
-                  <span class="flex items-center space-x-1 text-orange-600">
-                    <svg
-                      class="w-3 h-3"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.722-1.353l-2.035.795a1 1 0 01-1.222-1.222l.795-2.035A8.841 8.841 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM10 5a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 100-2h-3.586l.293-.293a1 1 0 00-1.414-1.414L9 7.586V6a1 1 0 00-1-1z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span>0 Comments</span>
-                  </span>
-                </p>
-                <p class="text-sm text-gray-700 mb-1 leading-tight">
-                  We’re expanding our digital health training program to equip
-                  community health workers with tools for real-time patient data
-                  tracking and remote diagnostics. Applications for the 2025
-                  cohort are now open.
-                </p>
-                <a
-                  href="#"
-                  class="text-xs text-green-700 font-semibold hover:text-green-600 transition"
-                  >Read more...</a
-                >
-              </div>
-            </div>
-            <div class="flex space-x-4 bg-white p-2 border-white rounded-xl">
-              <div
-                class="w-20 h-20 flex-shrink-0 relative overflow-hidden rounded-xl border border-gray-200"
-                style="background-color: #f0f7f5"
-              >
-                <img
-                  :src="awards"
-                  alt="Update thumbnail"
-                  class="w-full h-full object-cover"
-                />
-                <span
-                  class="absolute bottom-[-1px] left-1/2 transform -translate-x-1/2 bg-custom-maroon text-white text-[0.6rem] px-3 py-1 rounded-full whitespace-nowrap font-medium"
-                  style="
-                    background-color: #f54a00;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-                  "
-                >
-                  Health Alert
-                </span>
-              </div>
-
-              <div>
-                <p
-                  class="text-xs text-gray-500 mb-1 flex items-center space-x-3"
-                >
-                  <span
-                    class="flex items-center space-x-1 text-orange-600 font-semibold"
-                  >
-                    <svg
-                      class="w-3 h-3"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span>October 10, 2025</span>
-                  </span>
-                  <span class="flex items-center space-x-1 text-orange-600">
-                    <svg
-                      class="w-3 h-3"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.722-1.353l-2.035.795a1 1 0 01-1.222-1.222l.795-2.035A8.841 8.841 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM10 5a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 100-2h-3.586l.293-.293a1 1 0 00-1.414-1.414L9 7.586V6a1 1 0 00-1-1z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span>0 Comments</span>
-                  </span>
-                </p>
-                <p class="text-sm text-gray-700 mb-1 leading-tight">
-                  A new study on non-communicable diseases shows that physical
-                  activity and proper diet reduce the risk of heart disease by
-                  45%. Explore our upcoming fitness and nutrition workshops to
-                  learn more.
-                </p>
-                <a
-                  href="#"
-                  class="text-xs text-green-700 font-semibold hover:text-green-600 transition"
-                  >Read more...</a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="lg:grid lg:grid-cols-12 lg:gap-6">
-          <div class="lg:col-span-8">
-            <div
-              class="flex items-center justify-center mt-12 text-gray-600 text-sm"
-            ></div>
-
-            <div class="mt-16 sm:mt-24 w-full">
-              <div class="text-center mb-10">
-                <h2
-                  class="text-3xl sm:text-4xl px-4 py-4 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md"
-                >
-                  Programs and Initiatives
-                </h2>
-              </div>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-8">
+              <div class="flex space-x-4 bg-white p-2 border-white rounded-xl">
                 <div
-                  class="relative overflow-hidden shadow-lg pb-4"
-                  style="
-                    border-radius: 2rem;
-                    border: 1px solid #e0f2e0;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-                  "
+                  class="w-20 h-20 flex-shrink-0 relative overflow-hidden rounded-xl border border-gray-200"
+                  style="background-color: #f0f7f5"
                 >
-                  <div
-                    class="relative aspect-[16/9] bg-gray-50 mb-3 overflow-hidden"
-                    style="
-                      border-top-left-radius: 2rem;
-                      border-top-right-radius: 2rem;
-                    "
+                  <img
+                    :src="awards"
+                    alt="Update thumbnail"
+                    class="w-full h-full object-cover"
+                  />
+
+                  <span
+                    class="absolute bottom-[-1px] left-1/2 transform -translate-x-1/2 bg-green-700 text-white text-[0.6rem] px-3 py-1 rounded-full whitespace-nowrap font-medium"
+                    style="box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)"
                   >
-                    <img
-                      :src="awards"
-                      alt="HFN Walk for Life Event"
-                      class="w-full h-full object-cover"
-                    />
-                  </div>
+                    Programs & Initiatives
+                  </span>
 
-                  <div class="p-5 pt-0">
-                    <div class="flex justify-between items-center mb-2">
-                      <h3 class="text-xl font-bold text-gray-900">
-                        Tackling Hypertension: The Silent Killer Among Young
-                        Adults
-                      </h3>
-                      <span
-                        class="text-sm text-orange-500 bg-orange-100 px-3 py-1 rounded-full"
-                        >Annually</span
-                      >
-                    </div>
-
-                    <p class="text-sm text-gray-700 mb-4 leading-relaxed">
-                      Recent studies show a worrying rise in hypertension cases
-                      among people aged 25–40, driven by stress, poor diet, and
-                      sedentary lifestyles. The Healthcare Federation of Nigeria
-                      is partnering with local health centers to promote regular
-                      blood pressure checks and educate the public on preventive
-                      measures.
-                    </p>
-
-                    <div class="space-y-2 mb-6">
-                      <p
-                        class="text-sm text-gray-700 flex items-center space-x-2"
-                      >
-                        <svg
-                          class="w-4 h-4 text-orange-600"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                            clip-rule="evenodd"
-                          ></path>
-                        </svg>
-                        <span class="font-semibold text-orange-600"
-                          >October 10, 2025</span
-                        >
-                      </p>
-                      <p
-                        class="text-sm text-gray-700 flex items-center space-x-2"
-                      >
-                        <svg
-                          class="w-4 h-4 text-orange-600"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z"
-                            clip-rule="evenodd"
-                          ></path>
-                        </svg>
-                        <span class="font-semibold text-orange-600">10am</span>
-                      </p>
-                      <p
-                        class="text-sm text-gray-700 flex items-center space-x-2"
-                      >
-                        <svg
-                          class="w-4 h-4 text-orange-600"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                            clip-rule="evenodd"
-                          ></path>
-                        </svg>
-                        <span class="text-orange-600"
-                          >No 12 Ifeanyi str, Ikeja Lagos</span
-                        >
-                      </p>
-                    </div>
-
-                    <a
-                      href="#"
-                      class="inline-flex items-center justify-center w-full px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition"
+                  <span
+                    class="absolute top-0 right-0 bg-red-600 text-white text-xs px-1 py-0.5 rounded-bl-md"
+                  >
+                    SAVE
+                  </span>
+                </div>
+                <div>
+                  <p
+                    class="text-xs text-gray-500 mb-1 flex items-center space-x-3"
+                  >
+                    <span
+                      class="flex items-center space-x-1 text-orange-600 font-semibold"
                     >
-                      Join Now
                       <svg
-                        class="w-5 h-5 ml-2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                        class="w-3 h-3"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M17 8l4 4m0 0l-4 4m4-4H3"
+                          fill-rule="evenodd"
+                          d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                          clip-rule="evenodd"
                         ></path>
                       </svg>
-                    </a>
-                  </div>
+                      <span>October 10, 2025</span>
+                    </span>
+                    <span class="flex items-center space-x-1 text-orange-600">
+                      <svg
+                        class="w-3 h-3"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.722-1.353l-2.035.795a1 1 0 01-1.222-1.222l.795-2.035A8.841 8.841 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM10 5a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 100-2h-3.586l.293-.293a1 1 0 00-1.414-1.414L9 7.586V6a1 1 0 00-1-1z"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
+                      <span>0 Comments</span>
+                    </span>
+                  </p>
+                  <p class="text-sm text-gray-700 mb-1 leading-tight">
+                    Our telemedicine platform now connects patients with
+                    certified doctors 24/7. Consultations can be booked online,
+                    and prescriptions are delivered directly to your preferred
+                    pharmacy for convenience and safety.
+                  </p>
+                  <a
+                    href="#"
+                    class="text-xs text-green-700 font-semibold hover:text-green-600 transition"
+                    >Read more...</a
+                  >
+                </div>
+              </div>
+
+              <div class="flex space-x-4 bg-white p-2 border-white rounded-xl">
+                <div
+                  class="w-20 h-20 flex-shrink-0 relative overflow-hidden rounded-xl border border-gray-200"
+                  style="background-color: #f0f7f5"
+                >
+                  <img
+                    :src="awards"
+                    alt="Update thumbnail"
+                    class="w-full h-full object-cover"
+                  />
+                  <span
+                    class="absolute bottom-[-1px] left-1/2 transform -translate-x-1/2 bg-custom-maroon text-white text-[0.6rem] px-3 py-1 rounded-full whitespace-nowrap font-medium"
+                    style="
+                      background-color: #9d1c44;
+                      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                    "
+                  >
+                    Health Alert
+                  </span>
                 </div>
 
-                <div
-                  class="relative overflow-hidden shadow-lg pb-4"
-                  style="
-                    border-radius: 2rem;
-                    border: 1px solid #e0f2e0;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-                  "
-                >
-                  <div
-                    class="relative aspect-[16/9] bg-gray-50 mb-3 overflow-hidden"
-                    style="
-                      border-top-left-radius: 2rem;
-                      border-top-right-radius: 2rem;
-                    "
+                <div>
+                  <p
+                    class="text-xs text-gray-500 mb-1 flex items-center space-x-3"
                   >
-                    <img
-                      :src="awards"
-                      alt="HFN Walk for Life Event"
-                      class="w-full h-full object-cover"
-                    />
-                  </div>
-
-                  <div class="p-5 pt-0">
-                    <div class="flex justify-between items-center mb-2">
-                      <h3 class="text-xl font-bold text-gray-900">
-                        Digital Health Innovations Transforming Patient Care in
-                        Nigeria
-                      </h3>
-                      <span
-                        class="text-sm text-orange-500 bg-orange-100 px-3 py-1 rounded-full"
-                        >Annually</span
-                      >
-                    </div>
-
-                    <p class="text-sm text-gray-700 mb-4 leading-relaxed">
-                      As technology advances, healthcare delivery in Nigeria is
-                      experiencing a major shift. From telemedicine and
-                      AI-assisted diagnostics to electronic health records,
-                      digital innovation is improving access and efficiency
-                      across hospitals and clinics.
-                    </p>
-
-                    <div class="space-y-2 mb-6">
-                      <p
-                        class="text-sm text-gray-700 flex items-center space-x-2"
-                      >
-                        <svg
-                          class="w-4 h-4 text-orange-600"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                            clip-rule="evenodd"
-                          ></path>
-                        </svg>
-                        <span class="font-semibold text-orange-600"
-                          >October 10, 2025</span
-                        >
-                      </p>
-                      <p
-                        class="text-sm text-gray-700 flex items-center space-x-2"
-                      >
-                        <svg
-                          class="w-4 h-4 text-orange-600"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z"
-                            clip-rule="evenodd"
-                          ></path>
-                        </svg>
-                        <span class="font-semibold text-orange-600">10am</span>
-                      </p>
-                      <p
-                        class="text-sm text-gray-700 flex items-center space-x-2"
-                      >
-                        <svg
-                          class="w-4 h-4 text-orange-600"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                            clip-rule="evenodd"
-                          ></path>
-                        </svg>
-                        <span class="text-orange-600"
-                          >No 12 Ifeanyi str, Ikeja Lagos</span
-                        >
-                      </p>
-                    </div>
-
-                    <a
-                      href="#"
-                      class="inline-flex items-center justify-center w-full px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition"
+                    <span
+                      class="flex items-center space-x-1 text-orange-600 font-semibold"
                     >
-                      Join Now
                       <svg
-                        class="w-5 h-5 ml-2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                        class="w-3 h-3"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M17 8l4 4m0 0l-4 4m4-4H3"
+                          fill-rule="evenodd"
+                          d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                          clip-rule="evenodd"
                         ></path>
                       </svg>
-                    </a>
+                      <span>October 10, 2025</span>
+                    </span>
+                    <span class="flex items-center space-x-1 text-orange-600">
+                      <svg
+                        class="w-3 h-3"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.722-1.353l-2.035.795a1 1 0 01-1.222-1.222l.795-2.035A8.841 8.841 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM10 5a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 100-2h-3.586l.293-.293a1 1 0 00-1.414-1.414L9 7.586V6a1 1 0 00-1-1z"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
+                      <span>0 Comments</span>
+                    </span>
+                  </p>
+                  <p class="text-sm text-gray-700 mb-1 leading-tight">
+                    In collaboration with local NGOs, we’ve launched a
+                    vaccination outreach program to ensure every child has
+                    access to essential immunizations. Let’s work together to
+                    protect our future generations.
+                  </p>
+                  <a
+                    href="#"
+                    class="text-xs text-green-700 font-semibold hover:text-green-600 transition"
+                    >Read more...</a
+                  >
+                </div>
+              </div>
+              <div class="flex space-x-4 bg-white p-2 border-white rounded-xl">
+                <div
+                  class="w-20 h-20 flex-shrink-0 relative overflow-hidden rounded-xl border border-gray-200"
+                  style="background-color: #f0f7f5"
+                >
+                  <img
+                    :src="awards"
+                    alt="Update thumbnail"
+                    class="w-full h-full object-cover"
+                  />
+                  <span
+                    class="absolute bottom-[-1px] left-1/2 transform -translate-x-1/2 bg-custom-maroon text-white text-[0.6rem] px-3 py-1 rounded-full whitespace-nowrap font-medium"
+                    style="
+                      background-color: #9d1c44;
+                      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                    "
+                  >
+                    Health Alert
+                  </span>
+                </div>
+
+                <div>
+                  <p
+                    class="text-xs text-gray-500 mb-1 flex items-center space-x-3"
+                  >
+                    <span
+                      class="flex items-center space-x-1 text-orange-600 font-semibold"
+                    >
+                      <svg
+                        class="w-3 h-3"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
+                      <span>October 10, 2025</span>
+                    </span>
+                    <span class="flex items-center space-x-1 text-orange-600">
+                      <svg
+                        class="w-3 h-3"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.722-1.353l-2.035.795a1 1 0 01-1.222-1.222l.795-2.035A8.841 8.841 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM10 5a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 100-2h-3.586l.293-.293a1 1 0 00-1.414-1.414L9 7.586V6a1 1 0 00-1-1z"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
+                      <span>0 Comments</span>
+                    </span>
+                  </p>
+                  <p class="text-sm text-gray-700 mb-1 leading-tight">
+                    We’re expanding our digital health training program to equip
+                    community health workers with tools for real-time patient
+                    data tracking and remote diagnostics. Applications for the
+                    2025 cohort are now open.
+                  </p>
+                  <a
+                    href="#"
+                    class="text-xs text-green-700 font-semibold hover:text-green-600 transition"
+                    >Read more...</a
+                  >
+                </div>
+              </div>
+              <div class="flex space-x-4 bg-white p-2 border-white rounded-xl">
+                <div
+                  class="w-20 h-20 flex-shrink-0 relative overflow-hidden rounded-xl border border-gray-200"
+                  style="background-color: #f0f7f5"
+                >
+                  <img
+                    :src="awards"
+                    alt="Update thumbnail"
+                    class="w-full h-full object-cover"
+                  />
+                  <span
+                    class="absolute bottom-[-1px] left-1/2 transform -translate-x-1/2 bg-custom-maroon text-white text-[0.6rem] px-3 py-1 rounded-full whitespace-nowrap font-medium"
+                    style="
+                      background-color: #f54a00;
+                      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                    "
+                  >
+                    Health Alert
+                  </span>
+                </div>
+
+                <div>
+                  <p
+                    class="text-xs text-gray-500 mb-1 flex items-center space-x-3"
+                  >
+                    <span
+                      class="flex items-center space-x-1 text-orange-600 font-semibold"
+                    >
+                      <svg
+                        class="w-3 h-3"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
+                      <span>October 10, 2025</span>
+                    </span>
+                    <span class="flex items-center space-x-1 text-orange-600">
+                      <svg
+                        class="w-3 h-3"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.722-1.353l-2.035.795a1 1 0 01-1.222-1.222l.795-2.035A8.841 8.841 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM10 5a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 100-2h-3.586l.293-.293a1 1 0 00-1.414-1.414L9 7.586V6a1 1 0 00-1-1z"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
+                      <span>0 Comments</span>
+                    </span>
+                  </p>
+                  <p class="text-sm text-gray-700 mb-1 leading-tight">
+                    A new study on non-communicable diseases shows that physical
+                    activity and proper diet reduce the risk of heart disease by
+                    45%. Explore our upcoming fitness and nutrition workshops to
+                    learn more.
+                  </p>
+                  <a
+                    href="#"
+                    class="text-xs text-green-700 font-semibold hover:text-green-600 transition"
+                    >Read more...</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="lg:grid lg:grid-cols-12 lg:gap-6">
+            <div class="lg:col-span-8">
+              <div
+                class="flex items-center justify-center mt-12 text-gray-600 text-sm"
+              ></div>
+
+              <div class="mt-16 sm:mt-24 w-full">
+                <div class="text-center mb-10">
+                  <h2
+                    class="text-3xl sm:text-4xl px-4 py-4 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md"
+                  >
+                    Programs and Initiatives
+                  </h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div
+                    class="relative overflow-hidden shadow-lg pb-4"
+                    style="
+                      border-radius: 2rem;
+                      border: 1px solid #e0f2e0;
+                      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                    "
+                  >
+                    <div
+                      class="relative aspect-[16/9] bg-gray-50 mb-3 overflow-hidden"
+                      style="
+                        border-top-left-radius: 2rem;
+                        border-top-right-radius: 2rem;
+                      "
+                    >
+                      <img
+                        :src="awards"
+                        alt="HFN Walk for Life Event"
+                        class="w-full h-full object-cover"
+                      />
+                    </div>
+
+                    <div class="p-5 pt-0">
+                      <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">
+                          Tackling Hypertension: The Silent Killer Among Young
+                          Adults
+                        </h3>
+                        <span
+                          class="text-sm text-orange-500 bg-orange-100 px-3 py-1 rounded-full"
+                          >Annually</span
+                        >
+                      </div>
+
+                      <p class="text-sm text-gray-700 mb-4 leading-relaxed">
+                        Recent studies show a worrying rise in hypertension
+                        cases among people aged 25–40, driven by stress, poor
+                        diet, and sedentary lifestyles. The Healthcare
+                        Federation of Nigeria is partnering with local health
+                        centers to promote regular blood pressure checks and
+                        educate the public on preventive measures.
+                      </p>
+
+                      <div class="space-y-2 mb-6">
+                        <p
+                          class="text-sm text-gray-700 flex items-center space-x-2"
+                        >
+                          <svg
+                            class="w-4 h-4 text-orange-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                              clip-rule="evenodd"
+                            ></path>
+                          </svg>
+                          <span class="font-semibold text-orange-600"
+                            >October 10, 2025</span
+                          >
+                        </p>
+                        <p
+                          class="text-sm text-gray-700 flex items-center space-x-2"
+                        >
+                          <svg
+                            class="w-4 h-4 text-orange-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z"
+                              clip-rule="evenodd"
+                            ></path>
+                          </svg>
+                          <span class="font-semibold text-orange-600"
+                            >10am</span
+                          >
+                        </p>
+                        <p
+                          class="text-sm text-gray-700 flex items-center space-x-2"
+                        >
+                          <svg
+                            class="w-4 h-4 text-orange-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                              clip-rule="evenodd"
+                            ></path>
+                          </svg>
+                          <span class="text-orange-600"
+                            >No 12 Ifeanyi str, Ikeja Lagos</span
+                          >
+                        </p>
+                      </div>
+
+                      <a
+                        href="#"
+                        class="inline-flex items-center justify-center w-full px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition"
+                      >
+                        Join Now
+                        <svg
+                          class="w-5 h-5 ml-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M17 8l4 4m0 0l-4 4m4-4H3"
+                          ></path>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+
+                  <div
+                    class="relative overflow-hidden shadow-lg pb-4"
+                    style="
+                      border-radius: 2rem;
+                      border: 1px solid #e0f2e0;
+                      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                    "
+                  >
+                    <div
+                      class="relative aspect-[16/9] bg-gray-50 mb-3 overflow-hidden"
+                      style="
+                        border-top-left-radius: 2rem;
+                        border-top-right-radius: 2rem;
+                      "
+                    >
+                      <img
+                        :src="awards"
+                        alt="HFN Walk for Life Event"
+                        class="w-full h-full object-cover"
+                      />
+                    </div>
+
+                    <div class="p-5 pt-0">
+                      <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">
+                          Digital Health Innovations Transforming Patient Care
+                          in Nigeria
+                        </h3>
+                        <span
+                          class="text-sm text-orange-500 bg-orange-100 px-3 py-1 rounded-full"
+                          >Annually</span
+                        >
+                      </div>
+
+                      <p class="text-sm text-gray-700 mb-4 leading-relaxed">
+                        As technology advances, healthcare delivery in Nigeria
+                        is experiencing a major shift. From telemedicine and
+                        AI-assisted diagnostics to electronic health records,
+                        digital innovation is improving access and efficiency
+                        across hospitals and clinics.
+                      </p>
+
+                      <div class="space-y-2 mb-6">
+                        <p
+                          class="text-sm text-gray-700 flex items-center space-x-2"
+                        >
+                          <svg
+                            class="w-4 h-4 text-orange-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                              clip-rule="evenodd"
+                            ></path>
+                          </svg>
+                          <span class="font-semibold text-orange-600"
+                            >October 10, 2025</span
+                          >
+                        </p>
+                        <p
+                          class="text-sm text-gray-700 flex items-center space-x-2"
+                        >
+                          <svg
+                            class="w-4 h-4 text-orange-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z"
+                              clip-rule="evenodd"
+                            ></path>
+                          </svg>
+                          <span class="font-semibold text-orange-600"
+                            >10am</span
+                          >
+                        </p>
+                        <p
+                          class="text-sm text-gray-700 flex items-center space-x-2"
+                        >
+                          <svg
+                            class="w-4 h-4 text-orange-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                              clip-rule="evenodd"
+                            ></path>
+                          </svg>
+                          <span class="text-orange-600"
+                            >No 12 Ifeanyi str, Ikeja Lagos</span
+                          >
+                        </p>
+                      </div>
+
+                      <a
+                        href="#"
+                        class="inline-flex items-center justify-center w-full px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition"
+                      >
+                        Join Now
+                        <svg
+                          class="w-5 h-5 ml-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M17 8l4 4m0 0l-4 4m4-4H3"
+                          ></path>
+                        </svg>
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -925,6 +943,6 @@ import latest from "@/assets/latest_news.png";
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </template>

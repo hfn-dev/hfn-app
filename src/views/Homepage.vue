@@ -72,7 +72,6 @@ const toggleFaq = (index) => {
 
 const months = computed(() => Object.keys(pageContent.value.news.months));
 
-
 const featured = computed(
   () => pageContent.value.news.months[selectedMonth.value]?.featured
 );
@@ -140,533 +139,383 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section class="relative h-[90vh] min-h-[650px] overflow-hidden">
-    <div class="absolute inset-0">
-      <transition-group name="fade">
-        <img
-          v-for="(slide, index) in heroSlides"
-          v-show="index === activeSlide"
-          :key="slide"
-          :src="slide"
-          class="absolute inset-0 w-full h-full object-cover"
-        />
-      </transition-group>
+  <div>
+    <section class="relative h-[90vh] min-h-[650px] overflow-hidden">
+      <div class="absolute inset-0">
+        <transition-group name="fade">
+          <img
+            v-for="(slide, index) in heroSlides"
+            v-show="index === activeSlide"
+            :key="slide"
+            :src="slide"
+            class="absolute inset-0 w-full h-full object-cover"
+          />
+        </transition-group>
 
-      <div class="absolute inset-0 bg-black/50"></div>
-    </div>
-
-    <div class="relative z-10 h-full flex items-center">
-      <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
-        <div class="lg:w-1/2 text-white">
-          <h1
-            class="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight mb-6"
-          >
-            <span class="text-white-400">
-              {{ pageContent.hero.titleHighlight }}
-            </span>
-            <br />
-            <span class="text-white">
-              {{ pageContent.hero.titleMain }}
-            </span>
-          </h1>
-
-          <p class="text-lg mb-6 max-w-xl">
-            <span class="text-white-300 font-semibold">
-              {{ pageContent.hero.introLine }}
-            </span>
-            {{ pageContent.hero.introText }}
-          </p>
-
-          <p class="text-lg mb-10 max-w-xl">
-            {{ pageContent.hero.subText }}
-          </p>
-
-          <RouterLink
-            :to="pageContent.hero.ctaLink"
-            class="inline-flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white px-8 py-4 rounded-xl font-semibold shadow-xl transition"
-          >
-            {{ pageContent.hero.ctaText }}
-          </RouterLink>
-        </div>
+        <div class="absolute inset-0 bg-black/50"></div>
       </div>
-    </div>
 
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20">
-      <button
-        v-for="(_, index) in heroSlides"
-        :key="index"
-        class="w-3 h-3 rounded-full transition"
-        :class="activeSlide === index ? 'bg-white' : 'bg-white/40'"
-        @click="activeSlide = index"
-      />
-    </div>
-  </section>
-  <!-- <section class="relative py-20 overflow-hidden bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-        
-        <div class="relative w-full lg:w-1/2">
-          <div class="relative z-10 w-full aspect-square md:aspect-[4/5] overflow-hidden shadow-2xl transition-transform duration-700 hover:rotate-2" 
-               style="border-radius: 100px 0 100px 0;">
-            <img 
-              src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80" 
-              alt="Nigerian Healthcare" 
-              class="w-full h-full object-cover"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-[#004d33]/60 to-transparent"></div>
-          </div>
-          
-          <div class="absolute -bottom-6 -right-6 z-20 bg-white p-6 shadow-xl rounded-2xl border-l-4 border-[#004d33] animate-bounce-slow">
-            <p class="text-3xl font-black text-[#004d33]">6+</p>
-            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Health Guardians</p>
-          </div>
-          
-          <div class="absolute -top-10 -left-10 w-40 h-40 bg-[#f2f9f3] rounded-full -z-0"></div>
-        </div>
-
-        <div class="w-full lg:w-1/2 space-y-8">
-          <div class="inline-flex items-center space-x-2">
-            <span class="w-10 h-[2px] bg-[#004d33]"></span>
-            <span class="text-[#004d33] font-black uppercase tracking-[0.3em] text-xs">Who We Are</span>
-          </div>
-
-          <h2 class="text-4xl md:text-5xl font-black text-gray-900 leading-tight">
-            Strengthening Nigeria's <br/>
-            <span class="text-[#004d33]">Healthcare Ecosystem.</span>
-          </h2>
-
-          <div class="space-y-6">
-            <p class="text-lg text-gray-600 leading-relaxed font-medium">
-              The Healthcare Federation of Nigeria (HFN) is a 
-              <span class="text-gray-900 font-bold">coalition of private healthcare stakeholders</span> 
-              committed to strengthening Nigeria’s health system through strategic advocacy and leadership.
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="flex items-start gap-4 p-4 rounded-xl bg-[#f2f9f3]/50 border border-transparent hover:border-[#004d33]/20 transition-all">
-                <div class="w-10 h-10 rounded-lg bg-[#004d33] flex items-center justify-center text-white shrink-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4-4-4"/><path d="M3 3v18h18"/></svg>
-                </div>
-                <div>
-                  <h4 class="font-bold text-gray-900">Unified Platform</h4>
-                  <p class="text-xs text-gray-500">Engaging government and influencing health policy.</p>
-                </div>
-              </div>
-
-              <div class="flex items-start gap-4 p-4 rounded-xl bg-[#f2f9f3]/50 border border-transparent hover:border-[#004d33]/20 transition-all">
-                <div class="w-10 h-10 rounded-lg bg-[#004d33] flex items-center justify-center text-white shrink-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </div>
-                <div>
-                  <h4 class="font-bold text-gray-900">Universal Progress</h4>
-                  <p class="text-xs text-gray-500">Accelerating progress toward Universal Health Coverage.</p>
-                </div>
-              </div>
-            </div>
-
-            <button class="group flex items-center gap-3 bg-[#004d33] text-white px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-green-900/20 transition-all transform hover:-translate-y-1">
-              Read Our Full Story
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section> -->
-  <section ref="sectionRef" class="relative py-20 overflow-hidden bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-        <div
-          class="relative w-full lg:w-1/2 transition-all duration-1000 ease-out"
-          :class="
-            isVisible
-              ? 'opacity-100 translate-x-0'
-              : 'opacity-0 -translate-x-20'
-          "
-        >
-          <div
-            class="relative z-10 w-full aspect-square md:aspect-[4/5] overflow-hidden shadow-2xl hover:rotate-2 transition-transform duration-700"
-            style="border-radius: 100px 0 100px 0"
-          >
-            <img
-              src="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769803836/1_hkuaio.jpg"
-              class="w-full h-full object-cover"
-            />
-            <div
-              class="absolute inset-0 bg-gradient-to-t from-[#004d33]/60 to-transparent"
-            ></div>
-          </div>
-
-          <div
-            class="absolute -bottom-6 -right-6 z-20 bg-white p-6 shadow-xl rounded-2xl border-l-4 border-[#004d33] animate-bounce-slow"
-          >
-            <p class="text-3xl font-black text-[#004d33]">6+</p>
-            <p
-              class="text-xs font-bold text-gray-500 uppercase tracking-widest"
+      <div class="relative z-10 h-full flex items-center">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+          <div class="lg:w-1/2 text-white">
+            <h1
+              class="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight mb-6"
             >
-              Health Guardians
-            </p>
-          </div>
-        </div>
+              <span class="text-white-400">
+                {{ pageContent.hero.titleHighlight }}
+              </span>
+              <br />
+              <span class="text-white">
+                {{ pageContent.hero.titleMain }}
+              </span>
+            </h1>
 
-        <div
-          class="w-full lg:w-1/2 space-y-8 transition-all duration-1000 delay-300 ease-out"
-          :class="
-            isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20'
-          "
-        >
-          <div class="inline-flex items-center space-x-2">
-            <span class="w-10 h-[2px] bg-[#004d33]"></span>
-            <span
-              class="text-[#004d33] font-black uppercase tracking-[0.3em] text-xs"
-              >Who We Are</span
+            <p class="text-lg mb-6 max-w-xl">
+              <span class="text-white-300 font-semibold">
+                {{ pageContent.hero.introLine }}
+              </span>
+              {{ pageContent.hero.introText }}
+            </p>
+
+            <p class="text-lg mb-10 max-w-xl">
+              {{ pageContent.hero.subText }}
+            </p>
+
+            <RouterLink
+              :to="pageContent.hero.ctaLink"
+              class="inline-flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white px-8 py-4 rounded-xl font-semibold shadow-xl transition"
             >
-          </div>
-
-          <h2
-            class="text-4xl md:text-5xl font-black text-gray-900 leading-tight"
-          >
-            Strengthening Nigeria's <br />
-            <span class="text-green-700">Healthcare System</span>
-          </h2>
-
-          <div class="space-y-6">
-            <p class="text-lg text-gray-600 leading-relaxed font-medium">
-              Healthcare Federation of Nigeria (HFN) is a
-              <span class="text-green-700 font-bold"
-                >coalition of private healthcare stakeholders</span
-              >
-              committed to strengthening Nigeria’s health system through
-              strategic advocacy, collaboration, and private sector leadership.
-              HFN serves as a unified platform for engaging government,
-              influencing health policy, and enabling private sector
-              contributions that expand access, improve quality, and accelerate
-              progress toward Universal Health Coverage.
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="feature-card">
-                <div class="icon-box">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="m12 14 4-4-4-4" />
-                    <path d="M3 3v18h18" />
-                  </svg>
-                </div>
-                <div>
-                  <h4 class="font-bold text-green-700 text-sm">
-                    Unified Platform
-                  </h4>
-                  <p
-                    class="text-[10px] text-gray-500 uppercase font-bold tracking-tighter"
-                  >
-                    Engagement & Policy
-                  </p>
-                </div>
-              </div>
-
-              <div class="feature-card">
-                <div class="icon-box">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                  </svg>
-                </div>
-                <div>
-                  <h4 class="font-bold text-green-700 text-sm">
-                    Universal Progress
-                  </h4>
-                  <p
-                    class="text-[10px] text-gray-500 uppercase font-bold tracking-tighter"
-                  >
-                    Universal Coverage
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <RouterLink to="/about" class="cta-button group">
-              Read Our Full Story
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="transition-transform group-hover:translate-x-2"
-              >
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
-              </svg>
+              {{ pageContent.hero.ctaText }}
             </RouterLink>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-  <section ref="actionRef" class="py-24 bg-[#F2F9F3] relative overflow-hidden">
-    <div
-      class="absolute top-0 right-0 text-[15rem] font-black text-white leading-none -z-0 opacity-40 translate-y-20 select-none"
-    >
-      ACTION
-    </div>
 
-    <div class="max-w-7xl mx-auto px-4 relative z-10">
-      <div class="text-center mb-16 space-y-4">
-        <h2
-          class="text-green-700 font-black uppercase tracking-[0.4em] text-xs"
-        >
-          Our Core Mandate
-        </h2>
-        <h3 class="text-4xl md:text-5xl font-black text-gray-900">
-          What We Do
-        </h3>
-        <p class="max-w-2xl mx-auto text-gray-600 leading-relaxed font-medium">
-          Driving measurable change in Nigeria's healthcare landscape through
-          four strategic pillars.
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div
-          v-for="(action, index) in actions"
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+        <button
+          v-for="(_, index) in heroSlides"
           :key="index"
-          class="group relative bg-white p-8 md:p-10 rounded-[2.5rem] border border-white shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden translate-y-10 opacity-0"
-          :class="{ 'animate-reveal': isVisible }"
-          :style="{ 'animation-delay': `${index * 150}ms` }"
-        >
+          class="w-3 h-3 rounded-full transition"
+          :class="activeSlide === index ? 'bg-white' : 'bg-white/40'"
+          @click="activeSlide = index"
+        />
+      </div>
+    </section>
+
+    <section ref="sectionRef" class="relative py-20 overflow-hidden bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           <div
-            class="absolute inset-0 bg-gradient-to-br from-transparent via-[#f2f9f3]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-          ></div>
-
-          <div class="relative z-10 flex flex-col h-full">
-            <div class="flex items-start justify-between mb-6">
+            class="relative w-full lg:w-1/2 transition-all duration-1000 ease-out"
+            :class="
+              isVisible
+                ? 'opacity-100 translate-x-0'
+                : 'opacity-0 -translate-x-20'
+            "
+          >
+            <div
+              class="relative z-10 w-full aspect-square md:aspect-[4/5] overflow-hidden shadow-2xl hover:rotate-2 transition-transform duration-700"
+              style="border-radius: 100px 0 100px 0"
+            >
+              <img
+                src="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769803836/1_hkuaio.jpg"
+                class="w-full h-full object-cover"
+              />
               <div
-                class="w-16 h-16 rounded-2xl bg-green-700 flex items-center justify-center text-white shadow-lg group-hover:rotate-6 transition-transform duration-500"
-              >
-                <component :is="action.icon" class="w-8 h-8" />
-              </div>
-              <span
-                class="text-5xl font-black text-[#004d33]/5 select-none group-hover:text-[#004d33]/10 transition-colors"
-                >0{{ index + 1 }}</span
-              >
+                class="absolute inset-0 bg-gradient-to-t from-[#004d33]/60 to-transparent"
+              ></div>
             </div>
 
-            <h4 class="text-2xl font-black text-gray-900 mb-4">
-              {{ action.title }}
-            </h4>
-            <p class="text-gray-600 leading-relaxed font-medium">
-              {{ action.description }}
-            </p>
-
-            <div class="mt-8 flex flex-wrap gap-2">
-              <span
-                v-for="tag in action.tags"
-                :key="tag"
-                class="px-3 py-1 bg-[#F2F9F3] text-[#004d33] text-[10px] font-bold uppercase tracking-wider rounded-full"
-              >
-                {{ tag }}
-              </span>
-            </div>
-          </div>
-
-          <div class="sweep"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="bg-white py-16 px-6 md:px-12 lg:px-24">
-    <!-- <div class="text-center mb-10">
-      <h2
-        class="text-3xl md:text-4xl font-bold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
-      >
-        {{ pageContent.story.title }}
-      </h2>
-    </div> -->
-
-    <!-- <div class="grid md:grid-cols-2 gap-10 items-center">
-      <div class="relative w-full max-w-2xl mx-auto h-[400px] sm:h-[450px]">
-        <div
-          class="absolute inset-x-0 bottom-0 w-[100%] sm:w-[80%] h-[350px] sm:h-[350px] rounded-[30px] overflow-hidden shadow-2xl border-4 border-green-500/50"
-        >
-          <img
-            :src="group1"
-            alt="HFN team"
-            loading="lazy"
-            class="object-cover w-full h-full"
-          />
-        </div>
-
-        <div
-          class="absolute top-0 right-0 w-[30%] sm:w-[40%] h-[140px] sm:h-[180px] rounded-xl overflow-hidden shadow-2xl border-4 border-green-500"
-        >
-          <img
-            :src="group"
-            loading="lazy"
-            alt="HFN team"
-            class="object-cover w-full h-full"
-          />
-        </div>
-      </div>
-
-      <div class="text-gray-700 leading-relaxed">
-        <p class="mb-8">
-          {{ pageContent.story.body }}
-        </p>
-
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 text-center mt-10">
-          <div v-for="(stat, index) in pageContent.story.stats" :key="index">
-            <h3
-              class="text-3xl font-bold"
-              :class="index % 2 === 0 ? 'text-green-900' : 'text-red-600'"
+            <div
+              class="absolute -bottom-6 -right-6 z-20 bg-white p-6 shadow-xl rounded-2xl border-l-4 border-[#004d33] animate-bounce-slow"
             >
-              {{ stat.value }}
-            </h3>
-
-            <p class="text-green-800 font-semibold">
-              {{ stat.label }}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div> -->
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
-      <div
-        class="flex flex-col sm:flex-row justify-center items-center h-auto sm:h-20 relative rounded-2xl border-2 border-green-50 bg-white shadow-sm px-4 py-3"
-      >
-        <select
-          v-model="selectedMonth"
-          class="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-700 appearance-none bg-white pr-8 w-full sm:w-auto sm:absolute sm:left-6"
-        >
-          <option v-for="month in months" :key="month" :value="month">
-            {{ month }}
-          </option>
-        </select>
-
-        <h2
-          class="text-2xl sm:text-3xl md:text-4xl font-sans font-extrabold text-gray-900 tracking-tight text-center sm:text-left mt-3 sm:mt-0"
-        >
-          Our Latest Update
-        </h2>
-      </div>
-    </div>
-  </section>
-
-  <section class="bg-[#f6faf8] py-16 px-6 md:px-12 lg:px-24">
-    <div class="grid lg:grid-cols-3 gap-8">
-      <div
-        class="lg:col-span-2 bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100"
-      >
-        <div class="relative">
-          <img
-            :src="featured.image"
-            alt="Featured news"
-            class="w-full h-72 object-cover"
-          />
-          <span 
-            class="absolute bottom-4 left-4 bg-green-700 text-white text-xs font-semibold px-3 py-1 rounded-full"
-          >
-            {{ featured.tag }}
-          </span>
-        </div>
-
-        <div class="p-6">
-          <div class="flex items-center text-sm text-orange-600 mb-3 space-x-4">
-            <span class="flex items-center gap-1">
-              <i class="fa-regular fa-calendar"></i> {{ featured.date }}
-            </span>
-            <span class="flex items-center gap-1">
-              <i class="fa-regular fa-comments"></i>
-              {{ featured.comments }} Comments
-            </span>
-          </div>
-
-          <p class="text-gray-700 mb-6">
-            {{ featured.description }}
-          </p>
-
-          <RouterLink
-            :to="`/blog/${featured.slug}`"
-            class="inline-flex items-center gap-2 bg-green-700 text-white px-5 py-2 rounded-full font-medium hover:bg-green-800 transition"
-          >
-            Read More <i class="fa-solid fa-arrow-right"></i>
-          </RouterLink>
-        </div>
-      </div>
-
-      <div class="flex flex-col gap-6">
-        <div
-          v-for="(news, index) in newsList"
-          :key="index"
-          class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200 flex flex-col sm:flex-row transition hover:shadow-md"
-        >
-          <div class="relative w-full sm:w-48">
-            <img
-              :src="news.image"
-              alt="News image"
-              class="w-full h-40 sm:h-full object-cover"
-            />
-
-            <span
-              class="absolute bottom-3 left-3 bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full"
-              :class="{
-                'bg-red-700 text-white': news.tag === 'Health Alert',
-                'bg-orange-600 text-white':
-                  news.tag === 'Public Health Stories',
-              }"
-            >
-              {{ news.tag }}
-            </span>
-          </div>
-
-          <div class="flex flex-col justify-between p-4 flex-1">
-            <div>
-              <div
-                class="flex items-center text-xs text-orange-600 mb-2 space-x-6"
+              <p class="text-3xl font-black text-[#004d33]">6+</p>
+              <p
+                class="text-xs font-bold text-gray-500 uppercase tracking-widest"
               >
-                <span class="flex items-center gap-1">
-                  <i class="fa-regular fa-calendar text-orange-600"></i>
-                  {{ news.date }}
-                </span>
-                <span class="flex items-center gap-1">
-                  <i class="fa-regular fa-comments text-orange-600"></i>
-                  {{ news.comments }} Comments
-                </span>
-              </div>
-
-              <p class="text-gray-700 text-sm leading-relaxed line-clamp-3">
-                {{ news.description }}
+                Health Guardians
               </p>
             </div>
+          </div>
 
-            <div class="mt-3">
+          <div
+            class="w-full lg:w-1/2 space-y-8 transition-all duration-1000 delay-300 ease-out"
+            :class="
+              isVisible
+                ? 'opacity-100 translate-x-0'
+                : 'opacity-0 translate-x-20'
+            "
+          >
+            <div class="inline-flex items-center space-x-2">
+              <span class="w-10 h-[2px] bg-[#004d33]"></span>
               <span
-                class="inline-block bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full"
+                class="text-[#004d33] font-black uppercase tracking-[0.3em] text-xs"
+                >Who We Are</span
+              >
+            </div>
+
+            <h2
+              class="text-4xl md:text-5xl font-black text-gray-900 leading-tight"
+            >
+              Strengthening Nigeria's <br />
+              <span class="text-green-700">Healthcare System</span>
+            </h2>
+
+            <div class="space-y-6">
+              <p class="text-lg text-gray-600 leading-relaxed font-medium">
+                Healthcare Federation of Nigeria (HFN) is a
+                <span class="text-green-700 font-bold"
+                  >coalition of private healthcare stakeholders</span
+                >
+                committed to strengthening Nigeria’s health system through
+                strategic advocacy, collaboration, and private sector
+                leadership. HFN serves as a unified platform for engaging
+                government, influencing health policy, and enabling private
+                sector contributions that expand access, improve quality, and
+                accelerate progress toward Universal Health Coverage.
+              </p>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="feature-card">
+                  <div class="icon-box">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="m12 14 4-4-4-4" />
+                      <path d="M3 3v18h18" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-green-700 text-sm">
+                      Unified Platform
+                    </h4>
+                    <p
+                      class="text-[10px] text-gray-500 uppercase font-bold tracking-tighter"
+                    >
+                      Engagement & Policy
+                    </p>
+                  </div>
+                </div>
+
+                <div class="feature-card">
+                  <div class="icon-box">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-green-700 text-sm">
+                      Universal Progress
+                    </h4>
+                    <p
+                      class="text-[10px] text-gray-500 uppercase font-bold tracking-tighter"
+                    >
+                      Universal Coverage
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <RouterLink to="/about" class="cta-button group">
+                Read Our Full Story
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="transition-transform group-hover:translate-x-2"
+                >
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </RouterLink>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      ref="actionRef"
+      class="py-24 bg-[#F2F9F3] relative overflow-hidden"
+    >
+      <div
+        class="absolute top-0 right-0 text-[15rem] font-black text-white leading-none -z-0 opacity-40 translate-y-20 select-none"
+      >
+        ACTION
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 relative z-10">
+        <div class="text-center mb-16 space-y-4">
+          <h2
+            class="text-green-700 font-black uppercase tracking-[0.4em] text-xs"
+          >
+            Our Core Mandate
+          </h2>
+          <h3 class="text-4xl md:text-5xl font-black text-gray-900">
+            What We Do
+          </h3>
+          <p
+            class="max-w-2xl mx-auto text-gray-600 leading-relaxed font-medium"
+          >
+            Driving measurable change in Nigeria's healthcare landscape through
+            four strategic pillars.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div
+            v-for="(action, index) in actions"
+            :key="index"
+            class="group relative bg-white p-8 md:p-10 rounded-[2.5rem] border border-white shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden translate-y-10 opacity-0"
+            :class="{ 'animate-reveal': isVisible }"
+            :style="{ 'animation-delay': `${index * 150}ms` }"
+          >
+            <div
+              class="absolute inset-0 bg-gradient-to-br from-transparent via-[#f2f9f3]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+            ></div>
+
+            <div class="relative z-10 flex flex-col h-full">
+              <div class="flex items-start justify-between mb-6">
+                <div
+                  class="w-16 h-16 rounded-2xl bg-green-700 flex items-center justify-center text-white shadow-lg group-hover:rotate-6 transition-transform duration-500"
+                >
+                  <component :is="action.icon" class="w-8 h-8" />
+                </div>
+                <span
+                  class="text-5xl font-black text-[#004d33]/5 select-none group-hover:text-[#004d33]/10 transition-colors"
+                  >0{{ index + 1 }}</span
+                >
+              </div>
+
+              <h4 class="text-2xl font-black text-gray-900 mb-4">
+                {{ action.title }}
+              </h4>
+              <p class="text-gray-600 leading-relaxed font-medium">
+                {{ action.description }}
+              </p>
+
+              <div class="mt-8 flex flex-wrap gap-2">
+                <span
+                  v-for="tag in action.tags"
+                  :key="tag"
+                  class="px-3 py-1 bg-[#F2F9F3] text-[#004d33] text-[10px] font-bold uppercase tracking-wider rounded-full"
+                >
+                  {{ tag }}
+                </span>
+              </div>
+            </div>
+
+            <div class="sweep"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white py-16 px-6 md:px-12 lg:px-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+        <div
+          class="flex flex-col sm:flex-row justify-center items-center h-auto sm:h-20 relative rounded-2xl border-2 border-green-50 bg-white shadow-sm px-4 py-3"
+        >
+          <select
+            v-model="selectedMonth"
+            class="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-700 appearance-none bg-white pr-8 w-full sm:w-auto sm:absolute sm:left-6"
+          >
+            <option v-for="month in months" :key="month" :value="month">
+              {{ month }}
+            </option>
+          </select>
+
+          <h2
+            class="text-2xl sm:text-3xl md:text-4xl font-sans font-extrabold text-gray-900 tracking-tight text-center sm:text-left mt-3 sm:mt-0"
+          >
+            Our Latest Update
+          </h2>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-[#f6faf8] py-16 px-6 md:px-12 lg:px-24">
+      <div class="grid lg:grid-cols-3 gap-8">
+        <div
+          class="lg:col-span-2 bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100"
+        >
+          <div class="relative">
+            <img
+              :src="featured.image"
+              alt="Featured news"
+              class="w-full h-72 object-cover"
+            />
+            <span
+              class="absolute bottom-4 left-4 bg-green-700 text-white text-xs font-semibold px-3 py-1 rounded-full"
+            >
+              {{ featured.tag }}
+            </span>
+          </div>
+
+          <div class="p-6">
+            <div
+              class="flex items-center text-sm text-orange-600 mb-3 space-x-4"
+            >
+              <span class="flex items-center gap-1">
+                <i class="fa-regular fa-calendar"></i> {{ featured.date }}
+              </span>
+              <span class="flex items-center gap-1">
+                <i class="fa-regular fa-comments"></i>
+                {{ featured.comments }} Comments
+              </span>
+            </div>
+
+            <p class="text-gray-700 mb-6">
+              {{ featured.description }}
+            </p>
+
+            <RouterLink
+              :to="`/blog/${featured.slug}`"
+              class="inline-flex items-center gap-2 bg-green-700 text-white px-5 py-2 rounded-full font-medium hover:bg-green-800 transition"
+            >
+              Read More <i class="fa-solid fa-arrow-right"></i>
+            </RouterLink>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-6">
+          <div
+            v-for="(news, index) in newsList"
+            :key="index"
+            class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200 flex flex-col sm:flex-row transition hover:shadow-md"
+          >
+            <div class="relative w-full sm:w-48">
+              <img
+                :src="news.image"
+                alt="News image"
+                class="w-full h-40 sm:h-full object-cover"
+              />
+
+              <span
+                class="absolute bottom-3 left-3 bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full"
                 :class="{
                   'bg-red-700 text-white': news.tag === 'Health Alert',
                   'bg-orange-600 text-white':
@@ -675,275 +524,223 @@ onMounted(async () => {
               >
                 {{ news.tag }}
               </span>
-              <RouterLink 
-      :to="`/blog/${news.slug}`" 
-      class="text-green-700 text-xs font-bold hover:underline"
-    >
-      Read More →
-    </RouterLink>
+            </div>
+
+            <div class="flex flex-col justify-between p-4 flex-1">
+              <div>
+                <div
+                  class="flex items-center text-xs text-orange-600 mb-2 space-x-6"
+                >
+                  <span class="flex items-center gap-1">
+                    <i class="fa-regular fa-calendar text-orange-600"></i>
+                    {{ news.date }}
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <i class="fa-regular fa-comments text-orange-600"></i>
+                    {{ news.comments }} Comments
+                  </span>
+                </div>
+
+                <p class="text-gray-700 text-sm leading-relaxed line-clamp-3">
+                  {{ news.description }}
+                </p>
+              </div>
+
+              <div class="mt-3">
+                <span
+                  class="inline-block bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full"
+                  :class="{
+                    'bg-red-700 text-white': news.tag === 'Health Alert',
+                    'bg-orange-600 text-white':
+                      news.tag === 'Public Health Stories',
+                  }"
+                >
+                  {{ news.tag }}
+                </span>
+                <RouterLink
+                  :to="`/blog/${news.slug}`"
+                  class="text-green-700 text-xs font-bold hover:underline"
+                >
+                  Read More →
+                </RouterLink>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="py-16 bg-white">
-    <div class="container mx-auto px-6 text-center">
-      <h2
-        class="text-3xl md:text-4xl font-sans mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
-      >
-        Our Executives
-      </h2>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-        <div
-          v-for="(exec, index) in executives"
-          :key="index"
-          class="flex justify-center"
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-6 text-center">
+        <h2
+          class="text-3xl md:text-4xl font-sans mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
         >
+          Our Executives
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
           <div
-            class="relative w-full max-w-xs aspect-[4/5] rounded-t-[2.5rem] rounded-b-xl overflow-hidden shadow-2xl"
-            style="background-color: #f0f7f5"
+            v-for="(exec, index) in executives"
+            :key="index"
+            class="flex justify-center"
           >
-            <img
-              :src="exec.image"
-              :alt="exec.name"
-              class="w-full h-full object-cover object-top"
-            />
-
             <div
-              class="absolute mb-5 bottom-0 left-1/2 transform -translate-x-1/2 w-[85%] px-4 py-3 rounded-xl border border-green-300 bg-white shadow-xl text-center"
+              class="relative w-full max-w-xs aspect-[4/5] rounded-t-[2.5rem] rounded-b-xl overflow-hidden shadow-2xl"
+              style="background-color: #f0f7f5"
             >
-              <h3 class="text-lg font-bold text-green-700">
-                {{ exec.name }}
-              </h3>
-              <p class="text-sm text-gray-700">
-                {{ exec.position }}
-              </p>
-              <p class="text-sm text-gray-700">
-                {{ exec.role }}
-              </p>
+              <img
+                :src="exec.image"
+                :alt="exec.name"
+                class="w-full h-full object-cover object-top"
+              />
+
+              <div
+                class="absolute mb-5 bottom-0 left-1/2 transform -translate-x-1/2 w-[85%] px-4 py-3 rounded-xl border border-green-300 bg-white shadow-xl text-center"
+              >
+                <h3 class="text-lg font-bold text-green-700">
+                  {{ exec.name }}
+                </h3>
+                <p class="text-sm text-gray-700">
+                  {{ exec.position }}
+                </p>
+                <p class="text-sm text-gray-700">
+                  {{ exec.role }}
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <div class="py-6 border-b border-gray-200 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-6">
-        <span
-          class="text-lg font-semibold text-gray-500 uppercase tracking-wider"
-        >
-          {{ pageContent.partners.title }}
-        </span>
-      </div>
-
-      <div class="flex flex-wrap justify-center items-center gap-5 md:gap-10">
-        <div
-          v-for="(logoKey, index) in pageContent.partners.logos"
-          :key="index"
-          class="flex items-center justify-center h-48 w-49"
-        >
-          <img
-            :src="resolveAsset(logoKey)"
-            :alt="logoKey + ' Logo'"
-            class="max-h-full max-w-full object-contain"
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <HfnCalender id="calendar" />
-
-  <!-- <section class="py-16 bg-white">
-    <div class="container mx-auto px-6 text-center">
-      <h2
-        class="text-3xl md:text-4xl font-sans mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
-      >
-        Our Executives
-      </h2>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-        <div
-          v-for="(exec, index) in executives"
-          :key="index"
-          class="flex justify-center"
-        >
-          <div
-            class="relative w-full max-w-xs aspect-[4/5] rounded-t-[2.5rem] rounded-b-xl overflow-hidden shadow-2xl"
-            style="background-color: #f0f7f5"
-          >
-            <img
-              :src="exec.image"
-              :alt="exec.name"
-              class="w-full h-full object-cover object-top"
-            />
-
-            <div
-              class="absolute mb-5 bottom-0 left-1/2 transform -translate-x-1/2 w-[85%] px-4 py-3 rounded-xl border border-green-300 bg-white shadow-xl text-center"
-            >
-              <h3 class="text-lg font-bold text-green-700">
-                {{ exec.name }}
-              </h3>
-              <p class="text-sm text-gray-700">
-                {{ exec.position }}
-              </p>
-              <p class="text-sm text-gray-700">
-                {{ exec.role }}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section> -->
-
-  <!-- <section class="py-20 lg:py-28 bg-white" id="faq">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2
-        class="text-3xl text-center md:text-4xl font-sans mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
-      >
-        Frequently Asked Questions (F.A.Q)
-      </h2>
-
-      <div id="faq-accordion" class="space-y-4">
-        <div
-        v-for="(faq, index) in faqs"
-        :key="faq.question"
-        class="rounded-xl shadow-lg bg-[#F2F9F3] overflow-hidden"
-      >
-        <button
-          class="w-full flex justify-between items-center p-6 text-lg font-semibold hover:bg-[#F2F9F3] transition duration-150"
-          :aria-expanded="activeFaq === index"
-          @click="toggleFaq(index)"
-        >
-          <span class="text-green-800">
-            {{ faq.question }}
-          </span>
-
+    <div class="py-6 border-b border-gray-200 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-6">
           <span
-            class="text-primary transform transition-transform duration-300"
-            :class="activeFaq === index ? 'rotate-45' : ''"
+            class="text-lg font-semibold text-gray-500 uppercase tracking-wider"
           >
-            +
+            {{ pageContent.partners.title }}
           </span>
-        </button>
-
-        <div
-          class="overflow-hidden transition-all duration-300 ease-in-out"
-          :style="{
-            maxHeight: activeFaq === index ? '500px' : '0px'
-          }"
-        >
-          <p class="px-6 pb-6 pt-0 text-gray-600">
-            {{ faq.answer }}
-          </p>
         </div>
-      </div>
+
+        <div class="flex flex-wrap justify-center items-center gap-5 md:gap-10">
+          <div
+            v-for="(logoKey, index) in pageContent.partners.logos"
+            :key="index"
+            class="flex items-center justify-center h-48 w-49"
+          >
+            <img
+              :src="resolveAsset(logoKey)"
+              :alt="logoKey + ' Logo'"
+              class="max-h-full max-w-full object-contain"
+            />
+          </div>
+        </div>
       </div>
     </div>
-  </section> -->
-  <section class="relative py-20 px-4">
-    <div
-      class="max-w-6xl mx-auto relative overflow-hidden rounded-[4rem] bg-[#004d33] p-8 md:p-20 shadow-2xl group"
-    >
-      <div class="absolute inset-0 z-0 opacity-20">
-        <div
-          v-for="n in 8"
-          :key="n"
-          class="particle text-white"
-          :style="{ '--d': n * 2 + 's', '--x': n * 10 + '%' }"
-        ></div>
-      </div>
 
-      <div
-        class="absolute -top-24 -right-24 w-96 h-96 bg-green-400 rounded-full blur-[120px] opacity-20 group-hover:opacity-40 transition-opacity duration-1000"
-      ></div>
+    <HfnCalender id="calendar" />
 
+    <section class="relative py-20 px-4">
       <div
-        class="relative z-10 flex flex-col items-center text-center space-y-8"
+        class="max-w-6xl mx-auto relative overflow-hidden rounded-[4rem] bg-[#004d33] p-8 md:p-20 shadow-2xl group"
       >
-        <div
-          class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 animate-pulse"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="32"
-            height="32"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="white"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path
-              d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
-            />
-          </svg>
-        </div>
-
-        <div class="max-w-3xl space-y-4">
-          <h2 class="text-3xl md:text-5xl font-black text-white leading-tight">
-            Make a Tangible Difference
-          </h2>
-          <p
-            class="text-lg md:text-xl text-green-100/80 font-medium leading-relaxed"
-          >
-            Support advocacy and collaboration that strengthen Nigeria’s
-            healthcare system.
-          </p>
-        </div>
-
-        <button
-          class="relative group/btn overflow-hidden bg-white px-12 py-5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300"
-        >
+        <div class="absolute inset-0 z-0 opacity-20">
           <div
-            class="absolute inset-0 bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"
+            v-for="n in 8"
+            :key="n"
+            class="particle text-white"
+            :style="{ '--d': n * 2 + 's', '--x': n * 10 + '%' }"
           ></div>
-          <span
-            class="relative z-10 text-[#004d33] group-hover/btn:text-white font-black text-lg flex items-center gap-3"
+        </div>
+
+        <div
+          class="absolute -top-24 -right-24 w-96 h-96 bg-green-400 rounded-full blur-[120px] opacity-20 group-hover:opacity-40 transition-opacity duration-1000"
+        ></div>
+
+        <div
+          class="relative z-10 flex flex-col items-center text-center space-y-8"
+        >
+          <div
+            class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 animate-pulse"
           >
-            Donate Now
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
+              width="32"
+              height="32"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="currentColor"
-              stroke-width="3"
+              stroke="white"
+              stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              class="transition-transform group-hover/btn:translate-x-1"
             >
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
+              <path
+                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+              />
             </svg>
-          </span>
-        </button>
+          </div>
 
-        <div
-          class="pt-4 flex items-center gap-6 opacity-60 grayscale hover:grayscale-0 transition-all duration-500"
-        >
-          <p
-            class="text-[10px] text-white font-bold tracking-[0.2em] uppercase"
+          <div class="max-w-3xl space-y-4">
+            <h2
+              class="text-3xl md:text-5xl font-black text-white leading-tight"
+            >
+              Make a Tangible Difference
+            </h2>
+            <p
+              class="text-lg md:text-xl text-green-100/80 font-medium leading-relaxed"
+            >
+              Support advocacy and collaboration that strengthen Nigeria’s
+              healthcare system.
+            </p>
+          </div>
+
+          <button
+            class="relative group/btn overflow-hidden bg-white px-12 py-5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300"
           >
-            Secure Donation via
-          </p>
-          <div class="flex gap-4">
-            <div class="w-8 h-8 rounded bg-white/20"></div>
-            <div class="w-8 h-8 rounded bg-white/20"></div>
-            <div class="w-8 h-8 rounded bg-white/20"></div>
+            <div
+              class="absolute inset-0 bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"
+            ></div>
+            <span
+              class="relative z-10 text-[#004d33] group-hover/btn:text-white font-black text-lg flex items-center gap-3"
+            >
+              Donate Now
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="transition-transform group-hover/btn:translate-x-1"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </span>
+          </button>
+
+          <div
+            class="pt-4 flex items-center gap-6 opacity-60 grayscale hover:grayscale-0 transition-all duration-500"
+          >
+            <p
+              class="text-[10px] text-white font-bold tracking-[0.2em] uppercase"
+            >
+              Secure Donation via
+            </p>
+            <div class="flex gap-4">
+              <div class="w-8 h-8 rounded bg-white/20"></div>
+              <div class="w-8 h-8 rounded bg-white/20"></div>
+              <div class="w-8 h-8 rounded bg-white/20"></div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </template>
 
 <style scoped>

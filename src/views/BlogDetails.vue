@@ -106,45 +106,6 @@
               </div>
             </div>
           </div>
-          <!-- <div
-            v-for="(item, index) in otherNews"
-            :key="index"
-            class="mb-5 border-b border-gray-100 pb-4 last:border-b-0"
-          >
-            <RouterLink
-              :to="`/blog/${item.slug}`"
-              class="flex items-start gap-3 group"
-            >
-              <div class="flex-shrink-0 overflow-hidden rounded-lg">
-                <img
-                  :src="resolveImage(item)"
-                  alt="Other news"
-                  class="w-20 h-20 object-cover transform group-hover:scale-110 transition-transform duration-300"
-                />
-              </div>
-
-              <div class="flex-1">
-                <h3
-                  class="text-sm font-medium text-gray-800 leading-snug group-hover:text-green-700 transition-colors"
-                >
-                  {{ item.title }}
-                </h3>
-
-                <div
-                  class="flex items-center text-xs text-orange-600 mt-2 gap-3"
-                >
-                  <span>
-                    <i class="fa-regular fa-calendar text-orange-600 mr-1"></i>
-                    {{ item.date }}
-                  </span>
-                  <span v-if="item.comments">
-                    <i class="fa-regular fa-comments text-orange-600 mr-1"></i>
-                    {{ item.comments }}
-                  </span>
-                </div>
-              </div>
-            </RouterLink>
-          </div> -->
         </div>
 
         <div
@@ -163,7 +124,6 @@ import { computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import { homePageSchema } from "@/schemas/pages/home.schema";
 
-
 const route = useRoute();
 // const blogId = route.params.id;
 const slug = route.params.slug;
@@ -171,8 +131,8 @@ const slug = route.params.slug;
 const allBlogs = [
   ...newsPageSchema.news.latestNewsSection.articles,
   ...newsPageSchema.news.policyAdvocacySection.updates,
-  ...Object.values(homePageSchema.news.months).flatMap(m => m.newsList),
-  ...Object.values(homePageSchema.news.months).map(m => m.featured)
+  ...Object.values(homePageSchema.news.months).flatMap((m) => m.newsList),
+  ...Object.values(homePageSchema.news.months).map((m) => m.featured),
 ];
 
 const blog = computed(() => allBlogs.find((item) => item.slug === slug));

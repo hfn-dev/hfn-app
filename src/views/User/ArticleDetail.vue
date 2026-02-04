@@ -29,7 +29,7 @@ onMounted(fetchArticle);
       <article v-else-if="article">
         <img
           :src="article.featured_image"
-          class="w-full h-[360px] object-cover rounded-2xl shadow-md mb-8"
+          class="w-full h-[360px] object-contain rounded-2xl shadow-md mb-8"
         />
 
         <h1 class="text-4xl font-extrabold text-[#333] mb-4">

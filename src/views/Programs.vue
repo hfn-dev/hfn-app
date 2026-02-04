@@ -268,13 +268,18 @@
 </template>
 
 <script setup>
+const latest =
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715462/7b1cf2bb015edf7a3b174efeea1885c9_S_rmdi9e.jpg";
 
-const latest = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715462/7b1cf2bb015edf7a3b174efeea1885c9_S_rmdi9e.jpg';
+const group =
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715462/9b5a0a3fd69afdefa5535542b438e3b5_L_ttzh44.jpg";
 
-const group = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715462/9b5a0a3fd69afdefa5535542b438e3b5_L_ttzh44.jpg';
-
-const hands1 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715460/7f1f2889896f4672f824c99531afb22a_L_ded16z.jpg';
-const hands2 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715462/3d5f5fa3430c20ad8e03385fc8424f4d_M_o3dquk.jpg';
-const hands3 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715460/47ed312dbee39b4feb4a261300270374_M_loxrhx.jpg';
-const hands = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715457/0647a6ce9fdb90a9ec50f1f223793960_M_n4hpgb.jpg';
+const hands1 =
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715460/7f1f2889896f4672f824c99531afb22a_L_ded16z.jpg";
+const hands2 =
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715462/3d5f5fa3430c20ad8e03385fc8424f4d_M_o3dquk.jpg";
+const hands3 =
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715460/47ed312dbee39b4feb4a261300270374_M_loxrhx.jpg";
+const hands =
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715457/0647a6ce9fdb90a9ec50f1f223793960_M_n4hpgb.jpg";
 </script>

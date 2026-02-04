@@ -59,12 +59,13 @@
           class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
         >
           <img
-  :src="article.image.startsWith('http')
-    ? article.image
-    : imageMap[article.image]"
-  class="w-full h-60 object-contain"
-/>
-
+            :src="
+              article.image.startsWith('http')
+                ? article.image
+                : imageMap[article.image]
+            "
+            class="w-full h-60 object-contain"
+          />
 
           <div class="p-6">
             <p class="text-sm text-orange-500 mb-4 flex items-center space-x-4">

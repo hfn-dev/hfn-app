@@ -188,65 +188,10 @@ const resolveImage = (image) => imageMap[image] || image;
       </div>
     </section>
 
-    <!-- <section class="bg-white py-6 sm:py-16 lg:py-12">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div>
-          <div
-            class="w-full px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-50 bg-white shadow-md text-center"
-          >
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">
-              {{ page.story.sectionTitle }}
-            </h2>
-          </div>
-        </div>
-
-        <div class="lg:grid lg:grid-cols-12 lg:gap-12">
-          <div class="lg:col-span-5 flex justify-center mb-10 lg:mb-0">
-            <div class="relative w-full overflow-hidden">
-              <img
-                :src="aboutImage"
-                alt="HFN advocacy and partnership"
-                class="w-full h-full object-contain transition-transform duration-700 hover:scale-105"
-              />
-            </div>
-          </div>
-
-          <div class="lg:col-span-7 text-gray-700 text-lg space-y-6 pt-10">
-            <div class="space-y-6">
-              <p v-for="(p, i) in page.story.paragraphs" :key="i">
-                {{ p }}
-              </p>
-            </div>
-            <div>
-              <h3 class="font-bold text-xl text-green-700 mb-2">
-                Our mission
-                <span class="text-gray-700 text-lg font-normal">{{
-                  page.story.mission
-                }}</span>
-              </h3>
-            </div>
-
-            <div>
-              <h3 class="font-bold text-xl text-green-700 mb-2">
-                Our vision
-                <span class="text-gray-700 text-lg font-normal">{{
-                  page.story.vision
-                }}</span>
-              </h3>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section> -->
+    
     <section class="bg-white py-16 lg:py-24">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- <div class="mb-16">
-        <div class="inline-block px-6 py-3 rounded-2xl border-2 border-green-50 bg-[#f2f9f3] shadow-sm">
-          <h2 class="text-3xl sm:text-4xl font-black text-[#004d33]">
-            {{ page.story.sectionTitle }}
-          </h2>
-        </div>
-      </div> -->
+       
         <div class="mb-16">
           <div
             class="w-full px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-50 bg-white shadow-md text-center"
@@ -288,31 +233,6 @@ const resolveImage = (image) => imageMap[image] || image;
           </div>
         </div>
 
-        <!-- <div class="grid md:grid-cols-2 gap-8 mt-12">
-        <div class="relative p-8 rounded-[3rem] bg-[#004d33] text-white shadow-xl overflow-hidden group">
-          <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-             <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <div class="relative z-10">
-            <h3 class="text-orange-400 font-black uppercase tracking-widest text-sm mb-4">Our Mission</h3>
-            <p class="text-xl md:text-2xl font-medium leading-snug italic">
-              "{{ page.story.mission }}"
-            </p>
-          </div>
-        </div>
-
-        <div class="relative p-8 rounded-[3rem] bg-[#f8fdf9] border-2 border-[#004d33]/10 shadow-lg overflow-hidden group">
-          <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-             <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#004d33" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/></svg>
-          </div>
-          <div class="relative z-10">
-            <h3 class="text-[#004d33] font-black uppercase tracking-widest text-sm mb-4">Our Vision</h3>
-            <p class="text-xl md:text-2xl font-medium leading-snug text-gray-800 italic">
-              "{{ page.story.vision }}"
-            </p>
-          </div>
-        </div>
-      </div> -->
         <div class="grid md:grid-cols-2 gap-8 mt-12">
           <div
             class="relative p-8 rounded-[3rem] shadow-xl overflow-hidden cursor-pointer transition-all duration-700 group bg-[#004d33] hover:bg-[#f8fdf9] border-2 border-transparent hover:border-[#004d33]/10"
