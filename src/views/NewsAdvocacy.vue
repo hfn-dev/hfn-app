@@ -157,87 +157,41 @@
       <div
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16 py-10 px-10 bg-[#F2F9F3] rounded-3xl"
       >
-        <div class="flex flex-col text-center">
+        <div
+          v-for="item in policyUpdates"
+          :key="item.slug"
+          class="flex flex-col text-center"
+        >
           <div
-            class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md flex items-center justify-center"
+            class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md"
           >
             <img
-              :src="hands"
-              alt="Strengthening Emergency Healthcare"
-              class="w-full h-full object-cover"
+              :src="
+                item.image.startsWith('http')
+                  ? item.image
+                  : imageMap[item.image]
+              "
+              :alt="item.title"
             />
           </div>
 
           <h4 class="text-lg font-semibold text-gray-900 mb-2">
-            Strengthening Emergency Healthcare in Nigeria through Partnership.
+            {{ item.title }}
           </h4>
+
           <p class="text-gray-600 text-sm mb-3">
-            HFN and the Federal Ministry of Health jointly announced a new
-            partnership model to enhance emergency medical infrastructure across
-            Nigeria’s six geopolitical zones.
+            {{ item.excerpt }}
           </p>
-          <a
-            href="#"
+
+          <RouterLink
+            :to="`/blog/${item.slug}`"
             class="text-orange-600 text-sm font-medium hover:text-orange-700 transition mx-auto"
           >
-            Learn more...
-          </a>
-        </div>
-
-        <div class="flex flex-col text-center">
-          <div
-            class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md flex items-center justify-center"
-          >
-            <img
-              :src="hands1"
-              alt="Strengthening Emergency Healthcare"
-              class="w-full h-full object-cover"
-            />
-          </div>
-
-          <h4 class="text-lg font-semibold text-gray-900 mb-2">
-            Policy Framework for Health Technology Adoption
-          </h4>
-          <p class="text-gray-600 text-sm mb-3">
-            HFN’s Policy and Advocacy team released a new white paper
-            encouraging structured regulation and faster adoption of digital
-            health tools in clinical settings.
-          </p>
-          <a
-            href="#"
-            class="text-orange-600 text-sm font-medium hover:text-orange-700 transition mx-auto"
-          >
-            Learn more...
-          </a>
-        </div>
-
-        <div class="flex flex-col text-center">
-          <div
-            class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md flex items-center justify-center"
-          >
-            <img
-              :src="hands2"
-              alt="Strengthening Emergency Healthcare"
-              class="w-full h-full object-cover"
-            />
-          </div>
-
-          <h4 class="text-lg font-semibold text-gray-900 mb-2">
-            Public-Private Dialogue on Universal Health Coverage (UHC)
-          </h4>
-          <p class="text-gray-600 text-sm mb-3">
-            Stakeholders met in Abuja to evaluate funding mechanisms and policy
-            frameworks driving Nigeria’s progress toward universal access to
-            affordable healthcare.
-          </p>
-          <a
-            href="#"
-            class="text-orange-600 text-sm font-medium hover:text-orange-700 transition mx-auto"
-          >
-            Learn more...
-          </a>
+            Learn more →
+          </RouterLink>
         </div>
       </div>
+
       <div class="flex justify-center items-center space-x-4 text-gray-600">
         <span class="text-sm">Page 1 of 2</span>
         <a
@@ -269,13 +223,8 @@
 import wef from "@/assets/wef.jpg";
 import { newsPageSchema } from "@/schemas/pages/news.schema";
 
-const imageMap = {
-  "event.png": event,
-  "group.png": group,
-  "group1.png": group1,
-  "wef.jpg": wef,
-};
 const articles = newsPageSchema.news.latestNewsSection.articles;
+const policyUpdates = newsPageSchema.news.policyAdvocacySection.updates;
 
 const latest =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769896360/243A8355_r47c3t.jpg";
@@ -291,6 +240,17 @@ const hands1 =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769716174/f5b95525832f3712e665bb57dba370d3_XS_yrppya.jpg";
 const hands2 =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769716176/dc2a1ae8ac60464700aa7be25ea2c408_L_dt5us8.jpg";
+
+const imageMap = {
+  "event.png": event,
+  "group.png": group,
+  "group1.png": group1,
+  "wef.jpg": wef,
+  "hands.png": hands,
+    "hands1.png": hands1,
+  "hands2.png": hands2,
+
+};
 
 const videos = [
   {

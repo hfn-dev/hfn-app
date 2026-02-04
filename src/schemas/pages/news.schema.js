@@ -183,7 +183,7 @@ The roundtable reinforced the urgency of collaborative investment and structured
           title: 'Policy Framework for Health Technology Adoption',
           description:
             'HFN’s Policy and Advocacy team released a new white paper encouraging structured regulation and faster adoption of digital health tools in clinical settings.',
-          image: 'hands.png',
+          image: 'hands1.png',
           link: '#',
           slug: 'policy-framework-for-health',
           tag: 'News',
@@ -193,7 +193,7 @@ The roundtable reinforced the urgency of collaborative investment and structured
           title: 'Public-Private Dialogue on Universal Health Coverage (UHC)',
           description:
             'Stakeholders met in Abuja to evaluate funding mechanisms and policy frameworks driving Nigeria’s progress toward universal access to affordable healthcare.',
-          image: 'hands.png',
+          image: 'hands2.png',
           link: '#',
           slug: 'public-private-dialogue',
           tag: 'News',
