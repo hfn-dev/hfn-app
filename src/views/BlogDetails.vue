@@ -9,23 +9,23 @@
         <span
           class="inline-block bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full mb-3"
         >
-          {{ blog.tag }}
+          {{ blog?.tag }}
         </span>
 
         <h1
           class="text-2xl lg:text-3xl font-bold text-gray-900 leading-snug mb-4"
         >
-          {{ blog.title }}
+          {{ blog?.title }}
         </h1>
 
         <div class="flex items-center text-sm text-orange-500 mb-6 space-x-4">
           <span class="flex items-center gap-1">
             <i class="fa-regular fa-calendar text-orange-700"></i>
-            Published on {{ blog.date }}
+            Published on {{ blog?.date }}
           </span>
           <span class="flex items-center gap-1">
             <i class="fa-regular fa-eye text-orange-700"></i>
-            {{ blog.views }} Views
+            {{ blog?.views }} Views
           </span>
         </div>
 
@@ -36,13 +36,13 @@
             class="w-full h-80 object-cover rounded-2xl"
           />
           <p class="text-sm text-gray-400 italic mt-2">
-            {{ blog.caption }}
+            {{ blog?.caption }}
           </p>
         </div>
 
         <div class="prose max-w-none text-gray-700 leading-relaxed space-y-4">
           <p>
-            {{ blog.description }}
+            {{ blog?.description }}
           </p>
         </div>
 
@@ -161,6 +161,8 @@
 import { newsPageSchema } from "@/schemas/pages/news.schema";
 import { computed, watch } from "vue";
 import { useRoute } from "vue-router";
+import { homePageSchema } from "@/schemas/pages/home.schema";
+
 
 const route = useRoute();
 // const blogId = route.params.id;
@@ -169,6 +171,8 @@ const slug = route.params.slug;
 const allBlogs = [
   ...newsPageSchema.news.latestNewsSection.articles,
   ...newsPageSchema.news.policyAdvocacySection.updates,
+  ...Object.values(homePageSchema.news.months).flatMap(m => m.newsList),
+  ...Object.values(homePageSchema.news.months).map(m => m.featured)
 ];
 
 const blog = computed(() => allBlogs.find((item) => item.slug === slug));

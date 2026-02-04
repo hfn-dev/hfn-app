@@ -588,7 +588,7 @@ onMounted(async () => {
             alt="Featured news"
             class="w-full h-72 object-cover"
           />
-          <span
+          <span 
             class="absolute bottom-4 left-4 bg-green-700 text-white text-xs font-semibold px-3 py-1 rounded-full"
           >
             {{ featured.tag }}
@@ -675,6 +675,12 @@ onMounted(async () => {
               >
                 {{ news.tag }}
               </span>
+              <RouterLink 
+      :to="`/blog/${news.slug}`" 
+      class="text-green-700 text-xs font-bold hover:underline"
+    >
+      Read More →
+    </RouterLink>
             </div>
           </div>
         </div>
