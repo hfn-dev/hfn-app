@@ -25,7 +25,7 @@ const { role } = useAuth()
 </template> -->
 
 <template>
-  <div id="app" class="antialiased text-gray-800">
+  <div id="app" class="font-sans antialiased text-gray-800">
     <component :is="['admin', 'editor', 'user', 'tutor', 'superadmin', 'learner'].includes(role) ? AdminHeader : Header" />
 
     <RouterView v-slot="{ Component }">
