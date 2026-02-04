@@ -72,6 +72,7 @@ const toggleFaq = (index) => {
 
 const months = computed(() => Object.keys(pageContent.value.news.months));
 
+
 const featured = computed(
   () => pageContent.value.news.months[selectedMonth.value]?.featured
 );
