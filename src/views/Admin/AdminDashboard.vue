@@ -490,7 +490,7 @@ const closeSidebar = () => (showSidebar.value = false);
       class="fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:translate-x-0"
       :class="showSidebar ? 'translate-x-0' : '-translate-x-full'"
     >
-      <AdminSidebar @closeSidebar="closeSidebar" />
+      <AdminSidebar @closeSidebar="closeSidebar" class="h-full" />
     </div>
 
     <div
