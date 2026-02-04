@@ -198,17 +198,17 @@ const currentYear = new Date().getFullYear();
               </h5>
 
               <div class="flex space-x-4 text-green-700">
-                <a
+                <!-- <a
                   href="https://www.facebook.com/hfnigeria"
                   target="_blank"
                   aria-label="Facebook"
                   class="hover:text-green-600 transition"
                 >
                   <i class="fa-brands fa-square-facebook text-2xl"></i>
-                </a>
+                </a> -->
 
                 <a
-                  href="https://www.instagram.com/hfnigeria"
+                  href="https://www.instagram.com/hfn_nigeria?igsh=MWR1ODI1aW5kaWwyaA=="
                   target="_blank"
                   aria-label="Instagram"
                   class="hover:text-green-600 transition"
@@ -217,7 +217,7 @@ const currentYear = new Date().getFullYear();
                 </a>
 
                 <a
-                  href="https://www.linkedin.com/company/hfnigeria"
+                  href="https://www.linkedin.com/company/healthcare-federation-of-nigeria-hfn/posts/?feedView=all"
                   target="_blank"
                   aria-label="LinkedIn"
                   class="hover:text-green-600 transition"
@@ -226,7 +226,7 @@ const currentYear = new Date().getFullYear();
                 </a>
 
                 <a
-                  href="https://x.com/hfnigeria"
+                  href="https://x.com/hfn_nigeria"
                   target="_blank"
                   aria-label="Twitter"
                   class="hover:text-green-600 transition"
