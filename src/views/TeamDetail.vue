@@ -85,7 +85,7 @@
                   <div class="h-1 w-12 bg-green-700 rounded-full"></div>
                   <span
                     class="text-gray-400 font-bold uppercase text-xs tracking-widest"
-                    >Biography</span
+                    ></span
                   >
                 </div>
 
@@ -95,7 +95,7 @@
                   {{
                     member.bio ||
                     member.profile ||
-                    "Biography currently being updated."
+                    ""
                   }}
                 </p>
               </div>

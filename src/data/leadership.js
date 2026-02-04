@@ -2,7 +2,7 @@ export const chair = {
   name: 'Bola Adesola',
   title: 'Chair, Board of Trustees',
   slug: 'bola-adesola',
-  profile: 'Biography currently being updated.',
+  profile: '',
   image:
     'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Bola_Adesola_lr8vif.png',
 };
@@ -45,7 +45,7 @@ A dynamic and result-oriented leader who combines an entrepreneurial spirit with
     name: 'Grace Delano',
     slug: 'grace-delano',
     title: 'Trustee',
-    image: 'url_here',
+    image: 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770196059/Grace_Delano_d9blax.png',
   },
 ];
 
