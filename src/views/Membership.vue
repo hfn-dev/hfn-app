@@ -1,9 +1,10 @@
 <script setup>
 // import handsJoining from "@/assets/handsJoining.jpg";
 import { computed, ref } from "vue";
+  import { useRouter } from "vue-router";
 import membership from "@/assets/membership.jpg";
 
-// const router = useRouter()
+const router = useRouter()
 const isSubmitting = ref(false);
 
 // const joinNow = async () => {
