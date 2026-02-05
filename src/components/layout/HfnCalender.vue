@@ -144,7 +144,6 @@ function dateToISO(d) {
   return `${y}-${m}-${day}`;
 }
 
-const selectedEvent = ref(null);
 function onEventClick(ev) {
   selectedEvent.value = ev;
 }
