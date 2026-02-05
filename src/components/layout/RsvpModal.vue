@@ -1,3 +1,41 @@
+<script>
+import api from "@/api"; 
+import { ref } from "vue";
+
+const props = defineProps({ event: Object });
+
+const loading = ref(false);
+const success = ref(false);
+
+const form = ref({
+  name: "",
+  email: "",
+  phone: "",
+  organization: "",
+});
+
+const submitRsvp = async () => {
+  loading.value = true;
+
+  try {
+    await api.post("/events/rsvp", {
+      event_id: props.event.id,
+      ...form.value,
+    });
+
+    success.value = true;
+
+    setTimeout(() => {
+      emit("close");
+    }, 1500);
+  } catch (err) {
+    alert("Failed to RSVP. Please try again.");
+  } finally {
+    loading.value = false;
+  }
+};
+
+</script>
 <template>
   <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div class="bg-white rounded-2xl p-6 w-full max-w-md">
