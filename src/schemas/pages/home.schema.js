@@ -4,7 +4,7 @@ import group from '@/assets/group.png';
 import health from '@/assets/hfn-news5.PNG';
 import wef from '@/assets/hfn-news6.PNG';
 import event from '@/assets/hfn-news7.PNG';
-import hfn_partner from '@/assets/hfn_partner.png';
+// import hfn_partner from '@/assets/hfn_partner.png';
 
 import hba from '@/assets/hba-africa.png';
 import oando from '@/assets/oando_logo.png';
@@ -18,6 +18,7 @@ import jennifer from '@/assets/jennifer.png';
 import njide from '@/assets/njide.png';
 import reagan from '@/assets/reagan.png';
 
+const hfn_partner = "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715457/16268da44f149e859e5069f5fcdbf9fb_S_j9rsms.jpg";
 
 const society = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769734457/Society_For_Family_Health_Logo_1_a5qcrp.png';
 export const homePageSchema = {
