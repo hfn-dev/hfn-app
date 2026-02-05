@@ -1,7 +1,14 @@
-<script>
+<script setup>
 import { ref } from "vue";
 
-const props = defineProps({ event: Object });
+const props = defineProps({
+  event: {
+    type: Object,
+    required: true,
+  },
+});
+
+const emit = defineEmits(["close"]);
 
 const loading = ref(false);
 const success = ref(false);
@@ -15,9 +22,14 @@ const form = ref({
 
 const submitRsvp = async () => {
   loading.value = true;
- console.log('event submitted')
-};
 
+  console.log("RSVP submitted for:", props.event);
+
+  setTimeout(() => {
+    loading.value = false;
+    success.value = true;
+  }, 1000);
+};
 </script>
 <template>
   <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
