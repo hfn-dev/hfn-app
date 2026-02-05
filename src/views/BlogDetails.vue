@@ -33,7 +33,7 @@
           <img
             :src="resolveImage(blog)"
             alt="Blog featured"
-            class="w-full h-80 object-cover rounded-2xl"
+            class="w-full h-80 object-contain rounded-2xl"
           />
           <p class="text-sm text-gray-400 italic mt-2">
             {{ blog?.caption }}
