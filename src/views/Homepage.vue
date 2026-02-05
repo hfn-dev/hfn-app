@@ -14,6 +14,23 @@ import {
   UserGroupIcon,
 } from "@heroicons/vue/24/outline";
 
+
+const resolveImage = (item) => {
+  if (!item) return "/images/placeholder-news.jpg";
+
+  const img =
+    item.image ||
+    item.thumbnail ||
+    item.coverImage ||
+    item.featured_image;
+
+  if (!img) return "/images/placeholder-news.jpg";
+
+  if (img.startsWith("http")) return img;
+
+  return imageMap[img] || "/images/placeholder-news.jpg";
+};
+  
 const actionRef = ref(null);
 const isVisible = ref(false);
 const sectionRef = ref(null);
@@ -508,11 +525,12 @@ onMounted(async () => {
             class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200 flex flex-col sm:flex-row transition hover:shadow-md"
           >
             <div class="relative w-full sm:w-48">
+              
               <img
-                :src="news.image"
-                alt="News image"
-                class="w-full h-40 sm:h-full object-cover"
-              />
+  :src="resolveImage(news)"
+  alt="News image"
+  class="w-full h-40 sm:h-full object-cover"
+/>
 
               <span
                 class="absolute bottom-3 left-3 bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full"
