@@ -266,7 +266,7 @@ import globe from "@/assets/globe.png";
               </a>
 
               <a
-                href="https://www.instagram.com/hfnigeria"
+                href="https://www.instagram.com/hfn_nigeria?igsh=MWR1ODI1aW5kaWwyaA=="
                 target="_blank"
                 aria-label="Instagram"
                 class="text-green-700 hover:text-green-900 transition"
@@ -275,7 +275,7 @@ import globe from "@/assets/globe.png";
               </a>
 
               <a
-                href="https://www.linkedin.com/company/hfnigeria"
+                href="https://www.linkedin.com/company/healthcare-federation-of-nigeria-hfn/posts/?feedView=all"
                 target="_blank"
                 aria-label="LinkedIn"
                 class="text-green-700 hover:text-green-900 transition"
@@ -284,7 +284,7 @@ import globe from "@/assets/globe.png";
               </a>
 
               <a
-                href="https://x.com/hfnigeria"
+                href="https://x.com/hfn_nigeria"
                 target="_blank"
                 aria-label="Twitter"
                 class="text-green-700 hover:text-green-900 transition"
