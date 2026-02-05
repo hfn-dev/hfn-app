@@ -1,5 +1,4 @@
 <script>
-import api from "@/api"; 
 import { ref } from "vue";
 
 const props = defineProps({ event: Object });
@@ -16,23 +15,7 @@ const form = ref({
 
 const submitRsvp = async () => {
   loading.value = true;
-
-  try {
-    await api.post("/events/rsvp", {
-      event_id: props.event.id,
-      ...form.value,
-    });
-
-    success.value = true;
-
-    setTimeout(() => {
-      emit("close");
-    }, 1500);
-  } catch (err) {
-    alert("Failed to RSVP. Please try again.");
-  } finally {
-    loading.value = false;
-  }
+ console.log('event submitted')
 };
 
 </script>
