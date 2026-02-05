@@ -550,10 +550,10 @@ onMounted(async () => {
             <div class="relative w-full sm:w-48">
               
               <img
-  :src="resolveImage(news)"
-  alt="News image"
-  class="w-full h-40 sm:h-full object-cover"
-/>
+                :src="news.image"
+                alt="News image"
+                class="w-full h-40 sm:h-full object-cover"
+              />
 
               <span
                 class="absolute bottom-3 left-3 bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full"
