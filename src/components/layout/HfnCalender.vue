@@ -3,11 +3,22 @@ import { computed, ref } from "vue";
 import eventThumb3 from "@/assets/event2026.png";
 import eventThumb2 from "@/assets/hands.png";
 import eventThumb from "@/assets/latest_news.png";
+import RsvpModal from "./RsvpModal.vue";
 
+  
 const today = new Date();
 const activeDate = ref(new Date(today.getFullYear(), today.getMonth(), 1));
 const sortBy = ref("All");
 const eventThumb4 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769716174/f5b95525832f3712e665bb57dba370d3_XS_yrppya.jpg';
+
+
+  const selectedEvent = ref(null);
+const showRsvpModal = ref(false);
+
+const openRsvp = (event) => {
+  selectedEvent.value = event;
+  showRsvpModal.value = true;
+};
 
 function closeModal() {
   selectedEvent.value = null;
@@ -312,7 +323,7 @@ function isToday(date) {
               </p>
 
               <div class="flex items-center gap-3">
-                <button class="px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800">
+                <button @click="openRsvp(event)" class="px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800">
                   RSVP
                 </button>
                 <!-- <a href="#" class="text-sm text-green-700 underline">
@@ -326,6 +337,12 @@ function isToday(date) {
     </teleport>
 
   </section>
+  <RsvpModal
+  v-if="showRsvpModal"
+  :event="selectedEvent"
+  @close="showRsvpModal = false"
+/>
+
 </template>
 
 <style scoped></style>
