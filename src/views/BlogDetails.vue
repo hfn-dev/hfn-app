@@ -127,8 +127,8 @@ import wef from "@/assets/wef.jpg";
 
 const route = useRoute();
 // const blogId = route.params.id;
-// const slug = route.params.slug;
-const slug = computed(() => route.params.slug);
+const slug = route.params.slug;
+// const slug = computed(() => route.params.slug);
 
 const allBlogs = [
   ...newsPageSchema.news.latestNewsSection.articles,
