@@ -570,10 +570,11 @@ const resolveImage = (image) => imageMap[image] || image;
                         {{ item.fullDesc }}
                       </p>
 
-                      <button
+                      <router-link
+                        to="/get-involved" 
                         class="inline-flex items-center gap-2 px-8 py-3 bg-white text-gray-900 rounded-full text-xs font-black uppercase tracking-widest hover:bg-orange-400 hover:text-white transition-all duration-300 transform hover:scale-110"
                       >
-                        Get Details
+                        Get Involved
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           class="w-4 h-4"
@@ -588,7 +589,7 @@ const resolveImage = (image) => imageMap[image] || image;
                             d="M14 5l7 7m0 0l-7 7m7-7H3"
                           />
                         </svg>
-                      </button>
+                      </router-link>
                     </div>
                   </div>
                 </div>
