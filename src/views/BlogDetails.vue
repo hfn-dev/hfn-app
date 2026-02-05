@@ -137,10 +137,18 @@ const allBlogs = [
   ...Object.values(homePageSchema.news.months).map((m) => m.featured),
 ];
 
-const blog = computed(() => allBlogs.find((item) => item.slug === slug));
+// const blog = computed(() => allBlogs.find((item) => item.slug === slug));
+
+// const otherNews = computed(() =>
+//   allBlogs.filter((item) => item.slug !== slug).slice(0, 3)
+// );
+
+  const blog = computed(() =>
+  allBlogs.find((item) => item.slug === slug.value)
+);
 
 const otherNews = computed(() =>
-  allBlogs.filter((item) => item.slug !== slug).slice(0, 3)
+  allBlogs.filter((item) => item.slug !== slug.value).slice(0, 3)
 );
 
 // const resolveImage = (item) => {
