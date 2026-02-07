@@ -12,7 +12,7 @@ const articles = ref([]);
 
 
 
-const auth = useAuthStore();
+const auth = useAuth();
 
 const visibleArticles = computed(() => {
   return articles.value.filter(article => {
