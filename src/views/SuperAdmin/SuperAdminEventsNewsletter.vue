@@ -102,36 +102,60 @@ onMounted(async () => {
 };
 
 
-const saveNews = async () => {
-  try {
-    if (isEditing.value) {
-      await newsApi.partialUpdateArticle(
-        editingSlug.value,
-        newsForm.value
-      );
-    } else {
-      await newsApi.createArticle({
-        ...newsForm.value,
-        status: "draft",
-      });
-    }
+ const saveNews = async () => {
+  const formData = new FormData();
 
-    await fetchArticles();
-    resetNewsForm();
-  } catch (e) {
-    console.error(e);
-    console.log("Failed to save article");
+  Object.entries(newsForm.value).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      value.forEach(v => formData.append(`${key}[]`, v));
+    } else {
+      formData.append(key, value);
+    }
+  });
+
+  if (isEditing.value) {
+    await newsApi.partialUpdateArticle(editingSlug.value, formData);
+  } else {
+    await newsApi.createArticle(formData);
   }
 };
- 
 
-  const uploadNewsImage = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
 
-  const { url } = await uploadsApi.upload(file);
-  newsForm.value.featured_image = url;
+
+// const saveNews = async () => {
+//   try {
+//     if (isEditing.value) {
+//       await newsApi.partialUpdateArticle(
+//         editingSlug.value,
+//         newsForm.value
+//       );
+//     } else {
+//       await newsApi.createArticle({
+//         ...newsForm.value,
+//         status: "draft",
+//       });
+//     }
+
+//     await fetchArticles();
+//     resetNewsForm();
+//   } catch (e) {
+//     console.error(e);
+//     console.log("Failed to save article");
+//   }
+// };
+
+ const uploadNewsImage = (e) => {
+  newsForm.value.featured_image = e.target.files[0];
 };
+
+
+//   const uploadNewsImage = async (e) => {
+//   const file = e.target.files[0];
+//   if (!file) return;
+
+//   const { url } = await uploadsApi.upload(file);
+//   newsForm.value.featured_image = url;
+// };
 
   const addVideo = () => {
   if (!videoInput.value) return;
