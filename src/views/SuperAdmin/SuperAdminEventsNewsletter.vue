@@ -9,6 +9,27 @@ import { useAuth } from "@/store/authStore";
 const events = ref([]);
 const loadingEvents = ref(false);
 const articles = ref([]);
+const editingSlug = ref(null);
+const isEditing = computed(() => !!editingSlug.value);
+const publishingSlug = ref(null);
+
+ const editArticle = (article) => {
+  editingSlug.value = article.slug;
+
+  newsForm.value = {
+    title: article.title,
+    excerpt: article.excerpt,
+    content: article.content,
+    featured_image: article.featured_image,
+    status: article.status,
+    visibility: article.visibility,
+    is_featured: article.is_featured ?? false,
+    featured_order: article.featured_order ?? 0,
+    videos: article.videos ? [...article.videos] : [],
+  };
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
 
 
 
@@ -33,7 +54,7 @@ const deleteArticle = async (slug) => {
     articles.value = articles.value.filter(a => a.slug !== slug);
   } catch (e) {
     console.error(e);
-    alert("Failed to delete article");
+    console.log("Failed to delete article");
   } finally {
     deletingSlug.value = null;
   }
@@ -49,11 +70,9 @@ onMounted(async () => {
   await fetchArticles();
 });
 
-const createNews = async () => {
-  await newsApi.createArticle(newsForm.value);
-  await fetchArticles();
-
-  Object.assign(newsForm.value, {
+ const resetNewsForm = () => {
+  editingSlug.value = null;
+  newsForm.value = {
     title: "",
     excerpt: "",
     content: "",
@@ -62,8 +81,47 @@ const createNews = async () => {
     visibility: "public",
     is_featured: false,
     featured_order: 0,
-    videos: []
-  });
+    videos: [],
+  };
+};
+
+ const publishArticle = async (slug) => {
+  const confirmed = confirm("Publish this article?");
+  if (!confirmed) return;
+
+  try {
+    publishingSlug.value = slug;
+    await newsApi.publishArticle(slug);
+    await fetchArticles();
+  } catch (e) {
+    console.error(e);
+    console.log("Failed to publish article");
+  } finally {
+    publishingSlug.value = null;
+  }
+};
+
+
+const saveNews = async () => {
+  try {
+    if (isEditing.value) {
+      await newsApi.partialUpdateArticle(
+        editingSlug.value,
+        newsForm.value
+      );
+    } else {
+      await newsApi.createArticle({
+        ...newsForm.value,
+        status: "draft",
+      });
+    }
+
+    await fetchArticles();
+    resetNewsForm();
+  } catch (e) {
+    console.error(e);
+    console.log("Failed to save article");
+  }
 };
  
 
@@ -315,7 +373,10 @@ onMounted(() => {
         </section>
 
         <section class="mt-16">
-  <h2 class="text-xl font-semibold mb-4">Create News Article</h2>
+  <h2 class="text-xl font-semibold mb-4">
+  {{ isEditing ? "Edit News Article" : "Create News Article" }}
+</h2>
+
 
   <div class="bg-white p-6 rounded-xl shadow space-y-4 max-w-3xl">
     <input v-model="newsForm.title" class="input" placeholder="Title" />
@@ -368,9 +429,18 @@ onMounted(() => {
       </select>
     </div>
 
-    <button @click="createNews" class="btn-primary">
-      Publish Article
-    </button>
+    <button @click="saveNews" class="btn-primary">
+  {{ isEditing ? "Update Article" : "Save as Draft" }}
+</button>
+
+<button
+  v-if="isEditing"
+  @click="resetNewsForm"
+  class="btn-secondary ml-2"
+>
+  Cancel
+</button>
+
   </div>
 </section>
      <section class="mt-12">
@@ -429,22 +499,39 @@ onMounted(() => {
           </td>
 
           <td class="p-3 text-right space-x-2">
-            <RouterLink
-              :to="`/blog/${article.slug}`"
-              class="text-green-700 hover:underline text-xs"
-              target="_blank"
-            >
-              View
-            </RouterLink>
+  <button
+    @click="editArticle(article)"
+    class="text-blue-600 hover:underline text-xs"
+  >
+    Edit
+  </button>
 
-            <button
-              @click="deleteArticle(article.slug)"
-              class="text-red-600 hover:underline text-xs"
-              :disabled="deletingSlug === article.slug"
-            >
-              {{ deletingSlug === article.slug ? "Deleting…" : "Delete" }}
-            </button>
-          </td>
+  <button
+    v-if="article.status === 'draft'"
+    @click="publishArticle(article.slug)"
+    class="text-green-600 hover:underline text-xs"
+    :disabled="publishingSlug === article.slug"
+  >
+    {{ publishingSlug === article.slug ? "Publishing…" : "Publish" }}
+  </button>
+
+  <RouterLink
+    :to="`/blog/${article.slug}`"
+    class="text-gray-600 hover:underline text-xs"
+    target="_blank"
+  >
+    View
+  </RouterLink>
+
+  <button
+    @click="deleteArticle(article.slug)"
+    class="text-red-600 hover:underline text-xs"
+    :disabled="deletingSlug === article.slug"
+  >
+    {{ deletingSlug === article.slug ? "Deleting…" : "Delete" }}
+  </button>
+</td>
+
         </tr>
 
         <tr v-if="!articles.length">
