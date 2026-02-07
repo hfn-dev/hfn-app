@@ -2,11 +2,226 @@
 import uploadsApi from "@/api/contentUploadsApi";
 import eventsApi from "@/api/events.js";
 import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
+ import newsApi from "@/api/newsModule";
+import { useAuth } from "@/store/authStore";
 
 const events = ref([]);
 const loadingEvents = ref(false);
+const articles = ref([]);
+const editingSlug = ref(null);
+const isEditing = computed(() => !!editingSlug.value);
+const publishingSlug = ref(null);
+const showConfirm = ref(false);
+const confirmTitle = ref("");
+const confirmMessage = ref("");
+const confirmAction = ref(null);
+const confirmLoading = ref(false);
 
+
+ const uploadBanner = async (file) => {
+  const data = new FormData();
+  data.append("file", file);
+  data.append("upload_preset", "your_preset");
+
+  const res = await fetch(
+    "http://res.cloudinary.com/dawrem2mi/image/upload",
+    { method: "POST", body: data }
+  );
+
+  const json = await res.json();
+  form.value.banner = json.secure_url;
+};
+
+const loading = ref(false);
+
+ const editArticle = (article) => {
+  editingSlug.value = article.slug;
+
+  newsForm.value = {
+    title: article.title,
+    excerpt: article.excerpt,
+    content: article.content,
+    featured_image: article.featured_image,
+    status: article.status,
+    audience: article.audience,
+    is_featured: article.is_featured ?? false,
+    featured_order: article.featured_order ?? 0,
+    videos: article.videos ? [...article.videos] : [],
+  };
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+
+
+const auth = useAuth();
+
+const visibleArticles = computed(() => {
+  return articles.value.filter(article => {
+    if (article.audience === "all") return true;
+    return auth.isAuthenticated;
+  });
+});
+
+const deletingSlug = ref(null);
+
+// const deleteArticle = async (slug) => {
+//   const confirmed = confirm("Are you sure you want to delete this article?");
+//   if (!confirmed) return;
+
+//   try {
+//     deletingSlug.value = slug;
+//     await newsApi.deleteArticle(slug);
+//     articles.value = articles.value.filter(a => a.slug !== slug);
+//   } catch (e) {
+//     console.error(e);
+//     console.log("Failed to delete article");
+//   } finally {
+//     deletingSlug.value = null;
+//   }
+// };
+
+const deleteArticle = (slug) => {
+  confirmTitle.value = "Delete Article";
+  confirmMessage.value = "Are you sure you want to permanently delete this article? This action cannot be undone.";
+  showConfirm.value = true;
+
+  confirmAction.value = async () => {
+    try {
+      confirmLoading.value = true;
+      deletingSlug.value = slug;
+
+      await newsApi.deleteArticle(slug);
+      articles.value = articles.value.filter(a => a.slug !== slug);
+    } catch (e) {
+      console.error(e);
+      console.log("Failed to delete article");
+    } finally {
+      deletingSlug.value = null;
+      confirmLoading.value = false;
+      showConfirm.value = false;
+    }
+  };
+};
+
+  
+const fetchArticles = async () => {
+  articles.value = await newsApi.listArticles();
+};
+
+onMounted(async () => {
+  await fetchArticles();
+});
+
+ const resetNewsForm = () => {
+  editingSlug.value = null;
+  newsForm.value = {
+    title: "",
+    excerpt: "",
+    content: "",
+    featured_image: "",
+    status: "draft",
+    audience: "all",
+    is_featured: false,
+    featured_order: 0,
+    videos: [],
+  };
+};
+
+ const publishArticle = async (slug) => {
+  const confirmed = confirm("Publish this article?");
+  if (!confirmed) return;
+
+  try {
+    publishingSlug.value = slug;
+    await newsApi.publishArticle(slug);
+    await fetchArticles();
+  } catch (e) {
+    console.error(e);
+    console.log("Failed to publish article");
+  } finally {
+    publishingSlug.value = null;
+  }
+};
+
+
+//  const saveNews = async () => {
+//   const formData = new FormData();
+
+//   Object.entries(newsForm.value).forEach(([key, value]) => {
+//     if (Array.isArray(value)) {
+//       value.forEach(v => formData.append(`${key}[]`, v));
+//     } else {
+//       formData.append(key, value);
+//     }
+//   });
+
+//   if (isEditing.value) {
+//     await newsApi.partialUpdateArticle(editingSlug.value, formData);
+//   } else {
+//     await newsApi.createArticle(formData);
+//   }
+// };
+
+ const saveNews = async () => {
+  try {
+    const formData = new FormData();
+
+    Object.entries(newsForm.value).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach(v => formData.append(`${key}[]`, v));
+      } else {
+        formData.append(key, value);
+      }
+    });
+
+    if (isEditing.value) {
+      await newsApi.partialUpdateArticle(editingSlug.value, formData);
+    } else {
+      await newsApi.createArticle(formData);
+    }
+
+    await fetchArticles();   
+    resetNewsForm();         
+  } catch (e) {
+    console.error(e);
+    console.log("Failed to save article");
+  }
+};
+
+
+
+
+ const uploadNewsImage = (e) => {
+  newsForm.value.featured_image = e.target.files[0];
+};
+
+
+  const addVideo = () => {
+  if (!videoInput.value) return;
+  newsForm.value.videos.push(videoInput.value);
+  videoInput.value = "";
+};
+
+const removeVideo = (index) => {
+  newsForm.value.videos.splice(index, 1);
+};
+
+const newsForm = ref({
+  title: "",
+  excerpt: "",
+  content: "",
+  featured_image: "",
+  status: "draft",
+  audience: "all",
+  is_featured: false,
+  featured_order: 0,
+  videos: []
+});
+
+const videoInput = ref("");
+  
 const eventForm = ref({
   title: "",
   description: "",
@@ -31,9 +246,12 @@ const fetchEvents = async () => {
 const createEvent = async () => {
   const payload = {
     ...eventForm.value,
-    price: eventForm.value.is_free ? null : eventForm.value.price,
     banner: eventForm.value.banner,
+   price: eventForm.value.is_free ? undefined : Number(eventForm.value.price),
   };
+ if (eventForm.value.is_free) {
+  delete payload.price;
+}
 
   await eventsApi.createCalenderEvent(payload);
   await fetchEvents();
@@ -65,17 +283,17 @@ const uploadForm = ref({
 });
 
 
-const uploadBanner = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+// const uploadBanner = async (e) => {
+//   const file = e.target.files[0];
+//   if (!file) return;
 
-  try {
-    const { url } = await uploadsApi.upload(file);
-    eventForm.value.banner = url;
-  } catch (error) {
-    console.error("Banner upload failed", error);
-  }
-};
+//   try {
+//     const { url } = await uploadsApi.upload(file);
+//     eventForm.value.banner = url;
+//   } catch (error) {
+//     console.error("Banner upload failed", error);
+//   }
+// };
 
 
 const fetchUploads = async () => {
@@ -222,6 +440,180 @@ onMounted(() => {
           </div>
         </section>
 
+        <section class="mt-16">
+  <h2 class="text-xl font-semibold mb-4">
+  {{ isEditing ? "Edit News Article" : "Create News Article" }}
+</h2>
+
+
+  <div class="bg-white p-6 rounded-xl shadow space-y-4 max-w-3xl">
+    <input v-model="newsForm.title" class="input" placeholder="Title" />
+    <input v-model="newsForm.excerpt" class="input" placeholder="Excerpt" />
+
+    <textarea
+      v-model="newsForm.content"
+      class="input h-40"
+      placeholder="Full article content"
+    />
+
+    <div>
+      <label class="block mb-2">Featured Image</label>
+      <input type="file" @change="uploadNewsImage" />
+      <img
+        v-if="newsForm.featured_image"
+        :src="newsForm.featured_image"
+        class="h-40 mt-2 rounded"
+      />
+    </div>
+
+    <div>
+      <label class="block mb-1 font-medium">Video links</label>
+      <div class="flex gap-2">
+        <input v-model="videoInput" class="input flex-1" />
+        <button @click="addVideo" class="btn-secondary">Add</button>
+      </div>
+
+      <ul class="mt-2 text-sm">
+        <li
+          v-for="(video, i) in newsForm.videos"
+          :key="i"
+          class="flex justify-between"
+        >
+          {{ video }}
+          <button @click="removeVideo(i)" class="text-red-600">✕</button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="flex gap-4">
+      <select v-model="newsForm.status" class="input">
+        <option value="draft">Draft</option>
+        <option value="published">Published</option>
+      </select>
+
+      <select v-model="newsForm.audience" class="input">
+        <option value="all">All</option>
+        <option value="members">Members only</option>
+      </select>
+    </div>
+
+    <button @click="saveNews" class="btn-primary">
+  {{ isEditing ? "Update Article" : "Save as Draft" }}
+</button>
+
+<button
+  v-if="isEditing"
+  @click="resetNewsForm"
+  class="btn-secondary ml-2"
+>
+  Cancel
+</button>
+
+  </div>
+</section>
+     <section class="mt-12">
+  <h3 class="text-lg font-semibold mb-4">Existing Articles</h3>
+
+  <div class="bg-white rounded-xl shadow overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-100 text-left">
+        <tr>
+          <th class="p-3">Title</th>
+          <th>Status</th>
+          <th>Audience</th>
+          <th>Date</th>
+          <th class="text-right p-3">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr
+          v-for="article in articles"
+          :key="article.id"
+          class="border-t hover:bg-gray-50"
+        >
+          <td class="p-3 font-medium">
+            {{ article.title }}
+          </td>
+
+          <td>
+            <span
+              class="px-2 py-1 rounded text-xs font-medium"
+              :class="
+                article.status === 'published'
+                  ? 'bg-green-100 text-green-700'
+                  : 'bg-gray-200 text-gray-600'
+              "
+            >
+              {{ article.status }}
+            </span>
+          </td>
+
+          <td>
+            <span
+              class="px-2 py-1 rounded text-xs font-medium"
+              :class="
+                article.audience === 'all'
+                  ? 'bg-blue-100 text-blue-700'
+                  : 'bg-orange-100 text-orange-700'
+              "
+            >
+              {{ article.audience }}
+            </span>
+          </td>
+
+          <td>
+            {{ new Date(article.publish_date).toLocaleDateString() }}
+          </td>
+
+          <td class="p-3 text-right space-x-2">
+  <button
+    @click="editArticle(article)"
+    class="text-blue-600 hover:underline text-xs"
+  >
+    Edit
+  </button>
+
+  <button
+    v-if="article.status === 'draft'"
+    @click="publishArticle(article.slug)"
+    class="text-green-600 hover:underline text-xs"
+    :disabled="publishingSlug === article.slug"
+  >
+    {{ publishingSlug === article.slug ? "Publishing…" : "Publish" }}
+  </button>
+
+  <RouterLink
+    :to="`/blog/${article.slug}`"
+    class="text-gray-600 hover:underline text-xs"
+    target="_blank"
+  >
+    View
+  </RouterLink>
+
+  <button
+    @click="deleteArticle(article.slug)"
+    class="text-red-600 hover:underline text-xs"
+    :disabled="deletingSlug === article.slug"
+  >
+    {{ deletingSlug === article.slug ? "Deleting…" : "Delete" }}
+  </button>
+</td>
+
+        </tr>
+
+        <tr v-if="!articles.length">
+          <td colspan="5" class="p-6 text-center text-gray-500">
+            No articles created yet
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+
         <div class="my-12 flex items-center gap-4">
           <div class="flex-1 h-px bg-gray-300"></div>
           <span class="text-sm text-gray-500">NEWSLETTERS & DOCUMENTS</span>
@@ -280,5 +672,39 @@ onMounted(() => {
       </div>
     </main>
   </div>
+  <!-- Confirm Dialog -->
+<div
+  v-if="showConfirm"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+>
+  <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+    <h3 class="text-lg font-semibold mb-2">
+      {{ confirmTitle }}
+    </h3>
+
+    <p class="text-sm text-gray-600 mb-6">
+      {{ confirmMessage }}
+    </p>
+
+    <div class="flex justify-end gap-3">
+      <button
+        @click="showConfirm = false"
+        class="btn-secondary"
+        :disabled="confirmLoading"
+      >
+        Cancel
+      </button>
+
+      <button
+        @click="confirmAction"
+        class="btn-danger"
+        :disabled="confirmLoading"
+      >
+        {{ confirmLoading ? "Please wait…" : "Confirm" }}
+      </button>
+    </div>
+  </div>
+</div>
+
 </template>
     
