@@ -40,6 +40,21 @@
           </p>
         </div>
 
+        <div v-if="blog?.videos?.length" class="mt-10 space-y-6">
+  <div
+    v-for="(video, i) in blog.videos"
+    :key="i"
+    class="aspect-video"
+  >
+    <iframe
+      :src="getEmbedUrl(video)"
+      class="w-full h-full rounded-xl"
+      allowfullscreen
+    />
+  </div>
+</div>
+
+
         <div class="prose max-w-none text-gray-700 leading-relaxed space-y-4">
           <p>
             {{ blog?.description }}
