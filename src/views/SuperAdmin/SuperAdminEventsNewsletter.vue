@@ -22,7 +22,7 @@ const publishingSlug = ref(null);
     content: article.content,
     featured_image: article.featured_image,
     status: article.status,
-    visibility: article.visibility,
+    audience: article.audience,
     is_featured: article.is_featured ?? false,
     featured_order: article.featured_order ?? 0,
     videos: article.videos ? [...article.videos] : [],
@@ -37,7 +37,7 @@ const auth = useAuth();
 
 const visibleArticles = computed(() => {
   return articles.value.filter(article => {
-    if (article.visibility === "public") return true;
+    if (article.audience === "all") return true;
     return auth.isAuthenticated;
   });
 });
@@ -78,7 +78,7 @@ onMounted(async () => {
     content: "",
     featured_image: "",
     status: "draft",
-    visibility: "public",
+    audience: "all",
     is_featured: false,
     featured_order: 0,
     videos: [],
@@ -170,7 +170,7 @@ const newsForm = ref({
   content: "",
   featured_image: "",
   status: "draft",
-  visibility: "public",
+  audience: "all",
   is_featured: false,
   featured_order: 0,
   videos: []
@@ -444,8 +444,8 @@ onMounted(() => {
         <option value="published">Published</option>
       </select>
 
-      <select v-model="newsForm.visibility" class="input">
-        <option value="public">Public</option>
+      <select v-model="newsForm.audience" class="input">
+        <option value="all">All</option>
         <option value="members">Members only</option>
       </select>
     </div>
@@ -473,7 +473,7 @@ onMounted(() => {
         <tr>
           <th class="p-3">Title</th>
           <th>Status</th>
-          <th>Visibility</th>
+          <th>Audience</th>
           <th>Date</th>
           <th class="text-right p-3">Actions</th>
         </tr>
@@ -506,12 +506,12 @@ onMounted(() => {
             <span
               class="px-2 py-1 rounded text-xs font-medium"
               :class="
-                article.visibility === 'public'
+                article.audience === 'all'
                   ? 'bg-blue-100 text-blue-700'
                   : 'bg-orange-100 text-orange-700'
               "
             >
-              {{ article.visibility }}
+              {{ article.audience }}
             </span>
           </td>
 
