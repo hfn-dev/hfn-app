@@ -21,17 +21,37 @@ const visibleArticles = computed(() => {
   });
 });
 
+const deletingSlug = ref(null);
+
+const deleteArticle = async (slug) => {
+  const confirmed = confirm("Are you sure you want to delete this article?");
+  if (!confirmed) return;
+
+  try {
+    deletingSlug.value = slug;
+    await newsApi.deleteArticle(slug);
+    articles.value = articles.value.filter(a => a.slug !== slug);
+  } catch (e) {
+    console.error(e);
+    alert("Failed to delete article");
+  } finally {
+    deletingSlug.value = null;
+  }
+};
 
 
   
+const fetchArticles = async () => {
+  articles.value = await newsApi.listArticles();
+};
+
 onMounted(async () => {
-  articles.value = await newsApi.listArticles({
-    status: "published"
-  });
+  await fetchArticles();
 });
 
 const createNews = async () => {
   await newsApi.createArticle(newsForm.value);
+  await fetchArticles();
 
   Object.assign(newsForm.value, {
     title: "",
@@ -353,6 +373,90 @@ onMounted(() => {
     </button>
   </div>
 </section>
+     <section class="mt-12">
+  <h3 class="text-lg font-semibold mb-4">Existing Articles</h3>
+
+  <div class="bg-white rounded-xl shadow overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-100 text-left">
+        <tr>
+          <th class="p-3">Title</th>
+          <th>Status</th>
+          <th>Visibility</th>
+          <th>Date</th>
+          <th class="text-right p-3">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr
+          v-for="article in articles"
+          :key="article.id"
+          class="border-t hover:bg-gray-50"
+        >
+          <td class="p-3 font-medium">
+            {{ article.title }}
+          </td>
+
+          <td>
+            <span
+              class="px-2 py-1 rounded text-xs font-medium"
+              :class="
+                article.status === 'published'
+                  ? 'bg-green-100 text-green-700'
+                  : 'bg-gray-200 text-gray-600'
+              "
+            >
+              {{ article.status }}
+            </span>
+          </td>
+
+          <td>
+            <span
+              class="px-2 py-1 rounded text-xs font-medium"
+              :class="
+                article.visibility === 'public'
+                  ? 'bg-blue-100 text-blue-700'
+                  : 'bg-orange-100 text-orange-700'
+              "
+            >
+              {{ article.visibility }}
+            </span>
+          </td>
+
+          <td>
+            {{ new Date(article.created_at).toLocaleDateString() }}
+          </td>
+
+          <td class="p-3 text-right space-x-2">
+            <RouterLink
+              :to="`/blog/${article.slug}`"
+              class="text-green-700 hover:underline text-xs"
+              target="_blank"
+            >
+              View
+            </RouterLink>
+
+            <button
+              @click="deleteArticle(article.slug)"
+              class="text-red-600 hover:underline text-xs"
+              :disabled="deletingSlug === article.slug"
+            >
+              {{ deletingSlug === article.slug ? "Deleting…" : "Delete" }}
+            </button>
+          </td>
+        </tr>
+
+        <tr v-if="!articles.length">
+          <td colspan="5" class="p-6 text-center text-gray-500">
+            No articles created yet
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 
 
         <div class="my-12 flex items-center gap-4">
