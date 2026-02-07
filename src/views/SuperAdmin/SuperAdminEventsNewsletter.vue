@@ -2,7 +2,7 @@
 import uploadsApi from "@/api/contentUploadsApi";
 import eventsApi from "@/api/events.js";
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
  import newsApi from "@/api/news";
 import { useAuth } from "@/stores/auth";
 
