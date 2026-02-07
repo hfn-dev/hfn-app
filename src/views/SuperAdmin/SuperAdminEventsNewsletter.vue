@@ -247,7 +247,11 @@ const createEvent = async () => {
   const payload = {
     ...eventForm.value,
     banner: eventForm.value.banner,
+   price: eventForm.value.is_free ? undefined : Number(eventForm.value.price),
   };
+ if (eventForm.value.is_free) {
+  delete payload.price;
+}
 
   await eventsApi.createCalenderEvent(payload);
   await fetchEvents();
