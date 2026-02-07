@@ -12,6 +12,11 @@ const articles = ref([]);
 const editingSlug = ref(null);
 const isEditing = computed(() => !!editingSlug.value);
 const publishingSlug = ref(null);
+const showConfirm = ref(false);
+const confirmTitle = ref("");
+const confirmMessage = ref("");
+const confirmAction = ref(null);
+const confirmLoading = ref(false);
 
  const editArticle = (article) => {
   editingSlug.value = article.slug;
@@ -44,22 +49,44 @@ const visibleArticles = computed(() => {
 
 const deletingSlug = ref(null);
 
-const deleteArticle = async (slug) => {
-  const confirmed = confirm("Are you sure you want to delete this article?");
-  if (!confirmed) return;
+// const deleteArticle = async (slug) => {
+//   const confirmed = confirm("Are you sure you want to delete this article?");
+//   if (!confirmed) return;
 
-  try {
-    deletingSlug.value = slug;
-    await newsApi.deleteArticle(slug);
-    articles.value = articles.value.filter(a => a.slug !== slug);
-  } catch (e) {
-    console.error(e);
-    console.log("Failed to delete article");
-  } finally {
-    deletingSlug.value = null;
-  }
+//   try {
+//     deletingSlug.value = slug;
+//     await newsApi.deleteArticle(slug);
+//     articles.value = articles.value.filter(a => a.slug !== slug);
+//   } catch (e) {
+//     console.error(e);
+//     console.log("Failed to delete article");
+//   } finally {
+//     deletingSlug.value = null;
+//   }
+// };
+
+const deleteArticle = (slug) => {
+  confirmTitle.value = "Delete Article";
+  confirmMessage.value = "Are you sure you want to permanently delete this article? This action cannot be undone.";
+  showConfirm.value = true;
+
+  confirmAction.value = async () => {
+    try {
+      confirmLoading.value = true;
+      deletingSlug.value = slug;
+
+      await newsApi.deleteArticle(slug);
+      articles.value = articles.value.filter(a => a.slug !== slug);
+    } catch (e) {
+      console.error(e);
+      console.log("Failed to delete article");
+    } finally {
+      deletingSlug.value = null;
+      confirmLoading.value = false;
+      showConfirm.value = false;
+    }
+  };
 };
-
 
   
 const fetchArticles = async () => {
