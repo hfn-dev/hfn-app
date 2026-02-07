@@ -19,35 +19,6 @@ const confirmAction = ref(null);
 const confirmLoading = ref(false);
 
 
-
-const form = ref({
-  title: "",
-  description: "",
-  event_type: "webinar",
-  start_datetime: "",
-  location: "",
-  banner: "",
-  meeting_url: "",
-  is_free: true,
-  price: null,
-  status: "draft",
-});
-
-
- const submitEvent = async () => {
-  loading.value = true;
-  try {
-    await eventsApi.createEvent(form.value);
-    // redirect or toast success
-  } catch (e) {
-    console.error(e);
-  } finally {
-    loading.value = false;
-  }
-};
-
-
-
  const uploadBanner = async (file) => {
   const data = new FormData();
   data.append("file", file);
