@@ -246,7 +246,6 @@ const fetchEvents = async () => {
 const createEvent = async () => {
   const payload = {
     ...eventForm.value,
-    price: eventForm.value.is_free ? null : eventForm.value.price,
     banner: eventForm.value.banner,
   };
 
