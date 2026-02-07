@@ -280,17 +280,17 @@ const uploadForm = ref({
 });
 
 
-const uploadBanner = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+// const uploadBanner = async (e) => {
+//   const file = e.target.files[0];
+//   if (!file) return;
 
-  try {
-    const { url } = await uploadsApi.upload(file);
-    eventForm.value.banner = url;
-  } catch (error) {
-    console.error("Banner upload failed", error);
-  }
-};
+//   try {
+//     const { url } = await uploadsApi.upload(file);
+//     eventForm.value.banner = url;
+//   } catch (error) {
+//     console.error("Banner upload failed", error);
+//   }
+// };
 
 
 const fetchUploads = async () => {
