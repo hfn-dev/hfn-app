@@ -3,10 +3,82 @@ import uploadsApi from "@/api/contentUploadsApi";
 import eventsApi from "@/api/events.js";
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import { onMounted, ref } from "vue";
+ import newsApi from "@/api/news";
+import { useAuth } from "@/stores/auth";
 
 const events = ref([]);
 const loadingEvents = ref(false);
+const articles = ref([]);
 
+
+
+const auth = useAuthStore();
+
+const visibleArticles = computed(() => {
+  return articles.value.filter(article => {
+    if (article.visibility === "public") return true;
+    return auth.isAuthenticated;
+  });
+});
+
+
+
+  
+onMounted(async () => {
+  articles.value = await newsApi.listArticles({
+    status: "published"
+  });
+});
+
+const createNews = async () => {
+  await newsApi.createArticle(newsForm.value);
+
+  Object.assign(newsForm.value, {
+    title: "",
+    excerpt: "",
+    content: "",
+    featured_image: "",
+    status: "draft",
+    visibility: "public",
+    is_featured: false,
+    featured_order: 0,
+    videos: []
+  });
+};
+ 
+
+  const uploadNewsImage = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const { url } = await uploadsApi.upload(file);
+  newsForm.value.featured_image = url;
+};
+
+  const addVideo = () => {
+  if (!videoInput.value) return;
+  newsForm.value.videos.push(videoInput.value);
+  videoInput.value = "";
+};
+
+const removeVideo = (index) => {
+  newsForm.value.videos.splice(index, 1);
+};
+
+const newsForm = ref({
+  title: "",
+  excerpt: "",
+  content: "",
+  featured_image: "",
+  status: "draft",
+  visibility: "public",
+  is_featured: false,
+  featured_order: 0,
+  videos: []
+});
+
+const videoInput = ref("");
+  
 const eventForm = ref({
   title: "",
   description: "",
@@ -221,6 +293,67 @@ onMounted(() => {
             </table>
           </div>
         </section>
+
+        <section class="mt-16">
+  <h2 class="text-xl font-semibold mb-4">Create News Article</h2>
+
+  <div class="bg-white p-6 rounded-xl shadow space-y-4 max-w-3xl">
+    <input v-model="newsForm.title" class="input" placeholder="Title" />
+    <input v-model="newsForm.excerpt" class="input" placeholder="Excerpt" />
+
+    <textarea
+      v-model="newsForm.content"
+      class="input h-40"
+      placeholder="Full article content"
+    />
+
+    <div>
+      <label class="block mb-2">Featured Image</label>
+      <input type="file" @change="uploadNewsImage" />
+      <img
+        v-if="newsForm.featured_image"
+        :src="newsForm.featured_image"
+        class="h-40 mt-2 rounded"
+      />
+    </div>
+
+    <div>
+      <label class="block mb-1 font-medium">Video links</label>
+      <div class="flex gap-2">
+        <input v-model="videoInput" class="input flex-1" />
+        <button @click="addVideo" class="btn-secondary">Add</button>
+      </div>
+
+      <ul class="mt-2 text-sm">
+        <li
+          v-for="(video, i) in newsForm.videos"
+          :key="i"
+          class="flex justify-between"
+        >
+          {{ video }}
+          <button @click="removeVideo(i)" class="text-red-600">✕</button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="flex gap-4">
+      <select v-model="newsForm.status" class="input">
+        <option value="draft">Draft</option>
+        <option value="published">Published</option>
+      </select>
+
+      <select v-model="newsForm.visibility" class="input">
+        <option value="public">Public</option>
+        <option value="members">Members only</option>
+      </select>
+    </div>
+
+    <button @click="createNews" class="btn-primary">
+      Publish Article
+    </button>
+  </div>
+</section>
+
 
         <div class="my-12 flex items-center gap-4">
           <div class="flex-1 h-px bg-gray-300"></div>
