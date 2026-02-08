@@ -4,7 +4,7 @@ export default {
   
   async list(params = {}) {
     try {
-      const response = await api.get('/uploads/', { params });
+      const response = await api.get('/media/gallery/', { params });
       return response.data;
     } catch (error) {
       console.error('List uploads API error:', error);
