@@ -1,16 +1,54 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, onMounted } from "vue";
 import eventThumb3 from "@/assets/event2026.png";
 import eventThumb2 from "@/assets/hands.png";
 import eventThumb from "@/assets/latest_news.png";
 import RsvpModal from "./RsvpModal.vue";
+import eventsApi from "@/api/events.js"; 
+import { useToast } from "vue-toastification";
 
-  
+
+ const toast = useToast(); 
 const today = new Date();
 const activeDate = ref(new Date(today.getFullYear(), today.getMonth(), 1));
 const sortBy = ref("All");
 const eventThumb4 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769716174/f5b95525832f3712e665bb57dba370d3_XS_yrppya.jpg';
 
+  const fetchApiEvents = async () => {
+  try {
+    const apiEvents = await eventsApi.listEvents(); 
+   
+    const mappedApiEvents = apiEvents.map((e) => ({
+      id: e.id,
+      title: e.title,
+      date: e.date, // 'YYYY-MM-DD'
+      time: e.time || "All day",
+      tag: e.tag || "General",
+      image: e.image || eventThumb, 
+      excerpt: e.excerpt || "",
+      details: e.details || "",
+    }));
+    events.value = [...events.value, ...mappedApiEvents];
+  } catch (error) {
+    console.error("Failed to fetch API events:", error);
+  }
+};
+
+const registerForEvent = async (event) => {
+  try {
+    await eventsApi.registerEvent(event.slug || event.id);
+    toast.success("RSVP successful!");
+    showRsvpModal.value = false;
+  } catch (error) {
+    console.error("RSVP failed:", error);
+    console.log("Failed to RSVP. Please try again.");
+  }
+};
+  
+
+onMounted(() => {
+  fetchApiEvents();
+});
 
   const selectedEvent = ref(null);
 const showRsvpModal = ref(false);
@@ -322,7 +360,7 @@ function isToday(date) {
               </p>
 
               <div class="flex items-center gap-3">
-                <button @click="openRsvp(event)" class="px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800">
+                <button @click="registerForEvent(selectedEvent)" class="px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800">
                   RSVP
                 </button>
                 <!-- <a href="#" class="text-sm text-green-700 underline">
