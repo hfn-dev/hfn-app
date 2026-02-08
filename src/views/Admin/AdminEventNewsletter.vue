@@ -17,20 +17,41 @@ const confirmTitle = ref("");
 const confirmMessage = ref("");
 const confirmAction = ref(null);
 const confirmLoading = ref(false);
+const deletingEventSlug = ref(null);
 
 
- const uploadBanner = async (file) => {
-  const data = new FormData();
-  data.append("file", file);
-  data.append("upload_preset", "your_preset");
+//  const uploadBanner = async (file) => {
+//   const data = new FormData();
+//   data.append("file", file);
+//   data.append("upload_preset", "your_preset");
+
+//   const res = await fetch(
+//     "http://res.cloudinary.com/dawrem2mi/image/upload",
+//     { method: "POST", body: data }
+//   );
+
+//   const json = await res.json();
+//   form.value.banner = json.secure_url;
+// };
+const uploadBanner = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "your_preset"); 
 
   const res = await fetch(
-    "http://res.cloudinary.com/dawrem2mi/image/upload",
-    { method: "POST", body: data }
+    "https://api.cloudinary.com/v1_1/dawrem2mi/image/upload",
+    {
+      method: "POST",
+      body: formData,
+    }
   );
 
-  const json = await res.json();
-  form.value.banner = json.secure_url;
+  const data = await res.json();
+
+  eventForm.value.banner = data.secure_url;
 };
 
 const loading = ref(false);
@@ -235,6 +256,7 @@ const eventForm = ref({
   registration_deadline: "",
   is_free: true,
   price: "",
+  banner: "",
 });
 
 const fetchEvents = async () => {
@@ -242,6 +264,30 @@ const fetchEvents = async () => {
   events.value = await eventsApi.listEvents();
   loadingEvents.value = false;
 };
+
+const deleteEvent = (event) => {
+  confirmTitle.value = "Delete Event";
+  confirmMessage.value =
+    "Are you sure you want to permanently delete this event? This action cannot be undone.";
+  showConfirm.value = true;
+
+  confirmAction.value = async () => {
+    try {
+      confirmLoading.value = true;
+      deletingEventSlug.value = event.slug;
+
+      await eventsApi.deleteEvent(event.slug);
+      events.value = events.value.filter(e => e.slug !== event.slug);
+    } catch (e) {
+      console.error("Failed to delete event", e);
+    } finally {
+      deletingEventSlug.value = null;
+      confirmLoading.value = false;
+      showConfirm.value = false;
+    }
+  };
+};
+ 
 
 const createEvent = async () => {
   const payload = {
@@ -277,10 +323,12 @@ const uploads = ref([]);
 
 const uploadForm = ref({
   title: "",
-  type: "newsletter",
+  type: "newsletter", 
   description: "",
-  file: "",
+  files: [],           
+  bannerIndex: 0,      
 });
+ 
 
 
 // const uploadBanner = async (e) => {
@@ -300,23 +348,65 @@ const fetchUploads = async () => {
   uploads.value = await uploadsApi.list();
 };
 
-const uploadFile = async (e) => {
-  const file = e.target.files[0];
-  const { url } = await uploadsApi.upload(file);
-  uploadForm.value.file = url;
+const uploadFile = (e) => {
+  const selectedFiles = Array.from(e.target.files);
+  if (uploadForm.value.type === "gallery") {
+    
+    uploadForm.value.files.push(...selectedFiles);
+  } else {
+    
+    uploadForm.value.files = selectedFiles.slice(0, 1);
+  }
 };
-
+ 
 const createUpload = async () => {
-  await uploadsApi.create(uploadForm.value);
-  await fetchUploads();
+  if (!uploadForm.value.title || !uploadForm.value.files.length) return;
 
-  uploadForm.value = {
-    title: "",
-    type: "newsletter",
-    description: "",
-    file: "",
-  };
+  try {
+    const formData = new FormData();
+    formData.append("title", uploadForm.value.title);
+    formData.append("description", uploadForm.value.description);
+    formData.append("type", uploadForm.value.type);
+
+    if (uploadForm.value.type === "gallery") {
+      uploadForm.value.files.forEach((file, i) => {
+        formData.append("files[]", file);
+      });
+      formData.append("banner_index", uploadForm.value.bannerIndex);
+    } else {
+      
+      formData.append("file", uploadForm.value.files[0]);
+    }
+
+    let res;
+    switch (uploadForm.value.type) {
+      case "gallery":
+        res = await uploadsApi.postGallery(formData);
+        break;
+      case "newsletter":
+        res = await newsApi.postNewsletters(formData);
+        break;
+      case "minute":
+        res = await newsApi.postMinutes(formData);
+        break;
+      default:
+        res = await uploadsApi.create(formData);
+    }
+
+    await fetchUploads();
+
+    uploadForm.value = {
+      title: "",
+      type: "newsletter",
+      description: "",
+      files: [],
+      bannerIndex: 0,
+    };
+  } catch (error) {
+    console.error("Upload failed:", error);
+  }
 };
+
 
 onMounted(() => {
   fetchEvents();
@@ -426,15 +516,29 @@ onMounted(() => {
                   <th>Status</th>
                   <th>Type</th>
                   <th>Date</th>
+                  <th class="text-right pr-3">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="event in events" :key="event.id" class="border-t">
-                  <td class="p-3 font-medium">{{ event.title }}</td>
-                  <td>{{ event.status }}</td>
-                  <td>{{ event.event_type }}</td>
-                  <td>{{ event.start_datetime }}</td>
-                </tr>
+                <tr v-for="event in events" :key="event.id" class="border-t hover:bg-gray-50">
+  <td class="p-3 font-medium">{{ event.title }}</td>
+  <td>{{ event.status }}</td>
+  <td>{{ event.event_type }}</td>
+  <td>
+    {{ new Date(event.start_datetime).toLocaleDateString() }}
+  </td>
+
+  <td class="text-right pr-3 space-x-2">
+    <button
+      @click="deleteEvent(event)"
+      class="text-red-600 hover:underline text-xs"
+      :disabled="deletingEventSlug === event.slug"
+    >
+      {{ deletingEventSlug === event.slug ? "Deleting…" : "Delete" }}
+    </button>
+  </td>
+</tr>
+
               </tbody>
             </table>
           </div>
@@ -635,6 +739,8 @@ onMounted(() => {
             <select v-model="uploadForm.type" class="input mb-3">
               <option value="newsletter">Newsletter</option>
               <option value="document">Document</option>
+              <option value="gallery">Gallery</option>
+              <option value="minute">Minute</option>
             </select>
 
             <textarea
@@ -669,6 +775,34 @@ onMounted(() => {
             </ul>
           </div>
         </section>
+        <div v-if="uploadForm.type === 'gallery' && uploadForm.files.length" class="mb-4">
+  <p class="font-medium mb-1">Gallery Images (choose banner)</p>
+  <div class="flex gap-3 overflow-x-auto">
+    <div
+      v-for="(file, index) in uploadForm.files"
+      :key="index"
+      class="relative"
+    >
+      <img
+        :src="URL.createObjectURL(file)"
+        class="h-24 w-24 object-cover rounded cursor-pointer border-2"
+        :class="{
+          'border-green-500': uploadForm.bannerIndex === index,
+          'border-gray-300': uploadForm.bannerIndex !== index
+        }"
+        @click="uploadForm.bannerIndex = index"
+      />
+      <button
+        class="absolute top-0 right-0 text-red-600 font-bold"
+        @click.prevent="uploadForm.files.splice(index, 1)"
+      >
+        ✕
+      </button>
+    </div>
+  </div>
+  <p class="text-xs text-gray-500 mt-1">Click an image to mark as banner/thumbnail</p>
+</div>
+ 
       </div>
     </main>
   </div>
