@@ -71,4 +71,34 @@ export default {
       throw error;
     }
   },
+
+  async gallery(params = {}) {
+    try {
+      const response = await api.get('/media/gallery/', { params });
+      return response.data;
+    } catch (error) {
+      console.error('List gallery API error:', error);
+      throw error;
+    }
+  },
+  async singleGallery(params = {}) {
+    try {
+      const response = await api.get(`/media/gallery/${id}`, { params });
+      return response.data;
+    } catch (error) {
+      console.error('List gallery API error:', error);
+      throw error;
+    }
+  },
+  async postGallery(payload) {
+    try {
+      const response = await api.post(`/media/gallery/`, payload);
+      return response.data;
+    } catch (error) {
+      console.error('Update upload API error:', error);
+      throw error;
+    }
+  },
+
+ 
 };
