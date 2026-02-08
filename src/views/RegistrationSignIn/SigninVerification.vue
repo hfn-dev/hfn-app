@@ -114,7 +114,7 @@ const handleVerification = async () => {
       toast.success(successMsg);
 
       localStorage.removeItem("pendingVerificationEmail");
-      router.push('/signin');
+      router.push('/registration-payment');
       return;
     } else {
       const errorMessage = response.messages?.[0] || "Verification failed.";
