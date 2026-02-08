@@ -21,12 +21,15 @@ const eventThumb4 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v17697
     const mappedApiEvents = apiEvents.map((e) => ({
       id: e.id,
       title: e.title,
-      date: e.date, // 'YYYY-MM-DD'
-      time: e.time || "All day",
-      tag: e.tag || "General",
-      image: e.image || eventThumb, 
-      excerpt: e.excerpt || "",
-      details: e.details || "",
+      date: start.toISOString().slice(0, 10),
+      time: start.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
+      tag: e.event_type || "General",
+    image: e.banner_image || eventThumb,
+    excerpt: e.description || "",
+    details: e.description || "",
     }));
     events.value = [...events.value, ...mappedApiEvents];
   } catch (error) {
