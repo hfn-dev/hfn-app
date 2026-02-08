@@ -28,6 +28,55 @@ const isCreateMode = computed(() => mode.value === "create");
 const isEditMode = computed(() => mode.value === "edit");
 const isPreviewMode = computed(() => mode.value === "preview");
 
+const categorySearch = ref("");
+const showCategoryDropdown = ref(false);
+const creatingCategory = ref(false);
+
+const filteredCategories = computed(() => {
+  if (!categorySearch.value) return categories.value;
+
+  return categories.value.filter((c) =>
+    c.name.toLowerCase().includes(categorySearch.value.toLowerCase())
+  );
+});
+
+const canCreateCategory = computed(() => {
+  if (!categorySearch.value) return false;
+
+  return !categories.value.some(
+    (c) => c.name.toLowerCase() === categorySearch.value.toLowerCase()
+  );
+});
+
+
+
+const createCategory = async () => {
+  if (!categorySearch.value.trim()) return;
+
+  try {
+    creatingCategory.value = true;
+
+    const res = await courseApi.createCategory({
+      name: categorySearch.value.trim(),
+    });
+
+    const newCategory = res.data;
+
+    categories.value.push(newCategory);
+    basicInfoForm.value.category = newCategory.id;
+
+    categorySearch.value = newCategory.name;
+    showCategoryDropdown.value = false;
+
+    toast.success("Category created");
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to create category");
+  } finally {
+    creatingCategory.value = false;
+  }
+};
+  
 const toast = useToast();
 
 const currentStep = ref(1);
@@ -656,6 +705,14 @@ onMounted(async () => {
     const response = await learningModule.getCoursesDetails(courseSlug);
     const course = response.data;
     populateCourse(course);
+
+    const selectedCategory = categories.value.find(
+      (c) => c.id === course.category?.id
+    );
+
+    if (selectedCategory) {
+      categorySearch.value = selectedCategory.name;
+    }
   } catch (error) {
     console.error(error);
     toast.error("Failed to load course");
@@ -760,27 +817,55 @@ onMounted(async () => {
 
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <label
-                    for="category"
-                    class="block text-sm font-medium text-gray-700"
-                    >Category*</label
-                  >
-                  <select
-                    id="category"
-                    v-model="basicInfoForm.category"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border bg-white"
-                    required
-                  >
-                    <option value="">Select Category</option>
-                    <option
-                      v-for="cat in categories"
-                      :key="cat.id"
-                      :value="cat.id"
-                    >
-                      {{ cat.name }}
-                    </option>
-                  </select>
-                </div>
+  <label class="block text-sm font-medium text-gray-700">
+    Category
+  </label>
+
+  <div class="relative">
+    <input
+      type="text"
+      v-model="categorySearch"
+      @focus="showCategoryDropdown = true"
+      @blur="setTimeout(() => (showCategoryDropdown = false), 150)"
+      placeholder="Select or create category"
+      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66]"
+    />
+
+    <div
+      v-if="showCategoryDropdown"
+      class="absolute z-20 w-full bg-white border border-gray-200 rounded-md mt-1 shadow-lg max-h-56 overflow-auto"
+    >
+      <div
+        v-for="category in filteredCategories"
+        :key="category.id"
+        @click="
+          basicInfoForm.category = category.id;
+          categorySearch = category.name;
+          showCategoryDropdown = false;
+        "
+        class="px-4 py-2 hover:bg-green-50 cursor-pointer text-sm"
+      >
+        {{ category.icon }} {{ category.name }}
+      </div>
+
+      <div
+        v-if="canCreateCategory"
+        @click="createCategory"
+        class="px-4 py-2 bg-green-50 hover:bg-green-100 cursor-pointer text-sm text-[#006633] font-medium"
+      >
+        ➕ Create category “{{ categorySearch }}”
+      </div>
+
+      <div
+        v-if="filteredCategories.length === 0 && !canCreateCategory"
+        class="px-4 py-2 text-sm text-gray-400"
+      >
+        No categories found
+      </div>
+    </div>
+  </div>
+</div>
+
                 <div>
                   <label
                     for="level"
