@@ -65,7 +65,7 @@ const navLinks = [
 
 const handleLogout = () => {
   logout();
-  router.push("/");
+  window.location.href = "/";
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
