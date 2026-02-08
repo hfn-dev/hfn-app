@@ -277,10 +277,12 @@ const uploads = ref([]);
 
 const uploadForm = ref({
   title: "",
-  type: "newsletter",
+  type: "newsletter", 
   description: "",
-  file: "",
+  files: [],           
+  bannerIndex: 0,      
 });
+ 
 
 
 // const uploadBanner = async (e) => {
@@ -300,23 +302,65 @@ const fetchUploads = async () => {
   uploads.value = await uploadsApi.list();
 };
 
-const uploadFile = async (e) => {
-  const file = e.target.files[0];
-  const { url } = await uploadsApi.upload(file);
-  uploadForm.value.file = url;
+const uploadFile = (e) => {
+  const selectedFiles = Array.from(e.target.files);
+  if (uploadForm.value.type === "gallery") {
+    
+    uploadForm.value.files.push(...selectedFiles);
+  } else {
+    
+    uploadForm.value.files = selectedFiles.slice(0, 1);
+  }
 };
-
+ 
 const createUpload = async () => {
-  await uploadsApi.create(uploadForm.value);
-  await fetchUploads();
+  if (!uploadForm.value.title || !uploadForm.value.files.length) return;
 
-  uploadForm.value = {
-    title: "",
-    type: "newsletter",
-    description: "",
-    file: "",
-  };
+  try {
+    const formData = new FormData();
+    formData.append("title", uploadForm.value.title);
+    formData.append("description", uploadForm.value.description);
+    formData.append("type", uploadForm.value.type);
+
+    if (uploadForm.value.type === "gallery") {
+      uploadForm.value.files.forEach((file, i) => {
+        formData.append("files[]", file);
+      });
+      formData.append("banner_index", uploadForm.value.bannerIndex);
+    } else {
+      
+      formData.append("file", uploadForm.value.files[0]);
+    }
+
+    let res;
+    switch (uploadForm.value.type) {
+      case "gallery":
+        res = await uploadsApi.postGallery(formData);
+        break;
+      case "newsletter":
+        res = await uploadsApi.postNewsletters(formData);
+        break;
+      case "minute":
+        res = await uploadsApi.postMinutes(formData);
+        break;
+      default:
+        res = await uploadsApi.create(formData);
+    }
+
+    await fetchUploads();
+
+    uploadForm.value = {
+      title: "",
+      type: "newsletter",
+      description: "",
+      files: [],
+      bannerIndex: 0,
+    };
+  } catch (error) {
+    console.error("Upload failed:", error);
+  }
 };
+
 
 onMounted(() => {
   fetchEvents();
@@ -671,6 +715,34 @@ onMounted(() => {
             </ul>
           </div>
         </section>
+        <div v-if="uploadForm.type === 'gallery' && uploadForm.files.length" class="mb-4">
+  <p class="font-medium mb-1">Gallery Images (choose banner)</p>
+  <div class="flex gap-3 overflow-x-auto">
+    <div
+      v-for="(file, index) in uploadForm.files"
+      :key="index"
+      class="relative"
+    >
+      <img
+        :src="URL.createObjectURL(file)"
+        class="h-24 w-24 object-cover rounded cursor-pointer border-2"
+        :class="{
+          'border-green-500': uploadForm.bannerIndex === index,
+          'border-gray-300': uploadForm.bannerIndex !== index
+        }"
+        @click="uploadForm.bannerIndex = index"
+      />
+      <button
+        class="absolute top-0 right-0 text-red-600 font-bold"
+        @click.prevent="uploadForm.files.splice(index, 1)"
+      >
+        ✕
+      </button>
+    </div>
+  </div>
+  <p class="text-xs text-gray-500 mt-1">Click an image to mark as banner/thumbnail</p>
+</div>
+ 
       </div>
     </main>
   </div>
