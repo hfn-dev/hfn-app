@@ -1086,6 +1086,7 @@ onMounted(async () => {
                   </span>
                   <div class="flex items-center gap-3">
                     <button
+                      type="button"
                       v-if="curriculumForm.modules.length > 1"
                       @click.stop="removeModule(module.id)"
                       class="text-red-500 hover:text-red-700"
@@ -1146,6 +1147,7 @@ onMounted(async () => {
                           {{ lesson.duration.minutes }}m
                         </span>
                         <button
+                          type="button"
                           @click.stop="removeLesson(module.id, lesson.id)"
                           class="text-red-500 hover:text-red-700"
                           title="Delete lesson"
@@ -1196,6 +1198,7 @@ onMounted(async () => {
             </div>
             <div class="space-y-1">
               <button
+                type="button"
                 @click="addModule()"
                 class="w-full border border-dashed border-[#006633] py-2 rounded text-[#006633] text-sm font-medium hover:bg-green-50 transition"
               >
@@ -1206,6 +1209,7 @@ onMounted(async () => {
 
           <div class="grid grid-cols-2 gap-4 mb-10">
             <button
+              type="button"
               @click="
                 openAddLessonDialog(
                   activeModuleId || curriculumForm.modules[0]?.id
@@ -1217,6 +1221,7 @@ onMounted(async () => {
             </button>
 
             <button
+              type="button"
               @click="
                 openAddQuizDialog(
                   activeModuleId || curriculumForm.modules[0]?.id
