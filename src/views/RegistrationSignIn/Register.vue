@@ -164,21 +164,25 @@ const handleRegistration = async () => {
 
     if (response.status === "success") {
       toast.success(response.messages?.[0] || "Registration successful!");
+      
       // if (response.actions_required?.includes("verify_email")) {
-      //   localStorage.setItem("pendingVerificationEmail", form.value.email);
-      //   setTimeout(() => {
-      //     router.push("/signinverification");
-      //   }, 1500);
+      //   router.push("/signinverification");
       // } else {
-      //   setTimeout(() => {
-      //     router.push("/signin");
-      //   }, 1500);
+      //   router.push("/registration-payment");
       // }
       if (response.actions_required?.includes("verify_email")) {
-        router.push("/signinverification");
-      } else {
-        router.push("/registration-payment");
-      }
+  router.push("/signinverification");
+  return;
+}
+
+if (response.actions_required?.includes("make_payment")) {
+  router.push("/registration-payment");
+  return;
+}
+
+// fallback
+router.push("/signin");
+
     } else {
       const errorMessage =
         response.messages?.[0] || "Registration failed. Please try again.";
