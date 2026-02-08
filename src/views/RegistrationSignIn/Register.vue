@@ -171,6 +171,7 @@ const handleRegistration = async () => {
       //   router.push("/registration-payment");
       // }
       if (response.actions_required?.includes("verify_email")) {
+        localStorage.setItem("pendingVerificationEmail", payload.email);
   router.push("/signinverification");
   return;
 }
