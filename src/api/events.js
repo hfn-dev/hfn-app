@@ -214,4 +214,13 @@ export default {
       throw error;
     }
   },
+  async createRsvp() {
+    try {
+      const response = await api.post(`/events/${slug}/rsvp/`, {});
+      return response.data;
+    } catch (error) {
+      console.error('Create event API error:', error);
+      throw error;
+    }
+  },
 };
