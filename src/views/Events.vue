@@ -338,43 +338,37 @@ import newEvent from "@/assets/events.png";
 const apiEvents = ref([]);
 const loadingEvents = ref(false);
 
-  const fetchEvents = async () => {
+  const fetchApiEvents = async () => {
   try {
-    loadingEvents.value = true;
-
-    const res = await eventsApi.listEvents();
-
-    apiEvents.value = res.map((e) => {
-      const start = e.start_datetime ? new Date(e.start_datetime) : null;
+    const apiEvents = await eventsApi.listEvents(); 
+   
+    const mappedApiEvents = apiEvents.map((e) => {
+      // 1. Create a Date object from the API's start_date/date field
+      // Adjust 'e.start_date' to match the actual key your API returns
+      const startDate = new Date(e.start_date || e.date);
 
       return {
+        id: e.id,
         title: e.title,
-        category: e.audience === "members" ? "Members Only" : "Public",
-        date: start
-      ? start.toLocaleDateString(undefined, {
-          weekday: "long",
-          month: "long",
-          day: "numeric",
-          year: "numeric",
-        })
-      : "TBA",
-        time: start
-      ? start.toLocaleTimeString([], {
+        // 2. Format to YYYY-MM-DD to match your calendar's filtering logic
+        date: startDate.toISOString().slice(0, 10),
+        // 3. Format the time
+        time: startDate.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
-        })
-      : "TBA",
-        location: e.location || "Online",
-        frequency: e.is_free ? "Free" : `₦${e.price}`,
-        image: e.banner_image || event, 
-        description: e.description,
-        registerLink: `/events/${e.slug}`, 
+        }),
+        tag: e.event_type || "General",
+        image: e.banner_image || eventThumb,
+        excerpt: e.description || "",
+        details: e.description || "",
+        slug: e.slug // useful for registration
       };
     });
-  } catch (err) {
-    console.error("Failed to fetch events", err);
-  } finally {
-    loadingEvents.value = false;
+
+    // 4. Update the reactive events list
+    events.value = [...events.value, ...mappedApiEvents];
+  } catch (error) {
+    console.error("Failed to fetch API events:", error);
   }
 };
 
@@ -468,7 +462,7 @@ const pastEvents = [
 ];
 
   onMounted(() => {
-  fetchEvents();
+  fetchApiEvents();
 });
 
 </script>
