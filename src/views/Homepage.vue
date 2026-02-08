@@ -143,9 +143,15 @@ onMounted(async () => {
   interval = setInterval(() => {
     activeSlide.value = (activeSlide.value + 1) % heroSlides.length;
   }, 5000);
-  const { data } = await api.get(`/api/pages/${pageId}/`);
-  pageContent.value = data.content || structuredClone(homePageSchema);
-
+  
+  try {
+    const { data } = await api.get(`/api/pages/${pageId}/`);
+    pageContent.value = data.content || structuredClone(homePageSchema);
+  } catch (err) {
+    console.error("Failed to load homepage content:", err);
+    pageContent.value = structuredClone(homePageSchema); 
+  }
+  
   const toggles = document.querySelectorAll(".faq-toggle");
   toggles.forEach((toggle) => {
     toggle.addEventListener("click", () => {
