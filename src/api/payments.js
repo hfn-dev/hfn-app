@@ -39,4 +39,8 @@ export default {
     const { data } = await api.post('/payment/membership_intent/', payload);
     return data;
   },
+  async confirmPayment(payload, id) {
+    const { data } = await api.post(`/membership/payments/${id}/confirm_payment/`, payload);
+    return data;
+  },
 };
