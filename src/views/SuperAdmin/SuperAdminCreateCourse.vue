@@ -866,6 +866,7 @@ if (selectedCategory) {
                   </span>
                   <div class="flex items-center gap-3">
                     <button
+                      type="button"
                       v-if="curriculumForm.modules.length > 1"
                       @click.stop="removeModule(module.id)"
                       class="text-red-500 hover:text-red-700"
@@ -926,6 +927,7 @@ if (selectedCategory) {
                           {{ lesson.duration.minutes }}m
                         </span>
                         <button
+                          type="button"
                           @click.stop="removeLesson(module.id, lesson.id)"
                           class="text-red-500 hover:text-red-700"
                           title="Delete lesson"
@@ -968,6 +970,7 @@ if (selectedCategory) {
             </div>
             <div class="space-y-1">
               <button
+                type="button"
                 @click="addModule()"
                 class="w-full border border-dashed border-[#006633] py-2 rounded text-[#006633] text-sm font-medium hover:bg-green-50 transition"
               >
@@ -978,6 +981,7 @@ if (selectedCategory) {
 
           <div class="grid grid-cols-2 gap-4 mb-10">
             <button
+              type="button"
               @click="
                 openAddLessonDialog(
                   activeModuleId || curriculumForm.modules[0]?.id
@@ -989,6 +993,7 @@ if (selectedCategory) {
             </button>
 
             <button
+              type="button"
               @click="
                 activeModuleId =
                   activeModuleId || curriculumForm.modules[0]?.id;
@@ -1281,6 +1286,7 @@ if (selectedCategory) {
                 >
                   <span>{{ q.text }}</span>
                   <button
+                    type="button"
                     @click="removeQuizQuestion(q.id)"
                     class="text-red-500 text-xs"
                   >
@@ -1291,12 +1297,14 @@ if (selectedCategory) {
 
               <div class="flex justify-end gap-3">
                 <button
+                  type="button"
                   @click="closeAddQuizDialog"
                   class="px-4 py-2 border rounded"
                 >
                   Cancel
                 </button>
                 <button
+                  type="button"
                   @click="handleQuizAdded"
                   class="px-4 py-2 bg-[#006633] text-white rounded"
                 >
@@ -1670,12 +1678,14 @@ if (selectedCategory) {
               </div>
 
               <button
+                type="button"
                 @click="goBack"
                 class="w-full px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
               >
                 Edit
               </button>
               <button
+                type="button"
                 @click="saveAndContinue"
                 class="w-full px-6 py-2 bg-[#00cc66] text-white rounded-lg font-medium hover:bg-[#00994d] transition-colors shadow-md"
               >
@@ -1690,12 +1700,14 @@ if (selectedCategory) {
           class="flex justify-end space-x-4 pt-8 border-t border-gray-200"
         >
           <button
+            type="button"
             @click="goBack"
             class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
           >
             Back
           </button>
           <button
+            type="button"
             @click="saveAndContinue"
             class="px-6 py-2 bg-[#00cc66] text-white rounded-lg font-medium hover:bg-[#00994d] transition-colors shadow-md"
           >
