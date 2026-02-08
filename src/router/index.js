@@ -7,7 +7,7 @@ import EditorDashboard from '@/views/Editor/EditorDashboard.vue';
 import GetInvolved from '@/views/GetInvolved.vue';
 import NewsAdvocacy from '@/views/NewsAdvocacy.vue';
 import Programs from '@/views/Programs.vue';
-import Payment from '@/views/RegistrationSignIn/Payment.vue';
+import Payment from '@/views/Payment.vue';
 import Resources from '@/views/Resources.vue';
 
 import EditorPages from '@/views/Editor/EditorPages.vue';
