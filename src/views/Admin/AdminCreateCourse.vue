@@ -928,6 +928,7 @@ if (selectedCategory) {
                           {{ lesson.duration.minutes }}m
                         </span>
                         <button
+                          type="button"
                           @click.stop="removeLesson(module.id, lesson.id)"
                           class="text-red-500 hover:text-red-700"
                           title="Delete lesson"
@@ -971,6 +972,7 @@ if (selectedCategory) {
             <div class="space-y-1">
               <button
                 @click="addModule()"
+                type="button"
                 class="w-full border border-dashed border-[#006633] py-2 rounded text-[#006633] text-sm font-medium hover:bg-green-50 transition"
               >
                 + Add New Module
