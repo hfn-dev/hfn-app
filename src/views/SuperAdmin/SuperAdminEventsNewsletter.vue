@@ -635,6 +635,7 @@ onMounted(() => {
             <select v-model="uploadForm.type" class="input mb-3">
               <option value="newsletter">Newsletter</option>
               <option value="document">Document</option>
+              <option value="gallery">Gallery</option>
             </select>
 
             <textarea
