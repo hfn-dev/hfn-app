@@ -338,10 +338,10 @@ const createUpload = async () => {
         res = await uploadsApi.postGallery(formData);
         break;
       case "newsletter":
-        res = await uploadsApi.postNewsletters(formData);
+        res = await newsApi.postNewsletters(formData);
         break;
       case "minute":
-        res = await uploadsApi.postMinutes(formData);
+        res = await newsApi.postMinutes(formData);
         break;
       default:
         res = await uploadsApi.create(formData);
