@@ -636,6 +636,7 @@ onMounted(() => {
               <option value="newsletter">Newsletter</option>
               <option value="document">Document</option>
               <option value="gallery">Gallery</option>
+              <option value="minute">Minute</option>
             </select>
 
             <textarea
