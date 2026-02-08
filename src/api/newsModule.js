@@ -83,11 +83,66 @@ export default {
 
   async downloadMinutes (slug) {
     try {
-      const response = await api.delete(`/news/${slug}/`);
+      const response = await api.get(`/news/${slug}/`);
       return response.data;
     } catch (error) {
       console.error('Delete article API error:', error);
       throw error;
     }
   },
+  async getNewsletters(params = {}) {
+    try {
+      const response = await api.get('/media/newsletters/', { params });
+      return response.data;
+    } catch (error) {
+      console.error('List articles API error:', error);
+      throw error;
+    }
+  },
+  async getSingleNewsletters(params = {}) {
+    try {
+      const response = await api.get(`/media/newsletters/${slug}`, { params });
+      return response.data;
+    } catch (error) {
+      console.error('List articles API error:', error);
+      throw error;
+    }
+  },
+  async postNewsletters() {
+    try {
+      const response = await api.post('/media/newsletters/');
+      return response.data;
+    } catch (error) {
+      console.error('Publish article API error:', error);
+      throw error;
+    }
+  },
+  async getMinutes(params = {}) {
+    try {
+      const response = await api.get('/media/meeting-minutes/', { params });
+      return response.data;
+    } catch (error) {
+      console.error('List articles API error:', error);
+      throw error;
+    }
+  },
+  async getSingleMinutes(params = {}) {
+    try {
+      const response = await api.get(`/media/meeting-minutes/${slug}`, { params });
+      return response.data;
+    } catch (error) {
+      console.error('List articles API error:', error);
+      throw error;
+    }
+  },
+  async postMinutes() {
+    try {
+      const response = await api.post('/media/meeting-minutes/');
+      return response.data;
+    } catch (error) {
+      console.error('Publish article API error:', error);
+      throw error;
+    }
+  },
+
 };
