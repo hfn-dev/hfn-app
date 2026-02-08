@@ -328,9 +328,60 @@
 
 
 <script setup>
+import { ref, onMounted, computed } from "vue";
+import eventsApi from "@/api/events.js";
+  
 import awards from "@/assets/awards.png";
 import newEvent from "@/assets/events.png";
 // import latest from "@/assets/latest_news.png";
+
+const apiEvents = ref([]);
+const loadingEvents = ref(false);
+
+  const fetchEvents = async () => {
+  try {
+    loadingEvents.value = true;
+
+    const res = await eventsApi.listEvents();
+
+    apiEvents.value = res.map((e) => {
+      const start = new Date(e.start_datetime);
+
+      return {
+        title: e.title,
+        category: e.audience === "members" ? "Members Only" : "Public",
+        date: start.toLocaleDateString(undefined, {
+          weekday: "long",
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        }),
+        time: start.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        location: e.location || "Online",
+        frequency: e.is_free ? "Free" : `₦${e.price}`,
+        image: e.banner_image || event, 
+        description: e.description,
+        registerLink: `/events/${e.slug}`, 
+      };
+    });
+  } catch (err) {
+    console.error("Failed to fetch events", err);
+  } finally {
+    loadingEvents.value = false;
+  }
+};
+
+
+
+const events = computed(() => {
+  return [...apiEvents.value, ...staticEvents];
+});
+  
+
+  
 const event =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769883047/events-CNRYrGt8_trfhaz.png";
 const breakfast2025 =
@@ -341,7 +392,9 @@ const hfn2025 =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769881267/1746181486545_mtao0s.jpg";
 const latest =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770045591/243A7993_wxlzkg.jpg";
-const events = [
+
+  
+const staticEvents = [
   {
     title: "2026 HFN Annual Conference",
     category: "Member Only",
@@ -409,4 +462,9 @@ const pastEvents = [
     image: breakfast2025,
   },
 ];
+
+  onMounted(() => {
+  fetchEvents();
+});
+
 </script>
