@@ -43,7 +43,7 @@ onMounted(() => {
     userEmail.value = savedEmail;
   } else {
     toast.error("No email found for verification. Please register first.");
-    setTimeout(() => router.push('/register'), 2000);
+    // setTimeout(() => router.push('/register'), 2000);
   }
   
   startTimer();
