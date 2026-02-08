@@ -52,9 +52,9 @@ export default {
     }
   },
 
-  async deleteEvent(id) {
+  async deleteEvent(slug) {
     try {
-      const response = await api.delete(`/events/events/${id}/`);
+      const response = await api.delete(`/events/${slug}/`);
       return response.data;
     } catch (error) {
       console.error('Delete event API error:', error);

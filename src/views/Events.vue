@@ -345,21 +345,25 @@ const loadingEvents = ref(false);
     const res = await eventsApi.listEvents();
 
     apiEvents.value = res.map((e) => {
-      const start = new Date(e.start_datetime);
+      const start = e.start_datetime ? new Date(e.start_datetime) : null;
 
       return {
         title: e.title,
         category: e.audience === "members" ? "Members Only" : "Public",
-        date: start.toLocaleDateString(undefined, {
+        date: start
+      ? start.toLocaleDateString(undefined, {
           weekday: "long",
           month: "long",
           day: "numeric",
           year: "numeric",
-        }),
-        time: start.toLocaleTimeString([], {
+        })
+      : "TBA",
+        time: start
+      ? start.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
-        }),
+        })
+      : "TBA",
         location: e.location || "Online",
         frequency: e.is_free ? "Free" : `₦${e.price}`,
         image: e.banner_image || event, 

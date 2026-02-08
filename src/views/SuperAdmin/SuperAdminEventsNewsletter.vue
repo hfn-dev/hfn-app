@@ -17,6 +17,7 @@ const confirmTitle = ref("");
 const confirmMessage = ref("");
 const confirmAction = ref(null);
 const confirmLoading = ref(false);
+const deletingEventSlug = ref(null);
 
 
 //  const uploadBanner = async (file) => {
@@ -264,6 +265,30 @@ const fetchEvents = async () => {
   loadingEvents.value = false;
 };
 
+const deleteEvent = (event) => {
+  confirmTitle.value = "Delete Event";
+  confirmMessage.value =
+    "Are you sure you want to permanently delete this event? This action cannot be undone.";
+  showConfirm.value = true;
+
+  confirmAction.value = async () => {
+    try {
+      confirmLoading.value = true;
+      deletingEventSlug.value = event.slug;
+
+      await eventsApi.deleteEvent(event.slug);
+      events.value = events.value.filter(e => e.slug !== event.slug);
+    } catch (e) {
+      console.error("Failed to delete event", e);
+    } finally {
+      deletingEventSlug.value = null;
+      confirmLoading.value = false;
+      showConfirm.value = false;
+    }
+  };
+};
+ 
+
 const createEvent = async () => {
   const payload = {
     ...eventForm.value,
@@ -491,15 +516,29 @@ onMounted(() => {
                   <th>Status</th>
                   <th>Type</th>
                   <th>Date</th>
+                  <th class="text-right pr-3">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="event in events" :key="event.id" class="border-t">
-                  <td class="p-3 font-medium">{{ event.title }}</td>
-                  <td>{{ event.status }}</td>
-                  <td>{{ event.event_type }}</td>
-                  <td>{{ event.start_datetime }}</td>
-                </tr>
+                <tr v-for="event in events" :key="event.id" class="border-t hover:bg-gray-50">
+  <td class="p-3 font-medium">{{ event.title }}</td>
+  <td>{{ event.status }}</td>
+  <td>{{ event.event_type }}</td>
+  <td>
+    {{ new Date(event.start_datetime).toLocaleDateString() }}
+  </td>
+
+  <td class="text-right pr-3 space-x-2">
+    <button
+      @click="deleteEvent(event)"
+      class="text-red-600 hover:underline text-xs"
+      :disabled="deletingEventSlug === event.slug"
+    >
+      {{ deletingEventSlug === event.slug ? "Deleting…" : "Delete" }}
+    </button>
+  </td>
+</tr>
+
               </tbody>
             </table>
           </div>
