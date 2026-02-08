@@ -543,6 +543,15 @@ onMounted(async () => {
     basicInfoForm.value.level = course.level;
 
     hydrateCurriculum(course.curriculum);
+
+    const selectedCategory = categories.value.find(
+  (c) => c.id === course.category?.id
+);
+
+if (selectedCategory) {
+  categorySearch.value = selectedCategory.name;
+}
+
   }
 
   if (props.mode === "view") {
