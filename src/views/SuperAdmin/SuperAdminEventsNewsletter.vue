@@ -19,18 +19,38 @@ const confirmAction = ref(null);
 const confirmLoading = ref(false);
 
 
- const uploadBanner = async (file) => {
-  const data = new FormData();
-  data.append("file", file);
-  data.append("upload_preset", "your_preset");
+//  const uploadBanner = async (file) => {
+//   const data = new FormData();
+//   data.append("file", file);
+//   data.append("upload_preset", "your_preset");
+
+//   const res = await fetch(
+//     "http://res.cloudinary.com/dawrem2mi/image/upload",
+//     { method: "POST", body: data }
+//   );
+
+//   const json = await res.json();
+//   form.value.banner = json.secure_url;
+// };
+const uploadBanner = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "your_preset"); 
 
   const res = await fetch(
-    "http://res.cloudinary.com/dawrem2mi/image/upload",
-    { method: "POST", body: data }
+    "https://api.cloudinary.com/v1_1/dawrem2mi/image/upload",
+    {
+      method: "POST",
+      body: formData,
+    }
   );
 
-  const json = await res.json();
-  form.value.banner = json.secure_url;
+  const data = await res.json();
+
+  eventForm.value.banner = data.secure_url;
 };
 
 const loading = ref(false);
@@ -235,6 +255,7 @@ const eventForm = ref({
   registration_deadline: "",
   is_free: true,
   price: "",
+  banner: "",
 });
 
 const fetchEvents = async () => {
