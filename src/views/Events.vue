@@ -343,16 +343,12 @@ const loadingEvents = ref(false);
     const apiEvents = await eventsApi.listEvents(); 
    
     const mappedApiEvents = apiEvents.map((e) => {
-      // 1. Create a Date object from the API's start_date/date field
-      // Adjust 'e.start_date' to match the actual key your API returns
       const startDate = new Date(e.start_date || e.date);
 
       return {
         id: e.id,
         title: e.title,
-        // 2. Format to YYYY-MM-DD to match your calendar's filtering logic
         date: startDate.toISOString().slice(0, 10),
-        // 3. Format the time
         time: startDate.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -361,11 +357,10 @@ const loadingEvents = ref(false);
         image: e.banner_image || eventThumb,
         excerpt: e.description || "",
         details: e.description || "",
-        slug: e.slug // useful for registration
+        slug: e.slug
       };
     });
 
-    // 4. Update the reactive events list
     events.value = [...events.value, ...mappedApiEvents];
   } catch (error) {
     console.error("Failed to fetch API events:", error);
