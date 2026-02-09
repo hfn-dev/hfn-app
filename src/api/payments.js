@@ -43,8 +43,8 @@ export default {
     const { data } = await api.post(`/membership/payments/${id}/confirm_payment/`, payload);
     return data;
   },
-  async retrievePayment(payload, id) {
-    const { data } = await api.get(`/membership/payments/${id}/`, payload);
+  async retrievePayment(id) {
+    const { data } = await api.get(`/membership/payments/${id}/`);
     return data;
   },
   async removePayment(id) {
