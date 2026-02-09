@@ -184,7 +184,6 @@ const handleRegistration = async () => {
     if (response.status === "success") {
       toast.success(response.messages?.[0] || "Registration successful!");
 
-    
       if (response.actions_required?.includes("verify_email")) {
         localStorage.setItem("pendingVerificationEmail", payload.email);
         router.push("/signinverification");
@@ -559,7 +558,7 @@ const changeTab = (tab) => {
 
               <div>
                 <label class="block text-sm font-medium text-gray-700">
-                  Membership Category
+                  Membership Category*
                 </label>
 
                 <select
@@ -580,15 +579,17 @@ const changeTab = (tab) => {
                   </option>
                 </select>
 
-                <p v-if="selectedCategory" class="mt-2 font-semibold text-green-700">
-  Amount:
-  {{ currencySymbol }}
-  {{ selectedCategory.amount.toLocaleString() }}
-  <span class="text-sm text-gray-500">
-    ({{ selectedCategory.currency }})
-  </span>
-</p>
-
+                <p
+                  v-if="selectedCategory"
+                  class="mt-2 font-semibold text-green-700"
+                >
+                  Amount:
+                  {{ currencySymbol }}
+                  {{ selectedCategory.amount.toLocaleString() }}
+                  <span class="text-sm text-gray-500">
+                    ({{ selectedCategory.currency }})
+                  </span>
+                </p>
               </div>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
