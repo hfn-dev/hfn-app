@@ -2,6 +2,7 @@
 import Blog from '@/views/Blog.vue';
 import BlogDetails from '@/views/BlogDetails.vue';
 import Contact from '@/views/Contact.vue';
+import Confirmation from '@/views/Confirmation.vue';
 import EditorAccount from '@/views/Editor/EditorAccount.vue';
 import EditorDashboard from '@/views/Editor/EditorDashboard.vue';
 import GetInvolved from '@/views/GetInvolved.vue';
@@ -84,6 +85,7 @@ const routes = [
   { path: '/gallery', name: 'Gallery', component: Gallery },
   { path: '/governance', name: 'Governance', component: Governance },
   { path: '/publication', name: 'Publications', component: Publications },
+    { path: '/confirmation', name: 'Confirmation', component: Confirmation },
   { path: '/registration-payment', name: 'Payment', component: Payment },
 
   { path: '/get-involved', name: 'GetInvolved', component: GetInvolved },
