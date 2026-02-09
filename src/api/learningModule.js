@@ -423,4 +423,13 @@ export default {
       throw error;
     }
   },
+  async publishCourse(payload) {
+    try {
+      const response = await api.post(`/learning/courses/${slug}/publish/`, payload);
+      return response.data;
+    } catch (error) {
+      console.error('publish course API error:', error);
+      throw error;
+    }
+  },
 };
