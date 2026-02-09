@@ -429,7 +429,7 @@ const resolveImage = (image) => imageMap[image] || image;
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div
+          <router-link
             v-for="unit in [
               'Board of Trustees',
               'National Executive Council',
@@ -437,6 +437,7 @@ const resolveImage = (image) => imageMap[image] || image;
               'Secretariat',
             ]"
             :key="unit"
+            to="/governance"
             class="p-6 rounded-3xl border border-gray-100 bg-[#f8fdf9] hover:bg-white hover:shadow-xl hover:-translate-y-2 transition-all duration-500"
           >
             <div
@@ -457,7 +458,7 @@ const resolveImage = (image) => imageMap[image] || image;
             <p class="font-bold text-gray-800 text-sm uppercase tracking-tight">
               {{ unit }}
             </p>
-          </div>
+          </router-link>
         </div>
         <p
           class="mt-12 text-gray-500 max-w-3xl mx-auto font-medium leading-relaxed italic"
