@@ -1,9 +1,9 @@
 <script setup>
 // import registerImage from "@/assets/register.jpg";
+import userRegister from "@/api/userRegister";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
-import userRegister from "@/api/userRegister";
 
 const router = useRouter();
 const toast = useToast();
@@ -22,22 +22,24 @@ const form = ref({
   oragnizationName: "",
 });
 
-
 const membershipCategories = ref([
-  { id: 1, name: 'Individual', amount: 50000 },
-  { id: 2, name: 'Association', amount: 150000 },
-  { id: 3, name: 'Corporate', amount: 200000 },
-  { id: 4, name: 'Multinational', amount: 750000 },
-  { id: 5, name: 'Diaspora', amount: 50 }
-])
+  { id: 1, name: "Individual", amount: 50000, currency: "NGN" },
+  { id: 2, name: "Association", amount: 150000, currency: "NGN" },
+  { id: 3, name: "Corporate", amount: 200000, currency: "NGN" },
+  { id: 4, name: "Multinational", amount: 750000, currency: "NGN" },
+  { id: 5, name: "Diaspora", amount: 50, currency: "USD" },
+]);
 
-const selectedCategoryId = ref('')
+const selectedCategoryId = ref("");
+
 const selectedCategory = computed(() =>
-  membershipCategories.value.find(
-    c => c.id === selectedCategoryId.value
-  )
-)
-  
+  membershipCategories.value.find((c) => c.id === selectedCategoryId.value)
+);
+
+const currencySymbol = computed(() => {
+  if (!selectedCategory.value) return "";
+  return selectedCategory.value.currency === "USD" ? "$" : "₦";
+});
 
 const activeTab = ref("individual");
 const isLoading = ref(false);
@@ -181,35 +183,31 @@ const handleRegistration = async () => {
 
     if (response.status === "success") {
       toast.success(response.messages?.[0] || "Registration successful!");
-      
-      // if (response.actions_required?.includes("verify_email")) {
-      //   router.push("/signinverification");
-      // } else {
-      //   router.push("/registration-payment");
-      // }
+
+    
       if (response.actions_required?.includes("verify_email")) {
         localStorage.setItem("pendingVerificationEmail", payload.email);
-  router.push("/signinverification");
-  return;
-}
+        router.push("/signinverification");
+        return;
+      }
 
-if (response.actions_required?.includes("make_payment")) {
-  localStorage.setItem(
-    'membership_payment',
-    JSON.stringify({
-      category_id: selectedCategory.value.id,
-      category_name: selectedCategory.value.name,
-      amount: selectedCategory.value.amount,
-      email: payload.email
-    })
-  )
-  router.push("/registration-payment");
-  return;
-}
+      if (response.actions_required?.includes("make_payment")) {
+        localStorage.setItem(
+          "membership_payment",
+          JSON.stringify({
+            category_id: selectedCategory.value.id,
+            category_name: selectedCategory.value.name,
+            amount: selectedCategory.value.amount,
+            currency: selectedCategory.value.currency,
+            email: payload.email,
+          })
+        );
+        router.push("/registration-payment");
+        return;
+      }
 
-// fallback
-router.push("/signin");
-
+      // fallback
+      router.push("/signin");
     } else {
       const errorMessage =
         response.messages?.[0] || "Registration failed. Please try again.";
@@ -558,7 +556,40 @@ const changeTab = (tab) => {
                   />
                 </div>
               </div>
-              
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700">
+                  Membership Category
+                </label>
+
+                <select
+                  v-model="selectedCategoryId"
+                  required
+                  class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm p-2.5"
+                >
+                  <option disabled value="">Select a category</option>
+
+                  <option
+                    v-for="category in membershipCategories"
+                    :key="category.id"
+                    :value="category.id"
+                  >
+                    {{ category.name }} –
+                    {{ category.currency === "USD" ? "$" : "₦" }}
+                    {{ category.amount.toLocaleString() }}
+                  </option>
+                </select>
+
+                <p v-if="selectedCategory" class="mt-2 font-semibold text-green-700">
+  Amount:
+  {{ currencySymbol }}
+  {{ selectedCategory.amount.toLocaleString() }}
+  <span class="text-sm text-gray-500">
+    ({{ selectedCategory.currency }})
+  </span>
+</p>
+
+              </div>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -625,32 +656,6 @@ const changeTab = (tab) => {
                   <span>{{ rule.text }}</span>
                 </div>
               </div>
-
-              <div>
-  <label class="block text-sm font-medium text-gray-700">
-    Membership Category
-  </label>
-
-  <select
-    v-model="selectedCategoryId"
-    required
-    class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
-  >
-    <option disabled value="">Select a category</option>
-    <option
-      v-for="category in membershipCategories"
-      :key="category.id"
-      :value="category.id"
-    >
-      {{ category.name }} – ₦{{ category.amount.toLocaleString() }}
-    </option>
-  </select>
-
-  <p v-if="selectedCategory" class="mt-2 text-green-700 font-semibold">
-    Amount: ₦{{ selectedCategory.amount.toLocaleString() }}
-  </p>
-</div>
-
 
               <div class="pt-4 flex justify-center">
                 <button
