@@ -47,8 +47,8 @@ export default {
     const { data } = await api.get(`/membership/payments/${id}/`, payload);
     return data;
   },
-  async removePayment(payload, id) {
-    const { data } = await api.delete(`/membership/payments/${id}/`, payload);
+  async removePayment(id) {
+    const { data } = await api.delete(`/membership/payments/${id}/`);
     return data;
   },
 };
