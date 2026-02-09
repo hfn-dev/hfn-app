@@ -140,7 +140,7 @@ const fetchDashboardAnalytics = async () => {
 const handleDelete = async (id) => {
   if (!confirm('Are you sure you want to delete this payment?')) return;
 
-  await paymentApi.deletePayment(id);
+  await paymentApi.removePayment(id);
   fetchPayments();
 };
 
