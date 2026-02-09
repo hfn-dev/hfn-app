@@ -42,18 +42,6 @@ const activeCourses = computed(() => {
 
 });
 
-// const fetchPayments = async () => {
-//   loading.value = true;
-//   try {
-//     if (currentTab.value === 'Registration') {
-//       registration.value = await paymentApi.getPaymentList();
-//     } else {
-//       purchases.value = await paymentApi.getPurchases();
-//     }
-//   } finally {
-//     loading.value = false;
-//   }
-// };
 const fetchPayments = async () => {
   loading.value = true;
   try {
@@ -137,11 +125,6 @@ const fetchDashboardAnalytics = async () => {
       month: item.month,
       amount: item.amount,
     }));
-
-    // paymentTrendData.value = dashboard.weekly_payments.map((item) => ({
-    //   day: item.day,
-    //   count: item.count,
-    // }));
     paymentTrendData.value = (dashboard.weekly_payments || []).map((item) => ({
       day: item.day,
       count: item.count,
@@ -183,27 +166,62 @@ const handleAction = (action, course) => {
 };
 
 
-const markAsPaid = async (payment) => {
-  if (!confirm(`Are you sure you want to mark payment for ${payment.title} as PAID?`)) return;
+// const markAsPaid = async (payment) => {
+//   if (!confirm(`Are you sure you want to mark payment for ${payment.title} as PAID?`)) return;
 
-  const payload = {
-    transaction_id: payment.raw.transaction_id,
-    status: "completed",
-    payment_reference: payment.raw.payment_reference,
-    metadata: null,
-  };
+//   const payload = {
+//     transaction_id: payment.raw.transaction_id,
+//     status: "completed",
+//     payment_reference: payment.raw.payment_reference,
+//     metadata: null,
+//   };
+
+//   try {
+//     loading.value = true;
+//     const response = await paymentApi.confirmPayment(payload, payment.id);
+
+//     if (response?.status === "success") {
+//       toast.success(`Payment for ${payment.title} marked as completed`);
+//       fetchPayments(); 
+//     } else {
+//       const msg = response?.message || "Failed to confirm payment";
+//       toast.error(msg);
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     toast.error("Error confirming payment. Please try again.");
+//   } finally {
+//     loading.value = false;
+//   }
+// };
+
+  const markAsPaid = async (payment) => {
+  if (!confirm(`Are you sure you want to mark payment for ${payment.title} as PAID?`)) return;
 
   try {
     loading.value = true;
+
+    const paymentDetails = await paymentApi.retrievePayment(payment.id);
+
+    if (!paymentDetails?.transaction_id) {
+      toast.error("Transaction ID not found for this payment");
+      return;
+    }
+
+    const payload = {
+      transaction_id: paymentDetails.transaction_id,
+      status: "completed",
+      payment_reference: paymentDetails.payment_reference,
+      metadata: null,
+    };
+
     const response = await paymentApi.confirmPayment(payload, payment.id);
 
-    if (response?.status === "success") {
-      toast.success(`Payment for ${payment.title} marked as completed`);
-      fetchPayments(); 
-    } else {
-      const msg = response?.message || "Failed to confirm payment";
-      toast.error(msg);
-    }
+    toast.success(`Payment for ${payment.title} marked as completed`);
+
+    fetchPayments();
+    fetchDashboardAnalytics();
+
   } catch (error) {
     console.error(error);
     toast.error("Error confirming payment. Please try again.");
@@ -211,6 +229,7 @@ const markAsPaid = async (payment) => {
     loading.value = false;
   }
 };
+
   
 
 const statCards = computed(() => {
