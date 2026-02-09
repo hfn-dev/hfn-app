@@ -126,7 +126,7 @@ const dummyEvents = [
     date: "Oct 20, 2025",
     time: "10:00 AM",
     location: "Lagos, Nigeria",
-    buttonText: "Coming Soon",
+    buttonText: "View",
   },
   {
     slug: "Medical-nnovation-investment-forum",
@@ -138,7 +138,7 @@ const dummyEvents = [
     date: "Nov 12, 2025",
     time: "9:00 AM",
     location: "Abuja, Nigeria",
-    buttonText: "Coming Soon",
+    buttonText: "View",
   },
   {
     slug: "hfn-end-of-year-stakeholders-summit",
@@ -149,7 +149,7 @@ const dummyEvents = [
     date: "Dec 5, 2025",
     time: "11:00 AM",
     location: "Hybrid Event",
-    buttonText: "Coming Soon",
+    buttonText: "View",
   },
 ];
 
