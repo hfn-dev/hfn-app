@@ -338,43 +338,32 @@ import newEvent from "@/assets/events.png";
 const apiEvents = ref([]);
 const loadingEvents = ref(false);
 
-  const fetchEvents = async () => {
+  const fetchApiEvents = async () => {
   try {
-    loadingEvents.value = true;
-
-    const res = await eventsApi.listEvents();
-
-    apiEvents.value = res.map((e) => {
-      const start = e.start_datetime ? new Date(e.start_datetime) : null;
+    const apiEvents = await eventsApi.listEvents(); 
+   
+    const mappedApiEvents = apiEvents.map((e) => {
+      const startDate = new Date(e.start_date || e.date);
 
       return {
+        id: e.id,
         title: e.title,
-        category: e.audience === "members" ? "Members Only" : "Public",
-        date: start
-      ? start.toLocaleDateString(undefined, {
-          weekday: "long",
-          month: "long",
-          day: "numeric",
-          year: "numeric",
-        })
-      : "TBA",
-        time: start
-      ? start.toLocaleTimeString([], {
+        date: startDate.toISOString().slice(0, 10),
+        time: startDate.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
-        })
-      : "TBA",
-        location: e.location || "Online",
-        frequency: e.is_free ? "Free" : `₦${e.price}`,
-        image: e.banner_image || event, 
-        description: e.description,
-        registerLink: `/events/${e.slug}`, 
+        }),
+        tag: e.event_type || "General",
+        image: e.banner_image || eventThumb,
+        excerpt: e.description || "",
+        details: e.description || "",
+        slug: e.slug
       };
     });
-  } catch (err) {
-    console.error("Failed to fetch events", err);
-  } finally {
-    loadingEvents.value = false;
+
+    events.value = [...events.value, ...mappedApiEvents];
+  } catch (error) {
+    console.error("Failed to fetch API events:", error);
   }
 };
 
@@ -468,7 +457,7 @@ const pastEvents = [
 ];
 
   onMounted(() => {
-  fetchEvents();
+  fetchApiEvents();
 });
 
 </script>

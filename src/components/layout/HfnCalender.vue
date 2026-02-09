@@ -17,20 +17,26 @@ const eventThumb4 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v17697
   const fetchApiEvents = async () => {
   try {
     const apiEvents = await eventsApi.listEvents(); 
-   
-    const mappedApiEvents = apiEvents.map((e) => ({
-      id: e.id,
-      title: e.title,
-      date: start.toISOString().slice(0, 10),
-      time: start.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    }),
-      tag: e.event_type || "General",
-    image: e.banner_image || eventThumb,
-    excerpt: e.description || "",
-    details: e.description || "",
-    }));
+    
+    const mappedApiEvents = apiEvents.map((e) => {
+      const start = new Date(e.start_datetime);
+
+      return {
+        id: e.id,
+        title: e.title,
+        date: start.toISOString().slice(0, 10),
+        time: start.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        tag: e.event_type || "General",
+        image: e.banner_image || eventThumb,
+        excerpt: e.description || "",
+        details: e.description || "",
+        slug: e.slug 
+      };
+    });
+
     events.value = [...events.value, ...mappedApiEvents];
   } catch (error) {
     console.error("Failed to fetch API events:", error);

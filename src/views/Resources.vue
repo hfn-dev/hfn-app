@@ -235,34 +235,34 @@ const publications = [
     pdfUrl:
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067793/2025-hfn-conference-report_hapfj9.pdf",
   },
+  {
+    title: "High-Level Roundtable on Local Manufacturing of Medicines in Nigeria",
+    description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
+    pdfUrl:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067783/hfn-report_roundtable-on-local-manufacturing_esqq68.pdf",
+  },
 ];
 
 const newsletters = [
   {
-    date: "October 22, 2025",
-    comments: 0,
-    text: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
-    pdfUrl:
-      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067783/hfn-report_roundtable-on-local-manufacturing_esqq68.pdf",
-  },
-  {
-    date: "April 7, 2025",
-    comments: 0,
-    text: "At the 28th NUNSA Annual General Assembly and Scientific Conference themed “Empowering Nurses: A Catalyst for Sustainable Healthcare in Africa,” HFN President Njide Ndili delivered a compelling address emphasizing the indispensable role of nurses in Nigeria's healthcare landscape.",
-    pdfUrl:
-      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-2---2025_jfakrt.pdf",
-  },
-  {
     date: "October 3, 2024",
     comments: 0,
-    text: "As we step into 2025 with hope and determination, the Healthcare Federation of Nigeria (HFN) is delighted to present our Q4 2024 newsletter—a reflection of the strides we made in the final quarter of the year. This period was marked by notable collaborations, policy advancements, and landmark events, each contributing to our shared mission of achieving Universal Health Coverage (UHC).",
+    text: "Q4 Quarterly Newsletter, 2024 (October-December, 2024)",
     pdfUrl:
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-4_2024_rqpvhf.pdf",
   },
   {
+    date: "April 7, 2025",
+    comments: 0,
+    text: "Q1 Quarterly Newsletter, 2025 (April-June, 2025)",
+    pdfUrl:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-2---2025_jfakrt.pdf",
+  },
+  
+  {
     date: "October 8, 2025",
     comments: 0,
-    text: "As we reflect on the fourth quarter of 2025, we are pleased to share the progress and successes, shaping our ongoing initiatives. Your unwavering support and active engagement continue to reinforce a shared vision for a stronger, more resilient healthcare system in Nigeria. Together, we are not just recording achievements, we are shaping the future of healthcare.",
+    text: "Q4 Quarterly Newsletter, 2025 (October-December, 2025)",
     pdfUrl:
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067786/2025-hfn-quarterly-newsletter-q4_gd0aj6.pdf",
   },

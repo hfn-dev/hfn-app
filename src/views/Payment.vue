@@ -1,11 +1,19 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const copied = ref(false);
+const paymentInfo = ref(null)
+
+onMounted(() => {
+  const saved = localStorage.getItem('membership_payment')
+  if (saved) {
+    paymentInfo.value = JSON.parse(saved)
+  }
+})  
 
 const accountDetails = {
-  bankName: "Global Tech Bank",
-  accountName: "Membership Portal Ltd",
+  bankName: "Globus Bank",
+  accountName: "Healthcare Federation Of Nigeria",
   accountNumber: "0123456789",
   referenceCode: "TRANS-" + Math.floor(10000 + Math.random() * 90000)
 };
@@ -28,7 +36,14 @@ const copyToClipboard = (text) => {
       <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
         <div class="bg-[#004d33] p-8 text-white text-center">
           <p class="text-green-200 text-xs uppercase tracking-widest mb-1 font-semibold">Amount Due</p>
-          <h2 class="text-4xl font-black">$49.99</h2>
+          <h2 class="text-4xl font-black">
+  ₦{{ paymentInfo?.amount.toLocaleString() }}
+</h2>
+
+<p class="text-green-200 text-sm mt-1">
+  {{ paymentInfo?.category_name }} Membership
+</p>
+
         </div>
 
         <div class="p-8 space-y-5">

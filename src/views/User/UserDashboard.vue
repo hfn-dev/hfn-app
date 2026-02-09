@@ -123,10 +123,10 @@ const dummyEvents = [
     tag: "Programs & Initiatives",
     description:
       "A strategic discussion on strengthening Nigeria’s healthcare policy framework.",
-    date: "Oct 20, 2025",
+    date: "Oct 20, 2026",
     time: "10:00 AM",
     location: "Lagos, Nigeria",
-    buttonText: "Coming Soon",
+    buttonText: "View",
   },
   {
     slug: "Medical-nnovation-investment-forum",
@@ -135,10 +135,10 @@ const dummyEvents = [
     tag: "Health Alert",
     description:
       "Exploring investment opportunities in local pharmaceutical manufacturing.",
-    date: "Nov 12, 2025",
+    date: "Nov 12, 2026",
     time: "9:00 AM",
     location: "Abuja, Nigeria",
-    buttonText: "Coming Soon",
+    buttonText: "View",
   },
   {
     slug: "hfn-end-of-year-stakeholders-summit",
@@ -146,10 +146,10 @@ const dummyEvents = [
     image: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739050/850a9bd13a177b57467b2c6d7c3dfec3_L_g8tmki.jpg",
     tag: "Programs & Initiatives",
     description: "Annual summit bringing together key healthcare stakeholders.",
-    date: "Dec 5, 2025",
+    date: "Dec 5, 2026",
     time: "11:00 AM",
     location: "Hybrid Event",
-    buttonText: "Coming Soon",
+    buttonText: "View",
   },
 ];
 
@@ -540,9 +540,9 @@ onMounted(() => {
           <select
             class="border border-gray-300 rounded-lg p-2 text-sm font-medium text-gray-700 focus:ring-[#004D33] focus:border-[#004D33]"
           >
-            <option>October 2025</option>
-            <option>November 2025</option>
-            <option>December 2025</option>
+            <option>October 2026</option>
+            <option>November 2026</option>
+            <option>December 2026</option>
           </select>
         </div>
 

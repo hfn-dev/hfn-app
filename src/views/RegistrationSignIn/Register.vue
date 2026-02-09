@@ -22,6 +22,23 @@ const form = ref({
   oragnizationName: "",
 });
 
+
+const membershipCategories = ref([
+  { id: 1, name: 'Individual', amount: 50000 },
+  { id: 2, name: 'Association', amount: 150000 },
+  { id: 3, name: 'Corporate', amount: 200000 },
+  { id: 4, name: 'Multinational', amount: 750000 },
+  { id: 5, name: 'Diaspora', amount: 50 }
+])
+
+const selectedCategoryId = ref('')
+const selectedCategory = computed(() =>
+  membershipCategories.value.find(
+    c => c.id === selectedCategoryId.value
+  )
+)
+  
+
 const activeTab = ref("individual");
 const isLoading = ref(false);
 const customAlert = ref({
@@ -164,21 +181,35 @@ const handleRegistration = async () => {
 
     if (response.status === "success") {
       toast.success(response.messages?.[0] || "Registration successful!");
+      
       // if (response.actions_required?.includes("verify_email")) {
-      //   localStorage.setItem("pendingVerificationEmail", form.value.email);
-      //   setTimeout(() => {
-      //     router.push("/signinverification");
-      //   }, 1500);
+      //   router.push("/signinverification");
       // } else {
-      //   setTimeout(() => {
-      //     router.push("/signin");
-      //   }, 1500);
+      //   router.push("/registration-payment");
       // }
       if (response.actions_required?.includes("verify_email")) {
-        router.push("/signinverification");
-      } else {
-        router.push("/registration-payment");
-      }
+        localStorage.setItem("pendingVerificationEmail", payload.email);
+  router.push("/signinverification");
+  return;
+}
+
+if (response.actions_required?.includes("make_payment")) {
+  localStorage.setItem(
+    'membership_payment',
+    JSON.stringify({
+      category_id: selectedCategory.value.id,
+      category_name: selectedCategory.value.name,
+      amount: selectedCategory.value.amount,
+      email: payload.email
+    })
+  )
+  router.push("/registration-payment");
+  return;
+}
+
+// fallback
+router.push("/signin");
+
     } else {
       const errorMessage =
         response.messages?.[0] || "Registration failed. Please try again.";
@@ -527,6 +558,7 @@ const changeTab = (tab) => {
                   />
                 </div>
               </div>
+              
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -593,6 +625,32 @@ const changeTab = (tab) => {
                   <span>{{ rule.text }}</span>
                 </div>
               </div>
+
+              <div>
+  <label class="block text-sm font-medium text-gray-700">
+    Membership Category
+  </label>
+
+  <select
+    v-model="selectedCategoryId"
+    required
+    class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
+  >
+    <option disabled value="">Select a category</option>
+    <option
+      v-for="category in membershipCategories"
+      :key="category.id"
+      :value="category.id"
+    >
+      {{ category.name }} – ₦{{ category.amount.toLocaleString() }}
+    </option>
+  </select>
+
+  <p v-if="selectedCategory" class="mt-2 text-green-700 font-semibold">
+    Amount: ₦{{ selectedCategory.amount.toLocaleString() }}
+  </p>
+</div>
+
 
               <div class="pt-4 flex justify-center">
                 <button

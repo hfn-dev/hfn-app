@@ -76,10 +76,28 @@ const handleAction = async (action, course) => {
   isConfirmModalOpen.value = true;
       break;
 
+    // case 'Approve':
+    //   await courseApi.approveCourse(course.id);
+    //   fetchCourses();
+    //   break;
+
     case 'Approve':
-      await courseApi.approveCourse(course.id);
-      fetchCourses();
-      break;
+  try {
+    loading.value = true;
+
+    await courseApi.publishCourse(course.slug);
+
+    console.log(`Course "${course.title}" published successfully`);
+
+    fetchCourses();
+  } catch (err) {
+    console.error(err);
+    console.log('Failed to publish course');
+  } finally {
+    loading.value = false;
+  }
+  break;
+  
   }
 };
 
