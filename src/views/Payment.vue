@@ -1,7 +1,15 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const copied = ref(false);
+const paymentInfo = ref(null)
+
+onMounted(() => {
+  const saved = localStorage.getItem('membership_payment')
+  if (saved) {
+    paymentInfo.value = JSON.parse(saved)
+  }
+})  
 
 const accountDetails = {
   bankName: "Globus Bank",
@@ -28,7 +36,14 @@ const copyToClipboard = (text) => {
       <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
         <div class="bg-[#004d33] p-8 text-white text-center">
           <p class="text-green-200 text-xs uppercase tracking-widest mb-1 font-semibold">Amount Due</p>
-          <h2 class="text-4xl font-black">N50,000</h2>
+          <h2 class="text-4xl font-black">
+  ₦{{ paymentInfo?.amount.toLocaleString() }}
+</h2>
+
+<p class="text-green-200 text-sm mt-1">
+  {{ paymentInfo?.category_name }} Membership
+</p>
+
         </div>
 
         <div class="p-8 space-y-5">
