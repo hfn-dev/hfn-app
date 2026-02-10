@@ -7,6 +7,9 @@ import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useToast } from "vue-toastification";
 import { nextTick } from "vue";
 
+  
+const groupMessagesMap = ref({});
+
 const authStore = useAuth();
 const currentUserId = computed(() => authStore.user?.id);
 
@@ -393,7 +396,7 @@ const fetchGroupMessages = async (groupId) => {
   try {
     const response = await messagingApi.getGroupMessages(groupId);
 
-    chatMessages.value = response
+    groupMessagesMap.value[groupId] = response
       .map((msg) => ({
         id: msg.id,
         sender: msg.sender.full_name,
@@ -405,15 +408,16 @@ const fetchGroupMessages = async (groupId) => {
         isMine: msg.sender.id === currentUserId.value,
         body: msg.content,
         type: msg.attachment ? "file" : "text",
-        file: msg.attachment?.name,
         senderId: msg.sender.id,
       }))
-      .reverse(); 
+      .reverse();
+
+    chatMessages.value = groupMessagesMap.value[groupId];
 
     await nextTick();
     const el = document.querySelector(".overflow-y-auto");
     el?.scrollTo({ top: el.scrollHeight });
-  } catch (error) {
+  } catch {
     toast.error("Failed to load group messages");
   } finally {
     isLoading.value.messages = false;
@@ -546,6 +550,8 @@ const sendMessage = async () => {
 
   if (currentTab.value === "Groups" && currentGroup.value?.id) {
   try {
+    const groupId = currentGroup.value.id;
+
     const tempMessage = {
       id: Date.now(),
       sender: "You",
@@ -558,7 +564,12 @@ const sendMessage = async () => {
       senderId: currentUserId.value,
     };
 
-    chatMessages.value.push(tempMessage);
+    if (!groupMessagesMap.value[groupId]) {
+      groupMessagesMap.value[groupId] = [];
+    }
+
+    groupMessagesMap.value[groupId].push(tempMessage);
+    chatMessages.value = groupMessagesMap.value[groupId];
 
     await nextTick();
     const el = document.querySelector(".overflow-y-auto");
@@ -566,15 +577,16 @@ const sendMessage = async () => {
 
     messageInput.value = "";
 
-    await messagingApi.sendGroupMessage(currentGroup.value.id, {
+    await messagingApi.sendGroupMessage(groupId, {
       content: tempMessage.body,
     });
 
-    fetchGroupMessages(currentGroup.value.id);
+    fetchGroupMessages(groupId);
   } catch {
     toast.error("Failed to send group message");
   }
 }
+
 
 };
 
@@ -712,14 +724,20 @@ const blockConnectionRequest = async (id) => {
   }
 };
 
-
 const selectGroup = (group) => {
-  chatMessages.value = [];
   currentGroup.value = group;
   currentTab.value = "Groups";
-  fetchGroupMessages(group.id);
-};
 
+  if (groupMessagesMap.value[group.id]) {
+    chatMessages.value = groupMessagesMap.value[group.id];
+    nextTick(() => {
+      const el = document.querySelector(".overflow-y-auto");
+      el?.scrollTo({ top: el.scrollHeight });
+    });
+  } else {
+    fetchGroupMessages(group.id);
+  }
+};
 
   
 watch(currentTab, (newTab) => {
