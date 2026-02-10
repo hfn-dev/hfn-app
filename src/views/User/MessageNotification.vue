@@ -375,7 +375,8 @@ const fetchMessagesWithUser = async (userId) => {
   isMine: msg.sender === currentUserId.value,
 }));
 
-    chatMessages.value.reverse();
+    chatMessages.value = mappedMessages.reverse();
+
   } catch (error) {
     console.error("Error fetching messages:", error);
     toast.error("Failed to load messages");
@@ -398,10 +399,10 @@ const fetchGroupMessages = async (groupId) => {
         (msg.sender.first_name?.[0] || "") +
           (msg.sender.last_name?.[0] || "") || "??",
       color: getColorForUser(msg.sender.id),
+      isMine: msg.sender.id === currentUserId.value,
       body: msg.content,
       type: msg.attachment ? "file" : "text",
       file: msg.attachment?.name,
-      isRead: msg.is_read,
       senderId: msg.sender.id,
     }));
   } catch (error) {
