@@ -1325,15 +1325,15 @@ onUnmounted(() => {
                 <button
                   v-for="dm in directMessages"
                   :key="dm.name"
-                  @click="selectDMUser(dm)"
+                  @click="selectDMUser(dm.name)"
                   class="flex items-center justify-between w-full p-2 rounded-lg transition-colors"
                   :class="
-                    isDMActive(dm)
+                    isDMActive(dm.name)
                       ? 'font-semibold'
                       : 'hover:bg-gray-50 text-gray-600'
                   "
                   :style="
-                    isDMActive(dm)
+                    isDMActive(dm.name)
                       ? { backgroundColor: LIGHT_GREEN, color: DARK_GREEN }
                       : {}
                   "
@@ -1368,7 +1368,7 @@ onUnmounted(() => {
                 <button
                   v-for="group in groups"
                   :key="group.id"
-                  @click="selectGroup(group)"
+                  @click="selectGroup(group.name)"
                   class="flex justify-between items-center w-full p-2 rounded-lg transition-colors"
                   :class="
                     isGroupActive(group.name)
