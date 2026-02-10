@@ -1328,12 +1328,12 @@ onUnmounted(() => {
                   @click="selectDMUser(dm.name)"
                   class="flex items-center justify-between w-full p-2 rounded-lg transition-colors"
                   :class="
-                    isDMActive(dm.name)
+                    isDMActive(dm)
                       ? 'font-semibold'
                       : 'hover:bg-gray-50 text-gray-600'
                   "
                   :style="
-                    isDMActive(dm.name)
+                    isDMActive(dm)
                       ? { backgroundColor: LIGHT_GREEN, color: DARK_GREEN }
                       : {}
                   "
@@ -1371,12 +1371,12 @@ onUnmounted(() => {
                   @click="selectGroup(group.name)"
                   class="flex justify-between items-center w-full p-2 rounded-lg transition-colors"
                   :class="
-                    isGroupActive(group.name)
+                    isGroupActive(group)
                       ? 'font-semibold'
                       : 'hover:bg-gray-50 text-gray-600'
                   "
                   :style="
-                    isGroupActive(group.name)
+                    isGroupActive(group)
                       ? { backgroundColor: LIGHT_GREEN, color: DARK_GREEN }
                       : {}
                   "
