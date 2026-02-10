@@ -5,6 +5,7 @@ import UserSidebar from "@/components/layout/UserSidebar.vue";
 import { useAuth } from "@/store/authStore.js";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useToast } from "vue-toastification";
+import { nextTick } from "vue";
 
 const authStore = useAuth();
 const currentUserId = computed(() => authStore.user?.id);
@@ -352,33 +353,33 @@ const fetchMessagesWithUser = async (userId) => {
 
   isLoading.value.messages = true;
   try {
-    const response = await messagingApi.getMessagesWithUser({
-      user_id: userId,
-    });
-
+    const response = await messagingApi.getMessagesWithUser({ user_id: userId });
     const messagesArray = response.results || [];
 
-    chatMessages.value = messagesArray.map((msg) => ({
-  id: msg.id,
-  senderId: msg.sender,
-  sender:
-    msg.sender === currentUserId.value
-      ? "You"
-      : senderName,
-  time: formatTime(msg.created_at),
-  initial: msg.sender === currentUserId.value ? "ME" : initial,
-  color: msg.sender === currentUserId.value
-    ? "bg-green-700"
-    : getColorForUser(msg.sender),
-  body: msg.content,
-  type: msg.attachment ? "file" : "text",
-  isMine: msg.sender === currentUserId.value,
-}));
+    const otherName = currentDMUser.value?.name || "User";
+    const otherInitial = otherName
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .slice(0, 2);
 
-    chatMessages.value = mappedMessages.reverse();
-
+    chatMessages.value = messagesArray
+      .map((msg) => ({
+        id: msg.id,
+        senderId: msg.sender,
+        sender: msg.sender === currentUserId.value ? "You" : otherName,
+        initial: msg.sender === currentUserId.value ? "ME" : otherInitial,
+        time: formatTime(msg.created_at),
+        color:
+          msg.sender === currentUserId.value
+            ? "bg-green-700"
+            : getColorForUser(msg.sender),
+        body: msg.content,
+        type: msg.attachment ? "file" : "text",
+        isMine: msg.sender === currentUserId.value,
+      }))
+      .reverse();
   } catch (error) {
-    console.error("Error fetching messages:", error);
     toast.error("Failed to load messages");
   } finally {
     isLoading.value.messages = false;
@@ -412,6 +413,13 @@ const fetchGroupMessages = async (groupId) => {
     isLoading.value.messages = false;
   }
 };
+
+chatMessages.value = chatMessages.value.reverse();
+nextTick(() => {
+  const el = document.querySelector(".overflow-y-auto");
+  el?.scrollTo({ top: el.scrollHeight });
+});
+  
 
 const sendConnectionRequest = async (userId) => {
   try {
@@ -684,6 +692,7 @@ const blockConnectionRequest = async (id) => {
 
 
 const selectGroup = (group) => {
+  chatMessages.value = [];
   currentGroup.value = group;
   currentTab.value = "Groups";
   fetchGroupMessages(group.id);
