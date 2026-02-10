@@ -716,6 +716,7 @@ onMounted(() => {
       class="relative"
     >
       <img
+        v-if="file instanceof File"
         :src="URL.createObjectURL(file)"
         class="h-24 w-24 object-cover rounded cursor-pointer border-2"
         :class="{
