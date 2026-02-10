@@ -68,4 +68,13 @@ export default {
       })
       .then((res) => res.data);
   },
+  async contactForm(payload) {
+    try {
+      const response = await api.post('/contact/', payload);
+      return response.data;
+    } catch (error) {
+      console.error('Login API error:', error);
+      throw error;
+    }
+  },
 };
