@@ -192,11 +192,11 @@ export default {
     }
   },
 
-  async getGroupMessages(group_id, params = {}) {
+  async getGroupMessages(group_id) {
     try {
       const response = await api.get(
-        `/messaging/groups/${group_id}/messages/`,
-        { params }
+        `/messaging/groups/${group_id}/messages/`
+        
       );
       return response.data;
     } catch (error) {
