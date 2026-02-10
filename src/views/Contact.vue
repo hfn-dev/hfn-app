@@ -1,7 +1,7 @@
 <script setup>
 import globe from "@/assets/globe.png";
  import { ref } from "vue";
-import contactApi from "@/api/contactApi"; 
+import contactApi from "@/api/userRegister"; 
 
 const form = ref({
   name: "",
