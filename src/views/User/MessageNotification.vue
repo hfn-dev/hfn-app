@@ -1321,51 +1321,58 @@ onUnmounted(() => {
   class="w-full mb-3 p-2 border rounded"
 />
 
+<!-- SEARCH RESULTS -->
 <button
+  v-if="dmSearch"
   v-for="user in filteredConnections"
-  @click="selectDMUser({
-    userId: user.userId,
-    name: user.name,
-    initial: user.initial,
-    color: getColorForUser(user.userId)
-  })"
+  :key="user.userId"
+  @click="selectDMUser(user)"
+  class="flex items-center w-full p-2 rounded-lg hover:bg-gray-50"
 >
-  {{ user.name }}
+  <div
+    class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm text-white mr-3"
+    :class="getColorForUser(user.userId)"
+  >
+    {{ user.initial }}
+  </div>
+  <span class="truncate">{{ user.name }}</span>
 </button>
 
-                <button
-                  v-for="dm in directMessages"
-                  :key="dm.name"
-                  @click="selectDMUser(dm)"
-                  class="flex items-center justify-between w-full p-2 rounded-lg transition-colors"
-                  :class="
-                    isDMActive(dm)
-                      ? 'font-semibold'
-                      : 'hover:bg-gray-50 text-gray-600'
-                  "
-                  :style="
-                    isDMActive(dm)
-                      ? { backgroundColor: LIGHT_GREEN, color: DARK_GREEN }
-                      : {}
-                  "
-                >
-                  
-                  <div class="flex items-center">
-                    <div
-                      class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm text-white mr-3 flex-shrink-0"
-                      :class="dm.color"
-                    >
-                      {{ dm.initial }}
-                    </div>
-                    <div class="truncate">{{ dm.name }}</div>
-                  </div>
-                  <span
-                    v-if="dm.count > 0"
-                    class="text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full text-white bg-green-700 ml-2"
-                  >
-                    {{ dm.count }}
-                  </span>
-                </button>
+<!-- EXISTING CONVERSATIONS -->
+<button
+  v-else
+  v-for="dm in directMessages"
+  :key="dm.userId"
+  @click="selectDMUser(dm)"
+  class="flex items-center justify-between w-full p-2 rounded-lg transition-colors"
+  :class="
+    isDMActive(dm)
+      ? 'font-semibold'
+      : 'hover:bg-gray-50 text-gray-600'
+  "
+  :style="
+    isDMActive(dm)
+      ? { backgroundColor: LIGHT_GREEN, color: DARK_GREEN }
+      : {}
+  "
+>
+  <div class="flex items-center">
+    <div
+      class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm text-white mr-3"
+      :class="dm.color"
+    >
+      {{ dm.initial }}
+    </div>
+    <div class="truncate">{{ dm.name }}</div>
+  </div>
+
+  <span
+    v-if="dm.count > 0"
+    class="text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full text-white bg-green-700"
+  >
+    {{ dm.count }}
+  </span>
+</button>
 
                 <div
                   v-if="directMessages.length === 0"
