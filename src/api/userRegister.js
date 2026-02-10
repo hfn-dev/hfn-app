@@ -77,13 +77,9 @@ export default {
       throw error;
     }
   },
-  async getContactForm(payload) {
-    try {
-      const response = await api.get('/contact/', payload);
-      return response.data;
-    } catch (error) {
-      console.error('Login API error:', error);
-      throw error;
-    }
-  },
+
+  async getContactForm(params = {}) {
+  const response = await api.get('/contact/', { params });
+  return response.data;
+},
 };
