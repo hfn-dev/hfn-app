@@ -298,9 +298,9 @@ const fetchUploads = async () => {
   try {
     const [newsletters, minutes, documents, galleries] = await Promise.all([
       uploadsApi.listNewsletters(),
-      uploadsApi.listMinutes(),
-      uploadsApi.listDocuments(),
-      uploadsApi.listGalleries(),
+      uploadsApi.getMinutes(),
+      uploadsApi.list(),
+      uploadsApi.gallery(),
     ]);
 
     const formattedGalleries = galleries.map(g => ({
