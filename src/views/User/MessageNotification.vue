@@ -1349,17 +1349,17 @@ onUnmounted(() => {
 
               <div v-if="currentTab === 'Direct Messages'" class="space-y-1">
                 <input
-  v-model="dmSearch"
+  v-model="connectionSearchQuery"
   placeholder="Search connections..."
   class="w-full mb-3 p-2 border rounded"
 />
 
 <!-- SEARCH RESULTS -->
 <button
-  v-if="dmSearch"
+  v-if="filteredConnections.length > 0"
   v-for="user in filteredConnections"
   :key="user.userId"
-  @click="selectDMUser(user)"
+  @click="startNewChat(user)"
   class="flex items-center w-full p-2 rounded-lg hover:bg-gray-50"
 >
   <div
