@@ -304,9 +304,13 @@ const fetchUploads = async () => {
     ]);
 
     const formattedGalleries = galleries.map(g => ({
-      ...g,
-      file: g.images[g.banner_index]?.url || "", 
-      type: "gallery"
+      
+      id: g.id,
+  title: g.title,
+  type: "gallery",
+  file: g.image,        
+  audience: g.audience,
+  created_at: g.created_at
     }));
 
     uploads.value = [
