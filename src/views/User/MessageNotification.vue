@@ -659,15 +659,26 @@ const isDMActive = (dm) =>
 
 
 
+// const activeChatTitle = computed(() => {
+//   if (currentTab.value === "Groups") {
+//     return currentGroup.value;
+//   }
+//   if (currentTab.value === "Direct Messages") {
+//     return currentDMUser.value;
+//   }
+//   return "";
+// });
+
 const activeChatTitle = computed(() => {
   if (currentTab.value === "Groups") {
-    return currentGroup.value;
+    return currentGroup.value?.name || "";
   }
   if (currentTab.value === "Direct Messages") {
-    return currentDMUser.value;
+    return currentDMUser.value?.name || "";
   }
   return "";
 });
+  
 
 const pendingRequests = computed(() => {
   return allConnections.value.filter((conn) => conn.status === "pending");
@@ -1325,7 +1336,7 @@ onUnmounted(() => {
                 <button
                   v-for="dm in directMessages"
                   :key="dm.name"
-                  @click="selectDMUser(dm.name)"
+                  @click="selectDMUser(dm)"
                   class="flex items-center justify-between w-full p-2 rounded-lg transition-colors"
                   :class="
                     isDMActive(dm)
