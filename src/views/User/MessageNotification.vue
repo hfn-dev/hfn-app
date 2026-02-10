@@ -386,39 +386,75 @@ const fetchMessagesWithUser = async (userId) => {
   }
 };
 
+// const fetchGroupMessages = async (groupId) => {
+//   if (!groupId) return;
+
+//   isLoading.value.messages = true;
+//   try {
+//     const response = await messagingApi.getGroupMessages(groupId);
+//     chatMessages.value = response.map((msg) => ({
+//       id: msg.id,
+//       sender: msg.sender.full_name,
+//       time: formatTime(msg.created_at),
+//       initial:
+//         (msg.sender.first_name?.[0] || "") +
+//           (msg.sender.last_name?.[0] || "") || "??",
+//       color: getColorForUser(msg.sender.id),
+//       isMine: msg.sender.id === currentUserId.value,
+//       body: msg.content,
+//       type: msg.attachment ? "file" : "text",
+//       file: msg.attachment?.name,
+//       senderId: msg.sender.id,
+//     }));
+//   } catch (error) {
+//     console.error("Error fetching group messages:", error);
+//     toast.error("Failed to load group messages");
+//   } finally {
+//     isLoading.value.messages = false;
+//   }
+// };
+
 const fetchGroupMessages = async (groupId) => {
   if (!groupId) return;
 
   isLoading.value.messages = true;
   try {
     const response = await messagingApi.getGroupMessages(groupId);
-    chatMessages.value = response.map((msg) => ({
-      id: msg.id,
-      sender: msg.sender.full_name,
-      time: formatTime(msg.created_at),
-      initial:
-        (msg.sender.first_name?.[0] || "") +
-          (msg.sender.last_name?.[0] || "") || "??",
-      color: getColorForUser(msg.sender.id),
-      isMine: msg.sender.id === currentUserId.value,
-      body: msg.content,
-      type: msg.attachment ? "file" : "text",
-      file: msg.attachment?.name,
-      senderId: msg.sender.id,
-    }));
+
+    chatMessages.value = response
+      .map((msg) => ({
+        id: msg.id,
+        sender: msg.sender.full_name,
+        time: formatTime(msg.created_at),
+        initial:
+          (msg.sender.first_name?.[0] || "") +
+            (msg.sender.last_name?.[0] || "") || "??",
+        color: getColorForUser(msg.sender.id),
+        isMine: msg.sender.id === currentUserId.value,
+        body: msg.content,
+        type: msg.attachment ? "file" : "text",
+        file: msg.attachment?.name,
+        senderId: msg.sender.id,
+      }))
+      .reverse(); 
+
+    await nextTick();
+    const el = document.querySelector(".overflow-y-auto");
+    el?.scrollTo({ top: el.scrollHeight });
   } catch (error) {
-    console.error("Error fetching group messages:", error);
     toast.error("Failed to load group messages");
   } finally {
     isLoading.value.messages = false;
   }
 };
 
-chatMessages.value = chatMessages.value.reverse();
-nextTick(() => {
-  const el = document.querySelector(".overflow-y-auto");
-  el?.scrollTo({ top: el.scrollHeight });
-});
+
+  
+// chatMessages.value = chatMessages.value.reverse();
+// nextTick(() => {
+//   const el = document.querySelector(".overflow-y-auto");
+//   el?.scrollTo({ top: el.scrollHeight });
+// });
   
 
 const sendConnectionRequest = async (userId) => {
@@ -544,16 +580,37 @@ const sendMessage = async () => {
   }
 
   if (currentTab.value === "Groups" && currentGroup.value?.id) {
-    try {
-      await messagingApi.sendGroupMessage(currentGroup.value.id, {
-        content: messageInput.value,
-      });
-      messageInput.value = "";
-      fetchGroupMessages(currentGroup.value.id);
-    } catch {
-      toast.error("Failed to send group message");
-    }
+  try {
+    const tempMessage = {
+      id: Date.now(),
+      sender: "You",
+      time: formatTime(new Date()),
+      initial: "ME",
+      color: "bg-green-700",
+      isMine: true,
+      body: messageInput.value,
+      type: "text",
+      senderId: currentUserId.value,
+    };
+
+    chatMessages.value.push(tempMessage);
+
+    await nextTick();
+    const el = document.querySelector(".overflow-y-auto");
+    el?.scrollTo({ top: el.scrollHeight });
+
+    messageInput.value = "";
+
+    await messagingApi.sendGroupMessage(currentGroup.value.id, {
+      content: tempMessage.body,
+    });
+
+    fetchGroupMessages(currentGroup.value.id);
+  } catch {
+    toast.error("Failed to send group message");
   }
+}
+
 };
 
 const markMessageAsRead = async (messageId) => {
