@@ -21,6 +21,16 @@ let notificationInterval = null;
 const currentGroup = ref(null);
 const groupMessages = ref([]);
 
+
+  const dmSearch = ref("");
+
+const filteredConnections = computed(() => {
+  if (!dmSearch.value) return connections.value;
+  return connections.value.filter(c =>
+    c.name.toLowerCase().includes(dmSearch.value.toLowerCase())
+  );
+});
+
 // Loading states
 const isLoading = ref({
   directory: false,
@@ -1294,6 +1304,24 @@ onUnmounted(() => {
               </h2>
 
               <div v-if="currentTab === 'Direct Messages'" class="space-y-1">
+                <input
+  v-model="dmSearch"
+  placeholder="Search connections..."
+  class="w-full mb-3 p-2 border rounded"
+/>
+
+<button
+  v-for="user in filteredConnections"
+  @click="selectDMUser({
+    userId: user.userId,
+    name: user.name,
+    initial: user.initial,
+    color: getColorForUser(user.userId)
+  })"
+>
+  {{ user.name }}
+</button>
+
                 <button
                   v-for="dm in directMessages"
                   :key="dm.name"
@@ -1310,6 +1338,7 @@ onUnmounted(() => {
                       : {}
                   "
                 >
+                  
                   <div class="flex items-center">
                     <div
                       class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm text-white mr-3 flex-shrink-0"
