@@ -256,7 +256,7 @@ const newsletters = [
     comments: 0,
     text: "Q1 Quarterly Newsletter, 2025 (January-March, 2025)",
     pdfUrl:
-      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-2---2025_jfakrt.pdf",
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/1st-quarter-2025-hfn-newsletter1_nznhgn.pdf",
   },
   {
     date: "April 7, 2025",
@@ -270,7 +270,7 @@ const newsletters = [
     comments: 0,
     text: "Q3 Quarterly Newsletter, 2025 (July-September, 2025)",
     pdfUrl:
-      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-2---2025_jfakrt.pdf",
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067785/2025-hfn-quarterly-newsletter-q3_g4ks3t.pdf",
   },
   {
     date: "October 8, 2025",
