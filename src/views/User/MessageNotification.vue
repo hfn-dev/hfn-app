@@ -24,12 +24,25 @@ const groupMessages = ref([]);
 
   const dmSearch = ref("");
 
+  // This filters your ACCEPTED connections based on what you type in a search box
+const connectionSearchQuery = ref("");
 const filteredConnections = computed(() => {
-  if (!dmSearch.value) return connections.value;
-  return connections.value.filter(c =>
-    c.name.toLowerCase().includes(dmSearch.value.toLowerCase())
+  if (!connectionSearchQuery.value) return [];
+  const query = connectionSearchQuery.value.toLowerCase();
+  return connections.value.filter(user => 
+    user.name.toLowerCase().includes(query)
   );
 });
+
+// Function to start a chat from the search results
+const startNewChat = (user) => {
+  currentDMUser.value = user.name;
+  currentTab.value = "Direct Messages";
+  connectionSearchQuery.value = ""; // Clear search
+  fetchMessagesWithUser(user.userId);
+};
+
+
 
 // Loading states
 const isLoading = ref({
