@@ -5,6 +5,7 @@ import newsApi from "@/api/newsModule.js";
 import authApi from "@/api/userRegister.js";
 import UserSidebar from "@/components/layout/UserSidebar.vue";
 import { computed, onMounted, ref } from "vue";
+import newsletter_placeholder from "@/assets/newsletter-placeholder.jpg";
 
 const resources = ref([]);
 const searchQuery = ref("");
@@ -66,6 +67,50 @@ const videos = ref([
     url: "https://www.youtube.com/watch?v=rEqwcBARMMo",
   },
 ]);
+
+
+ const getPdfPreview = (url) => {
+  return url.replace(".pdf", ".jpg");
+};
+
+const newsletterPdfs = [
+  {
+    date: "October 3, 2024",
+    comments: 0,
+    text: "Q4 Quarterly Newsletter, 2024 (October-December, 2024)",
+    pdfUrl:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-4_2024_rqpvhf.pdf",
+  },
+  {
+    date: "February 27, 2025",
+    comments: 0,
+    text: "Q1 Quarterly Newsletter, 2025 (January-March, 2025)",
+    pdfUrl:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/1st-quarter-2025-hfn-newsletter1_nznhgn.pdf",
+  },
+  {
+    date: "April 7, 2025",
+    comments: 0,
+    text: "Q2 Quarterly Newsletter, 2025 (April-June, 2025)",
+    pdfUrl:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-2---2025_jfakrt.pdf",
+  },
+  {
+    date: "July 2, 2025",
+    comments: 0,
+    text: "Q3 Quarterly Newsletter, 2025 (July-September, 2025)",
+    pdfUrl:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067785/2025-hfn-quarterly-newsletter-q3_g4ks3t.pdf",
+  },
+  {
+    date: "October 8, 2025",
+    comments: 0,
+    text: "Q4 Quarterly Newsletter, 2025 (October-December, 2025)",
+    pdfUrl:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067786/2025-hfn-quarterly-newsletter-q4_gd0aj6.pdf",
+  },
+];
+ 
 
 const dummyResources = [
   {
@@ -445,6 +490,103 @@ onMounted(() => {
           <div v-else class="text-center py-12 text-gray-500">No data</div>
         </div>
       </section>
+      <section class="mt-16 max-w-7xl mx-auto px-4">
+  <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">
+    Newsletters
+  </h2>
+
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-16"
+  >
+    <div
+      v-for="(item, index) in newsletterPdfs"
+      :key="index"
+      class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 flex flex-col"
+    >
+      <div class="relative group h-60 overflow-hidden bg-gray-100">
+        <img
+          :src="getPdfPreview(item.pdfUrl)"
+          alt="Newsletter Preview"
+          class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          @error="(e) => (e.target.src = newsletter_placeholder)"
+        />
+        <div
+          class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+        >
+          <span class="text-white bg-green-700 px-3 py-1 rounded text-xs">
+            View Document
+          </span>
+        </div>
+      </div>
+
+      <div class="p-6 flex flex-col flex-grow">
+        <p class="text-sm text-orange-500 mb-3">
+          {{ item.date }}
+        </p>
+
+        <p class="text-gray-700 text-base mb-4 flex-grow">
+          {{ item.text }}
+        </p>
+
+        <div class="mt-auto flex gap-2">
+          <a
+            :href="item.pdfUrl"
+            download
+            target="_blank"
+            class="flex-1 text-center bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition"
+          >
+            Download PDF
+          </a>
+
+          <a
+            :href="item.pdfUrl"
+            target="_blank"
+            class="p-2 border border-gray-300 rounded-full hover:bg-gray-50 transition"
+            title="Open in browser"
+          >
+            <svg
+              class="w-5 h-5 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+              <path
+                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-center items-center space-x-4 text-gray-600 mb-20">
+    <span class="text-sm">Page 1 of 2</span>
+    <a
+      href="#"
+      class="flex items-center space-x-1 text-green-700 hover:underline"
+    >
+      <span>Next</span>
+      <svg
+        class="w-4 h-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 5l7 7-7 7"
+        />
+      </svg>
+    </a>
+  </div>
+</section>
+
       <section class="mt-16 max-w-6xl mx-auto px-4">
         <h3 class="text-3xl font-bold text-[#333] text-center mb-8">
           Resources & Publications
