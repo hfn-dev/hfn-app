@@ -349,7 +349,7 @@ const createUpload = async () => {
       title: "",
       type: "newsletter",
       description: "",
-      files: [],
+      image: "",
       bannerIndex: 0,
     };
   } catch (error) {
