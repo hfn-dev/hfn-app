@@ -8,7 +8,7 @@ const LIGHT_GREEN = '#f2f9f3';
 
 const currentTab = ref('Direct Messages');
 const currentGroup = ref('General');
-const currentDMUser = ref('Ade John');
+const currentDMUser = ref('');
 const messageInput = ref('');
 const directMessages = ref([]);
 const chatMessages = ref([]);
