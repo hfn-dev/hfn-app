@@ -14,7 +14,7 @@ const DARK_GREEN = "#004d33";
 const LIGHT_GREEN = "#f2f9f3";
 
 const currentTab = ref("Directory");
-const currentDMUser = ref("Ade John");
+const currentDMUser = ref("");
 const messageInput = ref("");
 const searchQuery = ref("");
 let notificationInterval = null;
