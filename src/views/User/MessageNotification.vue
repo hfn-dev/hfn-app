@@ -535,32 +535,52 @@ const declineAdminRequest = async (notification) => {
 //   }
 // };
 
-  const sendMessage = async () => {
+  
+
+const sendMessage = async () => {
   if (!messageInput.value.trim()) return;
 
-  try {
-    if (currentTab.value === "Direct Messages" && currentDMUser.value) {
+  let targetId = null;
+
+  if (currentTab.value === "Direct Messages") {
+    // Look in current conversations OR in the connections list
+    const dmTarget = directMessages.value.find(dm => dm.name === currentDMUser.value);
+    const connectionTarget = connections.value.find(c => c.name === currentDMUser.value);
+    
+    targetId = dmTarget?.userId || connectionTarget?.userId;
+
+    if (!targetId) {
+      toast.error("Could not find user to message");
+      return;
+    }
+
+    try {
       await messagingApi.sendMessage({
-        recipient: currentDMUser.value.userId,
+        recipient: targetId,
         content: messageInput.value,
       });
-      await fetchMessagesWithUser(currentDMUser.value.userId);
+      messageInput.value = "";
+      fetchMessagesWithUser(targetId); // Refresh chat
+      fetchConversations(); // Update sidebar list
+    } catch (error) {
+      toast.error("Failed to send message");
     }
-
-    if (currentTab.value === "Groups" && currentGroup.value) {
-      await messagingApi.sendGroupMessage(currentGroup.value.id, {
-        content: messageInput.value,
-      });
-      await fetchGroupMessages(currentGroup.value.id);
+  } else if (currentTab.value === "Groups") {
+    const group = groups.value.find(g => g.name === currentGroup.value);
+    if (group) {
+      try {
+        await messagingApi.sendGroupMessage(group.id, {
+          content: messageInput.value,
+        });
+        messageInput.value = "";
+        fetchGroupMessages(group.id);
+      } catch (error) {
+        toast.error("Failed to send group message");
+      }
     }
-
-    messageInput.value = "";
-  } catch (error) {
-    console.error(error);
-    toast.error("Failed to send message");
   }
 };
-
+  
 
 const markMessageAsRead = async (messageId) => {
   try {
