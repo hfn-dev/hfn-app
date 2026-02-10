@@ -381,13 +381,13 @@ const createUpload = async () => {
     let res;
     switch (uploadForm.value.type) {
       case "gallery":
-        res = await uploadsApi.postGallery(formData);
+        res = await uploadsApi.createGallery(formData);
         break;
       case "newsletter":
-        res = await newsApi.postNewsletters(formData);
+        res = await uploadsApi.createNewsletters(formData);
         break;
       case "minute":
-        res = await newsApi.postMinutes(formData);
+        res = await uploadsApi.createMinutes(formData);
         break;
       default:
         res = await uploadsApi.create(formData);
