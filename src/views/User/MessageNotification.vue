@@ -386,34 +386,6 @@ const fetchMessagesWithUser = async (userId) => {
   }
 };
 
-// const fetchGroupMessages = async (groupId) => {
-//   if (!groupId) return;
-
-//   isLoading.value.messages = true;
-//   try {
-//     const response = await messagingApi.getGroupMessages(groupId);
-//     chatMessages.value = response.map((msg) => ({
-//       id: msg.id,
-//       sender: msg.sender.full_name,
-//       time: formatTime(msg.created_at),
-//       initial:
-//         (msg.sender.first_name?.[0] || "") +
-//           (msg.sender.last_name?.[0] || "") || "??",
-//       color: getColorForUser(msg.sender.id),
-//       isMine: msg.sender.id === currentUserId.value,
-//       body: msg.content,
-//       type: msg.attachment ? "file" : "text",
-//       file: msg.attachment?.name,
-//       senderId: msg.sender.id,
-//     }));
-//   } catch (error) {
-//     console.error("Error fetching group messages:", error);
-//     toast.error("Failed to load group messages");
-//   } finally {
-//     isLoading.value.messages = false;
-//   }
-// };
-
 const fetchGroupMessages = async (groupId) => {
   if (!groupId) return;
 
@@ -448,13 +420,6 @@ const fetchGroupMessages = async (groupId) => {
   }
 };
 
-
-  
-// chatMessages.value = chatMessages.value.reverse();
-// nextTick(() => {
-//   const el = document.querySelector(".overflow-y-auto");
-//   el?.scrollTo({ top: el.scrollHeight });
-// });
   
 
 const sendConnectionRequest = async (userId) => {
