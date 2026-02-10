@@ -69,9 +69,13 @@ const videos = ref([
 ]);
 
 
+//  const getPdfPreview = (url) => {
+//   return url.replace(".pdf", ".jpg");
+// };
+
  const getPdfPreview = (url) => {
-  return url.replace(".pdf", ".jpg");
-};
+  return url ? url.replace(".pdf", ".jpg") : newsletter_placeholder;
+}; 
 
 const newsletterPdfs = [
   {
