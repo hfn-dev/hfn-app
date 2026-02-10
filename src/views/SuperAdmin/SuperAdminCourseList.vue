@@ -30,7 +30,7 @@ const tabStatusMap = {
   Published: 'published',
   Drafts: 'draft',
   Archived: 'archived',
-  Approvals: 'pending',
+  Approvals: 'draft',
 };
 
 const fetchCourses = async () => {
@@ -75,11 +75,6 @@ const handleAction = async (action, course) => {
       courseToDelete = course;
   isConfirmModalOpen.value = true;
       break;
-
-    // case 'Approve':
-    //   await courseApi.approveCourse(course.id);
-    //   fetchCourses();
-    //   break;
 
     case 'Approve':
   try {
@@ -214,14 +209,12 @@ onMounted(fetchCourses);
                 />
               </th>
 
-              <!-- If APPROVAL tab -->
               <template v-if="isApprovalTab">
                 <th class="py-3 px-3 text-left">Created By</th>
                 <th class="py-3 px-3 text-left">Creation Date</th>
                 <th class="py-3 px-3 text-center rounded-tr-lg">Action</th>
               </template>
 
-              <!-- Otherwise normal tabs -->
               <template v-else>
                 <th class="py-3 px-3 text-left">
                   Enrollments
@@ -263,7 +256,6 @@ onMounted(fetchCourses);
                 {{ course.title }}
               </td>
 
-              <!-- APPROVAL TAB body -->
               <template v-if="isApprovalTab">
                 <td class="py-3 px-3">
                   {{ course.created_by?.name }}
@@ -281,7 +273,6 @@ onMounted(fetchCourses);
                 </td>
               </template>
 
-              <!-- NORMAL TAB body -->
               <template v-else>
                 <td class="py-3 px-3">
                   {{ course.enrollments_count ?? '-' }}
