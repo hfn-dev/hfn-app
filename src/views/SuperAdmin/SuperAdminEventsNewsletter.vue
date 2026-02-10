@@ -19,6 +19,20 @@ const confirmAction = ref(null);
 const confirmLoading = ref(false);
 const deletingEventSlug = ref(null);
 
+
+ const isFile = (file) => {
+  return (
+    typeof window !== "undefined" &&
+    typeof File !== "undefined" &&
+    file instanceof File
+  );
+};
+
+const previewUrl = (file) => {
+  if (!isFile(file)) return null;
+  return URL.createObjectURL(file);
+};
+
 const uploadBanner = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -720,8 +734,8 @@ onMounted(() => {
       class="relative"
     >
       <img
-        v-if="file instanceof File"
-        :src="URL.createObjectURL(file)"
+        v-if="previewUrl(file)"
+        :src="previewUrl(file)"
         class="h-24 w-24 object-cover rounded cursor-pointer border-2"
         :class="{
           'border-green-500': uploadForm.bannerIndex === index,
