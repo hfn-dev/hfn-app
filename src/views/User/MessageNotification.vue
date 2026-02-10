@@ -14,11 +14,12 @@ const DARK_GREEN = "#004d33";
 const LIGHT_GREEN = "#f2f9f3";
 
 const currentTab = ref("Directory");
-const currentGroup = ref("General");
 const currentDMUser = ref("Ade John");
 const messageInput = ref("");
 const searchQuery = ref("");
 let notificationInterval = null;
+const currentGroup = ref(null);
+const groupMessages = ref([]);
 
 // Loading states
 const isLoading = ref({
@@ -38,6 +39,8 @@ const groups = ref([]);
 const directMessages = ref([]);
 const chatMessages = ref([]);
 const unreadCount = ref(0);
+
+  
 const directoryPagination = ref({
   count: 0,
   next: null,
@@ -479,48 +482,75 @@ const declineAdminRequest = async (notification) => {
   }
 };
 
-const sendMessage = async () => {
+// const sendMessage = async () => {
+//   if (!messageInput.value.trim()) return;
+
+//   const currentUserId = directMessages.value.find(
+//     (dm) => dm.name === currentDMUser.value
+//   )?.userId;
+
+//   try {
+//     if (currentTab.value === "Direct Messages" && currentUserId) {
+//       await messagingApi.sendMessage({
+//         recipient: currentUserId,
+//         content: messageInput.value,
+//       });
+//     } else if (currentTab.value === "Groups") {
+//       const currentGroupId = groups.value.find(
+//         (g) => g.name === currentGroup.value
+//       )?.id;
+//       if (currentGroupId) {
+//         await messagingApi.sendGroupMessage(currentGroupId, {
+//           content: messageInput.value,
+//         });
+//       }
+//     }
+
+//     messageInput.value = "";
+//     toast.success("Message sent");
+
+//     if (currentTab.value === "Direct Messages" && currentUserId) {
+//       fetchMessagesWithUser(currentUserId);
+//     } else if (currentTab.value === "Groups") {
+//       const currentGroupId = groups.value.find(
+//         (g) => g.name === currentGroup.value
+//       )?.id;
+//       if (currentGroupId) {
+//         fetchGroupMessages(currentGroupId);
+//       }
+//     }
+//   } catch (error) {
+//     console.error("Error sending message:", error);
+//     toast.error("Failed to send message");
+//   }
+// };
+
+  const sendMessage = async () => {
   if (!messageInput.value.trim()) return;
 
-  const currentUserId = directMessages.value.find(
-    (dm) => dm.name === currentDMUser.value
-  )?.userId;
-
   try {
-    if (currentTab.value === "Direct Messages" && currentUserId) {
+    if (currentTab.value === "Direct Messages" && currentDMUser.value) {
       await messagingApi.sendMessage({
-        recipient: currentUserId,
+        recipient: currentDMUser.value.userId,
         content: messageInput.value,
       });
-    } else if (currentTab.value === "Groups") {
-      const currentGroupId = groups.value.find(
-        (g) => g.name === currentGroup.value
-      )?.id;
-      if (currentGroupId) {
-        await messagingApi.sendGroupMessage(currentGroupId, {
-          content: messageInput.value,
-        });
-      }
+      await fetchMessagesWithUser(currentDMUser.value.userId);
+    }
+
+    if (currentTab.value === "Groups" && currentGroup.value) {
+      await messagingApi.sendGroupMessage(currentGroup.value.id, {
+        content: messageInput.value,
+      });
+      await fetchGroupMessages(currentGroup.value.id);
     }
 
     messageInput.value = "";
-    toast.success("Message sent");
-
-    if (currentTab.value === "Direct Messages" && currentUserId) {
-      fetchMessagesWithUser(currentUserId);
-    } else if (currentTab.value === "Groups") {
-      const currentGroupId = groups.value.find(
-        (g) => g.name === currentGroup.value
-      )?.id;
-      if (currentGroupId) {
-        fetchGroupMessages(currentGroupId);
-      }
-    }
   } catch (error) {
-    console.error("Error sending message:", error);
+    console.error(error);
     toast.error("Failed to send message");
   }
 };
+
 
 const markMessageAsRead = async (messageId) => {
   try {
@@ -665,18 +695,15 @@ const blockConnectionRequest = async (id) => {
   }
 };
 
-const selectGroup = (name) => {
-  currentGroup.value = name;
-  if (currentTab.value !== "Groups") {
-    currentTab.value = "Groups";
-  }
 
-  const groupId = groups.value.find((g) => g.name === name)?.id;
-  if (groupId) {
-    fetchGroupMessages(groupId);
-  }
+const selectGroup = (group) => {
+  currentGroup.value = group;
+  currentTab.value = "Groups";
+  fetchGroupMessages(group.id);
 };
 
+
+  
 watch(currentTab, (newTab) => {
   switch (newTab) {
     case "Directory":
@@ -1299,8 +1326,8 @@ onUnmounted(() => {
               <div v-else-if="currentTab === 'Groups'" class="space-y-1">
                 <button
                   v-for="group in groups"
-                  :key="group.name"
-                  @click="selectGroup(group.name)"
+                  :key="group.id"
+                  @click="selectGroup(group)"
                   class="flex justify-between items-center w-full p-2 rounded-lg transition-colors"
                   :class="
                     isGroupActive(group.name)
