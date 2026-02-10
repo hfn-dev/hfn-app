@@ -252,13 +252,26 @@ const newsletters = [
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-4_2024_rqpvhf.pdf",
   },
   {
-    date: "April 7, 2025",
+    date: "January 7, 2025",
     comments: 0,
-    text: "Q1 Quarterly Newsletter, 2025 (April-June, 2025)",
+    text: "Q1 Quarterly Newsletter, 2025 (January-March, 2025)",
     pdfUrl:
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-2---2025_jfakrt.pdf",
   },
-  
+  {
+    date: "April 7, 2025",
+    comments: 0,
+    text: "Q2 Quarterly Newsletter, 2025 (April-June, 2025)",
+    pdfUrl:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-2---2025_jfakrt.pdf",
+  },
+  {
+    date: "July 7, 2025",
+    comments: 0,
+    text: "Q3 Quarterly Newsletter, 2025 (July-September, 2025)",
+    pdfUrl:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-2---2025_jfakrt.pdf",
+  },
   {
     date: "October 8, 2025",
     comments: 0,
