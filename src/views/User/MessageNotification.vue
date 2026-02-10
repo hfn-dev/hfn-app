@@ -617,14 +617,18 @@ const connectedUserIds = computed(
 
 const dismissNotification = async (notificationId) => {
   try {
-    await messagingApi.dismissNotification(notificationId);
+    await messagingApi.deleteNotification(notificationId);
+
     notifications.value = notifications.value.filter(
       (n) => n.id !== notificationId
     );
-    toast.success("Notification dismissed");
+
+    unreadCount.value = Math.max(unreadCount.value - 1, 0);
+
+    toast.success("Notification removed");
   } catch (error) {
-    console.error("Error dismissing notification:", error);
-    toast.error("Failed to dismiss notification");
+    console.error("Error removing notification:", error);
+    toast.error("Failed to remove notification");
   }
 };
 
