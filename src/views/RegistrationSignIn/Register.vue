@@ -573,9 +573,7 @@ const changeTab = (tab) => {
                     :key="category.id"
                     :value="category.id"
                   >
-                    {{ category.name }} –
-                    {{ category.currency === "USD" ? "$" : "₦" }}
-                    {{ category.amount.toLocaleString() }}
+                    {{ category.name }} 
                   </option>
                 </select>
 
