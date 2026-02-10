@@ -1,5 +1,45 @@
 <script setup>
 import globe from "@/assets/globe.png";
+ import { ref } from "vue";
+import contactApi from "@/api/contactApi"; 
+
+const form = ref({
+  name: "",
+  email: "",
+  subject: "",
+  message: "",
+});
+
+const loading = ref(false);
+const successMessage = ref("");
+const errorMessage = ref("");
+
+const submitForm = async () => {
+  loading.value = true;
+  successMessage.value = "";
+  errorMessage.value = "";
+
+  try {
+    await contactApi.contactForm(form.value);
+
+    successMessage.value =
+      "Thank you for reaching out. Our team will get back to you within 24 hours.";
+
+    form.value = {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    };
+  } catch (error) {
+    errorMessage.value =
+      error?.response?.data?.message ||
+      "Something went wrong. Please try again.";
+  } finally {
+    loading.value = false;
+  }
+};
+ 
 </script>
 
 <template>
@@ -87,7 +127,7 @@ import globe from "@/assets/globe.png";
           <div
             class="lg:col-span-2 p-6 sm:p-8 rounded-[20px] border-2 border-green-200 bg-white shadow-lg"
           >
-            <form class="space-y-6">
+            <form class="space-y-6" @submit.prevent="submitForm">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label
@@ -97,6 +137,7 @@ import globe from "@/assets/globe.png";
                   >
                   <input
                     type="text"
+                    v-model="form.name"
                     id="name"
                     placeholder="Enter name"
                     class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm py-3 px-4 focus:ring-green-500 focus:border-green-500"
@@ -110,6 +151,7 @@ import globe from "@/assets/globe.png";
                   >
                   <input
                     type="email"
+                    v-model="form.email"
                     id="email"
                     placeholder="Enter email"
                     class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm py-3 px-4 focus:ring-green-500 focus:border-green-500"
@@ -126,6 +168,7 @@ import globe from "@/assets/globe.png";
                 <input
                   type="text"
                   id="subject"
+                  v-model="form.subject"
                   class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm py-3 px-4 focus:ring-green-500 focus:border-green-500"
                 />
               </div>
@@ -139,31 +182,47 @@ import globe from "@/assets/globe.png";
                 <textarea
                   id="message"
                   rows="5"
+                  v-model="form.message"
                   class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm py-3 px-4 focus:ring-green-500 focus:border-green-500"
                 ></textarea>
               </div>
 
+             <div v-if="successMessage" class="p-4 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm font-semibold">
+  {{ successMessage }}
+</div>
+
+<div v-if="errorMessage" class="p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm font-semibold">
+  {{ errorMessage }}
+</div>
+
+
+
               <div class="pt-2">
+                
                 <button
-                  type="submit"
-                  class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition"
-                >
-                  Send Message
-                  <svg
-                    class="w-5 h-5 ml-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M14 5l7 7m0 0l-7 7m7-7H3"
-                    ></path>
-                  </svg>
-                </button>
+  type="submit"
+  :disabled="loading"
+  class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition disabled:opacity-60 disabled:cursor-not-allowed"
+>
+  <span v-if="!loading">Send Message</span>
+  <span v-else>Sending...</span>
+
+  <svg
+    v-if="!loading"
+    class="w-5 h-5 ml-2"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M14 5l7 7m0 0l-7 7m7-7H3"
+    />
+  </svg>
+</button>
+
               </div>
             </form>
           </div>
