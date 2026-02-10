@@ -637,8 +637,9 @@ const getColorForUser = (userId) => {
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-const isGroupActive = (name) => name === currentGroup.value;
-// const isDMActive = (name) => name === currentDMUser.value;
+const isGroupActive = (group) =>
+  currentGroup.value && group.id === currentGroup.value.id;
+
 
 const pendingRequests = computed(() => {
   return allConnections.value.filter((conn) => conn.status === "pending");
