@@ -321,6 +321,10 @@ const createUpload = async () => {
       case "minute":
         res = await uploadsApi.createMinutes(formData);
         break;
+      case "document":
+        res = await uploadsApi.create(formData);
+        break;
+
       default:
         res = await uploadsApi.create(formData);
     }
