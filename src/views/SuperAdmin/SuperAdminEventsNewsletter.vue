@@ -19,20 +19,6 @@ const confirmAction = ref(null);
 const confirmLoading = ref(false);
 const deletingEventSlug = ref(null);
 
-
-//  const uploadBanner = async (file) => {
-//   const data = new FormData();
-//   data.append("file", file);
-//   data.append("upload_preset", "your_preset");
-
-//   const res = await fetch(
-//     "http://res.cloudinary.com/dawrem2mi/image/upload",
-//     { method: "POST", body: data }
-//   );
-
-//   const json = await res.json();
-//   form.value.banner = json.secure_url;
-// };
 const uploadBanner = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -74,8 +60,6 @@ const loading = ref(false);
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
-
-
 const auth = useAuth();
 
 const visibleArticles = computed(() => {
@@ -86,22 +70,6 @@ const visibleArticles = computed(() => {
 });
 
 const deletingSlug = ref(null);
-
-// const deleteArticle = async (slug) => {
-//   const confirmed = confirm("Are you sure you want to delete this article?");
-//   if (!confirmed) return;
-
-//   try {
-//     deletingSlug.value = slug;
-//     await newsApi.deleteArticle(slug);
-//     articles.value = articles.value.filter(a => a.slug !== slug);
-//   } catch (e) {
-//     console.error(e);
-//     console.log("Failed to delete article");
-//   } finally {
-//     deletingSlug.value = null;
-//   }
-// };
 
 const deleteArticle = (slug) => {
   confirmTitle.value = "Delete Article";
@@ -167,24 +135,6 @@ onMounted(async () => {
 };
 
 
-//  const saveNews = async () => {
-//   const formData = new FormData();
-
-//   Object.entries(newsForm.value).forEach(([key, value]) => {
-//     if (Array.isArray(value)) {
-//       value.forEach(v => formData.append(`${key}[]`, v));
-//     } else {
-//       formData.append(key, value);
-//     }
-//   });
-
-//   if (isEditing.value) {
-//     await newsApi.partialUpdateArticle(editingSlug.value, formData);
-//   } else {
-//     await newsApi.createArticle(formData);
-//   }
-// };
-
  const saveNews = async () => {
   try {
     const formData = new FormData();
@@ -211,10 +161,7 @@ onMounted(async () => {
   }
 };
 
-
-
-
- const uploadNewsImage = (e) => {
+const uploadNewsImage = (e) => {
   newsForm.value.featured_image = e.target.files[0];
 };
 
@@ -329,21 +276,6 @@ const uploadForm = ref({
   bannerIndex: 0,      
 });
  
-
-
-// const uploadBanner = async (e) => {
-//   const file = e.target.files[0];
-//   if (!file) return;
-
-//   try {
-//     const { url } = await uploadsApi.upload(file);
-//     eventForm.value.banner = url;
-//   } catch (error) {
-//     console.error("Banner upload failed", error);
-//   }
-// };
-
-
 const fetchUploads = async () => {
   uploads.value = await uploadsApi.list();
 };
