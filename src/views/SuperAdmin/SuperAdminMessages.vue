@@ -1,8 +1,8 @@
 <script setup>
 import messagingApi from '@/api/messaging.js';
 import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
-import { computed, onMounted, ref } from 'vue';
-
+import { computed, onMounted, ref, watch } from 'vue';
+import userRegister from '@/api/userRegister.js';
 const DARK_GREEN = '#004d33';
 const LIGHT_GREEN = '#f2f9f3';
 
@@ -13,8 +13,10 @@ const messageInput = ref('');
 const directMessages = ref([]);
 const chatMessages = ref([]);
 const selectedUserId = ref(null);
+const contactMessages = ref([]);
+const loadingMessages = ref(false);
 
-const tabs = ['Direct Messages'];
+const tabs = ['Direct Messages', 'Messages'];
 const searchQuery = ref('');
 
 const filteredDMs = computed(() =>
@@ -23,6 +25,25 @@ const filteredDMs = computed(() =>
   )
 );
 
+
+  const loadContactMessages = async () => {
+  try {
+    loadingMessages.value = true;
+    contactMessages.value = await userRegister.getContactForm();
+  } catch (err) {
+    console.error('Failed to load contact messages', err);
+  } finally {
+    loadingMessages.value = false;
+  }
+};
+
+
+watch(currentTab, (tab) => {
+  if (tab === 'Messages') {
+    loadContactMessages();
+  }
+});
+  
 const loadConversations = async () => {
   try {
     const res = await messagingApi.getConversations();
@@ -217,6 +238,55 @@ onMounted(() => {
           </p>
         </div>
       </div>
+
+      <div
+  v-if="currentTab === 'Messages'"
+  class="max-w-5xl space-y-4"
+>
+  <div
+    v-if="loadingMessages"
+    class="text-center py-12 text-gray-400"
+  >
+    Loading messages…
+  </div>
+
+  <div
+    v-for="msg in contactMessages"
+    :key="msg.id"
+    class="bg-white p-6 rounded-xl shadow border border-gray-100"
+  >
+    <div class="flex justify-between items-start mb-2">
+      <div>
+        <p class="font-semibold text-gray-900">
+          {{ msg.name }}
+        </p>
+        <p class="text-sm text-gray-500">
+          {{ msg.email }}
+        </p>
+      </div>
+
+      <span class="text-xs text-gray-400">
+        {{ new Date(msg.created_at).toLocaleString() }}
+      </span>
+    </div>
+
+    <p class="font-medium text-gray-800 mb-1">
+      {{ msg.subject }}
+    </p>
+
+    <p class="text-gray-600 whitespace-pre-line">
+      {{ msg.message }}
+    </p>
+  </div>
+
+  <p
+    v-if="!loadingMessages && !contactMessages.length"
+    class="text-center text-gray-400 py-12"
+  >
+    No contact messages yet
+  </p>
+</div>
+
 
       <div
         v-if="currentTab === 'Groups' || currentTab === 'Direct Messages'"
