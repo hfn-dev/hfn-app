@@ -24,7 +24,6 @@ const groupMessages = ref([]);
 
   const dmSearch = ref("");
 
-  // This filters your ACCEPTED connections based on what you type in a search box
 const connectionSearchQuery = ref("");
 const filteredConnections = computed(() => {
   if (!connectionSearchQuery.value) return [];
@@ -34,9 +33,7 @@ const filteredConnections = computed(() => {
   );
 });
 
-// Fix startNewChat to be consistent with selectDMUser
 const startNewChat = (user) => {
-  // Store the object, not just the name string
   currentDMUser.value = { 
     userId: user.userId || user.id, 
     name: user.name 
@@ -46,7 +43,6 @@ const startNewChat = (user) => {
   fetchMessagesWithUser(currentDMUser.value.userId);
 };
 
-// Update activeChatTitle to handle potential nulls safely
 const activeChatTitle = computed(() => {
   if (currentTab.value === "Groups") {
     return currentGroup.value?.name || "Select a Group";
@@ -57,13 +53,11 @@ const activeChatTitle = computed(() => {
   return "";
 });
 
-// Fix the comparison in the DM list
 const isDMActive = (dm) => {
   return currentDMUser.value && dm.userId === currentDMUser.value.userId;
 };
 
 
-// Loading states
 const isLoading = ref({
   directory: false,
   connections: false,
@@ -364,33 +358,22 @@ const fetchMessagesWithUser = async (userId) => {
 
     const messagesArray = response.results || [];
 
-    chatMessages.value = messagesArray.map((msg) => {
-      const senderUser =
-        directoryUsers.value.find((u) => u.id === msg.sender) ||
-        connections.value.find((c) => c.userId === msg.sender);
-
-      const senderName = senderUser
-        ? senderUser.name || `${senderUser.firstName} ${senderUser.lastName}`
-        : `User ${msg.sender}`;
-
-      const initial = senderUser
-        ? (senderUser.firstName?.[0] || senderUser.name?.[0] || "U") +
-          (senderUser.lastName?.[0] || "")
-        : "U";
-
-      return {
-        id: msg.id,
-        sender: senderName,
-        senderId: msg.sender,
-        time: formatTime(msg.created_at),
-        initial: initial.toUpperCase(),
-        color: getColorForUser(msg.sender),
-        body: msg.content,
-        type: msg.attachment ? "file" : "text",
-        file: msg.attachment?.name,
-        isRead: msg.is_read,
-      };
-    });
+    chatMessages.value = messagesArray.map((msg) => ({
+  id: msg.id,
+  senderId: msg.sender,
+  sender:
+    msg.sender === currentUserId.value
+      ? "You"
+      : senderName,
+  time: formatTime(msg.created_at),
+  initial: msg.sender === currentUserId.value ? "ME" : initial,
+  color: msg.sender === currentUserId.value
+    ? "bg-green-700"
+    : getColorForUser(msg.sender),
+  body: msg.content,
+  type: msg.attachment ? "file" : "text",
+  isMine: msg.sender === currentUserId.value,
+}));
 
     chatMessages.value.reverse();
   } catch (error) {
@@ -523,96 +506,46 @@ const declineAdminRequest = async (notification) => {
     toast.error("Failed to decline admin request");
   }
 };
-
-// const sendMessage = async () => {
-//   if (!messageInput.value.trim()) return;
-
-//   const currentUserId = directMessages.value.find(
-//     (dm) => dm.name === currentDMUser.value
-//   )?.userId;
-
-//   try {
-//     if (currentTab.value === "Direct Messages" && currentUserId) {
-//       await messagingApi.sendMessage({
-//         recipient: currentUserId,
-//         content: messageInput.value,
-//       });
-//     } else if (currentTab.value === "Groups") {
-//       const currentGroupId = groups.value.find(
-//         (g) => g.name === currentGroup.value
-//       )?.id;
-//       if (currentGroupId) {
-//         await messagingApi.sendGroupMessage(currentGroupId, {
-//           content: messageInput.value,
-//         });
-//       }
-//     }
-
-//     messageInput.value = "";
-//     toast.success("Message sent");
-
-//     if (currentTab.value === "Direct Messages" && currentUserId) {
-//       fetchMessagesWithUser(currentUserId);
-//     } else if (currentTab.value === "Groups") {
-//       const currentGroupId = groups.value.find(
-//         (g) => g.name === currentGroup.value
-//       )?.id;
-//       if (currentGroupId) {
-//         fetchGroupMessages(currentGroupId);
-//       }
-//     }
-//   } catch (error) {
-//     console.error("Error sending message:", error);
-//     toast.error("Failed to send message");
-//   }
-// };
-
   
 
 const sendMessage = async () => {
   if (!messageInput.value.trim()) return;
 
-  let targetId = null;
-
   if (currentTab.value === "Direct Messages") {
-    // Look in current conversations OR in the connections list
-    const dmTarget = directMessages.value.find(dm => dm.name === currentDMUser.value);
-    const connectionTarget = connections.value.find(c => c.name === currentDMUser.value);
-    
-    targetId = dmTarget?.userId || connectionTarget?.userId;
-
-    if (!targetId) {
-      toast.error("Could not find user to message");
+    if (!currentDMUser.value?.userId) {
+      toast.error("No active conversation");
       return;
     }
+
+    const targetId = currentDMUser.value.userId;
 
     try {
       await messagingApi.sendMessage({
         recipient: targetId,
         content: messageInput.value,
       });
+
       messageInput.value = "";
-      fetchMessagesWithUser(targetId); // Refresh chat
-      fetchConversations(); // Update sidebar list
+
+      await fetchMessagesWithUser(targetId);
+      await fetchConversations();
     } catch (error) {
       toast.error("Failed to send message");
     }
-  } else if (currentTab.value === "Groups") {
-    const group = groups.value.find(g => g.name === currentGroup.value);
-    if (group) {
-      try {
-        await messagingApi.sendGroupMessage(group.id, {
-          content: messageInput.value,
-        });
-        messageInput.value = "";
-        fetchGroupMessages(group.id);
-      } catch (error) {
-        toast.error("Failed to send group message");
-      }
+  }
+
+  if (currentTab.value === "Groups" && currentGroup.value?.id) {
+    try {
+      await messagingApi.sendGroupMessage(currentGroup.value.id, {
+        content: messageInput.value,
+      });
+      messageInput.value = "";
+      fetchGroupMessages(currentGroup.value.id);
+    } catch {
+      toast.error("Failed to send group message");
     }
   }
 };
-  
 
 const markMessageAsRead = async (messageId) => {
   try {
@@ -715,24 +648,16 @@ const activeConnections = computed(() => {
   return allConnections.value.filter((conn) => conn.status === "accepted");
 });
 
-
- const selectDMUser = (dm) => {
-  currentDMUser.value = dm;
+const selectDMUser = (dm) => {
+  currentDMUser.value = {
+    userId: dm.userId,
+    name: dm.name
+  };
   currentTab.value = "Direct Messages";
   fetchMessagesWithUser(dm.userId);
 };
+
  
-
-// const selectDMUser = (dm) => {
-//   currentDMUser.value = dm.name;
-
-//   if (currentTab.value !== "Direct Messages") {
-//     currentTab.value = "Direct Messages";
-//   }
-
-//   fetchMessagesWithUser(dm.userId);
-// };
-
 const fetchUnreadNotifications = async () => {
   const response = await messagingApi.listUnreadNotifications();
   unreadCount.value = response.count ?? response.results.length;
@@ -1413,7 +1338,7 @@ onUnmounted(() => {
                 <button
                   v-for="group in groups"
                   :key="group.id"
-                  @click="selectGroup(group.name)"
+                  @click="selectGroup(group)"
                   class="flex justify-between items-center w-full p-2 rounded-lg transition-colors"
                   :class="
                     isGroupActive(group)
@@ -1481,55 +1406,24 @@ onUnmounted(() => {
                 </div>
 
                 <div
-                  v-for="(message, idx) in chatMessages"
-                  :key="idx"
-                  class="flex space-x-3"
-                >
-                  <div v-if="message.type === 'file'" class="ml-12 w-full">
-                    <a
-                      href="#"
-                      class="inline-flex items-center p-2 text-sm bg-gray-100 rounded-lg text-gray-700 hover:bg-gray-200 transition"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="w-4 h-4 mr-2"
-                      >
-                        <path
-                          d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
-                        />
-                        <polyline points="14 2 14 8 20 8" />
-                      </svg>
-                      {{ message.file }}
-                    </a>
-                  </div>
+  v-for="message in chatMessages"
+  :key="message.id"
+  class="flex"
+  :class="message.isMine ? 'justify-end' : 'justify-start'"
+>
+  <div
+    class="max-w-[70%] p-3 rounded-xl"
+    :class="message.isMine
+      ? 'bg-green-600 text-white'
+      : 'bg-gray-100 text-gray-800'"
+  >
+    <p class="text-sm">{{ message.body }}</p>
+    <span class="text-xs opacity-70 block mt-1 text-right">
+      {{ message.time }}
+    </span>
+  </div>
+</div>
 
-                  <template v-else>
-                    <div
-                      class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm text-white flex-shrink-0"
-                      :class="message.color"
-                    >
-                      {{ message.initial }}
-                    </div>
-
-                    <div class="flex flex-col">
-                      <p class="text-sm font-semibold text-gray-800">
-                        {{ message.sender }}
-                        <span class="text-xs font-normal text-gray-400 ml-1">{{
-                          message.time
-                        }}</span>
-                      </p>
-                      <p class="text-gray-600 text-base">
-                        {{ message.body }}
-                      </p>
-                    </div>
-                  </template>
-                </div>
               </div>
 
               <footer class="p-4 border-t border-gray-100">
