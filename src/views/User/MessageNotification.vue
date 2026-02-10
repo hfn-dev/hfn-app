@@ -34,14 +34,33 @@ const filteredConnections = computed(() => {
   );
 });
 
-// Function to start a chat from the search results
+// Fix startNewChat to be consistent with selectDMUser
 const startNewChat = (user) => {
-  currentDMUser.value = user.name;
+  // Store the object, not just the name string
+  currentDMUser.value = { 
+    userId: user.userId || user.id, 
+    name: user.name 
+  };
   currentTab.value = "Direct Messages";
-  connectionSearchQuery.value = ""; // Clear search
-  fetchMessagesWithUser(user.userId);
+  connectionSearchQuery.value = ""; 
+  fetchMessagesWithUser(currentDMUser.value.userId);
 };
 
+// Update activeChatTitle to handle potential nulls safely
+const activeChatTitle = computed(() => {
+  if (currentTab.value === "Groups") {
+    return currentGroup.value?.name || "Select a Group";
+  }
+  if (currentTab.value === "Direct Messages") {
+    return currentDMUser.value?.name || "Select a Conversation";
+  }
+  return "";
+});
+
+// Fix the comparison in the DM list
+const isDMActive = (dm) => {
+  return currentDMUser.value && dm.userId === currentDMUser.value.userId;
+};
 
 
 // Loading states
@@ -687,31 +706,6 @@ const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 const isGroupActive = (name) => name === currentGroup.value;
 // const isDMActive = (name) => name === currentDMUser.value;
-const isDMActive = (dm) =>
-  currentDMUser.value && dm.userId === currentDMUser.value.userId;
-
-
-
-// const activeChatTitle = computed(() => {
-//   if (currentTab.value === "Groups") {
-//     return currentGroup.value;
-//   }
-//   if (currentTab.value === "Direct Messages") {
-//     return currentDMUser.value;
-//   }
-//   return "";
-// });
-
-const activeChatTitle = computed(() => {
-  if (currentTab.value === "Groups") {
-    return currentGroup.value?.name || "";
-  }
-  if (currentTab.value === "Direct Messages") {
-    return currentDMUser.value?.name || "";
-  }
-  return "";
-});
-  
 
 const pendingRequests = computed(() => {
   return allConnections.value.filter((conn) => conn.status === "pending");
