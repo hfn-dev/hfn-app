@@ -14,7 +14,7 @@ const DARK_GREEN = "#004d33";
 const LIGHT_GREEN = "#f2f9f3";
 
 const currentTab = ref("Directory");
-const currentDMUser = ref("");
+const currentDMUser = ref(null);
 const messageInput = ref("");
 const searchQuery = ref("");
 let notificationInterval = null;
@@ -643,7 +643,11 @@ const getColorForUser = (userId) => {
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 const isGroupActive = (name) => name === currentGroup.value;
-const isDMActive = (name) => name === currentDMUser.value;
+// const isDMActive = (name) => name === currentDMUser.value;
+const isDMActive = (dm) =>
+  currentDMUser.value && dm.userId === currentDMUser.value.userId;
+
+
 
 const activeChatTitle = computed(() => {
   if (currentTab.value === "Groups") {
@@ -663,15 +667,23 @@ const activeConnections = computed(() => {
   return allConnections.value.filter((conn) => conn.status === "accepted");
 });
 
-const selectDMUser = (dm) => {
-  currentDMUser.value = dm.name;
 
-  if (currentTab.value !== "Direct Messages") {
-    currentTab.value = "Direct Messages";
-  }
-
+ const selectDMUser = (dm) => {
+  currentDMUser.value = dm;
+  currentTab.value = "Direct Messages";
   fetchMessagesWithUser(dm.userId);
 };
+ 
+
+// const selectDMUser = (dm) => {
+//   currentDMUser.value = dm.name;
+
+//   if (currentTab.value !== "Direct Messages") {
+//     currentTab.value = "Direct Messages";
+//   }
+
+//   fetchMessagesWithUser(dm.userId);
+// };
 
 const fetchUnreadNotifications = async () => {
   const response = await messagingApi.listUnreadNotifications();
@@ -1285,15 +1297,15 @@ onUnmounted(() => {
                 <button
                   v-for="dm in directMessages"
                   :key="dm.name"
-                  @click="selectDMUser(dm.name)"
+                  @click="selectDMUser(dm)"
                   class="flex items-center justify-between w-full p-2 rounded-lg transition-colors"
                   :class="
-                    isDMActive(dm.name)
+                    isDMActive(dm)
                       ? 'font-semibold'
                       : 'hover:bg-gray-50 text-gray-600'
                   "
                   :style="
-                    isDMActive(dm.name)
+                    isDMActive(dm)
                       ? { backgroundColor: LIGHT_GREEN, color: DARK_GREEN }
                       : {}
                   "
