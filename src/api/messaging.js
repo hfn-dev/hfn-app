@@ -370,4 +370,15 @@ export default {
       throw error;
     }
   },
+  async deleteNotification(id) {
+    try {
+      const response = await api.patch(
+        `/messaging/notifications/${id}/`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Dismiss notification API error:", error);
+      throw error;
+    }
+  },
 };
