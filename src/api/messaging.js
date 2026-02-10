@@ -372,7 +372,7 @@ export default {
   },
   async deleteNotification(id) {
     try {
-      const response = await api.patch(
+      const response = await api.post(
         `/messaging/notifications/${id}/`
       );
       return response.data;
