@@ -316,7 +316,7 @@ const createUpload = async () => {
 
     if (uploadForm.value.type === "gallery") {
       uploadForm.value.files.forEach((file, i) => {
-        formData.append("files[]", file);
+        formData.append("image", file);
       });
       formData.append("banner_index", uploadForm.value.bannerIndex);
     } else {
