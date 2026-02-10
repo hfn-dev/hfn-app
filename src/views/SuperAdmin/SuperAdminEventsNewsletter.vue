@@ -290,9 +290,6 @@ const uploadForm = ref({
   bannerIndex: 0,      
 });
  
-// const fetchUploads = async () => {
-//   uploads.value = await uploadsApi.list();
-// };
 
 const fetchUploads = async () => {
   try {
@@ -303,27 +300,49 @@ const fetchUploads = async () => {
       uploadsApi.gallery(),
     ]);
 
-    const formattedGalleries = galleries.map(g => ({
-      
+    const normalizedNewsletters = newsletters.map(n => ({
+      id: n.id,
+      title: n.title,
+      type: "newsletter",
+      file: n.file,
+      created_at: n.created_at
+    }));
+
+    const normalizedMinutes = minutes.map(m => ({
+      id: m.id,
+      title: m.title,
+      type: "minute",
+      file: m.file,
+      created_at: m.created_at
+    }));
+
+    const normalizedDocuments = documents.map(d => ({
+      id: d.id,
+      title: d.title,
+      type: "document",
+      file: d.file,
+      created_at: d.created_at
+    }));
+
+    const normalizedGalleries = galleries.map(g => ({
       id: g.id,
-  title: g.title,
-  type: "gallery",
-  file: g.image,        
-  audience: g.audience,
-  created_at: g.created_at
+      title: g.title,
+      type: "gallery",
+      file: g.image, 
+      created_at: g.created_at
     }));
 
     uploads.value = [
-      ...newsletters.map(n => ({ ...n, type: "newsletter" })),
-      ...minutes.map(m => ({ ...m, type: "minute" })),
-      ...documents.map(d => ({ ...d, type: "document" })),
-      ...formattedGalleries
+      ...normalizedNewsletters,
+      ...normalizedMinutes,
+      ...normalizedDocuments,
+      ...normalizedGalleries
     ];
   } catch (error) {
     console.error("Failed to fetch uploads:", error);
   }
 };
- 
+
 
 const uploadFile = (e) => {
   const selectedFiles = Array.from(e.target.files);
