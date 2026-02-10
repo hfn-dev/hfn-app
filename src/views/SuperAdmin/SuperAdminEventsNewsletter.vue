@@ -290,9 +290,36 @@ const uploadForm = ref({
   bannerIndex: 0,      
 });
  
+// const fetchUploads = async () => {
+//   uploads.value = await uploadsApi.list();
+// };
+
 const fetchUploads = async () => {
-  uploads.value = await uploadsApi.list();
+  try {
+    const [newsletters, minutes, documents, galleries] = await Promise.all([
+      uploadsApi.listNewsletters(),
+      uploadsApi.listMinutes(),
+      uploadsApi.listDocuments(),
+      uploadsApi.listGalleries(),
+    ]);
+
+    const formattedGalleries = galleries.map(g => ({
+      ...g,
+      file: g.images[g.banner_index]?.url || "", 
+      type: "gallery"
+    }));
+
+    uploads.value = [
+      ...newsletters.map(n => ({ ...n, type: "newsletter" })),
+      ...minutes.map(m => ({ ...m, type: "minute" })),
+      ...documents.map(d => ({ ...d, type: "document" })),
+      ...formattedGalleries
+    ];
+  } catch (error) {
+    console.error("Failed to fetch uploads:", error);
+  }
 };
+ 
 
 const uploadFile = (e) => {
   const selectedFiles = Array.from(e.target.files);
