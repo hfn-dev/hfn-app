@@ -732,25 +732,48 @@ onMounted(() => {
           </div>
 
           <div class="mt-8">
-            <h3 class="font-semibold mb-3">Uploaded Content</h3>
+  <h3 class="font-semibold mb-3">Uploaded Content</h3>
 
-            <ul class="bg-white rounded-xl divide-y">
-              <li
-                v-for="item in uploads"
-                :key="item.id"
-                class="p-4 flex justify-between"
-              >
-                <div>
-                  <p class="font-medium">{{ item.title }}</p>
-                  <p class="text-xs text-gray-500">{{ item.type }}</p>
-                </div>
+  <table class="w-full text-sm bg-white rounded-xl overflow-hidden">
+    <thead class="bg-gray-100 text-left">
+      <tr>
+        <th class="p-3">Title</th>
+        <th>Type</th>
+        <th class="p-3">Preview / File</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="item in uploads" :key="item.id" class="border-t hover:bg-gray-50">
+        <td class="p-3 font-medium">{{ item.title }}</td>
+        <td>
+          <span class="px-2 py-1 rounded text-xs font-medium"
+            :class="{
+              'bg-blue-100 text-blue-700': item.type === 'newsletter',
+              'bg-green-100 text-green-700': item.type === 'minute',
+              'bg-gray-200 text-gray-700': item.type === 'document',
+              'bg-purple-100 text-purple-700': item.type === 'gallery'
+            }"
+          >
+            {{ item.type }}
+          </span>
+        </td>
+        <td class="p-3">
+          <a v-if="item.file" :href="item.file" target="_blank" class="text-primary">
+            <img v-if="item.type==='gallery'" :src="item.file" class="h-16 w-16 object-cover rounded" />
+            <span v-else>View</span>
+          </a>
+          <span v-else class="text-gray-400">No file</span>
+        </td>
+      </tr>
+      <tr v-if="!uploads.length">
+        <td colspan="3" class="p-6 text-center text-gray-500">
+          No uploads yet
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-                <a :href="item.file" target="_blank" class="text-primary">
-                  View
-                </a>
-              </li>
-            </ul>
-          </div>
         </section>
         <div v-if="uploadForm.type === 'gallery' && uploadForm.files.length" class="mb-4">
   <p class="font-medium mb-1">Gallery Images (choose banner)</p>
