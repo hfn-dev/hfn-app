@@ -41,7 +41,7 @@ export default {
   
   async create(payload) {
     try {
-      const response = await api.post('/uploads/', payload);
+      const response = await api.post('/media/gallery/', payload);
       return response.data;
     } catch (error) {
       console.error('Create upload API error:', error);
