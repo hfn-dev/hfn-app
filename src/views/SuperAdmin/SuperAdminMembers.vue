@@ -19,11 +19,17 @@ const showAddMemberModal = ref(false);
 const membershipTypes = ref([]);
  const showMembershipTypeModal = ref(false)
 
-const newMembershipType = ref({
+ const newMembershipType = ref({
   name: '',
+  description: '',
   price: '',
-  duration: ''
-})
+  duration_days: '',
+  features: '',
+  is_active: true,
+  max_courses: ''
+});
+ 
+  
 const filters = ref({
   membership_type: "",
   role: "",
@@ -175,21 +181,37 @@ const loadMembershipTypes = async () => {
   }
 };
 
- 
 const createMembershipType = async () => {
   try {
-    await membershipAPI.createMembershipType(newMembershipType.value)
-    await loadMembershipTypes()
+    const payload = {
+      ...newMembershipType.value,
+      duration_days: Number(newMembershipType.value.duration_days),
+      max_courses: Number(newMembershipType.value.max_courses),
+      price: String(newMembershipType.value.price),
+      features: null
+    };
+
+    await membershipAPI.createMembershipType(payload);
+
+    await loadMembershipTypes();
+
+    showCreateDialog.value = false;
 
     newMembershipType.value = {
       name: '',
+      description: '',
       price: '',
-      duration: ''
-    }
-  } catch (e) {
-    console.error('Failed to create type', e)
+      duration_days: '',
+      features: '',
+      is_active: true,
+      max_courses: ''
+    };
+
+  } catch (err) {
+    console.error("Create failed:", err.response?.data || err);
   }
-}
+};
+ 
 
 const deleteMembershipType = async (id) => {
   try {
@@ -370,16 +392,18 @@ watch(
           placeholder="Name"
           class="input"
         />
+        <input v-model="newMembershipType.description" placeholder="Description" class="input" />
         <input
           v-model="newMembershipType.price"
           placeholder="Price"
           class="input"
         />
-        <input
-          v-model="newMembershipType.duration"
-          placeholder="Duration (months)"
-          class="input"
-        />
+        <input v-model="newMembershipType.duration_days" placeholder="Duration (days)" class="input" type="number" />
+        <input v-model="newMembershipType.max_courses" placeholder="Max Courses" class="input" type="number" />
+        <label class="flex items-center gap-2">
+  <input type="checkbox" v-model="newMembershipType.is_active" />
+  Active
+</label>
         <button
           @click="createMembershipType"
           class="px-4 py-2 bg-[#006633] text-white rounded-lg"
@@ -411,7 +435,7 @@ watch(
             >
               <td class="p-3">{{ type.name }}</td>
               <td class="p-3">{{ type.price }}</td>
-              <td class="p-3">{{ type.duration }} months</td>
+              <td class="p-3">{{ type.duration_days }} months</td>
               <td class="p-3 text-center">
                 <button
                   @click="deleteMembershipType(type.id)"
