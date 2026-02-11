@@ -215,7 +215,7 @@ onMounted(() => {
 
 <template>
   <div
-    id="app"
+    
     class="min-h-screen bg-gray-50 font-sans flex flex-col sm:flex-row"
   >
     <AdminSidebar />

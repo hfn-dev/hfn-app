@@ -166,35 +166,6 @@ const handleAction = (action, course) => {
 };
 
 
-// const markAsPaid = async (payment) => {
-//   if (!confirm(`Are you sure you want to mark payment for ${payment.title} as PAID?`)) return;
-
-//   const payload = {
-//     transaction_id: payment.raw.transaction_id,
-//     status: "completed",
-//     payment_reference: payment.raw.payment_reference,
-//     metadata: null,
-//   };
-
-//   try {
-//     loading.value = true;
-//     const response = await paymentApi.confirmPayment(payload, payment.id);
-
-//     if (response?.status === "success") {
-//       toast.success(`Payment for ${payment.title} marked as completed`);
-//       fetchPayments(); 
-//     } else {
-//       const msg = response?.message || "Failed to confirm payment";
-//       toast.error(msg);
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     toast.error("Error confirming payment. Please try again.");
-//   } finally {
-//     loading.value = false;
-//   }
-// };
-
   const markAsPaid = async (payment) => {
   if (!confirm(`Are you sure you want to mark payment for ${payment.title} as PAID?`)) return;
 

@@ -1,10 +1,10 @@
 <script setup>
 import uploadsApi from "@/api/contentUploadsApi";
 import eventsApi from "@/api/events.js";
-import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
-import { onMounted, ref, computed } from "vue";
- import newsApi from "@/api/newsModule";
+import newsApi from "@/api/newsModule";
 import { useAuth } from "@/store/authStore";
+import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
+import { computed, onMounted, ref } from "vue";
 
 const events = ref([]);
 const loadingEvents = ref(false);
@@ -19,27 +19,26 @@ const confirmAction = ref(null);
 const confirmLoading = ref(false);
 const deletingEventSlug = ref(null);
 
+const isFile = (file) => {
+  return (
+    typeof window !== "undefined" &&
+    typeof File !== "undefined" &&
+    file instanceof File
+  );
+};
 
-//  const uploadBanner = async (file) => {
-//   const data = new FormData();
-//   data.append("file", file);
-//   data.append("upload_preset", "your_preset");
+const previewUrl = (file) => {
+  if (!isFile(file)) return null;
+  return URL.createObjectURL(file);
+};
 
-//   const res = await fetch(
-//     "http://res.cloudinary.com/dawrem2mi/image/upload",
-//     { method: "POST", body: data }
-//   );
-
-//   const json = await res.json();
-//   form.value.banner = json.secure_url;
-// };
 const uploadBanner = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("upload_preset", "your_preset"); 
+  formData.append("upload_preset", "your_preset");
 
   const res = await fetch(
     "https://api.cloudinary.com/v1_1/dawrem2mi/image/upload",
@@ -56,7 +55,7 @@ const uploadBanner = async (e) => {
 
 const loading = ref(false);
 
- const editArticle = (article) => {
+const editArticle = (article) => {
   editingSlug.value = article.slug;
 
   newsForm.value = {
@@ -74,12 +73,10 @@ const loading = ref(false);
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
-
-
 const auth = useAuth();
 
 const visibleArticles = computed(() => {
-  return articles.value.filter(article => {
+  return articles.value.filter((article) => {
     if (article.audience === "all") return true;
     return auth.isAuthenticated;
   });
@@ -87,25 +84,10 @@ const visibleArticles = computed(() => {
 
 const deletingSlug = ref(null);
 
-// const deleteArticle = async (slug) => {
-//   const confirmed = confirm("Are you sure you want to delete this article?");
-//   if (!confirmed) return;
-
-//   try {
-//     deletingSlug.value = slug;
-//     await newsApi.deleteArticle(slug);
-//     articles.value = articles.value.filter(a => a.slug !== slug);
-//   } catch (e) {
-//     console.error(e);
-//     console.log("Failed to delete article");
-//   } finally {
-//     deletingSlug.value = null;
-//   }
-// };
-
 const deleteArticle = (slug) => {
   confirmTitle.value = "Delete Article";
-  confirmMessage.value = "Are you sure you want to permanently delete this article? This action cannot be undone.";
+  confirmMessage.value =
+    "Are you sure you want to permanently delete this article? This action cannot be undone.";
   showConfirm.value = true;
 
   confirmAction.value = async () => {
@@ -114,7 +96,7 @@ const deleteArticle = (slug) => {
       deletingSlug.value = slug;
 
       await newsApi.deleteArticle(slug);
-      articles.value = articles.value.filter(a => a.slug !== slug);
+      articles.value = articles.value.filter((a) => a.slug !== slug);
     } catch (e) {
       console.error(e);
       console.log("Failed to delete article");
@@ -126,7 +108,6 @@ const deleteArticle = (slug) => {
   };
 };
 
-  
 const fetchArticles = async () => {
   articles.value = await newsApi.listArticles();
 };
@@ -135,7 +116,7 @@ onMounted(async () => {
   await fetchArticles();
 });
 
- const resetNewsForm = () => {
+const resetNewsForm = () => {
   editingSlug.value = null;
   newsForm.value = {
     title: "",
@@ -150,7 +131,7 @@ onMounted(async () => {
   };
 };
 
- const publishArticle = async (slug) => {
+const publishArticle = async (slug) => {
   const confirmed = confirm("Publish this article?");
   if (!confirmed) return;
 
@@ -166,32 +147,13 @@ onMounted(async () => {
   }
 };
 
-
-//  const saveNews = async () => {
-//   const formData = new FormData();
-
-//   Object.entries(newsForm.value).forEach(([key, value]) => {
-//     if (Array.isArray(value)) {
-//       value.forEach(v => formData.append(`${key}[]`, v));
-//     } else {
-//       formData.append(key, value);
-//     }
-//   });
-
-//   if (isEditing.value) {
-//     await newsApi.partialUpdateArticle(editingSlug.value, formData);
-//   } else {
-//     await newsApi.createArticle(formData);
-//   }
-// };
-
- const saveNews = async () => {
+const saveNews = async () => {
   try {
     const formData = new FormData();
 
     Object.entries(newsForm.value).forEach(([key, value]) => {
       if (Array.isArray(value)) {
-        value.forEach(v => formData.append(`${key}[]`, v));
+        value.forEach((v) => formData.append(`${key}[]`, v));
       } else {
         formData.append(key, value);
       }
@@ -203,23 +165,19 @@ onMounted(async () => {
       await newsApi.createArticle(formData);
     }
 
-    await fetchArticles();   
-    resetNewsForm();         
+    await fetchArticles();
+    resetNewsForm();
   } catch (e) {
     console.error(e);
     console.log("Failed to save article");
   }
 };
 
-
-
-
- const uploadNewsImage = (e) => {
+const uploadNewsImage = (e) => {
   newsForm.value.featured_image = e.target.files[0];
 };
 
-
-  const addVideo = () => {
+const addVideo = () => {
   if (!videoInput.value) return;
   newsForm.value.videos.push(videoInput.value);
   videoInput.value = "";
@@ -238,11 +196,11 @@ const newsForm = ref({
   audience: "all",
   is_featured: false,
   featured_order: 0,
-  videos: []
+  videos: [],
 });
 
 const videoInput = ref("");
-  
+
 const eventForm = ref({
   title: "",
   description: "",
@@ -277,7 +235,7 @@ const deleteEvent = (event) => {
       deletingEventSlug.value = event.slug;
 
       await eventsApi.deleteEvent(event.slug);
-      events.value = events.value.filter(e => e.slug !== event.slug);
+      events.value = events.value.filter((e) => e.slug !== event.slug);
     } catch (e) {
       console.error("Failed to delete event", e);
     } finally {
@@ -287,17 +245,16 @@ const deleteEvent = (event) => {
     }
   };
 };
- 
 
 const createEvent = async () => {
   const payload = {
     ...eventForm.value,
     banner: eventForm.value.banner,
-   price: eventForm.value.is_free ? undefined : Number(eventForm.value.price),
+    price: eventForm.value.is_free ? undefined : Number(eventForm.value.price),
   };
- if (eventForm.value.is_free) {
-  delete payload.price;
-}
+  if (eventForm.value.is_free) {
+    delete payload.price;
+  }
 
   await eventsApi.createCalenderEvent(payload);
   await fetchEvents();
@@ -315,7 +272,7 @@ const createEvent = async () => {
     registration_deadline: "",
     is_free: true,
     price: "",
-    banner: ""
+    banner: "",
   });
 };
 
@@ -323,42 +280,73 @@ const uploads = ref([]);
 
 const uploadForm = ref({
   title: "",
-  type: "newsletter", 
+  type: "newsletter",
   description: "",
-  files: [],           
-  bannerIndex: 0,      
+  files: [],
+  bannerIndex: 0,
 });
- 
-
-
-// const uploadBanner = async (e) => {
-//   const file = e.target.files[0];
-//   if (!file) return;
-
-//   try {
-//     const { url } = await uploadsApi.upload(file);
-//     eventForm.value.banner = url;
-//   } catch (error) {
-//     console.error("Banner upload failed", error);
-//   }
-// };
-
 
 const fetchUploads = async () => {
-  uploads.value = await uploadsApi.list();
+  try {
+    const [newsletters, minutes, documents, galleries] = await Promise.all([
+      uploadsApi.listNewsletters(),
+      uploadsApi.getMinutes(),
+      uploadsApi.list(),
+      uploadsApi.gallery(),
+    ]);
+
+    const normalizedNewsletters = newsletters.map((n) => ({
+      id: n.id,
+      title: n.title,
+      type: "newsletter",
+      file: n.file,
+      created_at: n.created_at,
+    }));
+
+    const normalizedMinutes = minutes.map((m) => ({
+      id: m.id,
+      title: m.title,
+      type: "minute",
+      file: m.file,
+      created_at: m.created_at,
+    }));
+
+    const normalizedDocuments = documents.map((d) => ({
+      id: d.id,
+      title: d.title,
+      type: "document",
+      file: d.file,
+      created_at: d.created_at,
+    }));
+
+    const normalizedGalleries = galleries.map((g) => ({
+      id: g.id,
+      title: g.title,
+      type: "gallery",
+      file: g.image,
+      created_at: g.created_at,
+    }));
+
+    uploads.value = [
+      ...normalizedNewsletters,
+      ...normalizedMinutes,
+      ...normalizedDocuments,
+      ...normalizedGalleries,
+    ];
+  } catch (error) {
+    console.error("Failed to fetch uploads:", error);
+  }
 };
 
 const uploadFile = (e) => {
   const selectedFiles = Array.from(e.target.files);
   if (uploadForm.value.type === "gallery") {
-    
     uploadForm.value.files.push(...selectedFiles);
   } else {
-    
     uploadForm.value.files = selectedFiles.slice(0, 1);
   }
 };
- 
+
 const createUpload = async () => {
   if (!uploadForm.value.title || !uploadForm.value.files.length) return;
 
@@ -370,25 +358,28 @@ const createUpload = async () => {
 
     if (uploadForm.value.type === "gallery") {
       uploadForm.value.files.forEach((file, i) => {
-        formData.append("files[]", file);
+        formData.append("image", file);
       });
       formData.append("banner_index", uploadForm.value.bannerIndex);
     } else {
-      
       formData.append("file", uploadForm.value.files[0]);
     }
 
     let res;
     switch (uploadForm.value.type) {
       case "gallery":
-        res = await uploadsApi.postGallery(formData);
+        res = await uploadsApi.createGallery(formData);
         break;
       case "newsletter":
-        res = await newsApi.postNewsletters(formData);
+        res = await uploadsApi.createNewsletters(formData);
         break;
       case "minute":
-        res = await newsApi.postMinutes(formData);
+        res = await uploadsApi.createMinutes(formData);
         break;
+      case "document":
+        res = await uploadsApi.create(formData);
+        break;
+
       default:
         res = await uploadsApi.create(formData);
     }
@@ -399,14 +390,13 @@ const createUpload = async () => {
       title: "",
       type: "newsletter",
       description: "",
-      files: [],
+      image: "",
       bannerIndex: 0,
     };
   } catch (error) {
     console.error("Upload failed:", error);
   }
 };
-
 
 onMounted(() => {
   fetchEvents();
@@ -478,15 +468,24 @@ onMounted(() => {
             placeholder="Description"
           ></textarea>
 
-<div class="mt-4">
-  <label class="block mb-2 font-medium text-gray-700">Event Banner</label>
-  <input type="file" @change="uploadBanner" class="border border-gray-300 rounded-md px-3 py-2 w-full" />
-  
-  <div v-if="eventForm.banner" class="mt-3">
-    <img :src="eventForm.banner" alt="Event Banner" class="h-40 w-full object-cover rounded-md shadow-md" />
-  </div>
-</div>
+          <div class="mt-4">
+            <label class="block mb-2 font-medium text-gray-700"
+              >Event Banner</label
+            >
+            <input
+              type="file"
+              @change="uploadBanner"
+              class="border border-gray-300 rounded-md px-3 py-2 w-full"
+            />
 
+            <div v-if="eventForm.banner" class="mt-3">
+              <img
+                :src="eventForm.banner"
+                alt="Event Banner"
+                class="h-40 w-full object-cover rounded-md shadow-md"
+              />
+            </div>
+          </div>
 
           <div class="flex items-center gap-4 mt-4">
             <label class="flex items-center gap-2">
@@ -520,203 +519,217 @@ onMounted(() => {
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="event in events" :key="event.id" class="border-t hover:bg-gray-50">
-  <td class="p-3 font-medium">{{ event.title }}</td>
-  <td>{{ event.status }}</td>
-  <td>{{ event.event_type }}</td>
-  <td>
-    {{ new Date(event.start_datetime).toLocaleDateString() }}
-  </td>
+                <tr
+                  v-for="event in events"
+                  :key="event.id"
+                  class="border-t hover:bg-gray-50"
+                >
+                  <td class="p-3 font-medium">{{ event.title }}</td>
+                  <td>{{ event.status }}</td>
+                  <td>{{ event.event_type }}</td>
+                  <td>
+                    {{ new Date(event.start_datetime).toLocaleDateString() }}
+                  </td>
 
-  <td class="text-right pr-3 space-x-2">
-    <button
-      @click="deleteEvent(event)"
-      class="text-red-600 hover:underline text-xs"
-      :disabled="deletingEventSlug === event.slug"
-    >
-      {{ deletingEventSlug === event.slug ? "Deleting…" : "Delete" }}
-    </button>
-  </td>
-</tr>
-
+                  <td class="text-right pr-3 space-x-2">
+                    <button
+                      @click="deleteEvent(event)"
+                      class="text-red-600 hover:underline text-xs"
+                      :disabled="deletingEventSlug === event.slug"
+                    >
+                      {{
+                        deletingEventSlug === event.slug
+                          ? "Deleting…"
+                          : "Delete"
+                      }}
+                    </button>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
         </section>
 
         <section class="mt-16">
-  <h2 class="text-xl font-semibold mb-4">
-  {{ isEditing ? "Edit News Article" : "Create News Article" }}
-</h2>
+          <h2 class="text-xl font-semibold mb-4">
+            {{ isEditing ? "Edit News Article" : "Create News Article" }}
+          </h2>
 
+          <div class="bg-white p-6 rounded-xl shadow space-y-4 max-w-3xl">
+            <input v-model="newsForm.title" class="input" placeholder="Title" />
+            <input
+              v-model="newsForm.excerpt"
+              class="input"
+              placeholder="Excerpt"
+            />
 
-  <div class="bg-white p-6 rounded-xl shadow space-y-4 max-w-3xl">
-    <input v-model="newsForm.title" class="input" placeholder="Title" />
-    <input v-model="newsForm.excerpt" class="input" placeholder="Excerpt" />
+            <textarea
+              v-model="newsForm.content"
+              class="input h-40"
+              placeholder="Full article content"
+            />
 
-    <textarea
-      v-model="newsForm.content"
-      class="input h-40"
-      placeholder="Full article content"
-    />
+            <div>
+              <label class="block mb-2">Featured Image</label>
+              <input type="file" @change="uploadNewsImage" />
+              <img
+                v-if="newsForm.featured_image"
+                :src="newsForm.featured_image"
+                class="h-40 mt-2 rounded"
+              />
+            </div>
 
-    <div>
-      <label class="block mb-2">Featured Image</label>
-      <input type="file" @change="uploadNewsImage" />
-      <img
-        v-if="newsForm.featured_image"
-        :src="newsForm.featured_image"
-        class="h-40 mt-2 rounded"
-      />
-    </div>
+            <div>
+              <label class="block mb-1 font-medium">Video links</label>
+              <div class="flex gap-2">
+                <input v-model="videoInput" class="input flex-1" />
+                <button @click="addVideo" class="btn-secondary">Add</button>
+              </div>
 
-    <div>
-      <label class="block mb-1 font-medium">Video links</label>
-      <div class="flex gap-2">
-        <input v-model="videoInput" class="input flex-1" />
-        <button @click="addVideo" class="btn-secondary">Add</button>
-      </div>
+              <ul class="mt-2 text-sm">
+                <li
+                  v-for="(video, i) in newsForm.videos"
+                  :key="i"
+                  class="flex justify-between"
+                >
+                  {{ video }}
+                  <button @click="removeVideo(i)" class="text-red-600">
+                    ✕
+                  </button>
+                </li>
+              </ul>
+            </div>
 
-      <ul class="mt-2 text-sm">
-        <li
-          v-for="(video, i) in newsForm.videos"
-          :key="i"
-          class="flex justify-between"
-        >
-          {{ video }}
-          <button @click="removeVideo(i)" class="text-red-600">✕</button>
-        </li>
-      </ul>
-    </div>
+            <div class="flex gap-4">
+              <select v-model="newsForm.status" class="input">
+                <option value="draft">Draft</option>
+                <option value="published">Published</option>
+              </select>
 
-    <div class="flex gap-4">
-      <select v-model="newsForm.status" class="input">
-        <option value="draft">Draft</option>
-        <option value="published">Published</option>
-      </select>
+              <select v-model="newsForm.audience" class="input">
+                <option value="all">All</option>
+                <option value="members">Members only</option>
+              </select>
+            </div>
 
-      <select v-model="newsForm.audience" class="input">
-        <option value="all">All</option>
-        <option value="members">Members only</option>
-      </select>
-    </div>
+            <button @click="saveNews" class="btn-primary">
+              {{ isEditing ? "Update Article" : "Save as Draft" }}
+            </button>
 
-    <button @click="saveNews" class="btn-primary">
-  {{ isEditing ? "Update Article" : "Save as Draft" }}
-</button>
-
-<button
-  v-if="isEditing"
-  @click="resetNewsForm"
-  class="btn-secondary ml-2"
->
-  Cancel
-</button>
-
-  </div>
-</section>
-     <section class="mt-12">
-  <h3 class="text-lg font-semibold mb-4">Existing Articles</h3>
-
-  <div class="bg-white rounded-xl shadow overflow-hidden">
-    <table class="w-full text-sm">
-      <thead class="bg-gray-100 text-left">
-        <tr>
-          <th class="p-3">Title</th>
-          <th>Status</th>
-          <th>Audience</th>
-          <th>Date</th>
-          <th class="text-right p-3">Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr
-          v-for="article in articles"
-          :key="article.id"
-          class="border-t hover:bg-gray-50"
-        >
-          <td class="p-3 font-medium">
-            {{ article.title }}
-          </td>
-
-          <td>
-            <span
-              class="px-2 py-1 rounded text-xs font-medium"
-              :class="
-                article.status === 'published'
-                  ? 'bg-green-100 text-green-700'
-                  : 'bg-gray-200 text-gray-600'
-              "
+            <button
+              v-if="isEditing"
+              @click="resetNewsForm"
+              class="btn-secondary ml-2"
             >
-              {{ article.status }}
-            </span>
-          </td>
+              Cancel
+            </button>
+          </div>
+        </section>
+        <section class="mt-12">
+          <h3 class="text-lg font-semibold mb-4">Existing Articles</h3>
 
-          <td>
-            <span
-              class="px-2 py-1 rounded text-xs font-medium"
-              :class="
-                article.audience === 'all'
-                  ? 'bg-blue-100 text-blue-700'
-                  : 'bg-orange-100 text-orange-700'
-              "
-            >
-              {{ article.audience }}
-            </span>
-          </td>
+          <div class="bg-white rounded-xl shadow overflow-hidden">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-100 text-left">
+                <tr>
+                  <th class="p-3">Title</th>
+                  <th>Status</th>
+                  <th>Audience</th>
+                  <th>Date</th>
+                  <th class="text-right p-3">Actions</th>
+                </tr>
+              </thead>
 
-          <td>
-            {{ new Date(article.publish_date).toLocaleDateString() }}
-          </td>
+              <tbody>
+                <tr
+                  v-for="article in articles"
+                  :key="article.id"
+                  class="border-t hover:bg-gray-50"
+                >
+                  <td class="p-3 font-medium">
+                    {{ article.title }}
+                  </td>
 
-          <td class="p-3 text-right space-x-2">
-  <button
-    @click="editArticle(article)"
-    class="text-blue-600 hover:underline text-xs"
-  >
-    Edit
-  </button>
+                  <td>
+                    <span
+                      class="px-2 py-1 rounded text-xs font-medium"
+                      :class="
+                        article.status === 'published'
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-gray-200 text-gray-600'
+                      "
+                    >
+                      {{ article.status }}
+                    </span>
+                  </td>
 
-  <button
-    v-if="article.status === 'draft'"
-    @click="publishArticle(article.slug)"
-    class="text-green-600 hover:underline text-xs"
-    :disabled="publishingSlug === article.slug"
-  >
-    {{ publishingSlug === article.slug ? "Publishing…" : "Publish" }}
-  </button>
+                  <td>
+                    <span
+                      class="px-2 py-1 rounded text-xs font-medium"
+                      :class="
+                        article.audience === 'all'
+                          ? 'bg-blue-100 text-blue-700'
+                          : 'bg-orange-100 text-orange-700'
+                      "
+                    >
+                      {{ article.audience }}
+                    </span>
+                  </td>
 
-  <RouterLink
-    :to="`/blog/${article.slug}`"
-    class="text-gray-600 hover:underline text-xs"
-    target="_blank"
-  >
-    View
-  </RouterLink>
+                  <td>
+                    {{ new Date(article.publish_date).toLocaleDateString() }}
+                  </td>
 
-  <button
-    @click="deleteArticle(article.slug)"
-    class="text-red-600 hover:underline text-xs"
-    :disabled="deletingSlug === article.slug"
-  >
-    {{ deletingSlug === article.slug ? "Deleting…" : "Delete" }}
-  </button>
-</td>
+                  <td class="p-3 text-right space-x-2">
+                    <button
+                      @click="editArticle(article)"
+                      class="text-blue-600 hover:underline text-xs"
+                    >
+                      Edit
+                    </button>
 
-        </tr>
+                    <button
+                      v-if="article.status === 'draft'"
+                      @click="publishArticle(article.slug)"
+                      class="text-green-600 hover:underline text-xs"
+                      :disabled="publishingSlug === article.slug"
+                    >
+                      {{
+                        publishingSlug === article.slug
+                          ? "Publishing…"
+                          : "Publish"
+                      }}
+                    </button>
 
-        <tr v-if="!articles.length">
-          <td colspan="5" class="p-6 text-center text-gray-500">
-            No articles created yet
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</section>
+                    <RouterLink
+                      :to="`/blog/${article.slug}`"
+                      class="text-gray-600 hover:underline text-xs"
+                      target="_blank"
+                    >
+                      View
+                    </RouterLink>
 
+                    <button
+                      @click="deleteArticle(article.slug)"
+                      class="text-red-600 hover:underline text-xs"
+                      :disabled="deletingSlug === article.slug"
+                    >
+                      {{
+                        deletingSlug === article.slug ? "Deleting…" : "Delete"
+                      }}
+                    </button>
+                  </td>
+                </tr>
 
+                <tr v-if="!articles.length">
+                  <td colspan="5" class="p-6 text-center text-gray-500">
+                    No articles created yet
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
 
         <div class="my-12 flex items-center gap-4">
           <div class="flex-1 h-px bg-gray-300"></div>
@@ -757,88 +770,128 @@ onMounted(() => {
           <div class="mt-8">
             <h3 class="font-semibold mb-3">Uploaded Content</h3>
 
-            <ul class="bg-white rounded-xl divide-y">
-              <li
-                v-for="item in uploads"
-                :key="item.id"
-                class="p-4 flex justify-between"
-              >
-                <div>
-                  <p class="font-medium">{{ item.title }}</p>
-                  <p class="text-xs text-gray-500">{{ item.type }}</p>
-                </div>
-
-                <a :href="item.file" target="_blank" class="text-primary">
-                  View
-                </a>
-              </li>
-            </ul>
+            <table class="w-full text-sm bg-white rounded-xl overflow-hidden">
+              <thead class="bg-gray-100 text-left">
+                <tr>
+                  <th class="p-3">Title</th>
+                  <th>Type</th>
+                  <th class="p-3">Preview / File</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="item in uploads"
+                  :key="item.id"
+                  class="border-t hover:bg-gray-50"
+                >
+                  <td class="p-3 font-medium">{{ item.title }}</td>
+                  <td>
+                    <span
+                      class="px-2 py-1 rounded text-xs font-medium"
+                      :class="{
+                        'bg-blue-100 text-blue-700': item.type === 'newsletter',
+                        'bg-green-100 text-green-700': item.type === 'minute',
+                        'bg-gray-200 text-gray-700': item.type === 'document',
+                        'bg-purple-100 text-purple-700':
+                          item.type === 'gallery',
+                      }"
+                    >
+                      {{ item.type }}
+                    </span>
+                  </td>
+                  <td class="p-3">
+                    <a
+                      v-if="item.file"
+                      :href="item.file"
+                      target="_blank"
+                      class="text-primary"
+                    >
+                      <img
+                        v-if="item.type === 'gallery'"
+                        :src="item.file"
+                        class="h-16 w-16 object-cover rounded"
+                      />
+                      <span v-else>View</span>
+                    </a>
+                    <span v-else class="text-gray-400">No file</span>
+                  </td>
+                </tr>
+                <tr v-if="!uploads.length">
+                  <td colspan="3" class="p-6 text-center text-gray-500">
+                    No uploads yet
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </section>
-        <div v-if="uploadForm.type === 'gallery' && uploadForm.files.length" class="mb-4">
-  <p class="font-medium mb-1">Gallery Images (choose banner)</p>
-  <div class="flex gap-3 overflow-x-auto">
-    <div
-      v-for="(file, index) in uploadForm.files"
-      :key="index"
-      class="relative"
-    >
-      <img
-        :src="URL.createObjectURL(file)"
-        class="h-24 w-24 object-cover rounded cursor-pointer border-2"
-        :class="{
-          'border-green-500': uploadForm.bannerIndex === index,
-          'border-gray-300': uploadForm.bannerIndex !== index
-        }"
-        @click="uploadForm.bannerIndex = index"
-      />
-      <button
-        class="absolute top-0 right-0 text-red-600 font-bold"
-        @click.prevent="uploadForm.files.splice(index, 1)"
-      >
-        ✕
-      </button>
-    </div>
-  </div>
-  <p class="text-xs text-gray-500 mt-1">Click an image to mark as banner/thumbnail</p>
-</div>
- 
+        <div
+          v-if="uploadForm.type === 'gallery' && uploadForm.files.length"
+          class="mb-4"
+        >
+          <p class="font-medium mb-1">Gallery Images (choose banner)</p>
+          <div class="flex gap-3 overflow-x-auto">
+            <div
+              v-for="(file, index) in uploadForm.files"
+              :key="index"
+              class="relative"
+            >
+              <img
+                v-if="previewUrl(file)"
+                :src="previewUrl(file)"
+                class="h-24 w-24 object-cover rounded cursor-pointer border-2"
+                :class="{
+                  'border-green-500': uploadForm.bannerIndex === index,
+                  'border-gray-300': uploadForm.bannerIndex !== index,
+                }"
+                @click="uploadForm.bannerIndex = index"
+              />
+              <button
+                class="absolute top-0 right-0 text-red-600 font-bold"
+                @click.prevent="uploadForm.files.splice(index, 1)"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+          <p class="text-xs text-gray-500 mt-1">
+            Click an image to mark as banner/thumbnail
+          </p>
+        </div>
       </div>
     </main>
   </div>
-  <!-- Confirm Dialog -->
-<div
-  v-if="showConfirm"
-  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
->
-  <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
-    <h3 class="text-lg font-semibold mb-2">
-      {{ confirmTitle }}
-    </h3>
+  <div
+    v-if="showConfirm"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  >
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+      <h3 class="text-lg font-semibold mb-2">
+        {{ confirmTitle }}
+      </h3>
 
-    <p class="text-sm text-gray-600 mb-6">
-      {{ confirmMessage }}
-    </p>
+      <p class="text-sm text-gray-600 mb-6">
+        {{ confirmMessage }}
+      </p>
 
-    <div class="flex justify-end gap-3">
-      <button
-        @click="showConfirm = false"
-        class="btn-secondary"
-        :disabled="confirmLoading"
-      >
-        Cancel
-      </button>
+      <div class="flex justify-end gap-3">
+        <button
+          @click="showConfirm = false"
+          class="btn-secondary"
+          :disabled="confirmLoading"
+        >
+          Cancel
+        </button>
 
-      <button
-        @click="confirmAction"
-        class="btn-danger"
-        :disabled="confirmLoading"
-      >
-        {{ confirmLoading ? "Please wait…" : "Confirm" }}
-      </button>
+        <button
+          @click="confirmAction"
+          class="btn-danger"
+          :disabled="confirmLoading"
+        >
+          {{ confirmLoading ? "Please wait…" : "Confirm" }}
+        </button>
+      </div>
     </div>
   </div>
-</div>
-
 </template>
     

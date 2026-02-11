@@ -1,10 +1,10 @@
 <script setup>
-import courseApi from '@/api/learningModule.js';  
-import analyticsApi from '@/api/dashboard.js';    
+import courseApi from '@/api/learningModule.js';
 import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
-import { computed, ref, watch, onMounted } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
+import ConfirmModal from '@/components/layout/ConfirmModal.vue';
 import {
   ChevronLeft,
   ChevronRight,
@@ -15,7 +15,6 @@ import {
   Search,
   Trash2,
 } from 'lucide-vue-next';
-import ConfirmModal from '@/components/layout/ConfirmModal.vue';
 
 const courseTabs = ref(['Published', 'Drafts', 'Archived', 'Approvals']);
 const currentTab = ref('Published');
@@ -136,7 +135,6 @@ onMounted(fetchCourses);
   <div class="flex min-h-screen font-sans">
     <SuperAdminSidebar />
     <main class="flex-1 p-8 overflow-auto bg-white">
-      <!-- Breadcrumbs -->
       <div class="text-sm text-gray-500 mb-6">
         <span class="text-[#006633]">Home</span> > My Courses
       </div>

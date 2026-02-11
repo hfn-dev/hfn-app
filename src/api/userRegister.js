@@ -68,6 +68,16 @@ export default {
       })
       .then((res) => res.data);
   },
+  async getUserList() {
+    try {
+      const response = await api.get('/account/users/');
+      return response.data;
+    } catch (error) {
+      console.error('Get User API error:', error);
+      throw error;
+    }
+  },
+
   async contactForm(payload) {
     try {
       const response = await api.post('/contact/', payload);
