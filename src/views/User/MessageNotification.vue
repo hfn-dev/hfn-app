@@ -754,6 +754,7 @@ watch(currentTab, (newTab) => {
       break;
     case "Direct Messages":
       fetchConversations();
+      fetchConnections();
       break;
   }
 });
