@@ -27,7 +27,7 @@ const createPage = async (pageName) => {
       .trim()
       .replace(/\s+/g, "-");
 
-    const schema = pageSchemas.others;
+    const schema = pageSchemas[pageType];
 
     const exists = pages.value.some(
       (p) => p.page_type === pageType
@@ -39,7 +39,7 @@ const createPage = async (pageName) => {
     }
 
     const payload = {
-      page_type: 'others', 
+      page_type: pageType, 
       name: pageName,
       status: "draft",
       is_visible: false,
@@ -132,9 +132,16 @@ const goBackToManager = () => {
   activePage.value = null;
 };
 
-const deletePage = (id) => {
-  console.log(`Confirmation bypassed. Deleting page with ID ${id}...`);
-  pages.value = pages.value.filter((page) => page.id !== id);
+const deletePage = async (id) => {
+  if (!confirm("Are you sure you want to delete this page?")) return;
+
+  try {
+    await pagesApi.deletePage(id);
+    pages.value = pages.value.filter((page) => page.id !== id);
+    console.log(`Deleted page with ID: ${id}`);
+  } catch (e) {
+    console.error("Failed to delete page", e);
+  }
 };
 
 const addNewSection = () => {

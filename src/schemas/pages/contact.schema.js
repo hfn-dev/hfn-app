@@ -1,19 +1,19 @@
 export const contactPageSchema = {
   contact: {
     hero: {
-      headline: "Let's keep in touch!",
+      headline: 'Get in touch with HFN Nigeria',
       subheadline:
-        'Healthcare Federation of Nigeria would love to hear from you.',
-      description:
-        'For any inquiries, partnerships, or further information on how we can work together to improve healthcare in Nigeria, feel free to reach out to us through any of the following contact options.',
+        'Healthcare Federation of Nigeria (HFN) welcomes enquiries from members, partners, policymakers, development organisations, media, and individuals interested in engaging with our work.',
+      description: 'Our team typically responds within 24 hours.',
       image: 'globe.png',
+      badgeText: 'Connect With Us',
       backgroundColor: 'bg-[#F2F9F3]',
     },
 
     form: {
       title: 'Contact Us',
       description:
-        'We are here to help! Whether you have a question about our service, need assistance with your account, or want to provide feedback, our team is ready to assist you.',
+        'Whether you are seeking information about membership, partnerships, events, advocacy, or general enquiries, our team is available to assist.',
       fields: [
         {
           id: 'name',
@@ -33,32 +33,34 @@ export const contactPageSchema = {
           id: 'subject',
           label: 'Subject',
           type: 'text',
-          placeholder: '',
+          placeholder: 'Enter subject',
           required: true,
         },
         {
           id: 'message',
           label: 'Message',
           type: 'textarea',
-          placeholder: '',
+          placeholder: 'Write your message...',
           rows: 5,
           required: true,
         },
       ],
       submitButtonText: 'Send Message',
+      successMessage:
+        'Thank you for reaching out. Our team will get back to you within 24 hours.',
     },
 
     contactDetails: {
       address: {
         text: '109, Awolowo Road, Ikoyi, Opposite Standard Chartered Bank, Lagos.',
-        googleMapsUrl: 'https://maps.google.com/...',
+        googleMapsUrl:
+          'https://maps.google.com/maps?q=109+Awolowo+Road,+Ikoyi,+Lagos,+Nigeria',
       },
       emails: [
-        { label: 'General Inquiries', address: 'info@hfnigeria.com' },
-        // {
-        //   label: 'Executive Secretary',
-        //   address: 'executivesecretary@hfnigeria.com',
-        // },
+        {
+          label: 'General Inquiries',
+          address: 'info@hfnigeria.com',
+        },
       ],
       phone: '+234 803 975 3274',
       socialMedia: [
@@ -69,17 +71,17 @@ export const contactPageSchema = {
         },
         {
           platform: 'Instagram',
-          url: 'https://www.instagram.com/hfnigeria',
+          url: 'https://www.instagram.com/hfn_nigeria?igsh=MWR1ODI1aW5kaWwyaA==',
           icon: 'fab fa-square-instagram',
         },
         {
           platform: 'LinkedIn',
-          url: 'https://www.linkedin.com/company/hfnigeria',
+          url: 'https://www.linkedin.com/company/healthcare-federation-of-nigeria-hfn/posts/?feedView=all',
           icon: 'fa-brands fa-linkedin',
         },
         {
           platform: 'Twitter/X',
-          url: 'https://x.com/hfnigeria',
+          url: 'https://x.com/hfn_nigeria',
           icon: 'fab fa-square-x-twitter',
         },
       ],

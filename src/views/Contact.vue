@@ -1,7 +1,7 @@
 <script setup>
 import globe from "@/assets/globe.png";
- import { ref } from "vue";
-import contactApi from "@/api/userRegister"; 
+import { ref } from "vue";
+import contactApi from "@/api/userRegister";
 
 const form = ref({
   name: "",
@@ -39,7 +39,6 @@ const submitForm = async () => {
     loading.value = false;
   }
 };
- 
 </script>
 
 <template>
@@ -187,42 +186,44 @@ const submitForm = async () => {
                 ></textarea>
               </div>
 
-             <div v-if="successMessage" class="p-4 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm font-semibold">
-  {{ successMessage }}
-</div>
+              <div
+                v-if="successMessage"
+                class="p-4 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm font-semibold"
+              >
+                {{ successMessage }}
+              </div>
 
-<div v-if="errorMessage" class="p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm font-semibold">
-  {{ errorMessage }}
-</div>
-
-
+              <div
+                v-if="errorMessage"
+                class="p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm font-semibold"
+              >
+                {{ errorMessage }}
+              </div>
 
               <div class="pt-2">
-                
                 <button
-  type="submit"
-  :disabled="loading"
-  class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition disabled:opacity-60 disabled:cursor-not-allowed"
->
-  <span v-if="!loading">Send Message</span>
-  <span v-else>Sending...</span>
+                  type="submit"
+                  :disabled="loading"
+                  class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <span v-if="!loading">Send Message</span>
+                  <span v-else>Sending...</span>
 
-  <svg
-    v-if="!loading"
-    class="w-5 h-5 ml-2"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
-      d="M14 5l7 7m0 0l-7 7m7-7H3"
-    />
-  </svg>
-</button>
-
+                  <svg
+                    v-if="!loading"
+                    class="w-5 h-5 ml-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M14 5l7 7m0 0l-7 7m7-7H3"
+                    />
+                  </svg>
+                </button>
               </div>
             </form>
           </div>
