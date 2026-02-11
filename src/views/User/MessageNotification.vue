@@ -237,25 +237,65 @@ const fetchPendingConnections = async () => {
   }
 };
 
+// const fetchConnections = async () => {
+//   isLoading.value.connections = true;
+//   try {
+//     const response = await messagingApi.listConnections();
+
+//     allConnections.value = response.results.map((conn) => {
+//       const otherUserId =
+//         conn.sender === currentUserId.value ? conn.receiver_name : conn.sender;
+
+//       const otherUser = directoryUsers.value.find((u) => u.id === otherUserId);
+//       const name = otherUser ? otherUser.name : `User ${otherUserId}`;
+//       const initial = otherUser ? otherUser.initial : "U";
+
+//       return {
+//         id: conn.id,
+//         status: conn.status,
+//         userId: otherUserId,
+//         name,
+//         initial,
+//         position: "Member",
+//       };
+//     });
+
+//     connections.value = allConnections.value.filter(
+//       (c) => c.status === "accepted"
+//     );
+//   } catch (error) {
+//     console.error("Error fetching connections:", error);
+//     toast.error("Failed to load connections");
+//   } finally {
+//     isLoading.value.connections = false;
+//   }
+// };
+
 const fetchConnections = async () => {
   isLoading.value.connections = true;
+
   try {
     const response = await messagingApi.listConnections();
 
     allConnections.value = response.results.map((conn) => {
-      const otherUserId =
-        conn.sender === currentUserId.value ? conn.receiver_name : conn.sender;
+      const isSender = conn.sender === currentUserId.value;
 
-      const otherUser = directoryUsers.value.find((u) => u.id === otherUserId);
-      const name = otherUser ? otherUser.name : `User ${otherUserId}`;
-      const initial = otherUser ? otherUser.initial : "U";
+      const otherUserId = isSender ? conn.receiver : conn.sender;
+      const otherUserName = isSender
+        ? conn.receiver_name
+        : conn.sender_name;
 
       return {
         id: conn.id,
         status: conn.status,
         userId: otherUserId,
-        name,
-        initial,
+        name: otherUserName,
+        initial: otherUserName
+          ?.split(" ")
+          .map((n) => n[0])
+          .join("")
+          .slice(0, 2)
+          .toUpperCase() || "U",
         position: "Member",
       };
     });
@@ -271,6 +311,7 @@ const fetchConnections = async () => {
   }
 };
 
+  
 const fetchNotifications = async () => {
   isLoading.value.notifications = true;
   try {
