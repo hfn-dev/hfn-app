@@ -169,6 +169,10 @@ const loadMembershipTypes = async () => {
   }
 };
 
+const pageTabs = ref(['Members', 'Membership Types'])
+const currentPageTab = ref('Members')
+  
+
 onMounted(() => {
   fetchMembers();
   loadMembershipAnalytics();
@@ -234,6 +238,21 @@ watch(
       <div class="text-sm text-gray-500 mb-6">
         <span class="text-[#006633]">Home</span> > Members
       </div>
+
+      <div class="flex gap-4 mb-6">
+  <button
+    v-for="tab in pageTabs"
+    :key="tab"
+    @click="currentPageTab = tab"
+    :class="[
+      'px-4 py-2 rounded-lg',
+      currentPageTab === tab ? 'bg-[#006633] text-white' : 'bg-gray-100'
+    ]"
+  >
+    {{ tab }}
+  </button>
+</div>
+
 
       <div class="text-center mb-8">
         <h1
