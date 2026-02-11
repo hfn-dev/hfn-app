@@ -24,7 +24,7 @@ const membershipTypes = ref([]);
   description: '',
   price: '',
   duration_days: '',
-  features: '',
+  features: [],
   is_active: true,
   max_courses: ''
 });
@@ -188,7 +188,11 @@ const createMembershipType = async () => {
       duration_days: Number(newMembershipType.value.duration_days),
       max_courses: Number(newMembershipType.value.max_courses),
       price: String(newMembershipType.value.price),
-      features: null
+      features: newMembershipType.value.features
+        ? newMembershipType.value.features
+            .split(',')
+            .map(f => f.trim())
+        : []
     };
 
     await membershipAPI.createMembershipType(payload);
@@ -398,6 +402,12 @@ watch(
           placeholder="Price"
           class="input"
         />
+        <input
+  v-model="newMembershipType.features"
+  placeholder="Features (comma separated)"
+  class="input"
+/>
+
         <input v-model="newMembershipType.duration_days" placeholder="Duration (days)" class="input" type="number" />
         <input v-model="newMembershipType.max_courses" placeholder="Max Courses" class="input" type="number" />
         <label class="flex items-center gap-2">
