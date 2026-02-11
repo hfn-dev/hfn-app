@@ -17,7 +17,13 @@ import { ref } from "vue";
 
 const showAddMemberModal = ref(false);
 const membershipTypes = ref([]);
+ const showMembershipTypeModal = ref(false)
 
+const newMembershipType = ref({
+  name: '',
+  price: '',
+  duration: ''
+})
 const filters = ref({
   membership_type: "",
   role: "",
@@ -169,8 +175,31 @@ const loadMembershipTypes = async () => {
   }
 };
 
-const pageTabs = ref(['Members', 'Membership Types'])
-const currentPageTab = ref('Members')
+ 
+const createMembershipType = async () => {
+  try {
+    await membershipAPI.createMembershipType(newMembershipType.value)
+    await loadMembershipTypes()
+
+    newMembershipType.value = {
+      name: '',
+      price: '',
+      duration: ''
+    }
+  } catch (e) {
+    console.error('Failed to create type', e)
+  }
+}
+
+const deleteMembershipType = async (id) => {
+  try {
+    await membershipAPI.deleteMembershipType(id)
+    membershipTypes.value = membershipTypes.value.filter(t => t.id !== id)
+  } catch (e) {
+    console.error('Failed to delete type', e)
+  }
+}
+
   
 
 onMounted(() => {
@@ -296,12 +325,115 @@ watch(
       <div
         class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4"
       >
+        <div class="flex gap-3">
+    <button
+      @click="showAddMemberModal = true"
+      class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#005528]"
+    >
+      + Add Member
+    </button>
+
+    <button
+      @click="showMembershipTypeModal = true"
+      class="px-4 py-2 border border-[#006633] text-[#006633] rounded-lg hover:bg-[#f0fff0]"
+    >
+      + Membership Type
+    </button>
+  </div>
+        <!-- Membership Type Modal -->
+<div
+  v-if="showMembershipTypeModal"
+  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+>
+  <div class="bg-white w-full max-w-3xl rounded-xl p-6 shadow-lg overflow-y-auto max-h-[90vh]">
+
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-bold text-gray-800">
+        Manage Membership Types
+      </h2>
+
+      <button
+        @click="showMembershipTypeModal = false"
+        class="text-gray-500 hover:text-gray-700"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Create Section -->
+    <div class="mb-8">
+      <h3 class="font-semibold mb-3">Create Membership Type</h3>
+
+      <div class="flex flex-col md:flex-row gap-3">
+        <input
+          v-model="newMembershipType.name"
+          placeholder="Name"
+          class="input"
+        />
+        <input
+          v-model="newMembershipType.price"
+          placeholder="Price"
+          class="input"
+        />
+        <input
+          v-model="newMembershipType.duration"
+          placeholder="Duration (months)"
+          class="input"
+        />
         <button
-          @click="showAddMemberModal = true"
-          class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#005528] flex-shrink-0"
+          @click="createMembershipType"
+          class="px-4 py-2 bg-[#006633] text-white rounded-lg"
         >
-          + Add Member
+          Create
         </button>
+      </div>
+    </div>
+
+    <!-- Existing Types -->
+    <div>
+      <h3 class="font-semibold mb-3">Existing Types</h3>
+
+      <div class="border rounded-lg overflow-hidden">
+        <table class="min-w-full text-sm">
+          <thead class="bg-[#f0fff0]">
+            <tr>
+              <th class="p-3 text-left">Name</th>
+              <th class="p-3 text-left">Price</th>
+              <th class="p-3 text-left">Duration</th>
+              <th class="p-3 text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="type in membershipTypes"
+              :key="type.id"
+              class="border-t"
+            >
+              <td class="p-3">{{ type.name }}</td>
+              <td class="p-3">{{ type.price }}</td>
+              <td class="p-3">{{ type.duration }} months</td>
+              <td class="p-3 text-center">
+                <button
+                  @click="deleteMembershipType(type.id)"
+                  class="text-red-600 hover:text-red-800"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+
+            <tr v-if="!membershipTypes.length">
+              <td colspan="4" class="p-4 text-center text-gray-400">
+                No membership types created yet
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
 
         <div
           class="flex flex-col sm:flex-row sm:items-center sm:gap-3 flex-wrap w-full md:w-auto"
