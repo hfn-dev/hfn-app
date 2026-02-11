@@ -244,7 +244,7 @@ const fetchConnections = async () => {
 
     allConnections.value = response.results.map((conn) => {
       const otherUserId =
-        conn.sender === currentUserId.value ? conn.receiver : conn.sender;
+        conn.sender === currentUserId.value ? conn.receiver_name : conn.sender;
 
       const otherUser = directoryUsers.value.find((u) => u.id === otherUserId);
       const name = otherUser ? otherUser.name : `User ${otherUserId}`;
