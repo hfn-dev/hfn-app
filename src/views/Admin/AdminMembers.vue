@@ -1,9 +1,9 @@
 <script setup>
 import analyticsApi from "@/api/dashboard.js";
-import membershipApi from "@/api/membership.js";
-
-import { useToast } from "@/composables/useToast";
+import membershipAPI from "@/api/membership.js";
 import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
+import { computed, onMounted, watch } from "vue";
+
 import {
   ChevronLeft,
   ChevronRight,
@@ -13,33 +13,29 @@ import {
   Search,
   Trash2,
 } from "lucide-vue-next";
-import { computed, onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
-
-const statusFilter = ref("");
-const categoryFilter = ref("");
-const membershipTypes = ref([]);
-
-const router = useRouter();
-const isEditOpen = ref(false);
-const editingSubscription = ref(null);
-const selectedType = ref(null);
-const toast = useToast();
-const courseTabs = ref(["Published", "Drafts", "Archived"]);
-const currentTab = ref("Published");
-const statCards = ref([]);
-const members = ref([]);
-const activeCourses = computed(() => members.value);
-const searchTerm = ref("");
-
-const membershipCategories = [
-  { label: "All", value: "" },
-  { label: "Individual", value: "individual" },
-  { label: "Corporate", value: "corporate" },
-  { label: "Diaspora", value: "diaspora" },
-];
+import { ref } from "vue";
 
 const showAddMemberModal = ref(false);
+const membershipTypes = ref([]);
+ const showMembershipTypeModal = ref(false)
+
+ const newMembershipType = ref({
+  name: '',
+  description: '',
+  price: '',
+  duration_days: '',
+  features: '',
+  is_active: true,
+  max_courses: ''
+});
+ 
+  
+const filters = ref({
+  membership_type: "",
+  role: "",
+  status: "",
+  payment_method: "",
+});
 
 const newMemberForm = ref({
   name: "",
@@ -50,47 +46,27 @@ const newMemberForm = ref({
   payment_method: "",
 });
 
-const submitNewMember = async () => {
-  try {
-    const payload = {
-      name: newMemberForm.value.name,
-      email: newMemberForm.value.email,
-      phone: newMemberForm.value.phone,
-      membership_type: newMemberForm.value.membership_type,
-      role: newMemberForm.value.role,
-      payment_method: newMemberForm.value.payment_method,
-    };
-
-    const application = await membershipApi.createApplication(payload);
-
-    await membershipApi.approveApplication(application.id, {
-      approved_by_admin: true,
-    });
-
-    showAddMemberModal.value = false;
-    await loadMembers(); // refresh table
-
-    // Reset form
-    newMemberForm.value = {
-      name: "",
-      email: "",
-      phone: "",
-      membership_type: "",
-      role: "",
-      payment_method: "",
-    };
-  } catch (error) {
-    console.error("Failed to add member", error);
-  }
-};
-
 const resetFilters = () => {
+  filters.value = {
+    membership_type: "",
+    role: "",
+    status: "",
+    payment_method: "",
+  };
   searchTerm.value = "";
-  statusFilter.value = "";
-  categoryFilter.value = "";
   currentPage.value = 1;
-  loadMembers();
+  fetchMembers();
 };
+
+const courseTabs = ref(["Published", "Drafts", "Archived"]);
+const currentTab = ref("Published");
+const members = ref([]);
+const itemsPerPage = 10;
+const searchTerm = ref("");
+const statCards = ref([]);
+
+const currentPage = ref(1);
+const totalPages = ref(1);
 
 const loadMembershipAnalytics = async () => {
   try {
@@ -151,101 +127,159 @@ const loadMembershipAnalytics = async () => {
   }
 };
 
-const loadMembers = async () => {
+const submitNewMember = async () => {
   try {
-    const data = await membershipApi.listSubscriptions({
+    const payload = {
+      name: newMemberForm.value.name,
+      email: newMemberForm.value.email,
+      phone: newMemberForm.value.phone,
+      membership_type: newMemberForm.value.membership_type,
+      role: newMemberForm.value.role,
+      payment_method: newMemberForm.value.payment_method,
+    };
+
+    const application = await membershipAPI.createApplication(payload);
+
+    await membershipAPI.approveApplication(application.id, {
+      approved_by_admin: true,
+    });
+
+    showAddMemberModal.value = false;
+    fetchMembers();
+
+    // Reset form
+    newMemberForm.value = {
+      name: "",
+      email: "",
+      phone: "",
+      membership_type: "",
+      role: "",
+      payment_method: "",
+    };
+  } catch (error) {
+    console.error("Failed to add member", error);
+  }
+};
+
+const fetchMembers = async () => {
+  try {
+    const data = await membershipAPI.listApplications({
       page: currentPage.value,
-      search: searchTerm.value,
-      status: statusFilter.value,
-      category: categoryFilter.value,
     });
-
-    members.value = data.results.map((item) => ({
-      id: item.id,
-      title: item.user?.full_name || "—",
-      enrollments: item.membership_type?.name || "—",
-      completion: item.last_payment_date || "—",
-      lastUpdate: item.status === "active" ? "Active" : "Inactive",
-    }));
-
-    totalPages.value = Math.ceil(data.count / 10);
+    members.value = data.results || data.data || [];
+    totalPages.value = data.count ? Math.ceil(data.count / itemsPerPage) : 1;
   } catch (error) {
-    console.error("Failed to load members", error);
-  }
-};
-
-const handleAction = (action, member) => {
-  if (action === "View") {
-    router.push(`/admin/members/${member.id}`);
-  }
-
-  if (action === "Edit") {
-    editingSubscription.value = { ...member };
-    selectedType.value = member.membershipTypeId;
-    isEditOpen.value = true;
-  }
-
-  if (action === "Delete") {
-    cancelSubscription(member.id);
-  }
-};
-
-const cancelSubscription = async (id) => {
-  const confirmCancel = confirm(
-    "Are you sure you want to cancel this subscription?"
-  );
-
-  if (!confirmCancel) return;
-
-  try {
-    await membershipApi.cancelSubscription(id);
-    await loadMembers(); // refresh list
-  } catch (error) {
-    console.error("Failed to cancel subscription", error);
-  }
-};
-
-const currentPage = ref(1);
-const totalPages = 2;
-
-const goToPage = (page) => {
-  if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page;
-    loadMembers();
-  }
-};
-
-const saveEdit = async () => {
-  try {
-    await membershipApi.updateSubscription(editingSubscription.value.id, {
-      membership_type: selectedType.value,
-      status: editingSubscription.value.status,
-    });
-
-    isEditOpen.value = false;
-    editingSubscription.value = null;
-
-    await loadMembers(); // refresh table
-  } catch (error) {
-    console.error("Failed to update subscription", error);
+    console.error("Failed to fetch members", error);
   }
 };
 
 const loadMembershipTypes = async () => {
   try {
-    const data = await membershipApi.listMembershipTypes();
-    membershipTypes.value = data.results; 
-  } catch (error) {
-    console.error("Failed to load membership types", error);
+    membershipTypes.value = await membershipAPI.listMembershipTypes();
+  } catch (e) {
+    console.error("Failed to load membership types", e);
   }
 };
+
+const createMembershipType = async () => {
+  try {
+    const payload = {
+      ...newMembershipType.value,
+      duration_days: Number(newMembershipType.value.duration_days),
+      max_courses: Number(newMembershipType.value.max_courses),
+      price: String(newMembershipType.value.price),
+      features: null
+    };
+
+    await membershipAPI.createMembershipType(payload);
+
+    await loadMembershipTypes();
+
+    showCreateDialog.value = false;
+
+    newMembershipType.value = {
+      name: '',
+      description: '',
+      price: '',
+      duration_days: '',
+      features: '',
+      is_active: true,
+      max_courses: ''
+    };
+
+  } catch (err) {
+    console.error("Create failed:", err.response?.data || err);
+  }
+};
+ 
+
+const deleteMembershipType = async (id) => {
+  try {
+    await membershipAPI.deleteMembershipType(id)
+    membershipTypes.value = membershipTypes.value.filter(t => t.id !== id)
+  } catch (e) {
+    console.error('Failed to delete type', e)
+  }
+}
+
   
 
 onMounted(() => {
+  fetchMembers();
   loadMembershipAnalytics();
-  loadMembers();
   loadMembershipTypes();
 });
+
+const handleAction = async (action, memberId) => {
+  try {
+    if (action === "Delete") {
+      await membershipAPI.deleteApplication(memberId);
+      members.value = members.value.filter((m) => m.id !== memberId);
+    } else if (action === "Edit") {
+      console.log(`Edit member ID: ${memberId}`);
+    } else if (action === "View") {
+      const data = await membershipAPI.getApplication(memberId);
+      console.log("Member Details:", data);
+    }
+  } catch (error) {
+    console.error(`${action} failed for member ${memberId}:`, error);
+  }
+};
+
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+    fetchMembers();
+  }
+};
+
+const filteredMembers = computed(() => {
+  if (!searchTerm.value) return members.value;
+
+  const term = searchTerm.value.toLowerCase();
+  return list.filter(
+    (m) =>
+      (m.name || "").toLowerCase().includes(term) ||
+      (m.category || "").toLowerCase().includes(term) ||
+      (m.lastPayment || "").toLowerCase().includes(term)
+  );
+});
+
+const paginatedMembers = computed(() => {
+  const list = filteredMembers.value || [];
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return list.slice(start, end);
+});
+
+watch(
+  [searchTerm, filters, currentPage],
+  () => {
+    currentPage.value = 1;
+    fetchMembers();
+  },
+  { deep: true }
+);
 </script>
 
 <template>
@@ -255,6 +289,21 @@ onMounted(() => {
       <div class="text-sm text-gray-500 mb-6">
         <span class="text-[#006633]">Home</span> > Members
       </div>
+
+      <div class="flex gap-4 mb-6">
+  <button
+    v-for="tab in pageTabs"
+    :key="tab"
+    @click="currentPageTab = tab"
+    :class="[
+      'px-4 py-2 rounded-lg',
+      currentPageTab === tab ? 'bg-[#006633] text-white' : 'bg-gray-100'
+    ]"
+  >
+    {{ tab }}
+  </button>
+</div>
+
 
       <div class="text-center mb-8">
         <h1
@@ -295,67 +344,180 @@ onMounted(() => {
         </div>
       </div>
 
-      <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="text-lg font-semibold text-gray-800">Members List</h2>
+      <div
+        class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4"
+      >
+        <div class="flex gap-3">
+    <button
+      @click="showAddMemberModal = true"
+      class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#005528]"
+    >
+      + Add Member
+    </button>
 
-          <button
-            @click="showAddMemberModal = true"
-            class="px-5 py-2 rounded-full bg-[#006633] text-white text-sm font-medium hover:bg-[#004d26] transition"
-          >
-            + Add Member
-          </button>
-        </div>
+    <button
+      @click="showMembershipTypeModal = true"
+      class="px-4 py-2 border border-[#006633] text-[#006633] rounded-lg hover:bg-[#f0fff0]"
+    >
+      + Membership Type
+    </button>
+  </div>
+        <!-- Membership Type Modal -->
+<div
+  v-if="showMembershipTypeModal"
+  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+>
+  <div class="bg-white w-full max-w-3xl rounded-xl p-6 shadow-lg overflow-y-auto max-h-[90vh]">
 
-        <div class="flex flex-wrap gap-3 items-center justify-between mb-6">
-          <div class="flex gap-3">
-            <select
-              v-model="categoryFilter"
-              class="border rounded-lg px-3 py-2 text-sm"
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-bold text-gray-800">
+        Manage Membership Types
+      </h2>
+
+      <button
+        @click="showMembershipTypeModal = false"
+        class="text-gray-500 hover:text-gray-700"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Create Section -->
+    <div class="mb-8">
+      <h3 class="font-semibold mb-3">Create Membership Type</h3>
+
+      <div class="flex flex-col md:flex-row gap-3">
+        <input
+          v-model="newMembershipType.name"
+          placeholder="Name"
+          class="input"
+        />
+        <input v-model="newMembershipType.description" placeholder="Description" class="input" />
+        <input
+          v-model="newMembershipType.price"
+          placeholder="Price"
+          class="input"
+        />
+        <input v-model="newMembershipType.duration_days" placeholder="Duration (days)" class="input" type="number" />
+        <input v-model="newMembershipType.max_courses" placeholder="Max Courses" class="input" type="number" />
+        <label class="flex items-center gap-2">
+  <input type="checkbox" v-model="newMembershipType.is_active" />
+  Active
+</label>
+        <button
+          @click="createMembershipType"
+          class="px-4 py-2 bg-[#006633] text-white rounded-lg"
+        >
+          Create
+        </button>
+      </div>
+    </div>
+
+    <!-- Existing Types -->
+    <div>
+      <h3 class="font-semibold mb-3">Existing Types</h3>
+
+      <div class="border rounded-lg overflow-hidden">
+        <table class="min-w-full text-sm">
+          <thead class="bg-[#f0fff0]">
+            <tr>
+              <th class="p-3 text-left">Name</th>
+              <th class="p-3 text-left">Price</th>
+              <th class="p-3 text-left">Duration</th>
+              <th class="p-3 text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="type in membershipTypes"
+              :key="type.id"
+              class="border-t"
             >
-              <option value="">All Categories</option>
-              <option value="individual">Individual</option>
-              <option value="corporate">Corporate</option>
-              <option value="diaspora">Diaspora</option>
-            </select>
+              <td class="p-3">{{ type.name }}</td>
+              <td class="p-3">{{ type.price }}</td>
+              <td class="p-3">{{ type.duration_days }} months</td>
+              <td class="p-3 text-center">
+                <button
+                  @click="deleteMembershipType(type.id)"
+                  class="text-red-600 hover:text-red-800"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
 
-            <select
-              v-model="statusFilter"
-              class="border rounded-lg px-3 py-2 text-sm"
-            >
-              <option value="">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
+            <tr v-if="!membershipTypes.length">
+              <td colspan="4" class="p-4 text-center text-gray-400">
+                No membership types created yet
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-            <button
-              @click="loadMembers"
-              class="px-4 py-2 rounded-lg bg-[#00cc66] text-white text-sm"
-            >
-              Apply
-            </button>
+  </div>
+</div>
 
-            <button
-              @click="resetFilters"
-              class="px-4 py-2 rounded-lg border text-sm"
-            >
-              Reset
-            </button>
-          </div>
-
-          <div class="relative w-full max-w-sm">
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:gap-3 flex-wrap w-full md:w-auto"
+        >
+          <div class="relative w-full sm:w-64">
             <Search
-              class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+              class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
             />
             <input
+              type="text"
               v-model="searchTerm"
-              @keyup.enter="loadMembers"
-              placeholder="Search by name..."
-              class="w-full pl-10 pr-4 py-2 border rounded-lg"
+              placeholder="Search..."
+              class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors"
             />
           </div>
-        </div>
 
+          <select v-model="filters.membership_type" class="filter">
+            <option value="">All Memberships</option>
+            <option
+              v-for="type in membershipTypes"
+              :key="type.id"
+              :value="type.id"
+            >
+              {{ type.name }}
+            </option>
+          </select>
+
+          <select v-model="filters.role" class="filter">
+            <option value="">All Roles</option>
+            <option value="individual">Admin</option>
+            <option value="corporate">Member</option>
+            <option value="admin">Learner</option>
+            <option value="admin">Tutor</option>
+          </select>
+
+          <select v-model="filters.status" class="filter">
+            <option value="">All Status</option>
+            <option value="approved">Approved</option>
+            <option value="pending">Pending</option>
+            <option value="rejected">Rejected</option>
+          </select>
+
+          <select v-model="filters.payment_method" class="filter">
+            <option value="">All Payments</option>
+            <option value="card">Card</option>
+            <option value="transfer">Transfer</option>
+            <option value="cash">Cash</option>
+          </select>
+
+          <button
+            @click="resetFilters"
+            class="px-3 py-2 border rounded-lg text-sm hover:bg-gray-100"
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+        
         <table class="min-w-full divide-y divide-gray-200">
           <thead>
             <tr
@@ -398,8 +560,8 @@ onMounted(() => {
             class="text-gray-600 text-sm font-light divide-y divide-gray-100"
           >
             <tr
-              v-for="course in activeCourses"
-              :key="course.id"
+              v-for="member in paginatedMembers"
+              :key="member.id"
               class="hover:bg-[#f9fff9] transition-colors"
             >
               <td class="py-3 px-3 whitespace-nowrap">
@@ -411,31 +573,32 @@ onMounted(() => {
               <td
                 class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]"
               >
-                {{ course.title }}
+                {{ member.name }}
               </td>
               <td class="py-3 px-3">
-                {{ course.enrollments !== null ? course.enrollments : "-" }}
+                {{ member.enrollments !== null ? member.enrollments : "-" }}
               </td>
               <td class="py-3 px-3">
                 <span
                   :class="{
-                    'text-green-600 font-semibold':
-                      course.completion.includes('100'),
+                    'text-green-600 font-semibold': (member.completion || '')
+                      .toString()
+                      .includes('100'),
                     'text-orange-500':
-                      parseFloat(course.completion) < 50 &&
-                      course.completion !== '-',
+                      Number.parseFloat(member.completion) < 50 &&
+                      member.completion !== '-',
                   }"
                 >
-                  {{ course.completion }}
+                  {{ member.completion }}
                 </span>
               </td>
               <td class="py-3 px-3">
-                {{ course.lastUpdate }}
+                {{ member.lastUpdate }}
               </td>
               <td class="py-3 px-3 text-center">
                 <div class="flex item-center justify-center space-x-2">
                   <button
-                    @click="handleAction('View', course)"
+                    @click="handleAction('View', member.id)"
                     class="w-6 h-6 transform hover:text-blue-500 hover:scale-110 transition-transform p-0.5"
                   >
                     <Eye
@@ -443,7 +606,7 @@ onMounted(() => {
                     />
                   </button>
                   <button
-                    @click="handleAction('Edit', course)"
+                    @click="handleAction('Edit', member.id)"
                     class="w-6 h-6 transform hover:text-green-500 hover:scale-110 transition-transform p-0.5"
                   >
                     <Edit2
@@ -451,7 +614,7 @@ onMounted(() => {
                     />
                   </button>
                   <button
-                    @click="handleAction('Delete', course.id)"
+                    @click="handleAction('Delete', member.id)"
                     class="w-6 h-6 transform hover:text-red-500 hover:scale-110 transition-transform p-0.5"
                   >
                     <Trash2
@@ -463,60 +626,6 @@ onMounted(() => {
             </tr>
           </tbody>
         </table>
-
-        <div
-          v-if="isEditOpen"
-          class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
-        >
-          <div class="bg-white rounded-xl w-full max-w-md p-6 shadow-xl">
-            <h3 class="text-xl font-semibold mb-4">Edit Subscription</h3>
-
-            <div class="mb-4">
-              <label class="block text-sm font-medium mb-1"
-                >Membership Type</label
-              >
-              <select
-                v-model="selectedType"
-                class="w-full border rounded-lg px-3 py-2"
-              >
-                <option
-                  v-for="type in membershipTypes"
-                  :key="type.id"
-                  :value="type.id"
-                >
-                  {{ type.name }}
-                </option>
-              </select>
-            </div>
-
-            <div class="mb-6">
-              <label class="block text-sm font-medium mb-1">Status</label>
-              <select
-                v-model="editingSubscription.status"
-                class="w-full border rounded-lg px-3 py-2"
-              >
-                <option value="active">Active</option>
-                <option value="cancelled">Cancelled</option>
-              </select>
-            </div>
-
-            <div class="flex justify-end space-x-3">
-              <button
-                @click="isEditOpen = false"
-                class="px-4 py-2 rounded-lg border"
-              >
-                Cancel
-              </button>
-
-              <button
-                @click="saveEdit"
-                class="px-4 py-2 rounded-lg bg-[#00cc66] text-white"
-              >
-                Save Changes
-              </button>
-            </div>
-          </div>
-        </div>
 
         <div class="flex justify-end items-center mt-6 text-sm text-gray-600">
           <span class="mr-4">Page {{ currentPage }} of {{ totalPages }}</span>
@@ -613,8 +722,11 @@ onMounted(() => {
   </div>
 </template>
 
-<!-- <style scoped>
-.input {
-  @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors;
+<style scoped>
+@reference "tailwindcss";
+
+.filter {
+  @apply px-3 py-2 border rounded-lg text-sm focus:ring-[#00cc66];
 }
-</style> -->
+</style>
+
