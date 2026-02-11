@@ -283,7 +283,7 @@ const fetchConnections = async () => {
       const otherUserId = isSender ? conn.receiver : conn.sender;
       const otherUserName = isSender
         ? conn.receiver_name
-        : conn.sender_name;
+        : conn.receiver_name;
 
       return {
         id: conn.id,
