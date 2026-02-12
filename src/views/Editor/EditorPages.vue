@@ -71,6 +71,21 @@ const availablePageTypes = computed(() =>
       description: '',
     })
   }
+  if (activeSection.value === 'newsletterSection') {
+    currentSectionData.value.items.push({
+      date: '',
+      text: '',
+      pdfUrl: '',
+    })
+  }
+
+  if (activeSection.value === 'publicationsSection') {
+    currentSectionData.value.items.push({
+      title: '',
+      description: '',
+      pdfUrl: '',
+    })
+  }  
 }
 
 const deleteItem = (index) => {
@@ -301,25 +316,6 @@ const deleteFaq = (faqId) => {
     console.log(`Deleted FAQ with ID: ${faqId}`);
   }
 };
-
-
-const addItem = () => {
-  if (activeSection.value === 'newsletterSection') {
-    currentSectionData.value.items.push({
-      date: '',
-      text: '',
-      pdfUrl: '',
-    })
-  }
-
-  if (activeSection.value === 'publicationsSection') {
-    currentSectionData.value.items.push({
-      title: '',
-      description: '',
-      pdfUrl: '',
-    })
-  }
-}
 
 const deleteItem = (index) => {
   currentSectionData.value.items.splice(index, 1)
