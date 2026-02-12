@@ -2161,6 +2161,232 @@ const removeFaq = (index) => {
     Add Option
   </button>
 </div>
+<div
+  v-else-if="
+    activePage.page_type.toLowerCase() === 'membership' &&
+    activeSection === 'hero'
+  "
+  class="space-y-4"
+>
+  <div>
+    <label class="block text-xs font-semibold uppercase text-gray-500">
+      Headline Top
+    </label>
+    <input
+      v-model="currentSectionData.headlineTop"
+      type="text"
+      class="w-full border-none focus:ring-0 p-0 m-0"
+    />
+  </div>
+
+  <div>
+    <label class="block text-xs font-semibold uppercase text-gray-500">
+      Headline Bottom
+    </label>
+    <input
+      v-model="currentSectionData.headlineBottom"
+      type="text"
+      class="w-full border-none focus:ring-0 p-0 m-0"
+    />
+  </div>
+
+  <div>
+    <label class="block text-xs font-semibold uppercase text-gray-500">
+      Description
+    </label>
+    <textarea
+      v-model="currentSectionData.description"
+      rows="4"
+      class="w-full border-none focus:ring-0 p-0 m-0 resize-none"
+    />
+  </div>
+
+  <div>
+    <label class="block text-xs font-semibold uppercase text-gray-500">
+      Hero Image
+    </label>
+    <input
+      v-model="currentSectionData.image"
+      type="text"
+      class="w-full border-none focus:ring-0 p-0 m-0"
+    />
+  </div>
+</div>
+<div
+  v-else-if="
+    activePage.page_type.toLowerCase() === 'membership' &&
+    activeSection === 'sectionTitle'
+  "
+>
+  <label class="block text-xs font-semibold uppercase text-gray-500">
+    Section Title
+  </label>
+  <input
+    v-model="currentSectionData"
+    type="text"
+    class="w-full border-none focus:ring-0 p-0 m-0"
+  />
+</div>
+
+
+
+<div
+  v-else-if="
+    activePage.page_type.toLowerCase() === 'membership' &&
+    activeSection === 'categories'
+  "
+  class="space-y-6"
+>
+  <div
+    v-for="(category, catIndex) in currentSectionData"
+    :key="catIndex"
+    class="border border-gray-300 rounded-lg p-4 space-y-4"
+  >
+    <!-- Category Info -->
+    <div>
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Category Name
+      </label>
+      <input
+        v-model="category.name"
+        type="text"
+        class="w-full border-none focus:ring-0 p-0 m-0"
+      />
+    </div>
+
+    <div>
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Description
+      </label>
+      <input
+        v-model="category.description"
+        type="text"
+        class="w-full border-none focus:ring-0 p-0 m-0"
+      />
+    </div>
+
+    <!-- Plans -->
+    <div
+      v-for="(plan, planIndex) in category.plans"
+      :key="planIndex"
+      class="border border-gray-200 rounded-md p-3 space-y-2"
+    >
+      <input v-model="plan.title" placeholder="Plan Title" class="w-full border-none p-0 m-0" />
+      <input v-model="plan.price" placeholder="Price" class="w-full border-none p-0 m-0" />
+      <input v-model="plan.audience" placeholder="Audience" class="w-full border-none p-0 m-0" />
+
+      <!-- Benefits -->
+      <div
+        v-for="(benefit, benefitIndex) in plan.benefits"
+        :key="benefitIndex"
+        class="flex items-center gap-2"
+      >
+        <input
+          v-model="plan.benefits[benefitIndex]"
+          class="flex-1 border-none p-0 m-0"
+        />
+        <button
+          class="text-red-500 text-sm"
+          @click="plan.benefits.splice(benefitIndex, 1)"
+        >
+          X
+        </button>
+      </div>
+
+      <button
+        class="text-sm text-black"
+        @click="plan.benefits.push('New benefit')"
+      >
+        + Add Benefit
+      </button>
+
+      <button
+        class="text-red-500 text-sm"
+        @click="category.plans.splice(planIndex, 1)"
+      >
+        Delete Plan
+      </button>
+    </div>
+
+    <button
+      class="text-sm bg-black text-white px-3 py-1 rounded"
+      @click="category.plans.push({
+        title: '',
+        price: '',
+        audience: '',
+        benefits: []
+      })"
+    >
+      + Add Plan
+    </button>
+
+    <button
+      class="text-red-500 text-sm"
+      @click="currentSectionData.splice(catIndex, 1)"
+    >
+      Delete Category
+    </button>
+  </div>
+
+  <button
+    class="bg-black text-white px-4 py-2 rounded"
+    @click="currentSectionData.push({
+      id: '',
+      name: '',
+      description: '',
+      plans: []
+    })"
+  >
+    + Add Category
+  </button>
+</div>
+<div
+  v-else-if="
+    activePage.page_type.toLowerCase() === 'membership' &&
+    activeSection === 'valuePropositionTabs'
+  "
+  class="space-y-6"
+>
+  <div
+    v-for="(tab, index) in currentSectionData"
+    :key="index"
+    class="border border-gray-300 rounded-lg p-4 space-y-3"
+  >
+    <input v-model="tab.name" placeholder="Tab Name" class="w-full border-none p-0 m-0" />
+    <input v-model="tab.titleHtml" placeholder="Title HTML" class="w-full border-none p-0 m-0" />
+    <input v-model="tab.color" placeholder="Color" class="w-full border-none p-0 m-0" />
+
+    <label class="block text-xs font-semibold uppercase text-gray-500">
+      Content HTML
+    </label>
+    <textarea
+      v-model="tab.contentHtml"
+      rows="6"
+      class="w-full border-none resize-none p-0 m-0"
+    />
+
+    <button
+      class="text-red-500 text-sm"
+      @click="currentSectionData.splice(index, 1)"
+    >
+      Delete Tab
+    </button>
+  </div>
+
+  <button
+    class="bg-black text-white px-4 py-2 rounded"
+    @click="currentSectionData.push({
+      id: '',
+      name: '',
+      titleHtml: '',
+      color: '',
+      contentHtml: ''
+    })"
+  >
+    + Add Tab
+  </button>
+</div>
+
 
 
           <div
