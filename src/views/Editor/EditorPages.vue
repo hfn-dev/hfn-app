@@ -225,7 +225,7 @@ const deletePage = async (id) => {
   try {
     await pagesApi.deletePage(id);
     pages.value = pages.value.filter((page) => page.id !== id);
-    console.log(`Deleted page with ID: ${id}`);
+    console.log(`Deleted page with slug: ${id}`);
   } catch (e) {
     console.error("Failed to delete page", e);
   }
@@ -558,7 +558,7 @@ const removeFaq = (index) => {
               </button>
 
               <button
-                @click="deletePage(page.id)"
+                @click="deletePage(page.page_type)"
                 class="text-red-500 hover:text-red-700 transition duration-200 p-2 rounded-full hover:bg-red-50"
                 aria-label="Delete Page"
                 title="Delete Page"
