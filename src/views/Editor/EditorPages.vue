@@ -16,6 +16,30 @@ const currentSectionData = ref(null);
 const pages = ref([]);
 const isLoading = ref(false);
 
+  const heroUploadRef = ref(null)
+
+const handleHeroImageUpload = (event) => {
+  const file = event.target.files[0]
+  if (!file) return
+
+  if (file.size > 1024 * 1024) {
+    alert("Image must be less than 1MB")
+    return
+  }
+
+  currentSectionData.value.heroImage = file
+
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    currentSectionData.value.heroImagePreview = e.target.result
+  }
+  reader.readAsDataURL(file)
+}
+
+const resetHeroColor = () => {
+  currentSectionData.value.backgroundColor = "#FFFFFF"
+}
+
 const availablePageTypes = computed(() =>
   Object.keys(pageSchemas)
 );
@@ -638,125 +662,173 @@ const toggleVisibility = async (page) => {
             </button>
           </div>
 
-          <div v-if="activePage.page_type.toLowerCase() === 'home' && activeSection === 'hero'">
-            <div class="flex space-x-6">
-              <div class="w-3/5 space-y-6">
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                    >Title</label
-                  >
-                  <input
-                    v-model="currentSectionData.titleHighlight"
-                    type="text"
-                    class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-                    placeholder="Enter section title"
-                  />
-                </div>
+          <div
+  v-if="activePage.page_type.toLowerCase() === 'home' && activeSection === 'hero'"
+>
+  <div class="flex space-x-6">
+    <!-- LEFT SIDE -->
+    <div class="w-3/5 space-y-6">
+      
+      <!-- Highlight Title -->
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">
+          Highlight Title
+        </label>
+        <input
+          v-model="currentSectionData.titleHighlight"
+          type="text"
+          class="w-full text-lg border-none focus:ring-0 p-0 m-0"
+          placeholder="Healthcare"
+        />
+      </div>
 
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                    >Sub Text</label
-                  >
-                  <textarea
-                    v-model="currentSectionData.subText"
-                    rows="5"
-                    class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-                    placeholder="Enter detailed sub text"
-                  ></textarea>
-                </div>
+      <!-- Main Title -->
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">
+          Main Title
+        </label>
+        <input
+          v-model="currentSectionData.titleMain"
+          type="text"
+          class="w-full text-lg border-none focus:ring-0 p-0 m-0"
+          placeholder="Advocacy."
+        />
+      </div>
 
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                    >CTA</label
-                  >
-                  <input
-                    v-model="currentSectionData.ctaText"
-                    type="text"
-                    class="w-full text-base border-none focus:ring-0 p-0 m-0"
-                    placeholder="Enter Call to Action text"
-                  />
-                </div>
-              </div>
+      <!-- Intro Line -->
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">
+          Intro Line
+        </label>
+        <textarea
+          v-model="currentSectionData.introLine"
+          rows="2"
+          class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+        />
+      </div>
 
-              <div class="w-2/5 space-y-6">
-                <div
-                  class="border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center bg-white shadow-inner"
-                >
-                  <div
-                    class="bg-red-50 h-40 w-full mb-4 border border-dashed border-gray-400 rounded-lg flex flex-col items-center justify-center text-center"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-8 w-8 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                      />
-                    </svg>
-                    <span class="text-sm text-gray-600 mt-2">Image Upload</span>
-                  </div>
-                  <div class="text-xs text-gray-500 space-y-1 w-full">
-                    <p class="font-semibold">Image Requirements:</p>
-                    <ul class="list-disc list-inside space-y-0">
-                      <li>File types: jpeg, jpg, png.</li>
-                      <li>File size: not more than 1MB.</li>
-                      <li>Dimensions: 1024x1024px.</li>
-                    </ul>
-                  </div>
-                </div>
+      <!-- Intro Text -->
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">
+          Intro Text
+        </label>
+        <textarea
+          v-model="currentSectionData.introText"
+          rows="2"
+          class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+        />
+      </div>
 
-                <div
-                  class="border border-gray-300 rounded-lg p-3 space-y-2 bg-white"
-                >
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                    >Background Colour</label
-                  >
-                  <div class="flex items-center space-x-2">
-                    <input
-                      v-model="currentSectionData.backgroundColor"
-                      type="color"
-                      class="w-8 h-8 rounded border-none p-0 cursor-pointer"
-                    />
-                    <input
-                      v-model="currentSectionData.backgroundColor"
-                      type="text"
-                      class="flex-grow text-base border-none focus:ring-0 p-0 m-0 font-mono uppercase"
-                      placeholder="#FFFFFF"
-                    />
-                    <button
-                      class="text-gray-500 hover:text-green-600"
-                      title="Reset Color"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path
-                          d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      <!-- Sub Text -->
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">
+          Sub Text
+        </label>
+        <textarea
+          v-model="currentSectionData.subText"
+          rows="4"
+          class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+        />
+      </div>
+
+      <!-- CTA Text -->
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">
+          CTA Text
+        </label>
+        <input
+          v-model="currentSectionData.ctaText"
+          type="text"
+          class="w-full text-base border-none focus:ring-0 p-0 m-0"
+        />
+      </div>
+
+      <!-- CTA Link -->
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">
+          CTA Link
+        </label>
+        <input
+          v-model="currentSectionData.ctaLink"
+          type="text"
+          class="w-full text-base border-none focus:ring-0 p-0 m-0"
+          placeholder="/register"
+        />
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="w-2/5 space-y-6">
+
+      <!-- IMAGE UPLOAD -->
+      <div
+        class="border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center bg-white shadow-inner"
+      >
+        <input
+          type="file"
+          accept="image/png, image/jpeg"
+          class="hidden"
+          ref="heroUploadRef"
+          @change="handleHeroImageUpload"
+        />
+
+        <div
+          class="bg-red-50 h-40 w-full mb-4 border border-dashed border-gray-400 rounded-lg flex items-center justify-center cursor-pointer"
+          @click="heroUploadRef.click()"
+        >
+          <img
+            v-if="currentSectionData.heroImagePreview"
+            :src="currentSectionData.heroImagePreview"
+            class="h-full object-contain"
+          />
+
+          <span v-else class="text-sm text-gray-600">
+            Click to upload hero image
+          </span>
+        </div>
+
+        <div class="text-xs text-gray-500 space-y-1 w-full">
+          <p class="font-semibold">Image Requirements:</p>
+          <ul class="list-disc list-inside">
+            <li>jpeg, jpg, png</li>
+            <li>Max 1MB</li>
+            <li>1024x1024px recommended</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- BACKGROUND COLOR -->
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2 bg-white">
+        <label class="block text-xs font-semibold uppercase text-gray-500">
+          Background Colour
+        </label>
+
+        <div class="flex items-center space-x-2">
+          <input
+            v-model="currentSectionData.backgroundColor"
+            type="color"
+            class="w-8 h-8 rounded border-none p-0 cursor-pointer"
+          />
+
+          <input
+            v-model="currentSectionData.backgroundColor"
+            type="text"
+            class="flex-grow text-base border-none focus:ring-0 p-0 m-0 font-mono uppercase"
+          />
+
+          <button
+            class="text-gray-500 hover:text-green-600"
+            @click="resetHeroColor"
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
           <div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'hero'">
             <div class="flex space-x-6">
@@ -1604,28 +1676,6 @@ const toggleVisibility = async (page) => {
                   <span>Add item</span>
                 </button>
               </div>
-            </div>
-          </div>
-
-          <div v-else class="text-gray-600 p-6 bg-gray-100 border rounded-lg">
-            <h3 class="text-xl font-medium mb-3">Section Content</h3>
-            <p>
-              Content for
-              <strong>{{ currentSectionData.name || activeSection }}</strong>
-              goes here. Use the title field below to update the content.
-            </p>
-            <div
-              class="w-full border border-gray-300 rounded-lg p-3 space-y-2 mt-4"
-            >
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Title (Fallback)</label
-              >
-              <input
-                v-model="currentSectionData.title"
-                type="text"
-                class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-                placeholder="Enter section title"
-              />
             </div>
           </div>
 
