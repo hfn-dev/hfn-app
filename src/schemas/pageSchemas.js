@@ -228,87 +228,107 @@ export const pageSchemas = {
     ],
   },
   about: {
-    hero: {
-      title: 'Who We Are',
-      subtitle: "The Unified Voice of Nigeria's Private Healthcare Sector",
-      description:
-        'Dedicated to collective action and policy advocacy to improve health outcomes for all Nigerians.',
-      image: 'about-hero-bg',
-    },
-
-    missionVision: {
-      mission: {
-        title: 'Our Mission',
-        text: 'To create an enabling environment for the private healthcare sector in Nigeria through advocacy, partnership, and capacity building.',
-        icon: 'target-icon',
-      },
-      vision: {
-        title: 'Our Vision',
-        text: 'A thriving private healthcare sector that contributes significantly to achieving universal health coverage in Nigeria.',
-        icon: 'eye-icon',
-      },
-    },
-
-    values: {
-      title: 'Our Core Values',
-      list: [
-        {
-          title: 'Integrity',
-          description:
-            'Transparency and ethical conduct in all our engagements.',
-          icon: 'shield',
-        },
-        {
-          title: 'Collaboration',
-          description:
-            'Fostering partnerships across the healthcare value chain.',
-          icon: 'users',
-        },
-        {
-          title: 'Innovation',
-          description:
-            'Driving modern solutions to age-old healthcare challenges.',
-          icon: 'lightbulb',
-        },
-        {
-          title: 'Impact',
-          description:
-            'Ensuring our advocacy results in tangible patient benefits.',
-          icon: 'trending-up',
-        },
-      ],
-    },
-
-    history: {
-      title: 'Our Evolution',
-      milestones: [
-        {
-          year: '2013',
-          event: 'Conceptualization and initial stakeholder engagement.',
-        },
-        {
-          year: '2014',
-          event: 'Official registration and launch of the Federation.',
-        },
-        {
-          year: '2018',
-          event:
-            'Key policy breakthrough in public-private partnership frameworks.',
-        },
-        {
-          year: '2024',
-          event: 'Exceeding 100+ registered health guardians and partners.',
-        },
-      ],
-    },
-
-    governance: {
-      title: 'Governance & Structure',
-      description:
-        'HFN is governed by an elected Executive Committee representing various sub-sectors of the health industry, ensuring balanced advocacy.',
-      structureImage: 'hfn-org-chart',
-    },
+  hero: {
+    titleHighlight: 'Who We Are',
+    titleMain: "The Unified Voice of Nigeria's Private Healthcare Sector",
+    descriptionTop: 'Dedicated to collective action and policy advocacy to improve health outcomes for all Nigerians.',
+    descriptionText: 'We engage, collaborate, and empower stakeholders to strengthen Nigeria’s health system.',
+    descriptionBottom: 'HFN exists to ensure that private sector capacity is aligned with national health priorities.',
+    ctaLabel: 'Join the Movement',
+    ctaLink: '/get-involved',
+    image: 'map.jpg',
   },
+
+  story: {
+    sectionTitle: 'Our HFN Story',
+    paragraphs: [
+      'The Healthcare Federation of Nigeria (HFN) is the umbrella body for private healthcare stakeholders in Nigeria, representing the interests of health professionals, companies, investors, associations, and institutions.',
+      'HFN provides members with access to advocacy platforms, strategic collaborations, knowledge-sharing, and investment opportunities aimed at building a stronger, more resilient health system.',
+    ],
+    mission: 'To create an enabling environment for the private healthcare sector in Nigeria through advocacy, partnership, and capacity building.',
+    vision: 'A thriving private healthcare sector that contributes significantly to achieving universal health coverage in Nigeria.',
+    rolePoints: [
+      'Providing a credible, coordinated voice for private sector stakeholders',
+      'Ensuring private sector perspectives are embedded in national health policies and reforms',
+      'Facilitating constructive public–private collaboration',
+      'Supporting reforms that unlock investment and improve service delivery',
+    ],
+    commitmentGoals: [
+      'Policy is informed by evidence and practice',
+      'Private sector contributions are coordinated',
+      'Investment supports quality and access',
+      'Patients remain at the centre of care',
+    ],
+    image: 'about-us.png',
+  },
+
+  items: [
+    {
+      title: 'Policy Advocacy',
+      shortDesc: 'Strategic Engagement.',
+      fullDesc:
+        'We engage with legislators, regulators, and government institutions to shape evidence-based policies that enable effective regulation, sustainable financing, and private sector participation in health system strengthening.',
+      colorClass: 'leaf-green',
+    },
+    {
+      title: 'Stakeholder Convening',
+      shortDesc: 'Unified Voice.',
+      fullDesc:
+        'We bring together healthcare providers, manufacturers, insurers, digital health innovators, development partners, and policymakers to align priorities, share knowledge, and drive collective action.',
+      colorClass: 'leaf-tan',
+    },
+    {
+      title: 'Sector Intelligence',
+      shortDesc: 'Thought Leadership.',
+      fullDesc:
+        'We produce research, industry insights, and high-level dialogues that inform policy decisions, investment strategies, and national health discourse.',
+      colorClass: 'leaf-green',
+    },
+    {
+      title: 'Public–Private Collaboration',
+      shortDesc: 'Practical Solutions.',
+      fullDesc:
+        'We support partnerships that leverage private sector expertise and resources to improve service delivery, emergency care, health financing, and access to quality healthcare.',
+      colorClass: 'leaf-tan',
+    },
+  ],
+
+  history: {
+    title: 'Our History',
+    milestones: [
+      {
+        year: '2015',
+        event: 'HFN was established to bring together stakeholders across Nigeria’s private health sector. Today, we are a nationally recognised voice, contributing to major policy reforms and public–private partnerships that have strengthened healthcare delivery across Nigeria.',
+      },
+    ],
+  },
+
+  governance: {
+    title: 'Governance & Leadership',
+    description:
+      'HFN is governed through a structure that includes the Board of Trustees, National Executive Council, Executive Committee, and Secretariat, ensuring accountability and effective execution of its mandate.',
+    units: [
+      'Board of Trustees',
+      'National Executive Council',
+      'Executive Committee',
+      'Secretariat',
+    ],
+  },
+
+  leadership: [
+    { name: 'Njide Ndili', position: 'President, HFN', role: 'Country Director, PharmAccess', image: 'njide.png' },
+    { name: 'Dr. Ayodele Benson-Cole', position: '1st Vice President, HFN', role: 'CEO, Benson Coleman & Associates', image: 'ayodele.png' },
+    { name: 'Dr. Jennifer Anyanti', position: '2nd Vice President, HFN', role: 'Deputy Managing Director, Society for Family Health', image: 'jennifer.png' },
+    { name: 'Chinyere Okorocha', position: 'Public Relations Secretary, HFN', role: 'Head of Sectors, Jackson, Etti & Edu', image: 'chinyere.png' },
+    { name: 'Olayode Babarinde', position: 'Financial Secretary, HFN', role: 'Healthcare System Partner – Policy, Roche', image: 'babarinde.png' },
+    { name: 'Reagan Rowland', position: 'Treasurer, HFN', role: 'Founder/CEO, OneClick Med', image: 'reagan.png' },
+  ],
+
+  ctaSection: {
+    title: 'Our Core Mandates',
+  },
+},
+
   contact: {
     hero: {
       headline: 'Get in touch with HFN Nigeria',
