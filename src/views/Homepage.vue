@@ -1,7 +1,5 @@
 <script setup>
 import api from "@/api/axios";
-// import group from "@/assets/group.png";
-// import group1 from "@/assets/hfn-news.PNG";
 import HfnCalender from "@/components/layout/HfnCalender.vue";
 import { homePageSchema } from "@/schemas/pages/home.schema";
 import { resolveAsset } from "@/utils/assetMap";
@@ -63,28 +61,24 @@ const actions = [
     description:
       "We engage policymakers to shape evidence-based reforms that enable effective regulation, sustainable financing, and private sector participation in health system strengthening.",
     icon: ScaleIcon,
-    // tags: ['Regulation', 'Financing', 'Reform'],
   },
   {
     title: "Stakeholder Convening",
     description:
       "We bring together private sector actors, government institutions, and development partners to align priorities, share knowledge, and drive collective action.",
     icon: UserGroupIcon,
-    // tags: ['Collaboration', 'Alignment', 'Action'],
   },
   {
     title: "Sector Intelligence & Thought Leadership",
     description:
       "We generate insights, reports, and high-level dialogues that inform policy decisions, investment, and strategic engagement across the health sector.",
     icon: LightBulbIcon,
-    // tags: ['Data', 'Insights', 'Investment'],
   },
   {
     title: "Public–Private Collaboration",
     description:
       "We support partnerships that leverage private sector capacity to improve service delivery, emergency care, and access to quality healthcare.",
     icon: HandRaisedIcon,
-    // tags: ['Service Delivery', 'Partnerships', 'Access'],
   },
 ];
 
