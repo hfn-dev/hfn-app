@@ -44,6 +44,15 @@ const availablePageTypes = computed(() =>
   Object.keys(pageSchemas)
 );
 
+
+  const addStoryStat = () => {
+  currentSectionData.value.stats.push({ label: "", value: "" })
+}
+
+const removeStoryStat = (index) => {
+  currentSectionData.value.stats.splice(index, 1)
+}
+
 const createPage = async (pageName) => {
   try {
     const pageType = pageName
@@ -215,6 +224,17 @@ const deleteMetric = (metricId) => {
   }
 };
 
+
+
+  const addPartnerLogo = () => {
+  currentSectionData.value.logos.push("")
+}
+
+const removePartnerLogo = (index) => {
+  currentSectionData.value.logos.splice(index, 1)
+}
+
+
 const activeSecondaryContent = ref(null);
 
 const toggleSecondaryContent = (itemId) => {
@@ -244,6 +264,32 @@ const deleteFaq = (faqId) => {
 };
 
 
+  const addMonth = () => {
+  currentSectionData.value.months["New Month"] = {
+    featured: { image: "", tag: "", date: "", comments: 0, description: "" },
+    newsList: []
+  }
+}
+
+const removeMonth = (month) => {
+  delete currentSectionData.value.months[month]
+}
+
+const addNewsItem = (month) => {
+  currentSectionData.value.months[month].newsList.push({
+    image: "",
+    tag: "",
+    date: "",
+    comments: 0,
+    description: ""
+  })
+}
+
+const removeNewsItem = (month, index) => {
+  currentSectionData.value.months[month].newsList.splice(index, 1)
+}
+
+
 
 const saveChanges = async () => {
   try {
@@ -266,6 +312,20 @@ const saveChanges = async () => {
     console.error("Failed to save section", e);
   }
 };
+
+  const addExecutive = () => {
+  currentSectionData.value.push({
+    name: "",
+    position: "",
+    role: "",
+    image: ""
+  })
+}
+
+const removeExecutive = (index) => {
+  currentSectionData.value.splice(index, 1)
+}
+
 
 const breadcrumbViewName = computed(() => {
   if (currentView.value === "view") return `View: ${activePage.value.title}`;
@@ -297,6 +357,17 @@ const toggleVisibility = async (page) => {
     page.is_visible = !page.is_visible;
   }
 };
+
+  const addFaq = () => {
+  currentSectionData.value.push({
+    question: "",
+    answer: ""
+  })
+}
+
+const removeFaq = (index) => {
+  currentSectionData.value.splice(index, 1)
+}
 
 </script>
 
@@ -829,6 +900,283 @@ const toggleVisibility = async (page) => {
     </div>
   </div>
 </div>
+          <div
+  v-if="activePage.page_type.toLowerCase() === 'home' && activeSection === 'partners'"
+>
+  <div class="space-y-6">
+
+    <!-- Title -->
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Section Title
+      </label>
+      <input
+        v-model="currentSectionData.title"
+        type="text"
+        class="w-full text-lg border-none focus:ring-0 p-0 m-0"
+      />
+    </div>
+
+    <!-- Logos -->
+    <div class="border border-gray-300 rounded-lg p-4 space-y-4">
+      <div class="flex justify-between items-center">
+        <label class="text-xs font-semibold uppercase text-gray-500">
+          Partner Logos
+        </label>
+
+        <button
+          class="text-sm bg-black text-white px-3 py-1 rounded"
+          @click="addPartnerLogo"
+        >
+          + Add Logo
+        </button>
+      </div>
+
+      <div
+        v-for="(logo, index) in currentSectionData.logos"
+        :key="index"
+        class="flex items-center space-x-3 border rounded p-2"
+      >
+        <input
+          v-model="currentSectionData.logos[index]"
+          type="text"
+          class="flex-grow border-none focus:ring-0"
+          placeholder="logo-key or cloudinary-id"
+        />
+
+        <button
+          class="text-red-500 text-sm"
+          @click="removePartnerLogo(index)"
+        >
+          Remove
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+          <div
+  v-if="activePage.page_type.toLowerCase() === 'home' && activeSection === 'story'"
+>
+  <div class="space-y-6">
+
+    <!-- Title -->
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Story Title
+      </label>
+      <input
+        v-model="currentSectionData.title"
+        type="text"
+        class="w-full border-none focus:ring-0"
+      />
+    </div>
+
+    <!-- Body -->
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Story Body
+      </label>
+      <textarea
+        v-model="currentSectionData.body"
+        rows="6"
+        class="w-full border-none focus:ring-0 resize-none"
+      />
+    </div>
+
+    <!-- Stats -->
+    <div class="border border-gray-300 rounded-lg p-4 space-y-4">
+      <div class="flex justify-between items-center">
+        <label class="text-xs font-semibold uppercase text-gray-500">
+          Statistics
+        </label>
+        <button
+          class="text-sm bg-black text-white px-3 py-1 rounded"
+          @click="addStoryStat"
+        >
+          + Add Stat
+        </button>
+      </div>
+
+      <div
+        v-for="(stat, index) in currentSectionData.stats"
+        :key="index"
+        class="grid grid-cols-2 gap-3 border rounded p-3"
+      >
+        <input
+          v-model="stat.label"
+          placeholder="Label"
+          class="border-none focus:ring-0"
+        />
+        <input
+          v-model="stat.value"
+          placeholder="Value"
+          class="border-none focus:ring-0"
+        />
+
+        <button
+          class="col-span-2 text-red-500 text-sm text-left"
+          @click="removeStoryStat(index)"
+        >
+          Remove
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+          <div
+  v-if="activePage.page_type.toLowerCase() === 'home' && activeSection === 'news'"
+>
+  <div class="space-y-8">
+
+    <div
+      v-for="(monthData, monthName) in currentSectionData.months"
+      :key="monthName"
+      class="border border-gray-300 rounded-lg p-4 space-y-6"
+    >
+
+      <!-- Month Header -->
+      <div class="flex justify-between items-center">
+        <h3 class="font-semibold">{{ monthName }}</h3>
+        <button
+          class="text-red-500 text-sm"
+          @click="removeMonth(monthName)"
+        >
+          Delete Month
+        </button>
+      </div>
+
+      <!-- Featured -->
+      <div class="space-y-2">
+        <label class="text-xs font-semibold uppercase text-gray-500">
+          Featured Description
+        </label>
+        <textarea
+          v-model="monthData.featured.description"
+          rows="3"
+          class="w-full border-none focus:ring-0 resize-none"
+        />
+      </div>
+
+      <!-- News List -->
+      <div class="space-y-4">
+        <div class="flex justify-between">
+          <label class="text-xs font-semibold uppercase text-gray-500">
+            News List
+          </label>
+          <button
+            class="text-sm bg-black text-white px-2 py-1 rounded"
+            @click="addNewsItem(monthName)"
+          >
+            + Add News
+          </button>
+        </div>
+
+        <div
+          v-for="(news, index) in monthData.newsList"
+          :key="index"
+          class="border rounded p-3 space-y-2"
+        >
+          <input v-model="news.tag" placeholder="Tag" class="w-full border-none focus:ring-0" />
+          <input v-model="news.date" placeholder="Date" class="w-full border-none focus:ring-0" />
+          <textarea v-model="news.description" rows="2" class="w-full border-none focus:ring-0 resize-none" />
+
+          <button
+            class="text-red-500 text-sm"
+            @click="removeNewsItem(monthName, index)"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <button
+      class="bg-black text-white px-4 py-2 rounded"
+      @click="addMonth"
+    >
+      + Add New Month
+    </button>
+
+  </div>
+</div>
+          <div
+  v-if="activePage.page_type.toLowerCase() === 'home' && activeSection === 'executives'"
+>
+  <div class="space-y-6">
+
+    <button
+      class="bg-black text-white px-3 py-2 rounded"
+      @click="addExecutive"
+    >
+      + Add Executive
+    </button>
+
+    <div
+      v-for="(exec, index) in currentSectionData"
+      :key="index"
+      class="border rounded p-4 space-y-2"
+    >
+      <input v-model="exec.name" placeholder="Name" class="w-full border-none focus:ring-0" />
+      <input v-model="exec.position" placeholder="Position" class="w-full border-none focus:ring-0" />
+      <input v-model="exec.role" placeholder="Role" class="w-full border-none focus:ring-0" />
+
+      <button
+        class="text-red-500 text-sm"
+        @click="removeExecutive(index)"
+      >
+        Remove
+      </button>
+    </div>
+
+  </div>
+</div>
+<div
+  v-if="activePage.page_type.toLowerCase() === 'home' && activeSection === 'faqs'"
+>
+  <div class="space-y-6">
+
+    <button
+      class="bg-black text-white px-3 py-2 rounded"
+      @click="addFaq"
+    >
+      + Add FAQ
+    </button>
+
+    <div
+      v-for="(faq, index) in currentSectionData"
+      :key="index"
+      class="border rounded p-4 space-y-3"
+    >
+      <input
+        v-model="faq.question"
+        placeholder="Question"
+        class="w-full border-none focus:ring-0"
+      />
+
+      <textarea
+        v-model="faq.answer"
+        rows="3"
+        placeholder="Answer"
+        class="w-full border-none focus:ring-0 resize-none"
+      />
+
+      <button
+        class="text-red-500 text-sm"
+        @click="removeFaq(index)"
+      >
+        Remove
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+
+
 
           <div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'hero'">
             <div class="flex space-x-6">
