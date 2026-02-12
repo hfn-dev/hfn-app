@@ -6,10 +6,10 @@ import { useRouter } from "vue-router";
 import { computed, onMounted, ref, watch } from "vue";
 import EditorSidebar from "./EditorSidebar.vue";
 
-
-const newYear = ref("")
-const newCategory = ref("")
-
+const newYear = ref("");
+const newCategory = ref("");
+const newGalleryYear = ref("");
+const newGalleryCategory = ref("");
 const currentView = ref("manager");
 const activePage = ref(null);
 const activeSection = ref("hero");
@@ -17,39 +17,80 @@ const router = useRouter();
 const hasPages = computed(() => pages.value && pages.value.length > 0);
 const currentSectionData = ref(null);
 
-  const addTrustee = () => {
+const availablePageTypes = computed(() => Object.keys(pageSchemas));
+
+const addGalleryYear = () => {
+  if (!newGalleryYear.value.trim()) return;
+  currentSectionData.value.filtering.years.push(newGalleryYear.value.trim());
+  newGalleryYear.value = "";
+};
+
+const removeGalleryYear = (index) => {
+  currentSectionData.value.filtering.years.splice(index, 1);
+};
+
+const addGalleryCategory = () => {
+  if (!newGalleryCategory.value.trim()) return;
+  currentSectionData.value.filtering.categories.push(
+    newGalleryCategory.value.trim()
+  );
+  newGalleryCategory.value = "";
+};
+
+const removeGalleryCategory = (index) => {
+  currentSectionData.value.filtering.categories.splice(index, 1);
+};
+
+const addGalleryItem = () => {
+  currentSectionData.value.galleryList.items.push({
+    id: Date.now(),
+    title: "",
+    category: "",
+    date: "",
+    image: "",
+    year: "",
+  });
+};
+
+const removeGalleryItem = (index) => {
+  currentSectionData.value.galleryList.items.splice(index, 1);
+};
+
+const addTrustee = () => {
   currentSectionData.value.trustees.push({
-    name: '',
-    title: '',
-    image: '',
-    slug: ''
-  })
-}
+    name: "",
+    title: "",
+    image: "",
+    slug: "",
+  });
+};
 
 const removeTrustee = (index) => {
-  currentSectionData.value.trustees.splice(index, 1)
-}
+  currentSectionData.value.trustees.splice(index, 1);
+};
 
-  const addYear = () => {
-  if (!newYear.value.trim()) return
+const addYear = () => {
+  if (!newYear.value.trim()) return;
 
-  currentSectionData.value.searchAndFilter.years.push(newYear.value.trim())
-  newYear.value = ""
-}
+  currentSectionData.value.searchAndFilter.years.push(newYear.value.trim());
+  newYear.value = "";
+};
 const removeYear = (index) => {
-  currentSectionData.value.searchAndFilter.years.splice(index, 1)
-}
+  currentSectionData.value.searchAndFilter.years.splice(index, 1);
+};
 const addCategory = () => {
-  if (!newCategory.value.trim()) return
+  if (!newCategory.value.trim()) return;
 
-  currentSectionData.value.searchAndFilter.categories.push(newCategory.value.trim())
-  newCategory.value = ""
-}
+  currentSectionData.value.searchAndFilter.categories.push(
+    newCategory.value.trim()
+  );
+  newCategory.value = "";
+};
 const removeCategory = (index) => {
-  currentSectionData.value.searchAndFilter.categories.splice(index, 1)
-}
+  currentSectionData.value.searchAndFilter.categories.splice(index, 1);
+};
 
-  const addLatestEvent = () => {
+const addLatestEvent = () => {
   currentSectionData.value.latestEvents.items.push({
     id: Date.now(),
     title: "",
@@ -61,147 +102,141 @@ const removeCategory = (index) => {
     description: "",
     image: "",
     registerLink: "",
-  })
-}
+  });
+};
 
 const removeLatestEvent = (index) => {
-  currentSectionData.value.latestEvents.items.splice(index, 1)
-}
+  currentSectionData.value.latestEvents.items.splice(index, 1);
+};
 
-  const addPastEvent = () => {
+const addPastEvent = () => {
   currentSectionData.value.pastEvents.items.push({
     title: "",
     category: "",
     date: "",
     theme: "",
     image: "",
-  })
-}
+  });
+};
 
 const removePastEvent = (index) => {
-  currentSectionData.value.pastEvents.items.splice(index, 1)
-}
-
+  currentSectionData.value.pastEvents.items.splice(index, 1);
+};
 
 const addExecutives = () => {
   currentSectionData.value.members.push({
-    name: '',
-    role: '',
-    slug: '',
-    image: '',
-    profile: '',
-    socials: []
-  })
-}
+    name: "",
+    role: "",
+    slug: "",
+    image: "",
+    profile: "",
+    socials: [],
+  });
+};
 
 const removeExecutives = (index) => {
-  currentSectionData.value.members.splice(index, 1)
-}
+  currentSectionData.value.members.splice(index, 1);
+};
 
 const addSocial = (memberIndex) => {
   currentSectionData.value.members[memberIndex].socials.push({
-    platform: '',
-    url: ''
-  })
-}
+    platform: "",
+    url: "",
+  });
+};
 
 const removeSocial = (memberIndex, socialIndex) => {
-  currentSectionData.value.members[memberIndex].socials.splice(socialIndex, 1)
-}
+  currentSectionData.value.members[memberIndex].socials.splice(socialIndex, 1);
+};
 
 const pages = ref([]);
 const isLoading = ref(false);
 
-  const heroUploadRef = ref(null)
+const heroUploadRef = ref(null);
 
 const handleHeroImageUpload = (event) => {
-  const file = event.target.files[0]
-  if (!file) return
+  const file = event.target.files[0];
+  if (!file) return;
 
   if (file.size > 1024 * 1024) {
-    alert("Image must be less than 1MB")
-    return
+    alert("Image must be less than 1MB");
+    return;
   }
 
-  currentSectionData.value.heroImage = file
+  currentSectionData.value.heroImage = file;
 
-  const reader = new FileReader()
+  const reader = new FileReader();
   reader.onload = (e) => {
-    currentSectionData.value.heroImagePreview = e.target.result
-  }
-  reader.readAsDataURL(file)
-}
+    currentSectionData.value.heroImagePreview = e.target.result;
+  };
+  reader.readAsDataURL(file);
+};
 
 const resetHeroColor = () => {
-  currentSectionData.value.backgroundColor = "#FFFFFF"
-}
+  currentSectionData.value.backgroundColor = "#FFFFFF";
+};
 
-const availablePageTypes = computed(() =>
-  Object.keys(pageSchemas)
-);
-
-  const addItem = () => {
-  if (activeSection.value === 'donations') {
-    currentSectionData.value.paragraphs.push('')
+const addItem = () => {
+  if (activeSection.value === "donations") {
+    currentSectionData.value.paragraphs.push("");
   }
 
-  if (activeSection.value === 'partnerships') {
+  if (activeSection.value === "partnerships") {
     currentSectionData.value.items.push({
-      title: '',
-      description: '',
-      buttonText: '',
-    })
+      title: "",
+      description: "",
+      buttonText: "",
+    });
   }
 
-  if (activeSection.value === 'opportunities') {
+  if (activeSection.value === "opportunities") {
     currentSectionData.value.items.push({
-      title: '',
-      description: '',
-      buttonText: '',
-    })
+      title: "",
+      description: "",
+      buttonText: "",
+    });
   }
 
-  if (activeSection.value === 'donationModal') {
+  if (activeSection.value === "donationModal") {
     currentSectionData.value.options.push({
-      title: '',
-      description: '',
-    })
+      title: "",
+      description: "",
+    });
   }
-  if (activeSection.value === 'newsletterSection') {
+  if (activeSection.value === "newsletterSection") {
     currentSectionData.value.items.push({
-      date: '',
-      text: '',
-      pdfUrl: '',
-    })
+      date: "",
+      text: "",
+      pdfUrl: "",
+    });
   }
 
-  if (activeSection.value === 'publicationsSection') {
+  if (activeSection.value === "publicationsSection") {
     currentSectionData.value.items.push({
-      title: '',
-      description: '',
-      pdfUrl: '',
-    })
-  }  
-}
+      title: "",
+      description: "",
+      pdfUrl: "",
+    });
+  }
+};
 
 const deleteItem = (index) => {
-  if (activeSection.value === 'donations') {
-    currentSectionData.value.paragraphs.splice(index, 1)
-  } else if (activeSection.value === 'donationModal') {
-    currentSectionData.value.options.splice(index, 1)
+  if (activeSection.value === "donations") {
+    currentSectionData.value.paragraphs.splice(index, 1);
+  } else if (activeSection.value === "donationModal") {
+    currentSectionData.value.options.splice(index, 1);
   } else {
-    currentSectionData.value.items.splice(index, 1)
+    currentSectionData.value.items.splice(index, 1);
   }
-}
+};
 
-
-  const addStoryStat = () => {
-  currentSectionData.value.stats.push({ label: "", value: "" })
-}
+const addStoryStat = () => {
+  currentSectionData.value.stats.push({ label: "", value: "" });
+};
 
 const removeStoryStat = (index) => {
-  currentSectionData.value.stats.splice(index, 1)
-}
+  currentSectionData.value.stats.splice(index, 1);
+};
 
 const createPage = async (pageName) => {
   try {
@@ -219,7 +254,7 @@ const createPage = async (pageName) => {
       name: pageName,
       status: "draft",
       is_visible: false,
-      content: schema, // fill schema here
+      content: schema,
     };
 
     const newPage = await pagesApi.createPage(payload);
@@ -228,56 +263,14 @@ const createPage = async (pageName) => {
       ...newPage,
       title: newPage.name,
       slug: `/${pageType}`,
-      sections: schema, // initialize editor with schema
+      sections: schema,
     });
-
+    await fetchPages();
     editPage(newPage);
   } catch (e) {
     console.error("Failed to create page", e);
   }
 };
-  
-
-// const createPage = async (pageName) => {
-//   try {
-//     const pageType = pageName
-//       .toLowerCase()
-//       .trim()
-//       .replace(/\s+/g, "-");
-
-//     const schema = pageSchemas[pageType];
-
-//     const exists = pages.value.some(
-//       (p) => p.page_type === pageType
-//     );
-
-//     if (exists) {
-//       console.log(`${pageName} page already exists`);
-//       return;
-//     }
-
-//     const payload = {
-//       page_type: pageType, 
-//       name: pageName,
-//       status: "draft",
-//       is_visible: false,
-//       content: structuredClone(schema),
-//     };
-
-//     const newPage = await pagesApi.createPage(payload);
-
-//     pages.value.push({
-//       ...newPage,
-//       title: newPage.name,
-//       slug: `/${pageType}`,
-//       sections: structuredClone(schema),
-//     });
-
-//     editPage(newPage);
-//   } catch (e) {
-//     console.error("Failed to create page", e);
-//   }
-// };
 
 const fetchPages = async () => {
   isLoading.value = true;
@@ -288,10 +281,17 @@ const fetchPages = async () => {
       const schema = pageSchemas[page.page_type.toLowerCase()];
       const content = structuredClone(schema);
 
-      if (page.content && typeof page.content === 'object' && Object.keys(page.content).length > 0) {
+      if (
+        page.content &&
+        typeof page.content === "object" &&
+        Object.keys(page.content).length > 0
+      ) {
         for (const sectionKey in schema) {
           if (page.content[sectionKey]) {
-            content[sectionKey] = { ...schema[sectionKey], ...page.content[sectionKey] };
+            content[sectionKey] = {
+              ...schema[sectionKey],
+              ...page.content[sectionKey],
+            };
           }
         }
       }
@@ -299,7 +299,9 @@ const fetchPages = async () => {
       return {
         ...page,
         title: page.name ?? page.page_type_display,
-        slug: `/${(page.name ?? page.page_type).toLowerCase().replace(/\s+/g, "-")}`,
+        slug: `/${(page.name ?? page.page_type)
+          .toLowerCase()
+          .replace(/\s+/g, "-")}`,
         sections: content,
       };
     });
@@ -356,6 +358,7 @@ const deletePage = async (id) => {
   try {
     await pagesApi.deletePage(id);
     pages.value = pages.value.filter((page) => page.id !== id);
+    fetchPages();
     console.log(`Deleted page with slug: ${id}`);
   } catch (e) {
     console.error("Failed to delete page", e);
@@ -409,16 +412,13 @@ const deleteMetric = (metricId) => {
   }
 };
 
-
-
-  const addPartnerLogo = () => {
-  currentSectionData.value.logos.push("")
-}
+const addPartnerLogo = () => {
+  currentSectionData.value.logos.push("");
+};
 
 const removePartnerLogo = (index) => {
-  currentSectionData.value.logos.splice(index, 1)
-}
-
+  currentSectionData.value.logos.splice(index, 1);
+};
 
 const activeSecondaryContent = ref(null);
 
@@ -448,16 +448,16 @@ const deleteFaq = (faqId) => {
   }
 };
 
-  const addMonth = () => {
+const addMonth = () => {
   currentSectionData.value.months["New Month"] = {
     featured: { image: "", tag: "", date: "", comments: 0, description: "" },
-    newsList: []
-  }
-}
+    newsList: [],
+  };
+};
 
 const removeMonth = (month) => {
-  delete currentSectionData.value.months[month]
-}
+  delete currentSectionData.value.months[month];
+};
 
 const addNewsItem = (month) => {
   currentSectionData.value.months[month].newsList.push({
@@ -465,31 +465,27 @@ const addNewsItem = (month) => {
     tag: "",
     date: "",
     comments: 0,
-    description: ""
-  })
-}
+    description: "",
+  });
+};
 
 const removeNewsItem = (month, index) => {
-  currentSectionData.value.months[month].newsList.splice(index, 1)
-}
-
-
+  currentSectionData.value.months[month].newsList.splice(index, 1);
+};
 
 const saveChanges = async () => {
   try {
     const payload = {
       content: {
-        [activeSection.value]: currentSectionData.value
-      }
+        [activeSection.value]: currentSectionData.value,
+      },
     };
 
-    await pagesApi.partialUpdatePage(
-      activePage.value.page_type,
-      payload
-    );
+    await pagesApi.partialUpdatePage(activePage.value.page_type, payload);
 
-    activePage.value.sections[activeSection.value] =
-      structuredClone(currentSectionData.value);
+    activePage.value.sections[activeSection.value] = structuredClone(
+      currentSectionData.value
+    );
 
     goBackToManager();
   } catch (e) {
@@ -497,19 +493,18 @@ const saveChanges = async () => {
   }
 };
 
-  const addExecutive = () => {
+const addExecutive = () => {
   currentSectionData.value.push({
     name: "",
     position: "",
     role: "",
-    image: ""
-  })
-}
+    image: "",
+  });
+};
 
 const removeExecutive = (index) => {
-  currentSectionData.value.splice(index, 1)
-}
-
+  currentSectionData.value.splice(index, 1);
+};
 
 const breadcrumbViewName = computed(() => {
   if (currentView.value === "view") return `View: ${activePage.value.title}`;
@@ -542,17 +537,16 @@ const toggleVisibility = async (page) => {
   }
 };
 
-  const addFaq = () => {
+const addFaq = () => {
   currentSectionData.value.push({
     question: "",
-    answer: ""
-  })
-}
+    answer: "",
+  });
+};
 
 const removeFaq = (index) => {
-  currentSectionData.value.splice(index, 1)
-}
-
+  currentSectionData.value.splice(index, 1);
+};
 </script>
 
 <template>
@@ -584,9 +578,7 @@ const removeFaq = (index) => {
             @change="createPage($event.target.value)"
             class="border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white"
           >
-            <option value="" disabled selected>
-              Select page type
-            </option>
+            <option value="" disabled selected>Select page type</option>
             <option
               v-for="type in availablePageTypes"
               :key="type"
@@ -595,7 +587,7 @@ const removeFaq = (index) => {
               {{ type.toUpperCase() }}
             </option>
           </select>
-          <p> Create page by selecting page type</p>
+          <p>Create page by selecting page type</p>
         </div>
 
         <div class="space-y-3">
@@ -918,2221 +910,3434 @@ const removeFaq = (index) => {
           </div>
 
           <div
-  v-if="activePage.page_type.toLowerCase() === 'home' && activeSection === 'hero'"
->
-  <div class="flex space-x-6">
-    <!-- LEFT SIDE -->
-    <div class="w-3/5 space-y-6">
-      
-      <!-- Highlight Title -->
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">
-          Highlight Title
-        </label>
-        <input
-          v-model="currentSectionData.titleHighlight"
-          type="text"
-          class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-          placeholder="Healthcare"
-        />
-      </div>
-
-      <!-- Main Title -->
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">
-          Main Title
-        </label>
-        <input
-          v-model="currentSectionData.titleMain"
-          type="text"
-          class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-          placeholder="Advocacy."
-        />
-      </div>
-
-      <!-- Intro Line -->
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">
-          Intro Line
-        </label>
-        <textarea
-          v-model="currentSectionData.introLine"
-          rows="2"
-          class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-        />
-      </div>
-
-      <!-- Intro Text -->
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">
-          Intro Text
-        </label>
-        <textarea
-          v-model="currentSectionData.introText"
-          rows="2"
-          class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-        />
-      </div>
-
-      <!-- Sub Text -->
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">
-          Sub Text
-        </label>
-        <textarea
-          v-model="currentSectionData.subText"
-          rows="4"
-          class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-        />
-      </div>
-
-      <!-- CTA Text -->
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">
-          CTA Text
-        </label>
-        <input
-          v-model="currentSectionData.ctaText"
-          type="text"
-          class="w-full text-base border-none focus:ring-0 p-0 m-0"
-        />
-      </div>
-
-      <!-- CTA Link -->
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">
-          CTA Link
-        </label>
-        <input
-          v-model="currentSectionData.ctaLink"
-          type="text"
-          class="w-full text-base border-none focus:ring-0 p-0 m-0"
-          placeholder="/register"
-        />
-      </div>
-
-    </div>
-
-    <!-- RIGHT SIDE -->
-    <div class="w-2/5 space-y-6">
-
-      <!-- IMAGE UPLOAD -->
-      <div
-        class="border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center bg-white shadow-inner"
-      >
-        <input
-          type="file"
-          accept="image/png, image/jpeg"
-          class="hidden"
-          ref="heroUploadRef"
-          @change="handleHeroImageUpload"
-        />
-
-        <div
-          class="bg-red-50 h-40 w-full mb-4 border border-dashed border-gray-400 rounded-lg flex items-center justify-center cursor-pointer"
-          @click="heroUploadRef.click()"
-        >
-          <img
-            v-if="currentSectionData.heroImagePreview"
-            :src="currentSectionData.heroImagePreview"
-            class="h-full object-contain"
-          />
-
-          <span v-else class="text-sm text-gray-600">
-            Click to upload hero image
-          </span>
-        </div>
-
-        <div class="text-xs text-gray-500 space-y-1 w-full">
-          <p class="font-semibold">Image Requirements:</p>
-          <ul class="list-disc list-inside">
-            <li>jpeg, jpg, png</li>
-            <li>Max 1MB</li>
-            <li>1024x1024px recommended</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- BACKGROUND COLOR -->
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2 bg-white">
-        <label class="block text-xs font-semibold uppercase text-gray-500">
-          Background Colour
-        </label>
-
-        <div class="flex items-center space-x-2">
-          <input
-            v-model="currentSectionData.backgroundColor"
-            type="color"
-            class="w-8 h-8 rounded border-none p-0 cursor-pointer"
-          />
-
-          <input
-            v-model="currentSectionData.backgroundColor"
-            type="text"
-            class="flex-grow text-base border-none focus:ring-0 p-0 m-0 font-mono uppercase"
-          />
-
-          <button
-            class="text-gray-500 hover:text-green-600"
-            @click="resetHeroColor"
+            v-if="
+              activePage.page_type.toLowerCase() === 'home' &&
+              activeSection === 'hero'
+            "
           >
-            Reset
-          </button>
-        </div>
-      </div>
+            <div class="flex space-x-6">
+              <!-- LEFT SIDE -->
+              <div class="w-3/5 space-y-6">
+                <!-- Highlight Title -->
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                  >
+                    Highlight Title
+                  </label>
+                  <input
+                    v-model="currentSectionData.titleHighlight"
+                    type="text"
+                    class="w-full text-lg border-none focus:ring-0 p-0 m-0"
+                    placeholder="Healthcare"
+                  />
+                </div>
 
-    </div>
-  </div>
-</div>
+                <!-- Main Title -->
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                  >
+                    Main Title
+                  </label>
+                  <input
+                    v-model="currentSectionData.titleMain"
+                    type="text"
+                    class="w-full text-lg border-none focus:ring-0 p-0 m-0"
+                    placeholder="Advocacy."
+                  />
+                </div>
+
+                <!-- Intro Line -->
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                  >
+                    Intro Line
+                  </label>
+                  <textarea
+                    v-model="currentSectionData.introLine"
+                    rows="2"
+                    class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+                  />
+                </div>
+
+                <!-- Intro Text -->
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                  >
+                    Intro Text
+                  </label>
+                  <textarea
+                    v-model="currentSectionData.introText"
+                    rows="2"
+                    class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+                  />
+                </div>
+
+                <!-- Sub Text -->
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                  >
+                    Sub Text
+                  </label>
+                  <textarea
+                    v-model="currentSectionData.subText"
+                    rows="4"
+                    class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+                  />
+                </div>
+
+                <!-- CTA Text -->
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                  >
+                    CTA Text
+                  </label>
+                  <input
+                    v-model="currentSectionData.ctaText"
+                    type="text"
+                    class="w-full text-base border-none focus:ring-0 p-0 m-0"
+                  />
+                </div>
+
+                <!-- CTA Link -->
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                  >
+                    CTA Link
+                  </label>
+                  <input
+                    v-model="currentSectionData.ctaLink"
+                    type="text"
+                    class="w-full text-base border-none focus:ring-0 p-0 m-0"
+                    placeholder="/register"
+                  />
+                </div>
+              </div>
+
+              <!-- RIGHT SIDE -->
+              <div class="w-2/5 space-y-6">
+                <!-- IMAGE UPLOAD -->
+                <div
+                  class="border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center bg-white shadow-inner"
+                >
+                  <input
+                    type="file"
+                    accept="image/png, image/jpeg"
+                    class="hidden"
+                    ref="heroUploadRef"
+                    @change="handleHeroImageUpload"
+                  />
+
+                  <div
+                    class="bg-red-50 h-40 w-full mb-4 border border-dashed border-gray-400 rounded-lg flex items-center justify-center cursor-pointer"
+                    @click="heroUploadRef.click()"
+                  >
+                    <img
+                      v-if="currentSectionData.heroImagePreview"
+                      :src="currentSectionData.heroImagePreview"
+                      class="h-full object-contain"
+                    />
+
+                    <span v-else class="text-sm text-gray-600">
+                      Click to upload hero image
+                    </span>
+                  </div>
+
+                  <div class="text-xs text-gray-500 space-y-1 w-full">
+                    <p class="font-semibold">Image Requirements:</p>
+                    <ul class="list-disc list-inside">
+                      <li>jpeg, jpg, png</li>
+                      <li>Max 1MB</li>
+                      <li>1024x1024px recommended</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- BACKGROUND COLOR -->
+                <div
+                  class="border border-gray-300 rounded-lg p-3 space-y-2 bg-white"
+                >
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                  >
+                    Background Colour
+                  </label>
+
+                  <div class="flex items-center space-x-2">
+                    <input
+                      v-model="currentSectionData.backgroundColor"
+                      type="color"
+                      class="w-8 h-8 rounded border-none p-0 cursor-pointer"
+                    />
+
+                    <input
+                      v-model="currentSectionData.backgroundColor"
+                      type="text"
+                      class="flex-grow text-base border-none focus:ring-0 p-0 m-0 font-mono uppercase"
+                    />
+
+                    <button
+                      class="text-gray-500 hover:text-green-600"
+                      @click="resetHeroColor"
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div
-  v-if="activePage.page_type.toLowerCase() === 'home' && activeSection === 'partners'"
->
-  <div class="space-y-6">
-
-    <!-- Title -->
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">
-        Section Title
-      </label>
-      <input
-        v-model="currentSectionData.title"
-        type="text"
-        class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-      />
-    </div>
-
-    <!-- Logos -->
-    <div class="border border-gray-300 rounded-lg p-4 space-y-4">
-      <div class="flex justify-between items-center">
-        <label class="text-xs font-semibold uppercase text-gray-500">
-          Partner Logos
-        </label>
-
-        <button
-          class="text-sm bg-black text-white px-3 py-1 rounded"
-          @click="addPartnerLogo"
-        >
-          + Add Logo
-        </button>
-      </div>
-
-      <div
-        v-for="(logo, index) in currentSectionData.logos"
-        :key="index"
-        class="flex items-center space-x-3 border rounded p-2"
-      >
-        <input
-          v-model="currentSectionData.logos[index]"
-          type="text"
-          class="flex-grow border-none focus:ring-0"
-          placeholder="logo-key or cloudinary-id"
-        />
-
-        <button
-          class="text-red-500 text-sm"
-          @click="removePartnerLogo(index)"
-        >
-          Remove
-        </button>
-      </div>
-    </div>
-
-  </div>
-</div>
-          <div
-  v-if="activePage.page_type.toLowerCase() === 'home' && activeSection === 'story'"
->
-  <div class="space-y-6">
-
-    <!-- Title -->
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">
-        Story Title
-      </label>
-      <input
-        v-model="currentSectionData.title"
-        type="text"
-        class="w-full border-none focus:ring-0"
-      />
-    </div>
-
-    <!-- Body -->
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">
-        Story Body
-      </label>
-      <textarea
-        v-model="currentSectionData.body"
-        rows="6"
-        class="w-full border-none focus:ring-0 resize-none"
-      />
-    </div>
-
-    <!-- Stats -->
-    <div class="border border-gray-300 rounded-lg p-4 space-y-4">
-      <div class="flex justify-between items-center">
-        <label class="text-xs font-semibold uppercase text-gray-500">
-          Statistics
-        </label>
-        <button
-          class="text-sm bg-black text-white px-3 py-1 rounded"
-          @click="addStoryStat"
-        >
-          + Add Stat
-        </button>
-      </div>
-
-      <div
-        v-for="(stat, index) in currentSectionData.stats"
-        :key="index"
-        class="grid grid-cols-2 gap-3 border rounded p-3"
-      >
-        <input
-          v-model="stat.label"
-          placeholder="Label"
-          class="border-none focus:ring-0"
-        />
-        <input
-          v-model="stat.value"
-          placeholder="Value"
-          class="border-none focus:ring-0"
-        />
-
-        <button
-          class="col-span-2 text-red-500 text-sm text-left"
-          @click="removeStoryStat(index)"
-        >
-          Remove
-        </button>
-      </div>
-    </div>
-
-  </div>
-</div>
-          <div
-  v-if="activePage.page_type.toLowerCase() === 'home' && activeSection === 'news'"
->
-  <div class="space-y-8">
-
-    <div
-      v-for="(monthData, monthName) in currentSectionData.months"
-      :key="monthName"
-      class="border border-gray-300 rounded-lg p-4 space-y-6"
-    >
-
-      <!-- Month Header -->
-      <div class="flex justify-between items-center">
-        <h3 class="font-semibold">{{ monthName }}</h3>
-        <button
-          class="text-red-500 text-sm"
-          @click="removeMonth(monthName)"
-        >
-          Delete Month
-        </button>
-      </div>
-
-      <!-- Featured -->
-      <div class="space-y-2">
-        <label class="text-xs font-semibold uppercase text-gray-500">
-          Featured Description
-        </label>
-        <textarea
-          v-model="monthData.featured.description"
-          rows="3"
-          class="w-full border-none focus:ring-0 resize-none"
-        />
-      </div>
-
-      <!-- News List -->
-      <div class="space-y-4">
-        <div class="flex justify-between">
-          <label class="text-xs font-semibold uppercase text-gray-500">
-            News List
-          </label>
-          <button
-            class="text-sm bg-black text-white px-2 py-1 rounded"
-            @click="addNewsItem(monthName)"
+            v-if="
+              activePage.page_type.toLowerCase() === 'home' &&
+              activeSection === 'partners'
+            "
           >
-            + Add News
-          </button>
-        </div>
+            <div class="space-y-6">
+              <!-- Title -->
+              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                >
+                  Section Title
+                </label>
+                <input
+                  v-model="currentSectionData.title"
+                  type="text"
+                  class="w-full text-lg border-none focus:ring-0 p-0 m-0"
+                />
+              </div>
 
-        <div
-          v-for="(news, index) in monthData.newsList"
-          :key="index"
-          class="border rounded p-3 space-y-2"
-        >
-          <input v-model="news.tag" placeholder="Tag" class="w-full border-none focus:ring-0" />
-          <input v-model="news.date" placeholder="Date" class="w-full border-none focus:ring-0" />
-          <textarea v-model="news.description" rows="2" class="w-full border-none focus:ring-0 resize-none" />
+              <!-- Logos -->
+              <div class="border border-gray-300 rounded-lg p-4 space-y-4">
+                <div class="flex justify-between items-center">
+                  <label class="text-xs font-semibold uppercase text-gray-500">
+                    Partner Logos
+                  </label>
 
-          <button
-            class="text-red-500 text-sm"
-            @click="removeNewsItem(monthName, index)"
+                  <button
+                    class="text-sm bg-black text-white px-3 py-1 rounded"
+                    @click="addPartnerLogo"
+                  >
+                    + Add Logo
+                  </button>
+                </div>
+
+                <div
+                  v-for="(logo, index) in currentSectionData.logos"
+                  :key="index"
+                  class="flex items-center space-x-3 border rounded p-2"
+                >
+                  <input
+                    v-model="currentSectionData.logos[index]"
+                    type="text"
+                    class="flex-grow border-none focus:ring-0"
+                    placeholder="logo-key or cloudinary-id"
+                  />
+
+                  <button
+                    class="text-red-500 text-sm"
+                    @click="removePartnerLogo(index)"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            v-if="
+              activePage.page_type.toLowerCase() === 'home' &&
+              activeSection === 'story'
+            "
           >
-            Remove
-          </button>
-        </div>
-      </div>
+            <div class="space-y-6">
+              <!-- Title -->
+              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                >
+                  Story Title
+                </label>
+                <input
+                  v-model="currentSectionData.title"
+                  type="text"
+                  class="w-full border-none focus:ring-0"
+                />
+              </div>
 
-    </div>
+              <!-- Body -->
+              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                >
+                  Story Body
+                </label>
+                <textarea
+                  v-model="currentSectionData.body"
+                  rows="6"
+                  class="w-full border-none focus:ring-0 resize-none"
+                />
+              </div>
 
-    <button
-      class="bg-black text-white px-4 py-2 rounded"
-      @click="addMonth"
-    >
-      + Add New Month
-    </button>
+              <!-- Stats -->
+              <div class="border border-gray-300 rounded-lg p-4 space-y-4">
+                <div class="flex justify-between items-center">
+                  <label class="text-xs font-semibold uppercase text-gray-500">
+                    Statistics
+                  </label>
+                  <button
+                    class="text-sm bg-black text-white px-3 py-1 rounded"
+                    @click="addStoryStat"
+                  >
+                    + Add Stat
+                  </button>
+                </div>
 
-  </div>
-</div>
+                <div
+                  v-for="(stat, index) in currentSectionData.stats"
+                  :key="index"
+                  class="grid grid-cols-2 gap-3 border rounded p-3"
+                >
+                  <input
+                    v-model="stat.label"
+                    placeholder="Label"
+                    class="border-none focus:ring-0"
+                  />
+                  <input
+                    v-model="stat.value"
+                    placeholder="Value"
+                    class="border-none focus:ring-0"
+                  />
+
+                  <button
+                    class="col-span-2 text-red-500 text-sm text-left"
+                    @click="removeStoryStat(index)"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
           <div
-  v-if="activePage.page_type.toLowerCase() === 'home' && activeSection === 'executives'"
->
-  <div class="space-y-6">
+            v-if="
+              activePage.page_type.toLowerCase() === 'home' &&
+              activeSection === 'news'
+            "
+          >
+            <div class="space-y-8">
+              <div
+                v-for="(monthData, monthName) in currentSectionData.months"
+                :key="monthName"
+                class="border border-gray-300 rounded-lg p-4 space-y-6"
+              >
+                <!-- Month Header -->
+                <div class="flex justify-between items-center">
+                  <h3 class="font-semibold">{{ monthName }}</h3>
+                  <button
+                    class="text-red-500 text-sm"
+                    @click="removeMonth(monthName)"
+                  >
+                    Delete Month
+                  </button>
+                </div>
 
-    <button
-      class="bg-black text-white px-3 py-2 rounded"
-      @click="addExecutive"
-    >
-      + Add Executive
-    </button>
+                <!-- Featured -->
+                <div class="space-y-2">
+                  <label class="text-xs font-semibold uppercase text-gray-500">
+                    Featured Description
+                  </label>
+                  <textarea
+                    v-model="monthData.featured.description"
+                    rows="3"
+                    class="w-full border-none focus:ring-0 resize-none"
+                  />
+                </div>
 
-    <div
-      v-for="(exec, index) in currentSectionData"
-      :key="index"
-      class="border rounded p-4 space-y-2"
-    >
-      <input v-model="exec.name" placeholder="Name" class="w-full border-none focus:ring-0" />
-      <input v-model="exec.position" placeholder="Position" class="w-full border-none focus:ring-0" />
-      <input v-model="exec.role" placeholder="Role" class="w-full border-none focus:ring-0" />
+                <!-- News List -->
+                <div class="space-y-4">
+                  <div class="flex justify-between">
+                    <label
+                      class="text-xs font-semibold uppercase text-gray-500"
+                    >
+                      News List
+                    </label>
+                    <button
+                      class="text-sm bg-black text-white px-2 py-1 rounded"
+                      @click="addNewsItem(monthName)"
+                    >
+                      + Add News
+                    </button>
+                  </div>
 
-      <button
-        class="text-red-500 text-sm"
-        @click="removeExecutive(index)"
-      >
-        Remove
-      </button>
-    </div>
+                  <div
+                    v-for="(news, index) in monthData.newsList"
+                    :key="index"
+                    class="border rounded p-3 space-y-2"
+                  >
+                    <input
+                      v-model="news.tag"
+                      placeholder="Tag"
+                      class="w-full border-none focus:ring-0"
+                    />
+                    <input
+                      v-model="news.date"
+                      placeholder="Date"
+                      class="w-full border-none focus:ring-0"
+                    />
+                    <textarea
+                      v-model="news.description"
+                      rows="2"
+                      class="w-full border-none focus:ring-0 resize-none"
+                    />
 
-  </div>
-</div>
-<div
-  v-if="activePage.page_type.toLowerCase() === 'home' && activeSection === 'faqs'"
->
-  <div class="space-y-6">
+                    <button
+                      class="text-red-500 text-sm"
+                      @click="removeNewsItem(monthName, index)"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              </div>
 
-    <button
-      class="bg-black text-white px-3 py-2 rounded"
-      @click="addFaq"
-    >
-      + Add FAQ
-    </button>
+              <button
+                class="bg-black text-white px-4 py-2 rounded"
+                @click="addMonth"
+              >
+                + Add New Month
+              </button>
+            </div>
+          </div>
+          <div
+            v-if="
+              activePage.page_type.toLowerCase() === 'home' &&
+              activeSection === 'executives'
+            "
+          >
+            <div class="space-y-6">
+              <button
+                class="bg-black text-white px-3 py-2 rounded"
+                @click="addExecutive"
+              >
+                + Add Executive
+              </button>
 
-    <div
-      v-for="(faq, index) in currentSectionData"
-      :key="index"
-      class="border rounded p-4 space-y-3"
-    >
-      <input
-        v-model="faq.question"
-        placeholder="Question"
-        class="w-full border-none focus:ring-0"
-      />
+              <div
+                v-for="(exec, index) in currentSectionData"
+                :key="index"
+                class="border rounded p-4 space-y-2"
+              >
+                <input
+                  v-model="exec.name"
+                  placeholder="Name"
+                  class="w-full border-none focus:ring-0"
+                />
+                <input
+                  v-model="exec.position"
+                  placeholder="Position"
+                  class="w-full border-none focus:ring-0"
+                />
+                <input
+                  v-model="exec.role"
+                  placeholder="Role"
+                  class="w-full border-none focus:ring-0"
+                />
 
-      <textarea
-        v-model="faq.answer"
-        rows="3"
-        placeholder="Answer"
-        class="w-full border-none focus:ring-0 resize-none"
-      />
+                <button
+                  class="text-red-500 text-sm"
+                  @click="removeExecutive(index)"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            v-if="
+              activePage.page_type.toLowerCase() === 'home' &&
+              activeSection === 'faqs'
+            "
+          >
+            <div class="space-y-6">
+              <button
+                class="bg-black text-white px-3 py-2 rounded"
+                @click="addFaq"
+              >
+                + Add FAQ
+              </button>
 
-      <button
-        class="text-red-500 text-sm"
-        @click="removeFaq(index)"
-      >
-        Remove
-      </button>
-    </div>
+              <div
+                v-for="(faq, index) in currentSectionData"
+                :key="index"
+                class="border rounded p-4 space-y-3"
+              >
+                <input
+                  v-model="faq.question"
+                  placeholder="Question"
+                  class="w-full border-none focus:ring-0"
+                />
 
-  </div>
-</div>
+                <textarea
+                  v-model="faq.answer"
+                  rows="3"
+                  placeholder="Answer"
+                  class="w-full border-none focus:ring-0 resize-none"
+                />
 
-<!-- ABOUT HERO SECTION -->
-<div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'hero'">
-  <div class="flex space-x-6">
-    <!-- LEFT SIDE -->
-    <div class="w-3/5 space-y-6">
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">Title Highlight</label>
-        <input v-model="currentSectionData.titleHighlight" type="text" class="w-full text-lg border-none focus:ring-0 p-0 m-0" />
-      </div>
+                <button class="text-red-500 text-sm" @click="removeFaq(index)">
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
 
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">Title Main</label>
-        <input v-model="currentSectionData.titleMain" type="text" class="w-full text-lg border-none focus:ring-0 p-0 m-0" />
-      </div>
+          <!-- ABOUT HERO SECTION -->
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'about' &&
+              activeSection === 'hero'
+            "
+          >
+            <div class="flex space-x-6">
+              <!-- LEFT SIDE -->
+              <div class="w-3/5 space-y-6">
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                    >Title Highlight</label
+                  >
+                  <input
+                    v-model="currentSectionData.titleHighlight"
+                    type="text"
+                    class="w-full text-lg border-none focus:ring-0 p-0 m-0"
+                  />
+                </div>
 
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">Description Top</label>
-        <textarea v-model="currentSectionData.descriptionTop" rows="2" class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
-      </div>
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                    >Title Main</label
+                  >
+                  <input
+                    v-model="currentSectionData.titleMain"
+                    type="text"
+                    class="w-full text-lg border-none focus:ring-0 p-0 m-0"
+                  />
+                </div>
 
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">Description Text</label>
-        <textarea v-model="currentSectionData.descriptionText" rows="2" class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
-      </div>
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                    >Description Top</label
+                  >
+                  <textarea
+                    v-model="currentSectionData.descriptionTop"
+                    rows="2"
+                    class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+                  ></textarea>
+                </div>
 
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">Description Bottom</label>
-        <textarea v-model="currentSectionData.descriptionBottom" rows="2" class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
-      </div>
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                    >Description Text</label
+                  >
+                  <textarea
+                    v-model="currentSectionData.descriptionText"
+                    rows="2"
+                    class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+                  ></textarea>
+                </div>
 
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">CTA Label</label>
-        <input v-model="currentSectionData.ctaLabel" type="text" class="w-full text-base border-none focus:ring-0 p-0 m-0" />
-      </div>
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                    >Description Bottom</label
+                  >
+                  <textarea
+                    v-model="currentSectionData.descriptionBottom"
+                    rows="2"
+                    class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+                  ></textarea>
+                </div>
 
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">CTA Link</label>
-        <input v-model="currentSectionData.ctaLink" type="text" class="w-full text-base border-none focus:ring-0 p-0 m-0" />
-      </div>
-    </div>
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                    >CTA Label</label
+                  >
+                  <input
+                    v-model="currentSectionData.ctaLabel"
+                    type="text"
+                    class="w-full text-base border-none focus:ring-0 p-0 m-0"
+                  />
+                </div>
 
-    <!-- RIGHT SIDE -->
-    <div class="w-2/5 space-y-6">
-      <image-uploader v-model="currentSectionData.image" />
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">Background Color</label>
-        <input type="color" v-model="currentSectionData.backgroundColor" class="w-12 h-8 rounded border-none p-0 cursor-pointer" />
-      </div>
-    </div>
-  </div>
-</div>
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                    >CTA Link</label
+                  >
+                  <input
+                    v-model="currentSectionData.ctaLink"
+                    type="text"
+                    class="w-full text-base border-none focus:ring-0 p-0 m-0"
+                  />
+                </div>
+              </div>
 
-<!-- ABOUT STORY SECTION -->
-<div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'story'">
-  <div class="space-y-6">
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">Section Title</label>
-      <input v-model="currentSectionData.sectionTitle" type="text" class="w-full text-lg border-none focus:ring-0 p-0 m-0" />
-    </div>
+              <!-- RIGHT SIDE -->
+              <div class="w-2/5 space-y-6">
+                <image-uploader v-model="currentSectionData.image" />
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                    >Background Color</label
+                  >
+                  <input
+                    type="color"
+                    v-model="currentSectionData.backgroundColor"
+                    class="w-12 h-8 rounded border-none p-0 cursor-pointer"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
 
-    <div v-for="(para, index) in currentSectionData.paragraphs" :key="index" class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">Paragraph {{ index + 1 }}</label>
-      <textarea v-model="currentSectionData.paragraphs[index]" rows="3" class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
-      <button class="text-red-500 text-sm" @click="deleteParagraph(index)">Delete</button>
-    </div>
-    <button class="bg-black text-white px-4 py-2 rounded" @click="addParagraph">Add Paragraph</button>
+          <!-- ABOUT STORY SECTION -->
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'about' &&
+              activeSection === 'story'
+            "
+          >
+            <div class="space-y-6">
+              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                  >Section Title</label
+                >
+                <input
+                  v-model="currentSectionData.sectionTitle"
+                  type="text"
+                  class="w-full text-lg border-none focus:ring-0 p-0 m-0"
+                />
+              </div>
 
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">Mission</label>
-      <textarea v-model="currentSectionData.mission" rows="3" class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
-    </div>
+              <div
+                v-for="(para, index) in currentSectionData.paragraphs"
+                :key="index"
+                class="border border-gray-300 rounded-lg p-3 space-y-2"
+              >
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                  >Paragraph {{ index + 1 }}</label
+                >
+                <textarea
+                  v-model="currentSectionData.paragraphs[index]"
+                  rows="3"
+                  class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+                ></textarea>
+                <button
+                  class="text-red-500 text-sm"
+                  @click="deleteParagraph(index)"
+                >
+                  Delete
+                </button>
+              </div>
+              <button
+                class="bg-black text-white px-4 py-2 rounded"
+                @click="addParagraph"
+              >
+                Add Paragraph
+              </button>
 
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">Vision</label>
-      <textarea v-model="currentSectionData.vision" rows="3" class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
-    </div>
+              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                  >Mission</label
+                >
+                <textarea
+                  v-model="currentSectionData.mission"
+                  rows="3"
+                  class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+                ></textarea>
+              </div>
 
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">Role Points</label>
-      <div v-for="(point, index) in currentSectionData.rolePoints" :key="index" class="flex justify-between items-center space-x-2">
-        <input v-model="currentSectionData.rolePoints[index]" type="text" class="flex-grow border-none focus:ring-0 p-0 m-0" />
-        <button class="text-red-500 text-sm" @click="deleteRolePoint(index)">Delete</button>
-      </div>
-      <button class="bg-black text-white px-3 py-1 rounded mt-2" @click="addRolePoint">Add Point</button>
-    </div>
+              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                  >Vision</label
+                >
+                <textarea
+                  v-model="currentSectionData.vision"
+                  rows="3"
+                  class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+                ></textarea>
+              </div>
 
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">Commitment Goals</label>
-      <div v-for="(goal, index) in currentSectionData.commitmentGoals" :key="index" class="flex justify-between items-center space-x-2">
-        <input v-model="currentSectionData.commitmentGoals[index]" type="text" class="flex-grow border-none focus:ring-0 p-0 m-0" />
-        <button class="text-red-500 text-sm" @click="deleteGoal(index)">Delete</button>
-      </div>
-      <button class="bg-black text-white px-3 py-1 rounded mt-2" @click="addCommitmentGoal">Add Goal</button>
-    </div>
+              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                  >Role Points</label
+                >
+                <div
+                  v-for="(point, index) in currentSectionData.rolePoints"
+                  :key="index"
+                  class="flex justify-between items-center space-x-2"
+                >
+                  <input
+                    v-model="currentSectionData.rolePoints[index]"
+                    type="text"
+                    class="flex-grow border-none focus:ring-0 p-0 m-0"
+                  />
+                  <button
+                    class="text-red-500 text-sm"
+                    @click="deleteRolePoint(index)"
+                  >
+                    Delete
+                  </button>
+                </div>
+                <button
+                  class="bg-black text-white px-3 py-1 rounded mt-2"
+                  @click="addRolePoint"
+                >
+                  Add Point
+                </button>
+              </div>
 
-    <image-uploader v-model="currentSectionData.image" />
-  </div>
-</div>
+              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                  >Commitment Goals</label
+                >
+                <div
+                  v-for="(goal, index) in currentSectionData.commitmentGoals"
+                  :key="index"
+                  class="flex justify-between items-center space-x-2"
+                >
+                  <input
+                    v-model="currentSectionData.commitmentGoals[index]"
+                    type="text"
+                    class="flex-grow border-none focus:ring-0 p-0 m-0"
+                  />
+                  <button
+                    class="text-red-500 text-sm"
+                    @click="deleteGoal(index)"
+                  >
+                    Delete
+                  </button>
+                </div>
+                <button
+                  class="bg-black text-white px-3 py-1 rounded mt-2"
+                  @click="addCommitmentGoal"
+                >
+                  Add Goal
+                </button>
+              </div>
 
-<!-- ABOUT ITEMS SECTION -->
-<div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'items'">
-  <div v-for="(item, index) in currentSectionData.items" :key="index" class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
-    <input v-model="item.title" type="text" class="w-full border-none focus:ring-0 p-0 m-0" />
+              <image-uploader v-model="currentSectionData.image" />
+            </div>
+          </div>
 
-    <label class="block text-xs font-semibold uppercase text-gray-500">Short Description</label>
-    <input v-model="item.shortDesc" type="text" class="w-full border-none focus:ring-0 p-0 m-0" />
+          <!-- ABOUT ITEMS SECTION -->
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'about' &&
+              activeSection === 'items'
+            "
+          >
+            <div
+              v-for="(item, index) in currentSectionData.items"
+              :key="index"
+              class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
+            >
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Title</label
+              >
+              <input
+                v-model="item.title"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
 
-    <label class="block text-xs font-semibold uppercase text-gray-500">Full Description</label>
-    <textarea v-model="item.fullDesc" rows="3" class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Short Description</label
+              >
+              <input
+                v-model="item.shortDesc"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
 
-    <label class="block text-xs font-semibold uppercase text-gray-500">Color Class</label>
-    <input v-model="item.colorClass" type="text" class="w-full border-none focus:ring-0 p-0 m-0" />
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Full Description</label
+              >
+              <textarea
+                v-model="item.fullDesc"
+                rows="3"
+                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+              ></textarea>
 
-    <button class="text-red-500 text-sm mt-2" @click="deleteItem(index)">Delete Item</button>
-  </div>
-  <button class="bg-black text-white px-4 py-2 rounded" @click="addItem">Add New Item</button>
-</div>
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Color Class</label
+              >
+              <input
+                v-model="item.colorClass"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
 
-<!-- ABOUT HISTORY SECTION -->
-<div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'history'">
-  <div class="border border-gray-300 rounded-lg p-3 mb-4">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
-    <input v-model="currentSectionData.title" type="text" class="w-full border-none focus:ring-0 p-0 m-0" />
-  </div>
-
-  <div v-for="(milestone, index) in currentSectionData.milestones" :key="index" class="border border-gray-300 rounded-lg p-3 mb-2 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Year</label>
-    <input v-model="milestone.year" type="text" class="w-full border-none focus:ring-0 p-0 m-0" />
-
-    <label class="block text-xs font-semibold uppercase text-gray-500">Event</label>
-    <textarea v-model="milestone.event" rows="2" class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
-
-    <button class="text-red-500 text-sm" @click="deleteMilestone(index)">Delete</button>
-  </div>
-
-  <button class="bg-black text-white px-4 py-2 rounded" @click="addMilestone">Add Milestone</button>
-</div>
-
-<!-- ABOUT GOVERNANCE SECTION -->
-<div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'governance'">
-  <div class="border border-gray-300 rounded-lg p-3 mb-4">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
-    <input v-model="currentSectionData.title" type="text" class="w-full border-none focus:ring-0 p-0 m-0" />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 mb-2 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Description</label>
-    <textarea v-model="currentSectionData.description" rows="3" class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Units</label>
-    <div v-for="(unit, index) in currentSectionData.units" :key="index" class="flex justify-between items-center space-x-2">
-      <input v-model="currentSectionData.units[index]" type="text" class="flex-grow border-none focus:ring-0 p-0 m-0" />
-      <button class="text-red-500 text-sm" @click="deleteUnit(index)">Delete</button>
-    </div>
-    <button class="bg-black text-white px-3 py-1 rounded mt-2" @click="addUnit">Add Unit</button>
-  </div>
-</div>
+              <button
+                class="text-red-500 text-sm mt-2"
+                @click="deleteItem(index)"
+              >
+                Delete Item
+              </button>
+            </div>
+            <button
+              class="bg-black text-white px-4 py-2 rounded"
+              @click="addItem"
+            >
+              Add New Item
+            </button>
+          </div>
 
           <div
-  v-else-if="activePage.page_type.toLowerCase() === 'contact' && activeSection === 'hero'"
->
-  <div class="flex space-x-6">
-    <!-- LEFT SIDE -->
-    <div class="w-3/5 space-y-6">
-      <!-- Badge Text -->
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">
-          Badge Text
-        </label>
-        <input
-          v-model="currentSectionData.badgeText"
-          type="text"
-          class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-        />
-      </div>
-
-      <!-- Headline Line 1 -->
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">
-          Headline Line 1
-        </label>
-        <input
-          v-model="currentSectionData.headline.line1"
-          type="text"
-          class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-        />
-      </div>
-
-      <!-- Headline Line 2 -->
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">
-          Headline Line 2
-        </label>
-        <input
-          v-model="currentSectionData.headline.line2"
-          type="text"
-          class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-        />
-      </div>
-
-      <!-- Subheadline -->
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">
-          Subheadline
-        </label>
-        <textarea
-          v-model="currentSectionData.subheadline"
-          rows="3"
-          class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-        />
-      </div>
-
-      <!-- Response Note -->
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">
-          Response Note
-        </label>
-        <input
-          v-model="currentSectionData.responseNote"
-          type="text"
-          class="w-full text-sm border-none focus:ring-0 p-0 m-0"
-        />
-      </div>
-    </div>
-
-    <!-- RIGHT SIDE -->
-    <div class="w-2/5 space-y-6">
-      <!-- Image Upload -->
-      <image-uploader v-model="currentSectionData.image.src" />
-
-      <!-- Image Alt -->
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">
-          Image Alt Text
-        </label>
-        <input
-          v-model="currentSectionData.image.alt"
-          type="text"
-          class="w-full text-sm border-none focus:ring-0 p-0 m-0"
-        />
-      </div>
-
-      <!-- Background Color -->
-      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-        <label class="block text-xs font-semibold uppercase text-gray-500">
-          Background Color Class
-        </label>
-        <input
-          v-model="currentSectionData.backgroundColor"
-          type="text"
-          class="w-full text-sm border-none focus:ring-0 p-0 m-0"
-        />
-      </div>
-    </div>
-  </div>
-</div>
-<div
-  v-else-if="activePage.page_type.toLowerCase() === 'contact' && activeSection === 'form'"
->
-  <div class="space-y-6">
-
-    <!-- Form Title -->
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">
-        Form Title
-      </label>
-      <input
-        v-model="currentSectionData.title"
-        type="text"
-        class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-      />
-    </div>
-
-    <!-- Description -->
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">
-        Description
-      </label>
-      <textarea
-        v-model="currentSectionData.description"
-        rows="3"
-        class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-      />
-    </div>
-
-    <!-- Fields -->
-    <div
-      v-for="(field, index) in currentSectionData.fields"
-      :key="index"
-      class="border border-gray-300 rounded-lg p-4 space-y-4"
-    >
-      <div class="flex justify-between items-center">
-        <h4 class="text-sm font-semibold text-gray-700">
-          Field {{ index + 1 }}
-        </h4>
-        <button
-          @click="deleteField(index)"
-          class="text-red-500 text-xs font-semibold"
-        >
-          Delete
-        </button>
-      </div>
-
-      <div class="grid grid-cols-2 gap-4">
-        <input
-          v-model="field.label"
-          placeholder="Label"
-          class="border border-gray-200 rounded p-2 text-sm"
-        />
-        <input
-          v-model="field.placeholder"
-          placeholder="Placeholder"
-          class="border border-gray-200 rounded p-2 text-sm"
-        />
-      </div>
-
-      <div class="grid grid-cols-2 gap-4">
-        <select
-          v-model="field.type"
-          class="border border-gray-200 rounded p-2 text-sm"
-        >
-          <option value="text">Text</option>
-          <option value="email">Email</option>
-          <option value="textarea">Textarea</option>
-        </select>
-
-        <label class="flex items-center text-sm space-x-2">
-          <input type="checkbox" v-model="field.required" />
-          <span>Required</span>
-        </label>
-      </div>
-    </div>
-
-    <button
-      @click="addField"
-      class="px-4 py-2 bg-gray-100 rounded-lg text-sm font-semibold"
-    >
-      Add Field
-    </button>
-
-    <!-- Submit Button Text -->
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">
-        Submit Button Text
-      </label>
-      <input
-        v-model="currentSectionData.submitButtonText"
-        type="text"
-        class="w-full text-sm border-none focus:ring-0 p-0 m-0"
-      />
-    </div>
-
-    <!-- Success Message -->
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">
-        Success Message
-      </label>
-      <textarea
-        v-model="currentSectionData.successMessage"
-        rows="2"
-        class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-      />
-    </div>
-  </div>
-</div>
-<div
-  v-else-if="activePage.page_type.toLowerCase() === 'contact' && activeSection === 'details'"
->
-  <div class="space-y-6">
-
-    <!-- Address -->
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">
-        Address
-      </label>
-      <textarea
-        v-model="currentSectionData.address.text"
-        rows="2"
-        class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-      />
-    </div>
-
-    <!-- Phone -->
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">
-        Phone Number
-      </label>
-      <input
-        v-model="currentSectionData.phone"
-        type="text"
-        class="w-full text-sm border-none focus:ring-0 p-0 m-0"
-      />
-    </div>
-
-    <!-- Email -->
-    <div
-      v-for="(email, index) in currentSectionData.emails"
-      :key="index"
-      class="border border-gray-300 rounded-lg p-3 space-y-2"
-    >
-      <label class="block text-xs font-semibold uppercase text-gray-500">
-        Email {{ index + 1 }}
-      </label>
-      <input
-        v-model="email.address"
-        type="text"
-        class="w-full text-sm border-none focus:ring-0 p-0 m-0"
-      />
-    </div>
-
-  </div>
-</div>
-<div
-  v-else-if="activePage.page_type.toLowerCase() === 'contact' && activeSection === 'map'"
->
-  <div class="space-y-6">
-
-    <!-- Iframe URL -->
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">
-        Google Maps Iframe URL
-      </label>
-      <textarea
-        v-model="currentSectionData.iframeUrl"
-        rows="3"
-        class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-      />
-    </div>
-
-    <!-- Map Height -->
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">
-        Map Height
-      </label>
-      <input
-        v-model="currentSectionData.height"
-        type="number"
-        class="w-full text-sm border-none focus:ring-0 p-0 m-0"
-      />
-    </div>
-
-  </div>
-</div>
-<div
-  v-else-if="activePage.page_type.toLowerCase() === 'resources' && activeSection === 'hero'"
-  class="space-y-6"
->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Title Line 1
-    </label>
-    <input
-      v-model="currentSectionData.titleLine1"
-      type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Title Line 2
-    </label>
-    <input
-      v-model="currentSectionData.titleLine2"
-      type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Description
-    </label>
-    <textarea
-      v-model="currentSectionData.description"
-      rows="3"
-      class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-    ></textarea>
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Background Color
-    </label>
-    <input
-      v-model="currentSectionData.backgroundColor"
-      type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-  </div>
-
-  <image-uploader
-    v-model="currentSectionData.image"
-    label="Hero Image"
-  />
-</div>
-<div
-  v-else-if="activePage.page_type.toLowerCase() === 'resources' && activeSection === 'newsletterSection'"
->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Section Title
-    </label>
-    <input
-      v-model="currentSectionData.title"
-      type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-  </div>
-
-  <!-- Newsletter Items -->
-  <div
-    v-for="(item, index) in currentSectionData.items"
-    :key="index"
-    class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
-  >
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Date
-    </label>
-    <input
-      v-model="item.date"
-      type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Title
-    </label>
-    <input
-      v-model="item.text"
-      type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      PDF URL
-    </label>
-    <input
-      v-model="item.pdfUrl"
-      type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-
-    <button
-      class="text-red-500 text-sm mt-2"
-      @click="deleteItem(index)"
-    >
-      Delete Newsletter
-    </button>
-  </div>
-
-  <button
-    class="bg-black text-white px-4 py-2 rounded"
-    @click="addItem"
-  >
-    Add Newsletter
-  </button>
-
-  <!-- Pagination -->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2 mt-6">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Current Page
-    </label>
-    <input
-      v-model="currentSectionData.pagination.currentPage"
-      type="number"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Total Pages
-    </label>
-    <input
-      v-model="currentSectionData.pagination.totalPages"
-      type="number"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Next Page URL
-    </label>
-    <input
-      v-model="currentSectionData.pagination.nextPageUrl"
-      type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-  </div>
-</div>
-<div
-  v-else-if="activePage.page_type.toLowerCase() === 'resources' && activeSection === 'publicationsSection'"
->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Section Title
-    </label>
-    <input
-      v-model="currentSectionData.title"
-      type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Background Color
-    </label>
-    <input
-      v-model="currentSectionData.backgroundColor"
-      type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-  </div>
-
-  <div
-    v-for="(item, index) in currentSectionData.items"
-    :key="index"
-    class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
-  >
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Title
-    </label>
-    <input
-      v-model="item.title"
-      type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Description
-    </label>
-    <textarea
-      v-model="item.description"
-      rows="3"
-      class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-    ></textarea>
-
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      PDF URL
-    </label>
-    <input
-      v-model="item.pdfUrl"
-      type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-
-    <button
-      class="text-red-500 text-sm mt-2"
-      @click="deleteItem(index)"
-    >
-      Delete Publication
-    </button>
-  </div>
-
-  <button
-    class="bg-black text-white px-4 py-2 rounded"
-    @click="addItem"
-  >
-    Add Publication
-  </button>
-
-  <!-- Pagination -->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2 mt-6">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Current Page
-    </label>
-    <input
-      v-model="currentSectionData.pagination.currentPage"
-      type="number"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Total Pages
-    </label>
-    <input
-      v-model="currentSectionData.pagination.totalPages"
-      type="number"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-  </div>
-</div>
-
-<div
-  v-else-if="activePage.page_type.toLowerCase() === 'getinvolved' && activeSection === 'hero'"
-  class="space-y-6"
->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Title Line 1</label>
-    <input v-model="currentSectionData.titleLine1" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Title Line 2</label>
-    <input v-model="currentSectionData.titleLine2" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Description</label>
-    <textarea v-model="currentSectionData.description" rows="3"
-      class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Background Color</label>
-    <input v-model="currentSectionData.backgroundColor" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-  </div>
-
-  <image-uploader v-model="currentSectionData.image" label="Hero Image" />
-</div>
-<div
-  v-else-if="activePage.page_type.toLowerCase() === 'getinvolved' && activeSection === 'donations'"
->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
-    <input v-model="currentSectionData.title" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Subtitle</label>
-    <input v-model="currentSectionData.subtitle" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-  </div>
-
-  <!-- Paragraphs -->
-  <div
-    v-for="(paragraph, index) in currentSectionData.paragraphs"
-    :key="index"
-    class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
-  >
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Paragraph {{ index + 1 }}
-    </label>
-    <textarea v-model="currentSectionData.paragraphs[index]" rows="3"
-      class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
-
-    <button class="text-red-500 text-sm mt-2"
-      @click="deleteItem(index)">
-      Delete Paragraph
-    </button>
-  </div>
-
-  <button class="bg-black text-white px-4 py-2 rounded mb-6"
-    @click="addItem">
-    Add Paragraph
-  </button>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Note</label>
-    <textarea v-model="currentSectionData.note" rows="2"
-      class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Quote</label>
-    <textarea v-model="currentSectionData.quote" rows="2"
-      class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Button Text</label>
-    <input v-model="currentSectionData.buttonText" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-  </div>
-</div>
-<div
-  v-else-if="activePage.page_type.toLowerCase() === 'getinvolved' && activeSection === 'partnerships'"
->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
-    <input v-model="currentSectionData.title" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Tagline</label>
-    <input v-model="currentSectionData.tagline" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Description</label>
-    <textarea v-model="currentSectionData.description" rows="3"
-      class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
-  </div>
-
-  <div
-    v-for="(item, index) in currentSectionData.items"
-    :key="index"
-    class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
-  >
-    <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
-    <input v-model="item.title" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-
-    <label class="block text-xs font-semibold uppercase text-gray-500">Description</label>
-    <textarea v-model="item.description" rows="3"
-      class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
-
-    <label class="block text-xs font-semibold uppercase text-gray-500">Button Text</label>
-    <input v-model="item.buttonText" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-
-    <button class="text-red-500 text-sm mt-2"
-      @click="deleteItem(index)">
-      Delete Item
-    </button>
-  </div>
-
-  <button class="bg-black text-white px-4 py-2 rounded"
-    @click="addItem">
-    Add Partnership Item
-  </button>
-</div>
-<div
-  v-else-if="activePage.page_type.toLowerCase() === 'getinvolved' && activeSection === 'opportunities'"
->
-  <div
-    v-for="(item, index) in currentSectionData.items"
-    :key="index"
-    class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
-  >
-    <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
-    <input v-model="item.title" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-
-    <label class="block text-xs font-semibold uppercase text-gray-500">Description</label>
-    <textarea v-model="item.description" rows="3"
-      class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
-
-    <label class="block text-xs font-semibold uppercase text-gray-500">Button Text</label>
-    <input v-model="item.buttonText" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-
-    <button class="text-red-500 text-sm mt-2"
-      @click="deleteItem(index)">
-      Delete Item
-    </button>
-  </div>
-
-  <button class="bg-black text-white px-4 py-2 rounded"
-    @click="addItem">
-    Add Opportunity
-  </button>
-</div>
-<div
-  v-else-if="activePage.page_type.toLowerCase() === 'getinvolved' && activeSection === 'volunteering'"
-  class="space-y-6"
->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
-    <input v-model="currentSectionData.title" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Subtitle</label>
-    <input v-model="currentSectionData.subtitle" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Description</label>
-    <textarea v-model="currentSectionData.description" rows="3"
-      class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Button Text</label>
-    <input v-model="currentSectionData.buttonText" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Background Color</label>
-    <input v-model="currentSectionData.backgroundColor" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-  </div>
-</div>
-<div
-  v-else-if="activePage.page_type.toLowerCase() === 'getinvolved' && activeSection === 'donationModal'"
->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Modal Title</label>
-    <input v-model="currentSectionData.title" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-6">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Subtitle</label>
-    <input v-model="currentSectionData.subtitle" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-  </div>
-
-  <div
-    v-for="(item, index) in currentSectionData.options"
-    :key="index"
-    class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
-  >
-    <label class="block text-xs font-semibold uppercase text-gray-500">Option Title</label>
-    <input v-model="item.title" type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0" />
-
-    <label class="block text-xs font-semibold uppercase text-gray-500">Description</label>
-    <textarea v-model="item.description" rows="2"
-      class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
-
-    <button class="text-red-500 text-sm mt-2"
-      @click="deleteItem(index)">
-      Delete Option
-    </button>
-  </div>
-
-  <button class="bg-black text-white px-4 py-2 rounded"
-    @click="addItem">
-    Add Option
-  </button>
-</div>
-<div
-  v-else-if="
-    activePage.page_type.toLowerCase() === 'membership' &&
-    activeSection === 'hero'
-  "
-  class="space-y-4"
->
-  <div>
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Headline Top
-    </label>
-    <input
-      v-model="currentSectionData.headlineTop"
-      type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-  </div>
-
-  <div>
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Headline Bottom
-    </label>
-    <input
-      v-model="currentSectionData.headlineBottom"
-      type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-  </div>
-
-  <div>
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Description
-    </label>
-    <textarea
-      v-model="currentSectionData.description"
-      rows="4"
-      class="w-full border-none focus:ring-0 p-0 m-0 resize-none"
-    />
-  </div>
-
-  <div>
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Hero Image
-    </label>
-    <input
-      v-model="currentSectionData.image"
-      type="text"
-      class="w-full border-none focus:ring-0 p-0 m-0"
-    />
-  </div>
-</div>
-<div
-  v-else-if="
-    activePage.page_type.toLowerCase() === 'membership' &&
-    activeSection === 'sectionTitle'
-  "
->
-  <label class="block text-xs font-semibold uppercase text-gray-500">
-    Section Title
-  </label>
-  <input
-    v-model="currentSectionData"
-    type="text"
-    class="w-full border-none focus:ring-0 p-0 m-0"
-  />
-</div>
-
-
-
-<div
-  v-else-if="
-    activePage.page_type.toLowerCase() === 'membership' &&
-    activeSection === 'categories'
-  "
-  class="space-y-6"
->
-  <div
-    v-for="(category, catIndex) in currentSectionData"
-    :key="catIndex"
-    class="border border-gray-300 rounded-lg p-4 space-y-4"
-  >
-    <!-- Category Info -->
-    <div>
-      <label class="block text-xs font-semibold uppercase text-gray-500">
-        Category Name
-      </label>
-      <input
-        v-model="category.name"
-        type="text"
-        class="w-full border-none focus:ring-0 p-0 m-0"
-      />
-    </div>
-
-    <div>
-      <label class="block text-xs font-semibold uppercase text-gray-500">
-        Description
-      </label>
-      <input
-        v-model="category.description"
-        type="text"
-        class="w-full border-none focus:ring-0 p-0 m-0"
-      />
-    </div>
-
-    <!-- Plans -->
-    <div
-      v-for="(plan, planIndex) in category.plans"
-      :key="planIndex"
-      class="border border-gray-200 rounded-md p-3 space-y-2"
-    >
-      <input v-model="plan.title" placeholder="Plan Title" class="w-full border-none p-0 m-0" />
-      <input v-model="plan.price" placeholder="Price" class="w-full border-none p-0 m-0" />
-      <input v-model="plan.audience" placeholder="Audience" class="w-full border-none p-0 m-0" />
-
-      <!-- Benefits -->
-      <div
-        v-for="(benefit, benefitIndex) in plan.benefits"
-        :key="benefitIndex"
-        class="flex items-center gap-2"
-      >
-        <input
-          v-model="plan.benefits[benefitIndex]"
-          class="flex-1 border-none p-0 m-0"
-        />
-        <button
-          class="text-red-500 text-sm"
-          @click="plan.benefits.splice(benefitIndex, 1)"
-        >
-          X
-        </button>
-      </div>
-
-      <button
-        class="text-sm text-black"
-        @click="plan.benefits.push('New benefit')"
-      >
-        + Add Benefit
-      </button>
-
-      <button
-        class="text-red-500 text-sm"
-        @click="category.plans.splice(planIndex, 1)"
-      >
-        Delete Plan
-      </button>
-    </div>
-
-    <button
-      class="text-sm bg-black text-white px-3 py-1 rounded"
-      @click="category.plans.push({
-        title: '',
-        price: '',
-        audience: '',
-        benefits: []
-      })"
-    >
-      + Add Plan
-    </button>
-
-    <button
-      class="text-red-500 text-sm"
-      @click="currentSectionData.splice(catIndex, 1)"
-    >
-      Delete Category
-    </button>
-  </div>
-
-  <button
-    class="bg-black text-white px-4 py-2 rounded"
-    @click="currentSectionData.push({
-      id: '',
-      name: '',
-      description: '',
-      plans: []
-    })"
-  >
-    + Add Category
-  </button>
-</div>
-<div
-  v-else-if="
-    activePage.page_type.toLowerCase() === 'membership' &&
-    activeSection === 'valuePropositionTabs'
-  "
-  class="space-y-6"
->
-  <div
-    v-for="(tab, index) in currentSectionData"
-    :key="index"
-    class="border border-gray-300 rounded-lg p-4 space-y-3"
-  >
-    <input v-model="tab.name" placeholder="Tab Name" class="w-full border-none p-0 m-0" />
-    <input v-model="tab.titleHtml" placeholder="Title HTML" class="w-full border-none p-0 m-0" />
-    <input v-model="tab.color" placeholder="Color" class="w-full border-none p-0 m-0" />
-
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Content HTML
-    </label>
-    <textarea
-      v-model="tab.contentHtml"
-      rows="6"
-      class="w-full border-none resize-none p-0 m-0"
-    />
-
-    <button
-      class="text-red-500 text-sm"
-      @click="currentSectionData.splice(index, 1)"
-    >
-      Delete Tab
-    </button>
-  </div>
-
-  <button
-    class="bg-black text-white px-4 py-2 rounded"
-    @click="currentSectionData.push({
-      id: '',
-      name: '',
-      titleHtml: '',
-      color: '',
-      contentHtml: ''
-    })"
-  >
-    + Add Tab
-  </button>
-</div>
-
-<div
-  v-if="activePage.page_type.toLowerCase() === 'news' && activeSection === 'hero'"
-  class="space-y-6"
->
-  <!-- Hero Section -->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Hero Title Line 1
-    </label>
-    <input
-      v-model="currentSectionData.hero.titleLine1"
-      type="text"
-      class="w-full border-none focus:ring-0"
-    />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Hero Title Line 2
-    </label>
-    <input
-      v-model="currentSectionData.hero.titleLine2"
-      type="text"
-      class="w-full border-none focus:ring-0"
-    />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Hero Description
-    </label>
-    <textarea
-      v-model="currentSectionData.hero.description"
-      rows="4"
-      class="w-full border-none focus:ring-0 resize-none"
-    ></textarea>
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Hero Image URL
-    </label>
-    <input
-      v-model="currentSectionData.hero.image"
-      type="text"
-      class="w-full border-none focus:ring-0"
-    />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Hero Background Color
-    </label>
-    <input
-      v-model="currentSectionData.hero.backgroundColor"
-      type="color"
-      class="w-16 h-10 p-0 border-none focus:ring-0"
-    />
-  </div>
-</div>
-
-<!-- Latest News Section -->
-<div
-  v-if="activePage.page_type.toLowerCase() === 'news' && activeSection === 'latestNewsSection'"
-  class="space-y-8"
->
-  <!-- Filters -->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Filters
-    </label>
-    <div class="flex gap-2 flex-wrap">
-      <span
-        v-for="(filter, index) in currentSectionData.filters"
-        :key="index"
-        class="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2"
-      >
-        {{ filter }}
-        <button @click="removeFilter(index)" class="text-red-500 font-bold">×</button>
-      </span>
-      <input
-        v-model="newFilter"
-        @keyup.enter="addFilter"
-        placeholder="Add filter"
-        class="border p-1 rounded focus:ring-0 w-32"
-      />
-    </div>
-  </div>
-
-  <!-- Articles -->
-  <div
-    v-for="(article, index) in currentSectionData.articles"
-    :key="article.id"
-    class="border border-gray-300 rounded-lg p-4 space-y-3"
-  >
-    <div class="flex justify-between items-center">
-      <h4 class="font-semibold text-sm">Article {{ index + 1 }}</h4>
-      <button @click="removeArticle(index)" class="text-red-500 text-sm">Delete</button>
-    </div>
-
-    <div class="space-y-2">
-      <label class="text-xs font-semibold uppercase text-gray-500">Title</label>
-      <input v-model="article.title" class="w-full border-none focus:ring-0" />
-
-      <label class="text-xs font-semibold uppercase text-gray-500">Excerpt</label>
-      <textarea v-model="article.excerpt" rows="3" class="w-full border-none focus:ring-0 resize-none"></textarea>
-
-      <label class="text-xs font-semibold uppercase text-gray-500">Description</label>
-      <textarea v-model="article.description" rows="5" class="w-full border-none focus:ring-0 resize-none"></textarea>
-
-      <label class="text-xs font-semibold uppercase text-gray-500">Image URL</label>
-      <input v-model="article.image" class="w-full border-none focus:ring-0" />
-
-      <label class="text-xs font-semibold uppercase text-gray-500">Date</label>
-      <input v-model="article.date" type="date" class="w-full border-none focus:ring-0" />
-
-      <label class="text-xs font-semibold uppercase text-gray-500">Link</label>
-      <input v-model="article.link" class="w-full border-none focus:ring-0" />
-
-      <label class="text-xs font-semibold uppercase text-gray-500">Slug</label>
-      <input v-model="article.slug" class="w-full border-none focus:ring-0" />
-
-      <label class="text-xs font-semibold uppercase text-gray-500">Tag</label>
-      <input v-model="article.tag" class="w-full border-none focus:ring-0" />
-    </div>
-  </div>
-
-  <button @click="addArticle" class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800">
-    + Add Article
-  </button>
-</div>
-
-<!-- Policy & Advocacy Section -->
-<div
-  v-if="activePage.page_type.toLowerCase() === 'news' && activeSection === 'policyAdvocacySection'"
-  class="space-y-6"
->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Section Title</label>
-    <input v-model="currentSectionData.title" type="text" class="w-full border-none focus:ring-0" />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Background Color</label>
-    <input v-model="currentSectionData.backgroundColor" type="color" class="w-16 h-10 border-none focus:ring-0" />
-  </div>
-
-  <div
-    v-for="(update, index) in currentSectionData.updates"
-    :key="update.id"
-    class="border border-gray-300 rounded-lg p-4 space-y-2"
-  >
-    <div class="flex justify-between items-center">
-      <h4 class="font-semibold text-sm">Update {{ index + 1 }}</h4>
-      <button @click="removeUpdate(index)" class="text-red-500 text-sm">Delete</button>
-    </div>
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Title</label>
-    <input v-model="update.title" class="w-full border-none focus:ring-0" />
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Description</label>
-    <textarea v-model="update.description" rows="3" class="w-full border-none focus:ring-0 resize-none"></textarea>
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Image URL</label>
-    <input v-model="update.image" class="w-full border-none focus:ring-0" />
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Link</label>
-    <input v-model="update.link" class="w-full border-none focus:ring-0" />
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Slug</label>
-    <input v-model="update.slug" class="w-full border-none focus:ring-0" />
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Tag</label>
-    <input v-model="update.tag" class="w-full border-none focus:ring-0" />
-  </div>
-
-  <button @click="addUpdate" class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800">
-    + Add Update
-  </button>
-</div>
-    <div
-  v-if="activePage.page_type.toLowerCase() === 'governance' && activeSection === 'hero'"
-  class="space-y-6"
->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Title Highlight
-    </label>
-    <input
-      v-model="currentSectionData.hero.titleHighlight"
-      type="text"
-      class="w-full border-none focus:ring-0"
-    />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Title Main
-    </label>
-    <input
-      v-model="currentSectionData.hero.titleMain"
-      type="text"
-      class="w-full border-none focus:ring-0"
-    />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Description
-    </label>
-    <textarea
-      v-model="currentSectionData.hero.description"
-      rows="4"
-      class="w-full border-none focus:ring-0 resize-none"
-    ></textarea>
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Hero Image URL
-    </label>
-    <input
-      v-model="currentSectionData.hero.image"
-      type="text"
-      class="w-full border-none focus:ring-0"
-    />
-  </div>
-</div>
-
-<div
-  v-if="activePage.page_type.toLowerCase() === 'governance' && activeSection === 'boardOfTrustees'"
-  class="space-y-8"
->
-  <!-- Section Title -->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Section Title
-    </label>
-    <input
-      v-model="currentSectionData.title"
-      type="text"
-      class="w-full border-none focus:ring-0"
-    />
-  </div>
-
-  <!-- Chair -->
-  <div class="border border-gray-300 rounded-lg p-4 space-y-3">
-    <h4 class="font-semibold text-sm">Chair</h4>
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Name</label>
-    <input v-model="currentSectionData.chair.name" class="w-full border-none focus:ring-0" />
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Role</label>
-    <input v-model="currentSectionData.chair.role" class="w-full border-none focus:ring-0" />
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Slug</label>
-    <input v-model="currentSectionData.chair.slug" class="w-full border-none focus:ring-0" />
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Tag</label>
-    <input v-model="currentSectionData.chair.tag" class="w-full border-none focus:ring-0" />
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Image URL</label>
-    <input v-model="currentSectionData.chair.image" class="w-full border-none focus:ring-0" />
-  </div>
-
-  <!-- Trustees -->
-  <div
-    v-for="(trustee, index) in currentSectionData.trustees"
-    :key="index"
-    class="border border-gray-300 rounded-lg p-4 space-y-3"
-  >
-    <div class="flex justify-between items-center">
-      <h4 class="font-semibold text-sm">Trustee {{ index + 1 }}</h4>
-      <button @click="removeTrustee(index)" class="text-red-500 text-sm">
-        Delete
-      </button>
-    </div>
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Name</label>
-    <input v-model="trustee.name" class="w-full border-none focus:ring-0" />
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Title</label>
-    <input v-model="trustee.title" class="w-full border-none focus:ring-0" />
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Slug</label>
-    <input v-model="trustee.slug" class="w-full border-none focus:ring-0" />
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Image URL</label>
-    <input v-model="trustee.image" class="w-full border-none focus:ring-0" />
-  </div>
-
-  <button
-    @click="addTrustee"
-    class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800"
-  >
-    + Add Trustee
-  </button>
-</div>
-<div
-  v-if="activePage.page_type.toLowerCase() === 'governance' && activeSection === 'executiveCommittee'"
-  class="space-y-8"
->
-  <!-- Section Title -->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Section Title
-    </label>
-    <input
-      v-model="currentSectionData.title"
-      type="text"
-      class="w-full border-none focus:ring-0"
-    />
-  </div>
-
-  <!-- Members -->
-  <div
-    v-for="(member, index) in currentSectionData.members"
-    :key="index"
-    class="border border-gray-300 rounded-lg p-4 space-y-3"
-  >
-    <div class="flex justify-between items-center">
-      <h4 class="font-semibold text-sm">Member {{ index + 1 }}</h4>
-      <button @click="removeExecutives(index)" class="text-red-500 text-sm">
-        Delete
-      </button>
-    </div>
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Name</label>
-    <input v-model="member.name" class="w-full border-none focus:ring-0" />
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Role</label>
-    <input v-model="member.role" class="w-full border-none focus:ring-0" />
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Slug</label>
-    <input v-model="member.slug" class="w-full border-none focus:ring-0" />
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Image URL</label>
-    <input v-model="member.image" class="w-full border-none focus:ring-0" />
-
-    <label class="text-xs font-semibold uppercase text-gray-500">Profile</label>
-    <textarea
-      v-model="member.profile"
-      rows="3"
-      class="w-full border-none focus:ring-0 resize-none"
-    ></textarea>
-
-    <!-- Socials -->
-    <div
-      v-for="(social, sIndex) in member.socials"
-      :key="sIndex"
-      class="flex gap-2 items-center"
-    >
-      <input
-        v-model="social.platform"
-        placeholder="Platform"
-        class="border p-1 rounded focus:ring-0 w-32"
-      />
-      <input
-        v-model="social.url"
-        placeholder="URL"
-        class="border p-1 rounded focus:ring-0 flex-1"
-      />
-      <button @click="removeSocial(index, sIndex)" class="text-red-500">
-        ×
-      </button>
-    </div>
-
-    <button
-      @click="addSocial(index)"
-      class="bg-gray-200 px-3 py-1 rounded text-sm"
-    >
-      + Add Social
-    </button>
-  </div>
-
-  <button
-    @click="addExecutives"
-    class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800"
-  >
-    + Add Member
-  </button>
-</div>
-<div
-  v-if="activePage.page_type.toLowerCase() === 'events' && activeSection === 'hero'"
-  class="space-y-6"
->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Hero Title Line 1
-    </label>
-    <input
-      v-model="currentSectionData.hero.titleLine1"
-      type="text"
-      class="w-full border-none focus:ring-0"
-    />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Hero Title Line 2
-    </label>
-    <input
-      v-model="currentSectionData.hero.titleLine2"
-      type="text"
-      class="w-full border-none focus:ring-0"
-    />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Hero Description
-    </label>
-    <textarea
-      v-model="currentSectionData.hero.description"
-      rows="4"
-      class="w-full border-none focus:ring-0 resize-none"
-    ></textarea>
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Hero Image URL
-    </label>
-    <input
-      v-model="currentSectionData.hero.image"
-      type="text"
-      class="w-full border-none focus:ring-0"
-    />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Hero Background Color
-    </label>
-    <input
-      v-model="currentSectionData.hero.backgroundColor"
-      type="color"
-      class="w-16 h-10 p-0 border-none focus:ring-0"
-    />
-  </div>
-</div>
-<div
-  v-if="activePage.page_type.toLowerCase() === 'events' && activeSection === 'searchAndFilter'"
-  class="space-y-8"
->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Section Title
-    </label>
-    <input
-      v-model="currentSectionData.searchAndFilter.title"
-      class="w-full border-none focus:ring-0"
-    />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Search Placeholder
-    </label>
-    <input
-      v-model="currentSectionData.searchAndFilter.searchPlaceholder"
-      class="w-full border-none focus:ring-0"
-    />
-  </div>
-
-  <!-- Years -->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Years
-    </label>
-    <div class="flex gap-2 flex-wrap">
-      <span
-        v-for="(year, index) in currentSectionData.searchAndFilter.years"
-        :key="index"
-        class="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2"
-      >
-        {{ year }}
-        <button @click="removeYear(index)" class="text-red-500 font-bold">×</button>
-      </span>
-      <input
-        v-model="newYear"
-        @keyup.enter="addYear"
-        placeholder="Add year"
-        class="border p-1 rounded focus:ring-0 w-24"
-      />
-    </div>
-  </div>
-
-  <!-- Categories -->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Categories
-    </label>
-    <div class="flex gap-2 flex-wrap">
-      <span
-        v-for="(category, index) in currentSectionData.searchAndFilter.categories"
-        :key="index"
-        class="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2"
-      >
-        {{ category }}
-        <button @click="removeCategory(index)" class="text-red-500 font-bold">×</button>
-      </span>
-      <input
-        v-model="newCategory"
-        @keyup.enter="addCategory"
-        placeholder="Add category"
-        class="border p-1 rounded focus:ring-0 w-32"
-      />
-    </div>
-  </div>
-</div>
-<div
-  v-if="activePage.page_type.toLowerCase() === 'events' && activeSection === 'featuredEvent'"
-  class="space-y-6"
->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Tag</label>
-    <input v-model="currentSectionData.featuredEvent.tag" class="w-full border-none focus:ring-0" />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
-    <input v-model="currentSectionData.featuredEvent.title" class="w-full border-none focus:ring-0" />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Date</label>
-    <input v-model="currentSectionData.featuredEvent.date" class="w-full border-none focus:ring-0" />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Location</label>
-    <input v-model="currentSectionData.featuredEvent.location" class="w-full border-none focus:ring-0" />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Description</label>
-    <textarea v-model="currentSectionData.featuredEvent.description" rows="4" class="w-full border-none focus:ring-0 resize-none"></textarea>
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Image URL</label>
-    <input v-model="currentSectionData.featuredEvent.image" class="w-full border-none focus:ring-0" />
-  </div>
-
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">Register Link</label>
-    <input v-model="currentSectionData.featuredEvent.registerLink" class="w-full border-none focus:ring-0" />
-  </div>
-</div>
-<div
-  v-if="activePage.page_type.toLowerCase() === 'events' && activeSection === 'latestEvents'"
-  class="space-y-8"
->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Section Title
-    </label>
-    <input
-      v-model="currentSectionData.latestEvents.title"
-      class="w-full border-none focus:ring-0"
-    />
-  </div>
-
-  <div
-    v-for="(event, index) in currentSectionData.latestEvents.items"
-    :key="event.id"
-    class="border border-gray-300 rounded-lg p-4 space-y-3"
-  >
-    <div class="flex justify-between items-center">
-      <h4 class="font-semibold text-sm">Event {{ index + 1 }}</h4>
-      <button @click="removeLatestEvent(index)" class="text-red-500 text-sm">Delete</button>
-    </div>
-
-    <input v-model="event.title" placeholder="Title" class="w-full border-none focus:ring-0" />
-    <input v-model="event.category" placeholder="Category" class="w-full border-none focus:ring-0" />
-    <input v-model="event.date" placeholder="Date" class="w-full border-none focus:ring-0" />
-    <input v-model="event.time" placeholder="Time" class="w-full border-none focus:ring-0" />
-    <input v-model="event.location" placeholder="Location" class="w-full border-none focus:ring-0" />
-    <input v-model="event.frequency" placeholder="Frequency" class="w-full border-none focus:ring-0" />
-    <textarea v-model="event.description" rows="3" placeholder="Description" class="w-full border-none focus:ring-0 resize-none"></textarea>
-    <input v-model="event.image" placeholder="Image URL" class="w-full border-none focus:ring-0" />
-    <input v-model="event.registerLink" placeholder="Register Link" class="w-full border-none focus:ring-0" />
-  </div>
-
-  <button @click="addLatestEvent" class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800">
-    + Add Event
-  </button>
-</div>
-<div
-  v-if="activePage.page_type.toLowerCase() === 'events' && activeSection === 'pastEvents'"
-  class="space-y-8"
->
-  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-    <label class="block text-xs font-semibold uppercase text-gray-500">
-      Section Title
-    </label>
-    <input
-      v-model="currentSectionData.pastEvents.title"
-      class="w-full border-none focus:ring-0"
-    />
-  </div>
-
-  <div
-    v-for="(event, index) in currentSectionData.pastEvents.items"
-    :key="index"
-    class="border border-gray-300 rounded-lg p-4 space-y-3"
-  >
-    <div class="flex justify-between items-center">
-      <h4 class="font-semibold text-sm">Past Event {{ index + 1 }}</h4>
-      <button @click="removePastEvent(index)" class="text-red-500 text-sm">Delete</button>
-    </div>
-
-    <input v-model="event.title" placeholder="Title" class="w-full border-none focus:ring-0" />
-    <input v-model="event.category" placeholder="Category" class="w-full border-none focus:ring-0" />
-    <input v-model="event.date" placeholder="Date" class="w-full border-none focus:ring-0" />
-    <input v-model="event.theme" placeholder="Theme" class="w-full border-none focus:ring-0" />
-    <input v-model="event.image" placeholder="Image URL" class="w-full border-none focus:ring-0" />
-  </div>
-
-  <button @click="addPastEvent" class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800">
-    + Add Past Event
-  </button>
-</div>
-
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'about' &&
+              activeSection === 'history'
+            "
+          >
+            <div class="border border-gray-300 rounded-lg p-3 mb-4">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Title</label
+              >
+              <input
+                v-model="currentSectionData.title"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <div
+              v-for="(milestone, index) in currentSectionData.milestones"
+              :key="index"
+              class="border border-gray-300 rounded-lg p-3 mb-2 space-y-2"
+            >
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Year</label
+              >
+              <input
+                v-model="milestone.year"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Event</label
+              >
+              <textarea
+                v-model="milestone.event"
+                rows="2"
+                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+              ></textarea>
+
+              <button
+                class="text-red-500 text-sm"
+                @click="deleteMilestone(index)"
+              >
+                Delete
+              </button>
+            </div>
+
+            <button
+              class="bg-black text-white px-4 py-2 rounded"
+              @click="addMilestone"
+            >
+              Add Milestone
+            </button>
+          </div>
+
+          <!-- ABOUT GOVERNANCE SECTION -->
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'about' &&
+              activeSection === 'governance'
+            "
+          >
+            <div class="border border-gray-300 rounded-lg p-3 mb-4">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Title</label
+              >
+              <input
+                v-model="currentSectionData.title"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 mb-2 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Description</label
+              >
+              <textarea
+                v-model="currentSectionData.description"
+                rows="3"
+                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+              ></textarea>
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Units</label
+              >
+              <div
+                v-for="(unit, index) in currentSectionData.units"
+                :key="index"
+                class="flex justify-between items-center space-x-2"
+              >
+                <input
+                  v-model="currentSectionData.units[index]"
+                  type="text"
+                  class="flex-grow border-none focus:ring-0 p-0 m-0"
+                />
+                <button class="text-red-500 text-sm" @click="deleteUnit(index)">
+                  Delete
+                </button>
+              </div>
+              <button
+                class="bg-black text-white px-3 py-1 rounded mt-2"
+                @click="addUnit"
+              >
+                Add Unit
+              </button>
+            </div>
+          </div>
+
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'contact' &&
+              activeSection === 'hero'
+            "
+          >
+            <div class="flex space-x-6">
+              <!-- LEFT SIDE -->
+              <div class="w-3/5 space-y-6">
+                <!-- Badge Text -->
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                  >
+                    Badge Text
+                  </label>
+                  <input
+                    v-model="currentSectionData.badgeText"
+                    type="text"
+                    class="w-full text-lg border-none focus:ring-0 p-0 m-0"
+                  />
+                </div>
+
+                <!-- Headline Line 1 -->
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                  >
+                    Headline Line 1
+                  </label>
+                  <input
+                    v-model="currentSectionData.headline.line1"
+                    type="text"
+                    class="w-full text-lg border-none focus:ring-0 p-0 m-0"
+                  />
+                </div>
+
+                <!-- Headline Line 2 -->
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                  >
+                    Headline Line 2
+                  </label>
+                  <input
+                    v-model="currentSectionData.headline.line2"
+                    type="text"
+                    class="w-full text-lg border-none focus:ring-0 p-0 m-0"
+                  />
+                </div>
+
+                <!-- Subheadline -->
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                  >
+                    Subheadline
+                  </label>
+                  <textarea
+                    v-model="currentSectionData.subheadline"
+                    rows="3"
+                    class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+                  />
+                </div>
+
+                <!-- Response Note -->
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                  >
+                    Response Note
+                  </label>
+                  <input
+                    v-model="currentSectionData.responseNote"
+                    type="text"
+                    class="w-full text-sm border-none focus:ring-0 p-0 m-0"
+                  />
+                </div>
+              </div>
+
+              <!-- RIGHT SIDE -->
+              <div class="w-2/5 space-y-6">
+                <!-- Image Upload -->
+                <image-uploader v-model="currentSectionData.image.src" />
+
+                <!-- Image Alt -->
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                  >
+                    Image Alt Text
+                  </label>
+                  <input
+                    v-model="currentSectionData.image.alt"
+                    type="text"
+                    class="w-full text-sm border-none focus:ring-0 p-0 m-0"
+                  />
+                </div>
+
+                <!-- Background Color -->
+                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                  <label
+                    class="block text-xs font-semibold uppercase text-gray-500"
+                  >
+                    Background Color Class
+                  </label>
+                  <input
+                    v-model="currentSectionData.backgroundColor"
+                    type="text"
+                    class="w-full text-sm border-none focus:ring-0 p-0 m-0"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'contact' &&
+              activeSection === 'form'
+            "
+          >
+            <div class="space-y-6">
+              <!-- Form Title -->
+              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                >
+                  Form Title
+                </label>
+                <input
+                  v-model="currentSectionData.title"
+                  type="text"
+                  class="w-full text-lg border-none focus:ring-0 p-0 m-0"
+                />
+              </div>
+
+              <!-- Description -->
+              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                >
+                  Description
+                </label>
+                <textarea
+                  v-model="currentSectionData.description"
+                  rows="3"
+                  class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+                />
+              </div>
+
+              <!-- Fields -->
+              <div
+                v-for="(field, index) in currentSectionData.fields"
+                :key="index"
+                class="border border-gray-300 rounded-lg p-4 space-y-4"
+              >
+                <div class="flex justify-between items-center">
+                  <h4 class="text-sm font-semibold text-gray-700">
+                    Field {{ index + 1 }}
+                  </h4>
+                  <button
+                    @click="deleteField(index)"
+                    class="text-red-500 text-xs font-semibold"
+                  >
+                    Delete
+                  </button>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                  <input
+                    v-model="field.label"
+                    placeholder="Label"
+                    class="border border-gray-200 rounded p-2 text-sm"
+                  />
+                  <input
+                    v-model="field.placeholder"
+                    placeholder="Placeholder"
+                    class="border border-gray-200 rounded p-2 text-sm"
+                  />
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                  <select
+                    v-model="field.type"
+                    class="border border-gray-200 rounded p-2 text-sm"
+                  >
+                    <option value="text">Text</option>
+                    <option value="email">Email</option>
+                    <option value="textarea">Textarea</option>
+                  </select>
+
+                  <label class="flex items-center text-sm space-x-2">
+                    <input type="checkbox" v-model="field.required" />
+                    <span>Required</span>
+                  </label>
+                </div>
+              </div>
+
+              <button
+                @click="addField"
+                class="px-4 py-2 bg-gray-100 rounded-lg text-sm font-semibold"
+              >
+                Add Field
+              </button>
+
+              <!-- Submit Button Text -->
+              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                >
+                  Submit Button Text
+                </label>
+                <input
+                  v-model="currentSectionData.submitButtonText"
+                  type="text"
+                  class="w-full text-sm border-none focus:ring-0 p-0 m-0"
+                />
+              </div>
+
+              <!-- Success Message -->
+              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                >
+                  Success Message
+                </label>
+                <textarea
+                  v-model="currentSectionData.successMessage"
+                  rows="2"
+                  class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'contact' &&
+              activeSection === 'details'
+            "
+          >
+            <div class="space-y-6">
+              <!-- Address -->
+              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                >
+                  Address
+                </label>
+                <textarea
+                  v-model="currentSectionData.address.text"
+                  rows="2"
+                  class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+                />
+              </div>
+
+              <!-- Phone -->
+              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                >
+                  Phone Number
+                </label>
+                <input
+                  v-model="currentSectionData.phone"
+                  type="text"
+                  class="w-full text-sm border-none focus:ring-0 p-0 m-0"
+                />
+              </div>
+
+              <!-- Email -->
+              <div
+                v-for="(email, index) in currentSectionData.emails"
+                :key="index"
+                class="border border-gray-300 rounded-lg p-3 space-y-2"
+              >
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                >
+                  Email {{ index + 1 }}
+                </label>
+                <input
+                  v-model="email.address"
+                  type="text"
+                  class="w-full text-sm border-none focus:ring-0 p-0 m-0"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'contact' &&
+              activeSection === 'map'
+            "
+          >
+            <div class="space-y-6">
+              <!-- Iframe URL -->
+              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                >
+                  Google Maps Iframe URL
+                </label>
+                <textarea
+                  v-model="currentSectionData.iframeUrl"
+                  rows="3"
+                  class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+                />
+              </div>
+
+              <!-- Map Height -->
+              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                >
+                  Map Height
+                </label>
+                <input
+                  v-model="currentSectionData.height"
+                  type="number"
+                  class="w-full text-sm border-none focus:ring-0 p-0 m-0"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'resources' &&
+              activeSection === 'hero'
+            "
+            class="space-y-6"
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Title Line 1
+              </label>
+              <input
+                v-model="currentSectionData.titleLine1"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Title Line 2
+              </label>
+              <input
+                v-model="currentSectionData.titleLine2"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Description
+              </label>
+              <textarea
+                v-model="currentSectionData.description"
+                rows="3"
+                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+              ></textarea>
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Background Color
+              </label>
+              <input
+                v-model="currentSectionData.backgroundColor"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <image-uploader
+              v-model="currentSectionData.image"
+              label="Hero Image"
+            />
+          </div>
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'resources' &&
+              activeSection === 'newsletterSection'
+            "
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Section Title
+              </label>
+              <input
+                v-model="currentSectionData.title"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <!-- Newsletter Items -->
+            <div
+              v-for="(item, index) in currentSectionData.items"
+              :key="index"
+              class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
+            >
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Date
+              </label>
+              <input
+                v-model="item.date"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Title
+              </label>
+              <input
+                v-model="item.text"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                PDF URL
+              </label>
+              <input
+                v-model="item.pdfUrl"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+
+              <button
+                class="text-red-500 text-sm mt-2"
+                @click="deleteItem(index)"
+              >
+                Delete Newsletter
+              </button>
+            </div>
+
+            <button
+              class="bg-black text-white px-4 py-2 rounded"
+              @click="addItem"
+            >
+              Add Newsletter
+            </button>
+
+            <!-- Pagination -->
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mt-6">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Current Page
+              </label>
+              <input
+                v-model="currentSectionData.pagination.currentPage"
+                type="number"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Total Pages
+              </label>
+              <input
+                v-model="currentSectionData.pagination.totalPages"
+                type="number"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Next Page URL
+              </label>
+              <input
+                v-model="currentSectionData.pagination.nextPageUrl"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+          </div>
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'resources' &&
+              activeSection === 'publicationsSection'
+            "
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Section Title
+              </label>
+              <input
+                v-model="currentSectionData.title"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Background Color
+              </label>
+              <input
+                v-model="currentSectionData.backgroundColor"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <div
+              v-for="(item, index) in currentSectionData.items"
+              :key="index"
+              class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
+            >
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Title
+              </label>
+              <input
+                v-model="item.title"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Description
+              </label>
+              <textarea
+                v-model="item.description"
+                rows="3"
+                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+              ></textarea>
+
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                PDF URL
+              </label>
+              <input
+                v-model="item.pdfUrl"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+
+              <button
+                class="text-red-500 text-sm mt-2"
+                @click="deleteItem(index)"
+              >
+                Delete Publication
+              </button>
+            </div>
+
+            <button
+              class="bg-black text-white px-4 py-2 rounded"
+              @click="addItem"
+            >
+              Add Publication
+            </button>
+
+            <!-- Pagination -->
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mt-6">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Current Page
+              </label>
+              <input
+                v-model="currentSectionData.pagination.currentPage"
+                type="number"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Total Pages
+              </label>
+              <input
+                v-model="currentSectionData.pagination.totalPages"
+                type="number"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+          </div>
+
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'getinvolved' &&
+              activeSection === 'hero'
+            "
+            class="space-y-6"
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Title Line 1</label
+              >
+              <input
+                v-model="currentSectionData.titleLine1"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Title Line 2</label
+              >
+              <input
+                v-model="currentSectionData.titleLine2"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Description</label
+              >
+              <textarea
+                v-model="currentSectionData.description"
+                rows="3"
+                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+              ></textarea>
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Background Color</label
+              >
+              <input
+                v-model="currentSectionData.backgroundColor"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <image-uploader
+              v-model="currentSectionData.image"
+              label="Hero Image"
+            />
+          </div>
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'getinvolved' &&
+              activeSection === 'donations'
+            "
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Title</label
+              >
+              <input
+                v-model="currentSectionData.title"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Subtitle</label
+              >
+              <input
+                v-model="currentSectionData.subtitle"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <!-- Paragraphs -->
+            <div
+              v-for="(paragraph, index) in currentSectionData.paragraphs"
+              :key="index"
+              class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
+            >
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Paragraph {{ index + 1 }}
+              </label>
+              <textarea
+                v-model="currentSectionData.paragraphs[index]"
+                rows="3"
+                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+              ></textarea>
+
+              <button
+                class="text-red-500 text-sm mt-2"
+                @click="deleteItem(index)"
+              >
+                Delete Paragraph
+              </button>
+            </div>
+
+            <button
+              class="bg-black text-white px-4 py-2 rounded mb-6"
+              @click="addItem"
+            >
+              Add Paragraph
+            </button>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Note</label
+              >
+              <textarea
+                v-model="currentSectionData.note"
+                rows="2"
+                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+              ></textarea>
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Quote</label
+              >
+              <textarea
+                v-model="currentSectionData.quote"
+                rows="2"
+                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+              ></textarea>
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Button Text</label
+              >
+              <input
+                v-model="currentSectionData.buttonText"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+          </div>
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'getinvolved' &&
+              activeSection === 'partnerships'
+            "
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Title</label
+              >
+              <input
+                v-model="currentSectionData.title"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Tagline</label
+              >
+              <input
+                v-model="currentSectionData.tagline"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Description</label
+              >
+              <textarea
+                v-model="currentSectionData.description"
+                rows="3"
+                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+              ></textarea>
+            </div>
+
+            <div
+              v-for="(item, index) in currentSectionData.items"
+              :key="index"
+              class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
+            >
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Title</label
+              >
+              <input
+                v-model="item.title"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Description</label
+              >
+              <textarea
+                v-model="item.description"
+                rows="3"
+                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+              ></textarea>
+
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Button Text</label
+              >
+              <input
+                v-model="item.buttonText"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+
+              <button
+                class="text-red-500 text-sm mt-2"
+                @click="deleteItem(index)"
+              >
+                Delete Item
+              </button>
+            </div>
+
+            <button
+              class="bg-black text-white px-4 py-2 rounded"
+              @click="addItem"
+            >
+              Add Partnership Item
+            </button>
+          </div>
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'getinvolved' &&
+              activeSection === 'opportunities'
+            "
+          >
+            <div
+              v-for="(item, index) in currentSectionData.items"
+              :key="index"
+              class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
+            >
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Title</label
+              >
+              <input
+                v-model="item.title"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Description</label
+              >
+              <textarea
+                v-model="item.description"
+                rows="3"
+                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+              ></textarea>
+
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Button Text</label
+              >
+              <input
+                v-model="item.buttonText"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+
+              <button
+                class="text-red-500 text-sm mt-2"
+                @click="deleteItem(index)"
+              >
+                Delete Item
+              </button>
+            </div>
+
+            <button
+              class="bg-black text-white px-4 py-2 rounded"
+              @click="addItem"
+            >
+              Add Opportunity
+            </button>
+          </div>
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'getinvolved' &&
+              activeSection === 'volunteering'
+            "
+            class="space-y-6"
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Title</label
+              >
+              <input
+                v-model="currentSectionData.title"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Subtitle</label
+              >
+              <input
+                v-model="currentSectionData.subtitle"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Description</label
+              >
+              <textarea
+                v-model="currentSectionData.description"
+                rows="3"
+                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+              ></textarea>
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Button Text</label
+              >
+              <input
+                v-model="currentSectionData.buttonText"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Background Color</label
+              >
+              <input
+                v-model="currentSectionData.backgroundColor"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+          </div>
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'getinvolved' &&
+              activeSection === 'donationModal'
+            "
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Modal Title</label
+              >
+              <input
+                v-model="currentSectionData.title"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-6">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Subtitle</label
+              >
+              <input
+                v-model="currentSectionData.subtitle"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <div
+              v-for="(item, index) in currentSectionData.options"
+              :key="index"
+              class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
+            >
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Option Title</label
+              >
+              <input
+                v-model="item.title"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Description</label
+              >
+              <textarea
+                v-model="item.description"
+                rows="2"
+                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+              ></textarea>
+
+              <button
+                class="text-red-500 text-sm mt-2"
+                @click="deleteItem(index)"
+              >
+                Delete Option
+              </button>
+            </div>
+
+            <button
+              class="bg-black text-white px-4 py-2 rounded"
+              @click="addItem"
+            >
+              Add Option
+            </button>
+          </div>
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'member' &&
+              activeSection === 'hero'
+            "
+            class="space-y-4"
+          >
+            <div>
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Headline Top
+              </label>
+              <input
+                v-model="currentSectionData.headlineTop"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <div>
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Headline Bottom
+              </label>
+              <input
+                v-model="currentSectionData.headlineBottom"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+
+            <div>
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Description
+              </label>
+              <textarea
+                v-model="currentSectionData.description"
+                rows="4"
+                class="w-full border-none focus:ring-0 p-0 m-0 resize-none"
+              />
+            </div>
+
+            <div>
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Hero Image
+              </label>
+              <input
+                v-model="currentSectionData.image"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
+          </div>
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'member' &&
+              activeSection === 'sectionTitle'
+            "
+          >
+            <label class="block text-xs font-semibold uppercase text-gray-500">
+              Section Title
+            </label>
+            <input
+              v-model="currentSectionData"
+              type="text"
+              class="w-full border-none focus:ring-0 p-0 m-0"
+            />
+          </div>
+
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'member' &&
+              activeSection === 'categories'
+            "
+            class="space-y-6"
+          >
+            <div
+              v-for="(category, catIndex) in currentSectionData"
+              :key="catIndex"
+              class="border border-gray-300 rounded-lg p-4 space-y-4"
+            >
+              <!-- Category Info -->
+              <div>
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                >
+                  Category Name
+                </label>
+                <input
+                  v-model="category.name"
+                  type="text"
+                  class="w-full border-none focus:ring-0 p-0 m-0"
+                />
+              </div>
+
+              <div>
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                >
+                  Description
+                </label>
+                <input
+                  v-model="category.description"
+                  type="text"
+                  class="w-full border-none focus:ring-0 p-0 m-0"
+                />
+              </div>
+
+              <!-- Plans -->
+              <div
+                v-for="(plan, planIndex) in category.plans"
+                :key="planIndex"
+                class="border border-gray-200 rounded-md p-3 space-y-2"
+              >
+                <input
+                  v-model="plan.title"
+                  placeholder="Plan Title"
+                  class="w-full border-none p-0 m-0"
+                />
+                <input
+                  v-model="plan.price"
+                  placeholder="Price"
+                  class="w-full border-none p-0 m-0"
+                />
+                <input
+                  v-model="plan.audience"
+                  placeholder="Audience"
+                  class="w-full border-none p-0 m-0"
+                />
+
+                <!-- Benefits -->
+                <div
+                  v-for="(benefit, benefitIndex) in plan.benefits"
+                  :key="benefitIndex"
+                  class="flex items-center gap-2"
+                >
+                  <input
+                    v-model="plan.benefits[benefitIndex]"
+                    class="flex-1 border-none p-0 m-0"
+                  />
+                  <button
+                    class="text-red-500 text-sm"
+                    @click="plan.benefits.splice(benefitIndex, 1)"
+                  >
+                    X
+                  </button>
+                </div>
+
+                <button
+                  class="text-sm text-black"
+                  @click="plan.benefits.push('New benefit')"
+                >
+                  + Add Benefit
+                </button>
+
+                <button
+                  class="text-red-500 text-sm"
+                  @click="category.plans.splice(planIndex, 1)"
+                >
+                  Delete Plan
+                </button>
+              </div>
+
+              <button
+                class="text-sm bg-black text-white px-3 py-1 rounded"
+                @click="
+                  category.plans.push({
+                    title: '',
+                    price: '',
+                    audience: '',
+                    benefits: [],
+                  })
+                "
+              >
+                + Add Plan
+              </button>
+
+              <button
+                class="text-red-500 text-sm"
+                @click="currentSectionData.splice(catIndex, 1)"
+              >
+                Delete Category
+              </button>
+            </div>
+
+            <button
+              class="bg-black text-white px-4 py-2 rounded"
+              @click="
+                currentSectionData.push({
+                  id: '',
+                  name: '',
+                  description: '',
+                  plans: [],
+                })
+              "
+            >
+              + Add Category
+            </button>
+          </div>
+          <div
+            v-else-if="
+              activePage.page_type.toLowerCase() === 'member' &&
+              activeSection === 'valuePropositionTabs'
+            "
+            class="space-y-6"
+          >
+            <div
+              v-for="(tab, index) in currentSectionData"
+              :key="index"
+              class="border border-gray-300 rounded-lg p-4 space-y-3"
+            >
+              <input
+                v-model="tab.name"
+                placeholder="Tab Name"
+                class="w-full border-none p-0 m-0"
+              />
+              <input
+                v-model="tab.titleHtml"
+                placeholder="Title HTML"
+                class="w-full border-none p-0 m-0"
+              />
+              <input
+                v-model="tab.color"
+                placeholder="Color"
+                class="w-full border-none p-0 m-0"
+              />
+
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Content HTML
+              </label>
+              <textarea
+                v-model="tab.contentHtml"
+                rows="6"
+                class="w-full border-none resize-none p-0 m-0"
+              />
+
+              <button
+                class="text-red-500 text-sm"
+                @click="currentSectionData.splice(index, 1)"
+              >
+                Delete Tab
+              </button>
+            </div>
+
+            <button
+              class="bg-black text-white px-4 py-2 rounded"
+              @click="
+                currentSectionData.push({
+                  id: '',
+                  name: '',
+                  titleHtml: '',
+                  color: '',
+                  contentHtml: '',
+                })
+              "
+            >
+              + Add Tab
+            </button>
+          </div>
+
+          <div
+            v-if="
+              activePage.page_type.toLowerCase() === 'latestnews' &&
+              activeSection === 'hero'
+            "
+            class="space-y-6"
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Hero Title Line 1
+              </label>
+              <input
+                v-model="currentSectionData.titleLine1"
+                type="text"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Hero Title Line 2
+              </label>
+              <input
+                v-model="currentSectionData.titleLine2"
+                type="text"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Hero Description
+              </label>
+              <textarea
+                v-model="currentSectionData.description"
+                rows="4"
+                class="w-full border-none focus:ring-0 resize-none"
+              ></textarea>
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Hero Image URL
+              </label>
+              <input
+                v-model="currentSectionData.image"
+                type="text"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Hero Background Color
+              </label>
+              <input
+                v-model="currentSectionData.backgroundColor"
+                type="color"
+                class="w-16 h-10 p-0 border-none focus:ring-0"
+              />
+            </div>
+          </div>
+
+          <div
+            v-if="
+              activePage.page_type.toLowerCase() === 'latestnews' &&
+              activeSection === 'latestNewsSection'
+            "
+            class="space-y-8"
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Filters
+              </label>
+              <div class="flex gap-2 flex-wrap">
+                <span
+                  v-for="(filter, index) in currentSectionData.filters"
+                  :key="index"
+                  class="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2"
+                >
+                  {{ filter }}
+                  <button
+                    @click="removeFilter(index)"
+                    class="text-red-500 font-bold"
+                  >
+                    ×
+                  </button>
+                </span>
+                <input
+                  v-model="newFilter"
+                  @keyup.enter="addFilter"
+                  placeholder="Add filter"
+                  class="border p-1 rounded focus:ring-0 w-32"
+                />
+              </div>
+            </div>
+
+            <div
+              v-for="(article, index) in currentSectionData.articles"
+              :key="article.id"
+              class="border border-gray-300 rounded-lg p-4 space-y-3"
+            >
+              <div class="flex justify-between items-center">
+                <h4 class="font-semibold text-sm">Article {{ index + 1 }}</h4>
+                <button
+                  @click="removeArticle(index)"
+                  class="text-red-500 text-sm"
+                >
+                  Delete
+                </button>
+              </div>
+
+              <div class="space-y-2">
+                <label class="text-xs font-semibold uppercase text-gray-500"
+                  >Title</label
+                >
+                <input
+                  v-model="article.title"
+                  class="w-full border-none focus:ring-0"
+                />
+
+                <label class="text-xs font-semibold uppercase text-gray-500"
+                  >Excerpt</label
+                >
+                <textarea
+                  v-model="article.excerpt"
+                  rows="3"
+                  class="w-full border-none focus:ring-0 resize-none"
+                ></textarea>
+
+                <label class="text-xs font-semibold uppercase text-gray-500"
+                  >Description</label
+                >
+                <textarea
+                  v-model="article.description"
+                  rows="5"
+                  class="w-full border-none focus:ring-0 resize-none"
+                ></textarea>
+
+                <label class="text-xs font-semibold uppercase text-gray-500"
+                  >Image URL</label
+                >
+                <input
+                  v-model="article.image"
+                  class="w-full border-none focus:ring-0"
+                />
+
+                <label class="text-xs font-semibold uppercase text-gray-500"
+                  >Date</label
+                >
+                <input
+                  v-model="article.date"
+                  type="date"
+                  class="w-full border-none focus:ring-0"
+                />
+
+                <label class="text-xs font-semibold uppercase text-gray-500"
+                  >Link</label
+                >
+                <input
+                  v-model="article.link"
+                  class="w-full border-none focus:ring-0"
+                />
+
+                <label class="text-xs font-semibold uppercase text-gray-500"
+                  >Slug</label
+                >
+                <input
+                  v-model="article.slug"
+                  class="w-full border-none focus:ring-0"
+                />
+
+                <label class="text-xs font-semibold uppercase text-gray-500"
+                  >Tag</label
+                >
+                <input
+                  v-model="article.tag"
+                  class="w-full border-none focus:ring-0"
+                />
+              </div>
+            </div>
+
+            <button
+              @click="addArticle"
+              class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800"
+            >
+              + Add Article
+            </button>
+          </div>
+
+          <div
+            v-if="
+              activePage.page_type.toLowerCase() === 'latestnews' &&
+              activeSection === 'policyAdvocacySection'
+            "
+            class="space-y-6"
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Section Title</label
+              >
+              <input
+                v-model="currentSectionData.title"
+                type="text"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Background Color</label
+              >
+              <input
+                v-model="currentSectionData.backgroundColor"
+                type="color"
+                class="w-16 h-10 border-none focus:ring-0"
+              />
+            </div>
+
+            <div
+              v-for="(update, index) in currentSectionData.updates"
+              :key="update.id"
+              class="border border-gray-300 rounded-lg p-4 space-y-2"
+            >
+              <div class="flex justify-between items-center">
+                <h4 class="font-semibold text-sm">Update {{ index + 1 }}</h4>
+                <button
+                  @click="removeUpdate(index)"
+                  class="text-red-500 text-sm"
+                >
+                  Delete
+                </button>
+              </div>
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Title</label
+              >
+              <input
+                v-model="update.title"
+                class="w-full border-none focus:ring-0"
+              />
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Description</label
+              >
+              <textarea
+                v-model="update.description"
+                rows="3"
+                class="w-full border-none focus:ring-0 resize-none"
+              ></textarea>
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Image URL</label
+              >
+              <input
+                v-model="update.image"
+                class="w-full border-none focus:ring-0"
+              />
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Link</label
+              >
+              <input
+                v-model="update.link"
+                class="w-full border-none focus:ring-0"
+              />
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Slug</label
+              >
+              <input
+                v-model="update.slug"
+                class="w-full border-none focus:ring-0"
+              />
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Tag</label
+              >
+              <input
+                v-model="update.tag"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <button
+              @click="addUpdate"
+              class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800"
+            >
+              + Add Update
+            </button>
+          </div>
+          <div
+            v-if="
+              activePage.page_type.toLowerCase() === 'governance' &&
+              activeSection === 'hero'
+            "
+            class="space-y-6"
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Title Highlight
+              </label>
+              <input
+                v-model="currentSectionData.titleHighlight"
+                type="text"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Title Main
+              </label>
+              <input
+                v-model="currentSectionData.titleMain"
+                type="text"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Description
+              </label>
+              <textarea
+                v-model="currentSectionData.description"
+                rows="4"
+                class="w-full border-none focus:ring-0 resize-none"
+              ></textarea>
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Hero Image URL
+              </label>
+              <input
+                v-model="currentSectionData.image"
+                type="text"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+          </div>
+
+          <div
+            v-if="
+              activePage.page_type.toLowerCase() === 'governance' &&
+              activeSection === 'boardOfTrustees'
+            "
+            class="space-y-8"
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Section Title
+              </label>
+              <input
+                v-model="currentSectionData.title"
+                type="text"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-4 space-y-3">
+              <h4 class="font-semibold text-sm">Chair</h4>
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Name</label
+              >
+              <input
+                v-model="currentSectionData.chair.name"
+                class="w-full border-none focus:ring-0"
+              />
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Role</label
+              >
+              <input
+                v-model="currentSectionData.chair.role"
+                class="w-full border-none focus:ring-0"
+              />
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Slug</label
+              >
+              <input
+                v-model="currentSectionData.chair.slug"
+                class="w-full border-none focus:ring-0"
+              />
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Tag</label
+              >
+              <input
+                v-model="currentSectionData.chair.tag"
+                class="w-full border-none focus:ring-0"
+              />
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Image URL</label
+              >
+              <input
+                v-model="currentSectionData.chair.image"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div
+              v-for="(trustee, index) in currentSectionData.trustees"
+              :key="index"
+              class="border border-gray-300 rounded-lg p-4 space-y-3"
+            >
+              <div class="flex justify-between items-center">
+                <h4 class="font-semibold text-sm">Trustee {{ index + 1 }}</h4>
+                <button
+                  @click="removeTrustee(index)"
+                  class="text-red-500 text-sm"
+                >
+                  Delete
+                </button>
+              </div>
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Name</label
+              >
+              <input
+                v-model="trustee.name"
+                class="w-full border-none focus:ring-0"
+              />
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Title</label
+              >
+              <input
+                v-model="trustee.title"
+                class="w-full border-none focus:ring-0"
+              />
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Slug</label
+              >
+              <input
+                v-model="trustee.slug"
+                class="w-full border-none focus:ring-0"
+              />
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Image URL</label
+              >
+              <input
+                v-model="trustee.image"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <button
+              @click="addTrustee"
+              class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800"
+            >
+              + Add Trustee
+            </button>
+          </div>
+          <div
+            v-if="
+              activePage.page_type.toLowerCase() === 'governance' &&
+              activeSection === 'executiveCommittee'
+            "
+            class="space-y-8"
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Section Title
+              </label>
+              <input
+                v-model="currentSectionData.title"
+                type="text"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div
+              v-for="(member, index) in currentSectionData.members"
+              :key="index"
+              class="border border-gray-300 rounded-lg p-4 space-y-3"
+            >
+              <div class="flex justify-between items-center">
+                <h4 class="font-semibold text-sm">Member {{ index + 1 }}</h4>
+                <button
+                  @click="removeExecutives(index)"
+                  class="text-red-500 text-sm"
+                >
+                  Delete
+                </button>
+              </div>
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Name</label
+              >
+              <input
+                v-model="member.name"
+                class="w-full border-none focus:ring-0"
+              />
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Role</label
+              >
+              <input
+                v-model="member.role"
+                class="w-full border-none focus:ring-0"
+              />
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Slug</label
+              >
+              <input
+                v-model="member.slug"
+                class="w-full border-none focus:ring-0"
+              />
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Image URL</label
+              >
+              <input
+                v-model="member.image"
+                class="w-full border-none focus:ring-0"
+              />
+
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Profile</label
+              >
+              <textarea
+                v-model="member.profile"
+                rows="3"
+                class="w-full border-none focus:ring-0 resize-none"
+              ></textarea>
+
+              <div
+                v-for="(social, sIndex) in member.socials"
+                :key="sIndex"
+                class="flex gap-2 items-center"
+              >
+                <input
+                  v-model="social.platform"
+                  placeholder="Platform"
+                  class="border p-1 rounded focus:ring-0 w-32"
+                />
+                <input
+                  v-model="social.url"
+                  placeholder="URL"
+                  class="border p-1 rounded focus:ring-0 flex-1"
+                />
+                <button
+                  @click="removeSocial(index, sIndex)"
+                  class="text-red-500"
+                >
+                  ×
+                </button>
+              </div>
+
+              <button
+                @click="addSocial(index)"
+                class="bg-gray-200 px-3 py-1 rounded text-sm"
+              >
+                + Add Social
+              </button>
+            </div>
+
+            <button
+              @click="addExecutives"
+              class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800"
+            >
+              + Add Member
+            </button>
+          </div>
+          <div
+            v-if="
+              activePage.page_type.toLowerCase() === 'events' &&
+              activeSection === 'hero'
+            "
+            class="space-y-6"
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Hero Title Line 1
+              </label>
+              <input
+                v-model="currentSectionData.titleLine1"
+                type="text"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Hero Title Line 2
+              </label>
+              <input
+                v-model="currentSectionData.titleLine2"
+                type="text"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Hero Description
+              </label>
+              <textarea
+                v-model="currentSectionData.description"
+                rows="4"
+                class="w-full border-none focus:ring-0 resize-none"
+              ></textarea>
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Hero Image URL
+              </label>
+              <input
+                v-model="currentSectionData.image"
+                type="text"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Hero Background Color
+              </label>
+              <input
+                v-model="currentSectionData.backgroundColor"
+                type="color"
+                class="w-16 h-10 p-0 border-none focus:ring-0"
+              />
+            </div>
+          </div>
+          <div
+            v-if="
+              activePage.page_type.toLowerCase() === 'events' &&
+              activeSection === 'searchAndFilter'
+            "
+            class="space-y-8"
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Section Title
+              </label>
+              <input
+                v-model="currentSectionData.title"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Search Placeholder
+              </label>
+              <input
+                v-model="currentSectionData.searchPlaceholder"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <!-- Years -->
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Years
+              </label>
+              <div class="flex gap-2 flex-wrap">
+                <span
+                  v-for="(year, index) in currentSectionData.years"
+                  :key="index"
+                  class="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2"
+                >
+                  {{ year }}
+                  <button
+                    @click="removeYear(index)"
+                    class="text-red-500 font-bold"
+                  >
+                    ×
+                  </button>
+                </span>
+                <input
+                  v-model="newYear"
+                  @keyup.enter="addYear"
+                  placeholder="Add year"
+                  class="border p-1 rounded focus:ring-0 w-24"
+                />
+              </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Categories
+              </label>
+              <div class="flex gap-2 flex-wrap">
+                <span
+                  v-for="(category, index) in currentSectionData.categories"
+                  :key="index"
+                  class="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2"
+                >
+                  {{ category }}
+                  <button
+                    @click="removeCategory(index)"
+                    class="text-red-500 font-bold"
+                  >
+                    ×
+                  </button>
+                </span>
+                <input
+                  v-model="newCategory"
+                  @keyup.enter="addCategory"
+                  placeholder="Add category"
+                  class="border p-1 rounded focus:ring-0 w-32"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            v-if="
+              activePage.page_type.toLowerCase() === 'events' &&
+              activeSection === 'featuredEvent'
+            "
+            class="space-y-6"
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Tag</label
+              >
+              <input
+                v-model="currentSectionData.tag"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Title</label
+              >
+              <input
+                v-model="currentSectionData.title"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Date</label
+              >
+              <input
+                v-model="currentSectionData.date"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Location</label
+              >
+              <input
+                v-model="currentSectionData.location"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Description</label
+              >
+              <textarea
+                v-model="currentSectionData.description"
+                rows="4"
+                class="w-full border-none focus:ring-0 resize-none"
+              ></textarea>
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Image URL</label
+              >
+              <input
+                v-model="currentSectionData.image"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Register Link</label
+              >
+              <input
+                v-model="currentSectionData.registerLink"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+          </div>
+          <div
+            v-if="
+              activePage.page_type.toLowerCase() === 'events' &&
+              activeSection === 'latestEvents'
+            "
+            class="space-y-8"
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Section Title
+              </label>
+              <input
+                v-model="currentSectionData.title"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div
+              v-for="(event, index) in currentSectionData.items"
+              :key="event.id"
+              class="border border-gray-300 rounded-lg p-4 space-y-3"
+            >
+              <div class="flex justify-between items-center">
+                <h4 class="font-semibold text-sm">Event {{ index + 1 }}</h4>
+                <button
+                  @click="removeLatestEvent(index)"
+                  class="text-red-500 text-sm"
+                >
+                  Delete
+                </button>
+              </div>
+
+              <input
+                v-model="event.title"
+                placeholder="Title"
+                class="w-full border-none focus:ring-0"
+              />
+              <input
+                v-model="event.category"
+                placeholder="Category"
+                class="w-full border-none focus:ring-0"
+              />
+              <input
+                v-model="event.date"
+                placeholder="Date"
+                class="w-full border-none focus:ring-0"
+              />
+              <input
+                v-model="event.time"
+                placeholder="Time"
+                class="w-full border-none focus:ring-0"
+              />
+              <input
+                v-model="event.location"
+                placeholder="Location"
+                class="w-full border-none focus:ring-0"
+              />
+              <input
+                v-model="event.frequency"
+                placeholder="Frequency"
+                class="w-full border-none focus:ring-0"
+              />
+              <textarea
+                v-model="event.description"
+                rows="3"
+                placeholder="Description"
+                class="w-full border-none focus:ring-0 resize-none"
+              ></textarea>
+              <input
+                v-model="event.image"
+                placeholder="Image URL"
+                class="w-full border-none focus:ring-0"
+              />
+              <input
+                v-model="event.registerLink"
+                placeholder="Register Link"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <button
+              @click="addLatestEvent"
+              class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800"
+            >
+              + Add Event
+            </button>
+          </div>
+          <div
+            v-if="
+              activePage.page_type.toLowerCase() === 'events' &&
+              activeSection === 'pastEvents'
+            "
+            class="space-y-8"
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Section Title
+              </label>
+              <input
+                v-model="currentSectionData.title"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div
+              v-for="(event, index) in currentSectionData.items"
+              :key="index"
+              class="border border-gray-300 rounded-lg p-4 space-y-3"
+            >
+              <div class="flex justify-between items-center">
+                <h4 class="font-semibold text-sm">
+                  Past Event {{ index + 1 }}
+                </h4>
+                <button
+                  @click="removePastEvent(index)"
+                  class="text-red-500 text-sm"
+                >
+                  Delete
+                </button>
+              </div>
+
+              <input
+                v-model="event.title"
+                placeholder="Title"
+                class="w-full border-none focus:ring-0"
+              />
+              <input
+                v-model="event.category"
+                placeholder="Category"
+                class="w-full border-none focus:ring-0"
+              />
+              <input
+                v-model="event.date"
+                placeholder="Date"
+                class="w-full border-none focus:ring-0"
+              />
+              <input
+                v-model="event.theme"
+                placeholder="Theme"
+                class="w-full border-none focus:ring-0"
+              />
+              <input
+                v-model="event.image"
+                placeholder="Image URL"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <button
+              @click="addPastEvent"
+              class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800"
+            >
+              + Add Past Event
+            </button>
+          </div>
+          <div
+            v-if="
+              activePage.page_type.toLowerCase() === 'gallery' &&
+              activeSection === 'hero'
+            "
+            class="space-y-6"
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Hero Title Line 1
+              </label>
+              <input
+                v-model="currentSectionData.titleLine1"
+                type="text"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Hero Title Line 2
+              </label>
+              <input
+                v-model="currentSectionData.titleLine2"
+                type="text"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Description
+              </label>
+              <textarea
+                v-model="currentSectionData.description"
+                rows="4"
+                class="w-full border-none focus:ring-0 resize-none"
+              ></textarea>
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Image URL
+              </label>
+              <input
+                v-model="currentSectionData.image"
+                type="text"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Background Color
+              </label>
+              <input
+                v-model="currentSectionData.backgroundColor"
+                type="color"
+                class="w-16 h-10 p-0 border-none focus:ring-0"
+              />
+            </div>
+          </div>
+          <div
+            v-if="
+              activePage.page_type.toLowerCase() === 'gallery' &&
+              activeSection === 'filtering'
+            "
+            class="space-y-8"
+          >
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Section Title
+              </label>
+              <input
+                v-model="currentSectionData.title"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Years
+              </label>
+              <div class="flex gap-2 flex-wrap">
+                <span
+                  v-for="(year, index) in currentSectionData.years"
+                  :key="index"
+                  class="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2"
+                >
+                  {{ year }}
+                  <button
+                    @click="removeGalleryYear(index)"
+                    class="text-red-500 font-bold"
+                  >
+                    ×
+                  </button>
+                </span>
+                <input
+                  v-model="newGalleryYear"
+                  @keyup.enter="addGalleryYear"
+                  placeholder="Add year"
+                  class="border p-1 rounded focus:ring-0 w-24"
+                />
+              </div>
+            </div>
+
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              <label
+                class="block text-xs font-semibold uppercase text-gray-500"
+              >
+                Categories
+              </label>
+              <div class="flex gap-2 flex-wrap">
+                <span
+                  v-for="(category, index) in currentSectionData.categories"
+                  :key="index"
+                  class="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2"
+                >
+                  {{ category }}
+                  <button
+                    @click="removeGalleryCategory(index)"
+                    class="text-red-500 font-bold"
+                  >
+                    ×
+                  </button>
+                </span>
+                <input
+                  v-model="newGalleryCategory"
+                  @keyup.enter="addGalleryCategory"
+                  placeholder="Add category"
+                  class="border p-1 rounded focus:ring-0 w-32"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            v-if="
+              activePage.page_type.toLowerCase() === 'gallery' &&
+              activeSection === 'galleryList'
+            "
+            class="space-y-8"
+          >
+            <div
+              v-for="(item, index) in currentSectionData.items"
+              :key="item.id"
+              class="border border-gray-300 rounded-lg p-4 space-y-3"
+            >
+              <div class="flex justify-between items-center">
+                <h4 class="font-semibold text-sm">
+                  Gallery Item {{ index + 1 }}
+                </h4>
+                <button
+                  @click="removeGalleryItem(index)"
+                  class="text-red-500 text-sm"
+                >
+                  Delete
+                </button>
+              </div>
+
+              <input
+                v-model="item.title"
+                placeholder="Title"
+                class="w-full border-none focus:ring-0"
+              />
+              <input
+                v-model="item.category"
+                placeholder="Category"
+                class="w-full border-none focus:ring-0"
+              />
+              <input
+                v-model="item.date"
+                placeholder="Date"
+                class="w-full border-none focus:ring-0"
+              />
+              <input
+                v-model="item.year"
+                placeholder="Year"
+                class="w-full border-none focus:ring-0"
+              />
+              <input
+                v-model="item.image"
+                placeholder="Image URL"
+                class="w-full border-none focus:ring-0"
+              />
+            </div>
+
+            <button
+              @click="addGalleryItem"
+              class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800"
+            >
+              + Add Gallery Item
+            </button>
+
+            <div class="border border-gray-300 rounded-lg p-4 space-y-3">
+              <label class="flex items-center gap-2 text-sm">
+                <input type="checkbox" v-model="currentSectionData.hasMore" />
+                Has More
+              </label>
+
+              <div>
+                <label
+                  class="block text-xs font-semibold uppercase text-gray-500"
+                >
+                  Next Cursor
+                </label>
+                <input
+                  v-model="currentSectionData.nextCursor"
+                  type="number"
+                  class="w-full border-none focus:ring-0"
+                />
+              </div>
+            </div>
+          </div>
 
           <div
             class="mt-10 flex justify-end space-x-4 border-t pt-4 border-gray-200"

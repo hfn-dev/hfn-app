@@ -14,14 +14,24 @@ import oando from '@/assets/oando_logo.png';
 import pharm from '@/assets/pharm.png';
 import reagan from '@/assets/reagan.png';
 // import society from '@/assets/society.png';
+
 import wef from '@/assets/wef.jpg';
-const eventImage = "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769883047/events-CNRYrGt8_trfhaz.png";
-const breakfast2025 = "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769881263/1758712162657_yclv7p.jpg";
-const roundtable2025 = "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769881265/1764355254559_g2wv3t.jpg";
-const hfn2025 = "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769881267/1746181486545_mtao0s.jpg";
-const latestHero = "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770045591/243A7993_wxlzkg.jpg";
+const eventImage =
+  'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769883047/events-CNRYrGt8_trfhaz.png';
+const breakfast2025 =
+  'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769881263/1758712162657_yclv7p.jpg';
+const roundtable2025 =
+  'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769881265/1764355254559_g2wv3t.jpg';
+const hfn2025 =
+  'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769881267/1746181486545_mtao0s.jpg';
+const latestHero =
+  'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770045591/243A7993_wxlzkg.jpg';
 const society =
   'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769734457/Society_For_Family_Health_Logo_1_a5qcrp.png';
+const handsJoining =
+  'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769896360/IMG_9238_vxq385.jpg';
+const chairImage =
+  'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Bola_Adesola_lr8vif.png';
 
 export const pageSchemas = {
   home: {
@@ -232,208 +242,227 @@ export const pageSchemas = {
     ],
   },
   about: {
-  
-  hero: {
-    titleHighlight: 'Championing',
-    titleMain: 'Healthcare in Nigeria',
-    descriptionTop: 'Healthcare Federation of Nigeria ',
-    descriptionText:
-      'is a coalition of private healthcare sector stakeholders committed to strengthening Nigeria’s healthcare system through strategic advocacy, collaboration, and private sector leadership.',
-    descriptionBottom:
-      '',
-    ctaLabel: 'Join the Coalition ->',
-    ctaLink: '/register',
-    image: 'map.jpg',
-    backgroundColor: '#f0f7f5',
-  },
-  story: {
-    sectionTitle: 'Our HFN Story',
-    paragraphs: [
-      'The Healthcare Federation of Nigeria (HFN) is the umbrella body for private healthcare stakeholders in Nigeria, representing the interests of health professionals, companies, investors, associations, and institutions.',
-      'HFN provides members with access to advocacy platforms, strategic collaborations, knowledge-sharing, and investment opportunities aimed at building a stronger, more resilient health system.',
-    ],
-    mission: 'To create an enabling environment for the private healthcare sector in Nigeria through advocacy, partnership, and capacity building.',
-    vision: 'A thriving private healthcare sector that contributes significantly to achieving universal health coverage in Nigeria.',
-    rolePoints: [
-      'Providing a credible, coordinated voice for private sector stakeholders',
-      'Ensuring private sector perspectives are embedded in national health policies and reforms',
-      'Facilitating constructive public–private collaboration',
-      'Supporting reforms that unlock investment and improve service delivery',
-    ],
-    commitmentGoals: [
-      'Policy is informed by evidence and practice',
-      'Private sector contributions are coordinated',
-      'Investment supports quality and access',
-      'Patients remain at the centre of care',
-    ],
-    image: 'about-us.png',
-  },
-
-  items: [
-    {
-      title: 'Policy Advocacy',
-      shortDesc: 'Strategic Engagement.',
-      fullDesc:
-        'We engage with legislators, regulators, and government institutions to shape evidence-based policies that enable effective regulation, sustainable financing, and private sector participation in health system strengthening.',
-      colorClass: 'leaf-green',
+    hero: {
+      titleHighlight: 'Championing',
+      titleMain: 'Healthcare in Nigeria',
+      descriptionTop: 'Healthcare Federation of Nigeria ',
+      descriptionText:
+        'is a coalition of private healthcare sector stakeholders committed to strengthening Nigeria’s healthcare system through strategic advocacy, collaboration, and private sector leadership.',
+      descriptionBottom: '',
+      ctaLabel: 'Join the Coalition ->',
+      ctaLink: '/register',
+      image: 'map.jpg',
+      backgroundColor: '#f0f7f5',
     },
-    {
-      title: 'Stakeholder Convening',
-      shortDesc: 'Unified Voice.',
-      fullDesc:
-        'We bring together healthcare providers, manufacturers, insurers, digital health innovators, development partners, and policymakers to align priorities, share knowledge, and drive collective action.',
-      colorClass: 'leaf-tan',
+    story: {
+      sectionTitle: 'Our HFN Story',
+      paragraphs: [
+        'The Healthcare Federation of Nigeria (HFN) is the umbrella body for private healthcare stakeholders in Nigeria, representing the interests of health professionals, companies, investors, associations, and institutions.',
+        'HFN provides members with access to advocacy platforms, strategic collaborations, knowledge-sharing, and investment opportunities aimed at building a stronger, more resilient health system.',
+      ],
+      mission:
+        'To create an enabling environment for the private healthcare sector in Nigeria through advocacy, partnership, and capacity building.',
+      vision:
+        'A thriving private healthcare sector that contributes significantly to achieving universal health coverage in Nigeria.',
+      rolePoints: [
+        'Providing a credible, coordinated voice for private sector stakeholders',
+        'Ensuring private sector perspectives are embedded in national health policies and reforms',
+        'Facilitating constructive public–private collaboration',
+        'Supporting reforms that unlock investment and improve service delivery',
+      ],
+      commitmentGoals: [
+        'Policy is informed by evidence and practice',
+        'Private sector contributions are coordinated',
+        'Investment supports quality and access',
+        'Patients remain at the centre of care',
+      ],
+      image: 'about-us.png',
     },
-    {
-      title: 'Sector Intelligence',
-      shortDesc: 'Thought Leadership.',
-      fullDesc:
-        'We produce research, industry insights, and high-level dialogues that inform policy decisions, investment strategies, and national health discourse.',
-      colorClass: 'leaf-green',
-    },
-    {
-      title: 'Public–Private Collaboration',
-      shortDesc: 'Practical Solutions.',
-      fullDesc:
-        'We support partnerships that leverage private sector expertise and resources to improve service delivery, emergency care, health financing, and access to quality healthcare.',
-      colorClass: 'leaf-tan',
-    },
-  ],
 
-  history: {
-    title: 'Our History',
-    milestones: [
+    items: [
       {
-        year: '2015',
-        event: 'HFN was established to bring together stakeholders across Nigeria’s private health sector. Today, we are a nationally recognised voice, contributing to major policy reforms and public–private partnerships that have strengthened healthcare delivery across Nigeria.',
+        title: 'Policy Advocacy',
+        shortDesc: 'Strategic Engagement.',
+        fullDesc:
+          'We engage with legislators, regulators, and government institutions to shape evidence-based policies that enable effective regulation, sustainable financing, and private sector participation in health system strengthening.',
+        colorClass: 'leaf-green',
+      },
+      {
+        title: 'Stakeholder Convening',
+        shortDesc: 'Unified Voice.',
+        fullDesc:
+          'We bring together healthcare providers, manufacturers, insurers, digital health innovators, development partners, and policymakers to align priorities, share knowledge, and drive collective action.',
+        colorClass: 'leaf-tan',
+      },
+      {
+        title: 'Sector Intelligence',
+        shortDesc: 'Thought Leadership.',
+        fullDesc:
+          'We produce research, industry insights, and high-level dialogues that inform policy decisions, investment strategies, and national health discourse.',
+        colorClass: 'leaf-green',
+      },
+      {
+        title: 'Public–Private Collaboration',
+        shortDesc: 'Practical Solutions.',
+        fullDesc:
+          'We support partnerships that leverage private sector expertise and resources to improve service delivery, emergency care, health financing, and access to quality healthcare.',
+        colorClass: 'leaf-tan',
       },
     ],
-  },
 
-  governance: {
-    title: 'Governance & Leadership',
-    description:
-      'HFN is governed through a structure that includes the Board of Trustees, National Executive Council, Executive Committee, and Secretariat, ensuring accountability and effective execution of its mandate.',
-    units: [
-      'Board of Trustees',
-      'National Executive Council',
-      'Executive Committee',
-      'Secretariat',
-    ],
-  },
+    history: {
+      title: 'Our History',
+      milestones: [
+        {
+          year: '2015',
+          event:
+            'HFN was established to bring together stakeholders across Nigeria’s private health sector. Today, we are a nationally recognised voice, contributing to major policy reforms and public–private partnerships that have strengthened healthcare delivery across Nigeria.',
+        },
+      ],
+    },
 
-  leadership: {
-    title: 'Our Leadership',
-    executives: [
-      {
-        name: 'Njide Ndili',
-        position: 'President, HFN',
-        organization: 'Country Director, PharmAccess',
-        image: 'njide.png',
-        themeColor: '#f0f7f5',
-        borderColor: 'border-green-300',
-        textColor: 'text-green-700',
-        bio: 'Njide Ndili is the Nigeria Country Director at PharmAccess, an international organisation that leverages digital innovation and market-based solutions to strengthen health systems across sub-Saharan Africa. PharmAccess works across both the demand and supply sides of healthcare to improve access, quality, and financial protection. She serves as President of the Healthcare Federation of Nigeria (HFN), where she leads private sector advocacy and engagement to advance policy reforms and strengthen Nigeria’s healthcare system. Njide is also a founding member of the Digital Transformation for Health Lab, which identifies and supports digital technologies that accelerate progress toward Universal Health Coverage, particularly in low- and middle-income countries. In addition, she serves on the Steering Committee of the Nigerian Economic Summit Group (NESG) Health Policy Commission. Njide holds an MSc in Health Economics, Policy, and Management from the London School of Economics, an Advanced Management Programme (AMP) from INSEAD, an MBA from the University of Houston, a Postgraduate Diploma in Finance, and a BSc in Computer Science.',
-        quote:
-          'True leadership in healthcare is measured not by titles, but by the lives we touch and the systems we transform.',
-        socials: [
-          { platform: 'linkedin', url: 'https://www.linkedin.com/in/njide-ndili/' },
-          { platform: 'twitter', url: 'https://twitter.com/' },
-          { platform: 'instagram', url: 'https://instagram.com/' },
-        ],
-      },
-      {
-        name: 'Dr. Ayodele Benson-Cole',
-        position: '1st Vice-President, HFN',
-        organization: 'CEO, Benson Coleman & Associates',
-        image: 'ayodele.png',
-        themeColor: '#fcefe7',
-        borderColor: 'border-orange-300',
-        textColor: 'text-orange-700',
-        bio: 'Dr. Ayodele Benson-Cole is a respected physician and healthcare strategist with over 18 years of clinical and administrative experience. He has built a reputation for promoting quality healthcare standards and patient-centered innovations in both urban and underserved communities. Dr. Benson-Cole earned his medical degree from the University of Ibadan and holds certifications in Healthcare Leadership and Quality Improvement. He has served as a consultant to various public health projects and continues to advocate for accessible healthcare systems that prioritize prevention, education, and technology integration.',
-        quote:
-          'Medicine is not just about curing the sick; it is about inspiring hope, preserving dignity, and leading with compassion.',
-        socials: [
-          { platform: 'linkedin', url: 'https://www.linkedin.com/in/ayodele-cole-benson-93b79027/' },
-          { platform: 'twitter', url: 'https://twitter.com/' },
-          { platform: 'instagram', url: 'https://instagram.com/' },
-        ],
-      },
-      {
-        name: 'Dr. Jennifer Anyati',
-        position: '2nd Vice President, HFN',
-        organization: 'Deputy Managing Director, Society for Family Health',
-        image: 'jennifer.png',
-        themeColor: '#f0f7f5',
-        borderColor: 'border-green-300',
-        textColor: 'text-green-700',
-        bio: 'Dr. Jennifer Anyati is a dynamic public health professional and advocate for equitable healthcare delivery. With a strong background in epidemiology and healthcare planning, she has led numerous community health programs aimed at improving maternal and child health outcomes. Her work emphasizes the power of data-driven decision-making and collaboration between government, private, and non-profit sectors. Dr. Anyati has also served as a mentor to emerging healthcare practitioners, encouraging innovation and ethical practice in all aspects of healthcare delivery.',
-        quote:
-          'When we uplift communities through healthcare, we heal not just individuals but the future of our nation.',
-        socials: [
-          { platform: 'linkedin', url: 'https://www.linkedin.com/in/jennifer-anyanti/' },
-          { platform: 'twitter', url: 'https://twitter.com/' },
-          { platform: 'instagram', url: 'https://instagram.com/' },
-        ],
-      },
-      {
-        name: 'Chinyere Okorocha',
-        position: 'Public Relations Secretary, HFN',
-        organization: 'Head of Sectors, Jackson, Etti & Edu',
-        image: 'chinyere.png',
-        themeColor: '#fcefe7',
-        borderColor: 'border-orange-300',
-        textColor: 'text-orange-700',
-        bio: 'Mrs. Chinyere Okorocha is an accomplished communications professional with over 15 years of experience in healthcare public relations and stakeholder engagement. She has successfully managed campaigns that increased public awareness about preventive health, vaccination, and patient rights. Her expertise lies in crafting clear and empathetic messages that bridge the gap between healthcare providers and the public. Mrs. Okorocha believes that effective communication is vital to trust, transparency, and health system strengthening.',
-        quote:
-          'When people understand healthcare, they make choices that transform lives — communication is the heartbeat of progress.',
-        socials: [
-          { platform: 'linkedin', url: 'https://www.linkedin.com/in/chinyere-okorocha-a1bb19bb/' },
-          { platform: 'twitter', url: 'https://twitter.com/' },
-          { platform: 'instagram', url: 'https://instagram.com/' },
-        ],
-      },
-      {
-        name: 'Olayode Babarinde',
-        position: 'Financial Secretary, HFN',
-        organization: 'Healthcare System Partner – Policy, Roche',
-        image: 'babarinde.png',
-        themeColor: '#f0f7f5',
-        borderColor: 'border-green-300',
-        textColor: 'text-green-700',
-        bio: 'Mr. Babarinde Olayode is a certified finance professional with over 12 years of experience managing budgets, investments, and financial systems within the healthcare sector. His strategic financial planning has enabled organizations to allocate resources efficiently while maintaining accountability and transparency. With a background in Accounting and an MBA in Health Economics, Mr. Olayode is passionate about improving financial sustainability in healthcare institutions and driving innovations in health financing.',
-        quote:
-          'Financial integrity in healthcare is not just about numbers — it’s about ensuring every naira spent saves a life.',
-        socials: [
-          { platform: 'linkedin', url: 'https://www.linkedin.com/in/olayode-babarinde-26863276/' },
-          { platform: 'twitter', url: 'https://twitter.com/' },
-          { platform: 'instagram', url: 'https://instagram.com/' },
-        ],
-      },
-      {
-        name: 'Reagan Rowland',
-        position: 'Treasurer, HFN',
-        organization: 'Founder/CEO, OneClick Med',
-        image: 'reagan.png',
-        themeColor: '#fcefe7',
-        borderColor: 'border-orange-300',
-        textColor: 'text-orange-700',
-        bio: 'Mr. Reagan Rowland is a results-oriented finance administrator dedicated to promoting accountability and fiscal discipline in the healthcare industry. With over a decade of experience in financial management and audit processes, he has supported several healthcare organizations in achieving operational excellence through strategic cost control and transparent reporting. He is known for his collaborative leadership and ability to translate financial insights into actionable growth strategies that strengthen healthcare systems.',
-        quote:
-          'Transparency is the foundation upon which trust and progress in healthcare are built.',
-        socials: [
-          { platform: 'linkedin', url: 'https://www.linkedin.com/in/reagan-rowland/' },
-          { platform: 'twitter', url: 'https://twitter.com/' },
-          { platform: 'instagram', url: 'https://instagram.com/' },
-        ],
-      },
-    ],
-  },
+    governance: {
+      title: 'Governance & Leadership',
+      description:
+        'HFN is governed through a structure that includes the Board of Trustees, National Executive Council, Executive Committee, and Secretariat, ensuring accountability and effective execution of its mandate.',
+      units: [
+        'Board of Trustees',
+        'National Executive Council',
+        'Executive Committee',
+        'Secretariat',
+      ],
+    },
 
-  ctaSection: {
-    title: 'Our Core Mandates',
+    leadership: {
+      title: 'Our Leadership',
+      executives: [
+        {
+          name: 'Njide Ndili',
+          position: 'President, HFN',
+          organization: 'Country Director, PharmAccess',
+          image: 'njide.png',
+          themeColor: '#f0f7f5',
+          borderColor: 'border-green-300',
+          textColor: 'text-green-700',
+          bio: 'Njide Ndili is the Nigeria Country Director at PharmAccess, an international organisation that leverages digital innovation and market-based solutions to strengthen health systems across sub-Saharan Africa. PharmAccess works across both the demand and supply sides of healthcare to improve access, quality, and financial protection. She serves as President of the Healthcare Federation of Nigeria (HFN), where she leads private sector advocacy and engagement to advance policy reforms and strengthen Nigeria’s healthcare system. Njide is also a founding member of the Digital Transformation for Health Lab, which identifies and supports digital technologies that accelerate progress toward Universal Health Coverage, particularly in low- and middle-income countries. In addition, she serves on the Steering Committee of the Nigerian Economic Summit Group (NESG) Health Policy Commission. Njide holds an MSc in Health Economics, Policy, and Management from the London School of Economics, an Advanced Management Programme (AMP) from INSEAD, an MBA from the University of Houston, a Postgraduate Diploma in Finance, and a BSc in Computer Science.',
+          quote:
+            'True leadership in healthcare is measured not by titles, but by the lives we touch and the systems we transform.',
+          socials: [
+            {
+              platform: 'linkedin',
+              url: 'https://www.linkedin.com/in/njide-ndili/',
+            },
+            { platform: 'twitter', url: 'https://twitter.com/' },
+            { platform: 'instagram', url: 'https://instagram.com/' },
+          ],
+        },
+        {
+          name: 'Dr. Ayodele Benson-Cole',
+          position: '1st Vice-President, HFN',
+          organization: 'CEO, Benson Coleman & Associates',
+          image: 'ayodele.png',
+          themeColor: '#fcefe7',
+          borderColor: 'border-orange-300',
+          textColor: 'text-orange-700',
+          bio: 'Dr. Ayodele Benson-Cole is a respected physician and healthcare strategist with over 18 years of clinical and administrative experience. He has built a reputation for promoting quality healthcare standards and patient-centered innovations in both urban and underserved communities. Dr. Benson-Cole earned his medical degree from the University of Ibadan and holds certifications in Healthcare Leadership and Quality Improvement. He has served as a consultant to various public health projects and continues to advocate for accessible healthcare systems that prioritize prevention, education, and technology integration.',
+          quote:
+            'Medicine is not just about curing the sick; it is about inspiring hope, preserving dignity, and leading with compassion.',
+          socials: [
+            {
+              platform: 'linkedin',
+              url: 'https://www.linkedin.com/in/ayodele-cole-benson-93b79027/',
+            },
+            { platform: 'twitter', url: 'https://twitter.com/' },
+            { platform: 'instagram', url: 'https://instagram.com/' },
+          ],
+        },
+        {
+          name: 'Dr. Jennifer Anyati',
+          position: '2nd Vice President, HFN',
+          organization: 'Deputy Managing Director, Society for Family Health',
+          image: 'jennifer.png',
+          themeColor: '#f0f7f5',
+          borderColor: 'border-green-300',
+          textColor: 'text-green-700',
+          bio: 'Dr. Jennifer Anyati is a dynamic public health professional and advocate for equitable healthcare delivery. With a strong background in epidemiology and healthcare planning, she has led numerous community health programs aimed at improving maternal and child health outcomes. Her work emphasizes the power of data-driven decision-making and collaboration between government, private, and non-profit sectors. Dr. Anyati has also served as a mentor to emerging healthcare practitioners, encouraging innovation and ethical practice in all aspects of healthcare delivery.',
+          quote:
+            'When we uplift communities through healthcare, we heal not just individuals but the future of our nation.',
+          socials: [
+            {
+              platform: 'linkedin',
+              url: 'https://www.linkedin.com/in/jennifer-anyanti/',
+            },
+            { platform: 'twitter', url: 'https://twitter.com/' },
+            { platform: 'instagram', url: 'https://instagram.com/' },
+          ],
+        },
+        {
+          name: 'Chinyere Okorocha',
+          position: 'Public Relations Secretary, HFN',
+          organization: 'Head of Sectors, Jackson, Etti & Edu',
+          image: 'chinyere.png',
+          themeColor: '#fcefe7',
+          borderColor: 'border-orange-300',
+          textColor: 'text-orange-700',
+          bio: 'Mrs. Chinyere Okorocha is an accomplished communications professional with over 15 years of experience in healthcare public relations and stakeholder engagement. She has successfully managed campaigns that increased public awareness about preventive health, vaccination, and patient rights. Her expertise lies in crafting clear and empathetic messages that bridge the gap between healthcare providers and the public. Mrs. Okorocha believes that effective communication is vital to trust, transparency, and health system strengthening.',
+          quote:
+            'When people understand healthcare, they make choices that transform lives — communication is the heartbeat of progress.',
+          socials: [
+            {
+              platform: 'linkedin',
+              url: 'https://www.linkedin.com/in/chinyere-okorocha-a1bb19bb/',
+            },
+            { platform: 'twitter', url: 'https://twitter.com/' },
+            { platform: 'instagram', url: 'https://instagram.com/' },
+          ],
+        },
+        {
+          name: 'Olayode Babarinde',
+          position: 'Financial Secretary, HFN',
+          organization: 'Healthcare System Partner – Policy, Roche',
+          image: 'babarinde.png',
+          themeColor: '#f0f7f5',
+          borderColor: 'border-green-300',
+          textColor: 'text-green-700',
+          bio: 'Mr. Babarinde Olayode is a certified finance professional with over 12 years of experience managing budgets, investments, and financial systems within the healthcare sector. His strategic financial planning has enabled organizations to allocate resources efficiently while maintaining accountability and transparency. With a background in Accounting and an MBA in Health Economics, Mr. Olayode is passionate about improving financial sustainability in healthcare institutions and driving innovations in health financing.',
+          quote:
+            'Financial integrity in healthcare is not just about numbers — it’s about ensuring every naira spent saves a life.',
+          socials: [
+            {
+              platform: 'linkedin',
+              url: 'https://www.linkedin.com/in/olayode-babarinde-26863276/',
+            },
+            { platform: 'twitter', url: 'https://twitter.com/' },
+            { platform: 'instagram', url: 'https://instagram.com/' },
+          ],
+        },
+        {
+          name: 'Reagan Rowland',
+          position: 'Treasurer, HFN',
+          organization: 'Founder/CEO, OneClick Med',
+          image: 'reagan.png',
+          themeColor: '#fcefe7',
+          borderColor: 'border-orange-300',
+          textColor: 'text-orange-700',
+          bio: 'Mr. Reagan Rowland is a results-oriented finance administrator dedicated to promoting accountability and fiscal discipline in the healthcare industry. With over a decade of experience in financial management and audit processes, he has supported several healthcare organizations in achieving operational excellence through strategic cost control and transparent reporting. He is known for his collaborative leadership and ability to translate financial insights into actionable growth strategies that strengthen healthcare systems.',
+          quote:
+            'Transparency is the foundation upon which trust and progress in healthcare are built.',
+          socials: [
+            {
+              platform: 'linkedin',
+              url: 'https://www.linkedin.com/in/reagan-rowland/',
+            },
+            { platform: 'twitter', url: 'https://twitter.com/' },
+            { platform: 'instagram', url: 'https://instagram.com/' },
+          ],
+        },
+      ],
+    },
+
+    ctaSection: {
+      title: 'Our Core Mandates',
+    },
   },
-},
 
   contact: {
     hero: {
@@ -531,198 +560,179 @@ export const pageSchemas = {
       borderColor: 'border-green-200',
     },
   },
-  
 
-events: {
+  events: {
+    hero: {
+      titleLine1: 'Events/Engagements',
 
-  hero: {
+      titleLine2: 'Speaking with one voice for the private health sector',
 
-    titleLine1: 'Events/Engagements',
+      description:
+        "Stay updated with our latest conferences, webinars, and community programs. Whether you're looking to expand your knowledge, network with industry leaders, or engage with our vibrant community, there's an event for you.",
 
-    titleLine2: 'Speaking with one voice for the private health sector',
+      image: latestHero,
 
-    description: "Stay updated with our latest conferences, webinars, and community programs. Whether you're looking to expand your knowledge, network with industry leaders, or engage with our vibrant community, there's an event for you.",
+      backgroundColor: '#E87A1814',
+    },
 
-    image: latestHero,
+    searchAndFilter: {
+      title: 'Find event',
 
-    backgroundColor: '#E87A1814', // Light orange tint from your template
+      searchPlaceholder: 'Search',
 
+      years: ['2026', '2025', '2024'],
+
+      categories: [
+        'Category',
+        'Webinar',
+        'Conference',
+        'Roundtable',
+        'Workshop',
+      ],
+    },
+
+    // This maps to the big horizontal card in your template
+
+    featuredEvent: {
+      tag: 'Members Only',
+
+      title: '2026 HFN Annual Conference',
+
+      date: 'Wednesday, March 4th 2026',
+
+      location: 'Lagos Oriental Hotel Lagos, LA',
+
+      description:
+        'Join HFN 2026 to explore bold private‑sector solutions driving healthcare financing and Universal Health Coverage in Nigeria. The Healthcare Federation of Nigeria (HFN) invites you to the HFN Annual Conference 2026, Nigeria’s premier gathering of private-sector healthcare leaders, policymakers, financiers, innovators, and development partners.',
+
+      image: eventImage,
+
+      registerLink: 'https://tix.africa/claim/2026-hfn-annual-conference/...',
+    },
+
+    // This maps to the 3-column grid below featured
+
+    latestEvents: {
+      title: 'Latest Events',
+
+      items: [
+        {
+          id: 1,
+
+          title: '2026 HFN Annual Conference',
+
+          category: 'Member Only',
+
+          date: 'Wednesday, March 4th 2026',
+
+          time: '10:00 AM',
+
+          location: 'Lagos Oriental Hotel Lagos, LA',
+
+          frequency: 'Free for Members',
+
+          description:
+            'Join HFN 2026 to explore bold private‑sector solutions driving healthcare financing and Universal Health Coverage in Nigeria.',
+
+          image: eventImage,
+
+          registerLink: 'https://tix.africa/claim/...',
+        },
+
+        {
+          id: 2,
+
+          title: '2026 HFN Annual Conference',
+
+          category: 'Non-members',
+
+          date: 'Wednesday, March 4th 2026',
+
+          time: '10:00 AM',
+
+          location: 'Lagos Oriental Hotel Lagos, LA',
+
+          frequency: 'Dollar Payment',
+
+          description:
+            'Join HFN 2026 to explore bold private‑sector solutions driving healthcare financing and Universal Health Coverage in Nigeria.',
+
+          image: eventImage,
+
+          registerLink: 'https://www.eventbrite.com/...',
+        },
+
+        {
+          id: 3,
+
+          title: '2026 HFN Annual Conference',
+
+          category: 'Non-members',
+
+          date: 'Wednesday, March 4th 2026',
+
+          time: '10:00 AM',
+
+          location: 'Lagos Oriental Hotel Lagos, LA',
+
+          frequency: 'Naira Payment',
+
+          description:
+            'Join HFN 2026 to explore bold private‑sector solutions driving healthcare financing and Universal Health Coverage in Nigeria.',
+
+          image: eventImage,
+
+          registerLink: 'https://tix.africa/discover/...',
+        },
+      ],
+    },
+
+    pastEvents: {
+      title: 'Past Events',
+
+      items: [
+        {
+          title: 'HFN Healthcare Leadership Conference 2025',
+
+          category: 'Conference',
+
+          date: 'June 2, 2025',
+
+          theme:
+            'Accelerating UHC and Health Sovereignty Through Public-Private Integration',
+
+          image: hfn2025,
+        },
+
+        {
+          title:
+            'High-Level Roundtable on Local Manufacturing of Medicines in Nigeria',
+
+          category: 'Roundtable',
+
+          date: 'October 22, 2025',
+
+          theme:
+            'Strengthening Local Pharmaceutical Manufacturing for Sustainable Health Security in Africa',
+
+          image: roundtable2025,
+        },
+
+        {
+          title: 'HFN–NHIA Private Sector Roundtable Breakfast Meeting',
+
+          category: 'Roundtable',
+
+          date: 'December 1, 2025',
+
+          theme:
+            'Leveraging Private Sector to Accelerate Health Insurance Coverage in Nigeria',
+
+          image: breakfast2025,
+        },
+      ],
+    },
   },
-
-
-
-  searchAndFilter: {
-
-    title: 'Find event',
-
-    searchPlaceholder: 'Search',
-
-    years: ['2026', '2025', '2024'],
-
-    categories: ['Category', 'Webinar', 'Conference', 'Roundtable', 'Workshop'],
-
-  },
-
-
-
-  // This maps to the big horizontal card in your template
-
-  featuredEvent: {
-
-    tag: 'Members Only',
-
-    title: '2026 HFN Annual Conference',
-
-    date: 'Wednesday, March 4th 2026',
-
-    location: 'Lagos Oriental Hotel Lagos, LA',
-
-    description: 'Join HFN 2026 to explore bold private‑sector solutions driving healthcare financing and Universal Health Coverage in Nigeria. The Healthcare Federation of Nigeria (HFN) invites you to the HFN Annual Conference 2026, Nigeria’s premier gathering of private-sector healthcare leaders, policymakers, financiers, innovators, and development partners.',
-
-    image: eventImage,
-
-    registerLink: 'https://tix.africa/claim/2026-hfn-annual-conference/...',
-
-  },
-
-
-
-  // This maps to the 3-column grid below featured
-
-  latestEvents: {
-
-    title: 'Latest Events',
-
-    items: [
-
-      {
-
-        id: 1,
-
-        title: '2026 HFN Annual Conference',
-
-        category: 'Member Only',
-
-        date: 'Wednesday, March 4th 2026',
-
-        time: '10:00 AM',
-
-        location: 'Lagos Oriental Hotel Lagos, LA',
-
-        frequency: 'Free for Members',
-
-        description: 'Join HFN 2026 to explore bold private‑sector solutions driving healthcare financing and Universal Health Coverage in Nigeria.',
-
-        image: eventImage,
-
-        registerLink: 'https://tix.africa/claim/...',
-
-      },
-
-      {
-
-        id: 2,
-
-        title: '2026 HFN Annual Conference',
-
-        category: 'Non-members',
-
-        date: 'Wednesday, March 4th 2026',
-
-        time: '10:00 AM',
-
-        location: 'Lagos Oriental Hotel Lagos, LA',
-
-        frequency: 'Dollar Payment',
-
-        description: 'Join HFN 2026 to explore bold private‑sector solutions driving healthcare financing and Universal Health Coverage in Nigeria.',
-
-        image: eventImage,
-
-        registerLink: 'https://www.eventbrite.com/...',
-
-      },
-
-      {
-
-        id: 3,
-
-        title: '2026 HFN Annual Conference',
-
-        category: 'Non-members',
-
-        date: 'Wednesday, March 4th 2026',
-
-        time: '10:00 AM',
-
-        location: 'Lagos Oriental Hotel Lagos, LA',
-
-        frequency: 'Naira Payment',
-
-        description: 'Join HFN 2026 to explore bold private‑sector solutions driving healthcare financing and Universal Health Coverage in Nigeria.',
-
-        image: eventImage,
-
-        registerLink: 'https://tix.africa/discover/...',
-
-      }
-
-    ],
-
-  },
-
-  pastEvents: {
-
-    title: 'Past Events',
-
-    items: [
-
-      {
-
-        title: "HFN Healthcare Leadership Conference 2025",
-
-        category: "Conference",
-
-        date: "June 2, 2025",
-
-        theme: "Accelerating UHC and Health Sovereignty Through Public-Private Integration",
-
-        image: hfn2025,
-
-      },
-
-      {
-
-        title: "High-Level Roundtable on Local Manufacturing of Medicines in Nigeria",
-
-        category: "Roundtable",
-
-        date: "October 22, 2025",
-
-        theme: "Strengthening Local Pharmaceutical Manufacturing for Sustainable Health Security in Africa",
-
-        image: roundtable2025,
-
-      },
-
-      {
-
-        title: "HFN–NHIA Private Sector Roundtable Breakfast Meeting",
-
-        category: "Roundtable",
-
-        date: "December 1, 2025",
-
-        theme: "Leveraging Private Sector to Accelerate Health Insurance Coverage in Nigeria",
-
-        image: breakfast2025,
-
-      }
-
-    ]
-
-  },
-  
   gallery: {
     hero: {
       titleLine1: 'Event Gallery',
@@ -800,244 +810,244 @@ events: {
       nextCursor: 2,
     },
   },
-  getInvolved: {
-  hero: {
-    titleLine1: 'Engage With HFN',
-    titleLine2: 'Beyond Membership',
-    description:
-      'Healthcare Federation of Nigeria (HFN) provides multiple pathways for individuals, organisations, and partners to support and engage with our work strengthening Nigeria’s healthcare system.',
-    image:
-      'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769892500/Women_gnwotm.jpg',
-    backgroundColor: '#f2f9f3',
-  },
-
-  donations: {
-    title: 'Donations',
-    subtitle: 'Support HFN’s advocacy and sector-strengthening work',
-
-    paragraphs: [
-      'HFN welcomes contributions that support our work in policy advocacy, stakeholder convening, research, and public–private collaboration.',
-      'Contributions help sustain HFN’s role as a credible platform for private sector engagement in health system reform.',
-    ],
-
-    note:
-      'Contributions are voluntary and support institutional activities aligned with HFN’s mission.',
-
-    quote:
-      'Your contribution helps us drive evidence-based reforms and build a more resilient healthcare ecosystem in Nigeria.',
-
-    buttonText: 'Donate Now',
-  },
-
-  partnerships: {
-    title: 'Partnerships & Sponsorships',
-    tagline: 'Partner with HFN',
-    description:
-      'HFN works with local and international partners to deliver high-impact convenings, dialogues, and sector initiatives.',
-
-    items: [
-      {
-        id: 'event-sponsorships',
-        title: 'Event Sponsorships',
-        description:
-          'Sponsorship of HFN conferences, roundtables, and stakeholder dialogues attended by policymakers, private sector leaders, and development partners.',
-        buttonText: 'Contact Us to Explore Partnerships',
-      },
-      {
-        id: 'programme-support',
-        title: 'Programme & Initiative Support',
-        description:
-          'Collaboration on policy dialogues, capacity-building programmes, and sector initiatives aligned with shared objectives.',
-        buttonText: 'Contact Us to Explore Partnerships',
-      },
-    ],
-
-    contactEmail: 'partnerships@hfnigeria.com',
-  },
-
-  opportunities: {
-    items: [
-      {
-        id: 'exhibitor',
-        title: 'Exhibitor Opportunities',
-        description:
-          'HFN events provide opportunities for organisations to showcase products, services, and innovations to a targeted audience of healthcare decision-makers. Exhibitor packages are available for selected events.',
-        buttonText: 'Contact Us for Exhibitor Opportunities',
-      },
-      {
-        id: 'advertising',
-        title: 'Advertising & Visibility',
-        description:
-          'HFN offers limited advertising opportunities across its communication platforms, including its newsletter and selected publications, subject to editorial review.',
-        buttonText: 'Contact Us for Advertising Enquiries',
-      },
-    ],
-  },
-
-  volunteering: {
-    title: 'Volunteering',
-    subtitle: 'Support HFN programmes and events',
-    description:
-      'HFN welcomes volunteers who wish to contribute time and expertise to support events, research, communications, and sector engagement activities. Volunteer opportunities are periodic and role-specific.',
-    buttonText: 'Sign Up to Volunteer',
-    backgroundColor: '#14532D', // green-900
-  },
-
-  donationModal: {
-    title: "Support HFN's Mission",
-    subtitle: 'Choose a contribution category',
-
-    options: [
-      {
-        key: 'advocacy',
-        title: 'Policy Advocacy',
-        description:
-          'Supporting HFN’s work in legislative and policy reforms.',
-      },
-      {
-        key: 'research',
-        title: 'Research & Insights',
-        description:
-          'Funding for healthcare sector research and data gathering.',
-      },
-      {
-        key: 'convening',
-        title: 'Stakeholder Convening',
-        description:
-          'Supporting dialogues between public and private health sectors.',
-      },
-      {
-        key: 'general',
-        title: 'General Support',
-        description:
-          'Contributions toward institutional mission-aligned activities.',
-      },
-    ],
-  },
-},
-
-  membership: {
-  hero: {
-    headlineTop: 'Engagement Access Quality',
-    headlineBottom: 'A coalition driving policy and innovation',
-    description:
-      'Membership of the Healthcare Federation of Nigeria (HFN) provides access to a trusted professional network that strengthens private sector participation in policy, investment, and health system reform. HFN members engage through structured advocacy platforms, strategic partnerships, and sector-wide collaborations that shape Nigeria’s healthcare landscape.',
-    image: 'membership.jpg',
-  },
-
-  sectionTitle: 'Membership Categories',
-
-  categories: [
-    {
-      id: 'individual',
-      name: 'Individual',
-      description: 'Ideal for private and insurance companies',
-      plans: [
-        {
-          title: 'Individual',
-          price: '₦50,000 per year',
-          audience: 'Ideal for private companies',
-          benefits: [
-            'Advocacy/Public-Private Engagement project',
-            'Networking/High Profile Breakfast Meetings',
-            'Access to Finance',
-            'Promotion & Brand Visibility',
-            'Access to Industry Information for Members Only',
-            'Partnership & Engagement with International Organizations',
-          ],
-        },
-      ],
-    },
-    {
-      id: 'association',
-      name: 'Association',
-      description: 'For registered professional or trade associations',
-      plans: [
-        {
-          title: 'Association Member',
-          price: '₦150,000 per year',
-          audience: 'Ideal for professional bodies',
-          benefits: [
-            'Advocacy/Public-Private Engagement project',
-            'Networking/High Profile Breakfast Meetings',
-            'Access to Finance',
-            'Promotion & Brand Visibility',
-            'Access to Industry Information for Members Only',
-            'Partnership & Engagement with International Organizations',
-          ],
-        },
-      ],
-    },
-    {
-      id: 'corporate',
-      name: 'Corporate',
-      description: 'Ideal for private and insurance companies',
-      plans: [
-        {
-          title: 'Corporate',
-          price: '₦200,000 per year',
-          audience: 'Ideal for private companies',
-          benefits: [
-            'Advocacy/Public-Private Engagement project',
-            'Networking/High Profile Breakfast Meetings',
-            'Access to Finance',
-            'Promotion & Brand Visibility',
-            'Access to Industry Information for Members Only',
-            'Partnership & Engagement with International Organizations',
-          ],
-        },
-      ],
-    },
-    {
-      id: 'multinational',
-      name: 'Multinational',
-      description: 'Designed for international and cross-border organizations',
-      plans: [
-        {
-          title: 'Global Partner',
-          price: '₦750,000 per year',
-          audience: 'Ideal for international firms',
-          benefits: [
-            'Advocacy/Public-Private Engagement project',
-            'Networking/High Profile Breakfast Meetings',
-            'Access to Finance',
-            'Promotion & Brand Visibility',
-            'Access to Industry Information for Members Only',
-            'Partnership & Engagement with International Organizations',
-          ],
-        },
-      ],
-    },
-    {
-      id: 'diaspora',
-      name: 'Diaspora',
+  getinvolved: {
+    hero: {
+      titleLine1: 'Engage With HFN',
+      titleLine2: 'Beyond Membership',
       description:
-        'For professionals or organizations abroad supporting local development',
-      plans: [
+        'Healthcare Federation of Nigeria (HFN) provides multiple pathways for individuals, organisations, and partners to support and engage with our work strengthening Nigeria’s healthcare system.',
+      image:
+        'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769892500/Women_gnwotm.jpg',
+      backgroundColor: '#f2f9f3',
+    },
+
+    donations: {
+      title: 'Donations',
+      subtitle: 'Support HFN’s advocacy and sector-strengthening work',
+
+      paragraphs: [
+        'HFN welcomes contributions that support our work in policy advocacy, stakeholder convening, research, and public–private collaboration.',
+        'Contributions help sustain HFN’s role as a credible platform for private sector engagement in health system reform.',
+      ],
+
+      note: 'Contributions are voluntary and support institutional activities aligned with HFN’s mission.',
+
+      quote:
+        'Your contribution helps us drive evidence-based reforms and build a more resilient healthcare ecosystem in Nigeria.',
+
+      buttonText: 'Donate Now',
+    },
+
+    partnerships: {
+      title: 'Partnerships & Sponsorships',
+      tagline: 'Partner with HFN',
+      description:
+        'HFN works with local and international partners to deliver high-impact convenings, dialogues, and sector initiatives.',
+
+      items: [
         {
-          title: 'Diaspora Partner',
-          price: '$50 per year',
-          audience: 'Ideal for Nigerians in diaspora',
-          benefits: [
-            'Advocacy/Public-Private Engagement project',
-            'Networking/High Profile Breakfast Meetings',
-            'Access to Finance',
-            'Promotion & Brand Visibility',
-            'Access to Industry Information for Members Only',
-            'Partnership & Engagement with International Organizations',
-          ],
+          id: 'event-sponsorships',
+          title: 'Event Sponsorships',
+          description:
+            'Sponsorship of HFN conferences, roundtables, and stakeholder dialogues attended by policymakers, private sector leaders, and development partners.',
+          buttonText: 'Contact Us to Explore Partnerships',
+        },
+        {
+          id: 'programme-support',
+          title: 'Programme & Initiative Support',
+          description:
+            'Collaboration on policy dialogues, capacity-building programmes, and sector initiatives aligned with shared objectives.',
+          buttonText: 'Contact Us to Explore Partnerships',
+        },
+      ],
+
+      contactEmail: 'partnerships@hfnigeria.com',
+    },
+
+    opportunities: {
+      items: [
+        {
+          id: 'exhibitor',
+          title: 'Exhibitor Opportunities',
+          description:
+            'HFN events provide opportunities for organisations to showcase products, services, and innovations to a targeted audience of healthcare decision-makers. Exhibitor packages are available for selected events.',
+          buttonText: 'Contact Us for Exhibitor Opportunities',
+        },
+        {
+          id: 'advertising',
+          title: 'Advertising & Visibility',
+          description:
+            'HFN offers limited advertising opportunities across its communication platforms, including its newsletter and selected publications, subject to editorial review.',
+          buttonText: 'Contact Us for Advertising Enquiries',
         },
       ],
     },
-  ],
 
-  valuePropositionTabs: [
-    {
-      id: 'policy',
-      name: 'Policy Influence and Advocacy.',
-      titleHtml: 'Policy Influence <br />and Advocacy.',
-      color: 'default',
-      contentHtml: `
+    volunteering: {
+      title: 'Volunteering',
+      subtitle: 'Support HFN programmes and events',
+      description:
+        'HFN welcomes volunteers who wish to contribute time and expertise to support events, research, communications, and sector engagement activities. Volunteer opportunities are periodic and role-specific.',
+      buttonText: 'Sign Up to Volunteer',
+      backgroundColor: '#14532D',
+    },
+
+    donationModal: {
+      title: "Support HFN's Mission",
+      subtitle: 'Choose a contribution category',
+
+      options: [
+        {
+          key: 'advocacy',
+          title: 'Policy Advocacy',
+          description:
+            'Supporting HFN’s work in legislative and policy reforms.',
+        },
+        {
+          key: 'research',
+          title: 'Research & Insights',
+          description:
+            'Funding for healthcare sector research and data gathering.',
+        },
+        {
+          key: 'convening',
+          title: 'Stakeholder Convening',
+          description:
+            'Supporting dialogues between public and private health sectors.',
+        },
+        {
+          key: 'general',
+          title: 'General Support',
+          description:
+            'Contributions toward institutional mission-aligned activities.',
+        },
+      ],
+    },
+  },
+
+  member: {
+    hero: {
+      headlineTop: 'Engagement Access Quality',
+      headlineBottom: 'A coalition driving policy and innovation',
+      description:
+        'Membership of the Healthcare Federation of Nigeria (HFN) provides access to a trusted professional network that strengthens private sector participation in policy, investment, and health system reform. HFN members engage through structured advocacy platforms, strategic partnerships, and sector-wide collaborations that shape Nigeria’s healthcare landscape.',
+      image: 'membership.jpg',
+    },
+
+    sectionTitle: 'Membership Categories',
+
+    categories: [
+      {
+        id: 'individual',
+        name: 'Individual',
+        description: 'Ideal for private and insurance companies',
+        plans: [
+          {
+            title: 'Individual',
+            price: '₦50,000 per year',
+            audience: 'Ideal for private companies',
+            benefits: [
+              'Advocacy/Public-Private Engagement project',
+              'Networking/High Profile Breakfast Meetings',
+              'Access to Finance',
+              'Promotion & Brand Visibility',
+              'Access to Industry Information for Members Only',
+              'Partnership & Engagement with International Organizations',
+            ],
+          },
+        ],
+      },
+      {
+        id: 'association',
+        name: 'Association',
+        description: 'For registered professional or trade associations',
+        plans: [
+          {
+            title: 'Association Member',
+            price: '₦150,000 per year',
+            audience: 'Ideal for professional bodies',
+            benefits: [
+              'Advocacy/Public-Private Engagement project',
+              'Networking/High Profile Breakfast Meetings',
+              'Access to Finance',
+              'Promotion & Brand Visibility',
+              'Access to Industry Information for Members Only',
+              'Partnership & Engagement with International Organizations',
+            ],
+          },
+        ],
+      },
+      {
+        id: 'corporate',
+        name: 'Corporate',
+        description: 'Ideal for private and insurance companies',
+        plans: [
+          {
+            title: 'Corporate',
+            price: '₦200,000 per year',
+            audience: 'Ideal for private companies',
+            benefits: [
+              'Advocacy/Public-Private Engagement project',
+              'Networking/High Profile Breakfast Meetings',
+              'Access to Finance',
+              'Promotion & Brand Visibility',
+              'Access to Industry Information for Members Only',
+              'Partnership & Engagement with International Organizations',
+            ],
+          },
+        ],
+      },
+      {
+        id: 'multinational',
+        name: 'Multinational',
+        description:
+          'Designed for international and cross-border organizations',
+        plans: [
+          {
+            title: 'Global Partner',
+            price: '₦750,000 per year',
+            audience: 'Ideal for international firms',
+            benefits: [
+              'Advocacy/Public-Private Engagement project',
+              'Networking/High Profile Breakfast Meetings',
+              'Access to Finance',
+              'Promotion & Brand Visibility',
+              'Access to Industry Information for Members Only',
+              'Partnership & Engagement with International Organizations',
+            ],
+          },
+        ],
+      },
+      {
+        id: 'diaspora',
+        name: 'Diaspora',
+        description:
+          'For professionals or organizations abroad supporting local development',
+        plans: [
+          {
+            title: 'Diaspora Partner',
+            price: '$50 per year',
+            audience: 'Ideal for Nigerians in diaspora',
+            benefits: [
+              'Advocacy/Public-Private Engagement project',
+              'Networking/High Profile Breakfast Meetings',
+              'Access to Finance',
+              'Promotion & Brand Visibility',
+              'Access to Industry Information for Members Only',
+              'Partnership & Engagement with International Organizations',
+            ],
+          },
+        ],
+      },
+    ],
+
+    valuePropositionTabs: [
+      {
+        id: 'policy',
+        name: 'Policy Influence and Advocacy.',
+        titleHtml: 'Policy Influence <br />and Advocacy.',
+        color: 'default',
+        contentHtml: `
         <p>
           <strong>Representation in Policy and Decision-Making:</strong>
           Members are represented in high-level national health policy
@@ -1061,39 +1071,39 @@ events: {
           sector.
         </p>
       `,
-    },
-    {
-      id: 'collaboration',
-      name: 'Collaboration, Networking, and Exposure.',
-      titleHtml: 'Collaboration, <br />Networking, <br />and Exposure.',
-      color: 'orange',
-      contentHtml: `...same exact HTML as page...`,
-    },
-    {
-      id: 'knowledge',
-      name: 'Information, Knowledge, and Capacity Development.',
-      titleHtml: 'Information, Knowledge, <br /> and Capacity Development.',
-      color: 'green',
-      contentHtml: `...same exact HTML as page...`,
-    },
-    {
-      id: 'digital',
-      name: 'Digital and Media Visibility.',
-      titleHtml: 'Digital and <br />Media Visibility.',
-      color: 'orange',
-      contentHtml: `...same exact HTML as page...`,
-    },
-    {
-      id: 'support',
-      name: 'Member Support, Benefits, and Privileges.',
-      titleHtml: 'Member Support, Benefits, <br /> and Privileges.',
-      color: 'green',
-      contentHtml: `...same exact HTML as page...`,
-    },
-  ],
-},
+      },
+      {
+        id: 'collaboration',
+        name: 'Collaboration, Networking, and Exposure.',
+        titleHtml: 'Collaboration, <br />Networking, <br />and Exposure.',
+        color: 'orange',
+        contentHtml: `...same exact HTML as page...`,
+      },
+      {
+        id: 'knowledge',
+        name: 'Information, Knowledge, and Capacity Development.',
+        titleHtml: 'Information, Knowledge, <br /> and Capacity Development.',
+        color: 'green',
+        contentHtml: `...same exact HTML as page...`,
+      },
+      {
+        id: 'digital',
+        name: 'Digital and Media Visibility.',
+        titleHtml: 'Digital and <br />Media Visibility.',
+        color: 'orange',
+        contentHtml: `...same exact HTML as page...`,
+      },
+      {
+        id: 'support',
+        name: 'Member Support, Benefits, and Privileges.',
+        titleHtml: 'Member Support, Benefits, <br /> and Privileges.',
+        color: 'green',
+        contentHtml: `...same exact HTML as page...`,
+      },
+    ],
+  },
 
-  news: {
+  latestnews: {
     hero: {
       titleLine1: 'Stay Informed:',
       titleLine2: 'Latest Healthcare News & Updates',
@@ -1378,194 +1388,216 @@ The roundtable reinforced the urgency of collaborative investment and structured
     },
   },
   resources: {
-  hero: {
-    titleLine1: 'Stay Informed:',
-    titleLine2: 'Latest Healthcare News & Updates',
-    description:
-      'Get the latest insights, announcements, and policy developments from the Healthcare Federation of Nigeria and across the health sector.',
-    image: 'latest_news.png',
-    backgroundColor: '#E87A1814',
-  },
-
-  newsletterSection: {
-    title: 'Newsletters',
-    items: [
-      {
-        id: 1,
-        date: 'October 3, 2024',
-        text: 'Q4 Quarterly Newsletter, 2024 (October-December, 2024)',
-        pdfUrl:
-          'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-4_2024_rqpvhf.pdf',
-      },
-      {
-        id: 2,
-        date: 'February 27, 2025',
-        text: 'Q1 Quarterly Newsletter, 2025 (January-March, 2025)',
-        pdfUrl:
-          'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/1st-quarter-2025-hfn-newsletter1_nznhgn.pdf',
-      },
-      {
-        id: 3,
-        date: 'April 7, 2025',
-        text: 'Q2 Quarterly Newsletter, 2025 (April-June, 2025)',
-        pdfUrl:
-          'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-2---2025_jfakrt.pdf',
-      },
-      {
-        id: 4,
-        date: 'July 2, 2025',
-        text: 'Q3 Quarterly Newsletter, 2025 (July-September, 2025)',
-        pdfUrl:
-          'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067785/2025-hfn-quarterly-newsletter-q3_g4ks3t.pdf',
-      },
-      {
-        id: 5,
-        date: 'October 8, 2025',
-        text: 'Q4 Quarterly Newsletter, 2025 (October-December, 2025)',
-        pdfUrl:
-          'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067786/2025-hfn-quarterly-newsletter-q4_gd0aj6.pdf',
-      },
-    ],
-    pagination: {
-      currentPage: 1,
-      totalPages: 2,
-      nextPageUrl:
-        'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf',
+    hero: {
+      titleLine1: 'Stay Informed:',
+      titleLine2: 'Latest Healthcare News & Updates',
+      description:
+        'Get the latest insights, announcements, and policy developments from the Healthcare Federation of Nigeria and across the health sector.',
+      image: 'latest_news.png',
+      backgroundColor: '#E87A1814',
     },
-  },
 
-  publicationsSection: {
-    title: 'Publications',
-    backgroundColor: '#F2F9F3',
-    items: [
-      {
-        id: 1,
-        title:
-          'Transforming Nigeria’s Healthcare Landscape Through Strategic Advocacy and Private Sector Leadership',
-        description:
-          'HFN is uniquely positioned to leverage its deep understanding of both the healthcare sector and the policy landscape to facilitate transformative change. We have the expertise to connect public and private sectors, mobilize financing, and advocate for reforms that drive long-term, sustainable growth in the healthcare industry.',
-        pdfUrl:
+    newsletterSection: {
+      title: 'Newsletters',
+      items: [
+        {
+          id: 1,
+          date: 'October 3, 2024',
+          text: 'Q4 Quarterly Newsletter, 2024 (October-December, 2024)',
+          pdfUrl:
+            'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-4_2024_rqpvhf.pdf',
+        },
+        {
+          id: 2,
+          date: 'February 27, 2025',
+          text: 'Q1 Quarterly Newsletter, 2025 (January-March, 2025)',
+          pdfUrl:
+            'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/1st-quarter-2025-hfn-newsletter1_nznhgn.pdf',
+        },
+        {
+          id: 3,
+          date: 'April 7, 2025',
+          text: 'Q2 Quarterly Newsletter, 2025 (April-June, 2025)',
+          pdfUrl:
+            'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-2---2025_jfakrt.pdf',
+        },
+        {
+          id: 4,
+          date: 'July 2, 2025',
+          text: 'Q3 Quarterly Newsletter, 2025 (July-September, 2025)',
+          pdfUrl:
+            'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067785/2025-hfn-quarterly-newsletter-q3_g4ks3t.pdf',
+        },
+        {
+          id: 5,
+          date: 'October 8, 2025',
+          text: 'Q4 Quarterly Newsletter, 2025 (October-December, 2025)',
+          pdfUrl:
+            'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067786/2025-hfn-quarterly-newsletter-q4_gd0aj6.pdf',
+        },
+      ],
+      pagination: {
+        currentPage: 1,
+        totalPages: 2,
+        nextPageUrl:
           'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf',
       },
-      {
-        id: 2,
-        title:
-          'THE HEALTHCARE FEDERATION OF NIGERIA In partnership with WHX Lagos',
-        description:
-          'The 2025 Healthcare Leadership Conference hosted by the Healthcare Federation of Nigeria (HFN), in partnership with WHX Lagos, themed “Accelerating UHC and Health Sovereignty: Scaling Up Best Practices Through Public-Private Integration,” convened distinguished leaders, policymakers, and system innovators to advance Nigeria’s journey toward Universal Health Coverage (UHC) and health sovereignty. The conference delivered not just vision, but actionable roadmaps.',
-        pdfUrl:
-          'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067796/2025-hfn-hlc-report_fyxosp.pdf',
+    },
+
+    publicationsSection: {
+      title: 'Publications',
+      backgroundColor: '#F2F9F3',
+      items: [
+        {
+          id: 1,
+          title:
+            'Transforming Nigeria’s Healthcare Landscape Through Strategic Advocacy and Private Sector Leadership',
+          description:
+            'HFN is uniquely positioned to leverage its deep understanding of both the healthcare sector and the policy landscape to facilitate transformative change. We have the expertise to connect public and private sectors, mobilize financing, and advocate for reforms that drive long-term, sustainable growth in the healthcare industry.',
+          pdfUrl:
+            'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf',
+        },
+        {
+          id: 2,
+          title:
+            'THE HEALTHCARE FEDERATION OF NIGERIA In partnership with WHX Lagos',
+          description:
+            'The 2025 Healthcare Leadership Conference hosted by the Healthcare Federation of Nigeria (HFN), in partnership with WHX Lagos, themed “Accelerating UHC and Health Sovereignty: Scaling Up Best Practices Through Public-Private Integration,” convened distinguished leaders, policymakers, and system innovators to advance Nigeria’s journey toward Universal Health Coverage (UHC) and health sovereignty. The conference delivered not just vision, but actionable roadmaps.',
+          pdfUrl:
+            'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067796/2025-hfn-hlc-report_fyxosp.pdf',
+        },
+        {
+          id: 3,
+          title:
+            'Expanding Access to Quality Healthcare: Transforming Nigeria through Innovation, Partnership, and Sustainability',
+          description:
+            'The 2025 Annual General Conference of the Healthcare Federation of Nigeria (HFN) was a landmark gathering convened to commemorate a decade of transformative advocacy, sectoral leadership, and policy influence by the private healthcare sector in Nigeria.',
+          pdfUrl:
+            'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067793/2025-hfn-conference-report_hapfj9.pdf',
+        },
+        {
+          id: 4,
+          title:
+            'High-Level Roundtable on Local Manufacturing of Medicines in Nigeria',
+          description:
+            'The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja.',
+          pdfUrl:
+            'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067783/hfn-report_roundtable-on-local-manufacturing_esqq68.pdf',
+        },
+      ],
+      pagination: {
+        currentPage: 1,
+        totalPages: 2,
       },
-      {
-        id: 3,
-        title:
-          'Expanding Access to Quality Healthcare: Transforming Nigeria through Innovation, Partnership, and Sustainability',
-        description:
-          'The 2025 Annual General Conference of the Healthcare Federation of Nigeria (HFN) was a landmark gathering convened to commemorate a decade of transformative advocacy, sectoral leadership, and policy influence by the private healthcare sector in Nigeria.',
-        pdfUrl:
-          'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067793/2025-hfn-conference-report_hapfj9.pdf',
-      },
-      {
-        id: 4,
-        title:
-          'High-Level Roundtable on Local Manufacturing of Medicines in Nigeria',
-        description:
-          'The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja.',
-        pdfUrl:
-          'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067783/hfn-report_roundtable-on-local-manufacturing_esqq68.pdf',
-      },
-    ],
-    pagination: {
-      currentPage: 1,
-      totalPages: 2,
     },
   },
-},
-governance: {
-  hero: {
-    titleHighlight: 'Governance & Leadership',
-    titleMain: '',
-    description: 'HFN is guided by a Board of Trustees and an Executive Committee providing strategic oversight and leadership for Nigeria’s private health sector.',
-    image: handsJoining,
-  },
-
-  boardOfTrustees: {
-    title: 'Board of Trustees',
-    chair: {
-      name: 'Bola Adesola',
-      role: 'Chair, Board of Trustees',
-      image: chairImage,
-      slug: 'bola-adesola',
-      tag: 'Chair'
+  governance: {
+    hero: {
+      titleHighlight: 'Governance & Leadership',
+      titleMain: '',
+      description:
+        'HFN is guided by a Board of Trustees and an Executive Committee providing strategic oversight and leadership for Nigeria’s private health sector.',
+      image: handsJoining,
     },
-    trustees: [
-      {
-        name: 'Clare Omatseye',
-        title: 'Founder & Managing Director, JNC International',
-        image: 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Clare_Omatseye.png', 
-        slug: 'clare-omatseye'
+
+    boardOfTrustees: {
+      title: 'Board of Trustees',
+      chair: {
+        name: 'Bola Adesola',
+        role: 'Chair, Board of Trustees',
+        image: chairImage,
+        slug: 'bola-adesola',
+        tag: 'Chair',
       },
-      {
-        name: 'Dr. Olaokun Soyinka',
-        title: 'Former Commissioner for Health, Ogun State',
-        image: 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Olaokun_Soyinka.png',
-        slug: 'dr-olaokun-soyinka'
-      },
-      {
-        name: 'Mr. Azubike Okorie',
-        title: 'Healthcare Consultant & Strategic Leader',
-        image: 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Azubike_Okorie.png',
-        slug: 'azubike-okorie'
-      }
-    ]
+      trustees: [
+        {
+          name: 'Clare Omatseye',
+          title: 'Founder & Managing Director, JNC International',
+          image:
+            'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Clare_Omatseye.png',
+          slug: 'clare-omatseye',
+        },
+        {
+          name: 'Dr. Olaokun Soyinka',
+          title: 'Former Commissioner for Health, Ogun State',
+          image:
+            'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Olaokun_Soyinka.png',
+          slug: 'dr-olaokun-soyinka',
+        },
+        {
+          name: 'Mr. Azubike Okorie',
+          title: 'Healthcare Consultant & Strategic Leader',
+          image:
+            'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Azubike_Okorie.png',
+          slug: 'azubike-okorie',
+        },
+      ],
+    },
+
+    executiveCommittee: {
+      title: 'Executive Committee',
+      members: [
+        {
+          name: 'Njide Ndili',
+          role: 'President, HFN',
+          slug: 'njide-ndili',
+          image:
+            'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Njide_Ndili.png',
+          profile:
+            'Country Director at PharmAccess Foundation with over 25 years of experience in healthcare and finance.',
+          socials: [
+            {
+              platform: 'LinkedIn',
+              url: 'https://www.linkedin.com/company/healthcare-federation-of-nigeria-hfn/',
+            },
+          ],
+        },
+        {
+          name: 'Dr. Ayodele Benson-Cole',
+          role: '1st Vice President, HFN',
+          slug: 'ayodele-benson-cole',
+          image:
+            'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Ayodele_Benson.png',
+          profile:
+            'CEO of Benson Coleman & Associates, providing strategic leadership in healthcare advocacy.',
+          socials: [
+            {
+              platform: 'LinkedIn',
+              url: 'https://www.linkedin.com/company/healthcare-federation-of-nigeria-hfn/',
+            },
+          ],
+        },
+        {
+          name: 'Dr. Jennifer Anyanti',
+          role: '2nd Vice President, HFN',
+          slug: 'jennifer-anyanti',
+          image:
+            'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Jennifer_Anyanti.png',
+          profile:
+            'Deputy Managing Director at Society for Family Health, driving primary healthcare delivery.',
+          socials: [
+            {
+              platform: 'LinkedIn',
+              url: 'https://www.linkedin.com/company/healthcare-federation-of-nigeria-hfn/',
+            },
+          ],
+        },
+        {
+          name: 'Chinyere Okorocha',
+          role: 'Public Relations Secretary, HFN',
+          slug: 'chinyere-okorocha',
+          image:
+            'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Chinyere_Okorocha.png',
+          profile:
+            'Partner and Head of Sectors at Jackson, Etti & Edu, specializing in intellectual property and health law.',
+          socials: [
+            {
+              platform: 'LinkedIn',
+              url: 'https://www.linkedin.com/company/healthcare-federation-of-nigeria-hfn/',
+            },
+          ],
+        },
+      ],
+    },
   },
-
-  executiveCommittee: {
-    title: 'Executive Committee',
-    members: [
-      {
-        name: 'Njide Ndili',
-        role: 'President, HFN',
-        slug: 'njide-ndili',
-        image: 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Njide_Ndili.png',
-        profile: 'Country Director at PharmAccess Foundation with over 25 years of experience in healthcare and finance.',
-        socials: [
-          { platform: 'LinkedIn', url: 'https://www.linkedin.com/company/healthcare-federation-of-nigeria-hfn/' }
-        ]
-      },
-      {
-        name: 'Dr. Ayodele Benson-Cole',
-        role: '1st Vice President, HFN',
-        slug: 'ayodele-benson-cole',
-        image: 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Ayodele_Benson.png',
-        profile: 'CEO of Benson Coleman & Associates, providing strategic leadership in healthcare advocacy.',
-        socials: [
-          { platform: 'LinkedIn', url: 'https://www.linkedin.com/company/healthcare-federation-of-nigeria-hfn/' }
-        ]
-      },
-      {
-        name: 'Dr. Jennifer Anyanti',
-        role: '2nd Vice President, HFN',
-        slug: 'jennifer-anyanti',
-        image: 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Jennifer_Anyanti.png',
-        profile: 'Deputy Managing Director at Society for Family Health, driving primary healthcare delivery.',
-        socials: [
-          { platform: 'LinkedIn', url: 'https://www.linkedin.com/company/healthcare-federation-of-nigeria-hfn/' }
-        ]
-      },
-      {
-        name: 'Chinyere Okorocha',
-        role: 'Public Relations Secretary, HFN',
-        slug: 'chinyere-okorocha',
-        image: 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Chinyere_Okorocha.png',
-        profile: 'Partner and Head of Sectors at Jackson, Etti & Edu, specializing in intellectual property and health law.',
-        socials: [
-          { platform: 'LinkedIn', url: 'https://www.linkedin.com/company/healthcare-federation-of-nigeria-hfn/' }
-        ]
-      }
-    ]
-  }
-}
-
-}
 };
