@@ -1174,152 +1174,164 @@ const removeFaq = (index) => {
   </div>
 </div>
 
+<!-- ABOUT HERO SECTION -->
 <div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'hero'">
   <div class="flex space-x-6">
+    <!-- LEFT SIDE -->
     <div class="w-3/5 space-y-6">
-      <div class="border p-3 rounded">
-        <label>Title Highlight</label>
-        <input v-model="currentSectionData.titleHighlight" type="text" />
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">Title Highlight</label>
+        <input v-model="currentSectionData.titleHighlight" type="text" class="w-full text-lg border-none focus:ring-0 p-0 m-0" />
       </div>
-      <div class="border p-3 rounded">
-        <label>Title Main</label>
-        <input v-model="currentSectionData.titleMain" type="text" />
+
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">Title Main</label>
+        <input v-model="currentSectionData.titleMain" type="text" class="w-full text-lg border-none focus:ring-0 p-0 m-0" />
       </div>
-      <div class="border p-3 rounded">
-        <label>Description Top</label>
-        <textarea v-model="currentSectionData.descriptionTop"></textarea>
+
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">Description Top</label>
+        <textarea v-model="currentSectionData.descriptionTop" rows="2" class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
       </div>
-      <div class="border p-3 rounded">
-        <label>Description Text</label>
-        <textarea v-model="currentSectionData.descriptionText"></textarea>
+
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">Description Text</label>
+        <textarea v-model="currentSectionData.descriptionText" rows="2" class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
       </div>
-      <div class="border p-3 rounded">
-        <label>Description Bottom</label>
-        <textarea v-model="currentSectionData.descriptionBottom"></textarea>
+
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">Description Bottom</label>
+        <textarea v-model="currentSectionData.descriptionBottom" rows="2" class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
       </div>
-      <div class="border p-3 rounded">
-        <label>CTA Label</label>
-        <input v-model="currentSectionData.ctaLabel" type="text" />
+
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">CTA Label</label>
+        <input v-model="currentSectionData.ctaLabel" type="text" class="w-full text-base border-none focus:ring-0 p-0 m-0" />
       </div>
-      <div class="border p-3 rounded">
-        <label>CTA Link</label>
-        <input v-model="currentSectionData.ctaLink" type="text" />
+
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">CTA Link</label>
+        <input v-model="currentSectionData.ctaLink" type="text" class="w-full text-base border-none focus:ring-0 p-0 m-0" />
       </div>
     </div>
+
+    <!-- RIGHT SIDE -->
     <div class="w-2/5 space-y-6">
-      <!-- Image Upload Component -->
       <image-uploader v-model="currentSectionData.image" />
-      <div class="border p-3 rounded">
-        <label>Background Color</label>
-        <input type="color" v-model="currentSectionData.backgroundColor" />
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">Background Color</label>
+        <input type="color" v-model="currentSectionData.backgroundColor" class="w-12 h-8 rounded border-none p-0 cursor-pointer" />
       </div>
     </div>
   </div>
 </div>
 
+<!-- ABOUT STORY SECTION -->
 <div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'story'">
-  <div class="space-y-4">
-    <div class="border p-3 rounded">
-      <label>Section Title</label>
-      <input v-model="currentSectionData.sectionTitle" type="text" />
+  <div class="space-y-6">
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">Section Title</label>
+      <input v-model="currentSectionData.sectionTitle" type="text" class="w-full text-lg border-none focus:ring-0 p-0 m-0" />
     </div>
 
-    <div v-for="(para, index) in currentSectionData.paragraphs" :key="index" class="border p-3 rounded">
-      <label>Paragraph {{ index + 1 }}</label>
-      <textarea v-model="currentSectionData.paragraphs[index]"></textarea>
-      <button @click="deleteParagraph(index)">Delete</button>
+    <div v-for="(para, index) in currentSectionData.paragraphs" :key="index" class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">Paragraph {{ index + 1 }}</label>
+      <textarea v-model="currentSectionData.paragraphs[index]" rows="3" class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
+      <button class="text-red-500 text-sm" @click="deleteParagraph(index)">Delete</button>
     </div>
-    <button @click="addParagraph">Add Paragraph</button>
+    <button class="bg-black text-white px-4 py-2 rounded" @click="addParagraph">Add Paragraph</button>
 
-    <div class="border p-3 rounded">
-      <label>Mission</label>
-      <textarea v-model="currentSectionData.mission"></textarea>
-    </div>
-
-    <div class="border p-3 rounded">
-      <label>Vision</label>
-      <textarea v-model="currentSectionData.vision"></textarea>
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">Mission</label>
+      <textarea v-model="currentSectionData.mission" rows="3" class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
     </div>
 
-    <div class="border p-3 rounded">
-      <label>Role Points</label>
-      <div v-for="(point, index) in currentSectionData.rolePoints" :key="index" class="flex justify-between">
-        <input v-model="currentSectionData.rolePoints[index]" type="text" />
-        <button @click="deleteRolePoint(index)">Delete</button>
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">Vision</label>
+      <textarea v-model="currentSectionData.vision" rows="3" class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
+    </div>
+
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">Role Points</label>
+      <div v-for="(point, index) in currentSectionData.rolePoints" :key="index" class="flex justify-between items-center space-x-2">
+        <input v-model="currentSectionData.rolePoints[index]" type="text" class="flex-grow border-none focus:ring-0 p-0 m-0" />
+        <button class="text-red-500 text-sm" @click="deleteRolePoint(index)">Delete</button>
       </div>
-      <button @click="addRolePoint">Add Point</button>
+      <button class="bg-black text-white px-3 py-1 rounded mt-2" @click="addRolePoint">Add Point</button>
     </div>
 
-    <div class="border p-3 rounded">
-      <label>Commitment Goals</label>
-      <div v-for="(goal, index) in currentSectionData.commitmentGoals" :key="index" class="flex justify-between">
-        <input v-model="currentSectionData.commitmentGoals[index]" type="text" />
-        <button @click="deleteGoal(index)">Delete</button>
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">Commitment Goals</label>
+      <div v-for="(goal, index) in currentSectionData.commitmentGoals" :key="index" class="flex justify-between items-center space-x-2">
+        <input v-model="currentSectionData.commitmentGoals[index]" type="text" class="flex-grow border-none focus:ring-0 p-0 m-0" />
+        <button class="text-red-500 text-sm" @click="deleteGoal(index)">Delete</button>
       </div>
-      <button @click="addCommitmentGoal">Add Goal</button>
+      <button class="bg-black text-white px-3 py-1 rounded mt-2" @click="addCommitmentGoal">Add Goal</button>
     </div>
 
     <image-uploader v-model="currentSectionData.image" />
   </div>
 </div>
 
-
+<!-- ABOUT ITEMS SECTION -->
 <div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'items'">
-  <div v-for="(item, index) in currentSectionData.items" :key="index" class="border p-3 rounded mb-4">
-    <label>Title</label>
-    <input v-model="item.title" type="text" />
+  <div v-for="(item, index) in currentSectionData.items" :key="index" class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
+    <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
+    <input v-model="item.title" type="text" class="w-full border-none focus:ring-0 p-0 m-0" />
 
-    <label>Short Description</label>
-    <input v-model="item.shortDesc" type="text" />
+    <label class="block text-xs font-semibold uppercase text-gray-500">Short Description</label>
+    <input v-model="item.shortDesc" type="text" class="w-full border-none focus:ring-0 p-0 m-0" />
 
-    <label>Full Description</label>
-    <textarea v-model="item.fullDesc"></textarea>
+    <label class="block text-xs font-semibold uppercase text-gray-500">Full Description</label>
+    <textarea v-model="item.fullDesc" rows="3" class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
 
-    <label>Color Class</label>
-    <input v-model="item.colorClass" type="text" />
+    <label class="block text-xs font-semibold uppercase text-gray-500">Color Class</label>
+    <input v-model="item.colorClass" type="text" class="w-full border-none focus:ring-0 p-0 m-0" />
 
-    <button @click="deleteItem(index)">Delete Item</button>
+    <button class="text-red-500 text-sm mt-2" @click="deleteItem(index)">Delete Item</button>
   </div>
-  <button @click="addItem">Add New Item</button>
+  <button class="bg-black text-white px-4 py-2 rounded" @click="addItem">Add New Item</button>
 </div>
 
-
+<!-- ABOUT HISTORY SECTION -->
 <div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'history'">
-  <div class="border p-3 rounded mb-4">
-    <label>Title</label>
-    <input v-model="currentSectionData.title" type="text" />
+  <div class="border border-gray-300 rounded-lg p-3 mb-4">
+    <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
+    <input v-model="currentSectionData.title" type="text" class="w-full border-none focus:ring-0 p-0 m-0" />
   </div>
 
-  <div v-for="(milestone, index) in currentSectionData.milestones" :key="index" class="border p-3 rounded mb-2">
-    <label>Year</label>
-    <input v-model="milestone.year" type="text" />
-    <label>Event</label>
-    <textarea v-model="milestone.event"></textarea>
-    <button @click="deleteMilestone(index)">Delete</button>
+  <div v-for="(milestone, index) in currentSectionData.milestones" :key="index" class="border border-gray-300 rounded-lg p-3 mb-2 space-y-2">
+    <label class="block text-xs font-semibold uppercase text-gray-500">Year</label>
+    <input v-model="milestone.year" type="text" class="w-full border-none focus:ring-0 p-0 m-0" />
+
+    <label class="block text-xs font-semibold uppercase text-gray-500">Event</label>
+    <textarea v-model="milestone.event" rows="2" class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
+
+    <button class="text-red-500 text-sm" @click="deleteMilestone(index)">Delete</button>
   </div>
 
-  <button @click="addMilestone">Add Milestone</button>
+  <button class="bg-black text-white px-4 py-2 rounded" @click="addMilestone">Add Milestone</button>
 </div>
 
-
+<!-- ABOUT GOVERNANCE SECTION -->
 <div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'governance'">
-  <div class="border p-3 rounded mb-4">
-    <label>Title</label>
-    <input v-model="currentSectionData.title" type="text" />
+  <div class="border border-gray-300 rounded-lg p-3 mb-4">
+    <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
+    <input v-model="currentSectionData.title" type="text" class="w-full border-none focus:ring-0 p-0 m-0" />
   </div>
 
-  <div class="border p-3 rounded mb-2">
-    <label>Description</label>
-    <textarea v-model="currentSectionData.description"></textarea>
+  <div class="border border-gray-300 rounded-lg p-3 mb-2 space-y-2">
+    <label class="block text-xs font-semibold uppercase text-gray-500">Description</label>
+    <textarea v-model="currentSectionData.description" rows="3" class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"></textarea>
   </div>
 
-  <div class="border p-3 rounded">
-    <label>Units</label>
-    <div v-for="(unit, index) in currentSectionData.units" :key="index" class="flex justify-between">
-      <input v-model="currentSectionData.units[index]" type="text" />
-      <button @click="deleteUnit(index)">Delete</button>
+  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+    <label class="block text-xs font-semibold uppercase text-gray-500">Units</label>
+    <div v-for="(unit, index) in currentSectionData.units" :key="index" class="flex justify-between items-center space-x-2">
+      <input v-model="currentSectionData.units[index]" type="text" class="flex-grow border-none focus:ring-0 p-0 m-0" />
+      <button class="text-red-500 text-sm" @click="deleteUnit(index)">Delete</button>
     </div>
-    <button @click="addUnit">Add Unit</button>
+    <button class="bg-black text-white px-3 py-1 rounded mt-2" @click="addUnit">Add Unit</button>
   </div>
 </div>
 
