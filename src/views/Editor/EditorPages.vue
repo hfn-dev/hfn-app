@@ -107,15 +107,10 @@ const removeStoryStat = (index) => {
   currentSectionData.value.stats.splice(index, 1)
 }
 
-
 const createPage = async (pageName) => {
   try {
-    const pageType = pageName
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, "-");
-
-    const schema = pageSchemas[pageType];
+    const pageType = pageName.toLowerCase().trim().replace(/\s+/g, "-");
+    const schema = structuredClone(pageSchemas[pageType]);
 
     const exists = pages.value.some((p) => p.page_type === pageType);
     if (exists) {
@@ -128,16 +123,16 @@ const createPage = async (pageName) => {
       name: pageName,
       status: "draft",
       is_visible: false,
+      content: schema, // fill schema here
     };
-    const newPage = await pagesApi.createPage(payload);
 
-    await pagesApi.updatePageContent(newPage.id, structuredClone(schema));
+    const newPage = await pagesApi.createPage(payload);
 
     pages.value.push({
       ...newPage,
       title: newPage.name,
       slug: `/${pageType}`,
-      sections: structuredClone(schema),
+      sections: schema, // initialize editor with schema
     });
 
     editPage(newPage);
@@ -145,7 +140,6 @@ const createPage = async (pageName) => {
     console.error("Failed to create page", e);
   }
 };
-
   
 
 // const createPage = async (pageName) => {
