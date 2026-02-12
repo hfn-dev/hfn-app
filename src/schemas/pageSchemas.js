@@ -973,7 +973,7 @@ export const pageSchemas = {
       contentHtml: `...same exact HTML as page...`,
     },
   ],
-}
+},
 
   news: {
     hero: {
