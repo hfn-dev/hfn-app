@@ -94,7 +94,7 @@ const addExecutives = () => {
   })
 }
 
-const removeExecutive = (index) => {
+const removeExecutives = (index) => {
   currentSectionData.value.members.splice(index, 1)
 }
 
@@ -2830,7 +2830,7 @@ const removeFaq = (index) => {
   >
     <div class="flex justify-between items-center">
       <h4 class="font-semibold text-sm">Member {{ index + 1 }}</h4>
-      <button @click="removeExecutive(index)" class="text-red-500 text-sm">
+      <button @click="removeExecutives(index)" class="text-red-500 text-sm">
         Delete
       </button>
     </div>
