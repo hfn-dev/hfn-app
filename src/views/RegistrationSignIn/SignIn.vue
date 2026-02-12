@@ -126,15 +126,9 @@ const handleSignIn = async () => {
   }
 };
 
-
 onMounted(() => {
-  if (route.query.message === 'session-expired') {
-    toast.warn({
-      severity: 'warn',
-      summary: 'Session Expired',
-      detail: 'Your session has expired. Please login again.',
-      life: 4000,
-    });
+  if (route.query.message === "session-expired") {
+    toast.error("Your session has expired. Please login.");
   }
 });
 

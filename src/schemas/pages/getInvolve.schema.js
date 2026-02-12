@@ -1,5 +1,5 @@
 export const getInvolvedPageSchema = {
-  getInvolved: {
+  getinvolved: {
     hero: {
       titleLine1: "Join the Movement",
       titleLine2: "Transform Healthcare in Nigeria",
