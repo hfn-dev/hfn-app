@@ -228,17 +228,20 @@ export const pageSchemas = {
     ],
   },
   about: {
+  
   hero: {
-    titleHighlight: 'Who We Are',
-    titleMain: "The Unified Voice of Nigeria's Private Healthcare Sector",
-    descriptionTop: 'Dedicated to collective action and policy advocacy to improve health outcomes for all Nigerians.',
-    descriptionText: 'We engage, collaborate, and empower stakeholders to strengthen Nigeria’s health system.',
-    descriptionBottom: 'HFN exists to ensure that private sector capacity is aligned with national health priorities.',
-    ctaLabel: 'Join the Movement',
-    ctaLink: '/get-involved',
+    titleHighlight: 'Championing',
+    titleMain: 'Healthcare in Nigeria',
+    descriptionTop: 'Healthcare Federation of Nigeria ',
+    descriptionText:
+      'is a coalition of private healthcare sector stakeholders committed to strengthening Nigeria’s healthcare system through strategic advocacy, collaboration, and private sector leadership.',
+    descriptionBottom:
+      '',
+    ctaLabel: 'Join the Coalition ->',
+    ctaLink: '/register',
     image: 'map.jpg',
+    backgroundColor: '#f0f7f5',
   },
-
   story: {
     sectionTitle: 'Our HFN Story',
     paragraphs: [
