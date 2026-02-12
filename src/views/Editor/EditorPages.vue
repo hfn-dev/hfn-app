@@ -1174,858 +1174,155 @@ const removeFaq = (index) => {
   </div>
 </div>
 
+<div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'hero'">
+  <div class="flex space-x-6">
+    <div class="w-3/5 space-y-6">
+      <div class="border p-3 rounded">
+        <label>Title Highlight</label>
+        <input v-model="currentSectionData.titleHighlight" type="text" />
+      </div>
+      <div class="border p-3 rounded">
+        <label>Title Main</label>
+        <input v-model="currentSectionData.titleMain" type="text" />
+      </div>
+      <div class="border p-3 rounded">
+        <label>Description Top</label>
+        <textarea v-model="currentSectionData.descriptionTop"></textarea>
+      </div>
+      <div class="border p-3 rounded">
+        <label>Description Text</label>
+        <textarea v-model="currentSectionData.descriptionText"></textarea>
+      </div>
+      <div class="border p-3 rounded">
+        <label>Description Bottom</label>
+        <textarea v-model="currentSectionData.descriptionBottom"></textarea>
+      </div>
+      <div class="border p-3 rounded">
+        <label>CTA Label</label>
+        <input v-model="currentSectionData.ctaLabel" type="text" />
+      </div>
+      <div class="border p-3 rounded">
+        <label>CTA Link</label>
+        <input v-model="currentSectionData.ctaLink" type="text" />
+      </div>
+    </div>
+    <div class="w-2/5 space-y-6">
+      <!-- Image Upload Component -->
+      <image-uploader v-model="currentSectionData.image" />
+      <div class="border p-3 rounded">
+        <label>Background Color</label>
+        <input type="color" v-model="currentSectionData.backgroundColor" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'story'">
+  <div class="space-y-4">
+    <div class="border p-3 rounded">
+      <label>Section Title</label>
+      <input v-model="currentSectionData.sectionTitle" type="text" />
+    </div>
+
+    <div v-for="(para, index) in currentSectionData.paragraphs" :key="index" class="border p-3 rounded">
+      <label>Paragraph {{ index + 1 }}</label>
+      <textarea v-model="currentSectionData.paragraphs[index]"></textarea>
+      <button @click="deleteParagraph(index)">Delete</button>
+    </div>
+    <button @click="addParagraph">Add Paragraph</button>
+
+    <div class="border p-3 rounded">
+      <label>Mission</label>
+      <textarea v-model="currentSectionData.mission"></textarea>
+    </div>
+
+    <div class="border p-3 rounded">
+      <label>Vision</label>
+      <textarea v-model="currentSectionData.vision"></textarea>
+    </div>
+
+    <div class="border p-3 rounded">
+      <label>Role Points</label>
+      <div v-for="(point, index) in currentSectionData.rolePoints" :key="index" class="flex justify-between">
+        <input v-model="currentSectionData.rolePoints[index]" type="text" />
+        <button @click="deleteRolePoint(index)">Delete</button>
+      </div>
+      <button @click="addRolePoint">Add Point</button>
+    </div>
+
+    <div class="border p-3 rounded">
+      <label>Commitment Goals</label>
+      <div v-for="(goal, index) in currentSectionData.commitmentGoals" :key="index" class="flex justify-between">
+        <input v-model="currentSectionData.commitmentGoals[index]" type="text" />
+        <button @click="deleteGoal(index)">Delete</button>
+      </div>
+      <button @click="addCommitmentGoal">Add Goal</button>
+    </div>
+
+    <image-uploader v-model="currentSectionData.image" />
+  </div>
+</div>
 
 
+<div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'items'">
+  <div v-for="(item, index) in currentSectionData.items" :key="index" class="border p-3 rounded mb-4">
+    <label>Title</label>
+    <input v-model="item.title" type="text" />
+
+    <label>Short Description</label>
+    <input v-model="item.shortDesc" type="text" />
+
+    <label>Full Description</label>
+    <textarea v-model="item.fullDesc"></textarea>
+
+    <label>Color Class</label>
+    <input v-model="item.colorClass" type="text" />
+
+    <button @click="deleteItem(index)">Delete Item</button>
+  </div>
+  <button @click="addItem">Add New Item</button>
+</div>
 
 
-          <div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'hero'">
-            <div class="flex space-x-6">
-              <div class="w-3/5 space-y-6">
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                    >Title</label
-                  >
-                  <input
-                    v-model="currentSectionData.title"
-                    type="text"
-                    class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-                    placeholder="Enter section title"
-                  />
-                </div>
+<div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'history'">
+  <div class="border p-3 rounded mb-4">
+    <label>Title</label>
+    <input v-model="currentSectionData.title" type="text" />
+  </div>
 
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                    >Subtitle</label
-                  >
-                  <input
-                    v-model="currentSectionData.subtitle"
-                    type="text"
-                    class="w-full text-base border-none focus:ring-0 p-0 m-0"
-                    placeholder="Enter subtitle"
-                  />
-                </div>
+  <div v-for="(milestone, index) in currentSectionData.milestones" :key="index" class="border p-3 rounded mb-2">
+    <label>Year</label>
+    <input v-model="milestone.year" type="text" />
+    <label>Event</label>
+    <textarea v-model="milestone.event"></textarea>
+    <button @click="deleteMilestone(index)">Delete</button>
+  </div>
 
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                    >Description</label
-                  >
-                  <textarea
-                    v-model="currentSectionData.description"
-                    rows="5"
-                    class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-                    placeholder="Enter description"
-                  ></textarea>
-                </div>
-              </div>
+  <button @click="addMilestone">Add Milestone</button>
+</div>
 
-              <div class="w-2/5 space-y-6">
-                <div
-                  class="border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center bg-white shadow-inner"
-                >
-                  <div
-                    class="bg-red-50 h-40 w-full mb-4 border border-dashed border-gray-400 rounded-lg flex flex-col items-center justify-center text-center"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-8 w-8 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                      />
-                    </svg>
-                    <span class="text-sm text-gray-600 mt-2">Image Upload</span>
-                  </div>
-                  <div class="text-xs text-gray-500 space-y-1 w-full">
-                    <p class="font-semibold">Image Requirements:</p>
-                    <ul class="list-disc list-inside space-y-0">
-                      <li>File types: jpeg, jpg, png.</li>
-                      <li>File size: not more than 1MB.</li>
-                      <li>Dimensions: 1024x1024px.</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <div v-else-if="activeSection === 'missionVision'">
-            <div class="space-y-6">
-              <div class="border border-gray-300 rounded-lg p-4">
-                <h3 class="text-lg font-semibold mb-4">Our Mission</h3>
-                <div class="space-y-4">
-                  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                    <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
-                    <input
-                      v-model="currentSectionData.mission.title"
-                      type="text"
-                      class="w-full text-base border-none focus:ring-0 p-0 m-0"
-                      placeholder="Enter mission title"
-                    />
-                  </div>
-                  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                    <label class="block text-xs font-semibold uppercase text-gray-500">Text</label>
-                    <textarea
-                      v-model="currentSectionData.mission.text"
-                      rows="4"
-                      class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-                      placeholder="Enter mission text"
-                    ></textarea>
-                  </div>
-                </div>
-              </div>
-              <div class="border border-gray-300 rounded-lg p-4">
-                <h3 class="text-lg font-semibold mb-4">Our Vision</h3>
-                <div class="space-y-4">
-                  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                    <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
-                    <input
-                      v-model="currentSectionData.vision.title"
-                      type="text"
-                      class="w-full text-base border-none focus:ring-0 p-0 m-0"
-                      placeholder="Enter vision title"
-                    />
-                  </div>
-                  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                    <label class="block text-xs font-semibold uppercase text-gray-500">Text</label>
-                    <textarea
-                      v-model="currentSectionData.vision.text"
-                      rows="4"
-                      class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-                      placeholder="Enter vision text"
-                    ></textarea>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+<div v-else-if="activePage.page_type.toLowerCase() === 'about' && activeSection === 'governance'">
+  <div class="border p-3 rounded mb-4">
+    <label>Title</label>
+    <input v-model="currentSectionData.title" type="text" />
+  </div>
 
-          <div v-else-if="activeSection === 'section1'">
-            <div class="flex flex-col space-y-6">
-              <div
-                class="w-full border border-gray-300 rounded-lg p-3 space-y-2"
-              >
-                <label
-                  class="block text-xs font-semibold uppercase text-gray-500"
-                  >Title</label
-                >
-                <input
-                  v-model="currentSectionData.title"
-                  type="text"
-                  class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-                  placeholder="Health Guardians"
-                />
-              </div>
+  <div class="border p-3 rounded mb-2">
+    <label>Description</label>
+    <textarea v-model="currentSectionData.description"></textarea>
+  </div>
 
-              <div
-                class="w-full border border-gray-300 rounded-lg p-6 bg-white shadow-inner space-y-4"
-              >
-                <div class="flex justify-end">
-                  <button
-                    @click="addNewLogo"
-                    class="text-green-600 hover:text-green-700 transition duration-200 flex items-center space-x-1 text-sm font-semibold"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <line x1="12" y1="5" x2="12" y2="19"></line>
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    <span>Add new</span>
-                  </button>
-                </div>
+  <div class="border p-3 rounded">
+    <label>Units</label>
+    <div v-for="(unit, index) in currentSectionData.units" :key="index" class="flex justify-between">
+      <input v-model="currentSectionData.units[index]" type="text" />
+      <button @click="deleteUnit(index)">Delete</button>
+    </div>
+    <button @click="addUnit">Add Unit</button>
+  </div>
+</div>
 
-                <div
-                  class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4"
-                >
-                  <div
-                    v-for="logo in currentSectionData.logos"
-                    :key="logo.id"
-                    class="relative group"
-                  >
-                    <img
-                      :src="logo.src"
-                      :alt="logo.name"
-                      class="w-full h-auto border border-gray-200 rounded-lg p-2 object-contain bg-white shadow-sm"
-                    />
-                    <button
-                      @click="deleteLogo(logo.id)"
-                      class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 h-5 w-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition duration-200 shadow-md"
-                      title="Delete Logo"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-3 w-3"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="3"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                      </svg>
-                    </button>
-                    <input
-                      v-model="logo.name"
-                      type="text"
-                      placeholder="Logo Name"
-                      class="mt-1 w-full text-center text-xs p-1 border border-gray-300 rounded-md focus:border-green-500 focus:ring-green-500"
-                    />
-                  </div>
-                </div>
-
-                <div
-                  class="text-xs text-gray-500 space-y-1 w-full pt-4 border-t border-gray-100"
-                >
-                  <p class="font-semibold">Image Requirements:</p>
-                  <ul class="list-disc list-inside space-y-0">
-                    <li>File types: png, jpg, svg.</li>
-                    <li>
-                      File size: not more than 50KB (recommended for logos).
-                    </li>
-                    <li>Dimensions: 200x100px (recommended ratio).</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div
-                class="w-full border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center bg-white shadow-inner"
-              >
-                <div
-                  class="bg-red-50 h-40 w-full mb-4 border border-dashed border-gray-400 rounded-lg flex flex-col items-center justify-center text-center"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-8 w-8 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                    />
-                  </svg>
-                  <span class="text-sm text-gray-600 mt-2">Image Upload</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div v-else-if="activeSection === 'section2'">
-            <div class="flex space-x-6">
-              <div class="w-1/2 space-y-6">
-                <div
-                  class="border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center shadow-inner"
-                >
-                  <div
-                    class="bg-red-50 h-48 w-full mb-4 border border-dashed border-gray-400 rounded-lg flex flex-col items-center justify-center text-center"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-8 w-8 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                      />
-                    </svg>
-                    <span class="text-sm text-gray-600 mt-2">Image Upload</span>
-                  </div>
-                  <div class="text-xs text-gray-500 space-y-1 w-full">
-                    <p class="font-semibold">Image Requirements:</p>
-                    <ul class="list-disc list-inside space-y-0">
-                      <li>File types: jpeg, jpg, png.</li>
-                      <li>File size: not more than 1MB.</li>
-                      <li>Dimensions: 1024x1024px.</li>
-                    </ul>
-                  </div>
-                </div>
-
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                    >Alt Text</label
-                  >
-                  <input
-                    v-model="currentSectionData.altText"
-                    type="text"
-                    class="w-full text-base border-none focus:ring-0 p-0 m-0"
-                    placeholder="Sample Text for accessibility"
-                  />
-                </div>
-              </div>
-
-              <div class="w-1/2 space-y-6">
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                    >Title</label
-                  >
-                  <input
-                    v-model="currentSectionData.title"
-                    type="text"
-                    class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-                    placeholder="Our HFN Story"
-                  />
-                </div>
-
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                    >Sub Text</label
-                  >
-                  <textarea
-                    v-model="currentSectionData.subText"
-                    rows="5"
-                    class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-                    placeholder="The Healthcare Federation of Nigeria (HFN) is..."
-                  ></textarea>
-                </div>
-
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                    >CTA</label
-                  >
-                  <input
-                    v-model="currentSectionData.cta"
-                    type="text"
-                    class="w-full text-base border-none focus:ring-0 p-0 m-0"
-                    placeholder="Join the Coalition"
-                  />
-                </div>
-
-                <div
-                  class="border border-gray-300 rounded-lg p-4 space-y-3 bg-white"
-                >
-                  <div class="flex justify-between items-center">
-                    <h3 class="text-sm font-semibold text-gray-700 uppercase">
-                      Key Metrics/Goals
-                    </h3>
-                    <button
-                      @click="addNewMetric"
-                      class="text-green-600 hover:text-green-700 transition duration-200 flex items-center space-x-1 text-sm font-semibold"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-4 w-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      >
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                      </svg>
-                      <span>Add Goal</span>
-                    </button>
-                  </div>
-
-                  <div
-                    v-for="metric in currentSectionData.metrics"
-                    :key="metric.id"
-                    class="p-2 border border-gray-200 rounded-lg bg-gray-50 relative group"
-                  >
-                    <div class="flex items-start space-x-2">
-                      <div class="w-1/4">
-                        <input
-                          v-model="metric.label"
-                          type="text"
-                          placeholder="Label"
-                          class="w-full text-xs font-bold p-1 border border-gray-300 rounded"
-                        />
-                      </div>
-                      <div class="w-3/4">
-                        <input
-                          v-model="metric.text"
-                          type="text"
-                          placeholder="Detail Text"
-                          class="w-full text-sm p-1 border border-gray-300 rounded"
-                        />
-                      </div>
-
-                      <button
-                        @click="deleteMetric(metric.id)"
-                        class="absolute top-1 right-1 text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition duration-200"
-                        title="Delete Goal"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="h-4 w-4"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <line x1="18" y1="6" x2="6" y2="18"></line>
-                          <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div v-else-if="activeSection === 'section3'">
-            <div class="p-4 border border-gray-300 rounded-xl space-y-6">
-              <h3 class="text-xl font-semibold text-gray-700">News Content</h3>
-              <div class="flex space-x-6">
-                <div class="w-1/3 space-y-3">
-                  <div
-                    class="border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center bg-white shadow-inner"
-                  >
-                    <div
-                      class="bg-red-50 h-32 w-full mb-4 border border-dashed border-gray-400 rounded-lg flex flex-col items-center justify-center text-center"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6 text-gray-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                        />
-                      </svg>
-                      <span class="text-sm text-gray-600 mt-1"
-                        >Image Upload</span
-                      >
-                    </div>
-                    <div class="text-xs text-gray-500 w-full">
-                      <p class="font-semibold">Image Requirements:</p>
-                      <ul class="list-disc list-inside space-y-0">
-                        <li>File types: png, jpg, jpeg.</li>
-                        <li>File size: not more than 50kb.</li>
-                        <li>Dimensions: 1024x1024px.</li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div
-                    class="border border-gray-300 rounded-lg p-3 space-y-2 bg-white"
-                  >
-                    <label
-                      class="block text-xs font-semibold uppercase text-gray-500"
-                      >Content Type</label
-                    >
-                    <select
-                      v-model="currentSectionData.primaryNews.contentType"
-                      class="w-full text-base border-none focus:ring-0 p-0 m-0"
-                    >
-                      <option>Programs & Initiatives</option>
-                      <option>Policy & Advocacy</option>
-                      <option>Member Success Stories</option>
-                      <option>Industry News</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="w-2/3 space-y-3">
-                  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                    <label
-                      class="block text-xs font-semibold uppercase text-gray-500"
-                      >Title</label
-                    >
-                    <input
-                      v-model="currentSectionData.primaryNews.title"
-                      type="text"
-                      class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-                      placeholder="HFN News"
-                    />
-                  </div>
-
-                  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                    <label
-                      class="block text-xs font-semibold uppercase text-gray-500"
-                      >Sub Text</label
-                    >
-                    <textarea
-                      v-model="currentSectionData.primaryNews.subText"
-                      rows="4"
-                      class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-                      placeholder="Enter article summary or main text..."
-                    ></textarea>
-                  </div>
-
-                  <div class="flex space-x-3">
-                    <div
-                      class="w-1/2 border border-gray-300 rounded-lg p-3 space-y-2 bg-white"
-                    >
-                      <label
-                        class="block text-xs font-semibold uppercase text-gray-500"
-                        >Metadate</label
-                      >
-                      <select
-                        v-model="currentSectionData.primaryNews.metadate"
-                        class="w-full text-base border-none focus:ring-0 p-0 m-0"
-                      >
-                        <option>Comments</option>
-                        <option>Views</option>
-                        <option>Author</option>
-                      </select>
-                    </div>
-                    <div
-                      class="w-1/2 border border-gray-300 rounded-lg p-3 space-y-2 bg-white"
-                    >
-                      <label
-                        class="block text-xs font-semibold uppercase text-gray-500"
-                        >Date</label
-                      >
-                      <input
-                        v-model="currentSectionData.primaryNews.date"
-                        type="date"
-                        class="w-full text-base border-none focus:ring-0 p-0 m-0"
-                      />
-                    </div>
-                  </div>
-
-                  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                    <label
-                      class="block text-xs font-semibold uppercase text-gray-500"
-                      >CTA</label
-                    >
-                    <input
-                      v-model="currentSectionData.primaryNews.cta"
-                      type="text"
-                      class="w-full text-base border-none focus:ring-0 p-0 m-0"
-                      placeholder="Read More"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="space-y-2">
-              <h3 class="text-xl font-semibold text-gray-700 pt-4">
-                Secondary News Content
-              </h3>
-
-              <div
-                v-for="item in currentSectionData.secondaryNews"
-                :key="item.id"
-                class="border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm"
-              >
-                <button
-                  @click="toggleSecondaryContent(item.id)"
-                  class="w-full flex justify-between items-center p-4 text-left font-medium text-gray-700 hover:bg-gray-50 transition duration-150"
-                  :aria-expanded="activeSecondaryContent === item.id"
-                >
-                  <span>{{ item.title }}</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 transition-transform duration-200"
-                    :class="{
-                      'rotate-180': activeSecondaryContent === item.id,
-                    }"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                </button>
-
-                <div
-                  v-show="activeSecondaryContent === item.id"
-                  class="p-4 border-t border-gray-200 bg-gray-50"
-                >
-                  <div class="space-y-3">
-                    <div
-                      class="border border-gray-300 rounded-lg p-3 space-y-1"
-                    >
-                      <label
-                        class="block text-xs font-semibold uppercase text-gray-500"
-                        >Title</label
-                      >
-                      <input
-                        v-model="item.title"
-                        type="text"
-                        class="w-full text-base border-none focus:ring-0 p-0 m-0"
-                      />
-                    </div>
-
-                    <div
-                      class="border border-gray-300 rounded-lg p-3 space-y-1"
-                    >
-                      <label
-                        class="block text-xs font-semibold uppercase text-gray-500"
-                        >Content Summary</label
-                      >
-                      <textarea
-                        v-model="item.content"
-                        rows="2"
-                        class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-                      ></textarea>
-                    </div>
-
-                    <div class="flex justify-end space-x-2 pt-2">
-                      <button class="text-sm text-red-500 hover:text-red-700">
-                        Delete
-                      </button>
-                      <button class="text-sm text-blue-500 hover:text-blue-700">
-                        Reorder
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex justify-center pt-2">
-                <button
-                  class="text-green-600 hover:text-green-700 transition duration-200 flex items-center space-x-1 text-sm font-semibold p-2"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                  </svg>
-                  <span>Add New Secondary Item</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div v-else-if="activeSection === 'section4'">
-            <div class="flex space-x-6">
-              <div class="w-1/2 space-y-6">
-                <div
-                  class="border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center bg-white shadow-inner"
-                >
-                  <div
-                    class="bg-red-50 h-48 w-full mb-4 border border-dashed border-gray-400 rounded-lg flex flex-col items-center justify-center text-center"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-8 w-8 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                      />
-                    </svg>
-                    <span class="text-sm text-gray-600 mt-2">Image Upload</span>
-                  </div>
-                  <div class="text-xs text-gray-500 space-y-1 w-full">
-                    <p class="font-semibold">Image Requirements:</p>
-                    <ul class="list-disc list-inside space-y-0">
-                      <li>File types: png, jpg, jpeg.</li>
-                      <li>File size: not more than 1MB.</li>
-                      <li>Dimensions: 1024x1024px.</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              <div class="w-1/2 space-y-6">
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                    >Title</label
-                  >
-                  <input
-                    v-model="currentSectionData.teamMember.title"
-                    type="text"
-                    class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-                    placeholder="HFN Executives"
-                  />
-                </div>
-
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                    >Name</label
-                  >
-                  <input
-                    v-model="currentSectionData.teamMember.name"
-                    type="text"
-                    class="w-full text-base border-none focus:ring-0 p-0 m-0"
-                    placeholder="Mrs. Njide Ndili"
-                  />
-                </div>
-
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                    >Position</label
-                  >
-                  <input
-                    v-model="currentSectionData.teamMember.position"
-                    type="text"
-                    class="w-full text-base border-none focus:ring-0 p-0 m-0"
-                    placeholder="President"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div v-else-if="activeSection === 'section5'">
-            <div class="space-y-6">
-              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                <label
-                  class="block text-xs font-semibold uppercase text-gray-500"
-                  >Title</label
-                >
-                <input
-                  v-model="currentSectionData.title"
-                  type="text"
-                  class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-                  placeholder="Frequently Asked Questions (FAQ)"
-                />
-              </div>
-
-              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                <label
-                  class="block text-xs font-semibold uppercase text-gray-500"
-                  >Intro Text</label
-                >
-                <textarea
-                  v-model="currentSectionData.introText"
-                  rows="2"
-                  class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-                  placeholder="Brief introductory text for the FAQ section."
-                ></textarea>
-              </div>
-
-              <h3
-                class="text-xl font-semibold text-gray-700 pt-2 border-t border-gray-200"
-              >
-                Questions & Answers
-              </h3>
-
-              <div
-                v-for="(faq, index) in currentSectionData.faqs"
-                :key="faq.id"
-                class="border border-gray-300 rounded-lg p-4 bg-white shadow-sm relative group"
-              >
-                <div class="flex justify-between items-center mb-2">
-                  <span class="text-sm font-bold text-gray-600"
-                    >Q & A Item {{ index + 1 }}</span
-                  >
-                  <button
-                    @click="deleteFaq(faq.id)"
-                    class="text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition duration-200 p-1 rounded-full"
-                    title="Delete FAQ Item"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-4 w-4"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-                </div>
-
-                <div class="space-y-3">
-                  <div class="border border-gray-300 rounded-lg p-3 space-y-1">
-                    <label
-                      class="block text-xs font-semibold uppercase text-gray-500"
-                      >Question</label
-                    >
-                    <input
-                      v-model="faq.question"
-                      type="text"
-                      class="w-full text-base border-none focus:ring-0 p-0 m-0"
-                      :placeholder="`Question ${index + 1}`"
-                      maxlength="120"
-                    />
-                    <div class="text-right text-xs text-gray-400">
-                      {{ 120 - faq.question.length }} / 120
-                    </div>
-                  </div>
-
-                  <div class="border border-gray-300 rounded-lg p-3 space-y-1">
-                    <label
-                      class="block text-xs font-semibold uppercase text-gray-500"
-                      >Response</label
-                    >
-                    <textarea
-                      v-model="faq.response"
-                      rows="3"
-                      class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-                      :placeholder="`Response for Question ${index + 1}`"
-                      maxlength="500"
-                    ></textarea>
-                    <div class="text-right text-xs text-gray-400">
-                      {{ 500 - faq.response.length }} / 500
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex justify-end pt-2">
-                <button
-                  @click="addNewFaq"
-                  class="text-green-600 hover:text-green-700 transition duration-200 flex items-center space-x-1 text-sm font-semibold p-2"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                  </svg>
-                  <span>Add item</span>
-                </button>
-              </div>
-            </div>
-          </div>
 
           <div
             class="mt-10 flex justify-end space-x-4 border-t pt-4 border-gray-200"
