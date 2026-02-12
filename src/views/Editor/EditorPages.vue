@@ -107,6 +107,7 @@ const removeStoryStat = (index) => {
   currentSectionData.value.stats.splice(index, 1)
 }
 
+
 const createPage = async (pageName) => {
   try {
     const pageType = pageName
@@ -116,24 +117,21 @@ const createPage = async (pageName) => {
 
     const schema = pageSchemas[pageType];
 
-    const exists = pages.value.some(
-      (p) => p.page_type === pageType
-    );
-
+    const exists = pages.value.some((p) => p.page_type === pageType);
     if (exists) {
       console.log(`${pageName} page already exists`);
       return;
     }
 
     const payload = {
-      page_type: pageType, 
+      page_type: pageType,
       name: pageName,
       status: "draft",
       is_visible: false,
-      content: structuredClone(schema),
     };
-
     const newPage = await pagesApi.createPage(payload);
+
+    await pagesApi.updatePageContent(newPage.id, structuredClone(schema));
 
     pages.value.push({
       ...newPage,
@@ -147,6 +145,49 @@ const createPage = async (pageName) => {
     console.error("Failed to create page", e);
   }
 };
+
+  
+
+// const createPage = async (pageName) => {
+//   try {
+//     const pageType = pageName
+//       .toLowerCase()
+//       .trim()
+//       .replace(/\s+/g, "-");
+
+//     const schema = pageSchemas[pageType];
+
+//     const exists = pages.value.some(
+//       (p) => p.page_type === pageType
+//     );
+
+//     if (exists) {
+//       console.log(`${pageName} page already exists`);
+//       return;
+//     }
+
+//     const payload = {
+//       page_type: pageType, 
+//       name: pageName,
+//       status: "draft",
+//       is_visible: false,
+//       content: structuredClone(schema),
+//     };
+
+//     const newPage = await pagesApi.createPage(payload);
+
+//     pages.value.push({
+//       ...newPage,
+//       title: newPage.name,
+//       slug: `/${pageType}`,
+//       sections: structuredClone(schema),
+//     });
+
+//     editPage(newPage);
+//   } catch (e) {
+//     console.error("Failed to create page", e);
+//   }
+// };
 
 const fetchPages = async () => {
   isLoading.value = true;
@@ -316,12 +357,6 @@ const deleteFaq = (faqId) => {
     console.log(`Deleted FAQ with ID: ${faqId}`);
   }
 };
-
-// const deleteItem = (index) => {
-//   currentSectionData.value.items.splice(index, 1)
-// }
-  
-
 
   const addMonth = () => {
   currentSectionData.value.months["New Month"] = {
