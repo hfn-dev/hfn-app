@@ -317,9 +317,9 @@ const deleteFaq = (faqId) => {
   }
 };
 
-const deleteItem = (index) => {
-  currentSectionData.value.items.splice(index, 1)
-}
+// const deleteItem = (index) => {
+//   currentSectionData.value.items.splice(index, 1)
+// }
   
 
 
