@@ -2387,6 +2387,186 @@ const removeFaq = (index) => {
   </button>
 </div>
 
+<div
+  v-if="activePage.page_type.toLowerCase() === 'news' && activeSection === 'hero'"
+  class="space-y-6"
+>
+  <!-- Hero Section -->
+  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+    <label class="block text-xs font-semibold uppercase text-gray-500">
+      Hero Title Line 1
+    </label>
+    <input
+      v-model="currentSectionData.hero.titleLine1"
+      type="text"
+      class="w-full border-none focus:ring-0"
+    />
+  </div>
+
+  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+    <label class="block text-xs font-semibold uppercase text-gray-500">
+      Hero Title Line 2
+    </label>
+    <input
+      v-model="currentSectionData.hero.titleLine2"
+      type="text"
+      class="w-full border-none focus:ring-0"
+    />
+  </div>
+
+  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+    <label class="block text-xs font-semibold uppercase text-gray-500">
+      Hero Description
+    </label>
+    <textarea
+      v-model="currentSectionData.hero.description"
+      rows="4"
+      class="w-full border-none focus:ring-0 resize-none"
+    ></textarea>
+  </div>
+
+  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+    <label class="block text-xs font-semibold uppercase text-gray-500">
+      Hero Image URL
+    </label>
+    <input
+      v-model="currentSectionData.hero.image"
+      type="text"
+      class="w-full border-none focus:ring-0"
+    />
+  </div>
+
+  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+    <label class="block text-xs font-semibold uppercase text-gray-500">
+      Hero Background Color
+    </label>
+    <input
+      v-model="currentSectionData.hero.backgroundColor"
+      type="color"
+      class="w-16 h-10 p-0 border-none focus:ring-0"
+    />
+  </div>
+</div>
+
+<!-- Latest News Section -->
+<div
+  v-if="activePage.page_type.toLowerCase() === 'news' && activeSection === 'latestNewsSection'"
+  class="space-y-8"
+>
+  <!-- Filters -->
+  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+    <label class="block text-xs font-semibold uppercase text-gray-500">
+      Filters
+    </label>
+    <div class="flex gap-2 flex-wrap">
+      <span
+        v-for="(filter, index) in currentSectionData.filters"
+        :key="index"
+        class="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2"
+      >
+        {{ filter }}
+        <button @click="removeFilter(index)" class="text-red-500 font-bold">×</button>
+      </span>
+      <input
+        v-model="newFilter"
+        @keyup.enter="addFilter"
+        placeholder="Add filter"
+        class="border p-1 rounded focus:ring-0 w-32"
+      />
+    </div>
+  </div>
+
+  <!-- Articles -->
+  <div
+    v-for="(article, index) in currentSectionData.articles"
+    :key="article.id"
+    class="border border-gray-300 rounded-lg p-4 space-y-3"
+  >
+    <div class="flex justify-between items-center">
+      <h4 class="font-semibold text-sm">Article {{ index + 1 }}</h4>
+      <button @click="removeArticle(index)" class="text-red-500 text-sm">Delete</button>
+    </div>
+
+    <div class="space-y-2">
+      <label class="text-xs font-semibold uppercase text-gray-500">Title</label>
+      <input v-model="article.title" class="w-full border-none focus:ring-0" />
+
+      <label class="text-xs font-semibold uppercase text-gray-500">Excerpt</label>
+      <textarea v-model="article.excerpt" rows="3" class="w-full border-none focus:ring-0 resize-none"></textarea>
+
+      <label class="text-xs font-semibold uppercase text-gray-500">Description</label>
+      <textarea v-model="article.description" rows="5" class="w-full border-none focus:ring-0 resize-none"></textarea>
+
+      <label class="text-xs font-semibold uppercase text-gray-500">Image URL</label>
+      <input v-model="article.image" class="w-full border-none focus:ring-0" />
+
+      <label class="text-xs font-semibold uppercase text-gray-500">Date</label>
+      <input v-model="article.date" type="date" class="w-full border-none focus:ring-0" />
+
+      <label class="text-xs font-semibold uppercase text-gray-500">Link</label>
+      <input v-model="article.link" class="w-full border-none focus:ring-0" />
+
+      <label class="text-xs font-semibold uppercase text-gray-500">Slug</label>
+      <input v-model="article.slug" class="w-full border-none focus:ring-0" />
+
+      <label class="text-xs font-semibold uppercase text-gray-500">Tag</label>
+      <input v-model="article.tag" class="w-full border-none focus:ring-0" />
+    </div>
+  </div>
+
+  <button @click="addArticle" class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800">
+    + Add Article
+  </button>
+</div>
+
+<!-- Policy & Advocacy Section -->
+<div
+  v-if="activePage.page_type.toLowerCase() === 'news' && activeSection === 'policyAdvocacySection'"
+  class="space-y-6"
+>
+  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+    <label class="block text-xs font-semibold uppercase text-gray-500">Section Title</label>
+    <input v-model="currentSectionData.title" type="text" class="w-full border-none focus:ring-0" />
+  </div>
+
+  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+    <label class="block text-xs font-semibold uppercase text-gray-500">Background Color</label>
+    <input v-model="currentSectionData.backgroundColor" type="color" class="w-16 h-10 border-none focus:ring-0" />
+  </div>
+
+  <div
+    v-for="(update, index) in currentSectionData.updates"
+    :key="update.id"
+    class="border border-gray-300 rounded-lg p-4 space-y-2"
+  >
+    <div class="flex justify-between items-center">
+      <h4 class="font-semibold text-sm">Update {{ index + 1 }}</h4>
+      <button @click="removeUpdate(index)" class="text-red-500 text-sm">Delete</button>
+    </div>
+
+    <label class="text-xs font-semibold uppercase text-gray-500">Title</label>
+    <input v-model="update.title" class="w-full border-none focus:ring-0" />
+
+    <label class="text-xs font-semibold uppercase text-gray-500">Description</label>
+    <textarea v-model="update.description" rows="3" class="w-full border-none focus:ring-0 resize-none"></textarea>
+
+    <label class="text-xs font-semibold uppercase text-gray-500">Image URL</label>
+    <input v-model="update.image" class="w-full border-none focus:ring-0" />
+
+    <label class="text-xs font-semibold uppercase text-gray-500">Link</label>
+    <input v-model="update.link" class="w-full border-none focus:ring-0" />
+
+    <label class="text-xs font-semibold uppercase text-gray-500">Slug</label>
+    <input v-model="update.slug" class="w-full border-none focus:ring-0" />
+
+    <label class="text-xs font-semibold uppercase text-gray-500">Tag</label>
+    <input v-model="update.tag" class="w-full border-none focus:ring-0" />
+  </div>
+
+  <button @click="addUpdate" class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800">
+    + Add Update
+  </button>
+</div>
 
 
           <div
