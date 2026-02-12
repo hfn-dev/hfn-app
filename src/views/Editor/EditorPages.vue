@@ -83,7 +83,7 @@ const removePastEvent = (index) => {
 }
 
 
-const addExecutive = () => {
+const addExecutives = () => {
   currentSectionData.value.members.push({
     name: '',
     role: '',
@@ -2884,7 +2884,7 @@ const removeFaq = (index) => {
   </div>
 
   <button
-    @click="addExecutive"
+    @click="addExecutives"
     class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800"
   >
     + Add Member
