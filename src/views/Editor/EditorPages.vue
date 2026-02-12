@@ -5,7 +5,7 @@ import { useRouter } from "vue-router";
 
 import { computed, onMounted, ref, watch } from "vue";
 import EditorSidebar from "./EditorSidebar.vue";
-import { ref } from "vue"
+
 
 const newYear = ref("")
 const newCategory = ref("")
