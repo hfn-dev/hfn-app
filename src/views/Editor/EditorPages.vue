@@ -1335,6 +1335,293 @@ const removeFaq = (index) => {
   </div>
 </div>
 
+          <div
+  v-else-if="activePage.page_type.toLowerCase() === 'contact' && activeSection === 'hero'"
+>
+  <div class="flex space-x-6">
+    <!-- LEFT SIDE -->
+    <div class="w-3/5 space-y-6">
+      <!-- Badge Text -->
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">
+          Badge Text
+        </label>
+        <input
+          v-model="currentSectionData.badgeText"
+          type="text"
+          class="w-full text-lg border-none focus:ring-0 p-0 m-0"
+        />
+      </div>
+
+      <!-- Headline Line 1 -->
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">
+          Headline Line 1
+        </label>
+        <input
+          v-model="currentSectionData.headline.line1"
+          type="text"
+          class="w-full text-lg border-none focus:ring-0 p-0 m-0"
+        />
+      </div>
+
+      <!-- Headline Line 2 -->
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">
+          Headline Line 2
+        </label>
+        <input
+          v-model="currentSectionData.headline.line2"
+          type="text"
+          class="w-full text-lg border-none focus:ring-0 p-0 m-0"
+        />
+      </div>
+
+      <!-- Subheadline -->
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">
+          Subheadline
+        </label>
+        <textarea
+          v-model="currentSectionData.subheadline"
+          rows="3"
+          class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+        />
+      </div>
+
+      <!-- Response Note -->
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">
+          Response Note
+        </label>
+        <input
+          v-model="currentSectionData.responseNote"
+          type="text"
+          class="w-full text-sm border-none focus:ring-0 p-0 m-0"
+        />
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="w-2/5 space-y-6">
+      <!-- Image Upload -->
+      <image-uploader v-model="currentSectionData.image.src" />
+
+      <!-- Image Alt -->
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">
+          Image Alt Text
+        </label>
+        <input
+          v-model="currentSectionData.image.alt"
+          type="text"
+          class="w-full text-sm border-none focus:ring-0 p-0 m-0"
+        />
+      </div>
+
+      <!-- Background Color -->
+      <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">
+          Background Color Class
+        </label>
+        <input
+          v-model="currentSectionData.backgroundColor"
+          type="text"
+          class="w-full text-sm border-none focus:ring-0 p-0 m-0"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  v-else-if="activePage.page_type.toLowerCase() === 'contact' && activeSection === 'form'"
+>
+  <div class="space-y-6">
+
+    <!-- Form Title -->
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Form Title
+      </label>
+      <input
+        v-model="currentSectionData.title"
+        type="text"
+        class="w-full text-lg border-none focus:ring-0 p-0 m-0"
+      />
+    </div>
+
+    <!-- Description -->
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Description
+      </label>
+      <textarea
+        v-model="currentSectionData.description"
+        rows="3"
+        class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+      />
+    </div>
+
+    <!-- Fields -->
+    <div
+      v-for="(field, index) in currentSectionData.fields"
+      :key="index"
+      class="border border-gray-300 rounded-lg p-4 space-y-4"
+    >
+      <div class="flex justify-between items-center">
+        <h4 class="text-sm font-semibold text-gray-700">
+          Field {{ index + 1 }}
+        </h4>
+        <button
+          @click="deleteField(index)"
+          class="text-red-500 text-xs font-semibold"
+        >
+          Delete
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <input
+          v-model="field.label"
+          placeholder="Label"
+          class="border border-gray-200 rounded p-2 text-sm"
+        />
+        <input
+          v-model="field.placeholder"
+          placeholder="Placeholder"
+          class="border border-gray-200 rounded p-2 text-sm"
+        />
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <select
+          v-model="field.type"
+          class="border border-gray-200 rounded p-2 text-sm"
+        >
+          <option value="text">Text</option>
+          <option value="email">Email</option>
+          <option value="textarea">Textarea</option>
+        </select>
+
+        <label class="flex items-center text-sm space-x-2">
+          <input type="checkbox" v-model="field.required" />
+          <span>Required</span>
+        </label>
+      </div>
+    </div>
+
+    <button
+      @click="addField"
+      class="px-4 py-2 bg-gray-100 rounded-lg text-sm font-semibold"
+    >
+      Add Field
+    </button>
+
+    <!-- Submit Button Text -->
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Submit Button Text
+      </label>
+      <input
+        v-model="currentSectionData.submitButtonText"
+        type="text"
+        class="w-full text-sm border-none focus:ring-0 p-0 m-0"
+      />
+    </div>
+
+    <!-- Success Message -->
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Success Message
+      </label>
+      <textarea
+        v-model="currentSectionData.successMessage"
+        rows="2"
+        class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+      />
+    </div>
+  </div>
+</div>
+<div
+  v-else-if="activePage.page_type.toLowerCase() === 'contact' && activeSection === 'details'"
+>
+  <div class="space-y-6">
+
+    <!-- Address -->
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Address
+      </label>
+      <textarea
+        v-model="currentSectionData.address.text"
+        rows="2"
+        class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+      />
+    </div>
+
+    <!-- Phone -->
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Phone Number
+      </label>
+      <input
+        v-model="currentSectionData.phone"
+        type="text"
+        class="w-full text-sm border-none focus:ring-0 p-0 m-0"
+      />
+    </div>
+
+    <!-- Email -->
+    <div
+      v-for="(email, index) in currentSectionData.emails"
+      :key="index"
+      class="border border-gray-300 rounded-lg p-3 space-y-2"
+    >
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Email {{ index + 1 }}
+      </label>
+      <input
+        v-model="email.address"
+        type="text"
+        class="w-full text-sm border-none focus:ring-0 p-0 m-0"
+      />
+    </div>
+
+  </div>
+</div>
+<div
+  v-else-if="activePage.page_type.toLowerCase() === 'contact' && activeSection === 'map'"
+>
+  <div class="space-y-6">
+
+    <!-- Iframe URL -->
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Google Maps Iframe URL
+      </label>
+      <textarea
+        v-model="currentSectionData.iframeUrl"
+        rows="3"
+        class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
+      />
+    </div>
+
+    <!-- Map Height -->
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Map Height
+      </label>
+      <input
+        v-model="currentSectionData.height"
+        type="number"
+        class="w-full text-sm border-none focus:ring-0 p-0 m-0"
+      />
+    </div>
+
+  </div>
+</div>
+
+
 
           <div
             class="mt-10 flex justify-end space-x-4 border-t pt-4 border-gray-200"
