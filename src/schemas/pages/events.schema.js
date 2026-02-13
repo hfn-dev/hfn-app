@@ -29,7 +29,7 @@ export const eventsPageSchema = {
       description:
         'Join HFN 2026 to explore bold private-sector solutions driving healthcare financing and Universal Health Coverage in Nigeria. The Healthcare Federation of Nigeria (HFN) invites you to the HFN Annual Conference 2026, Nigeria’s premier gathering of private-sector healthcare leaders, policymakers, financiers, innovators, and development partners.',
       image: 'event2026.png',
-      registerLink: 'https://tix.africa/claim/...',
+      registerLink: 'https://tix.africa/discover/2026-hfn-annual-conference',
     },
 
     eventList: {
@@ -46,7 +46,7 @@ export const eventsPageSchema = {
           description:
             'Join HFN 2026 to explore bold private-sector solutions driving healthcare financing and Universal Health Coverage in Nigeria.',
           image: 'event2026.png',
-          registerLink: 'https://tix.africa/claim/...',
+          registerLink: 'https://tix.africa/discover/2026-hfn-annual-conference',
         },
         {
           id: 2,
@@ -59,7 +59,7 @@ export const eventsPageSchema = {
           description:
             'Join HFN 2026 to explore bold private-sector solutions driving healthcare financing and Universal Health Coverage in Nigeria.',
           image: 'event2026.png',
-          registerLink: 'https://www.eventbrite.com/...',
+          registerLink: 'https://www.eventbrite.com/e/2026-hfn-annual-conference-tickets-1980514831174?aff=oddtdtcreator',
         },
         {
           id: 3,
@@ -72,7 +72,7 @@ export const eventsPageSchema = {
           description:
             'Join HFN 2026 to explore bold private-sector solutions driving healthcare financing and Universal Health Coverage in Nigeria.',
           image: 'event2026.png',
-          registerLink: 'https://tix.africa/discover/...',
+          registerLink: 'https://tix.africa/discover/2026-hfn-annual-conference',
         },
       ],
     },
