@@ -11,7 +11,7 @@ import Programs from '@/views/Programs.vue';
 import Payment from '@/views/Payment.vue';
 import Resources from '@/views/Resources.vue';
 import RegisterEvents from '@/views/RegisterEvents.vue';
-
+import Conference from '@/views/Conference.vue';
 import EditorPages from '@/views/Editor/EditorPages.vue';
 import Signin from '@/views/Editor/Signin.vue';
 import Membership from '@/views/Membership.vue';
@@ -89,7 +89,7 @@ const routes = [
     { path: '/confirmation', name: 'Confirmation', component: Confirmation },
   { path: '/registration-payment', name: 'Payment', component: Payment },
     { path: '/register-events', name: 'RegisterEvents', component: RegisterEvents },
-
+  { path: '/conference', name: 'Conference', component: Conference},
 
   { path: '/get-involved', name: 'GetInvolved', component: GetInvolved },
   { path: '/programs', name: 'Programs', component: Programs },
