@@ -39,9 +39,9 @@ const highlights = [
             policymakers, and innovators as we bridge the gap to Universal Health Coverage.
           </p>
           <div class="flex flex-wrap gap-4">
-            <button class="px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition shadow-lg">
+            <router-link to="/register-events" class="px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition shadow-lg">
               Register Now
-            </button>
+            </router-link>
             <button class="px-8 py-4 border-2 border-white text-white font-bold rounded-xl hover:bg-white hover:text-green-900 transition">
               Sponsorship Deck
             </button>
