@@ -278,7 +278,10 @@ const fetchPages = async () => {
     const rawPages = await pagesApi.listPages();
 
     pages.value = rawPages.map((page) => {
-      const schema = pageSchemas[page.page_type.toLowerCase()];
+      // const schema = pageSchemas[page.page_type.toLowerCase()];
+      const schema =
+  pageSchemas[page.page_type?.toLowerCase()] ?? {};
+
       const content = structuredClone(schema);
 
       if (
@@ -522,7 +525,9 @@ watch(
     currentSectionData.value =
       section ??
       structuredClone(
-        pageSchemas[activePage.value.page_type]?.[activeSection.value] ?? {}
+        // pageSchemas[activePage.value.page_type]?.[activeSection.value] ?? {}
+        pageSchemas[activePage.value.page_type?.toLowerCase()]?.[activeSection.value]
+
       );
   },
   { immediate: true }
