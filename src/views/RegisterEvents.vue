@@ -76,6 +76,11 @@
             <span v-if="loading">Processing...</span>
             <span v-else>Register Event</span>
           </button>
+          <div v-if="successMessage" 
+     class="mt-4 text-center text-green-600 font-semibold bg-green-50 py-3 rounded-lg border border-green-200">
+  {{ successMessage }}
+</div>
+
         </div>
       </form>
     </div>
@@ -85,7 +90,7 @@
 <script setup>
 import { ref, reactive } from "vue";
 import eventsApi from "@/api/events";
-
+const successMessage = ref("");
 const loading = ref(false);
 
 const form = reactive({
@@ -103,7 +108,7 @@ const form = reactive({
 
 const handleSubmit = async () => {
   loading.value = true;
-
+successMessage.value = "";
   try {
     const payload = {
       ...form,
@@ -111,6 +116,8 @@ const handleSubmit = async () => {
     };
 
     const response = await eventsApi.createEvent(payload);
+    successMessage.value = "Registration successful!! Thank you!";
+
     Object.keys(form).forEach((key) => (form[key] = ""));
   } catch (error) {
     console.error("Failed to create event:", error);
