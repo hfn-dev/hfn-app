@@ -10,6 +10,7 @@ import NewsAdvocacy from '@/views/NewsAdvocacy.vue';
 import Programs from '@/views/Programs.vue';
 import Payment from '@/views/Payment.vue';
 import Resources from '@/views/Resources.vue';
+import RegisterEvents from '@/views/RegisterEvents.vue';
 
 import EditorPages from '@/views/Editor/EditorPages.vue';
 import Signin from '@/views/Editor/Signin.vue';
@@ -87,6 +88,8 @@ const routes = [
   { path: '/publication', name: 'Publications', component: Publications },
     { path: '/confirmation', name: 'Confirmation', component: Confirmation },
   { path: '/registration-payment', name: 'Payment', component: Payment },
+    { path: '/register-events', name: 'RegsiterEvents', component: RegsiterEvents },
+
 
   { path: '/get-involved', name: 'GetInvolved', component: GetInvolved },
   { path: '/programs', name: 'Programs', component: Programs },
