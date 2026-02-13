@@ -25,16 +25,16 @@
           <div>
             <label class="block text-sm font-semibold text-gray-700">Event Type</label>
             <select v-model="form.event_type" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg bg-white">
-              <option value="webinar">Webinar</option>
-              <option value="conference">Conference</option>
+              <option value="online">Online</option>
+              <option value="onsite">Onsite</option>
               <option value="workshop">Workshop</option>
             </select>
           </div>
 
           <div>
-            <label class="block text-sm font-semibold text-gray-700">Target Audience</label>
+            <label class="block text-sm font-semibold text-gray-700">Select Audience</label>
             <select v-model="form.audience" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg bg-white">
-              <option value="members">HFN Members Only</option>
+              <option value="members">HFN Member</option>
               <option value="public">Public</option>
               <option value="stakeholders">Stakeholders</option>
             </select>
@@ -59,11 +59,11 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label class="block text-sm font-semibold text-gray-700">Location</label>
-            <input v-model="form.location" type="text" placeholder="Physical Address or Zoom Link"
+            <input v-model="form.location" type="text" placeholder="Home Address"
               class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg" />
           </div>
           <div>
-            <label class="block text-sm font-semibold text-gray-700">Max Attendees</label>
+            <label class="block text-sm font-semibold text-gray-700">Number of attendees</label>
             <input v-model.number="form.max_attendees" type="number" placeholder="Leave empty for unlimited"
               class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg" />
           </div>
@@ -73,7 +73,7 @@
           <div class="flex items-center">
             <input v-model="form.is_free" type="checkbox" id="is_free" 
               class="h-5 w-5 text-green-600 border-gray-300 rounded focus:ring-green-500" />
-            <label for="is_free" class="ml-3 block text-sm font-bold text-gray-700">This is a free event</label>
+            <label for="is_free" class="ml-3 block text-sm font-bold text-gray-700">I'm a member</label>
           </div>
           <div v-if="!form.is_free" class="w-1/3">
             <input v-model="form.price" type="text" placeholder="Price (NGN)"
