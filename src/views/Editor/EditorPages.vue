@@ -1770,7 +1770,7 @@ const removeFaq = (index) => {
           <div
             v-else-if="
               activePage.page_type.toLowerCase() === 'about' &&
-              activeSection === 'governance'
+              activeSection === ''
             "
           >
             <div class="border border-gray-300 rounded-lg p-3 mb-4">
@@ -3431,7 +3431,7 @@ const removeFaq = (index) => {
                 Title Highlight
               </label>
               <input
-                v-model="currentSectionData.hero.titleHighlight"
+                v-model="currentSectionData.titleHighlight"
                 type="text"
                 class="w-full border-none focus:ring-0"
               />
