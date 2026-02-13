@@ -636,7 +636,7 @@ export const pageSchemas = {
 
           image: eventImage,
 
-          registerLink: 'https://tix.africa/claim/...',
+          registerLink: 'https://tix.africa/discover/2026-hfn-annual-conference',
         },
 
         {
@@ -659,7 +659,7 @@ export const pageSchemas = {
 
           image: eventImage,
 
-          registerLink: 'https://www.eventbrite.com/...',
+          registerLink: 'https://www.eventbrite.com/e/2026-hfn-annual-conference-tickets-1980514831174?aff=oddtdtcreator',
         },
 
         {
@@ -682,7 +682,7 @@ export const pageSchemas = {
 
           image: eventImage,
 
-          registerLink: 'https://tix.africa/discover/...',
+          registerLink: 'https://tix.africa/discover/2026-hfn-annual-conference',
         },
       ],
     },
