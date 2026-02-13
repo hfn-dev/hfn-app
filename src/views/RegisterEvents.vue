@@ -11,14 +11,14 @@
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="md:col-span-2">
-            <label class="block text-sm font-semibold text-gray-700">Event Title</label>
-            <input v-model="form.title" type="text" required placeholder="e.g. Annual Healthcare Summit"
+            <label class="block text-sm font-semibold text-gray-700">Name</label>
+            <input v-model="form.name" type="text" required placeholder="Enter Name"
               class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition" />
           </div>
 
           <div class="md:col-span-2">
-            <label class="block text-sm font-semibold text-gray-700">Description</label>
-            <textarea v-model="form.description" rows="4" required
+            <label class="block text-sm font-semibold text-gray-700">Email</label>
+            <textarea v-model="form.email" type="text" required placeholder="Enter Email"
               class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition"></textarea>
           </div>
 
@@ -43,18 +43,7 @@
 
         <hr class="border-gray-100" />
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-sm font-semibold text-gray-700">Start Date & Time</label>
-            <input v-model="form.start_datetime" type="datetime-local" required
-              class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg" />
-          </div>
-          <div>
-            <label class="block text-sm font-semibold text-gray-700">End Date & Time</label>
-            <input v-model="form.end_datetime" type="datetime-local" required
-              class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg" />
-          </div>
-        </div>
+        
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -63,8 +52,8 @@
               class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg" />
           </div>
           <div>
-            <label class="block text-sm font-semibold text-gray-700">Number of attendees</label>
-            <input v-model.number="form.max_attendees" type="number" placeholder="Leave empty for unlimited"
+            <label class="block text-sm font-semibold text-gray-700">Phone Number</label>
+            <input v-model.number="form.phone" type="number" placeholder="Enter Phone Number"
               class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg" />
           </div>
         </div>
@@ -109,7 +98,7 @@ const form = reactive({
   end_datetime: "",
   location: "",
   is_free: true,
-  price: "0.00",
+  price: "50000.00",
   banner_image: "",
   max_attendees: null,
   audience: "members",
