@@ -95,7 +95,7 @@
 
 <script setup>
 import { ref, reactive } from "vue";
-import { createEvent } from "@/api/events";
+import eventsApi from "@/api/events";
 
 const loading = ref(false);
 
@@ -126,7 +126,7 @@ const handleSubmit = async () => {
       price: form.is_free ? "0" : form.price,
     };
 
-    const response = await createEvent(payload);
+    const response = await eventsApi.createEvent(payload);
     Object.keys(form).forEach((key) => (form[key] = ""));
   } catch (error) {
     console.error("Failed to create event:", error);
