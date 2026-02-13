@@ -3,8 +3,8 @@
     <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
       
       <div class="bg-green-700 p-8 text-white">
-        <h1 class="text-3xl font-bold">Organize New Event</h1>
-        <p class="mt-2 text-green-100 italic">Healthcare Federation of Nigeria (HFN) Portal</p>
+        <h1 class="text-3xl font-bold">2026 HFN Annual Conference</h1>
+        <p class="mt-2 text-green-100 italic">Healthcare Federation of Nigeria (HFN) Event Registration</p>
       </div>
 
       <form @submit.prevent="handleSubmit" class="p-8 space-y-6">
