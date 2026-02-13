@@ -88,7 +88,7 @@ const routes = [
   { path: '/publication', name: 'Publications', component: Publications },
     { path: '/confirmation', name: 'Confirmation', component: Confirmation },
   { path: '/registration-payment', name: 'Payment', component: Payment },
-    { path: '/register-events', name: 'RegsiterEvents', component: RegsiterEvents },
+    { path: '/register-events', name: 'RegisterEvents', component: RegisterEvents },
 
 
   { path: '/get-involved', name: 'GetInvolved', component: GetInvolved },
