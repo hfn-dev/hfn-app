@@ -31,8 +31,8 @@ export const homePageSchema = {
       '',
     subText:
       '',
-    ctaText: 'Join the Coalition ->',
-    ctaLink: '/register',
+    ctaText: 'Register For Events ->',
+    ctaLink: '/register-events',
     heroImage: 'hero-main',
   },
 
