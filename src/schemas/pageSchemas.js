@@ -1442,34 +1442,14 @@ The roundtable reinforced the urgency of collaborative investment and structured
         nextPageUrl:
           'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf',
       },
-      {
-        id: 3,
-        date: 'April 7, 2025',
-        text: 'Q2 Quarterly Newsletter, 2025 (April-June, 2025)',
-        pdfUrl:
-          'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-2---2025_jfakrt.pdf',
-      },
-      {
-        id: 4,
-        date: 'July 2, 2025',
-        text: 'Q3 Quarterly Newsletter, 2025 (July-September, 2025)',
-        pdfUrl:
-          'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067785/2025-hfn-quarterly-newsletter-q3_g4ks3t.pdf',
-      },
-      {
-        id: 5,
-        date: 'October 8, 2025',
-        text: 'Q4 Quarterly Newsletter, 2025 (October-December, 2025)',
-        pdfUrl:
-          'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067786/2025-hfn-quarterly-newsletter-q4_gd0aj6.pdf',
-      },
+      
     ],
-    pagination: {
-      currentPage: 1,
-      totalPages: 2,
-      nextPageUrl:
-        'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf',
-    },
+    // pagination: {
+    //   currentPage: 1,
+    //   totalPages: 2,
+    //   nextPageUrl:
+    //     'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf',
+    // },
   },
 
     publicationsSection: {
@@ -1517,11 +1497,11 @@ The roundtable reinforced the urgency of collaborative investment and structured
         currentPage: 1,
         totalPages: 2,
       },
-    ],
-    pagination: {
-      currentPage: 1,
-      totalPages: 2,
-    },
+    // ],
+    // pagination: {
+    //   currentPage: 1,
+    //   totalPages: 2,
+    // },
   },
   governance: {
     hero: {
