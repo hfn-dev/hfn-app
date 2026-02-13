@@ -269,7 +269,7 @@ onMounted(() => {
         </p>
       </div>
 
-      <div class="flex justify-between items-stretch mb-10 space-x-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-10">
         <div v-for="(stat, index) in statCards" :key="stat.title"
           class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
           :class="{
