@@ -89,18 +89,15 @@ import eventsApi from "@/api/events";
 const loading = ref(false);
 
 const form = reactive({
-  title: "",
-  description: "",
+  name: "",
+  email: "",
   event_type: "webinar",
   status: "upcoming",
-  organizer: 1,
-  start_datetime: "",
-  end_datetime: "",
   location: "",
   is_free: true,
   price: "50000.00",
   banner_image: "",
-  max_attendees: null,
+  phone: null,
   audience: "members",
 });
 
@@ -110,9 +107,7 @@ const handleSubmit = async () => {
   try {
     const payload = {
       ...form,
-      start_datetime: new Date(form.start_datetime).toISOString(),
-      end_datetime: new Date(form.end_datetime).toISOString(),
-      price: form.is_free ? "0" : form.price,
+       price: form.is_free ? "0" : form.price,
     };
 
     const response = await eventsApi.createEvent(payload);
