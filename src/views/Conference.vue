@@ -32,7 +32,7 @@ const highlights = [
             Annual Conference 2026
           </div>
           <h1 class="text-5xl md:text-7xl font-black text-white leading-tight mb-6">
-            Building a <span class="text-orange-400">Sovereign</span> Health Future.
+            Building a <span class="text-orange-400">Sovereign</span> Health Future
           </h1>
           <p class="text-xl text-gray-200 mb-10 leading-relaxed">
             Join the Healthcare Federation of Nigeria (HFN) for the premier gathering of private sector leaders, 
