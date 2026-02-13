@@ -1767,7 +1767,6 @@ const removeFaq = (index) => {
             </button>
           </div>
 
-          <!-- ABOUT GOVERNANCE SECTION -->
           <div
             v-else-if="
               activePage.page_type.toLowerCase() === 'about' &&
