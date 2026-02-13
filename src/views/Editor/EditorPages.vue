@@ -613,6 +613,18 @@ const removeFaq = (index) => {
             class="flex items-center justify-between bg-white p-4 rounded-xl shadow-lg border border-gray-100 transform hover:shadow-xl hover:scale-[1.005] transition duration-200"
           >
             <div class="flex items-center space-x-3">
+              <button
+  @click="toggleVisibility(page)"
+  class="px-3 py-1 text-xs font-semibold rounded-full transition duration-200"
+  :class="
+    page.is_visible
+      ? 'bg-green-600 text-white hover:bg-green-700'
+      : 'bg-gray-300 text-gray-800 hover:bg-gray-400'
+  "
+>
+  {{ page.is_visible ? "Visible" : "Hidden" }}
+</button>
+
               <span
                 class="px-3 py-1 text-xs font-semibold rounded-full min-w-[70px] text-center cursor-pointer"
                 :class="
