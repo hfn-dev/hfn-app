@@ -276,38 +276,69 @@ const fetchPages = async () => {
   isLoading.value = true;
   try {
     const rawPages = await pagesApi.listPages();
-
     pages.value = rawPages.map((page) => {
-      // const schema = pageSchemas[page.page_type.toLowerCase()];
-      const schema =
-  pageSchemas[page.page_type?.toLowerCase()] ?? {};
+  const schema =
+    pageSchemas[page.page_type?.toLowerCase()] ?? {};
 
-      const content = structuredClone(schema);
+  const content = structuredClone(schema ?? {});
 
-      if (
-        page.content &&
-        typeof page.content === "object" &&
-        Object.keys(page.content).length > 0
-      ) {
-        for (const sectionKey in schema) {
-          if (page.content[sectionKey]) {
-            content[sectionKey] = {
-              ...schema[sectionKey],
-              ...page.content[sectionKey],
-            };
-          }
-        }
+  if (
+    schema &&
+    Object.keys(schema).length > 0 &&
+    page.content &&
+    typeof page.content === "object"
+  ) {
+    for (const sectionKey in schema) {
+      if (page.content?.[sectionKey]) {
+        content[sectionKey] = {
+          ...schema[sectionKey],
+          ...page.content[sectionKey],
+        };
       }
+    }
+  }
 
-      return {
-        ...page,
-        title: page.name ?? page.page_type_display,
-        slug: `/${(page.name ?? page.page_type)
-          .toLowerCase()
-          .replace(/\s+/g, "-")}`,
-        sections: content,
-      };
-    });
+  return {
+    ...page,
+    title: page.name ?? page.page_type_display,
+    slug: `/${(page.name ?? page.page_type)
+      .toLowerCase()
+      .replace(/\s+/g, "-")}`,
+    sections: content,
+  };
+});
+
+
+    // pages.value = rawPages.map((page) => {
+      // const schema = pageSchemas[page.page_type.toLowerCase()];
+      // const schema = pageSchemas[page.page_type?.toLowerCase()] ?? {};
+
+    //   const content = structuredClone(schema);
+
+    //   if (
+    //     page.content &&
+    //     typeof page.content === "object" &&
+    //     Object.keys(page.content).length > 0
+    //   ) {
+    //     for (const sectionKey in schema) {
+    //       if (page.content[sectionKey]) {
+    //         content[sectionKey] = {
+    //           ...schema[sectionKey],
+    //           ...page.content[sectionKey],
+    //         };
+    //       }
+    //     }
+    //   }
+
+    //   return {
+    //     ...page,
+    //     title: page.name ?? page.page_type_display,
+    //     slug: `/${(page.name ?? page.page_type)
+    //       .toLowerCase()
+    //       .replace(/\s+/g, "-")}`,
+    //     sections: content,
+    //   };
+    // });
   } catch (e) {
     console.error("Failed to load pages", e);
   } finally {
