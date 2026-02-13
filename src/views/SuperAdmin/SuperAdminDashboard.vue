@@ -63,23 +63,6 @@ const dashboardData = reactive({
 const loading = ref(true);
 const error = ref(null);
 
-// const revenueData = reactive({
-//   labels: [],
-//   datasets: [
-//     {
-//       label: 'Revenue',
-//       backgroundColor: 'rgba(0, 204, 102, 0.3)',
-//       borderColor: '#00cc66',
-//       pointBackgroundColor: '#00cc66',
-//       pointBorderColor: '#fff',
-//       pointHoverBackgroundColor: '#fff',
-//       pointHoverBorderColor: '#00cc66',
-//       data: [],
-//       fill: true,
-//       tension: 0.4,
-//     },
-//   ],
-// });
 const revenueData = reactive({
   labels: MONTHS,
   datasets: [
@@ -197,19 +180,7 @@ const completionData = reactive({
   ],
 });
 
-// const growthData = reactive({
-//   labels: [],
-//   datasets: [
-//     {
-//       label: 'Students',
-//       borderColor: '#fdc700',
-//       backgroundColor: '#fdc7008a',
-//       fill: true,
-//       tension: 0.4,
-//       data: [],
-//     },
-//   ],
-// });
+
 const growthData = reactive({
   labels: ["Active", "Expired"],
   datasets: [
@@ -268,12 +239,7 @@ onMounted(async () => {
       );
     }
 
-    // dashboardData.stats = [
-    //   { title: 'Total Courses', value: dash.total_courses, change: `${dash.active_courses} Active`, changeColor: 'text-green-600' },
-    //   { title: 'Total Enrollments', value: dash.total_enrollments, change: `${dash.active_enrollments} Active`, changeColor: 'text-blue-600' },
-    //   { title: 'New Signups (30 days)', value: dash.new_signups_30_days, change: 'Last 30 days', changeColor: 'text-orange-600' },
-    //   { title: 'Active Users', value: dash.total_active_users, change: 'Currently active', changeColor: 'text-purple-600' },
-    // ];
+   
     dashboardData.stats = [
       {
         title: "Total Page Views",
@@ -421,7 +387,7 @@ onMounted(async () => {
         </p>
       </div>
 
-      <div class="flex justify-between items-stretch mb-10 space-x-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-10">
         <div
           v-for="(stat, index) in dashboardData.stats"
           :key="stat.title"
