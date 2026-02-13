@@ -3431,7 +3431,7 @@ const removeFaq = (index) => {
                 Title Highlight
               </label>
               <input
-                v-model="currentSectionData.titleHighlight"
+                v-model="currentSectionData.hero.titleHighlight"
                 type="text"
                 class="w-full border-none focus:ring-0"
               />
