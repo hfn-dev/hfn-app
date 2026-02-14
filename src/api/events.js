@@ -21,7 +21,7 @@ export default {
     }
   },
 
-  async createEvent() {
+  async createEvent(slug) {
     try {
       const response = await api.post(`/events/${slug}/register/`, {});
       return response.data;
