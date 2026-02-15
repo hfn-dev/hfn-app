@@ -23,7 +23,7 @@ export default {
 
   async createEvent(slug) {
     try {
-      const response = await api.post(`/events/${slug}/register/`, {});
+      const response = await api.post(`/events/${slug}/register-events/`, {});
       return response.data;
     } catch (error) {
       console.error('Create event API error:', error);
