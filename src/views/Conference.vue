@@ -771,7 +771,7 @@ const agenda = [
         </p>
         <div class="flex flex-col sm:flex-row justify-center gap-6">
           <router-link
-            to="/register-events"
+               :to="{ name: 'RegisterEvents', params: { slug: '2026-hfn-annual-conference' } }"
             class="bg-white text-orange-600 px-12 py-5 rounded-2xl font-black shadow-2xl hover:bg-green-950 hover:text-white transition-all transform hover:scale-105"
             >Get Your Tickets</router-link
           >
