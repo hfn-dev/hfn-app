@@ -369,7 +369,7 @@ function isToday(date) {
               </p>
 
               <div class="flex items-center gap-3">
-                <router-link to="/conference class="px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800">
+                <router-link to="/conference" class="px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800">
                   RSVP
                 </router-link>
                 <!-- <a href="#" class="text-sm text-green-700 underline">
