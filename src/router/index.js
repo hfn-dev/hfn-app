@@ -69,7 +69,8 @@ import Homepage from '../views/Homepage.vue';
 import GalleryDetail from '@/views/GalleryDetail.vue';
 import TeamDetail from '@/views/TeamDetail.vue';
 import Governance from '@/views/Governance.vue';
-  
+
+import Buttons from '@/component/layout/Buttons.vue';
 const routes = [
   {
     path: '/',
