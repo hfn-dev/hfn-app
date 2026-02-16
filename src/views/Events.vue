@@ -121,7 +121,7 @@
                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   ></path>
                 </svg>
-                Wednesday, March 4th 2026
+                Wednesday, March 4th - 5th 2026
               </span>
               <span class="flex items-center">
                 <svg
@@ -154,14 +154,14 @@
               private-sector healthcare leaders, policymakers, financiers,
               innovators, and development partners.
             </p>
-            <a
-              href="https://tix.africa/claim/2026-hfn-annual-conference/VGlja2V0LWE3MDc0Yjg4LTU3ZTUtNGE3My05MWU5LWNhMmYwYjZlYTJhYw=="
+            <router-link
+              :to="/buttons"
               target="_blank"
               rel="noopener noreferrer"
               class="inline-flex self-start px-6 py-2 bg-green-900 text-white justify-center rounded-full hover:bg-green-700 transition duration-150 text-sm"
             >
               Register Now
-            </a>
+            </router-link>
           </div>
         </div>
       </div>
