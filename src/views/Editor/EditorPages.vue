@@ -567,7 +567,7 @@ watch(
 const toggleVisibility = async (page) => {
   page.is_visible = !page.is_visible;
   try {
-    await pagesApi.updatePageVisibility(page.id, page.is_visible);
+    await pagesApi.updatePageVisibility(page.page_type.toLowerCase(), page.is_visible);
   } catch (e) {
     page.is_visible = !page.is_visible;
   }
