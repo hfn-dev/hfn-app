@@ -178,6 +178,9 @@ const dummyEvents = [
     time: "10:00 AM",
     location: "Lagos, Nigeria",
     buttonText: "Register",
+    externalUrl:
+      "https://tix.africa/claim/2026-hfn-annual-conference/VGlja2V0LTgzOWNmYmQ3LTliNDUtNGE3Ny1iNTM1LTI5ZWFjZWQ5MTgxOQ==",
+
   },
   {
     slug: "Medical-nnovation-investment-forum",
@@ -295,17 +298,38 @@ const fetchEvents = async () => {
     });
 
     if (data.results?.length) {
-      events.value = data.results.map((event) => ({
-        slug: event.slug,
-        title: event.title,
-        image: event.banner_image,
-        tag: event.event_type,
-        description: event.description,
-        date: new Date(event.start_datetime).toLocaleDateString(),
-        time: new Date(event.start_datetime).toLocaleTimeString(),
-        location: event.location,
-        buttonText: event.is_free ? "Register Free" : "Buy Ticket",
-      }));
+      // events.value = data.results.map((event) => ({
+      //   slug: event.slug,
+      //   title: event.title,
+      //   image: event.banner_image,
+      //   tag: event.event_type,
+      //   description: event.description,
+      //   date: new Date(event.start_datetime).toLocaleDateString(),
+      //   time: new Date(event.start_datetime).toLocaleTimeString(),
+      //   location: event.location,
+      //   buttonText: event.is_free ? "Register Free" : "Buy Ticket",
+      // }));
+      events.value = data.results.map((event) => {
+  const isAnnualConference =
+    event.slug === "2026-annual-conference" ||
+    event.title?.toLowerCase().includes("annual conference");
+
+  return {
+    slug: event.slug,
+    title: event.title,
+    image: event.banner_image,
+    tag: event.event_type,
+    description: event.description,
+    date: new Date(event.start_datetime).toLocaleDateString(),
+    time: new Date(event.start_datetime).toLocaleTimeString(),
+    location: event.location,
+    buttonText: event.is_free ? "Register Free" : "Buy Ticket",
+    externalUrl: isAnnualConference
+      ? "https://tix.africa/claim/2026-hfn-annual-conference/VGlja2V0LTgzOWNmYmQ3LTliNDUtNGE3Ny1iNTM1LTI5ZWFjZWQ5MTgxOQ=="
+      : null,
+  };
+});
+
     } else {
       events.value = dummyEvents;
     }
@@ -789,12 +813,23 @@ onMounted(() => {
                 <span class="font-medium text-xs">{{ event.location }}</span>
               </div>
 
-              <button
-                @click="openRegisterModal(event)"
-                class="w-full mt-4 bg-[#004D33] text-white px-4 py-3 rounded-lg font-medium hover:bg-[#006644] transition"
-              >
-                {{ event.buttonText }}
-              </button>
+              <a
+  v-if="event.externalUrl"
+  :href="event.externalUrl"
+  target="_blank"
+  class="block w-full text-center mt-4 bg-[#004D33] text-white px-4 py-3 rounded-lg font-medium hover:bg-[#006644] transition"
+>
+  {{ event.buttonText }}
+</a>
+
+<button
+  v-else
+  @click="openRegisterModal(event)"
+  class="w-full mt-4 bg-[#004D33] text-white px-4 py-3 rounded-lg font-medium hover:bg-[#006644] transition"
+>
+  {{ event.buttonText }}
+</button>
+
             </div>
           </div>
         </div>
