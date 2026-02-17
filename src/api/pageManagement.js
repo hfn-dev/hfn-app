@@ -61,11 +61,11 @@ export default {
     }
   },
 
-  async updatePageVisibility(pageType, payload) {
+  async updatePageVisibility(pageType, isVisible) {
     try {
       const response = await api.patch(
         `/pages/${pageType}/visibility/`,
-        payload
+        { is_visible: isVisible }
       );
       return response.data;
     } catch (error) {
