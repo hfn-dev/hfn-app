@@ -155,7 +155,7 @@
               innovators, and development partners.
             </p>
             <router-link
-              :to="/buttons"
+              to="/buttons"
               target="_blank"
               rel="noopener noreferrer"
               class="inline-flex self-start px-6 py-2 bg-green-900 text-white justify-center rounded-full hover:bg-green-700 transition duration-150 text-sm"
