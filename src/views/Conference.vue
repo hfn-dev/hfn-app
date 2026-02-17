@@ -1,5 +1,6 @@
 
 <script setup>
+const theme = "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771138263/HFN_2026_CONFERENCE_FLYER._mzpw5l.jpg";
 const heroBg =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770045591/243A7993_wxlzkg.jpg";
 const roundTable = "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770045588/IMG_9090_ugylgj.jpg";  
@@ -225,7 +226,7 @@ const agenda = [
             class="absolute -inset-4 bg-green-900 rounded-[3rem] opacity-10 group-hover:rotate-0 transition-transform rotate-3"
           ></div>
           <img
-            :src="heroBg"
+            :src="theme"
             class="relative z-10 aspect-[4/5] object-cover rounded-[3rem] shadow-2xl"
           />
           <div

@@ -154,14 +154,14 @@
               private-sector healthcare leaders, policymakers, financiers,
               innovators, and development partners.
             </p>
-            <a
-              href="https://tix.africa/claim/2026-hfn-annual-conference/VGlja2V0LWE3MDc0Yjg4LTU3ZTUtNGE3My05MWU5LWNhMmYwYjZlYTJhYw=="
+            <router-link
+              to="/buttons"
               target="_blank"
               rel="noopener noreferrer"
               class="inline-flex self-start px-6 py-2 bg-green-900 text-white justify-center rounded-full hover:bg-green-700 transition duration-150 text-sm"
             >
               Register Now
-            </a>
+            </router-link>
           </div>
         </div>
       </div>

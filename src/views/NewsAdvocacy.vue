@@ -54,7 +54,7 @@
         class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto mb-16"
       >
         <div
-          v-for="article in articles"
+          v-for="article in sortedArticles"
           :key="article.id"
           class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
         >
@@ -222,8 +222,13 @@
 <script setup>
 import wef from "@/assets/wef.jpg";
 import { newsPageSchema } from "@/schemas/pages/news.schema";
-
-const articles = newsPageSchema.news.latestNewsSection.articles;
+import { computed } from "vue";
+// const articles = newsPageSchema.news.latestNewsSection.articles;
+  const sortedArticles = computed(() => {
+  return [...newsPageSchema.news.latestNewsSection.articles].sort((a, b) => {
+    return new Date(b.date) - new Date(a.date);
+  });
+});
 const policyUpdates = newsPageSchema.news.policyAdvocacySection.updates;
 
 const latest =

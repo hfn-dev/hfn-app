@@ -69,7 +69,8 @@ import Homepage from '../views/Homepage.vue';
 import GalleryDetail from '@/views/GalleryDetail.vue';
 import TeamDetail from '@/views/TeamDetail.vue';
 import Governance from '@/views/Governance.vue';
-  
+
+import Buttons from '@/components/layout/Buttons.vue';
 const routes = [
   {
     path: '/',
@@ -94,7 +95,7 @@ const routes = [
   { path: '/get-involved', name: 'GetInvolved', component: GetInvolved },
   { path: '/programs', name: 'Programs', component: Programs },
   { path: '/news', name: 'NewsAdvocacy', component: NewsAdvocacy },
-
+  { path: '/buttons', name: 'Buttons', component: Buttons },
   { path: '/resources', name: 'Resources', component: Resources },
 
   {
