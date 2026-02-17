@@ -224,11 +224,12 @@ import wef from "@/assets/wef.jpg";
 import { newsPageSchema } from "@/schemas/pages/news.schema";
 import { computed } from "vue";
 // const articles = newsPageSchema.news.latestNewsSection.articles;
-  const sortedArticles = computed(() => {
-  return [...newsPageSchema.news.latestNewsSection.articles].sort((a, b) => {
-    return new Date(b.date) - new Date(a.date);
-  });
+const sortedArticles = computed(() => {
+  return [...newsPageSchema.news.latestNewsSection.articles].sort(
+    (a, b) => new Date(b.created_at) - new Date(a.created_at)
+  );
 });
+
 const policyUpdates = newsPageSchema.news.policyAdvocacySection.updates;
 
 const latest =

@@ -1,9 +1,11 @@
 
 <script setup>
-const theme = "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771138263/HFN_2026_CONFERENCE_FLYER._mzpw5l.jpg";
+const theme =
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771138263/HFN_2026_CONFERENCE_FLYER._mzpw5l.jpg";
 const heroBg =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770045591/243A7993_wxlzkg.jpg";
-const roundTable = "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770045588/IMG_9090_ugylgj.jpg";  
+const roundTable =
+  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770045588/IMG_9090_ugylgj.jpg";
 const logos = [
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061214/SFH_Logo_o0klhu.png",
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061214/pharm-BSXKP_7c_ffhayw.png",
@@ -157,20 +159,29 @@ const agenda = [
             Universal Health Coverage (UHC).
           </p>
           <div class="flex flex-wrap gap-5">
-            <router-link
-              :to="{
-    name: 'RegisterEvents',
-    params: { slug: '2026-hfn-annual-conference' }
-  }"
+            <a
+              href="/buttons"
               class="px-10 py-5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-2xl transition-all shadow-2xl hover:-translate-y-1"
             >
               Register Now
-            </router-link>
-            <button
+            </a>
+            <a
+  href="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771302048/HFN_Annual_Conference_2026_Sponsorship_Packages__ejkxtg.pdf"
+  download
+  target="_blank"
+>
+  <button
+    class="px-10 py-5 border-2 border-white/30 text-white font-bold rounded-2xl hover:bg-white hover:text-green-950 transition-all backdrop-blur-sm"
+  >
+    Sponsorship Deck
+  </button>
+</a>
+
+            <!-- <button
               class="px-10 py-5 border-2 border-white/30 text-white font-bold rounded-2xl hover:bg-white hover:text-green-950 transition-all backdrop-blur-sm"
             >
               Sponsorship Deck
-            </button>
+            </button> -->
           </div>
         </div>
       </div>
@@ -772,9 +783,9 @@ const agenda = [
         <div class="flex flex-col sm:flex-row justify-center gap-6">
           <router-link
             :to="{
-    name: 'RegisterEvents',
-    params: { slug: '2026-hfn-annual-conference' }
-  }"
+              name: 'RegisterEvents',
+              params: { slug: '2026-hfn-annual-conference' },
+            }"
             class="bg-white text-orange-600 px-12 py-5 rounded-2xl font-black shadow-2xl hover:bg-green-950 hover:text-white transition-all transform hover:scale-105"
             >Get Your Tickets</router-link
           >

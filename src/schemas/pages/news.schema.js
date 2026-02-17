@@ -15,6 +15,7 @@ export const newsPageSchema = {
       articles: [
         {
           id: 1,
+          created_at: "2025-12-01",
           title:
             'Driving Nigeria Toward Universal Health Coverage - 1st December, 2025',
           excerpt:
@@ -67,6 +68,7 @@ We extend our appreciation to Dr Kelechi Ohiri and the NHIA team for their leade
           image:
             'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715460/84d92881fff843d7a1d8f64ef8dce88f_M_pufrzc.jpg',
           date: 'December 5, 2025',
+          created_at: "2025-12-05",
           commentCount: 0,
           description: `At the Global Digital Health Forum 2025 in Nairobi, the President Healthcare Federation of Nigeria and Country Director PharmAccess Nigeria, Njide Ndili, a Founding Member of the Digital Transformation for Health Lab(DTH-Lab), delivered a powerful keynote on:
 Digital Determinants of Health Framework.
@@ -99,6 +101,7 @@ Her contribution today is a reminder that the future of public health will be sh
             'Quality on the supply side is the single most important lever to unlock demand for health insurance and finally make Universal Health Coverage real.',
           image: 'group1.png',
           date: 'December 11, 2025',
+          created_at: "2025-12-11",
           description: `Quality on the supply side is the single most important lever to unlock demand for health insurance and finally make Universal Health Coverage real.
 At the UHC Day 2025 High-Level Convening, themed “Unaffordable health cost? We are sick of it,” the President Healthcare Federation of Nigeria (HFN) and Country Director PharmAccess Nigeria, Njide Ndili, delivered a clear and compelling message:
 Nigeria cannot achieve Universal Health Coverage without strengthening supply-side quality and scaling the solutions that already work.
@@ -133,6 +136,7 @@ As she noted, the pathway to UHC requires bold decisions, aligned incentives, an
             'The Nigeria Centre for Disease Control and Prevention (NCDC) convened a high-level Private Sector Engagement Roundtable focused on strengthening national health security through strategic collaboration.',
           image: 'wef.jpg',
           date: 'December 5, 2025',
+          created_at: "2025-12-05",
           commentCount: 0,
           description: `The Nigeria Centre for Disease Control and Prevention (NCDC) convened a high-level Private Sector Engagement Roundtable focused on strengthening national health security through strategic collaboration. Healthcare Federation of Nigeria(HFN) was duly represented by Dr Benson Ayodele Cole(First Vice President 1), Mr Olufemi Akingbade(Executive Secretary), and Uchechi Amiloat the session.
 
