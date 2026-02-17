@@ -251,9 +251,8 @@ const confirmRegistration = async () => {
   try {
     await eventsApi.createEvent(selectedEvent.value.slug);
     closeRegisterModal();
-    console.log("Successfully registered for event");
   } catch (err) {
-    registerError.value = "Failed to register for event";
+    registerError.value = "Failed to view past event";
   } finally {
     registering.value = false;
   }
@@ -958,14 +957,14 @@ onMounted(() => {
       class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
     >
       <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
-        <h3 class="text-xl font-bold text-[#333] mb-2">Register for Event</h3>
+        <h3 class="text-xl font-bold text-[#333] mb-2">View Past Event</h3>
 
         <p class="text-gray-600 mb-6">
           {{ selectedEvent?.title }}
         </p>
 
         <div v-if="registerError" class="text-red-600 text-sm mb-4">
-          {{ registerError }}
+          
         </div>
 
         <div class="flex gap-3">
@@ -981,7 +980,7 @@ onMounted(() => {
             :disabled="registering"
             class="flex-1 bg-[#004D33] text-white rounded-lg py-2 font-semibold hover:bg-[#006644]"
           >
-            {{ registering ? "Registering…" : "Confirm" }}
+            {{ viewing ? "Viewing…" : "View" }}
           </button>
         </div>
       </div>
