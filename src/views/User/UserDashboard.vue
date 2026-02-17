@@ -169,15 +169,15 @@ const fetchResources = async () => {
 const dummyEvents = [
   {
     slug: "dummy-1",
-    title: "HFN Healthcare Policy Roundtable",
-    image: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769773394/2_dyphjj.png",
+    title: "2026 Annual Conference",
+    image: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769883047/events-CNRYrGt8_trfhaz.png",
     tag: "Programs & Initiatives",
     description:
-      "A strategic discussion on strengthening Nigeria’s healthcare policy framework.",
-    date: "Oct 20, 2026",
+      "The HFN Annual Conference has evolved into Nigeria’s leading private sector healthcare platform, convening over 500 high-level participants annually, alongside more than 50 exhibitors and strategic partners.",
+    date: "March 4th, 2026",
     time: "10:00 AM",
     location: "Lagos, Nigeria",
-    buttonText: "View",
+    buttonText: "Register",
   },
   {
     slug: "Medical-nnovation-investment-forum",
@@ -186,7 +186,7 @@ const dummyEvents = [
     tag: "Health Alert",
     description:
       "Exploring investment opportunities in local pharmaceutical manufacturing.",
-    date: "Nov 12, 2026",
+    date: "October 12, 2025",
     time: "9:00 AM",
     location: "Abuja, Nigeria",
     buttonText: "View",
