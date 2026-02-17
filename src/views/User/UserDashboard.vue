@@ -171,7 +171,7 @@ const dummyEvents = [
     slug: "dummy-1",
     title: "2026 Annual Conference",
     image: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769883047/events-CNRYrGt8_trfhaz.png",
-    tag: "Programs & Initiatives",
+    tag: "Conference",
     description:
       "The HFN Annual Conference has evolved into Nigeria’s leading private sector healthcare platform.",
     date: "March 4th, 2026",
