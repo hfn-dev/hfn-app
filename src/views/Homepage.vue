@@ -25,6 +25,15 @@ const hands1 =
 const hands2 =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769716176/dc2a1ae8ac60464700aa7be25ea2c408_L_dt5us8.jpg";
 
+ const showDonateDialog = ref(false);
+
+const openDonateDialog = () => {
+  showDonateDialog.value = true;
+};
+
+const closeDonateDialog = () => {
+  showDonateDialog.value = false;
+}; 
 const imageMap = {
   "event.png": event,
   "group.png": group,
@@ -737,6 +746,7 @@ onMounted(async () => {
           </div>
 
           <button
+            @click="openDonateDialog"
             class="relative group/btn overflow-hidden bg-white px-12 py-5 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300"
           >
             <div
@@ -782,6 +792,41 @@ onMounted(async () => {
       </div>
     </section>
   </div>
+  <!-- Donate Dialog -->
+<div
+  v-if="showDonateDialog"
+  class="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
+>
+  <div
+    class="bg-white rounded-2xl p-8 max-w-md w-full relative shadow-2xl"
+  >
+    <!-- Close Button -->
+    <button
+      @click="closeDonateDialog"
+      class="absolute top-4 right-4 text-gray-400 hover:text-black text-xl"
+    >
+      ✕
+    </button>
+
+    <h3 class="text-2xl font-bold mb-6 text-[#004d33]">
+      Donation Account Details
+    </h3>
+
+    <div class="space-y-4 text-gray-700 font-medium">
+      <p><strong>Bank Name:</strong> Zenith Bank</p>
+      <p><strong>Account Name:</strong> Healthcare Federation Of Nigeria</p>
+      <p><strong>Account Number:</strong> 1013784059</p>
+    </div>
+
+    <button
+      @click="closeDonateDialog"
+      class="mt-8 w-full bg-[#004d33] text-white py-3 rounded-xl font-bold hover:bg-green-800 transition"
+    >
+      Close
+    </button>
+  </div>
+</div>
+
 </template>
 
 <style scoped>
