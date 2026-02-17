@@ -245,25 +245,11 @@ const publications = [
 
 const newsletters = [
   {
-    date: "October 3, 2024",
+    date: "October 8, 2025",
     comments: 0,
-    text: "Q4 Quarterly Newsletter, 2024 (October-December, 2024)",
+    text: "Q4 Quarterly Newsletter, 2025 (October-December, 2025)",
     pdfUrl:
-      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-4_2024_rqpvhf.pdf",
-  },
-  {
-    date: "February 27, 2025",
-    comments: 0,
-    text: "Q1 Quarterly Newsletter, 2025 (January-March, 2025)",
-    pdfUrl:
-      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/1st-quarter-2025-hfn-newsletter1_nznhgn.pdf",
-  },
-  {
-    date: "April 7, 2025",
-    comments: 0,
-    text: "Q2 Quarterly Newsletter, 2025 (April-June, 2025)",
-    pdfUrl:
-      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-2---2025_jfakrt.pdf",
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067786/2025-hfn-quarterly-newsletter-q4_gd0aj6.pdf",
   },
   {
     date: "July 2, 2025",
@@ -273,12 +259,27 @@ const newsletters = [
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067785/2025-hfn-quarterly-newsletter-q3_g4ks3t.pdf",
   },
   {
-    date: "October 8, 2025",
+    date: "April 7, 2025",
     comments: 0,
-    text: "Q4 Quarterly Newsletter, 2025 (October-December, 2025)",
+    text: "Q2 Quarterly Newsletter, 2025 (April-June, 2025)",
     pdfUrl:
-      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067786/2025-hfn-quarterly-newsletter-q4_gd0aj6.pdf",
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-2---2025_jfakrt.pdf",
   },
+  {
+    date: "February 27, 2025",
+    comments: 0,
+    text: "Q1 Quarterly Newsletter, 2025 (January-March, 2025)",
+    pdfUrl:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/1st-quarter-2025-hfn-newsletter1_nznhgn.pdf",
+  },
+  {
+    date: "October 3, 2024",
+    comments: 0,
+    text: "Q4 Quarterly Newsletter, 2024 (October-December, 2024)",
+    pdfUrl:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-4_2024_rqpvhf.pdf",
+  },
+  
 ];
 </script>
 
