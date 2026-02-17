@@ -11,7 +11,7 @@
       <div class="flex flex-col gap-4">
         
         <a
-          href="https://tix.africa/claim/2026-hfn-annual-conference/VGlja2V0LWE3MDc0Yjg4LTU3ZTUtNGE3My05MWU5LWNhMmYwYjZlYTJhYw=="
+          href="https://tix.africa/claim/2026-hfn-annual-conference/VGlja2V0LTgzOWNmYmQ3LTliNDUtNGE3Ny1iNTM1LTI5ZWFjZWQ5MTgxOQ=="
           target="_blank"
           rel="noopener noreferrer"
           class="group relative flex items-center justify-between px-8 py-5 bg-green-900 text-white rounded-2xl shadow-lg hover:bg-green-800 transition-all duration-300 transform hover:-translate-y-1"
