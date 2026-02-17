@@ -144,6 +144,10 @@
 <script setup>
 import { ref, reactive } from "vue";
 import eventsApi from "@/api/events";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const eventSlug = route.params.slug;
 const successMessage = ref("");
 const loading = ref(false);
 
@@ -169,7 +173,7 @@ const handleSubmit = async () => {
       price: form.is_free ? "0" : form.price,
     };
 
-    const response = await eventsApi.createEvent(payload);
+    await eventsApi.createEvent(eventSlug, payload);
     successMessage.value = "Registration successful!! Thank you!";
 
     Object.keys(form).forEach((key) => (form[key] = ""));

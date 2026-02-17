@@ -121,7 +121,7 @@
                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   ></path>
                 </svg>
-                Wednesday, March 4th 2026
+                Wednesday, March 4th - 5th 2026
               </span>
               <span class="flex items-center">
                 <svg
@@ -166,7 +166,7 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <div
           v-for="(event, index) in events"
           :key="index"
@@ -286,7 +286,7 @@
             </a>
           </div>
         </div>
-      </div>
+      </div> -->
     </section>
     <section class="container mx-auto px-4 md:px-8 py-14">
       <h3 class="text-2xl font-semibold text-gray-800 mb-8">Past Events</h3>

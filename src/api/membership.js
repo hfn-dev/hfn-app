@@ -204,4 +204,13 @@ export default {
       throw error;
     }
   },
+  async getUnpaidMembers() {
+    try {
+      const response = await api.get("/membership/unpaid/");
+      return response.data;
+    } catch (error) {
+      console.error("Get unpaid members API error:", error);
+      throw error;
+    }
+  },
 };

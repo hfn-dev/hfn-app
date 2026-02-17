@@ -1,6 +1,8 @@
 <script setup>
 import analyticsApi from '@/api/dashboard.js';
 import paymentApi from '@/api/payments.js';
+import messagingApi from '@/api/messaging.js';
+import membershipApi from '@/api/membership.js';
 import { useToast } from 'vue-toastification';
 import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
 import { computed, onMounted, ref, watch } from 'vue';
@@ -41,6 +43,22 @@ const activeCourses = computed(() => {
 );
 
 });
+
+
+const unpaidMembersCount = ref(0);
+
+const openMessageModal = async (title) => {
+  if (title === "Unpaid members") {
+    try {
+      const unpaid = await membershipApi.getUnpaidMembers();
+      unpaidMembersCount.value = unpaid?.length || 0;
+      isMessageModalOpen.value = true;
+    } catch (error) {
+      toast.error("Failed to fetch unpaid members");
+    }
+  }
+};
+
 
 const fetchPayments = async () => {
   loading.value = true;
@@ -288,11 +306,11 @@ const messageContent = ref(
   'Dear user, we noticed your account is currently unpaid. Please complete your payment to continue enjoying full access to our services. Thank you.'
 );
 
-const openMessageModal = (title) => {
-  if (title === 'Unpaid members') {
-    isMessageModalOpen.value = true;
-  }
-};
+// const openMessageModal = (title) => {
+//   if (title === 'Unpaid members') {
+//     isMessageModalOpen.value = true;
+//   }
+// };
 
 const closeMessageModal = () => {
   isMessageModalOpen.value = false;
@@ -304,7 +322,7 @@ const sendMessage = async () => {
   sending.value = true;
 
   try {
-    await paymentApi.broadcastToUnpaid({
+    await messagingApi.broadcastMessage({
       subject: messageSubject.value,
       message: messageContent.value,
     });
@@ -580,10 +598,15 @@ watch(currentTab, () => {
                   class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors shadow-md">
                   Cancel
                 </button>
-                <button type="submit"
-                  class="px-6 py-2 text-sm font-medium text-white bg-[#006633] rounded-lg hover:bg-[#00994d] transition-colors shadow-lg shadow-[#006633]/50">
-                  Send Message
-                </button>
+                <button
+  type="submit"
+  :disabled="sending"
+  class="px-6 py-2 text-sm font-medium text-white bg-[#006633] rounded-lg hover:bg-[#00994d] transition-colors shadow-lg"
+>
+  <span v-if="sending">Sending...</span>
+  <span v-else>Send Message</span>
+</button>
+
               </div>
             </form>
           </div>

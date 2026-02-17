@@ -157,7 +157,10 @@ const agenda = [
           </p>
           <div class="flex flex-wrap gap-5">
             <router-link
-              to="/register-events"
+              :to="{
+    name: 'RegisterEvents',
+    params: { slug: '2026-hfn-annual-conference' }
+  }"
               class="px-10 py-5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-2xl transition-all shadow-2xl hover:-translate-y-1"
             >
               Register Now
@@ -767,7 +770,10 @@ const agenda = [
         </p>
         <div class="flex flex-col sm:flex-row justify-center gap-6">
           <router-link
-            to="/register-events"
+            :to="{
+    name: 'RegisterEvents',
+    params: { slug: '2026-hfn-annual-conference' }
+  }"
             class="bg-white text-orange-600 px-12 py-5 rounded-2xl font-black shadow-2xl hover:bg-green-950 hover:text-white transition-all transform hover:scale-105"
             >Get Your Tickets</router-link
           >

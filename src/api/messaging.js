@@ -384,4 +384,13 @@ export default {
       throw error;
     }
   },
+  async broadcastMessage() {
+    try {
+      const response = await api.post('/messaging/notifications/broadcast_unpaid_subscriptions/');
+      return response.data;
+    } catch (error) {
+      console.error('Message API error:', error);
+      throw error;
+    }
+  },
 };
