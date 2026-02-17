@@ -763,7 +763,7 @@ const agenda = [
             v-for="logo in logos"
             :key="logo"
             :src="logo"
-            class="h-12 w-auto grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition duration-300"
+            class="h-12 w-auto"
           />
         </div>
       </div>
@@ -776,25 +776,23 @@ const agenda = [
         <h2 class="text-5xl font-black mb-8 italic">
           Will you be in the room?
         </h2>
-        <p class="text-orange-100 mb-12 text-xl leading-relaxed">
-          The 2026 conference is more than an event; it's a catalyst for the
-          next decade of Nigerian healthcare delivery.
-        </p>
+        
         <div class="flex flex-col sm:flex-row justify-center gap-6">
-          <router-link
-            :to="{
-              name: 'RegisterEvents',
-              params: { slug: '2026-hfn-annual-conference' },
-            }"
+          <a
+            href="/buttons"
             class="bg-white text-orange-600 px-12 py-5 rounded-2xl font-black shadow-2xl hover:bg-green-950 hover:text-white transition-all transform hover:scale-105"
-            >Get Your Tickets</router-link
+            >Get Your Tickets</a
           >
-          <button
+          <!-- <button
             class="bg-green-950/20 border-2 border-white/30 text-white px-12 py-5 rounded-2xl font-black hover:bg-green-950 transition-all"
           >
             Sponsorship Inquiry
-          </button>
+          </button> -->
         </div>
+        <p class="text-orange-100 mt-12 text-xl leading-relaxed">
+          For more sponsorship, partnership and exhibition opportunities: 
+          <span>info@hfnigeria.com  |  +234 703 056 7554</span>
+        </p>
       </div>
       <div
         class="absolute -top-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl"
