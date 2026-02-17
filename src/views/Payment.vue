@@ -12,9 +12,9 @@ onMounted(() => {
 });
 
 const accountDetails = {
-  bankName: "Globus Bank",
+  bankName: "Zenith Bank",
   accountName: "Healthcare Federation Of Nigeria",
-  accountNumber: "0123456789",
+  accountNumber: "1013784059",
   referenceCode: "TRANS-" + Math.floor(10000 + Math.random() * 90000),
 };
 
