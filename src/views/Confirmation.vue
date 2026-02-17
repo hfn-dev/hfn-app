@@ -25,7 +25,6 @@ const goHome = () => {
 
       <h1 class="text-2xl font-bold text-gray-900 mb-3">
         Confirming Payment
-        <span><p>Return to home</p></span>
       </h1>
       <p class="text-gray-600 mb-8 leading-relaxed">
         Thank you! Your payment <span class="font-semibold text-green-700">will be confirmed shortly</span> once our system finishes processing the transaction.
