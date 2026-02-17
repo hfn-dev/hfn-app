@@ -157,15 +157,93 @@ const validateForm = () => {
   return true;
 };
 
-const handleRegistration = async () => {
-  if (!validateForm()) {
-    return;
-  }
+// const handleRegistration = async () => {
+//   if (!validateForm()) {
+//     return;
+//   }
+
+//   try {
+//     isLoading.value = true;
+
+//     let payload;
+//     if (activeTab.value === "individual") {
+//       payload = prepareIndividualPayload();
+//     } else {
+//       showCustomAlert(
+//         "Organization registration is not implemented yet",
+//         "warning"
+//       );
+//       isLoading.value = false;
+//       return;
+//     }
+
+//     console.log("Sending payload:", payload);
+
+//     const response = await userRegister.createUser(payload);
+
+//     if (response.status === "success") {
+//       toast.success(response.messages?.[0] || "Registration successful!");
+
+//       if (response.actions_required?.includes("verify_email")) {
+//         localStorage.setItem("pendingVerificationEmail", payload.email);
+//         router.push("/signinverification");
+//         return;
+//       }
+
+//       if (response.actions_required?.includes("make_payment")) {
+//         localStorage.setItem(
+//           "membership_payment",
+//           JSON.stringify({
+//             category_id: selectedCategory.value.id,
+//             category_name: selectedCategory.value.name,
+//             amount: selectedCategory.value.amount,
+//             currency: selectedCategory.value.currency,
+//             email: payload.email,
+//           })
+//         );
+//         router.push("/registration-payment");
+//         return;
+//       }
+
+//       // fallback
+//       router.push("/signin");
+//     } else {
+//       const errorMessage =
+//         response.messages?.[0] || "Registration failed. Please try again.";
+//       showCustomAlert(errorMessage, "error");
+//     }
+//   } catch (error) {
+//     console.error("Registration error:", error);
+//     if (error.response) {
+//       const errorMsg =
+//         error.response.data?.messages?.[0] ||
+//         error.response.data?.message ||
+//         `Error: ${error.response.status}`;
+//       showCustomAlert(errorMsg, "error");
+//     } else if (error.request) {
+//       showCustomAlert(
+//         "Network error. Please check your connection and try again.",
+//         "error"
+//       );
+//     } else {
+//       showCustomAlert(
+//         "An unexpected error occurred. Please try again.",
+//         "error"
+//       );
+//     }
+//   } finally {
+//     isLoading.value = false;
+//   }
+// };
+
+  const handleRegistration = async () => {
+  if (!validateForm()) return;
 
   try {
     isLoading.value = true;
 
     let payload;
+
     if (activeTab.value === "individual") {
       payload = prepareIndividualPayload();
     } else {
@@ -177,20 +255,12 @@ const handleRegistration = async () => {
       return;
     }
 
-    console.log("Sending payload:", payload);
-
     const response = await userRegister.createUser(payload);
 
     if (response.status === "success") {
       toast.success(response.messages?.[0] || "Registration successful!");
 
-      if (response.actions_required?.includes("verify_email")) {
-        localStorage.setItem("pendingVerificationEmail", payload.email);
-        router.push("/signinverification");
-        return;
-      }
-
-      if (response.actions_required?.includes("make_payment")) {
+      if (selectedCategory.value) {
         localStorage.setItem(
           "membership_payment",
           JSON.stringify({
@@ -201,6 +271,17 @@ const handleRegistration = async () => {
             email: payload.email,
           })
         );
+      }
+
+      // If email verification is required
+      if (response.actions_required?.includes("verify_email")) {
+        localStorage.setItem("pendingVerificationEmail", payload.email);
+        router.push("/signinverification");
+        return;
+      }
+
+      // If payment required immediately
+      if (response.actions_required?.includes("make_payment")) {
         router.push("/registration-payment");
         return;
       }
@@ -214,6 +295,7 @@ const handleRegistration = async () => {
     }
   } catch (error) {
     console.error("Registration error:", error);
+
     if (error.response) {
       const errorMsg =
         error.response.data?.messages?.[0] ||
