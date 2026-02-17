@@ -70,7 +70,7 @@ import GalleryDetail from '@/views/GalleryDetail.vue';
 import TeamDetail from '@/views/TeamDetail.vue';
 import Governance from '@/views/Governance.vue';
 
-import Buttons from '@/src/components/layout/Buttons.vue';
+import Buttons from '@/components/layout/Buttons.vue';
 const routes = [
   {
     path: '/',
