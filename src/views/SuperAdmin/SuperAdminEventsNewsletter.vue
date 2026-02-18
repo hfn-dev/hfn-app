@@ -1,10 +1,10 @@
 <script setup>
 import uploadsApi from "@/api/contentUploadsApi";
 import eventsApi from "@/api/events.js";
-import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
-import { onMounted, ref, computed } from "vue";
 import newsApi from "@/api/newsModule";
 import { useAuth } from "@/store/authStore";
+import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
+import { computed, onMounted, ref } from "vue";
 
 const events = ref([]);
 const loadingEvents = ref(false);
@@ -209,6 +209,7 @@ const eventForm = ref({
   start_datetime: "",
   end_datetime: "",
   location: "",
+  audience: "all",
   meeting_url: "",
   max_attendees: null,
   registration_deadline: "",
@@ -267,6 +268,7 @@ const createEvent = async () => {
     start_datetime: "",
     end_datetime: "",
     location: "",
+    audience: "all",
     meeting_url: "",
     max_attendees: null,
     registration_deadline: "",
@@ -282,6 +284,7 @@ const uploadForm = ref({
   title: "",
   type: "newsletter",
   description: "",
+  audience: "all",
   files: [],
   bannerIndex: 0,
 });
@@ -355,7 +358,7 @@ const createUpload = async () => {
     formData.append("title", uploadForm.value.title);
     formData.append("description", uploadForm.value.description);
     formData.append("type", uploadForm.value.type);
-
+formData.append("audience", uploadForm.value.audience);
     if (uploadForm.value.type === "gallery") {
       uploadForm.value.files.forEach((file, i) => {
         formData.append("image", file);
@@ -391,6 +394,7 @@ const createUpload = async () => {
       type: "newsletter",
       description: "",
       image: "",
+      audience: "all",
       bannerIndex: 0,
     };
   } catch (error) {
@@ -426,6 +430,13 @@ onMounted(() => {
               <option value="webinar">Webinar</option>
               <option value="physical">Physical</option>
             </select>
+
+            <select v-model="eventForm.audience" class="input">
+  <option value="all">All</option>
+  <option value="members">Members Only</option>
+  <option value="non_members">Non Members Only</option>
+</select>
+
 
             <input
               type="datetime-local"
@@ -609,6 +620,8 @@ onMounted(() => {
               <select v-model="newsForm.audience" class="input">
                 <option value="all">All</option>
                 <option value="members">Members only</option>
+                <option value="non_members">Non Members Only</option>
+
               </select>
             </div>
 
@@ -755,6 +768,13 @@ onMounted(() => {
               <option value="gallery">Gallery</option>
               <option value="minute">Minute</option>
             </select>
+
+            <select v-model="uploadForm.audience" class="input mb-3">
+  <option value="all">All</option>
+  <option value="members">Members Only</option>
+  <option value="non_members">Non Members Only</option>
+</select>
+
 
             <textarea
               v-model="uploadForm.description"
