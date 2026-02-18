@@ -92,7 +92,7 @@ const prepareOrganizationPayload = () => {
     contact_person: form.value.organizationContactPerson.trim(),
     phone_number: formatPhoneNumber(form.value.phone),
     password: form.value.password,
-    role: "organization",
+    role: "learner",
   };
 };
 
@@ -103,7 +103,7 @@ const prepareIndividualPayload = () => {
     last_name: form.value.lastName.trim(),
     phone_number: formatPhoneNumber(form.value.phone),
     password: form.value.password,
-    role: "member",
+    role: "learner",
   };
 
   if (form.value.otherName && form.value.otherName.trim()) {
