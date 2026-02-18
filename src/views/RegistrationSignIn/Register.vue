@@ -20,6 +20,7 @@ const form = ref({
   password: "",
   confirmPassword: "",
   oragnizationName: "",
+  organizationContactPerson: "",
 });
 
 const membershipCategories = ref([
@@ -84,6 +85,17 @@ const formatPhoneNumber = (phone) => {
   return "0" + cleaned;
 };
 
+const prepareOrganizationPayload = () => {
+  return {
+    email: form.value.email,
+    organization_name: form.value.organizationName.trim(),
+    contact_person: form.value.organizationContactPerson.trim(),
+    phone_number: formatPhoneNumber(form.value.phone),
+    password: form.value.password,
+    role: "organization",
+  };
+};
+
 const prepareIndividualPayload = () => {
   const payload = {
     email: form.value.email,
@@ -101,15 +113,85 @@ const prepareIndividualPayload = () => {
   return payload;
 };
 
-const validateForm = () => {
-  if (!form.value.firstName.trim()) {
-    showCustomAlert("First name is required", "error");
-    return false;
-  }
+// const validateForm = () => {
+//   if (!form.value.firstName.trim()) {
+//     showCustomAlert("First name is required", "error");
+//     return false;
+//   }
 
-  if (!form.value.lastName.trim()) {
-    showCustomAlert("Last name is required", "error");
-    return false;
+//   if (!form.value.lastName.trim()) {
+//     showCustomAlert("Last name is required", "error");
+//     return false;
+//   }
+
+//   if (!form.value.email.trim()) {
+//     showCustomAlert("Email is required", "error");
+//     return false;
+//   }
+
+//   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//   if (!emailRegex.test(form.value.email)) {
+//     showCustomAlert("Please enter a valid email address", "error");
+//     return false;
+//   }
+
+//   if (!form.value.phone.trim()) {
+//     showCustomAlert("Phone number is required", "error");
+//     return false;
+//   }
+
+//   const formattedPhone = formatPhoneNumber(form.value.phone);
+//   if (formattedPhone.length < 10) {
+//     showCustomAlert("Please enter a valid phone number", "error");
+//     return false;
+//   }
+
+//   if (!form.value.password) {
+//     showCustomAlert("Password is required", "error");
+//     return false;
+//   }
+
+//   if (form.value.email !== form.value.confirmEmail) {
+//     showCustomAlert("Email addresses do not match", "error");
+//     return false;
+//   }
+
+//   if (form.value.password !== form.value.confirmPassword) {
+//     showCustomAlert("Passwords do not match", "error");
+//     return false;
+//   }
+
+//   if (!isPasswordValid.value) {
+//     showCustomAlert("Please ensure all password requirements are met", "error");
+//     return false;
+//   }
+
+//   if (activeTab.value === "organization") {
+//     if (!form.value.organizationName.trim()) {
+//       showCustomAlert("Organization name is required", "error");
+//       return false;
+//     }
+
+//     if (!form.value.organizationContactPerson.trim()) {
+//       showCustomAlert("Contact person is required", "error");
+//       return false;
+//     }
+//   }
+
+//   return true;
+// };
+
+const validateForm = () => {
+  if (activeTab.value === "individual") {
+    if (!form.value.firstName.trim()) {
+      showCustomAlert("First name is required", "error");
+      return false;
+    }
+
+    if (!form.value.lastName.trim()) {
+      showCustomAlert("Last name is required", "error");
+      return false;
+    }
   }
 
   if (!form.value.email.trim()) {
@@ -139,7 +221,7 @@ const validateForm = () => {
     return false;
   }
 
-  if (form.value.email !== form.value.confirmEmail) {
+  if (form.value.email !== form.value.confirmEmail && activeTab.value === "individual") {
     showCustomAlert("Email addresses do not match", "error");
     return false;
   }
@@ -154,89 +236,22 @@ const validateForm = () => {
     return false;
   }
 
+  if (activeTab.value === "organization") {
+    if (!form.value.organizationName?.trim()) {
+      showCustomAlert("Organization name is required", "error");
+      return false;
+    }
+
+    if (!form.value.organizationContactPerson?.trim()) {
+      showCustomAlert("Contact person is required", "error");
+      return false;
+    }
+  }
+
   return true;
 };
 
-// const handleRegistration = async () => {
-//   if (!validateForm()) {
-//     return;
-//   }
-
-//   try {
-//     isLoading.value = true;
-
-//     let payload;
-//     if (activeTab.value === "individual") {
-//       payload = prepareIndividualPayload();
-//     } else {
-//       showCustomAlert(
-//         "Organization registration is not implemented yet",
-//         "warning"
-//       );
-//       isLoading.value = false;
-//       return;
-//     }
-
-//     console.log("Sending payload:", payload);
-
-//     const response = await userRegister.createUser(payload);
-
-//     if (response.status === "success") {
-//       toast.success(response.messages?.[0] || "Registration successful!");
-
-//       if (response.actions_required?.includes("verify_email")) {
-//         localStorage.setItem("pendingVerificationEmail", payload.email);
-//         router.push("/signinverification");
-//         return;
-//       }
-
-//       if (response.actions_required?.includes("make_payment")) {
-//         localStorage.setItem(
-//           "membership_payment",
-//           JSON.stringify({
-//             category_id: selectedCategory.value.id,
-//             category_name: selectedCategory.value.name,
-//             amount: selectedCategory.value.amount,
-//             currency: selectedCategory.value.currency,
-//             email: payload.email,
-//           })
-//         );
-//         router.push("/registration-payment");
-//         return;
-//       }
-
-//       // fallback
-//       router.push("/signin");
-//     } else {
-//       const errorMessage =
-//         response.messages?.[0] || "Registration failed. Please try again.";
-//       showCustomAlert(errorMessage, "error");
-//     }
-//   } catch (error) {
-//     console.error("Registration error:", error);
-//     if (error.response) {
-//       const errorMsg =
-//         error.response.data?.messages?.[0] ||
-//         error.response.data?.message ||
-//         `Error: ${error.response.status}`;
-//       showCustomAlert(errorMsg, "error");
-//     } else if (error.request) {
-//       showCustomAlert(
-//         "Network error. Please check your connection and try again.",
-//         "error"
-//       );
-//     } else {
-//       showCustomAlert(
-//         "An unexpected error occurred. Please try again.",
-//         "error"
-//       );
-//     }
-//   } finally {
-//     isLoading.value = false;
-//   }
-// };
-
-  const handleRegistration = async () => {
+const handleRegistration = async () => {
   if (!validateForm()) return;
 
   try {
@@ -247,12 +262,7 @@ const validateForm = () => {
     if (activeTab.value === "individual") {
       payload = prepareIndividualPayload();
     } else {
-      showCustomAlert(
-        "Organization registration is not implemented yet",
-        "warning"
-      );
-      isLoading.value = false;
-      return;
+      payload = prepareOrganizationPayload();
     }
 
     const response = await userRegister.createUser(payload);
@@ -655,7 +665,7 @@ const changeTab = (tab) => {
                     :key="category.id"
                     :value="category.id"
                   >
-                    {{ category.name }} 
+                    {{ category.name }}
                   </option>
                 </select>
 
@@ -772,10 +782,104 @@ const changeTab = (tab) => {
               </div>
             </template>
 
-            <!-- Organization template remains the same -->
-            <template v-else>
-              <!-- ... organization form fields ... -->
-            </template>
+             <template v-else>
+  <div class="space-y-4">
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700">
+        Organization Name*
+      </label>
+      <input
+        type="text"
+        v-model="form.organizationName"
+        required
+        class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
+      />
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700">
+        Contact Person*
+      </label>
+      <input
+        type="text"
+        v-model="form.organizationContactPerson"
+        required
+        class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
+      />
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700">
+        Official Email*
+      </label>
+      <input
+        type="email"
+        v-model="form.email"
+        required
+        class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
+      />
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700">
+        Phone Number*
+      </label>
+      <div class="mt-1 flex rounded-lg shadow-sm">
+        <span
+          class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm"
+        >
+          +234
+        </span>
+        <input
+          type="tel"
+          v-model="form.phone"
+          required
+          class="flex-1 block w-full border-gray-300 rounded-r-lg focus:border-green-500 focus:ring-green-500 p-2.5"
+        />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          Password*
+        </label>
+        <input
+          type="password"
+          v-model="form.password"
+          required
+          class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          Confirm Password*
+        </label>
+        <input
+          type="password"
+          v-model="form.confirmPassword"
+          required
+          class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
+        />
+      </div>
+    </div>
+
+    <div class="pt-4 flex justify-center">
+      <button
+        type="submit"
+        :disabled="!isPasswordValid || isLoading"
+        class="w-full md:w-auto px-10 py-3 bg-green-700 text-white font-semibold rounded-lg shadow-md hover:bg-green-800 transition duration-150 disabled:bg-gray-400"
+      >
+        <span v-if="isLoading">Processing...</span>
+        <span v-else>Register Organization</span>
+      </button>
+    </div>
+
+  </div>
+</template>
+
           </form>
 
           <div class="mt-6 text-center text-gray-600">
