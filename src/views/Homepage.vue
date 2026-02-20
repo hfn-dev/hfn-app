@@ -862,7 +862,7 @@ onMounted(async () => {
         
         <div class="flex flex-col gap-3">
           <RouterLink 
-            to="/conference-2026" 
+            to="/conference" 
             @click="closeConferencePopup"
             class="w-full bg-green-700 hover:bg-green-800 text-white py-4 rounded-2xl font-bold shadow-lg shadow-green-900/20 transition-all flex items-center justify-center gap-2"
           >
