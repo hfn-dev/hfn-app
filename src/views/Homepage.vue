@@ -874,7 +874,7 @@ onMounted(async () => {
       
       <div class="h-48 relative overflow-hidden">
         <img 
-          src="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769803836/1_hkuaio.jpg" 
+          src="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771138263/HFN_2026_CONFERENCE_FLYER._mzpw5l.jpg" 
           class="w-full h-full object-cover"
           alt="Conference 2026"
         />
