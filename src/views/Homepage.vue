@@ -853,7 +853,7 @@ onMounted(async () => {
 
       <div class="p-8 text-center">
         <div class="inline-block px-4 py-1 rounded-full bg-orange-100 text-orange-600 text-xs font-bold uppercase mb-4">
-          Save the Date: 2026
+          Save the Date: March 4th-5th 2026
         </div>
         <h3 class="text-3xl font-black text-gray-900 mb-4">HFN 2026: Shaping the Future of Healthcare</h3>
         <p class="text-gray-600 mb-8 font-medium">
