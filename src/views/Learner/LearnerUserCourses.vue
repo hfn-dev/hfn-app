@@ -220,7 +220,7 @@ const handleCourseAction = async (item) => {
       })
     );
 
-    router.push("/course-payment");
+    router.push("/registration-payment");
     return;
   
  
