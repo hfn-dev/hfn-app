@@ -19,7 +19,7 @@ const form = ref({
   confirmEmail: "",
   password: "",
   confirmPassword: "",
-  oragnizationName: "",
+  organizationName: "",
   organizationContactPerson: "",
 });
 
@@ -295,7 +295,7 @@ const changeTab = (tab) => {
     confirmEmail: "",
     password: "",
     confirmPassword: "",
-    oragnizationName: "",
+    organizationName: "",
   };
 };
 </script>
