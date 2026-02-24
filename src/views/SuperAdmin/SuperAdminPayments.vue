@@ -496,7 +496,7 @@ watch(currentTab, () => {
                 <input type="checkbox" class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]" />
               </td>
               <td class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]">
-                {{ course.title }}
+                {{ course.full_name }}
               </td>
               <td class="py-3 px-3">
                 {{ course.enrollments !== null ? course.enrollments : '-' }}
