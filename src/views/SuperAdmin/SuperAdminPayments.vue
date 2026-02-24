@@ -78,7 +78,8 @@ const fetchPayments = async () => {
 const normalizePayment = (item) => {
   return {
     id: item.id,
-    title: item.user?.full_name || item.user?.email || '—',
+    title: item.full_name || '—',
+    email: item.email || '-',
     enrollments: item.payment_type_display || '—',
     completion: item.amount || '—',
     amount: item.amount,
@@ -496,7 +497,7 @@ watch(currentTab, () => {
                 <input type="checkbox" class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]" />
               </td>
               <td class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]">
-                {{ course.full_name }}
+                {{ course.title }}
               </td>
               <td class="py-3 px-3">
                 {{ course.enrollments !== null ? course.enrollments : '-' }}
