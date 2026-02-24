@@ -51,4 +51,8 @@ export default {
     const { data } = await api.delete(`/membership/payments/${id}/`);
     return data;
   },
+  async getUnpaidMembers() {
+    const { data } = await api.get('/membership/subscriptions/members-with-unpaid-or-no-active-subscription/');
+    return data;
+  },
 };
