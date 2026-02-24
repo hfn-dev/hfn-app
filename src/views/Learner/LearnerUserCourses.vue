@@ -223,7 +223,7 @@ const handleCourseAction = async (item) => {
     router.push("/registration-payment");
     return;
   
- 
+  }
   } catch (error) {
     const serverMessage = error.response?.data?.error || error.response?.data?.message;
     console.error('Enrollment Failed:', serverMessage || error.message);
