@@ -64,7 +64,7 @@ const fetchPayments = async () => {
   loading.value = true;
   try {
     if (currentTab.value === 'Registration') {
-      const res = await paymentApi.getPaymentList();
+      const res = await paymentApi.getUnpaidMembers();
       registration.value = res.map(normalizePayment);
     } else {
       const res = await paymentApi.getPurchases();
