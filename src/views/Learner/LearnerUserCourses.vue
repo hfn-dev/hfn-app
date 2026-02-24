@@ -192,12 +192,38 @@ const handleCourseAction = async (item) => {
     return;
   }
 
-  try {
-    await learningModule.courseEnrollment(slug);
-    
-    toast.success(`Successfully enrolled in ${courseData.title || 'course'}`);
-    
-    await fetchUserEnrollments(); 
+  if (courseData.is_free) {
+    try {
+      await learningModule.courseEnrollment(slug);
+      toast.success(`Successfully enrolled in ${courseData.title}`);
+      await fetchUserEnrollments();
+    } catch (error) {
+      const serverMessage =
+        error.response?.data?.error ||
+        error.response?.data?.message;
+
+      toast.error(serverMessage || 'Enrollment failed');
+    }
+    return;
+  }
+
+  if (!courseData.is_free) {
+    localStorage.setItem(
+      "course_payment",
+      JSON.stringify({
+        course_id: courseId,
+        slug: slug,
+        title: courseData.title,
+        amount: courseData.price,
+        currency: "NGN",
+        type: "course"
+      })
+    );
+
+    router.push("/course-payment");
+    return;
+  
+ 
   } catch (error) {
     const serverMessage = error.response?.data?.error || error.response?.data?.message;
     console.error('Enrollment Failed:', serverMessage || error.message);
