@@ -1,23 +1,41 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 
 const copied = ref(false);
 const paymentInfo = ref(null);
 
 onMounted(() => {
-  const saved = localStorage.getItem("membership_payment");
-  if (saved) {
-    paymentInfo.value = JSON.parse(saved);
+  const membership = localStorage.getItem("membership_payment");
+  const course = localStorage.getItem("course_payment");
+
+  if (membership) {
+    paymentInfo.value = JSON.parse(membership);
+    paymentInfo.value.type = "membership";
+  } else if (course) {
+    paymentInfo.value = JSON.parse(course);
+    paymentInfo.value.type = "course";
   }
+
 });
 
-const accountDetails = {
-  bankName: "Zenith Bank",
-  accountName: "Healthcare Federation Of Nigeria",
-  accountNumber: "1013784059",
-  referenceCode: "TRANS-" + Math.floor(10000 + Math.random() * 90000),
-};
+const getAccountDetails = () => {
+  if (paymentInfo.value?.type === "course") {
+    return {
+      bankName: "Zenith Bank",
+      accountName: "HFN Learning Hub",
+      accountNumber: "2020202020",
+    };
+  }
 
+  return {
+    bankName: "Zenith Bank",
+    accountName: "Healthcare Federation Of Nigeria",
+    accountNumber: "1013784059",
+  };
+};  
+
+ const accountDetails = computed(() => getAccountDetails());
+  
 const copyToClipboard = (text) => {
   navigator.clipboard.writeText(text);
   copied.value = true;
