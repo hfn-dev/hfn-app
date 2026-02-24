@@ -43,7 +43,6 @@ const newMemberForm = ref({
   email: "",
   phone_number: "",
   membership_type_id: "",
-  role: "",
   payment_method: "",
 });
 
@@ -137,7 +136,7 @@ const submitNewMember = async () => {
       phone_number: newMemberForm.value.phone_number,
       membership_type: newMemberForm.value.membership_type,
       membership_type_id: Number(newMemberForm.value.membership_type_id),
-      role: newMemberForm.value.role,
+      // role: newMemberForm.value.role,
       payment_method: newMemberForm.value.payment_method,
     };
 
@@ -157,7 +156,6 @@ const submitNewMember = async () => {
       email: "",
       phone_number: "",
       membership_type: "",
-      role: "",
       payment_method: "",
     };
   } catch (error) {
@@ -706,13 +704,7 @@ watch(
             </option>
           </select>
 
-          <select v-model="newMemberForm.role" class="input">
-            <option disabled value="">Select Role</option>
-            <option value="tutor">Tutor</option>
-            <option value="editor">Editor</option>
-            <option value="learner">Learner</option>
-            <option value="member">Member</option>
-          </select>
+          
 
           <select v-model="newMemberForm.payment_method" class="input">
             <option disabled value="">Payment Method</option>
