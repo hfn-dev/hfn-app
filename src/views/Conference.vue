@@ -405,10 +405,16 @@ const agenda = [
               >
             </div>
           </div>
-          <img
-            :src="outlook"
-            class="relative z-10 aspect-[4/5] object-cover rounded-[3rem] shadow-2xl"
-          />
+          <div
+  class="aspect-video rounded-3xl overflow-hidden order-1 md:order-2 shadow-2xl"
+>
+  <img
+    :src="outlook"
+    alt="Outlook 2026 Official Unveiling"
+    class="w-full h-full object-cover"
+  />
+</div>
+          
         </div>
         <div class="grid md:grid-cols-2 gap-16 items-center">
           <div
