@@ -1,5 +1,6 @@
 
 <script setup>
+const outlook = "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772037286/IMG-20260224-WA0000_okdvpl.jpg";  
 const theme =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771138263/HFN_2026_CONFERENCE_FLYER._mzpw5l.jpg";
 const heroBg =
@@ -55,8 +56,7 @@ const speakerImages = {
     "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061210/Jane_Egerton-Idehen_cfi3kb.jpg",
   "Dr. Emmanuella Zamba":
     "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061211/Dr_Emmanuella_Zamba_kmo73a.jpg",
-  "Tosin Runsewe":
-    "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061210/Tosin_Runsewe_jl7vzv.png",
+
 };
 
 const speakers = [
@@ -89,7 +89,6 @@ const speakers = [
   { name: "Dr. Ebere Okereke", role: "Global Health Expert, Chatham House" },
   { name: "Jane Egerton-Idehen", role: "CEO, NIGCOMSAT" },
   { name: "Dr. Emmanuella Zamba", role: "PS & CEO, LASHMA" },
-  { name: "Tosin Runsewe", role: "CEO, AfyA Care" },
 ];
 
 const agenda = [
@@ -406,22 +405,11 @@ const agenda = [
               >
             </div>
           </div>
-          <div
-            class="bg-gray-200 aspect-video rounded-3xl overflow-hidden order-1 md:order-2 shadow-2xl"
-          >
-            <div
-              class="w-full h-full bg-gradient-to-br from-green-800 to-green-950 flex items-center justify-center p-12"
-            >
-              <div
-                class="text-white text-center border-4 border-orange-500 p-8"
-              >
-                <h4 class="text-3xl font-black italic">OUTLOOK 2026</h4>
-                <p class="mt-2 opacity-60">Official Unveiling</p>
-              </div>
-            </div>
-          </div>
+          <img
+            :src="theme"
+            class="relative z-10 aspect-[4/5] object-cover rounded-[3rem] shadow-2xl"
+          />
         </div>
-
         <div class="grid md:grid-cols-2 gap-16 items-center">
           <div
             class="bg-gray-200 aspect-square rounded-[4rem] overflow-hidden shadow-2xl"
