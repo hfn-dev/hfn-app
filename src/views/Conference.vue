@@ -406,7 +406,7 @@ const agenda = [
             </div>
           </div>
           <img
-            :src="theme"
+            :src="outlook"
             class="relative z-10 aspect-[4/5] object-cover rounded-[3rem] shadow-2xl"
           />
         </div>
