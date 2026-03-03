@@ -73,21 +73,31 @@ const imageMap = {
 };
 
 
-  const resolveImage = (item) => {
+const resolveImage = (item) => {
   if (!item) return "/images/placeholder-news.jpg";
 
   const img =
     item.image ||
     item.thumbnail ||
     item.coverImage ||
-    item.featured_image;
+    item.featured_image ||
+    item.featuredImage ||
+    item.image_url ||
+    item.file ||
+    item.media;
 
   if (!img) return "/images/placeholder-news.jpg";
 
-  if (img.startsWith("http")) return img;
+  if (typeof img === "string" && img.startsWith("http")) {
+    return img;
+  }
 
-  return imageMap[img] || "/images/placeholder-news.jpg";
-};
+  if (imageMap[img]) {
+    return imageMap[img];
+  }
+
+  return "/images/placeholder-news.jpg";
+};  
   
 const actionRef = ref(null);
 const isVisible = ref(false);
