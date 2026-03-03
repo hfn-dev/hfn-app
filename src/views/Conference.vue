@@ -37,7 +37,7 @@ const logos = [
 { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535509/Copy_of_myitura_tygw31.png", scale: "scale-70" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535509/DIgitax_ocdglv.png", scale: "scale-240" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535502/doroki_logo_b1zufs.jpg", scale: "scale-160" },
-  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535501/gabbi_Logo_yn9mo3.png", scale: "scale-85" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535501/gabbi_Logo_yn9mo3.png", scale: "scale-95" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535500/IHS-Logo-Primary-Large_ia9x2r.png", scale: "scale-65" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535499/Instrat_Global_tmpqt0.jpg", scale: "scale-105" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535481/Iwosan_Logos_2_c4ygwa.png", scale: "scale-135" },
