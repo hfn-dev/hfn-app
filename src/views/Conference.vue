@@ -32,7 +32,7 @@ const logos = [
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061214/SFH_Logo_o0klhu.png", scale: "scale-185" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061214/pharm-BSXKP_7c_ffhayw.png", scale: "scale-110" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061213/MTN_Foundation_pawphd.png", scale: "scale-125" },
-  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061213/png-clipart-roche-holding-ag-logo-organization-mysugr-gmbh-multinational-corporation-roche-logo-blue-angle-thumbnail_hld1nd.png", scale: "scale-90" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772529613/Hoffmann-La_Roche_logo_gbiyut.png", scale: "scale-90" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061212/Medison_Specialist_mpmexj.jpg", scale: "scale-130" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061212/tanit_medical_engineering_limited_logo_suno7n.jpg", scale: "scale-195" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061212/SYNLAB_LOGO_4c_OK_ee6i96.png", scale: "scale-110" },
