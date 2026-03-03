@@ -73,31 +73,45 @@ const imageMap = {
 };
 
 
-const resolveImage = (item) => {
-  if (!item) return "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772533037/news_mup0qv.png";
+ const resolveImage = (item) => {
+  if (!item) return "/images/placeholder-news.jpg";
 
   const img =
     item.image ||
     item.thumbnail ||
     item.coverImage ||
     item.featured_image ||
-    item.featuredImage ||
-    item.image_url ||
-    item.file ||
-    item.media;
+    item.featuredImage;
 
-  if (!img) return "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772533037/news_mup0qv.png";
+  if (!img) return "/images/placeholder-news.jpg";
+  return img;
+}; 
 
-  if (typeof img === "string" && img.startsWith("http")) {
-    return img;
-  }
+// const resolveImage = (item) => {
+//   if (!item) return "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772533037/news_mup0qv.png";
 
-  if (imageMap[img]) {
-    return imageMap[img];
-  }
+//   const img =
+//     item.image ||
+//     item.thumbnail ||
+//     item.coverImage ||
+//     item.featured_image ||
+//     item.featuredImage ||
+//     item.image_url ||
+//     item.file ||
+//     item.media;
 
-  return "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772533037/news_mup0qv.png";
-};  
+//   if (!img) return "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772533037/news_mup0qv.png";
+
+//   if (typeof img === "string" && img.startsWith("http")) {
+//     return img;
+//   }
+
+//   if (imageMap[img]) {
+//     return imageMap[img];
+//   }
+
+//   return "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772533037/news_mup0qv.png";
+// };  
   
 const actionRef = ref(null);
 const isVisible = ref(false);
@@ -563,7 +577,7 @@ onMounted(async () => {
         >
           <div class="relative">
             <img
-              :src="featured.image"
+              :src="resolveImage(featured)"
               alt="Featured news"
               class="w-full h-72 object-contain"
             />
@@ -609,7 +623,7 @@ onMounted(async () => {
             <div class="relative w-full sm:w-48">
               
               <img
-                :src="news.image"
+                :src="resolveImage(news)"
                 alt="News image"
                 class="w-full h-40 sm:h-full object-cover"
               />
