@@ -563,7 +563,7 @@ onMounted(async () => {
         >
           <div class="relative">
             <img
-              :src="featured.image"
+              :src="resolveImage(featured)"
               alt="Featured news"
               class="w-full h-72 object-contain"
             />
