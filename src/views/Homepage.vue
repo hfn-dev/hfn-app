@@ -563,7 +563,7 @@ onMounted(async () => {
         >
           <div class="relative">
             <img
-              :src="resolveImage(featured)"
+              :src="featured.image"
               alt="Featured news"
               class="w-full h-72 object-contain"
             />
@@ -609,7 +609,7 @@ onMounted(async () => {
             <div class="relative w-full sm:w-48">
               
               <img
-                :src="resolveImage(news)"
+                :src="news.image"
                 alt="News image"
                 class="w-full h-40 sm:h-full object-cover"
               />
