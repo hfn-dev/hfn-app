@@ -29,7 +29,7 @@ const roundTable =
 
 
 const logos = [
-  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061214/SFH_Logo_o0klhu.png", scale: "scale-100" },
+  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061214/SFH_Logo_o0klhu.png", scale: "scale-125" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061214/pharm-BSXKP_7c_ffhayw.png", scale: "scale-110" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061213/MTN_Foundation_pawphd.png", scale: "scale-125" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061213/png-clipart-roche-holding-ag-logo-organization-mysugr-gmbh-multinational-corporation-roche-logo-blue-angle-thumbnail_hld1nd.png", scale: "scale-90" },
