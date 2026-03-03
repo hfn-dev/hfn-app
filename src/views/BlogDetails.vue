@@ -127,8 +127,6 @@ import { useRoute } from "vue-router";
 import wef from "@/assets/wef.jpg";
 
 const route = useRoute();
-// const blogId = route.params.id;
-// const slug = route.params.slug;
 const slug = computed(() => route.params.slug);
 
 const allBlogs = [
@@ -138,13 +136,7 @@ const allBlogs = [
   ...Object.values(homePageSchema.news.months).map((m) => m.featured),
 ];
 
-// const blog = computed(() => allBlogs.find((item) => item.slug === slug));
-
-// const otherNews = computed(() =>
-//   allBlogs.filter((item) => item.slug !== slug).slice(0, 3)
-// );
-
-  const blog = computed(() =>
+const blog = computed(() =>
   allBlogs.find((item) => item.slug === slug.value)
 );
 
@@ -152,17 +144,6 @@ const otherNews = computed(() =>
   allBlogs.filter((item) => item.slug !== slug.value).slice(0, 3)
 );
 
-// const resolveImage = (item) => {
-//   if (!item) return "/images/placeholder-news.jpg";
-
-//   return (
-//     item.image ||
-//     item.thumbnail ||
-//     item.coverImage ||
-//     item.featured_image ||
-//     "/images/placeholder-news.jpg"
-//   );
-// };
 
 const latest =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769896360/243A8355_r47c3t.jpg";
@@ -192,6 +173,21 @@ const imageMap = {
 };
 
 
+// const resolveImage = (item) => {
+//   if (!item) return "/images/placeholder-news.jpg";
+
+//   const img =
+//     item.image ||
+//     item.thumbnail ||
+//     item.coverImage ||
+//     item.featured_image;
+
+//   if (!img) return "/images/placeholder-news.jpg";
+
+//   if (img.startsWith("http")) return img;
+
+//   return imageMap[img] || "/images/placeholder-news.jpg";
+// };
 const resolveImage = (item) => {
   if (!item) return "/images/placeholder-news.jpg";
 
@@ -199,15 +195,21 @@ const resolveImage = (item) => {
     item.image ||
     item.thumbnail ||
     item.coverImage ||
-    item.featured_image;
+    item.featured_image ||
+    item.featuredImage;
 
   if (!img) return "/images/placeholder-news.jpg";
 
-  if (img.startsWith("http")) return img;
+  if (typeof img === 'string' && (img.startsWith("http") || img.startsWith("data:image"))) {
+    return img;
+  }
 
-  return imageMap[img] || "/images/placeholder-news.jpg";
+  if (typeof img === 'string' && img.includes('/assets/')) {
+    return img;
+  }
+
+  return imageMap[img] || img || "/images/placeholder-news.jpg";
 };
-
 watch(
   () => route.params.slug,
   () => {
