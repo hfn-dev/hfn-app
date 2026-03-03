@@ -573,7 +573,7 @@ onMounted(async () => {
               </span>
               <span class="flex items-center gap-1">
                 <i class="fa-regular fa-comments"></i>
-                {{ featured.comments }} Comments
+                {{ featured.comments }} Comment
               </span>
             </div>
 
@@ -599,7 +599,7 @@ onMounted(async () => {
             <div class="relative w-full sm:w-48">
               
               <img
-                :src="news.image"
+                :src="resolveImage(news)"
                 alt="News image"
                 class="w-full h-40 sm:h-full object-cover"
               />
@@ -627,7 +627,7 @@ onMounted(async () => {
                   </span>
                   <span class="flex items-center gap-1">
                     <i class="fa-regular fa-comments text-orange-600"></i>
-                    {{ news.comments }} Comments
+                    {{ news.comments }} Comment
                   </span>
                 </div>
 
