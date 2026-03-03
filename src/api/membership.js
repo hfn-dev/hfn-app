@@ -206,7 +206,7 @@ export default {
   },
   async getUnpaidMembers() {
     try {
-      const response = await api.get("/membership/unpaid/");
+      const response = await api.get("/membership/subscriptions/members-with-unpaid-or-no-active-subscription/");
       return response.data;
     } catch (error) {
       console.error("Get unpaid members API error:", error);
