@@ -74,7 +74,7 @@ const imageMap = {
 
 
 const resolveImage = (item) => {
-  if (!item) return "/images/placeholder-news.jpg";
+  if (!item) return "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772533037/news_mup0qv.png";
 
   const img =
     item.image ||
@@ -86,7 +86,7 @@ const resolveImage = (item) => {
     item.file ||
     item.media;
 
-  if (!img) return "/images/placeholder-news.jpg";
+  if (!img) return "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772533037/news_mup0qv.png";
 
   if (typeof img === "string" && img.startsWith("http")) {
     return img;
@@ -96,7 +96,7 @@ const resolveImage = (item) => {
     return imageMap[img];
   }
 
-  return "/images/placeholder-news.jpg";
+  return "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772533037/news_mup0qv.png";
 };  
   
 const actionRef = ref(null);
