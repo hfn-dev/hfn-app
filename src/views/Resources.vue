@@ -147,6 +147,7 @@
           class="flex flex-col text-center"
         >
           <div
+            style="display: inline-table;"
             class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md flex items-center justify-center bg-white"
           >
             <img
