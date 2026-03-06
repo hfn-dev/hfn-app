@@ -152,7 +152,7 @@
             <img
               :src="getPdfPreview(pub.pdfUrl)"
               alt="Publication preview"
-              class="w-full h-full object-cover"
+              class="w-full h-full object-contain"
               @error="(e) => (e.target.src = hands)"
             />
           </div>
@@ -162,7 +162,7 @@
           </h4>
 
           <p class="text-gray-600 text-sm mb-4">
-            {{ pub.description }}
+            
           </p>
 
           <a
