@@ -338,7 +338,7 @@ const startTimer = () => {
 };
 
 const confirmPayment = () => {
-  if (!buyerEmail.value) {
+  if (!form.value.buyerEmail || !form.value.name || !form.value.organization) {
     alert("Please enter your email.");
     return;
   }
@@ -347,7 +347,6 @@ const confirmPayment = () => {
   showPaymentDialog.value = false;
   showSuccessDialog.value = true;
 
-  console.log("User email for document:", buyerEmail.value);
 };
 const getPdfPreview = (url) => {
   return url.replace(".pdf", ".jpg");
