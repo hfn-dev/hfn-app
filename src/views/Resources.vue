@@ -226,12 +226,31 @@
     <div class="mb-4">
       <label class="text-sm font-medium text-gray-700">Your Email</label>
       <input
-        v-model="buyerEmail"
+        v-model="form.buyerEmail"
         type="email"
         class="w-full border rounded-lg px-3 py-2 mt-1"
         placeholder="Enter email to receive document"
       />
     </div>
+    <div class="mb-4">
+      <label class="text-sm font-medium text-gray-700">Your Name</label>
+      <input
+        v-model="form.name"
+        type="name"
+        class="w-full border rounded-lg px-3 py-2 mt-1"
+        placeholder="Enter name"
+      />
+    </div>
+<div class="mb-4">
+      <label class="text-sm font-medium text-gray-700">Your Organization</label>
+      <input
+        v-model="form.organization"
+        type="organization"
+        class="w-full border rounded-lg px-3 py-2 mt-1"
+        placeholder="Enter Organization"
+      />
+    </div>
+
 
     <p class="text-xs text-gray-500 mb-4">
       Session expires in {{ timer }} seconds
@@ -287,7 +306,11 @@ import { ref } from "vue";
 const showPaymentDialog = ref(false);
 const showSuccessDialog = ref(false);
 
-const buyerEmail = ref("");
+  const form = {
+    buyerEmail: "",
+    name: "",
+    organization: ""
+  }
 const timer = ref(300); // 5 minutes
 
 let interval = null;
