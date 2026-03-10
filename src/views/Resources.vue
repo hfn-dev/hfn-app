@@ -226,7 +226,7 @@
     <div class="mb-4">
       <label class="text-sm font-medium text-gray-700">Your Email</label>
       <input
-        v-model="form.buyerEmail"
+        v-model="form.value.buyerEmail"
         type="email"
         class="w-full border rounded-lg px-3 py-2 mt-1"
         placeholder="Enter email to receive document"
@@ -235,7 +235,7 @@
     <div class="mb-4">
       <label class="text-sm font-medium text-gray-700">Your Name</label>
       <input
-        v-model="form.name"
+        v-model="form.value.name"
         type="name"
         class="w-full border rounded-lg px-3 py-2 mt-1"
         placeholder="Enter name"
@@ -244,7 +244,7 @@
 <div class="mb-4">
       <label class="text-sm font-medium text-gray-700">Your Organization</label>
       <input
-        v-model="form.organization"
+        v-model="form.value.organization"
         type="organization"
         class="w-full border rounded-lg px-3 py-2 mt-1"
         placeholder="Enter Organization"
@@ -306,11 +306,11 @@ import { ref } from "vue";
 const showPaymentDialog = ref(false);
 const showSuccessDialog = ref(false);
 
-  const form = {
-    buyerEmail: "",
-    name: "",
-    organization: ""
-  }
+  const form = ref({
+  buyerEmail: "",
+  name: "",
+  organization: ""
+})
 const timer = ref(300); // 5 minutes
 
 let interval = null;
