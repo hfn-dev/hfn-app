@@ -125,19 +125,11 @@ const toggleDropdown = (title) => {
     <div class="marquee-content whitespace-nowrap flex items-center">
       <span class="mx-4 text-orange-400 font-bold"></span>
       <span class="font-medium"></span>
-      <RouterLink 
-        to="/" 
-        class="ml-4 bg-orange-500 hover:bg-orange-600 text-white text-[10px] px-3 py-0.5 rounded-full font-black transition-colors uppercase"
-      >
-      </RouterLink>
+      
       
       <span class="mx-12 text-orange-400 font-bold"></span>
       <span class="font-medium"></span>
-      <RouterLink 
-        to="/" 
-        class="ml-4 bg-orange-500 hover:bg-orange-600 text-white text-[10px] px-3 py-0.5 rounded-full font-black transition-colors uppercase"
-      >
-      </RouterLink>
+      
     </div>
   </div>
 
