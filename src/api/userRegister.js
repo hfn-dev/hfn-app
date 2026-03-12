@@ -81,35 +81,25 @@ export default {
   async generateCertificate(enrollmentId) {
   try {
     const res = await api.post('/learning/certificates/generate/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        enrollment_id: enrollmentId
-      })
-    })
+      enrollment_id: enrollmentId
+    });
 
-    const data = await res.json()
+    return res.data;
 
-    certificate.value = data
-    certificateUrl.value = data.pdf_url
-
-  } catch (err) {
-    console.error("Certificate generation failed", err)
+  } catch (error) {
+    console.error('Certificate generation failed:', error);
+    throw error;
   }
 },
 
-  async loadCertificate (certificateId) {
+  async loadCertificate(certificateId) {
   try {
-    const res = await api.get(`/learning/certificates/${certificateId}/`)
-    const data = await res.json()
+    const res = await api.get(`/learning/certificates/${certificateId}/`);
+    return res.data;
 
-    certificate.value = data
-    certificateUrl.value = data.pdf_url
-
-  } catch (err) {
-    console.error("Failed to fetch certificate", err)
+  } catch (error) {
+    console.error('Failed to fetch certificate:', error);
+    throw error;
   }
 },
 
