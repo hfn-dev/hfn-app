@@ -25,11 +25,13 @@ onMounted(async () => {
 const certificateUrl = ref('/sample-certificates.png');
 
 const viewCertificateInNewTab = () => {
-  if (certificateUrl.value) {
-    window.open(certificateUrl.value, '_blank');
+  if (certificate.value) {
+    window.open(
+      `/api/learning/certificates/${certificate.value.id}/download/`,
+      "_blank"
+    )
   }
-};
-
+}
 const subscription = computed(() => ({
   type: user.value?.membership_type || 'None',
   expiresAt: user.value?.membership_expires_at,
@@ -922,13 +924,13 @@ watch(user, (u) => {
             <!-- Actions -->
             <div class="mt-6 flex justify-center space-x-4">
               <a
-                v-if="certificateUrl"
-                :href="certificateUrl"
-                download="certificate.pdf"
-                class="px-6 py-2 bg-[#0c6b39] hover:bg-[#09572d] text-white rounded-lg shadow"
-              >
-                Download Certificate
-              </a>
+  v-if="certificate"
+  :href="`/learning/certificates/${certificate.id}/download/`"
+  target="_blank"
+  class="px-6 py-2 bg-[#0c6b39] hover:bg-[#09572d] text-white rounded-lg shadow"
+>
+  Download Certificate
+</a>
 
               <button
                 @click="viewCertificateInNewTab"
