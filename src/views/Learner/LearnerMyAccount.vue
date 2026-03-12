@@ -10,20 +10,33 @@ const user = ref(null)
 const loading = ref(true)
 const certificate = ref(null)
 const certificateUrl = ref(null)
+const enrollmentId = ref(null)
 
 onMounted(async () => {
   try {
     const res = await usersApi.getUser()
     user.value = res.data
+
+    await loadCertificate()
+
   } catch (e) {
     console.error('Failed to load user', e)
   } finally {
     loading.value = false
   }
-})
+})  
 
-const certificateUrl = ref('/sample-certificates.png');
+const loadCertificate = async () => {
+  try {
+    const res = await usersApi.generateCertificate(enrollmentId.value)
 
+    certificate.value = res
+    certificateUrl.value = res.pdf_url
+
+  } catch (err) {
+    console.error("Certificate loading failed", err)
+  }
+}  
 const viewCertificateInNewTab = () => {
   if (certificate.value) {
     window.open(
@@ -925,7 +938,7 @@ watch(user, (u) => {
             <div class="mt-6 flex justify-center space-x-4">
               <a
   v-if="certificate"
-  :href="`/learning/certificates/${certificate.id}/download/`"
+  :href="`https://temp-hf.onrender.com/api/learning/certificates/${certificate.id}/download/`"
   target="_blank"
   class="px-6 py-2 bg-[#0c6b39] hover:bg-[#09572d] text-white rounded-lg shadow"
 >
