@@ -25,14 +25,9 @@ export default {
     return data;
   },
 
-  // async broadcastToUnpaid(payload) {
-  //   const { data } = await api.post('/payment/broadcast/unpaid/', payload);
-  //   return data;
-  // },
-
   async broadcastToUnpaid(payload) {
   const { data } = await api.post(
-    '/payment/broadcast/unpaid/',
+    '/messaging/notifications/broadcast_unpaid_subscriptions/',
     {
       subject: payload.subject,
       message: payload.message
