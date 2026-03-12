@@ -78,6 +78,28 @@ export default {
     }
   },
 
+  async generateCertificate(enrollmentId) {
+  try {
+    const res = await api.post('/learning/certificates/generate/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        enrollment_id: enrollmentId
+      })
+    })
+
+    const data = await res.json()
+
+    certificate.value = data
+    certificateUrl.value = data.pdf_url
+
+  } catch (err) {
+    console.error("Certificate generation failed", err)
+  }
+},
+
   async contactForm(payload) {
     try {
       const response = await api.post('/contact/', payload);
