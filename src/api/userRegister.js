@@ -100,6 +100,19 @@ export default {
   }
 },
 
+  async loadCertificate (certificateId) {
+  try {
+    const res = await api.get(`/learning/certificates/${certificateId}/`)
+    const data = await res.json()
+
+    certificate.value = data
+    certificateUrl.value = data.pdf_url
+
+  } catch (err) {
+    console.error("Failed to fetch certificate", err)
+  }
+},
+
   async contactForm(payload) {
     try {
       const response = await api.post('/contact/', payload);
