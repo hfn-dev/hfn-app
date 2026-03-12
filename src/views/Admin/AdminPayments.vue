@@ -304,20 +304,29 @@ const sendMessage = async () => {
   sending.value = true;
 
   try {
-    await paymentApi.broadcastToUnpaid({
-      subject: messageSubject.value,
-      message: messageContent.value,
-    });
 
-    toast.success('Message sent to all unpaid members');
+    const payload = {
+      subject: messageSubject.value,
+      message: messageContent.value
+    };
+
+    console.log("Payload being sent:", payload);
+
+    const res = await paymentApi.broadcastToUnpaid(payload);
+
+    console.log("API response:", res);
+
+    toast.success("Message sent to all unpaid members");
     closeMessageModal();
+
   } catch (error) {
-    toast.error('Failed to send message');
+    console.error("API error:", error.response?.data);
+    toast.error("Failed to send message");
   } finally {
     sending.value = false;
   }
 };
-
+  
 onMounted(() => {
   fetchPayments();
   fetchDashboardAnalytics();
