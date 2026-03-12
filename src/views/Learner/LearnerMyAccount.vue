@@ -8,7 +8,8 @@ import LearnerSidebar from './LearnerSidebar.vue';
 const router = useRouter();
 const user = ref(null)
 const loading = ref(true)
-
+const certificate = ref(null)
+const certificateUrl = ref(null)
 
 onMounted(async () => {
   try {
