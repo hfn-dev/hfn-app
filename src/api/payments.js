@@ -11,7 +11,7 @@ export default {
   },
 
   async getPurchases(params = {}) {
-    const { data } = await api.get('/payment/purchases/', { params });
+    const { data } = await api.get('/membership/payments/', { params });
     return data;
   },
 
@@ -21,14 +21,28 @@ export default {
   },
 
   async deletePayment(id) {
-    const { data } = await api.delete(`/payment/delete/${id}`);
+    const { data } = await api.delete(`/membership/payments/${id}`);
     return data;
   },
 
+  // async broadcastToUnpaid(payload) {
+  //   const { data } = await api.post('/payment/broadcast/unpaid/', payload);
+  //   return data;
+  // },
+
   async broadcastToUnpaid(payload) {
-    const { data } = await api.post('/payment/broadcast/unpaid/', payload);
-    return data;
-  },
+  const { data } = await api.post(
+    '/payment/broadcast/unpaid/',
+    {
+      subject: payload.subject,
+      message: payload.message
+    },
+    {
+      headers: { "Content-Type": "application/json" }
+    }
+  );
+  return data;
+},
 
   async coursePayment(payload) {
     const { data } = await api.post('/payment/course_intent/', payload);
