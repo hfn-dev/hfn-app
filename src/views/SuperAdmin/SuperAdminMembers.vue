@@ -136,8 +136,6 @@ const submitNewMember = async () => {
       phone_number: newMemberForm.value.phone_number,
       membership_type: newMemberForm.value.membership_type,
       membership_type_id: Number(newMemberForm.value.membership_type_id),
-      // role: newMemberForm.value.role,
-      payment_method: newMemberForm.value.payment_method,
     };
 
     const application = await membershipAPI.createMember(payload);
