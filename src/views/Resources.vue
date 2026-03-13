@@ -359,8 +359,12 @@ const confirmPayment = () => {
   showSuccessDialog.value = true;
 
 };
-const getPdfPreview = (url) => {
-  return url.replace(".pdf", ".jpg");
+
+//   const getPdfPreview = (url) => {
+//   return url.replace(".pdf", ".jpg");
+// };
+  const getPdfPreview = (url) => {
+  return url.replace("/upload/", "/upload/pg_1,w_600/").replace(".pdf", ".jpg");
 };
 
 const publications = [
