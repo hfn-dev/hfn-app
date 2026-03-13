@@ -286,17 +286,23 @@ const goToPage = (page) => {
 // });
 
 const filteredMembers = computed(() => {
-  if (!searchTerm.value) return members.value;
+  return members.value
+    .filter(m => {
+      const term = searchTerm.value.toLowerCase();
+      const matchesSearch =
+        (m.full_name || "").toLowerCase().includes(term) ||
+        (m.membership_type || "").toLowerCase().includes(term) ||
+        (m.email || "").toLowerCase().includes(term);
 
-  const term = searchTerm.value.toLowerCase();
-  return members.value.filter(
-    (m) =>
-      (m.full_name || "").toLowerCase().includes(term) ||
-      (m.membership_type || "").toLowerCase().includes(term) ||
-      (m.email || "").toLowerCase().includes(term)
-  );
-});  
+      const matchesRole = filters.value.role ? m.role === filters.value.role : true;
+      const matchesMembership = filters.value.membership_type
+        ? m.membership_type_id === Number(filters.value.membership_type)
+        : true;
 
+      return matchesSearch && matchesRole && matchesMembership;
+    });
+});
+  
 const paginatedMembers = computed(() => {
   const list = filteredMembers.value || [];
   const start = (currentPage.value - 1) * itemsPerPage;
