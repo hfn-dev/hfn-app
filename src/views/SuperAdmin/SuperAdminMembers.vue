@@ -183,11 +183,12 @@ const fetchMembers = async () => {
   try {
     const data = await userList.getUserList();
     console.log('response', data)
-    members.value = (data.data || data.results || []).map(member => ({
-      ...member,
-      completion: '-', 
-      lastUpdate: member.last_login_time || member.date_joined,
-    }));
+    members.value = data;
+    // members.value = (data.data || data.results || []).map(member => ({
+    //   ...member,
+    //   completion: '-', 
+    //   lastUpdate: member.last_login_time || member.date_joined,
+    // }));
   } catch (error) {
     console.error("Failed to fetch members", error);
   }
