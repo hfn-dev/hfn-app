@@ -180,13 +180,26 @@ const fetchDashboardAnalytics = async () => {
   }
 };
 
+// const handleDelete = async (id) => {
+//   if (!confirm('Are you sure you want to delete this payment?')) return;
+
+//   await paymentApi.removePayment(id);
+//   fetchPayments();
+// };
 const handleDelete = async (id) => {
-  if (!confirm('Are you sure you want to delete this payment?')) return;
+  if (!confirm("Are you sure you want to delete this payment?")) return;
 
-  await paymentApi.removePayment(id);
-  fetchPayments();
+  try {
+    await paymentApi.removePayment(id);
+
+    toast.success("Payment deleted successfully");
+
+    fetchPayments();
+  } catch (error) {
+    toast.error("Failed to delete payment");
+  }
 };
-
+  
 const handleAction = (action, course) => {
   switch (action) {
     case 'View':
