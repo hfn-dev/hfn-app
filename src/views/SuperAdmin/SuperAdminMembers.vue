@@ -184,11 +184,7 @@ const fetchMembers = async () => {
     const data = await userList.getUserList();
     console.log('response', data)
     members.value = data;
-    // members.value = (data.data || data.results || []).map(member => ({
-    //   ...member,
-    //   completion: '-', 
-    //   lastUpdate: member.last_login_time || member.date_joined,
-    // }));
+    
   } catch (error) {
     console.error("Failed to fetch members", error);
   }
@@ -585,13 +581,13 @@ watch(currentPage, () => {
                 />
               </th>
               <th class="py-3 px-3 text-left">
-                Last Payment
+                Phone Number
                 <MoreVertical
                   class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
                 />
               </th>
               <th class="py-3 px-3 text-left">
-                Status
+                Date Joined
                 <MoreVertical
                   class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
                 />
@@ -622,21 +618,10 @@ watch(currentPage, () => {
   {{ member.membership_type || member.role || '-' }}
               </td>
               <td class="py-3 px-3">
-                <span
-                  :class="{
-                    'text-green-600 font-semibold': (member.completion || '')
-                      .toString()
-                      .includes('100'),
-                    'text-orange-500':
-                      Number.parseFloat(member.completion) < 50 &&
-                      member.completion !== '-',
-                  }"
-                >
-                  {{ member.completion }}
-                </span>
+  {{ member.phone_number || '-' }}
               </td>
               <td class="py-3 px-3">
-                {{ member.lastUpdate }}
+                {{ member.date_joined }}
               </td>
               <td class="py-3 px-3 text-center">
                 <div class="flex item-center justify-center space-x-2">
