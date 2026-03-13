@@ -170,7 +170,7 @@ onMounted(() => {
             >
               <div class="relative w-full h-36 bg-gray-100">
                 <img
-                  v-if="enrollment.course.thumbnail"
+                  v-if="enrollment.course?.thumbnail"
                   :src="enrollment.course.thumbnail"
                   :alt="enrollment.course.title"
                   class="w-full h-full object-cover"
