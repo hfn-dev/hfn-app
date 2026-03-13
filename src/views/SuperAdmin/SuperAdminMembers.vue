@@ -178,27 +178,15 @@ const submitNewMember = async () => {
   }
 };
 
-//   const fetchMembers = async () => {
-//   try {
-//     const data = await userList.getUserList({
-//       page: currentPage.value,
-//     });
-//     members.value = data.results || data.data || [];
-//     totalPages.value = data.count ? Math.ceil(data.count / itemsPerPage) : 1;
-//   } catch (error) {
-//     console.error("Failed to fetch members", error);
-//   }
-// };
 
 const fetchMembers = async () => {
   try {
-    const data = await userList.getUserList({ page: currentPage.value });
+    const data = await userList.getUserList();
     members.value = (data.results || data.data || []).map(member => ({
       ...member,
       completion: '-', 
       lastUpdate: member.last_login_time || member.date_joined,
     }));
-    totalPages.value = data.count ? Math.ceil(data.count / itemsPerPage) : 1;
   } catch (error) {
     console.error("Failed to fetch members", error);
   }
