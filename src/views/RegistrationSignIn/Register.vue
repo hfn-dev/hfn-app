@@ -203,18 +203,57 @@ const handleRegistration = async () => {
     if (response.status === "success") {
       toast.success(response.messages?.[0] || "Registration successful!");
 
-      if (selectedCategory.value) {
-        localStorage.setItem(
-          "membership_payment",
-          JSON.stringify({
-            category_id: selectedCategory.value.id,
-            category_name: selectedCategory.value.name,
-            amount: selectedCategory.value.amount,
-            currency: selectedCategory.value.currency,
-            email: payload.email,
-          })
-        );
-      }
+      if (activeTab.value === "individual") {
+
+    showSuccessDialog.value = true;
+
+    form.value = {
+      firstName: "",
+      otherName: "",
+      lastName: "",
+      phone: "",
+      alternatePhone: "",
+      email: "",
+      confirmEmail: "",
+      password: "",
+      confirmPassword: "",
+      organizationName: "",
+      organizationContactPerson: "",
+    };
+
+    return;
+  }
+
+  if (activeTab.value === "organization") {
+
+    if (selectedCategory.value) {
+      localStorage.setItem(
+        "membership_payment",
+        JSON.stringify({
+          category_id: selectedCategory.value.id,
+          category_name: selectedCategory.value.name,
+          amount: selectedCategory.value.amount,
+          currency: selectedCategory.value.currency,
+          email: payload.email,
+        })
+      );
+    }
+
+    router.push("/registration-payment");
+  }
+
+      // if (selectedCategory.value) {
+      //   localStorage.setItem(
+      //     "membership_payment",
+      //     JSON.stringify({
+      //       category_id: selectedCategory.value.id,
+      //       category_name: selectedCategory.value.name,
+      //       amount: selectedCategory.value.amount,
+      //       currency: selectedCategory.value.currency,
+      //       email: payload.email,
+      //     })
+      //   );
+      // }
 
       // If email verification is required
       if (response.actions_required?.includes("verify_email")) {
