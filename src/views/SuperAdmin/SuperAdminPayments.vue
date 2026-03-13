@@ -74,18 +74,32 @@ purchases.value = (res.results || res || []).map(normalizePayment);    }
   }
 };
 
+// const normalizePayment = (item) => {
+//   return {
+//     id: item.id,
+//     title: item.user?.full_name || "—",
+//     email: item.user?.email || "-",
+//     enrollments: item.payment_type_display || "—",
+//     completion: Number(item.amount) || 0,
+//     amount: Number(item.amount) || 0,
+//     lastUpdate: item.payment_date
+//       ? new Date(item.payment_date).toLocaleDateString()
+//       : "—",
+//     raw: item,
+//   };
+// };
 const normalizePayment = (item) => {
   return {
     id: item.id,
-    title: item.user?.full_name || "—",
-    email: item.user?.email || "-",
-    enrollments: item.payment_type_display || "—",
-    completion: Number(item.amount) || 0,
-    amount: Number(item.amount) || 0,
-    lastUpdate: item.payment_date
-      ? new Date(item.payment_date).toLocaleDateString()
-      : "—",
-    raw: item,
+    title: item.full_name || '—',
+    email: item.email || '-',
+    enrollments: item.payment_type_display || '—',
+    completion: item.amount || '—',
+    amount: item.amount,
+    lastUpdate: item.created_at
+      ? new Date(item.created_at).toLocaleDateString()
+      : '—',
+    raw: item, 
   };
 };
   
