@@ -305,7 +305,7 @@ import { ref } from "vue";
 
 const showPaymentDialog = ref(false);
 const showSuccessDialog = ref(false);
-
+const selectedPublication = ref(null);
   const form = ref({
   buyerEmail: "",
   name: "",
@@ -317,6 +317,7 @@ let interval = null;
 
 const handleDownload = (pub) => {
   if (pub.title === "Nigeria Private Health Sector Market Outlook 2026") {
+    selectedPublication.value = pub;
     showPaymentDialog.value = true;
     startTimer();
   } else {
@@ -345,6 +346,16 @@ const confirmPayment = () => {
 
   clearInterval(interval);
   showPaymentDialog.value = false;
+  
+  if (selectedPublication.value) {
+    const link = document.createElement("a");
+    link.href = selectedPublication.value.pdfUrl;
+    link.download = "";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   showSuccessDialog.value = true;
 
 };
