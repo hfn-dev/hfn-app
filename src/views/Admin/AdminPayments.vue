@@ -88,7 +88,8 @@ const fetchPayments = async () => {
       registration.value = (res.results || []).map(normalizePayment);
     } else {
       const res = await paymentApi.getPurchases();
-purchases.value = (res.results || res || []).map(normalizePayment);    }
+purchases.value = res.map(normalizePayment);
+    }
   } finally {
     loading.value = false;
   }
