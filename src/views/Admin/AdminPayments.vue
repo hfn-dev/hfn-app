@@ -98,9 +98,9 @@ purchases.value = res.map(normalizePayment);
 const normalizePayment = (item) => {
   return {
     id: item.id,
-    title: item.full_name || '—',
+    title: item.full_name || item.user.full_name,
     email: item.email || '-',
-    enrollments: item.role || '—',
+    enrollments: item.role || item.payment_type,
     completion: item.amount || '—',
     amount: item.amount,
     status: item.status,
