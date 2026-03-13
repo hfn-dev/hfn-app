@@ -31,7 +31,8 @@ const isConfirmModalOpen = ref(false);
 const paymentToConfirm = ref(null);
 const loadingAnalytics = ref(false);
 const unpaidMembersCount = ref(0);
-
+const isViewModalOpen = ref(false);
+const paymentToView = ref(null);
 const loading = ref(false);
 const searchQuery = ref('');
 
@@ -55,6 +56,16 @@ const closeConfirmDialog = () => {
   isConfirmModalOpen.value = false;
   paymentToConfirm.value = null;
 };
+
+const openViewModal = (payment) => {
+  paymentToView.value = payment;
+  isViewModalOpen.value = true;
+};
+
+const closeViewModal = () => {
+  isViewModalOpen.value = false;
+  paymentToView.value = null;
+};  
 
 const openMessageModal = async (title) => {
   if (title === "Unpaid members") {
@@ -179,7 +190,7 @@ const handleDelete = async (id) => {
 const handleAction = (action, course) => {
   switch (action) {
     case 'View':
-      router.push(`/admin/payments/${course.id}`);
+  openViewModal(course);
       break;
 
     case 'Edit':
@@ -734,6 +745,83 @@ watch(currentTab, () => {
 
   </div>
 </div>
+    <div v-if="isEditModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
+  <div class="absolute inset-0 bg-black/40" @click="isEditModalOpen=false"></div>
+
+  <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10">
+    <h3 class="text-xl font-bold mb-4">Edit Payment</h3>
+
+    <div class="space-y-4">
+      <div>
+        <label class="text-sm text-gray-600">Name</label>
+        <input
+          v-model="selectedPayment.title"
+          class="w-full border rounded-lg px-3 py-2"
+          disabled
+        />
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-600">Amount</label>
+        <input
+          v-model="selectedPayment.amount"
+          type="number"
+          class="w-full border rounded-lg px-3 py-2"
+        />
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-3 mt-6">
+      <button
+        @click="isEditModalOpen=false"
+        class="px-4 py-2 bg-gray-200 rounded-lg"
+      >
+        Cancel
+      </button>
+
+      <button
+        @click="saveEdit"
+        class="px-4 py-2 bg-[#006633] text-white rounded-lg"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+     <div v-if="isViewModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
+  <div class="absolute inset-0 bg-black/40" @click="closeViewModal"></div>
+
+  <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10">
+
+    <h3 class="text-xl font-bold mb-4">Payment Details</h3>
+
+    <div class="space-y-3 text-sm">
+
+      <p><strong>Name:</strong> {{ paymentToView?.title }}</p>
+
+      <p><strong>Email:</strong> {{ paymentToView?.email }}</p>
+
+      <p><strong>Category:</strong> {{ paymentToView?.enrollments }}</p>
+
+      <p><strong>Amount:</strong> {{ formatCurrency(paymentToView?.amount) }}</p>
+
+      <p><strong>Status:</strong> {{ paymentToView?.status }}</p>
+
+      <p><strong>Date:</strong> {{ paymentToView?.lastUpdate }}</p>
+
+    </div>
+
+    <div class="flex justify-end mt-6">
+      <button
+        @click="closeViewModal"
+        class="px-4 py-2 bg-gray-200 rounded-lg"
+      >
+        Close
+      </button>
+    </div>
+
+  </div>
+</div> 
     </main>
   </div>
 </template>
