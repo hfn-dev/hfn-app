@@ -1,6 +1,8 @@
 <script setup>
 import analyticsApi from "@/api/dashboard.js";
 import membershipAPI from "@/api/membership.js";
+import userList from "@/api/userRegister.js";
+  
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import { computed, onMounted, watch } from "vue";
 import { useToast } from "@/composables/useToast";
@@ -177,7 +179,7 @@ const submitNewMember = async () => {
 };
 const fetchMembers = async () => {
   try {
-    const data = await membershipAPI.listApplications({
+    const data = await userList.getUserList({
       page: currentPage.value,
     });
     members.value = data.results || data.data || [];
