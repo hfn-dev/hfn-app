@@ -88,7 +88,7 @@ const normalizePayment = (item) => {
     id: item.id,
     title: item.full_name || '—',
     email: item.email || '-',
-    enrollments: item.payment_type_display || '—',
+    enrollments: item.role || '—',
     completion: item.amount || '—',
     amount: item.amount,
     status: item.status,
