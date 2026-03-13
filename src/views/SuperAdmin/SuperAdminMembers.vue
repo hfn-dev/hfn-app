@@ -177,17 +177,32 @@ const submitNewMember = async () => {
     console.error("Failed to add member", error);
   }
 };
+
+//   const fetchMembers = async () => {
+//   try {
+//     const data = await userList.getUserList({
+//       page: currentPage.value,
+//     });
+//     members.value = data.results || data.data || [];
+//     totalPages.value = data.count ? Math.ceil(data.count / itemsPerPage) : 1;
+//   } catch (error) {
+//     console.error("Failed to fetch members", error);
+//   }
+// };
+
 const fetchMembers = async () => {
   try {
-    const data = await userList.getUserList({
-      page: currentPage.value,
-    });
-    members.value = data.results || data.data || [];
+    const data = await userList.getUserList({ page: currentPage.value });
+    members.value = (data.results || data.data || []).map(member => ({
+      ...member,
+      completion: '-', 
+      lastUpdate: member.last_login_time || member.date_joined,
+    }));
     totalPages.value = data.count ? Math.ceil(data.count / itemsPerPage) : 1;
   } catch (error) {
     console.error("Failed to fetch members", error);
   }
-};
+};  
 
 const loadMembershipTypes = async () => {
   try {
@@ -310,14 +325,10 @@ const paginatedMembers = computed(() => {
   return list.slice(start, end);
 });
 
-watch(
-  [searchTerm, filters, currentPage],
-  () => {
-    currentPage.value = 1;
-    fetchMembers();
-  },
-  { deep: true }
-);
+watch([searchTerm, filters], () => {
+  currentPage.value = 1;
+});
+
 </script>
 
 <template>
