@@ -273,17 +273,29 @@ const goToPage = (page) => {
   }
 };
 
+// const filteredMembers = computed(() => {
+//   if (!searchTerm.value) return members.value;
+
+//   const term = searchTerm.value.toLowerCase();
+//   return list.filter(
+//     (m) =>
+//       (m.name || "").toLowerCase().includes(term) ||
+//       (m.category || "").toLowerCase().includes(term) ||
+//       (m.lastPayment || "").toLowerCase().includes(term)
+//   );
+// });
+
 const filteredMembers = computed(() => {
   if (!searchTerm.value) return members.value;
 
   const term = searchTerm.value.toLowerCase();
-  return list.filter(
+  return members.value.filter(
     (m) =>
-      (m.name || "").toLowerCase().includes(term) ||
-      (m.category || "").toLowerCase().includes(term) ||
-      (m.lastPayment || "").toLowerCase().includes(term)
+      (m.full_name || "").toLowerCase().includes(term) ||
+      (m.membership_type || "").toLowerCase().includes(term) ||
+      (m.email || "").toLowerCase().includes(term)
   );
-});
+});  
 
 const paginatedMembers = computed(() => {
   const list = filteredMembers.value || [];
@@ -599,10 +611,10 @@ watch(
               <td
                 class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]"
               >
-                {{ member.name }}
+                {{ member.full_name }}
               </td>
               <td class="py-3 px-3">
-                {{ member.enrollments !== null ? member.enrollments : "-" }}
+  {{ member.membership_type || member.role || '-' }}
               </td>
               <td class="py-3 px-3">
                 <span
