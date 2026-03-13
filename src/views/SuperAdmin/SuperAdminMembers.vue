@@ -20,6 +20,8 @@ import { ref } from "vue";
 const showAddMemberModal = ref(false);
 const membershipTypes = ref([]);
  const showMembershipTypeModal = ref(false)
+ const showMemberDetailsModal = ref(false);
+const selectedMember = ref(null); 
 const { showToast } = useToast();
  const newMembershipType = ref({
   name: '',
@@ -257,10 +259,19 @@ const handleAction = async (action, memberId) => {
       await membershipAPI.deleteApplication(memberId);
       members.value = members.value.filter((m) => m.id !== memberId);
     } else if (action === "Edit") {
-      console.log(`Edit member ID: ${memberId}`);
+      const member = members.value.find((m) => m.id === memberId);
+      if (member) {
+        selectedMember.value = member;
+        showMemberDetailsModal.value = true;
+      }
+
     } else if (action === "View") {
-      const data = await membershipAPI.getApplication(memberId);
-      console.log("Member Details:", data);
+      const member = members.value.find((m) => m.id === memberId);
+      if (member) {
+        selectedMember.value = member;
+        showMemberDetailsModal.value = true;
+      }
+
     }
   } catch (error) {
     console.error(`${action} failed for member ${memberId}:`, error);
@@ -748,6 +759,41 @@ watch(currentPage, () => {
       </div>
     </div>
   </div>
+  <div
+  v-if="showMemberDetailsModal"
+  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+>
+  <div class="bg-white w-full max-w-md rounded-xl p-6 shadow-lg">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold text-gray-800">Member Details</h2>
+      <button
+        @click="showMemberDetailsModal = false"
+        class="text-gray-500 hover:text-gray-700"
+      >
+        ✕
+      </button>
+    </div>
+
+    <div class="space-y-2">
+      <p><strong>Name:</strong> {{ selectedMember.full_name }}</p>
+      <p><strong>Email:</strong> {{ selectedMember.email }}</p>
+      <p><strong>Phone:</strong> {{ selectedMember.phone_number }}</p>
+      <p><strong>Membership Type:</strong> {{ selectedMember.membership_type }}</p>
+      <p><strong>Role:</strong> {{ selectedMember.role }}</p>
+      <p><strong>Status:</strong> {{ selectedMember.status }}</p>
+      <p><strong>Date Joined:</strong> {{ selectedMember.date_joined }}</p>
+    </div>
+
+    <div class="flex justify-end pt-4">
+      <button
+        @click="showMemberDetailsModal = false"
+        class="px-4 py-2 bg-[#006633] text-white rounded-lg"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>
 </template>
 
 <style scoped>
