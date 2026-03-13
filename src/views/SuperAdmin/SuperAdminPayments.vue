@@ -241,11 +241,6 @@ const markAsPaid = async () => {
 
     const paymentDetails = await paymentApi.retrievePayment(payment.id);
 
-    if (!paymentDetails?.transaction_id) {
-      toast.error("Transaction ID not found for this payment");
-      return;
-    }
-
     const payload = {
       transaction_id: paymentDetails.transaction_id,
       status: "completed",
