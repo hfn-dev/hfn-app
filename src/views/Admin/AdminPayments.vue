@@ -95,21 +95,6 @@ purchases.value = res.map(normalizePayment);
   }
 };
 
-// const normalizePayment = (item) => {
-//   return {
-//     id: item.id,
-//     title: item.full_name || item.user.full_name,
-//     email: item.email || '-',
-//     enrollments: item.role || item.payment_type,
-//     completion: item.amount || '—',
-//     amount: item.amount,
-//     status: item.status,
-//     lastUpdate: item.created_at
-//       ? new Date(item.created_at).toLocaleDateString()
-//       : '—',
-//     raw: item, 
-//   };
-// };
 const normalizePayment = (item) => {
 
   if (item.user) {
@@ -199,7 +184,7 @@ const fetchDashboardAnalytics = async () => {
     month,
     amount,
   })
-).slice(-6);
+);
     paymentTrendData.value = (revenue.payment_method_distribution || []).map(
   (item) => ({
     day: item.payment_method,
