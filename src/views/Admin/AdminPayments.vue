@@ -1,9 +1,11 @@
 <script setup>
 import analyticsApi from '@/api/dashboard.js';
 import paymentApi from '@/api/payments.js';
+import messagingApi from '@/api/messaging.js';
+import membershipApi from '@/api/membership.js';
+import { useToast } from 'vue-toastification';
 import AdminSidebar from '@/views/Admin/AdminSidebar.vue';
 import { computed, onMounted, ref, watch } from 'vue';
-import { useToast } from 'vue-toastification';
 
 import {
   ChevronLeft,
@@ -25,9 +27,12 @@ const selectedPayment = ref(null);
 const dashboardStats = ref(null);
 const revenueData = ref([]);
 const paymentTrendData = ref([]);
-
+const isConfirmModalOpen = ref(false);
+const paymentToConfirm = ref(null);
 const loadingAnalytics = ref(false);
-
+const unpaidMembersCount = ref(0);
+const isViewModalOpen = ref(false);
+const paymentToView = ref(null);
 const loading = ref(false);
 const searchQuery = ref('');
 
@@ -42,16 +47,48 @@ const activeCourses = computed(() => {
 
 });
 
+const openConfirmDialog = (payment) => {
+  paymentToConfirm.value = payment;
+  isConfirmModalOpen.value = true;
+};
+
+const closeConfirmDialog = () => {
+  isConfirmModalOpen.value = false;
+  paymentToConfirm.value = null;
+};
+
+const openViewModal = (payment) => {
+  paymentToView.value = payment;
+  isViewModalOpen.value = true;
+};
+
+const closeViewModal = () => {
+  isViewModalOpen.value = false;
+  paymentToView.value = null;
+};  
+
+const openMessageModal = async (title) => {
+  if (title === "Unpaid members") {
+    try {
+      const unpaid = await membershipApi.getUnpaidMembers();
+      unpaidMembersCount.value = unpaid?.length || 0;
+      isMessageModalOpen.value = true;
+    } catch (error) {
+      toast.error("Failed to fetch unpaid members");
+    }
+  }
+};
+
+
 const fetchPayments = async () => {
   loading.value = true;
   try {
     if (currentTab.value === 'Registration') {
-      const res = await paymentApi.getPaymentList();
-      registration.value = res.map(normalizePayment);
+      const res = await paymentApi.getUnpaidMembers();
+      registration.value = (res.results || []).map(normalizePayment);
     } else {
       const res = await paymentApi.getPurchases();
-      purchases.value = res.map(normalizePayment);
-    }
+purchases.value = (res.results || res || []).map(normalizePayment);    }
   } finally {
     loading.value = false;
   }
@@ -60,10 +97,12 @@ const fetchPayments = async () => {
 const normalizePayment = (item) => {
   return {
     id: item.id,
-    title: item.user?.full_name || item.user?.email || '—',
-    enrollments: item.payment_type_display || '—',
+    title: item.full_name || '—',
+    email: item.email || '-',
+    enrollments: item.role || '—',
     completion: item.amount || '—',
     amount: item.amount,
+    status: item.status,
     lastUpdate: item.created_at
       ? new Date(item.created_at).toLocaleDateString()
       : '—',
@@ -71,7 +110,6 @@ const normalizePayment = (item) => {
   };
 };
   
-
 const openEditModal = (payment) => {
   selectedPayment.value = { ...payment };
   isEditModalOpen.value = true;
@@ -87,9 +125,11 @@ const saveEdit = async () => {
   fetchPayments();
 };
 
+
 const maxRevenue = computed(() => {
-  return Math.max(...revenueData.value.map((d) => d.amount)) || 1;
-});
+  if (!revenueData.value.length) return 0;
+  return Math.max(...revenueData.value.map((r) => r.amount || 0));
+});  
 
 const maxCount = computed(() => {
   return Math.max(...paymentTrendData.value.map((d) => d.count)) || 1;
@@ -121,15 +161,18 @@ const fetchDashboardAnalytics = async () => {
       revenue: revenue.total_revenue,
     };
 
-    revenueData.value = revenue.monthly.map((item) => ({
-      month: item.month,
-      amount: item.amount,
-    }));
-    paymentTrendData.value = (dashboard.weekly_payments || []).map((item) => ({
-      day: item.day,
-      count: item.count,
-    }));
-
+    revenueData.value = Object.entries(revenue.monthly_revenue).map(
+  ([month, amount]) => ({
+    month,
+    amount,
+  })
+);
+    paymentTrendData.value = (revenue.payment_method_distribution || []).map(
+  (item) => ({
+    day: item.payment_method,
+    count: item.count,
+  })
+);
   } catch (error) {
     toast.error('Failed to load dashboard analytics');
   } finally {
@@ -137,17 +180,30 @@ const fetchDashboardAnalytics = async () => {
   }
 };
 
+// const handleDelete = async (id) => {
+//   if (!confirm('Are you sure you want to delete this payment?')) return;
+
+//   await paymentApi.removePayment(id);
+//   fetchPayments();
+// };
 const handleDelete = async (id) => {
-  if (!confirm('Are you sure you want to delete this payment?')) return;
+  if (!confirm("Are you sure you want to delete this payment?")) return;
 
-  await paymentApi.removePayment(id);
-  fetchPayments();
+  try {
+    await paymentApi.removePayment(id);
+
+    toast.success("Payment deleted successfully");
+
+    fetchPayments();
+  } catch (error) {
+    toast.error("Failed to delete payment");
+  }
 };
-
+  
 const handleAction = (action, course) => {
   switch (action) {
     case 'View':
-      router.push(`/admin/payments/${course.id}`);
+  openViewModal(course);
       break;
 
     case 'Edit':
@@ -166,18 +222,48 @@ const handleAction = (action, course) => {
 };
 
 
-  const markAsPaid = async (payment) => {
-  if (!confirm(`Are you sure you want to mark payment for ${payment.title} as PAID?`)) return;
+//   const markAsPaid = async (payment) => {
+//   if (!confirm(`Are you sure you want to mark payment for ${payment.title} as PAID?`)) return;
+
+//   try {
+//     loading.value = true;
+
+//     const paymentDetails = await paymentApi.retrievePayment(payment.id);
+
+//     if (!paymentDetails?.transaction_id) {
+//       toast.error("Transaction ID not found for this payment");
+//       return;
+//     }
+
+//     const payload = {
+//       transaction_id: paymentDetails.transaction_id,
+//       status: "completed",
+//       payment_reference: paymentDetails.payment_reference,
+//       metadata: null,
+//     };
+
+//     const response = await paymentApi.confirmPayment(payload, payment.id);
+
+//     toast.success(`Payment for ${payment.title} marked as completed`);
+
+//     fetchPayments();
+//     fetchDashboardAnalytics();
+
+//   } catch (error) {
+//     console.error(error);
+//     toast.error("Error confirming payment. Please try again.");
+//   } finally {
+//     loading.value = false;
+//   }
+// };
+
+const markAsPaid = async () => {
+  const payment = paymentToConfirm.value;
 
   try {
     loading.value = true;
 
     const paymentDetails = await paymentApi.retrievePayment(payment.id);
-
-    if (!paymentDetails?.transaction_id) {
-      toast.error("Transaction ID not found for this payment");
-      return;
-    }
 
     const payload = {
       transaction_id: paymentDetails.transaction_id,
@@ -186,22 +272,26 @@ const handleAction = (action, course) => {
       metadata: null,
     };
 
-    const response = await paymentApi.confirmPayment(payload, payment.id);
+    await paymentApi.confirmPayment(payload, payment.id);
 
     toast.success(`Payment for ${payment.title} marked as completed`);
+
+    closeConfirmDialog();
 
     fetchPayments();
     fetchDashboardAnalytics();
 
   } catch (error) {
-    console.error(error);
-    toast.error("Error confirming payment. Please try again.");
+    const message =
+      error.response?.data?.detail ||
+      error.response?.data?.message ||
+      "Error confirming payment";
+
+    toast.error(message);
   } finally {
     loading.value = false;
   }
-};
-
-  
+};  
 
 const statCards = computed(() => {
   if (!dashboardStats.value) return [];
@@ -274,10 +364,12 @@ const goToPage = (page) => {
   }
 };
 
-const formatCurrency = (amount) => {
-  return `₦${amount.toLocaleString('en-US')}`;
-};
+const formatCurrency = (value) => {
+  if (!value && value !== 0) return "₦0";
 
+  return `₦${Number(value).toLocaleString()}`;
+};
+  
 const getBarHeight = (amount) => {
   return `${(amount / maxRevenue.value) * 100}%`;
 };
@@ -288,11 +380,11 @@ const messageContent = ref(
   'Dear user, we noticed your account is currently unpaid. Please complete your payment to continue enjoying full access to our services. Thank you.'
 );
 
-const openMessageModal = (title) => {
-  if (title === 'Unpaid members') {
-    isMessageModalOpen.value = true;
-  }
-};
+// const openMessageModal = (title) => {
+//   if (title === 'Unpaid members') {
+//     isMessageModalOpen.value = true;
+//   }
+// };
 
 const closeMessageModal = () => {
   isMessageModalOpen.value = false;
@@ -300,6 +392,23 @@ const closeMessageModal = () => {
 
 const sending = ref(false);
 
+// const sendMessage = async () => {
+//   sending.value = true;
+
+//   try {
+//     await messagingApi.broadcastMessage({
+//       subject: messageSubject.value,
+//       message: messageContent.value,
+//     });
+
+//     toast.success('Message sent to all unpaid members');
+//     closeMessageModal();
+//   } catch (error) {
+//     toast.error('Failed to send message');
+//   } finally {
+//     sending.value = false;
+//   }
+// };
 const sendMessage = async () => {
   sending.value = true;
 
@@ -368,7 +477,7 @@ watch(currentTab, () => {
               </div>
             </div>
             <p class="mt-4 text-xs text-gray-500 text-right">
-              Maximum Revenue: {{ formatCurrency(maxRevenue) }}
+              Maximum Revenue: {{ formatCurrency(maxRevenue.value) }}
             </p>
           </div>
 
@@ -524,9 +633,21 @@ watch(currentTab, () => {
                     class="w-6 h-6 transform hover:text-red-500 hover:scale-110 transition-transform p-0.5">
                     <Trash2 class="w-full h-full text-gray-500 hover:text-red-500" />
                   </button>
-                  <button @click="handleAction('Paid', course)" class="px-2 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
-                    Paid
-                  </button>
+                  <button
+  v-if="course.status !== 'completed'"
+  @click="openConfirmDialog(course)"
+  class="px-2 py-1 bg-orange-500 text-white rounded-lg hover:bg-orange-600 text-sm"
+>
+  Confirm
+</button>
+
+<button
+  v-else
+  disabled
+  class="px-2 py-1 bg-green-600 text-white rounded-lg text-sm cursor-not-allowed"
+>
+  Paid
+</button>
                 </div>
               </td>
             </tr>
@@ -589,15 +710,131 @@ watch(currentTab, () => {
                   class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors shadow-md">
                   Cancel
                 </button>
-                <button type="submit"
-                  class="px-6 py-2 text-sm font-medium text-white bg-[#006633] rounded-lg hover:bg-[#00994d] transition-colors shadow-lg shadow-[#006633]/50">
-                  Send Message
-                </button>
+                <button
+  type="submit"
+  :disabled="sending"
+  class="px-6 py-2 text-sm font-medium text-white bg-[#006633] rounded-lg hover:bg-[#00994d] transition-colors shadow-lg"
+>
+  <span v-if="sending">Sending...</span>
+  <span v-else>Send Message</span>
+</button>
+
               </div>
             </form>
           </div>
         </div>
       </div>
+      <div v-if="isConfirmModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
+  <div class="absolute inset-0 bg-black/40" @click="closeConfirmDialog"></div>
+
+  <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10">
+
+    <h3 class="text-xl font-bold mb-4 text-gray-800">
+      Confirm Payment
+    </h3>
+
+    <p class="text-gray-600 mb-6">
+      Are you sure you want to confirm payment for
+      <strong>{{ paymentToConfirm?.title }}</strong>?
+    </p>
+
+    <div class="flex justify-end gap-3">
+      <button
+        @click="closeConfirmDialog"
+        class="px-4 py-2 bg-gray-200 rounded-lg"
+      >
+        Cancel
+      </button>
+
+      <button
+        @click="markAsPaid"
+        :disabled="loading"
+        class="px-4 py-2 bg-[#006633] text-white rounded-lg"
+      >
+        <span v-if="loading">Confirming...</span>
+        <span v-else>Confirm Payment</span>
+      </button>
+    </div>
+
+  </div>
+</div>
+    <div v-if="isEditModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
+  <div class="absolute inset-0 bg-black/40" @click="isEditModalOpen=false"></div>
+
+  <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10">
+    <h3 class="text-xl font-bold mb-4">Edit Payment</h3>
+
+    <div class="space-y-4">
+      <div>
+        <label class="text-sm text-gray-600">Name</label>
+        <input
+          v-model="selectedPayment.title"
+          class="w-full border rounded-lg px-3 py-2"
+          disabled
+        />
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-600">Amount</label>
+        <input
+          v-model="selectedPayment.amount"
+          type="number"
+          class="w-full border rounded-lg px-3 py-2"
+        />
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-3 mt-6">
+      <button
+        @click="isEditModalOpen=false"
+        class="px-4 py-2 bg-gray-200 rounded-lg"
+      >
+        Cancel
+      </button>
+
+      <button
+        @click="saveEdit"
+        class="px-4 py-2 bg-[#006633] text-white rounded-lg"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+     <div v-if="isViewModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
+  <div class="absolute inset-0 bg-black/40" @click="closeViewModal"></div>
+
+  <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10">
+
+    <h3 class="text-xl font-bold mb-4">Payment Details</h3>
+
+    <div class="space-y-3 text-sm">
+
+      <p><strong>Name:</strong> {{ paymentToView?.title }}</p>
+
+      <p><strong>Email:</strong> {{ paymentToView?.email }}</p>
+
+      <p><strong>Category:</strong> {{ paymentToView?.enrollments }}</p>
+
+      <p><strong>Amount:</strong> {{ formatCurrency(paymentToView?.amount) }}</p>
+
+      <p><strong>Status:</strong> {{ paymentToView?.status }}</p>
+
+      <p><strong>Date:</strong> {{ paymentToView?.lastUpdate }}</p>
+
+    </div>
+
+    <div class="flex justify-end mt-6">
+      <button
+        @click="closeViewModal"
+        class="px-4 py-2 bg-gray-200 rounded-lg"
+      >
+        Close
+      </button>
+    </div>
+
+  </div>
+</div> 
     </main>
   </div>
 </template>
