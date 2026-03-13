@@ -27,8 +27,10 @@ const selectedPayment = ref(null);
 const dashboardStats = ref(null);
 const revenueData = ref([]);
 const paymentTrendData = ref([]);
-
+const isConfirmModalOpen = ref(false);
+const paymentToConfirm = ref(null);
 const loadingAnalytics = ref(false);
+const unpaidMembersCount = ref(0);
 
 const loading = ref(false);
 const searchQuery = ref('');
@@ -44,8 +46,15 @@ const activeCourses = computed(() => {
 
 });
 
+const openConfirmDialog = (payment) => {
+  paymentToConfirm.value = payment;
+  isConfirmModalOpen.value = true;
+};
 
-const unpaidMembersCount = ref(0);
+const closeConfirmDialog = () => {
+  isConfirmModalOpen.value = false;
+  paymentToConfirm.value = null;
+};
 
 const openMessageModal = async (title) => {
   if (title === "Unpaid members") {
@@ -74,20 +83,6 @@ purchases.value = (res.results || res || []).map(normalizePayment);    }
   }
 };
 
-// const normalizePayment = (item) => {
-//   return {
-//     id: item.id,
-//     title: item.user?.full_name || "—",
-//     email: item.user?.email || "-",
-//     enrollments: item.payment_type_display || "—",
-//     completion: Number(item.amount) || 0,
-//     amount: Number(item.amount) || 0,
-//     lastUpdate: item.payment_date
-//       ? new Date(item.payment_date).toLocaleDateString()
-//       : "—",
-//     raw: item,
-//   };
-// };
 const normalizePayment = (item) => {
   return {
     id: item.id,
@@ -96,6 +91,7 @@ const normalizePayment = (item) => {
     enrollments: item.payment_type_display || '—',
     completion: item.amount || '—',
     amount: item.amount,
+    status: item.status,
     lastUpdate: item.created_at
       ? new Date(item.created_at).toLocaleDateString()
       : '—',
@@ -202,8 +198,43 @@ const handleAction = (action, course) => {
 };
 
 
-  const markAsPaid = async (payment) => {
-  if (!confirm(`Are you sure you want to mark payment for ${payment.title} as PAID?`)) return;
+//   const markAsPaid = async (payment) => {
+//   if (!confirm(`Are you sure you want to mark payment for ${payment.title} as PAID?`)) return;
+
+//   try {
+//     loading.value = true;
+
+//     const paymentDetails = await paymentApi.retrievePayment(payment.id);
+
+//     if (!paymentDetails?.transaction_id) {
+//       toast.error("Transaction ID not found for this payment");
+//       return;
+//     }
+
+//     const payload = {
+//       transaction_id: paymentDetails.transaction_id,
+//       status: "completed",
+//       payment_reference: paymentDetails.payment_reference,
+//       metadata: null,
+//     };
+
+//     const response = await paymentApi.confirmPayment(payload, payment.id);
+
+//     toast.success(`Payment for ${payment.title} marked as completed`);
+
+//     fetchPayments();
+//     fetchDashboardAnalytics();
+
+//   } catch (error) {
+//     console.error(error);
+//     toast.error("Error confirming payment. Please try again.");
+//   } finally {
+//     loading.value = false;
+//   }
+// };
+
+const markAsPaid = async () => {
+  const payment = paymentToConfirm.value;
 
   try {
     loading.value = true;
@@ -222,22 +253,26 @@ const handleAction = (action, course) => {
       metadata: null,
     };
 
-    const response = await paymentApi.confirmPayment(payload, payment.id);
+    await paymentApi.confirmPayment(payload, payment.id);
 
     toast.success(`Payment for ${payment.title} marked as completed`);
+
+    closeConfirmDialog();
 
     fetchPayments();
     fetchDashboardAnalytics();
 
   } catch (error) {
-    console.error(error);
-    toast.error("Error confirming payment. Please try again.");
+    const message =
+      error.response?.data?.detail ||
+      error.response?.data?.message ||
+      "Error confirming payment";
+
+    toast.error(message);
   } finally {
     loading.value = false;
   }
-};
-
-  
+};  
 
 const statCards = computed(() => {
   if (!dashboardStats.value) return [];
@@ -579,9 +614,21 @@ watch(currentTab, () => {
                     class="w-6 h-6 transform hover:text-red-500 hover:scale-110 transition-transform p-0.5">
                     <Trash2 class="w-full h-full text-gray-500 hover:text-red-500" />
                   </button>
-                  <button @click="handleAction('Paid', course)" class="px-2 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
-                    Paid
-                  </button>
+                  <button
+  v-if="course.status !== 'completed'"
+  @click="openConfirmDialog(course)"
+  class="px-2 py-1 bg-orange-500 text-white rounded-lg hover:bg-orange-600 text-sm"
+>
+  Confirm
+</button>
+
+<button
+  v-else
+  disabled
+  class="px-2 py-1 bg-green-600 text-white rounded-lg text-sm cursor-not-allowed"
+>
+  Paid
+</button>
                 </div>
               </td>
             </tr>
@@ -658,6 +705,40 @@ watch(currentTab, () => {
           </div>
         </div>
       </div>
+      <div v-if="isConfirmModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
+  <div class="absolute inset-0 bg-black/40" @click="closeConfirmDialog"></div>
+
+  <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10">
+
+    <h3 class="text-xl font-bold mb-4 text-gray-800">
+      Confirm Payment
+    </h3>
+
+    <p class="text-gray-600 mb-6">
+      Are you sure you want to confirm payment for
+      <strong>{{ paymentToConfirm?.title }}</strong>?
+    </p>
+
+    <div class="flex justify-end gap-3">
+      <button
+        @click="closeConfirmDialog"
+        class="px-4 py-2 bg-gray-200 rounded-lg"
+      >
+        Cancel
+      </button>
+
+      <button
+        @click="markAsPaid"
+        :disabled="loading"
+        class="px-4 py-2 bg-[#006633] text-white rounded-lg"
+      >
+        <span v-if="loading">Confirming...</span>
+        <span v-else>Confirm Payment</span>
+      </button>
+    </div>
+
+  </div>
+</div>
     </main>
   </div>
 </template>
