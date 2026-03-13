@@ -80,15 +80,15 @@ const normalizePayment = (item) => {
     title: item.user?.full_name || "—",
     email: item.user?.email || "-",
     enrollments: item.payment_type_display || "—",
-    completion: item.amount || "—",
-    amount: item.amount,
+    completion: Number(item.amount) || 0,
+    amount: Number(item.amount) || 0,
     lastUpdate: item.payment_date
       ? new Date(item.payment_date).toLocaleDateString()
       : "—",
     raw: item,
   };
-};  
-
+};
+  
 const openEditModal = (payment) => {
   selectedPayment.value = { ...payment };
   isEditModalOpen.value = true;
@@ -104,9 +104,11 @@ const saveEdit = async () => {
   fetchPayments();
 };
 
+
 const maxRevenue = computed(() => {
-  return Math.max(...revenueData.value.map((d) => d.amount)) || 1;
-});
+  if (!revenueData.value.length) return 0;
+  return Math.max(...revenueData.value.map((r) => r.amount || 0));
+});  
 
 const maxCount = computed(() => {
   return Math.max(...paymentTrendData.value.map((d) => d.count)) || 1;
@@ -294,10 +296,12 @@ const goToPage = (page) => {
   }
 };
 
-const formatCurrency = (amount) => {
-  return `₦${amount.toLocaleString('en-US')}`;
-};
+const formatCurrency = (value) => {
+  if (!value && value !== 0) return "₦0";
 
+  return `₦${Number(value).toLocaleString()}`;
+};
+  
 const getBarHeight = (amount) => {
   return `${(amount / maxRevenue.value) * 100}%`;
 };
