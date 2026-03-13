@@ -1,9 +1,11 @@
 <script setup>
 import analyticsApi from "@/api/dashboard.js";
 import membershipAPI from "@/api/membership.js";
+import userList from "@/api/userRegister.js";
+  
 import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
 import { computed, onMounted, watch } from "vue";
-
+import { useToast } from "@/composables/useToast";
 import {
   ChevronLeft,
   ChevronRight,
@@ -18,7 +20,9 @@ import { ref } from "vue";
 const showAddMemberModal = ref(false);
 const membershipTypes = ref([]);
  const showMembershipTypeModal = ref(false)
-
+ const showMemberDetailsModal = ref(false);
+const selectedMember = ref(null); 
+const { showToast } = useToast();
  const newMembershipType = ref({
   name: '',
   description: '',
@@ -38,11 +42,11 @@ const filters = ref({
 });
 
 const newMemberForm = ref({
-  name: "",
+  first_name: "",
+  last_name: "",
   email: "",
-  phone: "",
-  membership_type: "",
-  role: "",
+  phone_number: "",
+  membership_type_id: "",
   payment_method: "",
 });
 
@@ -130,48 +134,63 @@ const loadMembershipAnalytics = async () => {
 const submitNewMember = async () => {
   try {
     const payload = {
-      name: newMemberForm.value.name,
+      first_name: newMemberForm.value.first_name,
+      last_name: newMemberForm.value.last_name,
       email: newMemberForm.value.email,
-      phone: newMemberForm.value.phone,
-      membership_type: newMemberForm.value.membership_type,
-      role: newMemberForm.value.role,
-      payment_method: newMemberForm.value.payment_method,
+      phone_number: newMemberForm.value.phone_number,
+      membership_type_id: Number(newMemberForm.value.membership_type_id),
+      payment_method: newMemberForm.value.payment_method
     };
 
-    const application = await membershipAPI.createApplication(payload);
+    const response = await membershipAPI.createMember(payload);
 
-    await membershipAPI.approveApplication(application.id, {
-      approved_by_admin: true,
-    });
+    if (response.status === "success") {
 
-    showAddMemberModal.value = false;
-    fetchMembers();
+      showAddMemberModal.value = false;
 
-    // Reset form
-    newMemberForm.value = {
-      name: "",
-      email: "",
-      phone: "",
-      membership_type: "",
-      role: "",
-      payment_method: "",
-    };
+      showToast("Member added successfully", "success");
+
+      // Reload members
+      fetchMembers();
+
+      // Reset form
+      newMemberForm.value = {
+        first_name: "",
+        last_name: "",
+        email: "",
+        phone_number: "",
+        membership_type_id: "",
+        payment_method: ""
+      };
+    }
+
   } catch (error) {
+
+    const errors = error?.response?.data;
+
+    if (errors) {
+      const firstError = Object.values(errors)[0]?.[0];
+
+      showToast(firstError || "Failed to add member", "error");
+    } else {
+      showToast("Something went wrong", "error");
+    }
+
     console.error("Failed to add member", error);
   }
 };
 
+
 const fetchMembers = async () => {
   try {
-    const data = await membershipAPI.listApplications({
-      page: currentPage.value,
-    });
-    members.value = data.results || data.data || [];
-    totalPages.value = data.count ? Math.ceil(data.count / itemsPerPage) : 1;
+    const data = await userList.getUserList();
+    console.log('response', data)
+    members.value = data;
+    
   } catch (error) {
     console.error("Failed to fetch members", error);
   }
-};
+};  
 
 const loadMembershipTypes = async () => {
   try {
@@ -240,10 +259,19 @@ const handleAction = async (action, memberId) => {
       await membershipAPI.deleteApplication(memberId);
       members.value = members.value.filter((m) => m.id !== memberId);
     } else if (action === "Edit") {
-      console.log(`Edit member ID: ${memberId}`);
+      const member = members.value.find((m) => m.id === memberId);
+      if (member) {
+        selectedMember.value = member;
+        showMemberDetailsModal.value = true;
+      }
+
     } else if (action === "View") {
-      const data = await membershipAPI.getApplication(memberId);
-      console.log("Member Details:", data);
+      const member = members.value.find((m) => m.id === memberId);
+      if (member) {
+        selectedMember.value = member;
+        showMemberDetailsModal.value = true;
+      }
+
     }
   } catch (error) {
     console.error(`${action} failed for member ${memberId}:`, error);
@@ -257,33 +285,45 @@ const goToPage = (page) => {
   }
 };
 
+
 const filteredMembers = computed(() => {
-  if (!searchTerm.value) return members.value;
+  return members.value.filter(m => {
+    const term = searchTerm.value.toLowerCase();
+    
+    // Search logic
+    const matchesSearch =
+      (m.full_name || "").toLowerCase().includes(term) ||
+      (m.email || "").toLowerCase().includes(term) ||
+      (m.membership_type || "").toLowerCase().includes(term);
 
-  const term = searchTerm.value.toLowerCase();
-  return list.filter(
-    (m) =>
-      (m.name || "").toLowerCase().includes(term) ||
-      (m.category || "").toLowerCase().includes(term) ||
-      (m.lastPayment || "").toLowerCase().includes(term)
-  );
-});
+    // Role Filter
+    const matchesRole = filters.value.role ? m.role === filters.value.role : true;
 
+    const matchesMembership = filters.value.membership_type
+      ? m.membership_type === filters.value.membership_type || m.membership_type_id === Number(filters.value.membership_type)
+      : true;
+
+    return matchesSearch && matchesRole && matchesMembership;
+  });
+});  
+  
 const paginatedMembers = computed(() => {
-  const list = filteredMembers.value || [];
-  const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  return list.slice(start, end);
+  return filteredMembers.value;
 });
 
+  
 watch(
-  [searchTerm, filters, currentPage],
+  [searchTerm, filters],
   () => {
     currentPage.value = 1;
     fetchMembers();
-  },
-  { deep: true }
+  }
 );
+
+watch(currentPage, () => {
+  fetchMembers();
+});
+
 </script>
 
 <template>
@@ -497,10 +537,10 @@ watch(
 
           <select v-model="filters.role" class="filter">
             <option value="">All Roles</option>
-            <option value="individual">Admin</option>
-            <option value="corporate">Member</option>
-            <option value="admin">Learner</option>
-            <option value="admin">Tutor</option>
+            <option value="admin">Admin</option>
+            <option value="member">Member</option>
+            <option value="learner">Learner</option>
+            <option value="Tutor">Tutor</option>
           </select>
 
           <select v-model="filters.status" class="filter">
@@ -552,13 +592,13 @@ watch(
                 />
               </th>
               <th class="py-3 px-3 text-left">
-                Last Payment
+                Phone Number
                 <MoreVertical
                   class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
                 />
               </th>
               <th class="py-3 px-3 text-left">
-                Status
+                Date Joined
                 <MoreVertical
                   class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
                 />
@@ -583,27 +623,16 @@ watch(
               <td
                 class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]"
               >
-                {{ member.name }}
+                {{ member.full_name }}
               </td>
               <td class="py-3 px-3">
-                {{ member.enrollments !== null ? member.enrollments : "-" }}
+  {{ member.membership_type || member.role || '-' }}
               </td>
               <td class="py-3 px-3">
-                <span
-                  :class="{
-                    'text-green-600 font-semibold': (member.completion || '')
-                      .toString()
-                      .includes('100'),
-                    'text-orange-500':
-                      Number.parseFloat(member.completion) < 50 &&
-                      member.completion !== '-',
-                  }"
-                >
-                  {{ member.completion }}
-                </span>
+  {{ member.phone_number || '-' }}
               </td>
               <td class="py-3 px-3">
-                {{ member.lastUpdate }}
+                {{ member.date_joined }}
               </td>
               <td class="py-3 px-3 text-center">
                 <div class="flex item-center justify-center space-x-2">
@@ -671,8 +700,13 @@ watch(
 
         <form @submit.prevent="submitNewMember" class="space-y-4">
           <input
-            v-model="newMemberForm.name"
-            placeholder="Full Name"
+            v-model="newMemberForm.first_name"
+            placeholder="First Name"
+            class="input"
+          />
+          <input
+            v-model="newMemberForm.last_name"
+            placeholder="Last Name"
             class="input"
           />
           <input
@@ -681,12 +715,12 @@ watch(
             class="input"
           />
           <input
-            v-model="newMemberForm.phone"
+            v-model="newMemberForm.phone_number"
             placeholder="Phone Number"
             class="input"
           />
 
-          <select v-model="newMemberForm.membership_type" class="input">
+          <select v-model="newMemberForm.membership_type_id" class="input">
             <option disabled value="">Select Membership Type</option>
             <option
               v-for="type in membershipTypes"
@@ -697,12 +731,7 @@ watch(
             </option>
           </select>
 
-          <select v-model="newMemberForm.role" class="input">
-            <option disabled value="">Select Role</option>
-            <option value="individual">Individual</option>
-            <option value="corporate">Corporate</option>
-            <option value="admin">Admin</option>
-          </select>
+          
 
           <select v-model="newMemberForm.payment_method" class="input">
             <option disabled value="">Payment Method</option>
@@ -730,6 +759,41 @@ watch(
       </div>
     </div>
   </div>
+  <div
+  v-if="showMemberDetailsModal"
+  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+>
+  <div class="bg-white w-full max-w-md rounded-xl p-6 shadow-lg">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold text-gray-800">Member Details</h2>
+      <button
+        @click="showMemberDetailsModal = false"
+        class="text-gray-500 hover:text-gray-700"
+      >
+        ✕
+      </button>
+    </div>
+
+    <div class="space-y-2">
+      <p><strong>Name:</strong> {{ selectedMember.full_name }}</p>
+      <p><strong>Email:</strong> {{ selectedMember.email }}</p>
+      <p><strong>Phone:</strong> {{ selectedMember.phone_number }}</p>
+      <p><strong>Membership Type:</strong> {{ selectedMember.membership_type }}</p>
+      <p><strong>Role:</strong> {{ selectedMember.role }}</p>
+      <p><strong>Status:</strong> {{ selectedMember.status }}</p>
+      <p><strong>Date Joined:</strong> {{ selectedMember.date_joined }}</p>
+    </div>
+
+    <div class="flex justify-end pt-4">
+      <button
+        @click="showMemberDetailsModal = false"
+        class="px-4 py-2 bg-[#006633] text-white rounded-lg"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>
 </template>
 
 <style scoped>
