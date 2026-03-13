@@ -182,7 +182,8 @@ const submitNewMember = async () => {
 const fetchMembers = async () => {
   try {
     const data = await userList.getUserList();
-    members.value = (data.results || data.data || []).map(member => ({
+    console.log('response', data)
+    members.value = (data.data || data.results || []).map(member => ({
       ...member,
       completion: '-', 
       lastUpdate: member.last_login_time || member.date_joined,
