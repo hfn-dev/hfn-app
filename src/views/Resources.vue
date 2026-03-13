@@ -350,7 +350,7 @@ const confirmPayment = () => {
   if (selectedPublication.value) {
     const link = document.createElement("a");
     link.href = selectedPublication.value.pdfUrl;
-    link.download = "";
+    link.download = selectedPublication.value.title + ".pdf";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
