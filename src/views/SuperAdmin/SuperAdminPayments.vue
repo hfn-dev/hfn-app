@@ -68,8 +68,7 @@ const fetchPayments = async () => {
       registration.value = (res.results || []).map(normalizePayment);
     } else {
       const res = await paymentApi.getPurchases();
-      purchases.value = (res.results || []).map(normalizePayment);
-    }
+purchases.value = (res.results || res || []).map(normalizePayment);    }
   } finally {
     loading.value = false;
   }
@@ -78,18 +77,17 @@ const fetchPayments = async () => {
 const normalizePayment = (item) => {
   return {
     id: item.id,
-    title: item.full_name || '—',
-    email: item.email || '-',
-    enrollments: item.payment_type_display || '—',
-    completion: item.amount || '—',
+    title: item.user?.full_name || "—",
+    email: item.user?.email || "-",
+    enrollments: item.payment_type_display || "—",
+    completion: item.amount || "—",
     amount: item.amount,
-    lastUpdate: item.created_at
-      ? new Date(item.created_at).toLocaleDateString()
-      : '—',
-    raw: item, 
+    lastUpdate: item.payment_date
+      ? new Date(item.payment_date).toLocaleDateString()
+      : "—",
+    raw: item,
   };
-};
-  
+};  
 
 const openEditModal = (payment) => {
   selectedPayment.value = { ...payment };
@@ -140,15 +138,18 @@ const fetchDashboardAnalytics = async () => {
       revenue: revenue.total_revenue,
     };
 
-    revenueData.value = revenue.monthly.map((item) => ({
-      month: item.month,
-      amount: item.amount,
-    }));
-    paymentTrendData.value = (dashboard.weekly_payments || []).map((item) => ({
-      day: item.day,
-      count: item.count,
-    }));
-
+    revenueData.value = Object.entries(revenue.monthly_revenue).map(
+  ([month, amount]) => ({
+    month,
+    amount,
+  })
+);
+    paymentTrendData.value = (revenue.payment_method_distribution || []).map(
+  (item) => ({
+    day: item.payment_method,
+    count: item.count,
+  })
+);
   } catch (error) {
     toast.error('Failed to load dashboard analytics');
   } finally {
@@ -404,7 +405,7 @@ watch(currentTab, () => {
               </div>
             </div>
             <p class="mt-4 text-xs text-gray-500 text-right">
-              Maximum Revenue: {{ formatCurrency(maxRevenue) }}
+              Maximum Revenue: {{ formatCurrency(maxRevenue.value) }}
             </p>
           </div>
 
