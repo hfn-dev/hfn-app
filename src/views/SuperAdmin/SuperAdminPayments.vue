@@ -182,7 +182,7 @@ const fetchDashboardAnalytics = async () => {
   ([month, amount]) => ({
     month,
     amount,
-  })
+  }).slice(-6);
 );
     paymentTrendData.value = (revenue.payment_method_distribution || []).map(
   (item) => ({
