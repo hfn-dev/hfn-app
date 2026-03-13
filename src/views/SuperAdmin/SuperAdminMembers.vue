@@ -181,6 +181,36 @@ const submitNewMember = async () => {
 };
 
 
+ const approveApplication = async () => {
+  try {
+    await membershipAPI.approveApplication(selectedMember.value.id);
+
+    showToast("Application approved successfully", "success");
+
+    showMemberDetailsModal.value = false;
+
+    fetchMembers();
+  } catch (error) {
+    console.error("Approval failed:", error);
+    showToast("Failed to approve application", "error");
+  }
+};
+
+const rejectApplication = async () => {
+  try {
+    await membershipAPI.rejectApplication(selectedMember.value.id);
+
+    showToast("Application rejected", "success");
+
+    showMemberDetailsModal.value = false;
+
+    fetchMembers();
+  } catch (error) {
+    console.error("Rejection failed:", error);
+    showToast("Failed to reject application", "error");
+  }
+}; 
+
 const fetchMembers = async () => {
   try {
     const data = await userList.getUserList();
@@ -784,14 +814,30 @@ watch(currentPage, () => {
       <p><strong>Date Joined:</strong> {{ selectedMember.date_joined }}</p>
     </div>
 
-    <div class="flex justify-end pt-4">
-      <button
-        @click="showMemberDetailsModal = false"
-        class="px-4 py-2 bg-[#006633] text-white rounded-lg"
-      >
-        Close
-      </button>
-    </div>
+    <div class="flex justify-between pt-6">
+  <button
+    @click="rejectApplication"
+    class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+  >
+    Reject
+  </button>
+
+  <div class="flex gap-3">
+    <button
+      @click="showMemberDetailsModal = false"
+      class="px-4 py-2 border rounded-lg"
+    >
+      Cancel
+    </button>
+
+    <button
+      @click="approveApplication"
+      class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#005528]"
+    >
+      Approve
+    </button>
+  </div>
+</div>
   </div>
 </div>
 </template>
