@@ -288,45 +288,43 @@ const goToPage = (page) => {
   }
 };
 
-// const filteredMembers = computed(() => {
-//   if (!searchTerm.value) return members.value;
-
-//   const term = searchTerm.value.toLowerCase();
-//   return list.filter(
-//     (m) =>
-//       (m.name || "").toLowerCase().includes(term) ||
-//       (m.category || "").toLowerCase().includes(term) ||
-//       (m.lastPayment || "").toLowerCase().includes(term)
-//   );
-// });
 
 const filteredMembers = computed(() => {
-  return members.value
-    .filter(m => {
-      const term = searchTerm.value.toLowerCase();
-      const matchesSearch =
-        (m.full_name || "").toLowerCase().includes(term) ||
-        (m.membership_type || "").toLowerCase().includes(term) ||
-        (m.email || "").toLowerCase().includes(term);
+  return members.value.filter(m => {
+    const term = searchTerm.value.toLowerCase();
+    
+    // Search logic
+    const matchesSearch =
+      (m.full_name || "").toLowerCase().includes(term) ||
+      (m.email || "").toLowerCase().includes(term) ||
+      (m.membership_type || "").toLowerCase().includes(term);
 
-      const matchesRole = filters.value.role ? m.role === filters.value.role : true;
-      const matchesMembership = filters.value.membership_type
-        ? m.membership_type_id === Number(filters.value.membership_type)
-        : true;
+    // Role Filter
+    const matchesRole = filters.value.role ? m.role === filters.value.role : true;
 
-      return matchesSearch && matchesRole && matchesMembership;
-    });
-});
+    const matchesMembership = filters.value.membership_type
+      ? m.membership_type === filters.value.membership_type || m.membership_type_id === Number(filters.value.membership_type)
+      : true;
+
+    return matchesSearch && matchesRole && matchesMembership;
+  });
+});  
   
 const paginatedMembers = computed(() => {
-  const list = filteredMembers.value || [];
-  const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  return list.slice(start, end);
+  return filteredMembers.value;
 });
 
-watch([searchTerm, filters], () => {
-  currentPage.value = 1;
+  
+watch(
+  [searchTerm, filters],
+  () => {
+    currentPage.value = 1;
+    fetchMembers();
+  }
+);
+
+watch(currentPage, () => {
+  fetchMembers();
 });
 
 </script>
