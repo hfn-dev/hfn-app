@@ -96,21 +96,37 @@ purchases.value = res.map(normalizePayment);
 };
 
 const normalizePayment = (item) => {
+
+  if (item.user) {
+    return {
+      id: item.id,
+      title: item.user?.full_name || item.user?.email || "Unknown",
+      email: item.user?.email || "-",
+      enrollments: item.payment_type_display || "-",
+      completion: item.amount || "-",
+      amount: item.amount,
+      status: item.status,
+      lastUpdate: item.payment_date
+        ? new Date(item.payment_date).toLocaleDateString()
+        : "-",
+      raw: item,
+    };
+  }
+
   return {
     id: item.id,
-    title: item.full_name || '—',
-    email: item.email || '-',
-    enrollments: item.role || '—',
-    completion: item.amount || '—',
-    amount: item.amount,
-    status: item.status,
-    lastUpdate: item.created_at
-      ? new Date(item.created_at).toLocaleDateString()
-      : '—',
-    raw: item, 
+    title: item.full_name || item.email || "Unknown",
+    email: item.email || "-",
+    enrollments: item.role || "Member",
+    completion: "-",
+    amount: null,
+    status: item.has_active_subscription ? "completed" : "pending",
+    lastUpdate: item.membership_expires_at
+      ? new Date(item.membership_expires_at).toLocaleDateString()
+      : "-",
+    raw: item,
   };
-};
-  
+};  
 const openEditModal = (payment) => {
   selectedPayment.value = { ...payment };
   isEditModalOpen.value = true;
