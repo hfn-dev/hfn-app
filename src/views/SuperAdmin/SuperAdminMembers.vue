@@ -3,7 +3,7 @@ import analyticsApi from "@/api/dashboard.js";
 import membershipAPI from "@/api/membership.js";
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import { computed, onMounted, watch } from "vue";
-
+import { useToast } from "@/composables/useToast";
 import {
   ChevronLeft,
   ChevronRight,
@@ -18,7 +18,7 @@ import { ref } from "vue";
 const showAddMemberModal = ref(false);
 const membershipTypes = ref([]);
  const showMembershipTypeModal = ref(false)
-
+const { showToast } = useToast();
  const newMembershipType = ref({
   name: '',
   description: '',
@@ -144,7 +144,7 @@ const submitNewMember = async () => {
 
       showAddMemberModal.value = false;
 
-      showCustomAlert("Member added successfully", "success");
+      showToast("Member added successfully", "success");
 
       // Reload members
       fetchMembers();
@@ -167,9 +167,9 @@ const submitNewMember = async () => {
     if (errors) {
       const firstError = Object.values(errors)[0]?.[0];
 
-      showCustomAlert(firstError || "Failed to add member", "error");
+      showToast(firstError || "Failed to add member", "error");
     } else {
-      showCustomAlert("Something went wrong", "error");
+      showToast("Something went wrong", "error");
     }
 
     console.error("Failed to add member", error);
