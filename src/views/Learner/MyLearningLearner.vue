@@ -97,7 +97,7 @@ const reviewCourse = async (enrollment) => {
     if (enrollment.certificate_url) {
       window.open(enrollment.certificate_url, '_blank');
     } else {
-      router.push(`/courses/${enrollment.course_slug || enrollment.course}`);
+      router.push(`/learning/courses/${enrollment.course_slug || enrollment.course}`);
     }
   } catch (error) {
     console.error('Error reviewing course:', error);
