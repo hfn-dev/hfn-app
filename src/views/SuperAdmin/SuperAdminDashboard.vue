@@ -294,7 +294,7 @@ onMounted(async () => {
       topMonth: { name: topMonthEntry[0], year: new Date().getFullYear() },
       topYear: {
         year: new Date().getFullYear(),
-        sales: `$${dash.total_revenue.toLocaleString()}`,
+        sales: `${dash.total_revenue.toLocaleString()}`,
       },
       bestSeller: {
         name: dash.most_viewed_courses[0]?.title || "None",
