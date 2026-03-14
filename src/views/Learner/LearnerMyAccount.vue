@@ -27,19 +27,20 @@ await loadEnrollment()
   }
 })  
 
-
 const loadEnrollment = async () => {
   try {
     const res = await learningModule.getEnrollment()
 
-    if (res.length) {
-      enrollmentId.value = res[0].id
+    const enrollments = res.data 
+
+    if (enrollments.length) {
+      enrollmentId.value = enrollments[0].id
     }
 
   } catch (err) {
     console.error("Failed to load enrollments", err)
   }
-}  
+}
 
 const loadCertificate = async () => {
   if (!enrollmentId.value) {
