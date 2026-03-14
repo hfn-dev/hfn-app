@@ -61,33 +61,6 @@ const isOrganization = ref(true);
 const currentView = ref('My Profile');
 const activeTab = ref('My Profile');
 
-// const navLinks = [
-//   {
-//     name: 'Dashboard',
-//     icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
-//   },
-//   {
-//     name: 'My Learning',
-//     icon: 'M12 6.253v13M3.475 12h17.052M18.82 8.16l-1.397 1.5M5.18 8.16l1.397 1.5',
-//   },
-//   {
-//     name: 'Messages',
-//     icon: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z',
-//   },
-//   {
-//     name: 'My Account',
-//     icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
-//   },
-//   {
-//     name: 'Support',
-//     icon: 'M18.364 5.636l-1.414 1.414M16 12a4 4 0 10-8 0 4 4 0 008 0zM12 1v2M12 19v2M5.636 18.364l1.414-1.414M19 12h2M3 12h2M5.636 5.636l1.414 1.414M18.364 18.364l-1.414-1.414',
-//   },
-//   {
-//     name: 'Logout',
-//     icon: 'M11 16l-4-4m0 0l4-4m-4 4h14M3 12h2a2 2 0 002-2V6a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H9a2 2 0 00-2 2v-4',
-//   },
-// ];
-
 const navLinks = [
   
   {
