@@ -36,16 +36,13 @@ const fetchUserEnrollments = async () => {
         : response.data.results || [];
       
       activeCourses.value = userEnrollments.value.filter(
-        enrollment => !enrollment.is_completed && enrollment.completion_percentage < 100
+        enrollment => !enrollment.status && enrollment.progress_percentage < 100
       );
       
       completedCourses.value = userEnrollments.value.filter(
-        enrollment => enrollment.is_completed || enrollment.completion_percentage === 100
+        enrollment => enrollment.status || enrollment.progress_percentage === 100
       );
       
-      console.log('Enrollments loaded:', userEnrollments.value.length);
-      console.log('Active courses:', activeCourses.value.length);
-      console.log('Completed courses:', completedCourses.value.length);
     }
   } catch (error) {
     console.error('Error fetching enrollments:', error);
@@ -172,11 +169,11 @@ onMounted(() => {
                 <img
                   v-if="enrollment.course?.thumbnail"
                   :src="enrollment.course.thumbnail"
-                  :alt="enrollment.course.title"
+                  :alt="enrollment.course_title"
                   class="w-full h-full object-cover"
                 />
                 <div v-else class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#004d33] to-[#00cc66]">
-                  <span class="text-white text-lg font-bold">{{ enrollment.course.title?.charAt(0) || 'C' }}</span>
+                  <span class="text-white text-lg font-bold">{{ enrollment.course_title?.charAt(0) || 'C' }}</span>
                 </div>
                 <div
                   class="absolute bottom-0 left-4 transform translate-y-1/2 p-1 bg-white rounded-full shadow-lg"
