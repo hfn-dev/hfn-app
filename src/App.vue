@@ -8,7 +8,7 @@ import FeedbackFlag from "@/components/layout/FeedbackFlag.vue";
 import AdminHeader from "./components/layout/AdminHeader.vue";
 import Footer from "./components/layout/Footer.vue";
 import Header from "./components/layout/Header.vue";
-
+import AppToast from "@/components/layout/AppToast.vue";
 import "./style.css";
 
 const { role } = useAuth();
@@ -34,6 +34,7 @@ const { role } = useAuth();
         </div>
       </transition>
     </RouterView>
+    <AppToast />
 
     <FeedbackFlag />
     <Footer />
