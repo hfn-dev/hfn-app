@@ -300,7 +300,6 @@
 <script setup>
 import hands from "@/assets/hands.png";
 import latest from "@/assets/latest_news.png";
-import newsletter from "@/assets/newsletter.png";
 import { ref } from "vue";
 
 const showPaymentDialog = ref(false);
@@ -360,9 +359,7 @@ const confirmPayment = () => {
 
 };
 
-//   const getPdfPreview = (url) => {
-//   return url.replace(".pdf", ".jpg");
-// };
+
   const getPdfPreview = (url) => {
   return url.replace("/upload/", "/upload/pg_1,w_600/").replace(".pdf", ".jpg");
 };
