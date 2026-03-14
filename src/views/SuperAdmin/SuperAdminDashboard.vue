@@ -98,7 +98,7 @@ const revenueChartOptions = reactive({
           if (context.parsed.y !== null) {
             label += new Intl.NumberFormat("en-US", {
               style: "currency",
-              currency: "NGN",
+              currency: "N",
               maximumFractionDigits: 0,
             }).format(context.parsed.y);
           }
