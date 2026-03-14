@@ -111,7 +111,7 @@ const revenueChartOptions = ref({
           if (context.parsed.y !== null) {
             label += new Intl.NumberFormat("en-US", {
               style: "currency",
-              currency: "USD",
+              currency: "NGN",
               maximumFractionDigits: 0,
             }).format(context.parsed.y);
           }
@@ -227,7 +227,7 @@ const statCards = computed(() => {
       title: "Total Revenue",
       value: new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency: "USD",
+        currency: "NGN",
         maximumFractionDigits: 0,
       }).format(dashboardData.value.total_revenue || 0),
       change: "All time",
@@ -711,7 +711,7 @@ const closeSidebar = () => (showSidebar.value = false);
                     {{
                       new Intl.NumberFormat("en-US", {
                         style: "currency",
-                        currency: "USD",
+                        currency: "NGN",
                         maximumFractionDigits: 0,
                       }).format(topRevenueData.topMonthRevenue)
                     }}
@@ -732,7 +732,7 @@ const closeSidebar = () => (showSidebar.value = false);
                     {{
                       new Intl.NumberFormat("en-US", {
                         style: "currency",
-                        currency: "USD",
+                        currency: "NGN",
                         maximumFractionDigits: 0,
                       }).format(topRevenueData.totalYearRevenue)
                     }}
