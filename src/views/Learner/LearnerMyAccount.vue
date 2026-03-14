@@ -16,7 +16,7 @@ onMounted(async () => {
   try {
     const res = await usersApi.getUser()
     user.value = res.data
-
+await loadEnrollment()
     await loadCertificate()
 
   } catch (e) {
@@ -26,7 +26,25 @@ onMounted(async () => {
   }
 })  
 
+
+const loadEnrollment = async () => {
+  try {
+    const res = await usersApi.getEnrollments()
+
+    if (res.length) {
+      enrollmentId.value = res[0].id
+    }
+
+  } catch (err) {
+    console.error("Failed to load enrollments", err)
+  }
+}  
+
 const loadCertificate = async () => {
+  if (!enrollmentId.value) {
+    console.warn("Enrollment ID missing")
+    return
+  }
   try {
     const res = await usersApi.generateCertificate(enrollmentId.value)
 
