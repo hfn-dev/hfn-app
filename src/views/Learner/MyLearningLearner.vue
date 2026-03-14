@@ -173,7 +173,7 @@ onMounted(() => {
                   class="w-full h-full object-cover"
                 />
                 <div v-else class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#004d33] to-[#00cc66]">
-                  <span class="text-white text-lg font-bold">{{ enrollment.course_title?.charAt(0) || 'C' }}</span>
+                  <span class="text-white text-lg font-bold">{{ enrollment.course_title }}</span>
                 </div>
                 <div
                   class="absolute bottom-0 left-4 transform translate-y-1/2 p-1 bg-white rounded-full shadow-lg"
@@ -194,7 +194,7 @@ onMounted(() => {
                   {{ enrollment.course.instructor?.title || '' }}
                 </p>
                 <h3 class="text-lg font-bold text-gray-800 mb-4">
-                  {{ enrollment.course.title }}
+                  {{ enrollment.course_title }}
                 </h3>
 
                 <div class="mb-4">
