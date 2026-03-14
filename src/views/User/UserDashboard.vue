@@ -6,6 +6,7 @@ import authApi from "@/api/userRegister.js";
 import UserSidebar from "@/components/layout/UserSidebar.vue";
 import { computed, onMounted, ref } from "vue";
 import newsletter_placeholder from "@/assets/newsletter-placeholder.jpg";
+import contentUploadsApi from "@/api/contentUploadsApi";
 
 const resources = ref([]);
 const searchQuery = ref("");
@@ -68,16 +69,36 @@ const videos = ref([
   },
 ]);
 
+const fetchVideos = async () => {
+  try {
+    const data = await newsApi.listArticles({ limit: 20 });
 
-//  const getPdfPreview = (url) => {
-//   return url.replace(".pdf", ".jpg");
-// };
+    const apiVideos = data
+      .filter((a) => a.videos && a.videos.length)
+      .flatMap((a) =>
+        a.videos.map((v) => ({
+          title: a.title,
+          url: v,
+        }))
+      );
 
- const getPdfPreview = (url) => {
-  return url ? url.replace(".pdf", ".jpg") : newsletter_placeholder;
-}; 
+    videos.value = [...apiVideos, ...videos.value];
+  } catch (err) {
+    console.error("Failed to fetch videos", err);
+  }
+};
 
-const newsletterPdfs = [
+const getPdfPreview = (url) => {
+  if (!url) return newsletter_placeholder;
+
+  if (url.endsWith(".pdf")) {
+    return url.replace(".pdf", ".jpg");
+  }
+
+  return url;
+};
+
+const newsletterPdfs = ref([
   {
     date: "October 8, 2025",
     comments: 0,
@@ -113,10 +134,7 @@ const newsletterPdfs = [
     pdfUrl:
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-4_2024_rqpvhf.pdf",
   },
-  
-  
-];
- 
+]);
 
 const dummyResources = [
   {
@@ -170,7 +188,8 @@ const dummyEvents = [
   {
     slug: "dummy-1",
     title: "2026 Annual Conference",
-    image: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769883047/events-CNRYrGt8_trfhaz.png",
+    image:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769883047/events-CNRYrGt8_trfhaz.png",
     tag: "Conference",
     description:
       "The HFN Annual Conference has evolved into Nigeria’s leading private sector healthcare platform.",
@@ -180,12 +199,12 @@ const dummyEvents = [
     buttonText: "Register",
     externalUrl:
       "https://tix.africa/claim/2026-hfn-annual-conference/VGlja2V0LTgzOWNmYmQ3LTliNDUtNGE3Ny1iNTM1LTI5ZWFjZWQ5MTgxOQ==",
-
   },
   {
     slug: "Medical-nnovation-investment-forum",
     title: "Medical Innovation & Investment Forum",
-    image: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769801324/37a077342a5babe5ea57edba2f8b97d5_M_wvfvsf.jpg",
+    image:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769801324/37a077342a5babe5ea57edba2f8b97d5_M_wvfvsf.jpg",
     tag: "Health Alert",
     description:
       "Exploring investment opportunities in local pharmaceutical manufacturing.",
@@ -197,7 +216,8 @@ const dummyEvents = [
   {
     slug: "hfn-end-of-year-stakeholders-summit",
     title: "HFN End-of-Year Stakeholders Summit",
-    image: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739050/850a9bd13a177b57467b2c6d7c3dfec3_L_g8tmki.jpg",
+    image:
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739050/850a9bd13a177b57467b2c6d7c3dfec3_L_g8tmki.jpg",
     tag: "Programs & Initiatives",
     description: "Annual summit bringing together key healthcare stakeholders.",
     date: "Dec 5, 2026",
@@ -267,7 +287,6 @@ const fetchUser = async () => {
   }
 };
 
-
 const fixImageUrl = (url) => {
   if (!url) return "";
   return url.replace("http://", "https://");
@@ -288,6 +307,41 @@ const fetchNewsletters = async () => {
   }
 };
 
+const formatDate = (date) => {
+  return new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
+
+const fetchNewsletterPdfs = async () => {
+  try {
+    const data = await contentUploadsApi.listNewsletters();
+
+    const apiNewsletters = data.map((n) => ({
+      date: formatDate(n.created_at),
+      text: n.title,
+      pdfUrl: n.file,
+      created_at: n.created_at
+    }));
+
+    const localNewsletters = newsletterPdfs.value.map(n => ({
+      ...n,
+      created_at: new Date(n.date)
+    }));
+
+    newsletterPdfs.value = [...apiNewsletters, ...localNewsletters].sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    );
+
+  } catch (err) {
+    console.error("Failed to fetch newsletters", err);
+  }
+};
+
+
 const fetchEvents = async () => {
   try {
     const data = await eventsApi.listEvents({
@@ -297,38 +351,26 @@ const fetchEvents = async () => {
     });
 
     if (data.results?.length) {
-      // events.value = data.results.map((event) => ({
-      //   slug: event.slug,
-      //   title: event.title,
-      //   image: event.banner_image,
-      //   tag: event.event_type,
-      //   description: event.description,
-      //   date: new Date(event.start_datetime).toLocaleDateString(),
-      //   time: new Date(event.start_datetime).toLocaleTimeString(),
-      //   location: event.location,
-      //   buttonText: event.is_free ? "Register Free" : "Buy Ticket",
-      // }));
       events.value = data.results.map((event) => {
-  const isAnnualConference =
-    event.slug === "2026-annual-conference" ||
-    event.title?.toLowerCase().includes("annual conference");
+        const isAnnualConference =
+          event.slug === "2026-annual-conference" ||
+          event.title?.toLowerCase().includes("annual conference");
 
-  return {
-    slug: event.slug,
-    title: event.title,
-    image: event.banner_image,
-    tag: event.event_type,
-    description: event.description,
-    date: new Date(event.start_datetime).toLocaleDateString(),
-    time: new Date(event.start_datetime).toLocaleTimeString(),
-    location: event.location,
-    buttonText: event.is_free ? "Register Free" : "Buy Ticket",
-    externalUrl: isAnnualConference
-      ? "https://tix.africa/claim/2026-hfn-annual-conference/VGlja2V0LTgzOWNmYmQ3LTliNDUtNGE3Ny1iNTM1LTI5ZWFjZWQ5MTgxOQ=="
-      : null,
-  };
-});
-
+        return {
+          slug: event.slug,
+          title: event.title,
+          image: event.banner_image,
+          tag: event.event_type,
+          description: event.description,
+          date: new Date(event.start_datetime).toLocaleDateString(),
+          time: new Date(event.start_datetime).toLocaleTimeString(),
+          location: event.location,
+          buttonText: event.is_free ? "Register Free" : "Buy Ticket",
+          externalUrl: isAnnualConference
+            ? "https://tix.africa/claim/2026-hfn-annual-conference/VGlja2V0LTgzOWNmYmQ3LTliNDUtNGE3Ny1iNTM1LTI5ZWFjZWQ5MTgxOQ=="
+            : null,
+        };
+      });
     } else {
       events.value = dummyEvents;
     }
@@ -338,29 +380,33 @@ const fetchEvents = async () => {
   }
 };
 
-// const fetchTopics = async () => {
-//   try {
-//     const data = await newsApi.listArticles({ limit: 4 });
-//     topics.value = data;
-//   } catch (error) {
-//     console.error("Failed to fetch topics:", error);
-//   }
-// };
+const fetchLatestMinutes = async () => {
+  try {
+    const minutes = await contentUploadsApi.getMinutes();
+
+    if (minutes && minutes.length) {
+      latestMinutes.value = minutes[0];
+    }
+  } catch (err) {
+    console.error("Failed to fetch minutes", err);
+  }
+};
+
 const fetchTopics = async () => {
   try {
     const data = await newsApi.listArticles({ limit: 4 });
-    topics.value = data.map(item => ({
+    topics.value = data.map((item) => ({
       ...item,
       visualImage: fixImageUrl(item.featured_image),
       description: item.excerpt,
-      date: new Date(item.publish_date).toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric'
+      date: new Date(item.publish_date).toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
       }),
-      tag: "Public Health Stories", 
+      tag: "Public Health Stories",
       tagColor: "#ff6600",
-      comments: "0 Comments"
+      comments: "0 Comments",
     }));
   } catch (error) {
     console.error("Failed to fetch topics:", error);
@@ -385,6 +431,9 @@ onMounted(() => {
   fetchTopics();
   fetchUser();
   fetchResources();
+  fetchVideos();
+  fetchLatestMinutes();
+  fetchNewsletterPdfs();
 });
 </script>
 
@@ -394,7 +443,7 @@ onMounted(() => {
 
     <div class="flex-1 p-6 md:p-10 overflow-y-auto">
       <h2 class="text-xl md:text-2xl font-semibold text-[#f54a00]">
-        Welcome {{ user.first_name || 'Member' }},
+        Welcome {{ user.first_name || "Member" }},
       </h2>
       <p class="text-[#555] mt-1">Stay up to date with the latest on HFN</p>
 
@@ -442,7 +491,9 @@ onMounted(() => {
                 <p class="text-sm font-semibold text-[#333] mt-2 leading-none">
                   Meeting Minutes
                 </p>
-                <p class="text-xs text-gray-500">No 07 29-10-2025</p>
+                <p class="text-xs text-gray-500">
+                  {{ latestMinutes?.title || "Latest meeting minutes" }}
+                </p>
               </div>
             </div>
           </div>
@@ -507,7 +558,7 @@ onMounted(() => {
               <p class="text-md text-gray-700 mb-6">
                 {{ newsletters[0].description_short }}
               </p>
-              
+
               <router-link
                 :to="`/news/${newsletters[0].slug}`"
                 class="inline-block bg-[#004D33] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#006644] transition duration-300"
@@ -520,101 +571,99 @@ onMounted(() => {
         </div>
       </section>
       <section class="mt-16 max-w-7xl mx-auto px-4">
-  <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">
-    Newsletters
-  </h2>
+        <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">
+          Newsletters
+        </h2>
 
-  <div
-    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-16"
-  >
-    <div
-      v-for="(item, index) in newsletterPdfs"
-      :key="index"
-      class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 flex flex-col"
-    >
-      <div class="relative group h-60 overflow-hidden bg-gray-100">
-        <img
-          :src="getPdfPreview(item.pdfUrl)"
-          alt="Newsletter Preview"
-          class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          @error="(e) => (e.target.src = newsletter_placeholder)"
-        />
-        <div
-          class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
-        >
-          <span class="text-white bg-green-700 px-3 py-1 rounded text-xs">
-            View Document
-          </span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-16">
+          <div
+            v-for="(item, index) in newsletterPdfs"
+            :key="index"
+            class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 flex flex-col"
+          >
+            <div class="relative group h-60 overflow-hidden bg-gray-100">
+              <img
+                :src="getPdfPreview(item.pdfUrl)"
+                alt="Newsletter Preview"
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                @error="(e) => (e.target.src = newsletter_placeholder)"
+              />
+              <div
+                class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+              >
+                <span class="text-white bg-green-700 px-3 py-1 rounded text-xs">
+                  View Document
+                </span>
+              </div>
+            </div>
+
+            <div class="p-6 flex flex-col flex-grow">
+              <p class="text-sm text-orange-500 mb-3">
+                {{ item.date }}
+              </p>
+
+              <p class="text-gray-700 text-base mb-4 flex-grow">
+                {{ item.text }}
+              </p>
+
+              <div class="mt-auto flex gap-2">
+                <a
+                  :href="item.pdfUrl"
+                  download
+                  target="_blank"
+                  class="flex-1 text-center bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition"
+                >
+                  Download PDF
+                </a>
+
+                <a
+                  :href="item.pdfUrl"
+                  target="_blank"
+                  class="p-2 border border-gray-300 rounded-full hover:bg-gray-50 transition"
+                  title="Open in browser"
+                >
+                  <svg
+                    class="w-5 h-5 text-gray-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="p-6 flex flex-col flex-grow">
-        <p class="text-sm text-orange-500 mb-3">
-          {{ item.date }}
-        </p>
-
-        <p class="text-gray-700 text-base mb-4 flex-grow">
-          {{ item.text }}
-        </p>
-
-        <div class="mt-auto flex gap-2">
+        <div
+          class="flex justify-center items-center space-x-4 text-gray-600 mb-20"
+        >
+          <span class="text-sm">Page 1 of 2</span>
           <a
-            :href="item.pdfUrl"
-            download
-            target="_blank"
-            class="flex-1 text-center bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition"
+            href="#"
+            class="flex items-center space-x-1 text-green-700 hover:underline"
           >
-            Download PDF
-          </a>
-
-          <a
-            :href="item.pdfUrl"
-            target="_blank"
-            class="p-2 border border-gray-300 rounded-full hover:bg-gray-50 transition"
-            title="Open in browser"
-          >
+            <span>Next</span>
             <svg
-              class="w-5 h-5 text-gray-600"
+              class="w-4 h-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
               <path
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-              <path
-                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
               />
             </svg>
           </a>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex justify-center items-center space-x-4 text-gray-600 mb-20">
-    <span class="text-sm">Page 1 of 2</span>
-    <a
-      href="#"
-      class="flex items-center space-x-1 text-green-700 hover:underline"
-    >
-      <span>Next</span>
-      <svg
-        class="w-4 h-4"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M9 5l7 7-7 7"
-        />
-      </svg>
-    </a>
-  </div>
-</section>
+      </section>
 
       <section class="mt-16 max-w-6xl mx-auto px-4">
         <h3 class="text-3xl font-bold text-[#333] text-center mb-8">
@@ -813,22 +862,21 @@ onMounted(() => {
               </div>
 
               <a
-  v-if="event.externalUrl"
-  :href="event.externalUrl"
-  target="_blank"
-  class="block w-full text-center mt-4 bg-[#004D33] text-white px-4 py-3 rounded-lg font-medium hover:bg-[#006644] transition"
->
-  {{ event.buttonText }}
-</a>
+                v-if="event.externalUrl"
+                :href="event.externalUrl"
+                target="_blank"
+                class="block w-full text-center mt-4 bg-[#004D33] text-white px-4 py-3 rounded-lg font-medium hover:bg-[#006644] transition"
+              >
+                {{ event.buttonText }}
+              </a>
 
-<button
-  v-else
-  @click="openRegisterModal(event)"
-  class="w-full mt-4 bg-[#004D33] text-white px-4 py-3 rounded-lg font-medium hover:bg-[#006644] transition"
->
-  {{ event.buttonText }}
-</button>
-
+              <button
+                v-else
+                @click="openRegisterModal(event)"
+                class="w-full mt-4 bg-[#004D33] text-white px-4 py-3 rounded-lg font-medium hover:bg-[#006644] transition"
+              >
+                {{ event.buttonText }}
+              </button>
             </div>
           </div>
         </div>
@@ -934,7 +982,14 @@ onMounted(() => {
                 class="w-full h-full"
                 :src="getEmbedUrl(video.url)"
                 frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allow="
+                  accelerometer;
+                  autoplay;
+                  clipboard-write;
+                  encrypted-media;
+                  gyroscope;
+                  picture-in-picture;
+                "
                 allowfullscreen
               ></iframe>
             </div>
@@ -963,9 +1018,7 @@ onMounted(() => {
           {{ selectedEvent?.title }}
         </p>
 
-        <div v-if="registerError" class="text-red-600 text-sm mb-4">
-          
-        </div>
+        <div v-if="registerError" class="text-red-600 text-sm mb-4"></div>
 
         <div class="flex gap-3">
           <button
