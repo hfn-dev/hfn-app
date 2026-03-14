@@ -86,7 +86,7 @@ const goToCompletedPage = (page) => {
 
 const continueLearning = async (enrollment) => {
   try {
-    router.push(`/learning/courses/${enrollment.course.slug || enrollment.course.id}`);
+    router.push(`/learning/courses/${enrollment.course_slug || enrollment.course}`);
   } catch (error) {
     toast.error(`Failed to open course ${error.message}`);
   }
@@ -97,7 +97,7 @@ const reviewCourse = async (enrollment) => {
     if (enrollment.certificate_url) {
       window.open(enrollment.certificate_url, '_blank');
     } else {
-      router.push(`/courses/${enrollment.course.slug || enrollment.course.id}`);
+      router.push(`/courses/${enrollment.course_slug || enrollment.course}`);
     }
   } catch (error) {
     console.error('Error reviewing course:', error);
