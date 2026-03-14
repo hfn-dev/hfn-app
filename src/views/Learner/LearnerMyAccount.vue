@@ -3,6 +3,7 @@ import usersApi from '@/api/userRegister';
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import LearnerSidebar from './LearnerSidebar.vue';
+import learningModule from "@/api/learningModule.js";
 
 
 const router = useRouter();
@@ -29,7 +30,7 @@ await loadEnrollment()
 
 const loadEnrollment = async () => {
   try {
-    const res = await usersApi.getEnrollments()
+    const res = await learningModule.getEnrollment()
 
     if (res.length) {
       enrollmentId.value = res[0].id
