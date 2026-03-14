@@ -467,6 +467,7 @@ onMounted(() => {
                     :src="course.thumbnail"
                     :alt="course.title"
                     class="w-full h-full object-cover"
+                    @error="course.thumbnail = ''"
                   />
                   <div v-else class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#004d33] to-[#00cc66]">
                     <span class="text-white text-lg font-bold">{{ course.title?.charAt(0) || 'C' }}</span>
@@ -630,6 +631,7 @@ onMounted(() => {
                       :src="course.thumbnail"
                       :alt="course.title"
                       class="w-full h-full object-cover"
+                      @error="course.thumbnail = ''"
                     />
                     <div v-else class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#004d33] to-[#00cc66]">
                       <span class="text-white text-lg font-bold">{{ course.title?.charAt(0) || 'C' }}</span>

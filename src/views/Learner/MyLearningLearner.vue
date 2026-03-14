@@ -20,6 +20,13 @@ const activePage = ref(1);
 const activePerPage = 5;
 const completedPage = ref(1);
 const completedPerPage = 3;
+const showReviewDialog = ref(false);
+const selectedEnrollment = ref(null);
+
+const reviewForm = ref({
+  rating: 0,
+  review_text: ""
+});
 
 const fetchUserEnrollments = async () => {
   try {
@@ -92,16 +99,38 @@ const continueLearning = async (enrollment) => {
   }
 };
 
-const reviewCourse = async (enrollment) => {
+
+
+const reviewCourse = (enrollment) => {
+  selectedEnrollment.value = enrollment;
+  reviewForm.value = {
+    rating: 0,
+    review_text: ""
+  };
+  showReviewDialog.value = true;
+};
+
+
+const submitReview = async () => {
   try {
-    if (enrollment.certificate_url) {
-      window.open(enrollment.certificate_url, '_blank');
-    } else {
-      router.push(`/learning/courses/${enrollment.course_slug || enrollment.course}`);
+    if (!reviewForm.value.rating) {
+      toast.error("Please select a rating");
+      return;
     }
+
+    await learningModule.createReview({
+      course: selectedEnrollment.value.course,
+      rating: reviewForm.value.rating,
+      review_text: reviewForm.value.review_text
+    });
+
+    toast.success("Review submitted successfully");
+
+    showReviewDialog.value = false;
+
   } catch (error) {
-    console.error('Error reviewing course:', error);
-    toast.error('Failed to open course');
+    console.error(error);
+    toast.error("Failed to submit review");
   }
 };
 
@@ -331,7 +360,7 @@ onMounted(() => {
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                     <polyline points="22 4 12 14.01 9 11.01"></polyline>
                   </svg>
-                  Completed on {{ new Date(enrollment.completed_at).toLocaleDateString() }}
+Completed on {{ enrollment.completed_at ? new Date(enrollment.completed_at).toLocaleDateString() : '—' }}
                 </p>
 
                 <button
@@ -397,6 +426,60 @@ onMounted(() => {
       </main>
     </div>
   </div>
+  <div v-if="showReviewDialog"
+     class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+
+  <div class="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
+
+    <h3 class="text-lg font-bold mb-4">Review Course</h3>
+
+    <!-- Star Rating -->
+    <div class="flex space-x-2 mb-4">
+      <svg
+        v-for="star in 5"
+        :key="star"
+        @click="reviewForm.rating = star"
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-8 h-8 cursor-pointer"
+        :class="star <= reviewForm.rating ? 'text-yellow-400' : 'text-gray-300'"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M12 .587l3.668 7.431L24 9.587l-6 5.848L19.335 24 12 20.202 4.665 24 6 15.435 0 9.587l8.332-1.569z"
+        />
+      </svg>
+    </div>
+
+    <!-- Comment -->
+    <textarea
+      v-model="reviewForm.review_text"
+      placeholder="Write your review..."
+      class="w-full border rounded-lg p-3 mb-4"
+      rows="4"
+    ></textarea>
+
+    <!-- Buttons -->
+    <div class="flex justify-end space-x-3">
+
+      <button
+        @click="showReviewDialog = false"
+        class="px-4 py-2 border rounded-lg"
+      >
+        Cancel
+      </button>
+
+      <button
+        @click="submitReview"
+        class="px-4 py-2 bg-[#004d33] text-white rounded-lg"
+      >
+        Submit Review
+      </button>
+
+    </div>
+
+  </div>
+</div>
 </template>
 
 <style scoped>

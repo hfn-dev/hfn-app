@@ -11,25 +11,25 @@ const selectedRating = ref('all');
 
 const mapReviewRow = (review) => ({
   id: review.id,
-  title: review.course.title,
-  courseSlug: review.course.slug,
-  status: review.course.status,
+  title: `Course #${review.course}`,
+  courseSlug: review.course,
+  status: review.is_approved ? "Published" : "Pending",
   rating: review.rating,
   lastUpdate: new Date(review.created_at).toLocaleDateString(),
+  comment: review.review_text,
+  user: review.user_name
 });
+
 
 const fetchReviews = async () => {
   loading.value = true;
 
   try {
     const res = await learningModule.reviewCourse({
-      page: currentPage.value,
       search: searchQuery.value,
       rating: selectedRating.value !== 'all' ? selectedRating.value : undefined,
     });
-
-    reviews.value = (res.results || []).map(mapReviewRow);
-    totalPages.value = res.total_pages || 1;
+    reviews.value = (res || []).map(mapReviewRow);
   } catch (err) {
     console.error(err);
   } finally {
@@ -76,31 +76,35 @@ const filteredFeedback = computed(() => {
 
 const paginatedReviews = computed(() => reviews.value);
 
+
 const viewReviewDetails = async (review) => {
   try {
-    const res = await learningModule.getReviewDetails(review.courseSlug);
 
-    const feedback = res.results.map((r) => ({
-      id: r.id,
-      user: r.user.full_name,
-      time: new Date(r.created_at).toLocaleDateString(),
-      rating: r.rating,
-      comment: r.comment,
-      avatar: r.user.avatar,
-    }));
+    const feedback = [
+      {
+        id: review.id,
+        user: review.user,
+        time: review.lastUpdate,
+        rating: review.rating,
+        comment: review.comment,
+        avatar: ""
+      }
+    ];
 
     selectedCourse.value = {
       title: review.title,
-      averageRating: res.average_rating,
-      ratingDistribution: res.rating_distribution,
-      feedback,
+      averageRating: review.rating,
+      ratingDistribution: [],
+      feedback
     };
 
     currentView.value = 'details';
+
   } catch (err) {
     console.error(err);
   }
 };
+
 
 const goBackToList = () => {
   currentView.value = 'list';

@@ -21,9 +21,28 @@ const course = ref(null);
 const modules = ref([]);
 const instructor = ref(null);
 const similarCourses = ref([]);
-
+const enrollment = ref(null);
 const toggleModule = (moduleId) => {
   activeModule.value = activeModule.value === moduleId ? null : moduleId;
+};
+
+
+const fetchEnrollment = async () => {
+  try {
+    const res = await learningModule.getEnrollment({
+      expand: "course",
+    });
+
+    const enrollments = Array.isArray(res.data)
+      ? res.data
+      : res.data.results || [];
+
+    enrollment.value = enrollments.find(
+      (e) => e.course_slug === courseParam || e.course === courseParam
+    );
+  } catch (error) {
+    console.error("Failed to fetch enrollment", error);
+  }
 };
 
 const fetchCourse = async () => {
@@ -42,7 +61,21 @@ const fetchCourse = async () => {
   }
 };
 
-onMounted(fetchCourse);
+
+const isCompleted = () => {
+  return (
+    enrollment.value &&
+    (enrollment.value.status === "completed" ||
+      Number(enrollment.value.progress_percentage) === 100)
+  );
+};
+
+
+onMounted(() => {
+  fetchCourse();
+  fetchEnrollment();
+});
+
 </script>
 
 <template>
@@ -310,11 +343,50 @@ onMounted(fetchCourse);
               </p>
             </div>
 
-            <div v-else-if="activeTab === 'certificate'" class="space-y-4">
-              <p class="text-gray-700">
-                Content for Certificate tab will go here.
-              </p>
-            </div>
+            <div v-else-if="activeTab === 'certificate'" class="space-y-6">
+
+  <div v-if="!enrollment" class="text-gray-500">
+    You are not enrolled in this course.
+  </div>
+
+  <div v-else-if="!isCompleted()" class="text-center py-10">
+    <p class="text-lg font-semibold text-gray-700">
+      Complete the course to unlock your certificate
+    </p>
+
+    <p class="text-sm text-gray-500 mt-2">
+      Progress: {{ Math.round(enrollment.progress_percentage) }}%
+    </p>
+  </div>
+
+  <div v-else class="space-y-6">
+
+    <p class="text-green-700 font-semibold">
+      Course completed on
+      {{ new Date(enrollment.completed_at).toLocaleDateString() }}
+    </p>
+
+    <div class="border rounded-lg overflow-hidden h-[500px]">
+      <iframe
+        v-if="enrollment.certificate"
+        :src="enrollment.certificate"
+        class="w-full h-full"
+      ></iframe>
+    </div>
+
+    <a
+      v-if="enrollment.certificate"
+      :href="enrollment.certificate"
+      download
+      class="inline-block px-6 py-3 rounded-lg font-semibold text-white"
+      :style="{ backgroundColor: DARK_GREEN }"
+    >
+      Download Certificate
+    </a>
+
+  </div>
+
+</div>
           </div>
 
           <div class="lg:col-span-1 space-y-8">
@@ -570,7 +642,6 @@ onMounted(fetchCourse);
           </div>
         </div>
 
-        <!-- Similar Courses Section -->
         <div class="mt-12">
           <h2 class="text-2xl font-bold text-gray-800 mb-6">
             Similar courses you might like...

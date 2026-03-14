@@ -11,7 +11,8 @@ const isOrganization = ref(false);
 const orgDetails = reactive({});
 const otherDetails = reactive({});
 const interests = reactive([]);
-const certificateUrl = ref('/sample-certificates.png');
+const certificates = ref([]);
+const certificateUrl = ref('');
 const isOtherDetailsEditing = ref(false);
 
 const isOrgEditing = ref(false);
@@ -46,6 +47,25 @@ const activeTab = ref('My Profile');
 const viewCertificateInNewTab = () => {
   if (certificateUrl.value) {
     window.open(certificateUrl.value, '_blank');
+  }
+};
+
+
+const fetchCertificates = async () => {
+  try {
+    const res = await learningModule.getCertificate();
+
+    const certs = Array.isArray(res)
+      ? res
+      : res.results || [];
+
+    certificates.value = certs;
+
+    if (certs.length > 0) {
+      certificateUrl.value = certs[0].certificate_file || certs[0].certificate_url || '';
+    }
+  } catch (error) {
+    console.error("Error fetching certificates:", error);
   }
 };
 
@@ -213,6 +233,8 @@ const fetchUserData = async () => {
 
 onMounted(() => {
   fetchUserData();
+    fetchCertificates();
+
 });
 
 

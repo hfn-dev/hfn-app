@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 import learningModule from '@/api/learningModule.js';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -130,7 +130,7 @@ onMounted(() => {
                 class="w-full px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md text-center"
               >
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">
-                  My Learning
+                  My Learnin
                 </h2>
               </div>
             </div>
@@ -403,4 +403,4 @@ onMounted(() => {
 </template>
 
 <style scoped>
-</style>
+</style> -->

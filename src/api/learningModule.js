@@ -414,7 +414,7 @@ export default {
   async verifyCertificate(payload) {
     try {
       const response = await api.get(
-        '/learning/certificates/verify/?number={certificate_number}',
+        `/learning/certificates/verify/?number=${certificateNumber}/`,
         payload
       );
       return response.data;
@@ -424,15 +424,12 @@ export default {
     }
   },
   async publishCourse(slug) {
-  try {
-    const response = await api.post(
-      `/learning/courses/${slug}/publish/`
-    );
-    return response.data;
-  } catch (error) {
-    console.error('publish course API error:', error);
-    throw error;
-  }
-},
-
+    try {
+      const response = await api.post(`/learning/courses/${slug}/publish/`);
+      return response.data;
+    } catch (error) {
+      console.error('publish course API error:', error);
+      throw error;
+    }
+  },
 };
