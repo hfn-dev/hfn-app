@@ -247,21 +247,20 @@ const fetchConnections = async () => {
       const isSender = conn.sender === currentUserId.value;
 
       const otherUserId = isSender ? conn.receiver : conn.sender;
-      const otherUserName = isSender
-        ? conn.receiver_name
-        : conn.sender_name;
+      const otherUserName = isSender ? conn.receiver_name : conn.sender_name;
 
       return {
         id: conn.id,
         status: conn.status,
         userId: otherUserId,
         name: otherUserName,
-        initial: otherUserName
-          ?.split(" ")
-          .map((n) => n[0])
-          .join("")
-          .slice(0, 2)
-          .toUpperCase() || "U",
+        initial:
+          otherUserName
+            ?.split(" ")
+            .map((n) => n[0])
+            .join("")
+            .slice(0, 2)
+            .toUpperCase() || "U",
         position: "Member",
       };
     });
@@ -277,8 +276,6 @@ const fetchConnections = async () => {
   }
 };
 
-
-  
 const fetchNotifications = async () => {
   isLoading.value.notifications = true;
   try {
@@ -788,89 +785,299 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 flex flex-col">
-    <div class="flex flex-grow">
-      <UserSidebar />
+  <div class="flex min-h-screen bg-gray-50">
+    <UserSidebar />
 
-      <main class="flex-grow p-4 md:p-8 lg:p-12">
-        <div class="flex justify-center w-full items-center mb-8">
-          <div class="w-full">
-            <div class="mb-16 w-full">
-              <div
-                class="w-full px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md text-center"
-              >
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">
-                  Messages
-                  <span
-                    v-if="unreadCount > 0"
-                    class="ml-2 px-2 py-1 text-xs bg-red-500 text-white rounded-full"
-                  >
-                    {{ unreadCount }}
-                  </span>
-                </h2>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="flex justify-center w-full">
-          <div class="border-b border-gray-200 mb-6 max-w-7xl w-full">
-            <div class="flex text-lg font-medium justify-center">
-              <button
-                v-for="tab in tabs"
-                :key="tab"
-                @click="currentTab = tab"
-                class="py-2 px-4 transition border-b-2"
-                :class="
-                  currentTab === tab
-                    ? 'font-bold'
-                    : 'text-gray-500 hover:text-gray-900 border-transparent'
-                "
-                :style="
-                  currentTab === tab
-                    ? { color: DARK_GREEN, borderColor: DARK_GREEN }
-                    : {}
-                "
-              >
-                {{ tab }}
+    <main class="flex-1 p-4 md:p-8 lg:p-12">
+      <div class="flex justify-center w-full items-center mb-8">
+        <div class="w-full">
+          <div class="mb-16 w-full">
+            <div
+              class="w-full px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md text-center"
+            >
+              <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">
+                Messages
                 <span
-                  v-if="tab === 'Notifications' && unreadCount > 0"
-                  class="ml-1 text-xs bg-red-500 text-white rounded-full px-1"
+                  v-if="unreadCount > 0"
+                  class="ml-2 px-2 py-1 text-xs bg-red-500 text-white rounded-full"
                 >
                   {{ unreadCount }}
                 </span>
-              </button>
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-center w-full">
+        <div class="border-b border-gray-200 mb-6 max-w-7xl w-full">
+          <div class="flex text-lg font-medium justify-center">
+            <button
+              v-for="tab in tabs"
+              :key="tab"
+              @click="currentTab = tab"
+              class="py-2 px-4 transition border-b-2"
+              :class="
+                currentTab === tab
+                  ? 'font-bold'
+                  : 'text-gray-500 hover:text-gray-900 border-transparent'
+              "
+              :style="
+                currentTab === tab
+                  ? { color: DARK_GREEN, borderColor: DARK_GREEN }
+                  : {}
+              "
+            >
+              {{ tab }}
+              <span
+                v-if="tab === 'Notifications' && unreadCount > 0"
+                class="ml-1 text-xs bg-red-500 text-white rounded-full px-1"
+              >
+                {{ unreadCount }}
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading Indicator -->
+      <div v-if="isLoading[currentTab.toLowerCase()]" class="text-center py-12">
+        <div
+          class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#004d33]"
+        ></div>
+        <p class="mt-4 text-gray-600">
+          Loading {{ currentTab.toLowerCase() }}...
+        </p>
+      </div>
+
+      <div v-else>
+        <div
+          v-if="currentTab === 'Directory'"
+          class="max-w-7xl bg-white p-6 rounded-xl shadow-lg border border-gray-100"
+        >
+          <div class="flex justify-between items-center mb-6">
+            <div class="relative w-full max-w-sm mr-4">
+              <input
+                v-model="searchQuery"
+                @keyup.enter="handleSearch"
+                type="text"
+                placeholder="Search by name or email..."
+                class="w-full p-2 pl-10 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </div>
+            <div class="flex items-center">
+              <span class="text-sm font-medium text-gray-700 mr-2">Show</span>
+              <select
+                v-model="directoryPagination.pageSize"
+                @change="
+                  fetchDirectoryUsers(
+                    directoryPagination.currentLetter,
+                    directoryPagination.currentSearch,
+                    1
+                  )
+                "
+                class="p-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+              >
+                <option value="20">20 per page</option>
+                <option value="50">50 per page</option>
+                <option value="100">100 per page</option>
+              </select>
+            </div>
+          </div>
+
+          <div
+            class="flex flex-wrap justify-start gap-1 p-2 bg-gray-50 rounded-lg mb-6 border border-gray-200"
+          >
+            <button
+              v-for="letter in alphabet"
+              :key="letter"
+              @click="handleLetterClick(letter)"
+              class="w-8 h-8 flex items-center justify-center text-sm font-semibold rounded-lg transition-all"
+              :class="{
+                'bg-green-100 text-gray-800 border border-green-300':
+                  directoryPagination.currentLetter === letter &&
+                  !directoryPagination.currentSearch,
+                'text-gray-500 hover:bg-gray-100':
+                  directoryPagination.currentLetter !== letter ||
+                  directoryPagination.currentSearch,
+              }"
+              :style="
+                directoryPagination.currentLetter === letter &&
+                !directoryPagination.currentSearch
+                  ? {
+                      borderColor: DARK_GREEN,
+                      backgroundColor: LIGHT_GREEN,
+                      color: DARK_GREEN,
+                    }
+                  : {}
+              "
+            >
+              {{ letter }}
+            </button>
+          </div>
+
+          <div v-if="isLoading.directory" class="text-center py-8">
+            <div
+              class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#004d33]"
+            ></div>
+            <p class="mt-2 text-gray-600">Loading users...</p>
+          </div>
+
+          <div v-else>
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 min-h-[200px] max-h-[60vh] overflow-y-auto"
+            >
+              <div
+                v-for="(user, index) in directoryUsers"
+                :key="index"
+                class="py-2 px-3 border-l-4 border-green-500 flex flex-col justify-center hover:bg-gray-50 rounded-lg transition"
+              >
+                <div class="flex items-center mb-2">
+                  <div
+                    v-if="user.profileImage"
+                    class="w-10 h-10 rounded-full overflow-hidden mr-3"
+                  >
+                    <img
+                      :src="user.profileImage"
+                      :alt="user.name"
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div
+                    v-else
+                    class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold mr-3"
+                  >
+                    {{ user.initial }}
+                  </div>
+                  <div>
+                    <p class="text-sm font-semibold text-gray-800">
+                      {{ user.name }}
+                    </p>
+                    <p class="text-xs text-gray-500">{{ user.email }}</p>
+                  </div>
+                </div>
+
+                <div class="mt-2">
+                  <span
+                    v-if="connectedUserIds.has(user.id)"
+                    class="text-xs px-3 py-1 border border-green-600 text-green-600 rounded-full bg-green-50 inline-block"
+                  >
+                    Connected
+                  </span>
+                  <button
+                    v-else-if="user.status === 'none'"
+                    @click="sendConnectionRequest(user.id)"
+                    class="text-xs px-3 py-1 border border-green-600 text-green-600 rounded-full hover:bg-green-50 transition"
+                  >
+                    Request to Connect
+                  </button>
+                  <span
+                    v-else-if="user.status === 'pending'"
+                    class="text-xs px-3 py-1 border border-amber-600 text-amber-600 rounded-full bg-amber-50 inline-block"
+                  >
+                    Request Pending
+                  </span>
+
+                  <span
+                    v-else-if="user.status === 'declined'"
+                    class="text-xs px-3 py-1 border border-red-600 text-red-600 rounded-full bg-red-50 inline-block"
+                  >
+                    Request Declined
+                  </span>
+                  <span v-else class="text-xs text-gray-500">
+                    {{ user.status }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div
+              v-if="directoryUsers.length > 0"
+              class="mt-6 flex justify-between items-center"
+            >
+              <div>
+                <span class="text-sm text-gray-500">
+                  Showing
+                  {{
+                    (directoryPagination.page - 1) *
+                      directoryPagination.pageSize +
+                    1
+                  }}
+                  to
+                  {{
+                    Math.min(
+                      directoryPagination.page * directoryPagination.pageSize,
+                      directoryPagination.count
+                    )
+                  }}
+                  of {{ directoryPagination.count }} users
+                </span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <button
+                  @click="goToPrevPage"
+                  :disabled="!directoryPagination.previous"
+                  class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Previous
+                </button>
+                <span class="text-sm text-gray-600">
+                  Page {{ directoryPagination.page }}
+                </span>
+                <button
+                  @click="goToNextPage"
+                  :disabled="!directoryPagination.next"
+                  class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+
+            <div v-else class="text-center py-12 text-gray-500">
+              <p>No users found</p>
+              <p v-if="directoryPagination.currentSearch" class="text-sm mt-2">
+                No results for "{{ directoryPagination.currentSearch }}"
+              </p>
+              <p v-else class="text-sm mt-2">
+                No users found starting with "{{
+                  directoryPagination.currentLetter
+                }}"
+              </p>
             </div>
           </div>
         </div>
 
-        <!-- Loading Indicator -->
-        <div
-          v-if="isLoading[currentTab.toLowerCase()]"
-          class="text-center py-12"
-        >
+        <div v-if="currentTab === 'Notifications'" class="space-y-6 max-w-4xl">
           <div
-            class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#004d33]"
-          ></div>
-          <p class="mt-4 text-gray-600">
-            Loading {{ currentTab.toLowerCase() }}...
-          </p>
-        </div>
-
-        <div v-else>
-          <div
-            v-if="currentTab === 'Directory'"
-            class="max-w-7xl bg-white p-6 rounded-xl shadow-lg border border-gray-100"
+            v-for="(message, index) in notifications"
+            :key="index"
+            class="bg-white p-6 rounded-xl shadow-md border-l-4"
+            :class="{
+              'border-green-600': message.category === 'COURSES',
+              'border-blue-600': message.category === 'SYSTEM',
+              'border-yellow-600': message.category === 'MY ACCOUNT',
+              'border-red-600': message.category === 'SUBSCRIPTION',
+              'border-purple-600': message.category === 'ADMIN',
+              'opacity-75': message.isRead,
+            }"
           >
-            <div class="flex justify-between items-center mb-6">
-              <div class="relative w-full max-w-sm mr-4">
-                <input
-                  v-model="searchQuery"
-                  @keyup.enter="handleSearch"
-                  type="text"
-                  placeholder="Search by name or email..."
-                  class="w-full p-2 pl-10 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
-                />
+            <div class="flex justify-between items-start mb-2">
+              <div class="flex items-center space-x-2">
                 <svg
+                  v-if="message.category === 'COURSES'"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="none"
@@ -878,684 +1085,459 @@ onUnmounted(() => {
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  class="w-5 h-5 text-green-600"
                 >
-                  <circle cx="11" cy="11" r="8" />
-                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  <path
+                    d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V5H6.5A2.5 2.5 0 0 0 4 7.5v12z"
+                  />
                 </svg>
-              </div>
-              <div class="flex items-center">
-                <span class="text-sm font-medium text-gray-700 mr-2">Show</span>
-                <select
-                  v-model="directoryPagination.pageSize"
-                  @change="
-                    fetchDirectoryUsers(
-                      directoryPagination.currentLetter,
-                      directoryPagination.currentSearch,
-                      1
-                    )
-                  "
-                  class="p-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+                <svg
+                  v-if="message.category === 'ADMIN'"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="w-5 h-5 text-purple-600"
                 >
-                  <option value="20">20 per page</option>
-                  <option value="50">50 per page</option>
-                  <option value="100">100 per page</option>
-                </select>
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="8.5" cy="7" r="4" />
+                  <polyline points="17 11 19 13 23 9" />
+                </svg>
+                <span
+                  class="text-xs font-semibold uppercase tracking-wider"
+                  :class="{
+                    'text-green-600': message.category === 'COURSES',
+                    'text-blue-600': message.category === 'SYSTEM',
+                    'text-yellow-600': message.category === 'MY ACCOUNT',
+                    'text-red-600': message.category === 'SUBSCRIPTION',
+                    'text-purple-600': message.category === 'ADMIN',
+                  }"
+                >
+                  {{ message.category }}
+                </span>
+                <div class="w-1 h-1 bg-gray-300 rounded-full"></div>
+                <span class="text-xs text-gray-500">{{ message.time }}</span>
+              </div>
+              <div class="flex space-x-2">
+                <button
+                  @click="markNotificationAsRead(message.id)"
+                  class="text-xs text-gray-400 hover:text-gray-600"
+                >
+                  Mark as read
+                </button>
+                <button
+                  @click="dismissNotification(message.id)"
+                  class="text-xs text-gray-400 hover:text-gray-600"
+                >
+                  Dismiss
+                </button>
               </div>
             </div>
-
-            <div
-              class="flex flex-wrap justify-start gap-1 p-2 bg-gray-50 rounded-lg mb-6 border border-gray-200"
-            >
+            <p class="text-base font-bold text-gray-900 mb-1">
+              {{ message.title }}
+            </p>
+            <p class="text-sm text-gray-600 line-clamp-2">
+              {{ message.body }}
+            </p>
+            <div v-if="message.type === 'ACTION'" class="mt-4 flex space-x-3">
               <button
-                v-for="letter in alphabet"
-                :key="letter"
-                @click="handleLetterClick(letter)"
-                class="w-8 h-8 flex items-center justify-center text-sm font-semibold rounded-lg transition-all"
-                :class="{
-                  'bg-green-100 text-gray-800 border border-green-300':
-                    directoryPagination.currentLetter === letter &&
-                    !directoryPagination.currentSearch,
-                  'text-gray-500 hover:bg-gray-100':
-                    directoryPagination.currentLetter !== letter ||
-                    directoryPagination.currentSearch,
-                }"
-                :style="
-                  directoryPagination.currentLetter === letter &&
-                  !directoryPagination.currentSearch
-                    ? {
-                        borderColor: DARK_GREEN,
-                        backgroundColor: LIGHT_GREEN,
-                        color: DARK_GREEN,
-                      }
-                    : {}
-                "
+                @click="acceptAdminRequest(message)"
+                class="px-4 py-2 text-sm font-semibold rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition shadow-md"
               >
-                {{ letter }}
+                Accept
               </button>
-            </div>
-
-            <div v-if="isLoading.directory" class="text-center py-8">
-              <div
-                class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#004d33]"
-              ></div>
-              <p class="mt-2 text-gray-600">Loading users...</p>
-            </div>
-
-            <div v-else>
-              <div
-                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 min-h-[200px] max-h-[60vh] overflow-y-auto"
+              <button
+                @click="declineAdminRequest(message)"
+                class="px-4 py-2 text-sm font-semibold rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
               >
-                <div
-                  v-for="(user, index) in directoryUsers"
-                  :key="index"
-                  class="py-2 px-3 border-l-4 border-green-500 flex flex-col justify-center hover:bg-gray-50 rounded-lg transition"
-                >
-                  <div class="flex items-center mb-2">
-                    <div
-                      v-if="user.profileImage"
-                      class="w-10 h-10 rounded-full overflow-hidden mr-3"
-                    >
-                      <img
-                        :src="user.profileImage"
-                        :alt="user.name"
-                        class="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div
-                      v-else
-                      class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold mr-3"
-                    >
-                      {{ user.initial }}
-                    </div>
-                    <div>
-                      <p class="text-sm font-semibold text-gray-800">
-                        {{ user.name }}
-                      </p>
-                      <p class="text-xs text-gray-500">{{ user.email }}</p>
-                    </div>
-                  </div>
-
-                  <div class="mt-2">
-                    <span
-                      v-if="connectedUserIds.has(user.id)"
-                      class="text-xs px-3 py-1 border border-green-600 text-green-600 rounded-full bg-green-50 inline-block"
-                    >
-                      Connected
-                    </span>
-                    <button
-                      v-else-if="user.status === 'none'"
-                      @click="sendConnectionRequest(user.id)"
-                      class="text-xs px-3 py-1 border border-green-600 text-green-600 rounded-full hover:bg-green-50 transition"
-                    >
-                      Request to Connect
-                    </button>
-                    <span
-                      v-else-if="user.status === 'pending'"
-                      class="text-xs px-3 py-1 border border-amber-600 text-amber-600 rounded-full bg-amber-50 inline-block"
-                    >
-                      Request Pending
-                    </span>
-
-                    <span
-                      v-else-if="user.status === 'declined'"
-                      class="text-xs px-3 py-1 border border-red-600 text-red-600 rounded-full bg-red-50 inline-block"
-                    >
-                      Request Declined
-                    </span>
-                    <span v-else class="text-xs text-gray-500">
-                      {{ user.status }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                v-if="directoryUsers.length > 0"
-                class="mt-6 flex justify-between items-center"
-              >
-                <div>
-                  <span class="text-sm text-gray-500">
-                    Showing
-                    {{
-                      (directoryPagination.page - 1) *
-                        directoryPagination.pageSize +
-                      1
-                    }}
-                    to
-                    {{
-                      Math.min(
-                        directoryPagination.page * directoryPagination.pageSize,
-                        directoryPagination.count
-                      )
-                    }}
-                    of {{ directoryPagination.count }} users
-                  </span>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <button
-                    @click="goToPrevPage"
-                    :disabled="!directoryPagination.previous"
-                    class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Previous
-                  </button>
-                  <span class="text-sm text-gray-600">
-                    Page {{ directoryPagination.page }}
-                  </span>
-                  <button
-                    @click="goToNextPage"
-                    :disabled="!directoryPagination.next"
-                    class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Next
-                  </button>
-                </div>
-              </div>
-
-              <div v-else class="text-center py-12 text-gray-500">
-                <p>No users found</p>
-                <p
-                  v-if="directoryPagination.currentSearch"
-                  class="text-sm mt-2"
-                >
-                  No results for "{{ directoryPagination.currentSearch }}"
-                </p>
-                <p v-else class="text-sm mt-2">
-                  No users found starting with "{{
-                    directoryPagination.currentLetter
-                  }}"
-                </p>
-              </div>
+                Decline
+              </button>
             </div>
           </div>
 
           <div
-            v-if="currentTab === 'Notifications'"
-            class="space-y-6 max-w-4xl"
+            v-if="notifications.length === 0"
+            class="text-center py-12 text-gray-500"
           >
-            <div
-              v-for="(message, index) in notifications"
-              :key="index"
-              class="bg-white p-6 rounded-xl shadow-md border-l-4"
-              :class="{
-                'border-green-600': message.category === 'COURSES',
-                'border-blue-600': message.category === 'SYSTEM',
-                'border-yellow-600': message.category === 'MY ACCOUNT',
-                'border-red-600': message.category === 'SUBSCRIPTION',
-                'border-purple-600': message.category === 'ADMIN',
-                'opacity-75': message.isRead,
-              }"
+            <p>No notifications yet</p>
+          </div>
+        </div>
+
+        <div
+          v-else-if="currentTab === 'Connections'"
+          class="max-w-7xl bg-white p-6 rounded-xl shadow-lg border border-gray-100"
+        >
+          <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+            Connection Requests
+            <span
+              v-if="pendingRequests.length > 0"
+              class="ml-2 px-2 py-0.5 text-xs bg-amber-100 text-amber-700 rounded-full"
             >
-              <div class="flex justify-between items-start mb-2">
-                <div class="flex items-center space-x-2">
-                  <svg
-                    v-if="message.category === 'COURSES'"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="w-5 h-5 text-green-600"
-                  >
-                    <path
-                      d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V5H6.5A2.5 2.5 0 0 0 4 7.5v12z"
-                    />
-                  </svg>
-                  <svg
-                    v-if="message.category === 'ADMIN'"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="w-5 h-5 text-purple-600"
-                  >
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                    <circle cx="8.5" cy="7" r="4" />
-                    <polyline points="17 11 19 13 23 9" />
-                  </svg>
-                  <span
-                    class="text-xs font-semibold uppercase tracking-wider"
-                    :class="{
-                      'text-green-600': message.category === 'COURSES',
-                      'text-blue-600': message.category === 'SYSTEM',
-                      'text-yellow-600': message.category === 'MY ACCOUNT',
-                      'text-red-600': message.category === 'SUBSCRIPTION',
-                      'text-purple-600': message.category === 'ADMIN',
-                    }"
-                  >
-                    {{ message.category }}
-                  </span>
-                  <div class="w-1 h-1 bg-gray-300 rounded-full"></div>
-                  <span class="text-xs text-gray-500">{{ message.time }}</span>
+              {{ pendingRequests.length }} Pending
+            </span>
+          </h3>
+
+          <div v-if="pendingRequests.length > 0" class="space-y-3 mb-10">
+            <div
+              v-for="request in pendingRequests"
+              :key="request.id"
+              class="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-100 shadow-sm"
+            >
+              <div class="flex items-center space-x-3">
+                <div
+                  v-if="request.profileImage"
+                  class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0"
+                >
+                  <img
+                    :src="request.profileImage"
+                    class="w-full h-full object-cover"
+                  />
                 </div>
-                <div class="flex space-x-2">
-                  <button
-                    @click="markNotificationAsRead(message.id)"
-                    class="text-xs text-gray-400 hover:text-gray-600"
-                  >
-                    Mark as read
-                  </button>
-                  <button
-                    @click="dismissNotification(message.id)"
-                    class="text-xs text-gray-400 hover:text-gray-600"
-                  >
-                    Dismiss
-                  </button>
+                <div
+                  v-else
+                  class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center text-lg font-bold text-amber-700 flex-shrink-0"
+                >
+                  {{ request.initial }}
+                </div>
+
+                <div>
+                  <p class="text-base font-bold text-gray-900 leading-tight">
+                    {{ request.name }}
+                  </p>
+                  <p class="text-xs text-gray-500 italic">
+                    {{ request.role || "Member" }} wants to connect.
+                  </p>
                 </div>
               </div>
-              <p class="text-base font-bold text-gray-900 mb-1">
-                {{ message.title }}
-              </p>
-              <p class="text-sm text-gray-600 line-clamp-2">
-                {{ message.body }}
-              </p>
-              <div v-if="message.type === 'ACTION'" class="mt-4 flex space-x-3">
+
+              <div
+                v-if="request.status?.toLowerCase() === 'pending'"
+                class="flex items-center space-x-4"
+              >
                 <button
-                  @click="acceptAdminRequest(message)"
-                  class="px-4 py-2 text-sm font-semibold rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition shadow-md"
-                >
-                  Accept
-                </button>
-                <button
-                  @click="declineAdminRequest(message)"
-                  class="px-4 py-2 text-sm font-semibold rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
+                  @click="declineConnectionRequest(request.id)"
+                  class="text-sm font-bold text-red-500 hover:underline transition-all"
                 >
                   Decline
                 </button>
-              </div>
-            </div>
 
-            <div
-              v-if="notifications.length === 0"
-              class="text-center py-12 text-gray-500"
-            >
-              <p>No notifications yet</p>
+                <button
+                  @click="acceptConnectionRequest(request.id)"
+                  class="text-sm font-bold text-green-600 hover:underline transition-all"
+                >
+                  Accept
+                </button>
+              </div>
             </div>
           </div>
 
           <div
-            v-else-if="currentTab === 'Connections'"
-            class="max-w-7xl bg-white p-6 rounded-xl shadow-lg border border-gray-100"
+            v-else
+            class="py-8 text-center border-2 border-dashed border-gray-100 rounded-xl mb-10"
           >
-            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-              Connection Requests
-              <span
-                v-if="pendingRequests.length > 0"
-                class="ml-2 px-2 py-0.5 text-xs bg-amber-100 text-amber-700 rounded-full"
-              >
-                {{ pendingRequests.length }} Pending
-              </span>
-            </h3>
-
-            <div v-if="pendingRequests.length > 0" class="space-y-3 mb-10">
-              <div
-                v-for="request in pendingRequests"
-                :key="request.id"
-                class="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-100 shadow-sm"
-              >
-                <div class="flex items-center space-x-3">
-                  <div
-                    v-if="request.profileImage"
-                    class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0"
-                  >
-                    <img
-                      :src="request.profileImage"
-                      class="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div
-                    v-else
-                    class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center text-lg font-bold text-amber-700 flex-shrink-0"
-                  >
-                    {{ request.initial }}
-                  </div>
-
-                  <div>
-                    <p class="text-base font-bold text-gray-900 leading-tight">
-                      {{ request.name }}
-                    </p>
-                    <p class="text-xs text-gray-500 italic">
-                      {{ request.role || "Member" }} wants to connect.
-                    </p>
-                  </div>
-                </div>
-
-                <div
-                  v-if="request.status?.toLowerCase() === 'pending'"
-                  class="flex items-center space-x-4"
-                >
-                  <button
-                    @click="declineConnectionRequest(request.id)"
-                    class="text-sm font-bold text-red-500 hover:underline transition-all"
-                  >
-                    Decline
-                  </button>
-
-                  <button
-                    @click="acceptConnectionRequest(request.id)"
-                    class="text-sm font-bold text-green-600 hover:underline transition-all"
-                  >
-                    Accept
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div
-              v-else
-              class="py-8 text-center border-2 border-dashed border-gray-100 rounded-xl mb-10"
-            >
-              <p class="text-gray-400">No pending connection requests.</p>
-            </div>
-
-            <hr class="my-8 border-gray-100" />
-
-            <h3 class="text-xl font-bold text-gray-800 mb-4">
-              My Connections ({{ activeConnections.length }})
-            </h3>
-
-            <div v-if="activeConnections.length > 0" class="space-y-3">
-              <div
-                v-for="connection in activeConnections"
-                :key="connection.id"
-                class="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-100 shadow-sm"
-              >
-                <div class="flex items-center space-x-3">
-                  <div
-                    v-if="connection.profileImage"
-                    class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0"
-                  >
-                    <img
-                      :src="connection.profileImage"
-                      class="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div
-                    v-else
-                    class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-lg font-bold text-green-700 flex-shrink-0"
-                  >
-                    {{ connection.initial }}
-                  </div>
-
-                  <div>
-                    <p class="text-base font-bold text-gray-900 leading-tight">
-                      {{ connection.name }}
-                    </p>
-                    <div class="flex items-center">
-                      <span
-                        class="w-2 h-2 bg-green-500 rounded-full mr-1.5"
-                      ></span>
-                      <span class="text-xs text-gray-500">Connected</span>
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  @click="removeConnection(connection.id)"
-                  class="text-sm font-bold text-red-500 hover:text-red-700 transition-colors"
-                >
-                  Remove
-                </button>
-              </div>
-            </div>
-
-            <div v-else class="py-12 text-center bg-gray-50 rounded-xl">
-              <p class="text-gray-500">
-                You haven't added any connections yet.
-              </p>
-            </div>
+            <p class="text-gray-400">No pending connection requests.</p>
           </div>
-          <div
-            v-if="currentTab === 'Groups' || currentTab === 'Direct Messages'"
-            class="flex h-[80vh] min-h-[600px] max-w-7xl border border-gray-200 rounded-xl shadow-lg overflow-hidden"
-          >
-            <aside
-              class="w-72 bg-white p-4 border-r border-gray-100 flex-shrink-0 overflow-y-auto"
+
+          <hr class="my-8 border-gray-100" />
+
+          <h3 class="text-xl font-bold text-gray-800 mb-4">
+            My Connections ({{ activeConnections.length }})
+          </h3>
+
+          <div v-if="activeConnections.length > 0" class="space-y-3">
+            <div
+              v-for="connection in activeConnections"
+              :key="connection.id"
+              class="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-100 shadow-sm"
             >
-              <h2 class="text-xl font-bold text-gray-800 mb-4">
-                {{ currentTab }}
-              </h2>
-
-              <div v-if="currentTab === 'Direct Messages'" class="space-y-1">
-                <input
-                  v-model="connectionSearchQuery"
-                  placeholder="Search connections..."
-                  class="w-full mb-3 p-2 border rounded"
-                />
-
-                <button
-                  v-if="filteredConnections.length > 0"
-                  v-for="user in filteredConnections"
-                  :key="user.userId"
-                  @click="startNewChat(user)"
-                  class="flex items-center w-full p-2 rounded-lg hover:bg-gray-50"
-                >
-                  <div
-                    class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm text-white mr-3"
-                    :class="getColorForUser(user.userId)"
-                  >
-                    {{ user.initial }}
-                  </div>
-                  <div class="truncate">{{ user.name }}</div>
-                  <span
-                    v-if="user.count > 0"
-                    class="text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full text-white bg-green-700"
-                  >
-                    {{ user.count }}
-                  </span>
-                </button>
+              <div class="flex items-center space-x-3">
                 <div
-                  v-if="filteredConnections.length === 0"
-                  class="text-center py-4 text-gray-500"
+                  v-if="connection.profileImage"
+                  class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0"
                 >
-                  <p class="text-sm">No matching connections found</p>
-                </div>
-
-                <button
-                  v-else
-                  v-for="dm in directMessages"
-                  :key="dm.userId"
-                  @click="selectDMUser(dm)"
-                  class="flex items-center justify-between w-full p-2 rounded-lg transition-colors"
-                  :class="
-                    isDMActive(dm)
-                      ? 'font-semibold'
-                      : 'hover:bg-gray-50 text-gray-600'
-                  "
-                  :style="
-                    isDMActive(dm)
-                      ? { backgroundColor: LIGHT_GREEN, color: DARK_GREEN }
-                      : {}
-                  "
-                >
-                  <div class="flex items-center">
-                    <div
-                      class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm text-white mr-3"
-                      :class="dm.color"
-                    >
-                      {{ dm.initial }}
-                    </div>
-                    <div class="truncate">{{ dm.name }}</div>
-                  </div>
-
-                  <span
-                    v-if="dm.count > 0"
-                    class="text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full text-white bg-green-700"
-                  >
-                    {{ dm.count }}
-                  </span>
-                </button>
-
-                <div
-                  v-if="directMessages.length === 0"
-                  class="text-center py-4 text-gray-500"
-                >
-                  <p class="text-sm">No conversations yet</p>
-                </div>
-              </div>
-
-              <div v-else-if="currentTab === 'Groups'" class="space-y-1">
-                <button
-                  v-for="group in groups"
-                  :key="group.id"
-                  @click="selectGroup(group)"
-                  class="flex justify-between items-center w-full p-2 rounded-lg transition-colors"
-                  :class="
-                    isGroupActive(group)
-                      ? 'font-semibold'
-                      : 'hover:bg-gray-50 text-gray-600'
-                  "
-                  :style="
-                    isGroupActive(group)
-                      ? { backgroundColor: LIGHT_GREEN, color: DARK_GREEN }
-                      : {}
-                  "
-                >
-                  <span class="flex items-center truncate">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="w-4 h-4 mr-2 flex-shrink-0"
-                    >
-                      <line x1="16" y1="3" x2="8" y2="21"></line>
-                      <line x1="21" y1="8" x2="3" y2="16"></line>
-                    </svg>
-                    <span class="truncate">{{ group.name }}</span>
-                  </span>
-                  <span
-                    v-if="group.count > 0"
-                    class="text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full text-white bg-green-700 flex-shrink-0"
-                  >
-                    {{ group.count }}
-                  </span>
-                </button>
-
-                <div
-                  v-if="groups.length === 0"
-                  class="text-center py-4 text-gray-500"
-                >
-                  <p class="text-sm">No groups yet</p>
-                </div>
-              </div>
-            </aside>
-
-            <section class="flex-grow flex flex-col bg-white">
-              <header class="p-4 border-b border-gray-100">
-                <h3 class="text-xl font-semibold text-gray-800">
-                  {{ activeChatTitle }}
-                </h3>
-              </header>
-
-              <div class="flex-grow p-6 space-y-4 overflow-y-auto">
-                <div class="text-center my-4">
-                  <span class="text-xs text-gray-400">{{
-                    new Date().toLocaleDateString()
-                  }}</span>
-                </div>
-
-                <div
-                  v-if="chatMessages.length === 0"
-                  class="text-center py-12 text-gray-500"
-                >
-                  <p>No messages yet. Start the conversation!</p>
-                </div>
-
-                <div
-                  v-for="message in chatMessages"
-                  :key="message.id"
-                  class="flex"
-                  :class="message.isMine ? 'justify-end' : 'justify-start'"
-                >
-                  <div
-                    class="max-w-[70%] p-3 rounded-xl"
-                    :class="
-                      message.isMine
-                        ? 'bg-green-600 text-white'
-                        : 'bg-gray-100 text-gray-800'
-                    "
-                  >
-                    <p class="text-sm">{{ message.body }}</p>
-                    <span class="text-xs opacity-70 block mt-1 text-right">
-                      {{ message.time }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <footer class="p-4 border-t border-gray-100">
-                <div
-                  class="flex items-center bg-gray-50 rounded-xl border border-gray-200 pr-2"
-                >
-                  <button
-                    class="p-3 text-gray-400 hover:text-gray-600 transition"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="w-5 h-5"
-                    >
-                      <path
-                        d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19A4 4 0 0 1 18 3.5l-9.19 9.19a2 2 0 0 0 2.83 2.83l8.61-8.61"
-                      />
-                    </svg>
-                  </button>
-                  <input
-                    type="text"
-                    v-model="messageInput"
-                    @keyup.enter="sendMessage"
-                    placeholder="Type your message"
-                    class="flex-grow p-3 bg-transparent focus:outline-none text-gray-700"
+                  <img
+                    :src="connection.profileImage"
+                    class="w-full h-full object-cover"
                   />
-                  <button
-                    @click="sendMessage"
-                    :disabled="!messageInput.trim()"
-                    class="p-3 text-white rounded-lg transition"
-                    :class="{
-                      'opacity-50 cursor-not-allowed': !messageInput.trim(),
-                    }"
-                    :style="{
-                      backgroundColor: messageInput.trim()
-                        ? DARK_GREEN
-                        : '#ccc',
-                    }"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="w-5 h-5"
-                    >
-                      <line x1="22" y1="2" x2="11" y2="13" />
-                      <polygon points="22 2 15 22 11 15 2 11 22 2" />
-                    </svg>
-                  </button>
                 </div>
-              </footer>
-            </section>
+                <div
+                  v-else
+                  class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-lg font-bold text-green-700 flex-shrink-0"
+                >
+                  {{ connection.initial }}
+                </div>
+
+                <div>
+                  <p class="text-base font-bold text-gray-900 leading-tight">
+                    {{ connection.name }}
+                  </p>
+                  <div class="flex items-center">
+                    <span
+                      class="w-2 h-2 bg-green-500 rounded-full mr-1.5"
+                    ></span>
+                    <span class="text-xs text-gray-500">Connected</span>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                @click="removeConnection(connection.id)"
+                class="text-sm font-bold text-red-500 hover:text-red-700 transition-colors"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+
+          <div v-else class="py-12 text-center bg-gray-50 rounded-xl">
+            <p class="text-gray-500">You haven't added any connections yet.</p>
           </div>
         </div>
-      </main>
-    </div>
+        <div
+          v-if="currentTab === 'Groups' || currentTab === 'Direct Messages'"
+          class="flex h-[80vh] min-h-[600px] max-w-7xl border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+        >
+          <aside
+            class="w-72 bg-white p-4 border-r border-gray-100 flex-shrink-0 overflow-y-auto"
+          >
+            <h2 class="text-xl font-bold text-gray-800 mb-4">
+              {{ currentTab }}
+            </h2>
+
+            <div v-if="currentTab === 'Direct Messages'" class="space-y-1">
+              <input
+                v-model="connectionSearchQuery"
+                placeholder="Search connections..."
+                class="w-full mb-3 p-2 border rounded"
+              />
+
+              <button
+                v-if="filteredConnections.length > 0"
+                v-for="user in filteredConnections"
+                :key="user.userId"
+                @click="startNewChat(user)"
+                class="flex items-center w-full p-2 rounded-lg hover:bg-gray-50"
+              >
+                <div
+                  class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm text-white mr-3"
+                  :class="getColorForUser(user.userId)"
+                >
+                  {{ user.initial }}
+                </div>
+                <div class="truncate">{{ user.name }}</div>
+                <span
+                  v-if="user.count > 0"
+                  class="text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full text-white bg-green-700"
+                >
+                  {{ user.count }}
+                </span>
+              </button>
+              <div
+                v-if="filteredConnections.length === 0"
+                class="text-center py-4 text-gray-500"
+              >
+                <p class="text-sm">No matching connections found</p>
+              </div>
+
+              <button
+                v-else
+                v-for="dm in directMessages"
+                :key="dm.userId"
+                @click="selectDMUser(dm)"
+                class="flex items-center justify-between w-full p-2 rounded-lg transition-colors"
+                :class="
+                  isDMActive(dm)
+                    ? 'font-semibold'
+                    : 'hover:bg-gray-50 text-gray-600'
+                "
+                :style="
+                  isDMActive(dm)
+                    ? { backgroundColor: LIGHT_GREEN, color: DARK_GREEN }
+                    : {}
+                "
+              >
+                <div class="flex items-center">
+                  <div
+                    class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm text-white mr-3"
+                    :class="dm.color"
+                  >
+                    {{ dm.initial }}
+                  </div>
+                  <div class="truncate">{{ dm.name }}</div>
+                </div>
+
+                <span
+                  v-if="dm.count > 0"
+                  class="text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full text-white bg-green-700"
+                >
+                  {{ dm.count }}
+                </span>
+              </button>
+
+              <div
+                v-if="directMessages.length === 0"
+                class="text-center py-4 text-gray-500"
+              >
+                <p class="text-sm">No conversations yet</p>
+              </div>
+            </div>
+
+            <div v-else-if="currentTab === 'Groups'" class="space-y-1">
+              <button
+                v-for="group in groups"
+                :key="group.id"
+                @click="selectGroup(group)"
+                class="flex justify-between items-center w-full p-2 rounded-lg transition-colors"
+                :class="
+                  isGroupActive(group)
+                    ? 'font-semibold'
+                    : 'hover:bg-gray-50 text-gray-600'
+                "
+                :style="
+                  isGroupActive(group)
+                    ? { backgroundColor: LIGHT_GREEN, color: DARK_GREEN }
+                    : {}
+                "
+              >
+                <span class="flex items-center truncate">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-4 h-4 mr-2 flex-shrink-0"
+                  >
+                    <line x1="16" y1="3" x2="8" y2="21"></line>
+                    <line x1="21" y1="8" x2="3" y2="16"></line>
+                  </svg>
+                  <span class="truncate">{{ group.name }}</span>
+                </span>
+                <span
+                  v-if="group.count > 0"
+                  class="text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full text-white bg-green-700 flex-shrink-0"
+                >
+                  {{ group.count }}
+                </span>
+              </button>
+
+              <div
+                v-if="groups.length === 0"
+                class="text-center py-4 text-gray-500"
+              >
+                <p class="text-sm">No groups yet</p>
+              </div>
+            </div>
+          </aside>
+
+          <section class="flex-grow flex flex-col bg-white">
+            <header class="p-4 border-b border-gray-100">
+              <h3 class="text-xl font-semibold text-gray-800">
+                {{ activeChatTitle }}
+              </h3>
+            </header>
+
+            <div class="flex-grow p-6 space-y-4 overflow-y-auto">
+              <div class="text-center my-4">
+                <span class="text-xs text-gray-400">{{
+                  new Date().toLocaleDateString()
+                }}</span>
+              </div>
+
+              <div
+                v-if="chatMessages.length === 0"
+                class="text-center py-12 text-gray-500"
+              >
+                <p>No messages yet. Start the conversation!</p>
+              </div>
+
+              <div
+                v-for="message in chatMessages"
+                :key="message.id"
+                class="flex"
+                :class="message.isMine ? 'justify-end' : 'justify-start'"
+              >
+                <div
+                  class="max-w-[70%] p-3 rounded-xl"
+                  :class="
+                    message.isMine
+                      ? 'bg-green-600 text-white'
+                      : 'bg-gray-100 text-gray-800'
+                  "
+                >
+                  <p class="text-sm">{{ message.body }}</p>
+                  <span class="text-xs opacity-70 block mt-1 text-right">
+                    {{ message.time }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <footer class="p-4 border-t border-gray-100">
+              <div
+                class="flex items-center bg-gray-50 rounded-xl border border-gray-200 pr-2"
+              >
+                <button
+                  class="p-3 text-gray-400 hover:text-gray-600 transition"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5"
+                  >
+                    <path
+                      d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19A4 4 0 0 1 18 3.5l-9.19 9.19a2 2 0 0 0 2.83 2.83l8.61-8.61"
+                    />
+                  </svg>
+                </button>
+                <input
+                  type="text"
+                  v-model="messageInput"
+                  @keyup.enter="sendMessage"
+                  placeholder="Type your message"
+                  class="flex-grow p-3 bg-transparent focus:outline-none text-gray-700"
+                />
+                <button
+                  @click="sendMessage"
+                  :disabled="!messageInput.trim()"
+                  class="p-3 text-white rounded-lg transition"
+                  :class="{
+                    'opacity-50 cursor-not-allowed': !messageInput.trim(),
+                  }"
+                  :style="{
+                    backgroundColor: messageInput.trim() ? DARK_GREEN : '#ccc',
+                  }"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5"
+                  >
+                    <line x1="22" y1="2" x2="11" y2="13" />
+                    <polygon points="22 2 15 22 11 15 2 11 22 2" />
+                  </svg>
+                </button>
+              </div>
+            </footer>
+          </section>
+        </div>
+      </div>
+    </main>
   </div>
 </template>
 

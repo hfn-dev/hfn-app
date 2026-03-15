@@ -5,7 +5,7 @@ import userList from "@/api/userRegister.js";
   
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import { computed, onMounted, watch } from "vue";
-import { useToast } from "@/composables/useToast";
+import { useToast } from "vue-toastification";
 import {
   ChevronLeft,
   ChevronRight,
@@ -22,7 +22,7 @@ const membershipTypes = ref([]);
  const showMembershipTypeModal = ref(false)
  const showMemberDetailsModal = ref(false);
 const selectedMember = ref(null); 
-const { showToast } = useToast();
+const toast = useToast();
  const newMembershipType = ref({
   name: '',
   description: '',
@@ -148,7 +148,7 @@ const submitNewMember = async () => {
 
       showAddMemberModal.value = false;
 
-      showToast("Member added successfully", "success");
+      toast.success("Member added successfully", "success");
 
       // Reload members
       fetchMembers();
@@ -171,9 +171,9 @@ const submitNewMember = async () => {
     if (errors) {
       const firstError = Object.values(errors)[0]?.[0];
 
-      showToast(firstError || "Failed to add member", "error");
+      toast.error(firstError || "Failed to add member", "error");
     } else {
-      showToast("Something went wrong", "error");
+      toast.error("Something went wrong", "error");
     }
 
     console.error("Failed to add member", error);
@@ -185,14 +185,14 @@ const submitNewMember = async () => {
   try {
     await membershipAPI.approveApplication(selectedMember.value.id);
 
-    showToast("Application approved successfully", "success");
+    toast.success("Application approved successfully", "success");
 
     showMemberDetailsModal.value = false;
 
     fetchMembers();
   } catch (error) {
     console.error("Approval failed:", error);
-    showToast("Failed to approve application", "error");
+    toast.error("Failed to approve application", "error");
   }
 };
 
@@ -200,14 +200,14 @@ const rejectApplication = async () => {
   try {
     await membershipAPI.rejectApplication(selectedMember.value.id);
 
-    showToast("Application rejected", "success");
+    toast.success("Application rejected", "success");
 
     showMemberDetailsModal.value = false;
 
     fetchMembers();
   } catch (error) {
     console.error("Rejection failed:", error);
-    showToast("Failed to reject application", "error");
+    toast.error("Failed to reject application", "error");
   }
 }; 
 

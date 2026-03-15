@@ -5,7 +5,7 @@ import userList from "@/api/userRegister.js";
   
 import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
 import { computed, onMounted, watch } from "vue";
-import { useToast } from "@/composables/useToast";
+import { useToast } from "vue-toastification";
 import {
   ChevronLeft,
   ChevronRight,
@@ -22,7 +22,7 @@ const membershipTypes = ref([]);
  const showMembershipTypeModal = ref(false)
  const showMemberDetailsModal = ref(false);
 const selectedMember = ref(null); 
-const { showToast } = useToast();
+const toast = useToast();
  const newMembershipType = ref({
   name: '',
   description: '',
@@ -148,7 +148,7 @@ const submitNewMember = async () => {
 
       showAddMemberModal.value = false;
 
-      showToast("Member added successfully", "success");
+      toast.success("Member added successfully", "success");
 
       // Reload members
       fetchMembers();
@@ -171,9 +171,9 @@ const submitNewMember = async () => {
     if (errors) {
       const firstError = Object.values(errors)[0]?.[0];
 
-      showToast(firstError || "Failed to add member", "error");
+      toast.error(firstError || "Failed to add member", "error");
     } else {
-      showToast("Something went wrong", "error");
+      toast.error("Something went wrong", "error");
     }
 
     console.error("Failed to add member", error);

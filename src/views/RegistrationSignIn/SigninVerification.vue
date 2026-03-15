@@ -84,66 +84,6 @@ const handleKeydown = (index, event) => {
 
 const fullCode = computed(() => verificationCode.value.join(''));
 
-// const handleVerification = async () => {
-//   if (fullCode.value.length !== 6) {
-//     toast.error('Please enter the full 6-digit code.');
-//     return;
-//   }
-
-//   if (!userEmail.value) {
-//     toast.error('Email not found. Please register again.');
-//     return;
-//   }
-
-//   try {
-//     isLoading.value = true;
-    
-//     const payload = {
-//       email: userEmail.value,
-//       code: fullCode.value,
-//       purpose: "email_verification"
-//     };
-
-//     console.log("Verifying OTP with payload:", payload);
-    
-//     const response = await userRegister.verifyUser(payload);
-//     console.log("Verification response:", response);
-    
-//     if (response?.status === "success") {
-//       const successMsg = response.messages?.[0] || "Email verified successfully!";
-//       toast.success(successMsg);
-
-//       localStorage.removeItem("pendingVerificationEmail");
-//       router.push('/registration-payment');
-//       return;
-//     } else {
-//       const errorMessage = response.messages?.[0] || "Verification failed.";
-//       toast.error(errorMessage);
-
-//       if (response.actions_required?.includes("resend_email_verification")) {
-//       }
-//     }
-    
-//   } catch (error) {
-//     console.error("Verification error:", error);
-//     if (error.response) {
-//       const errorMsg = error.response.data?.messages?.[0] || 
-//                       error.response.data?.message || 
-//                       `Error: ${error.response.status}`;
-//       toast.error(errorMsg);
-
-//       if (error.response?.actions_required?.includes("resend_email_verification")) {
-//         // Optionally auto-resend or just show message
-//       }
-//     } else if (error.request) {
-//       toast.error("Network error. Please check your connection and try again.");
-//     } else {
-//       toast.error("An unexpected error occurred. Please try again.");
-//     }
-//   } finally {
-//     isLoading.value = false;
-//   }
-// };
 const handleVerification = async () => {
   if (fullCode.value.length !== 6) {
     toast.error("Please enter the full 6-digit code.");

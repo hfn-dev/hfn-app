@@ -3,10 +3,10 @@ import cert from "@/assets/cert.png";
 import sign from "@/assets/sign.png";
 import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
 import { computed, reactive, ref, onMounted } from "vue";
-import { useToast } from "@/composables/useToast";
+import { useToast } from "vue-toastification";
 import accessApi from "@/api/userRegister";
 
-const { showToast } = useToast();
+const toast = useToast();
 const currentView = ref("My Profile");
 const activeTab = ref("My Profile");
 const previewImageUrl = ref(null);
@@ -31,7 +31,7 @@ const profile = reactive({
 
 const toggleIndividualEdit = () => {
   if (isIndividualEditing.value) {
-    showToast("Profile updated successfully", "success");
+    toast.success("Profile updated successfully", "success");
   }
   isIndividualEditing.value = !isIndividualEditing.value;
 };
@@ -82,7 +82,7 @@ const fetchProfile = async () => {
     isOrganization.value = data.role === "organization";
   } catch (err) {
     console.error("Failed to load profile:", err);
-    showToast("Failed to load profile.", "error");
+    toast.error("Failed to load profile.", "error");
   }
 };
 
@@ -91,12 +91,12 @@ const handleProfilePicUpload = (event) => {
   if (!file) return;
 
   if (!["image/jpeg", "image/png", "image/jpg"].includes(file.type)) {
-    showToast("Please upload a valid JPG or PNG image.", "error");
+    toast.error("Please upload a valid JPG or PNG image.", "error");
     return;
   }
 
   if (file.size > 1024 * 1024) {
-    showToast("File size exceeds 1MB limit.", "error");
+    toast.error("File size exceeds 1MB limit.", "error");
     return;
   }
 
@@ -126,7 +126,7 @@ const handleFileUpload = (event) => {
     ].includes(file.type) &&
     file.type !== ""
   ) {
-    showToast(
+    toast.error(
       "Invalid file type. Please upload a zip, rar, jpg, or png file.",
       "error"
     );

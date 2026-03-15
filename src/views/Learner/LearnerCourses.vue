@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 import learningModule from "@/api/learningModule.js";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
@@ -676,4 +676,4 @@ onMounted(() => {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-</style>
+</style> -->

@@ -1,10 +1,10 @@
 <script setup>
 import learningModule from "@/api/learningModule.js";
-import paymentApi from '@/api/payments.js';
+import paymentApi from "@/api/payments.js";
 import UserSidebar from "@/components/layout/UserSidebar.vue";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import { useToast } from 'vue-toastification';
+import { useToast } from "vue-toastification";
 
 import user from "@/assets/user.png";
 import user1 from "@/assets/user1.png";
@@ -43,40 +43,39 @@ const courseTracks = ref([]);
 // Fetch user profile
 const fetchUserProfile = async () => {
   try {
-    const userData = JSON.parse(localStorage.getItem('user') || '{}');
+    const userData = JSON.parse(localStorage.getItem("user") || "{}");
     userName.value = userData.full_name || userData.username || "User";
   } catch (error) {
-    console.error('Error fetching user profile:', error);
+    console.error("Error fetching user profile:", error);
   }
 };
 
 const userRole = computed(() => {
   try {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
     return user.role || user.user_type || null;
   } catch {
     return null;
   }
 });
 
-
 // Fetch categories (course tracks)
 const fetchCategories = async () => {
   try {
     const response = await learningModule.getCategories();
     if (response.data) {
-      categories.value = Array.isArray(response.data) 
-        ? response.data 
+      categories.value = Array.isArray(response.data)
+        ? response.data
         : response.data.results || [];
-      
+
       courseTracks.value = categories.value
-        .filter(cat => cat.is_active !== false)
-        .map(cat => cat.name)
+        .filter((cat) => cat.is_active !== false)
+        .map((cat) => cat.name)
         .slice(0, 6);
     }
   } catch (error) {
-    console.error('Error fetching categories:', error);
-    toast.error('Failed to load course categories');
+    console.error("Error fetching categories:", error);
+    toast.error("Failed to load course categories");
   }
 };
 
@@ -84,25 +83,25 @@ const fetchCategories = async () => {
 const fetchCourses = async () => {
   try {
     const response = await learningModule.listCourses({
-      status: 'published',
-      ordering: '-enrollment_count'
+      status: "published",
+      ordering: "-enrollment_count",
     });
-    
+
     if (response.data) {
-      const allCourses = Array.isArray(response.data) 
-        ? response.data 
+      const allCourses = Array.isArray(response.data)
+        ? response.data
         : response.data.results || [];
-      
+
       courses.value = allCourses;
       filteredCourses.value = allCourses;
-      
+
       latestCourses.value = allCourses.slice(0, 3);
-      
+
       updatePagination();
     }
   } catch (error) {
-    console.error('Error fetching courses:', error);
-    toast.error('Failed to load courses');
+    console.error("Error fetching courses:", error);
+    toast.error("Failed to load courses");
   }
 };
 
@@ -116,7 +115,7 @@ const fetchUserEnrollments = async () => {
         : enrollmentResponse.data.results || [];
     }
   } catch (error) {
-    console.error('Error fetching enrollments:', error);
+    console.error("Error fetching enrollments:", error);
   }
 };
 
@@ -128,17 +127,20 @@ const filterCoursesByTrack = () => {
   if (!activeCourseTrack.value || activeCourseTrack.value === "All") {
     filteredCourses.value = courses.value;
   } else {
-    const category = categories.value.find(cat => cat.name === activeCourseTrack.value);
+    const category = categories.value.find(
+      (cat) => cat.name === activeCourseTrack.value
+    );
     if (category) {
-      filteredCourses.value = courses.value.filter(course => 
-        course.category?.name === activeCourseTrack.value ||
-        course.category?.id === category.id
+      filteredCourses.value = courses.value.filter(
+        (course) =>
+          course.category?.name === activeCourseTrack.value ||
+          course.category?.id === category.id
       );
     } else {
       filteredCourses.value = courses.value;
     }
   }
-  
+
   currentPage.value = 1;
   updatePagination();
 };
@@ -154,29 +156,30 @@ const handleSearch = () => {
     filteredCourses.value = courses.value;
   } else {
     const query = searchQuery.value.toLowerCase();
-    filteredCourses.value = courses.value.filter(course => 
-      course.title?.toLowerCase().includes(query) ||
-      course.description?.toLowerCase().includes(query) ||
-      course.short_description?.toLowerCase().includes(query) ||
-      course.tags?.some(tag => tag.toLowerCase().includes(query))
+    filteredCourses.value = courses.value.filter(
+      (course) =>
+        course.title?.toLowerCase().includes(query) ||
+        course.description?.toLowerCase().includes(query) ||
+        course.short_description?.toLowerCase().includes(query) ||
+        course.tags?.some((tag) => tag.toLowerCase().includes(query))
     );
   }
-  
+
   currentPage.value = 1;
   updatePagination();
 };
 
 const formatPrice = (course) => {
   if (course.is_free) return "Free";
-  return `₦${course.price?.toLocaleString() || '0'}`;
+  return `₦${course.price?.toLocaleString() || "0"}`;
 };
 
 const formatRating = (course) => {
-  return course.rating_average?.toFixed(1) || '0.0';
+  return course.rating_average?.toFixed(1) || "0.0";
 };
 
 const formatReviewCount = (course) => {
-  return course.rating_count?.toLocaleString() || '0';
+  return course.rating_count?.toLocaleString() || "0";
 };
 
 const goToCourseDetails = (courseId) => {
@@ -184,7 +187,9 @@ const goToCourseDetails = (courseId) => {
 };
 
 const isUserEnrolled = (courseId) => {
-  return userEnrollments.value.some(enrollment => enrollment.course?.id === courseId);
+  return userEnrollments.value.some(
+    (enrollment) => enrollment.course?.id === courseId
+  );
 };
 
 // const handleCourseAction = async (course) => {
@@ -210,77 +215,74 @@ const handleCourseAction = async (course) => {
     return;
   }
 
-  if (userRole.value === 'member') {
+  if (userRole.value === "member") {
     router.push(`/learning/courses/${course.id || course.slug}`);
     return;
   }
 
-  if (userRole.value === 'learner') {
-
+  if (userRole.value === "learner") {
     if (course.is_free) {
       try {
         await learningModule.courseEnrollment({
-          slug: course.slug || course.id
+          slug: course.slug || course.id,
         });
         toast.success(`Enrolled in "${course.title}" successfully!`);
         await fetchUserEnrollments();
       } catch (error) {
-        console.error('Enrollment error:', error);
-        toast.error('Failed to enroll in course');
+        console.error("Enrollment error:", error);
+        toast.error("Failed to enroll in course");
       }
       return;
     }
 
     try {
       const payload = {
-        payment_type: 'subscription',
-        subscription_id: 0, 
+        payment_type: "subscription",
+        subscription_id: 0,
         course_id: course.id,
-        payment_method: 'cash',
+        payment_method: "cash",
       };
 
       const response = await paymentApi.coursePayment(payload);
-      console.log('Payment intent:', response);
+      console.log("Payment intent:", response);
 
-      toast.success('Payment initiated. Redirecting to payment...');
+      toast.success("Payment initiated. Redirecting to payment...");
 
       // OPTIONAL redirect
       // router.push({ name: 'CoursePayment', params: { intentId: response.id } });
-
     } catch (error) {
-      console.error('Payment initiation error:', error);
-      toast.error('Failed to initiate payment');
+      console.error("Payment initiation error:", error);
+      toast.error("Failed to initiate payment");
     }
 
     return;
   }
 
-  toast.error('You are not allowed to take this course.');
+  toast.error("You are not allowed to take this course.");
 };
 
-
 const getActionButtonText = (course) => {
-  return isUserEnrolled(course.id) ? 'Continue Course' : 'Take Course';
+  return isUserEnrolled(course.id) ? "Continue Course" : "Take Course";
 };
 
 const getStarIcons = (rating) => {
   const stars = [];
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating % 1 >= 0.5;
-  
+
   for (let i = 0; i < fullStars; i++) {
-    stars.push('full');
+    stars.push("full");
   }
-  
+
   if (hasHalfStar) {
-    stars.push('half');
+    stars.push("half");
   }
-  
+
   const emptyStars = 5 - stars.length;
   for (let i = 0; i < emptyStars; i++) {
-    stars.push('empty');
+    stars.push("empty");
   }
-  
+
   return stars;
 };
 
@@ -317,30 +319,32 @@ const getIconPaths = (name) => {
 const initializeData = async () => {
   try {
     isLoading.value = true;
-    
+
     await Promise.all([
       fetchUserProfile(),
       fetchCategories(),
       fetchCourses(),
-      fetchUserEnrollments()
+      fetchUserEnrollments(),
     ]);
-    
+
     if (courseTracks.value.length > 0) {
       activeCourseTrack.value = courseTracks.value[0];
       filterCoursesByTrack();
     }
-    
   } catch (error) {
-    console.error('Initialization error:', error);
-    toast.error('Failed to load dashboard data');
+    console.error("Initialization error:", error);
+    toast.error("Failed to load dashboard data");
   } finally {
     isLoading.value = false;
   }
 };
 
-watch(() => activeCourseTrack.value, () => {
-  filterCoursesByTrack();
-});
+watch(
+  () => activeCourseTrack.value,
+  () => {
+    filterCoursesByTrack();
+  }
+);
 
 onMounted(() => {
   initializeData();
@@ -348,16 +352,17 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col bg-white border-0 font-sans">
-    <div class="flex flex-grow overflow-hidden">
+  <div class="flex min-h-screen  bg-white border-0 font-sans">
       <UserSidebar />
       <main
-        class="flex-grow overflow-y-auto pb-12"
+        class="flex-1 overflow-y-auto pb-12"
         :style="{ backgroundColor: 'white' }"
       >
         <div class="max-w-6xl mx-auto p-4 sm:p-8">
           <div v-if="isLoading" class="flex justify-center items-center h-64">
-            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#00cc66]"></div>
+            <div
+              class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#00cc66]"
+            ></div>
           </div>
 
           <div v-else>
@@ -371,7 +376,7 @@ onMounted(() => {
             </div>
 
             <div
-              class="w-screen mb-12 py-16 shadow-inner relative left-1/2 right-1/2 -mx-[50vw]"
+              class="w-full mb-12 py-16 shadow-inner"
               :style="{ backgroundColor: LIGHT_PINKISH_GRAY }"
             >
               <div class="max-w-6xl mx-auto px-6">
@@ -416,8 +421,8 @@ onMounted(() => {
                       Search for Courses
                     </h3>
                     <p class="text-sm text-gray-600">
-                      Find health tips, natural living guides, and upcoming events
-                      that align with your interests.
+                      Find health tips, natural living guides, and upcoming
+                      events that align with your interests.
                     </p>
                   </div>
 
@@ -446,9 +451,19 @@ onMounted(() => {
 
             <div class="mb-8">
               <div class="relative max-w-2xl mx-auto">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                >
+                  <svg
+                    class="h-5 w-5 text-gray-400"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                      clip-rule="evenodd"
+                    />
                   </svg>
                 </div>
                 <input
@@ -488,7 +503,10 @@ onMounted(() => {
               </button>
             </div>
 
-            <div v-if="currentPageCourses.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div
+              v-if="currentPageCourses.length > 0"
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+            >
               <div
                 v-for="course in currentPageCourses"
                 :key="course.id"
@@ -502,49 +520,67 @@ onMounted(() => {
                     class="w-full h-full object-cover"
                     @error="course.thumbnail = ''"
                   />
-                  <div v-else class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#004d33] to-[#00cc66]">
-                    <span class="text-white text-lg font-bold">{{ course.title?.charAt(0) || 'C' }}</span>
+                  <div
+                    v-else
+                    class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#004d33] to-[#00cc66]"
+                  >
+                    <span class="text-white text-lg font-bold">{{
+                      course.title?.charAt(0) || "C"
+                    }}</span>
                   </div>
                   <div class="absolute top-2 right-2">
-                    <span 
+                    <span
                       :class="[
                         'px-2 py-1 rounded text-xs font-semibold',
-                        course.is_free ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
+                        course.is_free
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-blue-100 text-blue-800',
                       ]"
                     >
                       {{ formatPrice(course) }}
                     </span>
                   </div>
                   <div class="absolute bottom-2 left-2">
-                    <span class="px-2 py-1 bg-black/70 text-white text-xs rounded">
-                      {{ course.level || 'Beginner' }}
+                    <span
+                      class="px-2 py-1 bg-black/70 text-white text-xs rounded"
+                    >
+                      {{ course.level || "Beginner" }}
                     </span>
                   </div>
                 </div>
 
                 <div class="p-4">
                   <p class="text-xs text-gray-500 font-semibold uppercase mb-1">
-                    {{ course.category?.name || 'Uncategorized' }}
+                    {{ course.category?.name || "Uncategorized" }}
                   </p>
-                  <h3 
+                  <h3
                     @click="goToCourseDetails(course.id)"
                     class="text-lg font-bold text-gray-800 mt-1 line-clamp-2 hover:text-[#004d33] cursor-pointer transition-colors"
                   >
                     {{ course.title }}
                   </h3>
-                  <p class="text-sm text-gray-600 mb-2">By {{ course.instructor?.full_name || course.instructor?.username || 'HFN Team' }}</p>
+                  <p class="text-sm text-gray-600 mb-2">
+                    By
+                    {{
+                      course.instructor?.full_name ||
+                      course.instructor?.username ||
+                      "HFN Team"
+                    }}
+                  </p>
 
                   <div class="flex items-center my-3">
                     <div class="flex items-center mr-2">
                       <svg
-                        v-for="(star, index) in getStarIcons(course.rating_average || 0)"
+                        v-for="(star, index) in getStarIcons(
+                          course.rating_average || 0
+                        )"
                         :key="index"
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-4 h-4 mr-1"
                         :class="{
                           'text-yellow-500': star === 'full',
                           'text-yellow-300': star === 'half',
-                          'text-gray-300': star === 'empty'
+                          'text-gray-300': star === 'empty',
                         }"
                         viewBox="0 0 24 24"
                         fill="currentColor"
@@ -552,30 +588,70 @@ onMounted(() => {
                         stroke-width="0"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        v-html="getIconPaths(star === 'full' ? 'star-fill' : star === 'half' ? 'star-half' : 'star-empty')"
+                        v-html="
+                          getIconPaths(
+                            star === 'full'
+                              ? 'star-fill'
+                              : star === 'half'
+                              ? 'star-half'
+                              : 'star-empty'
+                          )
+                        "
                       ></svg>
                     </div>
                     <span class="text-sm text-gray-600">
-                      {{ formatRating(course) }} ({{ formatReviewCount(course) }} reviews)
+                      {{ formatRating(course) }} ({{
+                        formatReviewCount(course)
+                      }}
+                      reviews)
                     </span>
                   </div>
 
                   <p class="text-sm text-gray-500 line-clamp-3 mb-4">
-                    {{ course.short_description || course.description || 'No description available' }}
+                    {{
+                      course.short_description ||
+                      course.description ||
+                      "No description available"
+                    }}
                   </p>
 
                   <div class="flex justify-between text-xs text-gray-500 mb-4">
                     <div class="flex items-center">
-                      <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      <svg
+                        class="w-4 h-4 mr-1 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
                       </svg>
                       <span>{{ course.duration_hours || 0 }}h</span>
                     </div>
                     <div class="flex items-center">
-                      <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                      <svg
+                        class="w-4 h-4 mr-1 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                        />
                       </svg>
-                      <span>{{ course.enrollment_count?.toLocaleString() || 0 }} enrolled</span>
+                      <span
+                        >{{
+                          course.enrollment_count?.toLocaleString() || 0
+                        }}
+                        enrolled</span
+                      >
                     </div>
                   </div>
 
@@ -584,7 +660,7 @@ onMounted(() => {
                     class="w-full py-2 rounded-lg font-semibold text-white transition duration-200 hover:opacity-90"
                     :style="{ backgroundColor: DARK_GREEN }"
                     :class="{
-                      'bg-[#e87a18]': isUserEnrolled(course.id)
+                      'bg-[#e87a18]': isUserEnrolled(course.id),
                     }"
                   >
                     {{ getActionButtonText(course) }}
@@ -594,18 +670,35 @@ onMounted(() => {
             </div>
 
             <div v-else class="text-center py-12">
-              <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              <svg
+                class="w-16 h-16 mx-auto text-gray-400 mb-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                />
               </svg>
               <h3 class="text-lg font-medium text-gray-900 mb-2">
                 No courses found
               </h3>
               <p class="text-gray-500">
-                {{ searchQuery ? 'No courses match your search.' : 'No courses available in this category.' }}
+                {{
+                  searchQuery
+                    ? "No courses match your search."
+                    : "No courses available in this category."
+                }}
               </p>
             </div>
 
-            <div v-if="currentPageCourses.length > 0" class="flex justify-center items-center mt-10 space-x-4 text-gray-600">
+            <div
+              v-if="currentPageCourses.length > 0"
+              class="flex justify-center items-center mt-10 space-x-4 text-gray-600"
+            >
               <button
                 @click="currentPage--"
                 :disabled="currentPage === 1"
@@ -625,11 +718,15 @@ onMounted(() => {
                 ></svg>
                 Prev
               </button>
-              <span class="text-sm">Page {{ currentPage }} of {{ totalPages }}</span>
+              <span class="text-sm"
+                >Page {{ currentPage }} of {{ totalPages }}</span
+              >
               <button
                 @click="currentPage++"
                 :disabled="currentPage === totalPages"
-                :class="{ 'opacity-50 cursor-not-allowed': currentPage === totalPages }"
+                :class="{
+                  'opacity-50 cursor-not-allowed': currentPage === totalPages,
+                }"
                 class="text-sm font-medium hover:text-gray-900 transition flex items-center"
               >
                 Next
@@ -666,37 +763,57 @@ onMounted(() => {
                       class="w-full h-full object-cover"
                       @error="course.thumbnail = ''"
                     />
-                    <div v-else class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#004d33] to-[#00cc66]">
-                      <span class="text-white text-lg font-bold">{{ course.title?.charAt(0) || 'C' }}</span>
+                    <div
+                      v-else
+                      class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#004d33] to-[#00cc66]"
+                    >
+                      <span class="text-white text-lg font-bold">{{
+                        course.title?.charAt(0) || "C"
+                      }}</span>
                     </div>
                     <div class="absolute top-2 right-2">
-                      <span 
+                      <span
                         :class="[
                           'px-2 py-1 rounded text-xs font-semibold',
-                          course.is_free ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
+                          course.is_free
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-blue-100 text-blue-800',
                         ]"
                       >
                         {{ formatPrice(course) }}
                       </span>
                     </div>
                     <div class="absolute bottom-2 left-2">
-                      <span class="px-2 py-1 bg-black/70 text-white text-xs rounded">
+                      <span
+                        class="px-2 py-1 bg-black/70 text-white text-xs rounded"
+                      >
                         NEW
                       </span>
                     </div>
                   </div>
 
                   <div class="p-4">
-                    <h3 
+                    <h3
                       @click="goToCourseDetails(course.id)"
                       class="text-lg font-bold text-gray-800 mt-1 line-clamp-2 hover:text-[#004d33] cursor-pointer transition-colors"
                     >
                       {{ course.title }}
                     </h3>
-                    <p class="text-sm text-gray-600 mb-2">By {{ course.instructor?.full_name || course.instructor?.username || 'HFN Team' }}</p>
+                    <p class="text-sm text-gray-600 mb-2">
+                      By
+                      {{
+                        course.instructor?.full_name ||
+                        course.instructor?.username ||
+                        "HFN Team"
+                      }}
+                    </p>
 
                     <p class="text-sm text-gray-500 line-clamp-3 mb-4">
-                      {{ course.short_description || course.description || 'No description available' }}
+                      {{
+                        course.short_description ||
+                        course.description ||
+                        "No description available"
+                      }}
                     </p>
 
                     <button
@@ -714,7 +831,7 @@ onMounted(() => {
         </div>
       </main>
     </div>
-  </div>
+  
 </template>
 
 <style scoped>

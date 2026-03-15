@@ -15,8 +15,12 @@ import TutorSidebar from "./TutorSidebar.vue";
 
 const router = useRouter();
 const route = useRoute();
+const toast = useToast();
 
 const courseSlug = route.params.slug;
+
+const currentStep = ref(1);
+const isLoading = ref(false);
 
 const mode = computed(() => {
   if (!courseSlug) return "create";
@@ -77,10 +81,6 @@ const createCategory = async () => {
   }
 };
   
-const toast = useToast();
-
-const currentStep = ref(1);
-const isLoading = ref(false);
 
 const basicInfoForm = ref({
   title: "",

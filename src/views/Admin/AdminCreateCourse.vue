@@ -21,6 +21,10 @@ const activeModuleId = ref(null);
 const categories = ref([]);
 const loadingCategories = ref(false);
 
+const toast = useToast();
+const router = useRouter();
+const currentStep = ref(1);
+
 const route = useRoute();
 const props = defineProps({
   mode: {
@@ -79,11 +83,6 @@ const createCategory = async () => {
   }
 };
   
-
-  
-const toast = useToast();
-const router = useRouter();
-const currentStep = ref(1);
 
 const basicInfoForm = ref({
   title: "",
