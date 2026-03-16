@@ -16,7 +16,7 @@ const activeModule = ref(null);
 const route = useRoute();
 const slug = route.params.slug;
 const loading = ref(true);
-
+const completedLessons = ref(new Set());
 const course = ref(null);
 const modules = ref([]);
 const instructor = ref(null);
@@ -66,7 +66,7 @@ const completeLesson = async (lessonId) => {
   try {
     await learningModule.completeLessonMark(lessonId);
 
-    // refresh enrollment progress
+completedLessons.value.add(lessonId);
     await fetchEnrollment();
 
   } catch (error) {
@@ -316,11 +316,17 @@ onMounted(() => {
                         <span>Lesson {{ idx + 1 }}: {{ lesson.title }}</span>
                         <span>{{ lesson.duration }}</span>
                         <button
-    @click="completeLesson(lesson.id)"
-    class="text-xs px-3 py-1 rounded bg-green-600 text-white"
-  >
-    Mark Complete
-  </button>
+  @click="completeLesson(lesson.id)"
+  :disabled="completedLessons.has(lesson.id)"
+  class="text-xs px-3 py-1 rounded text-white"
+  :class="
+    completedLessons.has(lesson.id)
+      ? 'bg-gray-400 cursor-not-allowed'
+      : 'bg-green-600'
+  "
+>
+  {{ completedLessons.has(lesson.id) ? "Completed" : "Mark Complete" }}
+</button>
                       </div>
                       <div
                         v-for="(resource, idx) in module.resources"
