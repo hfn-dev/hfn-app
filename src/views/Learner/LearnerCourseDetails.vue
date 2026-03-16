@@ -28,7 +28,9 @@ const toggleModule = (moduleId) => {
   activeModule.value = activeModule.value === moduleId ? null : moduleId;
 };
 
-
+const isLessonCompleted = (lessonId) => {
+  return completedLessons.value?.has(lessonId);
+};
 const fetchEnrollment = async () => {
   try {
     const res = await learningModule.getEnrollment({
@@ -319,15 +321,15 @@ onMounted(() => {
                         <span>{{ lesson.duration }}</span>
                         <button
   @click="completeLesson(lesson.id)"
-  :disabled="completedLessons.has(lesson.id)"
+  :disabled="isLessonCompleted(lesson.id)"
   class="text-xs px-3 py-1 rounded text-white"
   :class="
-    completedLessons.has(lesson.id)
+    isLessonCompleted(lesson.id)
       ? 'bg-gray-400 cursor-not-allowed'
       : 'bg-green-600'
   "
 >
-  {{ completedLessons.has(lesson.id) ? "Completed" : "Mark Complete" }}
+  {{ isLessonCompleted(lesson.id) ? "Completed" : "Mark Complete" }}
 </button>
                       </div>
                       <div
