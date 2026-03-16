@@ -31,6 +31,7 @@ const toggleModule = (moduleId) => {
 const completeLesson = async (lessonId) => {
   try {
     await learningModule.completeLessonMark(lessonId);
+    completedLessons.value.add(lessonId);
 
     await fetchEnrollment();
 
