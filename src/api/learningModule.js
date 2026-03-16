@@ -240,11 +240,11 @@ export default {
     }
   },
 
-  async getCourseQuiz(payload) {
+  async getCourseQuiz(slug, payload = {}) {
     try {
       const response = await api.get(
         `/learning/courses/${slug}/quizzes/`,
-        payload
+        {payload}
       );
       return response.data;
     } catch (error) {
@@ -253,9 +253,9 @@ export default {
     }
   },
 
-  async getCourseQuizDetails(payload) {
+  async getCourseQuizDetails(id, payload = {}) {
     try {
-      const response = await api.get(`/learning/quizzes/${id}/`, payload);
+      const response = await api.get(`/learning/quizzes/${id}/`, {payload});
       return response.data;
     } catch (error) {
       console.error('get course quiz details API error:', error);
@@ -410,11 +410,10 @@ export default {
     }
   },
 
-  async verifyCertificate(payload) {
+  async verifyCertificate(certificateNumber) {
     try {
       const response = await api.get(
-        `/learning/certificates/verify/?number=${certificateNumber}/`,
-        payload
+        `/learning/certificates/verify/?number=${certificateNumber}/`
       );
       return response.data;
     } catch (error) {
