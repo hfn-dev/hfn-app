@@ -28,6 +28,17 @@ const toggleModule = (moduleId) => {
   activeModule.value = activeModule.value === moduleId ? null : moduleId;
 };
 
+const completeLesson = async (lessonId) => {
+  try {
+    await learningModule.completeLessonMark(lessonId);
+
+    await fetchEnrollment();
+
+  } catch (error) {
+    console.error("Lesson completion failed", error);
+  }
+};
+  
 const fetchEnrollment = async () => {
   try {
     const res = await learningModule.getEnrollment({
@@ -303,6 +314,20 @@ onMounted(() => {
                       >
                         <span>Lesson {{ idx + 1 }}: {{ lesson.title }}</span>
                         <span>{{ lesson.duration }}</span>
+                        <div
+  v-for="(lesson, idx) in module.lessons"
+  :key="lesson.id"
+  class="flex justify-between items-center text-sm text-gray-600"
+>
+  <span>Lesson {{ idx + 1 }}: {{ lesson.title }}</span>
+
+  <button
+    @click="completeLesson(lesson.id)"
+    class="text-xs px-3 py-1 rounded bg-green-600 text-white"
+  >
+    Mark Complete
+  </button>
+</div>
                       </div>
                       <div
                         v-for="(resource, idx) in module.resources"
