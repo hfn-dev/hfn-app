@@ -15,7 +15,7 @@ const activeModule = ref(null);
 
 const route = useRoute();
 const slug = route.params.slug;
-  const courseParam = route.params.slug || route.params.id;
+  const courseParam = route.params.slug;
 
 const loading = ref(true);
 const completedLessons = ref(new Set());
