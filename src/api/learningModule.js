@@ -228,11 +228,10 @@ export default {
     }
   },
 
-  async completeLessonMark(id, payload) {
+  async completeLessonMark(id) {
     try {
       const response = await api.get(
-        `/learning/lessons/${id}/complete/`,
-        payload
+        `/learning/lessons/${id}/complete/`
       );
       return response.data;
     } catch (error) {
