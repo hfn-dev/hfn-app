@@ -172,9 +172,12 @@ const formatReviewCount = (course) => {
   return course.rating_count?.toLocaleString() || "0";
 };
 
-const goToCourseDetails = (courseId) => {
-  router.push({ name: "CourseDetails", params: { id: courseId } });
-};
+const goToCourseDetails = (course) => {
+  router.push({
+    name: "CourseDetails",
+    params: { slug: course.slug || course.id },
+  });
+};  
 
 const isUserEnrolled = (courseId) => {
   return userEnrollments.value.some(
@@ -522,7 +525,7 @@ onMounted(() => {
                   {{ course.category?.name || "Uncategorized" }}
                 </p>
                 <h3
-                  @click="goToCourseDetails(course.id)"
+                  @click="goToCourseDetails(course)"
                   class="text-lg font-bold text-gray-800 mt-1 line-clamp-2 hover:text-[#004d33] cursor-pointer transition-colors"
                 >
                   {{ course.title }}
@@ -762,7 +765,7 @@ onMounted(() => {
 
                 <div class="p-4">
                   <h3
-                    @click="goToCourseDetails(course.id)"
+                    @click="goToCourseDetails(course)"
                     class="text-lg font-bold text-gray-800 mt-1 line-clamp-2 hover:text-[#004d33] cursor-pointer transition-colors"
                   >
                     {{ course.title }}
