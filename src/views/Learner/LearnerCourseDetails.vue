@@ -29,8 +29,9 @@ const toggleModule = (moduleId) => {
 };
 
 const isLessonCompleted = (lessonId) => {
-  return completedLessons.value?.has(lessonId);
+  return completedLessons.value?.has(lessonId) || false;
 };
+  
 const fetchEnrollment = async () => {
   try {
     const res = await learningModule.getEnrollment({
