@@ -390,6 +390,7 @@ const buildPayload = () => ({
       const lessonPayload = {
         title: lesson.title,
         content_type: lesson.content_type,
+        content: lesson.article_content || "",
         duration: lesson.duration,
         is_preview: lesson.is_preview,
       };
