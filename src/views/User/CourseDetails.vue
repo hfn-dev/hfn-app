@@ -314,25 +314,57 @@ onMounted(() => {
                       class="px-6 py-4 bg-gray-50 space-y-2"
                     >
                       <div
-                        v-for="(lesson, idx) in module.lessons"
-                        :key="idx"
-                        class="flex justify-between items-center text-sm text-gray-600"
-                      >
-                        <span>Lesson {{ idx + 1 }}: {{ lesson.title }}</span>
-                        <span>{{ lesson.duration }}</span>
-                        <button
-  @click="completeLesson(lesson.id)"
-  :disabled="isLessonCompleted(lesson.id)"
-  class="text-xs px-3 py-1 rounded text-white"
-  :class="
-    isLessonCompleted(lesson.id)
-      ? 'bg-gray-400 cursor-not-allowed'
-      : 'bg-green-600'
-  "
+  v-for="(lesson, idx) in module.lessons"
+  :key="lesson.id"
+  class="bg-white border rounded-lg p-4 space-y-3"
 >
-  {{ isLessonCompleted(lesson.id) ? "Completed" : "Mark Complete" }}
-</button>
-                       </div>
+  <div class="flex justify-between items-center text-sm text-gray-700">
+    <span class="font-semibold">
+      Lesson {{ idx + 1 }}: {{ lesson.title }}
+    </span>
+
+    <button
+      @click="completeLesson(lesson.id)"
+      :disabled="isLessonCompleted(lesson.id)"
+      class="text-xs px-3 py-1 rounded text-white"
+      :class="
+        isLessonCompleted(lesson.id)
+          ? 'bg-gray-400 cursor-not-allowed'
+          : 'bg-green-600'
+      "
+    >
+      {{ isLessonCompleted(lesson.id) ? "Completed" : "Mark Complete" }}
+    </button>
+  </div>
+
+  <!-- TEXT LESSON -->
+  <div
+    v-if="lesson.content_type === 'text'"
+    class="text-sm text-gray-600 leading-relaxed"
+  >
+    {{ lesson.content }}
+  </div>
+
+  <!-- VIDEO LESSON -->
+  <div v-if="lesson.content_type === 'video' && lesson.video_url">
+    <iframe
+      :src="lesson.video_url"
+      class="w-full aspect-video rounded"
+      allowfullscreen
+    ></iframe>
+  </div>
+
+  <!-- FILE DOWNLOAD -->
+  <div v-if="lesson.file_attachment">
+    <a
+      :href="lesson.file_attachment"
+      target="_blank"
+      class="text-sm text-green-700 underline"
+    >
+      Download Resource
+    </a>
+  </div>
+</div>
                       <div
                         v-for="(resource, idx) in module.resources"
                         :key="`res-${idx}`"
