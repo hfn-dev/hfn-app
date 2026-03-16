@@ -408,12 +408,7 @@ const buildPayload = () => ({
   })),
 
   materials: curriculumForm.value.materialsIncluded.map((m) => m.text),
-
-  instructor: {
-    name: curriculumForm.value.instructorName,
-    bio: curriculumForm.value.briefBiography,
-  },
-
+  instructor: selectedInstructorId.value,
   pricing: {
     access_type: pricingAccessForm.value.courseAccessType,
     visibility: pricingAccessForm.value.courseVisibility,
@@ -542,6 +537,7 @@ onMounted(async () => {
     basicInfoForm.value.fullOverview = course.overview;
     basicInfoForm.value.category = course.category?.slug;
     basicInfoForm.value.level = course.level;
+  selectedInstructorId.value = course.instructor?.id || null;
 
     hydrateCurriculum(course.curriculum);
     const selectedCategory = categories.value.find(
