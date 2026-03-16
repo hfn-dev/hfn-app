@@ -192,31 +192,14 @@ const isUserEnrolled = (courseId) => {
   );
 };
 
-// const handleCourseAction = async (course) => {
-//   if (isUserEnrolled(course.id)) {
-//     router.push(`/learning/courses/${course.id || course.slug}`);
-//   } else {
-//     try {
-//       await learningModule.courseEnrollment({
-//         slug: course.slug || course.id
-//       });
-//       toast.success(`Enrolled in "${course.title}" successfully!`);
-//       await fetchUserEnrollments();
-//     } catch (error) {
-//       console.error('Enrollment error:', error);
-//       toast.error('Failed to enroll in course');
-//     }
-//   }
-// };
-
 const handleCourseAction = async (course) => {
   if (isUserEnrolled(course.id)) {
-    router.push(`/learning/courses/${course.id || course.slug}`);
+    router.push(`/learning/courses/${course.slug || course.id}`);
     return;
   }
 
   if (userRole.value === "member") {
-    router.push(`/learning/courses/${course.id || course.slug}`);
+    router.push(`/learning/courses/${course.slug || course.id}`);
     return;
   }
 
