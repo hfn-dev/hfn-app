@@ -23,6 +23,7 @@ const course = ref(null);
 const modules = ref([]);
 const instructor = ref(null);
 const similarCourses = ref([]);
+const completedLessons = ref(new Set());
 
 const toggleModule = (moduleId) => {
   activeModule.value = activeModule.value === moduleId ? null : moduleId;
