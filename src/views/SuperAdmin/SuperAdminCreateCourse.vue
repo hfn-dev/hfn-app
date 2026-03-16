@@ -20,7 +20,7 @@ import SuperAdminSidebar from "./SuperAdminSidebar.vue";
 const activeModuleId = ref(null);
 const categories = ref([]);
 const loadingCategories = ref(false);
-
+const selectedInstructorId = ref(null);
 const route = useRoute();
 const props = defineProps({
   mode: {
@@ -408,10 +408,11 @@ const buildPayload = () => ({
 
   materials: curriculumForm.value.materialsIncluded.map((m) => m.text),
 
-  instructor: {
-    name: curriculumForm.value.instructorName,
-    bio: curriculumForm.value.briefBiography,
-  },
+  // instructor: {
+  //   name: curriculumForm.value.instructorName,
+  //   bio: curriculumForm.value.briefBiography,
+  // },
+  instructor: selectedInstructorId.value,
 
   pricing: {
     access_type: pricingAccessForm.value.courseAccessType,
@@ -541,6 +542,7 @@ onMounted(async () => {
     basicInfoForm.value.fullOverview = course.overview;
     basicInfoForm.value.category = course.category?.slug;
     basicInfoForm.value.level = course.level;
+  selectedInstructorId.value = course.instructor?.id || null;
 
     hydrateCurriculum(course.curriculum);
 
