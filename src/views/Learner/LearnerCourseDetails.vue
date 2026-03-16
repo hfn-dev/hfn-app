@@ -15,6 +15,8 @@ const activeModule = ref(null);
 
 const route = useRoute();
 const slug = route.params.slug;
+  const courseParam = route.params.slug || route.params.id;
+
 const loading = ref(true);
 const completedLessons = ref(new Set());
 const course = ref(null);
@@ -38,7 +40,7 @@ const fetchEnrollment = async () => {
       : res.data.results || [];
 
     enrollment.value = enrollments.find(
-      (e) => e.course_slug === slug || e.course === slug
+      (e) => e.course_slug === courseParam || e.course === courseParam
     );
   } catch (error) {
     console.error("Failed to fetch enrollment", error);
