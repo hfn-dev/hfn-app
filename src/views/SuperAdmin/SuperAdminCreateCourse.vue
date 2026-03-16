@@ -390,7 +390,6 @@ const buildPayload = () => ({
       const lessonPayload = {
         title: lesson.title,
         content_type: lesson.content_type,
-        content: lesson.article_content || "",
         duration: lesson.duration,
         is_preview: lesson.is_preview,
       };
@@ -400,7 +399,7 @@ const buildPayload = () => ({
       }
 
       if (lesson.content_type === "text") {
-        lessonPayload.content = lesson.article_content || "";
+        lessonPayload.article_content = lesson.article_content || "";
       }
 
       return lessonPayload;
