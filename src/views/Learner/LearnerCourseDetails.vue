@@ -38,7 +38,7 @@ const fetchEnrollment = async () => {
       : res.data.results || [];
 
     enrollment.value = enrollments.find(
-      (e) => e.course_slug === courseParam || e.course === courseParam
+      (e) => e.course_slug === slug || e.course === slug
     );
   } catch (error) {
     console.error("Failed to fetch enrollment", error);
