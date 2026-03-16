@@ -111,7 +111,7 @@ const revenueChartOptions = ref({
           if (context.parsed.y !== null) {
             label += new Intl.NumberFormat("en-US", {
               style: "currency",
-              currency: "N",
+              currency: "NGN",
               maximumFractionDigits: 0,
             }).format(context.parsed.y);
           }
@@ -227,7 +227,7 @@ const statCards = computed(() => {
       title: "Total Revenue",
       value: new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency: "N",
+        currency: "NGN",
         maximumFractionDigits: 0,
       }).format(dashboardData.value.total_revenue || 0),
       change: "All time",
@@ -711,7 +711,7 @@ const closeSidebar = () => (showSidebar.value = false);
                     {{
                       new Intl.NumberFormat("en-US", {
                         style: "currency",
-                        currency: "N",
+                        currency: "NGN",
                         maximumFractionDigits: 0,
                       }).format(topRevenueData.topMonthRevenue)
                     }}
@@ -732,7 +732,7 @@ const closeSidebar = () => (showSidebar.value = false);
                     {{
                       new Intl.NumberFormat("en-US", {
                         style: "currency",
-                        currency: "N",
+                        currency: "NGN",
                         maximumFractionDigits: 0,
                       }).format(topRevenueData.totalYearRevenue)
                     }}
@@ -750,7 +750,7 @@ const closeSidebar = () => (showSidebar.value = false);
                     class="w-10 h-10 rounded-full mb-1 border-2 border-orange-300 bg-gray-200 flex items-center justify-center"
                   >
                     <span class="text-gray-600 font-bold">
-                      {{ mostViewedCourses[0]?.name?.charAt(0) || "N" }}
+                      {{ mostViewedCourses[0]?.name?.charAt(0) || "NGN" }}
                     </span>
                   </div>
                   <p class="text-lg font-bold text-gray-800 truncate">
