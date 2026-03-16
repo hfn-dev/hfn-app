@@ -230,7 +230,7 @@ export default {
 
   async completeLessonMark(id) {
     try {
-      const response = await api.get(
+      const response = await api.post(
         `/learning/lessons/${id}/mark_complete/`
       );
       return response.data;
