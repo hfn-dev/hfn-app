@@ -62,6 +62,19 @@ const fetchCourse = async () => {
 };
 
 
+const completeLesson = async (lessonId) => {
+  try {
+    await learningModule.completeLessonMark(lessonId);
+
+    // refresh enrollment progress
+    await fetchEnrollment();
+
+  } catch (error) {
+    console.error("Lesson completion failed", error);
+  }
+};  
+
+
 const isCompleted = () => {
   return (
     enrollment.value &&
@@ -302,6 +315,12 @@ onMounted(() => {
                       >
                         <span>Lesson {{ idx + 1 }}: {{ lesson.title }}</span>
                         <span>{{ lesson.duration }}</span>
+                        <button
+    @click="completeLesson(lesson.id)"
+    class="text-xs px-3 py-1 rounded bg-green-600 text-white"
+  >
+    Mark Complete
+  </button>
                       </div>
                       <div
                         v-for="(resource, idx) in module.resources"
