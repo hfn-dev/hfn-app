@@ -314,20 +314,14 @@ onMounted(() => {
                       >
                         <span>Lesson {{ idx + 1 }}: {{ lesson.title }}</span>
                         <span>{{ lesson.duration }}</span>
-                        <div
-  v-for="(lesson, idx) in module.lessons"
-  :key="lesson.id"
-  class="flex justify-between items-center text-sm text-gray-600"
->
-  <span>Lesson {{ idx + 1 }}: {{ lesson.title }}</span>
-
+                        
   <button
     @click="completeLesson(lesson.id)"
     class="text-xs px-3 py-1 rounded bg-green-600 text-white"
   >
     Mark Complete
   </button>
-</div>
+
                       </div>
                       <div
                         v-for="(resource, idx) in module.resources"
