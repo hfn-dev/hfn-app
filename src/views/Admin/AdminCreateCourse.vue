@@ -20,6 +20,7 @@ import AdminSidebar from "./AdminSidebar.vue";
 const activeModuleId = ref(null);
 const categories = ref([]);
 const loadingCategories = ref(false);
+const selectedInstructorId = ref(null);
 
 const toast = useToast();
 const router = useRouter();
