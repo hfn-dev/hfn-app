@@ -28,6 +28,10 @@ const toggleModule = (moduleId) => {
   activeModule.value = activeModule.value === moduleId ? null : moduleId;
 };
 
+const isLessonCompleted = (lessonId) => {
+  return completedLessons.value?.has(lessonId) || false;
+};
+  
 const completeLesson = async (lessonId) => {
   try {
     await learningModule.completeLessonMark(lessonId);
