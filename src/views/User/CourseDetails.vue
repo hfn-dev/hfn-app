@@ -15,7 +15,7 @@ const activeModule = ref(null);
 
 const route = useRoute();
 const enrollment = ref(null);
-const courseParam = route.params.slug || route.params.id;
+const courseParam = route.params.slug;
 
 const loading = ref(true);
 
