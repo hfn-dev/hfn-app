@@ -399,7 +399,7 @@ const buildPayload = () => ({
       }
 
       if (lesson.content_type === "text") {
-        lessonPayload.article_content = lesson.article_content || "";
+        lessonPayload.content = lesson.article_content || "";
       }
 
       return lessonPayload;
