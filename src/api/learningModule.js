@@ -231,7 +231,7 @@ export default {
   async completeLessonMark(id) {
     try {
       const response = await api.get(
-        `/learning/lessons/${id}/complete/`
+        `/learning/lessons/${id}/mark_complete/`
       );
       return response.data;
     } catch (error) {
