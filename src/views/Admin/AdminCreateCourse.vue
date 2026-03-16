@@ -477,7 +477,7 @@ const submitCourse = async () => {
     const payload = buildPayload();
 
     if (props.mode === "edit") {
-      await courseApi.updateCourse(route.params.slug, payload);
+      await courseApi.updateCourses(route.params.slug, payload);
       toast.success("Course updated successfully");
     } else {
       await courseApi.createCourses(payload);
