@@ -41,20 +41,26 @@
       </h2>
 
       <div class="max-w-7xl mx-auto mb-8">
-        <select
-          class="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 text-sm"
-        >
-          <option>January 2026</option>
-          <option>February 2026</option>
-          <option>March 2026</option>
-        </select>
+        <select v-model="selectedDate.month" @change="fetchArticles(); fetchVideos()">
+  <option value="">All Months</option>
+  <option v-for="m in 12" :key="m" :value="m">
+    {{ new Date(0, m - 1).toLocaleString('default', { month: 'long' }) }}
+  </option>
+</select>
+
+<select v-model="selectedDate.year" @change="fetchArticles(); fetchVideos()">
+  <option value="">All Years</option>
+  <option v-for="y in 5" :key="y" :value="2026 - y + 1">
+    {{ 2026 - y + 1 }}
+  </option>
+</select>
       </div>
 
       <div
         class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto mb-16"
       >
         <div
-          v-for="article in sortedArticles"
+          v-for="article in filteredArticles"
           :key="article.id"
           class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
         >
@@ -124,7 +130,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div
-            v-for="(video, index) in videos"
+            v-for="(video, index) in filteredVideos"
             :key="index"
             class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden"
           >
@@ -224,8 +230,8 @@ import wef from "@/assets/wef.jpg";
 import { newsPageSchema } from "@/schemas/pages/news.schema";
 import { computed } from "vue";
 import { ref, reactive, computed, onMounted } from "vue";
-import { getArticles, getVideos } from "@/api"; 
-
+import contentUploadApi from "@/api/contentUploadsApi";
+import newsModule from "@/api/newsModule";
 
 const sortedArticles = computed(() => {
   return [...newsPageSchema.news.latestNewsSection.articles].sort((a, b) => {
@@ -291,55 +297,112 @@ const videos = ref([]);
 
 const selectedAudience = ref("all"); // all | non-members
 const selectedDate = reactive({ month: "", year: "" });   
-
-// const videos = [
-//   {
-//     title: "Special Address by NCDC DG Dr. Jide Idris | HFN Annual Conference 2026",
-//     date: "March 11, 2026",
-//     url: "https://www.youtube.com/watch?v=-EE2utpBKng&t=6s",
-//   },
-//   {
-//     title: "HFN Healthcare Policy Roundtable",
-//     date: "October 20, 2025",
-//     url: "https://www.youtube.com/watch?v=Usug5WLXWRM",
-//   },
-//   {
-//     title: "HFN Women’s Forum – Innovation & Leadership",
-//     date: "September 18, 2025",
-//     url: "https://www.youtube.com/watch?v=GAxo0PH39Sc",
-//   },
-//   {
-//     title: "HFN Conference 2025 Highlights",
-//     date: "August 5, 2025",
-//     url: "https://www.youtube.com/watch?v=ihiq1lI5ghY",
-//   },
-// ];
-
- const fetchArticles = async () => {
+  
+const fetchArticles = async () => {
   try {
-    const apiArticles = await getArticles({ audience: selectedAudience.value });
-    articles.value = [...dummyArticles, ...apiArticles];
-  } catch (err) {
-    console.error("Error fetching articles:", err);
+    const res = await newsModule.listArticles({
+      audience: selectedAudience.value,
+    });
+
+    const apiArticles = Array.isArray(res)
+      ? res
+      : res.results || [];
+
+    const normalizedApiArticles = apiArticles.map((item) => ({
+      id: item.id,
+      slug: item.slug,
+      excerpt: item.excerpt || item.content?.slice(0, 120),
+      image: item.image || "event.png",
+      created_at: item.created_at,
+      date: new Date(item.created_at).toDateString(),
+      commentCount: item.comment_count || 0,
+    }));
+
+    articles.value = [...dummyArticles, ...normalizedApiArticles];
+  } catch (error) {
+    console.error("Error fetching articles:", error);
     articles.value = [...dummyArticles];
   }
 };
 
 const fetchVideos = async () => {
   try {
-    const apiVideos = await getVideos({ audience: selectedAudience.value });
-    videos.value = [...dummyVideos, ...apiVideos];
-  } catch (err) {
-    console.error("Error fetching videos:", err);
-    videos.value = [...dummyVideos]; // fallback
-  }
-}; 
+    const res = await contentUploadApi.gallery({
+      type: "video", 
+      audience: selectedAudience.value,
+    });
 
+    const apiVideos = Array.isArray(res)
+      ? res
+      : res.results || [];
+
+    const normalizedApiVideos = apiVideos.map((item) => ({
+      title: item.title,
+      url: item.video_url || item.url,
+      date: item.created_at
+        ? new Date(item.created_at).toDateString()
+        : "",
+    }));
+
+    videos.value = [...dummyVideos, ...normalizedApiVideos];
+  } catch (error) {
+    console.error("Error fetching videos:", error);
+    videos.value = [...dummyVideos];
+  }
+};
+
+const selectedDate = reactive({
+  month: "",
+  year: "",
+});
+
+const filteredArticles = computed(() => {
+  return articles.value
+    .filter((article) => {
+      const d = new Date(article.created_at || article.date);
+
+      const matchMonth = selectedDate.month
+        ? d.getMonth() + 1 === Number(selectedDate.month)
+        : true;
+
+      const matchYear = selectedDate.year
+        ? d.getFullYear() === Number(selectedDate.year)
+        : true;
+
+      return matchMonth && matchYear;
+    })
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+});
+
+
+const filteredVideos = computed(() => {
+  return videos.value.filter((video) => {
+    const d = new Date(video.date);
+
+    const matchMonth = selectedDate.month
+      ? d.getMonth() + 1 === Number(selectedDate.month)
+      : true;
+
+    const matchYear = selectedDate.year
+      ? d.getFullYear() === Number(selectedDate.year)
+      : true;
+
+    return matchMonth && matchYear;
+  });
+});  
+  
 const getEmbedUrl = (youtubeUrl) => {
   const url = new URL(youtubeUrl);
   const videoId = url.searchParams.get("v");
   return `https://www.youtube.com/embed/${videoId}`;
 };
+
+onMounted(() => {
+  fetchArticles();
+  fetchVideos();
+});
+
+
 </script>
 
 <style scoped>
