@@ -300,7 +300,6 @@
 <script setup>
 import hands from "@/assets/hands.png";
 import latest from "@/assets/latest_news.png";
-import { ref } from "vue";
 import { ref, onMounted } from "vue";
 import contentUploadApi from "@/api/contentUploadsApi";
 
@@ -461,28 +460,30 @@ const dummyNewsletters = [
 
 const fetchDocuments = async () => {
   try {
-    const res = await contentUploadApi.gallery({
-      type: "document",
-      audience: "all",
-    });
+    const [newslettersRes, publicationsRes] = await Promise.all([
+      contentUploadApi.listNewsletters(),
+      contentUploadApi.listPublications()
+    ]);
 
-    const data = Array.isArray(res) ? res : res.results || [];
+    const newslettersData = Array.isArray(newslettersRes)
+      ? newslettersRes
+      : newslettersRes.results || [];
 
-    const apiNewsletters = data
-      .filter(item => item.category === "newsletter" && item.file)
-      .map(item => ({
-        text: item.title,
-        pdfUrl: item.file,
-        date: new Date(item.created_at).toDateString(),
-      }));
+    const publicationsData = Array.isArray(publicationsRes)
+      ? publicationsRes
+      : publicationsRes.results || [];
 
-    const apiPublications = data
-      .filter(item => item.category === "publication" && item.file)
-      .map(item => ({
-        title: item.title,
-        pdfUrl: item.file,
-        description: item.caption || "",
-      }));
+    const apiNewsletters = newslettersData.map(item => ({
+      text: item.title,
+      pdfUrl: item.file || item.pdf || item.document,
+      date: new Date(item.created_at).toDateString(),
+    }));
+
+    const apiPublications = publicationsData.map(item => ({
+      title: item.title,
+      pdfUrl: item.file || item.pdf || item.document,
+      description: item.caption || item.description || "",
+    }));
 
     newsletters.value = [...dummyNewsletters, ...apiNewsletters];
     publications.value = [...dummyPublications, ...apiPublications];
@@ -490,12 +491,11 @@ const fetchDocuments = async () => {
   } catch (error) {
     console.error("Error fetching documents:", error);
 
-    // fallback to dummy
     newsletters.value = [...dummyNewsletters];
     publications.value = [...dummyPublications];
   }
 };
-
+  
  onMounted(() => {
   fetchDocuments();
 }); 
