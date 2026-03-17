@@ -40,22 +40,53 @@
         Latest News
       </h2>
 
-      <div class="max-w-7xl mx-auto mb-8">
-        <select v-model="selectedDate.month" @change="fetchArticles(); fetchVideos()">
-  <option value="">All Months</option>
-  <option v-for="m in 12" :key="m" :value="m">
-    {{ new Date(0, m - 1).toLocaleString('default', { month: 'long' }) }}
-  </option>
-</select>
+      <div class="max-w-7xl mx-auto mb-10 flex flex-wrap items-center gap-4 justify-center">
 
-<select v-model="selectedDate.year" @change="fetchArticles(); fetchVideos()">
-  <option value="">All Years</option>
-  <option v-for="y in 5" :key="y" :value="2026 - y + 1">
-    {{ 2026 - y + 1 }}
-  </option>
-</select>
-      </div>
+  <!-- Month -->
+  <div class="relative">
+    <select
+      v-model="selectedDate.month"
+      @change="fetchArticles(); fetchVideos()"
+      class="appearance-none bg-white border border-gray-300 text-gray-700 text-sm rounded-full px-5 py-2 pr-10 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+    >
+      <option value="">All Months</option>
+      <option v-for="m in 12" :key="m" :value="m">
+        {{ new Date(0, m - 1).toLocaleString('default', { month: 'long' }) }}
+      </option>
+    </select>
 
+    <span class="absolute right-3 top-2.5 text-gray-400">
+      ▼
+    </span>
+  </div>
+
+  <!-- Year -->
+  <div class="relative">
+    <select
+      v-model="selectedDate.year"
+      @change="fetchArticles(); fetchVideos()"
+      class="appearance-none bg-white border border-gray-300 text-gray-700 text-sm rounded-full px-5 py-2 pr-10 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+    >
+      <option value="">All Years</option>
+      <option v-for="y in 5" :key="y" :value="2026 - y + 1">
+        {{ 2026 - y + 1 }}
+      </option>
+    </select>
+
+    <span class="absolute right-3 top-2.5 text-gray-400">
+      ▼
+    </span>
+  </div>
+
+  <!-- Reset -->
+  <button
+    @click="selectedDate.month=''; selectedDate.year=''; fetchArticles(); fetchVideos();"
+    class="text-sm bg-green-700 text-white px-4 py-2 rounded-full hover:bg-green-800 transition"
+  >
+    Reset Filters
+  </button>
+
+</div>
       <div
         class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto mb-16"
       >
@@ -88,7 +119,7 @@
             </p>
 
             <RouterLink
-              :to="`/blog/${article.slug}`"
+              :to="`/blog/${article.slug}`, state: { article }"
               class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors"
             >
               Read More
