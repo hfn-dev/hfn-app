@@ -85,7 +85,7 @@ const loadMembershipAnalytics = async () => {
       },
       {
         title: "Total New Members",
-        value: data.new_members ?? 0,
+        value: data.total_new_members ?? 0,
         change: "",
         changeColor: "text-[#00cc66]",
       },
