@@ -67,7 +67,13 @@ const editArticle = (article) => {
     audience: article.audience,
     is_featured: article.is_featured ?? false,
     featured_order: article.featured_order ?? 0,
-    videos: article.videos ? [...article.videos] : [],
+    // videos: article.videos ? [...article.videos] : [],
+    videos: (article.videos || []).map((v) =>
+      typeof v === "string"
+        ? { media_type: "video", youtube_url: v }
+        : v
+    ),
+
   };
 
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -208,6 +214,19 @@ const saveNews = async () => {
   }
 };
 
+const getYoutubeEmbed = (video) => {
+  if (!video) return "";
+
+  if (typeof video === "string") {
+    return video.replace("watch?v=", "embed/");
+  }
+
+  if (video.youtube_url) {
+    return video.youtube_url.replace("watch?v=", "embed/");
+  }
+
+  return "";
+};
   
 const uploadNewsImage = (e) => {
   newsForm.value.featured_image = e.target.files[0];
@@ -719,7 +738,7 @@ onMounted(() => {
                   :key="i"
                   class="flex justify-between"
                 >
-                  {{ video }}
+                  {{ video.youtube_url || video }}
                   <button @click="removeVideo(i)" class="text-red-600">
                     ✕
                   </button>
@@ -730,7 +749,7 @@ onMounted(() => {
             <iframe
   v-for="(video, i) in newsForm.videos"
   :key="i"
-  :src="video.youtube_url.replace('watch?v=', 'embed/')"
+  :src="getYoutubeEmbed(video)"
   class="w-full h-40 mt-2"
 />
             <div class="flex gap-4">
