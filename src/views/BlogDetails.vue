@@ -136,9 +136,14 @@ const allBlogs = [
   ...Object.values(homePageSchema.news.months).map((m) => m.featured),
 ];
 
-const blog = computed(() =>
-  allBlogs.find((item) => item.slug === slug.value)
-);
+// const blog = computed(() =>
+//   allBlogs.find((item) => item.slug === slug.value)
+// );
+
+const blog = computed(() => {
+  return route.state?.article || 
+    allBlogs.find((item) => item.slug === route.params.slug);
+});  
 
 const otherNews = computed(() =>
   allBlogs.filter((item) => item.slug !== slug.value).slice(0, 3)
