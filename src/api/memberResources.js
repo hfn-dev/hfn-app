@@ -21,4 +21,13 @@ export default {
       throw error;
     }
   },
+  async postDownloadList(id, payload) {
+    try {
+      const response = await api.post(`/forms/${id}/submit/`, payload);
+      return response.data;
+    } catch (error) {
+      console.error('Create article API error:', error);
+      throw error;
+    }
+  },
 };
