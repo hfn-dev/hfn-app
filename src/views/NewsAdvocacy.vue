@@ -136,6 +136,7 @@
           >
             <div class="aspect-video bg-black">
               <iframe
+                v-if="video.url"
                 class="w-full h-full"
                 :src="getEmbedUrl(video.url)"
                 frameborder="0"
@@ -311,9 +312,9 @@ const fetchArticles = async () => {
       id: item.id,
       slug: item.slug,
       excerpt: item.excerpt || item.content?.slice(0, 120),
-      image: item.image || "event.png",
-      created_at: item.created_at,
-      date: new Date(item.created_at).toDateString(),
+      image: item.featured_image || "event.png",
+      created_at: item.publish_date,
+      date: new Date(item.publish_date).toDateString(),
       commentCount: item.comment_count || 0,
       audience: item.audience, 
     }));
@@ -336,14 +337,14 @@ const fetchVideos = async () => {
       ? res
       : res.results || [];
 
-    const normalizedApiVideos = apiVideos.map((item) => ({
-      title: item.title,
-      url: item.youtube_url || item.video_url || item.url,
-      date: item.created_at
-        ? new Date(item.created_at).toDateString()
-        : "",
-      audience: item.audience,
-    }));
+    const normalizedApiVideos = apiVideos
+  .filter(item => item.media_type === "youtube" && item.youtube_url)
+  .map((item) => ({
+    title: item.title,
+    url: item.youtube_url,
+    date: new Date(item.created_at).toDateString(),
+    audience: item.audience,
+  }));
 
     videos.value = [...dummyVideos, ...normalizedApiVideos];
   } catch (error) {
@@ -392,12 +393,24 @@ const filteredVideos = computed(() => {
 
     return matchMonth && matchYear && matchAudience;
   });
-});  
-const getEmbedUrl = (youtubeUrl) => {
-  const url = new URL(youtubeUrl);
-  const videoId = url.searchParams.get("v");
-  return `https://www.youtube.com/embed/${videoId}`;
-};
+}); 
+  
+// const getEmbedUrl = (youtubeUrl) => {
+//   const url = new URL(youtubeUrl);
+//   const videoId = url.searchParams.get("v");
+//   return `https://www.youtube.com/embed/${videoId}`;
+// };
+
+ const getEmbedUrl = (youtubeUrl) => {
+  if (!youtubeUrl) return "";
+
+  try {
+    const videoId = youtubeUrl.split("v=")[1]?.split("&")[0];
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : "";
+  } catch {
+    return "";
+  }
+}; 
 
 onMounted(() => {
   fetchArticles();
