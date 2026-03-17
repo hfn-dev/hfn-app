@@ -18,7 +18,8 @@ const enrollment = ref(null);
 const courseParam = route.params.slug;
 
 const loading = ref(true);
-
+const certificate = ref(null);
+const hasReviewed = ref(false);
 const course = ref(null);
 const modules = ref([]);
 const instructor = ref(null);
@@ -58,6 +59,13 @@ const fetchEnrollment = async () => {
     enrollment.value = enrollments.find(
       (e) => e.course_slug === courseParam || e.course === courseParam
     );
+    if (
+      enrollment.value &&
+      (enrollment.value.status === "completed" ||
+        Number(enrollment.value.progress_percentage) === 100)
+    ) {
+      fetchCertificate();
+    }
   } catch (error) {
     console.error("Failed to fetch enrollment", error);
   }
@@ -88,6 +96,23 @@ const isCompleted = () => {
     (enrollment.value.status === "completed" ||
       Number(enrollment.value.progress_percentage) === 100)
   );
+};
+
+
+  const fetchCertificate = async () => {
+  try {
+    if (!enrollment.value?.id) return;
+
+    // Try generating (safe — backend handles duplicates)
+    const res = await learningModule.generateCertificate({
+      enrollment_id: enrollment.value.id,
+    });
+
+    certificate.value = res.data;
+
+  } catch (err) {
+    console.error("Certificate fetch/generate failed", err);
+  }
 };
 
 onMounted(() => {
@@ -428,21 +453,21 @@ onMounted(() => {
 
                 <div class="border rounded-lg overflow-hidden h-[500px]">
                   <iframe
-                    v-if="enrollment.certificate"
-                    :src="enrollment.certificate"
-                    class="w-full h-full"
-                  ></iframe>
+  v-if="certificate?.pdf_file"
+  :src="certificate.pdf_file"
+  class="w-full h-full"
+></iframe>
                 </div>
 
                 <a
-                  v-if="enrollment.certificate"
-                  :href="enrollment.certificate"
-                  download
-                  class="inline-block px-6 py-3 rounded-lg font-semibold text-white"
-                  :style="{ backgroundColor: DARK_GREEN }"
-                >
-                  Download Certificate
-                </a>
+  v-if="certificate?.pdf_file"
+  :href="certificate.pdf_file"
+  target="_blank"
+  class="inline-block px-6 py-3 rounded-lg font-semibold text-white"
+  :style="{ backgroundColor: DARK_GREEN }"
+>
+  Download Certificate
+</a>
               </div>
             </div>
           </div>
