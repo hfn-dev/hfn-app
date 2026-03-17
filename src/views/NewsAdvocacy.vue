@@ -351,11 +351,6 @@ const fetchVideos = async () => {
   }
 };
 
-const selectedDate = reactive({
-  month: "",
-  year: "",
-});
-
 const filteredArticles = computed(() => {
   return articles.value
     .filter((article) => {
