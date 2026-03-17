@@ -152,13 +152,6 @@ const fetchSingleArticle = async () => {
   }
 };
 
-onMounted(() => {
-  blog.value = route.state?.article || null;
-
-  if (!blog.value) {
-    fetchSingleArticle();
-  }
-});
 const route = useRoute();
 const slug = computed(() => route.params.slug);
 
@@ -232,6 +225,35 @@ watch(
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 );
+
+
+onMounted(() => {
+  blog.value = route.state?.article || null;
+
+  if (!blog.value) {
+    fetchSingleArticle().then(() => {
+      if (!blog.value) {
+        const dummyFound = newsPageSchema.news.latestNewsSection.articles.find(
+          (a) => a.slug === route.params.slug
+        ) || newsPageSchema.news.policyAdvocacySection.updates.find(
+          (a) => a.slug === route.params.slug
+        );
+
+        if (dummyFound) {
+          blog.value = {
+            title: dummyFound.title,
+            description: dummyFound.description || dummyFound.excerpt || "",
+            image: dummyFound.featured_image || dummyFound.image || "event.png",
+            date: new Date(dummyFound.created_at || dummyFound.date).toDateString(),
+            tag: dummyFound.tag || "News",
+            caption: dummyFound.caption || "",
+            comments: dummyFound.commentCount || 0,
+          };
+        }
+      }
+    });
+  }
+});  
 </script>
 
 <style scoped>
