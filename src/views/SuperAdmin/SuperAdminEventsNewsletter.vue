@@ -70,7 +70,7 @@ const editArticle = (article) => {
     // videos: article.videos ? [...article.videos] : [],
     videos: (article.videos || []).map((v) =>
       typeof v === "string"
-        ? { media_type: "video", youtube_url: v }
+        ? { media_type: "youtube", youtube_url: v }
         : v
     ),
 
@@ -242,7 +242,7 @@ const addVideo = () => {
   if (!videoInput.value) return;
 
   newsForm.value.videos.push({
-    media_type: "video",
+    media_type: "youtube",
     youtube_url: videoInput.value,
   });
 
@@ -482,7 +482,7 @@ const createUpload = async () => {
     formData.append("media_type", uploadForm.value.media_type);
     formData.append("type", uploadForm.value.type);
 
-    if (uploadForm.value.media_type === "video") {
+    if (uploadForm.value.media_type === "youtube") {
       if (!uploadForm.value.youtube_url) return;
       formData.append("youtube_url", uploadForm.value.youtube_url);
     }
@@ -925,12 +925,12 @@ onMounted(() => {
 
             <select v-model="uploadForm.media_type" class="input mb-3">
   <option value="image">Upload File</option>
-  <option value="video">YouTube Video</option>
+  <option value="youtube">YouTube Video</option>
 </select>
             
 
             <input
-  v-if="uploadForm.media_type === 'video'"
+  v-if="uploadForm.media_type === 'youtube'"
   v-model="uploadForm.youtube_url"
   class="input mb-4"
   placeholder="Paste YouTube link"
