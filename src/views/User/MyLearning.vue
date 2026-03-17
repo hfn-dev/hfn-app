@@ -10,7 +10,7 @@ const toast = useToast();
 
 const DARK_GREEN = "#004d33";
 const LIGHT_GREEN = "#f2f9f3";
-
+const reviewedCourses = ref(new Set());
 const isLoading = ref(true);
 const userEnrollments = ref([]);
 const activeCourses = ref([]);
@@ -27,6 +27,17 @@ const reviewForm = ref({
   rating: 0,
   review_text: "",
 });
+
+  const goToCertificate = (enrollment) => {
+  const slug = enrollment.course?.slug;
+
+  if (!slug) {
+    toast.error("Course not found");
+    return;
+  }
+
+  router.push(`/learning/courses/${slug}?tab=certificate`);
+};
 
 const fetchUserEnrollments = async () => {
   try {
@@ -111,6 +122,25 @@ const continueLearning = (enrollment) => {
   router.push(`/learning/courses/${slug}`);
 };
 
+
+  const fetchUserReviews = async () => {
+  try {
+    const res = await learningModule.getReviews(); // adjust if needed
+
+    const reviews = Array.isArray(res.data)
+      ? res.data
+      : res.data.results || [];
+
+    // store reviewed course IDs
+    reviewedCourses.value = new Set(
+      reviews.map((r) => r.course)
+    );
+
+  } catch (err) {
+    console.error("Failed to fetch reviews", err);
+  }
+};
+
 // const reviewCourse = async (enrollment) => {
 //   try {
 //     if (enrollment.certificate_url) {
@@ -145,6 +175,9 @@ const submitReview = async () => {
       review_text: reviewForm.value.review_text,
     });
 
+    // mark as reviewed instantly
+    reviewedCourses.value.add(selectedEnrollment.value.course.id);
+
     toast.success("Review submitted successfully");
 
     showReviewDialog.value = false;
@@ -160,6 +193,7 @@ const formatProgress = (progress) => {
 
 onMounted(() => {
   fetchUserEnrollments();
+  fetchUserReviews();
 });
 </script>
 
@@ -423,17 +457,29 @@ onMounted(() => {
                 }}
               </p>
 
-              <button
-                @click="reviewCourse(enrollment)"
-                class="mt-auto py-2 rounded-lg font-semibold transition duration-200"
-                :style="{
-                  backgroundColor: LIGHT_GREEN,
-                  color: DARK_GREEN,
-                  border: '1px solid #004d33',
-                }"
-              >
-                Review Course
-              </button>
+              <!-- If NOT reviewed -->
+<button
+  v-if="!reviewedCourses.has(enrollment.course.id)"
+  @click="reviewCourse(enrollment)"
+  class="mt-auto py-2 rounded-lg font-semibold transition duration-200"
+  :style="{
+    backgroundColor: LIGHT_GREEN,
+    color: DARK_GREEN,
+    border: '1px solid #004d33',
+  }"
+>
+  Review Course
+</button>
+
+<!-- If already reviewed -->
+<button
+  v-else
+  @click="goToCertificate(enrollment)"
+  class="mt-auto py-2 rounded-lg font-semibold text-white"
+  :style="{ backgroundColor: DARK_GREEN }"
+>
+  Get Certificate
+</button>
             </div>
           </div>
         </div>
