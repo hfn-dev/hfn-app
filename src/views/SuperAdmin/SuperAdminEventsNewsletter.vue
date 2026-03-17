@@ -147,15 +147,49 @@ const publishArticle = async (slug) => {
   }
 };
 
+// const saveNews = async () => {
+//   try {
+//     const formData = new FormData();
+
+//     Object.entries(newsForm.value).forEach(([key, value]) => {
+//       if (Array.isArray(value)) {
+//         value.forEach((v) => formData.append(`${key}[]`, v));
+//       } else {
+//         formData.append(key, value);
+//       }
+//     });
+
+//     if (isEditing.value) {
+//       await newsApi.partialUpdateArticle(editingSlug.value, formData);
+//     } else {
+//       await newsApi.createArticle(formData);
+//     }
+
+//     await fetchArticles();
+//     resetNewsForm();
+//   } catch (e) {
+//     console.error(e);
+//     console.log("Failed to save article");
+//   }
+// };
+
 const saveNews = async () => {
   try {
     const formData = new FormData();
 
     Object.entries(newsForm.value).forEach(([key, value]) => {
       if (Array.isArray(value)) {
-        value.forEach((v) => formData.append(`${key}[]`, v));
+        value.forEach((v) => {
+          if (typeof v === "object") {
+            formData.append(`${key}[]`, JSON.stringify(v));
+          } else {
+            formData.append(`${key}[]`, v);
+          }
+        });
+      } else if (typeof value === "object" && value !== null) {
+        formData.append(key, JSON.stringify(value));
       } else {
-        formData.append(key, value);
+        formData.append(key, value ?? "");
       }
     });
 
@@ -167,12 +201,14 @@ const saveNews = async () => {
 
     await fetchArticles();
     resetNewsForm();
+
   } catch (e) {
     console.error(e);
     console.log("Failed to save article");
   }
 };
 
+  
 const uploadNewsImage = (e) => {
   newsForm.value.featured_image = e.target.files[0];
 };
@@ -363,41 +399,105 @@ const uploadFile = (e) => {
   }
 };
 
+// const createUpload = async () => {
+//   if (!uploadForm.value.title || !uploadForm.value.files.length) return;
+
+//   try {
+//     const formData = new FormData();
+//     formData.append("title", uploadForm.value.title);
+//     formData.append("description", uploadForm.value.description);
+//     formData.append("type", uploadForm.value.type);
+// formData.append("audience", uploadForm.value.audience);
+//     if (uploadForm.value.type === "gallery") {
+//       uploadForm.value.files.forEach((file, i) => {
+//         formData.append("image", file);
+//       });
+//       formData.append("banner_index", uploadForm.value.bannerIndex);
+//     } else {
+//       formData.append("file", uploadForm.value.files[0]);
+//     }
+
+//     let res;
+//     switch (uploadForm.value.type) {
+//       case "gallery":
+//         res = await uploadsApi.createGallery(formData);
+//         break;
+//       case "newsletter":
+//         res = await uploadsApi.createNewsletters(formData);
+//         break;
+//       case "minute":
+//         res = await uploadsApi.createMinutes(formData);
+//         break;
+//       case "document":
+//         res = await uploadsApi.create(formData);
+//         break;
+
+//       default:
+//         res = await uploadsApi.create(formData);
+//     }
+
+//     await fetchUploads();
+
+//     uploadForm.value = {
+//       title: "",
+//       type: "newsletter",
+//       description: "",
+//       image: "",
+//       audience: "all",
+//       bannerIndex: 0,
+//     };
+//   } catch (error) {
+//     console.error("Upload failed:", error);
+//   }
+// };
+
 const createUpload = async () => {
-  if (!uploadForm.value.title || !uploadForm.value.files.length) return;
+  if (!uploadForm.value.title) return;
 
   try {
     const formData = new FormData();
+
     formData.append("title", uploadForm.value.title);
-    formData.append("description", uploadForm.value.description);
+    formData.append("caption", uploadForm.value.description);
+    formData.append("audience", uploadForm.value.audience);
+    formData.append("media_type", uploadForm.value.media_type);
     formData.append("type", uploadForm.value.type);
-formData.append("audience", uploadForm.value.audience);
-    if (uploadForm.value.type === "gallery") {
-      uploadForm.value.files.forEach((file, i) => {
-        formData.append("image", file);
-      });
-      formData.append("banner_index", uploadForm.value.bannerIndex);
-    } else {
-      formData.append("file", uploadForm.value.files[0]);
+
+    if (uploadForm.value.media_type === "video") {
+      if (!uploadForm.value.youtube_url) return;
+      formData.append("youtube_url", uploadForm.value.youtube_url);
     }
 
-    let res;
+    else {
+      if (!uploadForm.value.files.length) return;
+
+      if (uploadForm.value.type === "gallery") {
+        uploadForm.value.files.forEach((file) => {
+          formData.append("image", file);
+        });
+
+        formData.append("banner_index", uploadForm.value.bannerIndex);
+      } else {
+        formData.append("file", uploadForm.value.files[0]);
+      }
+    }
+
     switch (uploadForm.value.type) {
       case "gallery":
-        res = await uploadsApi.createGallery(formData);
-        break;
-      case "newsletter":
-        res = await uploadsApi.createNewsletters(formData);
-        break;
-      case "minute":
-        res = await uploadsApi.createMinutes(formData);
-        break;
-      case "document":
-        res = await uploadsApi.create(formData);
+        await uploadsApi.createGallery(formData);
         break;
 
+      case "newsletter":
+        await uploadsApi.createNewsletters(formData);
+        break;
+
+      case "minute":
+        await uploadsApi.createMinutes(formData);
+        break;
+
+      case "document":
       default:
-        res = await uploadsApi.create(formData);
+        await uploadsApi.create(formData);
     }
 
     await fetchUploads();
@@ -406,15 +506,18 @@ formData.append("audience", uploadForm.value.audience);
       title: "",
       type: "newsletter",
       description: "",
-      image: "",
       audience: "all",
+      media_type: "image",
+      youtube_url: "",
+      files: [],
       bannerIndex: 0,
     };
+
   } catch (error) {
     console.error("Upload failed:", error);
   }
 };
-
+  
 onMounted(() => {
   fetchEvents();
   fetchUploads();
@@ -625,11 +728,11 @@ onMounted(() => {
             </div>
 
             <iframe
-  v-if="video.youtube_url"
+  v-for="(video, i) in newsForm.videos"
+  :key="i"
   :src="video.youtube_url.replace('watch?v=', 'embed/')"
   class="w-full h-40 mt-2"
-/>  
-
+/>
             <div class="flex gap-4">
               <select v-model="newsForm.status" class="input">
                 <option value="draft">Draft</option>
@@ -805,10 +908,14 @@ onMounted(() => {
   <option value="image">Upload File</option>
   <option value="video">YouTube Video</option>
 </select>
-            <select v-model="uploadForm.media_type" class="input mb-3">
-  <option value="image">Upload File</option>
-  <option value="video">YouTube Video</option>
-</select>
+            
+
+            <input
+  v-if="uploadForm.media_type === 'video'"
+  v-model="uploadForm.youtube_url"
+  class="input mb-4"
+  placeholder="Paste YouTube link"
+/>
 
             <input type="file" @change="uploadFile" class="mb-4" />
 
@@ -863,6 +970,35 @@ onMounted(() => {
                     </a>
                     <span v-else class="text-gray-400">No file</span>
                   </td>
+                  <td class="p-3">
+
+  <!-- IMAGE -->
+  <img
+    v-if="item.file && item.type === 'gallery'"
+    :src="item.file"
+    class="h-16 w-16 object-cover rounded"
+  />
+
+  <!-- VIDEO -->
+  <iframe
+    v-else-if="item.youtube_url"
+    :src="item.youtube_url.replace('watch?v=', 'embed/')"
+    class="w-32 h-20"
+  ></iframe>
+
+  <!-- FILE -->
+  <a
+    v-else-if="item.file"
+    :href="item.file"
+    target="_blank"
+    class="text-primary"
+  >
+    View
+  </a>
+
+  <span v-else class="text-gray-400">No media</span>
+
+</td>
                 </tr>
                 <tr v-if="!uploads.length">
                   <td colspan="3" class="p-6 text-center text-gray-500">
