@@ -273,5 +273,13 @@ export default {
       throw error;
     }
   },
- 
+  async listPublications(params = {}) {
+    try {
+      const { data } = await api.get('/media/publications/', { params });
+      return data;
+    } catch (error) {
+      console.error('List publications error:', error);
+      throw error;
+    }
+  },
 };
