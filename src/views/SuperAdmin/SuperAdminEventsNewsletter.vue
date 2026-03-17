@@ -177,11 +177,22 @@ const uploadNewsImage = (e) => {
   newsForm.value.featured_image = e.target.files[0];
 };
 
+// const addVideo = () => {
+//   if (!videoInput.value) return;
+//   newsForm.value.videos.push(videoInput.value);
+//   videoInput.value = "";
+// };
+
 const addVideo = () => {
   if (!videoInput.value) return;
-  newsForm.value.videos.push(videoInput.value);
+
+  newsForm.value.videos.push({
+    media_type: "video",
+    youtube_url: videoInput.value,
+  });
+
   videoInput.value = "";
-};
+};  
 
 const removeVideo = (index) => {
   newsForm.value.videos.splice(index, 1);
@@ -285,6 +296,8 @@ const uploadForm = ref({
   type: "newsletter",
   description: "",
   audience: "all",
+  media_type: "image",
+  youtube_url: "",
   files: [],
   bannerIndex: 0,
 });
@@ -611,6 +624,12 @@ onMounted(() => {
               </ul>
             </div>
 
+            <iframe
+  v-if="video.youtube_url"
+  :src="video.youtube_url.replace('watch?v=', 'embed/')"
+  class="w-full h-40 mt-2"
+/>  
+
             <div class="flex gap-4">
               <select v-model="newsForm.status" class="input">
                 <option value="draft">Draft</option>
@@ -781,6 +800,11 @@ onMounted(() => {
               class="input mb-3"
               placeholder="Description"
             ></textarea>
+
+            <select v-model="uploadForm.media_type" class="input mb-3">
+  <option value="image">Upload File</option>
+  <option value="video">YouTube Video</option>
+</select>
 
             <input type="file" @change="uploadFile" class="mb-4" />
 
