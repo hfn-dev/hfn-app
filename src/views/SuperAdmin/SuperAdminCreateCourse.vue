@@ -238,7 +238,7 @@ const lessonForm = ref({
   videoUrl: "",
   videoSource: "url",
   videoFile: null,
-  articleContent: "",
+  content: "",
   documentFile: null,
   liveDate: "",
   liveLink: "",
@@ -313,7 +313,7 @@ watch(
     lessonForm.value.videoUrl = "";
     lessonForm.value.videoFile = null;
     lessonForm.value.videoSource = "url";
-    lessonForm.value.articleContent = "";
+    lessonForm.value.content = "";
     lessonForm.value.documentFile = null;
     lessonForm.value.liveDate = "";
     lessonForm.value.liveLink = "";
@@ -341,7 +341,7 @@ const handleLessonAdded = () => {
         ? lessonForm.value.videoUrl || ""
         : null,
 
-    article_content: lessonForm.value.articleContent,
+    content: lessonForm.value.content,
     document_file: lessonForm.value.documentFile,
 
     live_class:
@@ -399,7 +399,7 @@ const buildPayload = () => ({
       }
 
       if (lesson.content_type === "text") {
-        lessonPayload.article_content = lesson.article_content || "";
+        lessonPayload.content = lesson.content || "";
       }
 
       return lessonPayload;
@@ -505,7 +505,7 @@ const hydrateCurriculum = (backendCurriculum) => {
       content_type: lesson.content_type,
       duration: lesson.duration,
       video_url: lesson.video_url,
-      article_content: lesson.article_content,
+      content: lesson.content,
       is_preview: lesson.is_preview,
     })),
   }));
@@ -1190,7 +1190,7 @@ if (selectedCategory) {
                     >Article Content</label
                   >
                   <textarea
-                    v-model="lessonForm.articleContent"
+                    v-model="lessonForm.content"
                     rows="5"
                     placeholder="Write lesson content..."
                     class="w-full border rounded px-3 py-2 text-sm"
