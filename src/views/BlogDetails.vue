@@ -227,10 +227,33 @@ watch(
 );
 
 
+const fetchBlog = async () => {
+  try {
+    const res = await newsModule.getArticleBySlug(route.params.slug);
+
+    if (res) {
+      blog.value = {
+        title: res.title,
+        description: res.content || res.description || "",
+        image: res.featured_image || res.image || "event.png",
+        date: new Date(res.publish_date || res.date).toDateString(),
+        tag: res.tag || "News",
+        caption: res.caption || "",
+        comments: res.commentCount || 0,
+        views: res.views || 0,
+      };
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};  
+
+
 onMounted(() => {
   blog.value = route.state?.article || null;
 
   if (!blog.value) {
+    fetchBlog();
     fetchSingleArticle().then(() => {
       if (!blog.value) {
         const dummyFound = newsPageSchema.news.latestNewsSection.articles.find(
