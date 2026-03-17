@@ -119,11 +119,14 @@
             </p>
 
             <RouterLink
-              :to="`/blog/${article.slug}`, state: { article }"
-              class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors"
-            >
-              Read More
-            </RouterLink>
+  :to="{
+    path: `/blog/${article.slug}`,
+    state: { article }
+  }"
+  class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors"
+>
+  Read More
+</RouterLink>
           </div>
         </div>
       </div>
