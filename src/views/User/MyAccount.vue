@@ -4,8 +4,6 @@ import UserSidebar from '@/components/layout/UserSidebar.vue';
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-
-
 const router = useRouter();
 const isOrganization = ref(false);
 const orgDetails = reactive({});
@@ -44,19 +42,14 @@ const individualDetailsKeys = [
 const currentView = ref('My Profile');
 const activeTab = ref('My Profile');
 
-
-
-
 const fetchCertificates = async () => {
   try {
     const res = await learningModule.getCertificate();
 
-    // Make it always an array
     const certs = Array.isArray(res) ? res : res.results ? res.results : [res];
 
     certificates.value = certs;
 
-    // Default to first certificate for preview
     if (certs.length > 0) {
       certificateUrl.value = certs[0].pdf_file || '';
     }
