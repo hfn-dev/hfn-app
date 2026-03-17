@@ -223,6 +223,8 @@
 import wef from "@/assets/wef.jpg";
 import { newsPageSchema } from "@/schemas/pages/news.schema";
 import { computed } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
+import { getArticles, getVideos } from "@/api"; 
 
 
 const sortedArticles = computed(() => {
@@ -258,7 +260,10 @@ const imageMap = {
 
 };
 
-const videos = [
+
+
+const dummyArticles = [...newsPageSchema.news.latestNewsSection.articles]; 
+const dummyVideos = [
   {
     title: "Special Address by NCDC DG Dr. Jide Idris | HFN Annual Conference 2026",
     date: "March 11, 2026",
@@ -280,6 +285,55 @@ const videos = [
     url: "https://www.youtube.com/watch?v=ihiq1lI5ghY",
   },
 ];
+
+const articles = ref([]);
+const videos = ref([]);
+
+const selectedAudience = ref("all"); // all | non-members
+const selectedDate = reactive({ month: "", year: "" });   
+
+// const videos = [
+//   {
+//     title: "Special Address by NCDC DG Dr. Jide Idris | HFN Annual Conference 2026",
+//     date: "March 11, 2026",
+//     url: "https://www.youtube.com/watch?v=-EE2utpBKng&t=6s",
+//   },
+//   {
+//     title: "HFN Healthcare Policy Roundtable",
+//     date: "October 20, 2025",
+//     url: "https://www.youtube.com/watch?v=Usug5WLXWRM",
+//   },
+//   {
+//     title: "HFN Women’s Forum – Innovation & Leadership",
+//     date: "September 18, 2025",
+//     url: "https://www.youtube.com/watch?v=GAxo0PH39Sc",
+//   },
+//   {
+//     title: "HFN Conference 2025 Highlights",
+//     date: "August 5, 2025",
+//     url: "https://www.youtube.com/watch?v=ihiq1lI5ghY",
+//   },
+// ];
+
+ const fetchArticles = async () => {
+  try {
+    const apiArticles = await getArticles({ audience: selectedAudience.value });
+    articles.value = [...dummyArticles, ...apiArticles];
+  } catch (err) {
+    console.error("Error fetching articles:", err);
+    articles.value = [...dummyArticles];
+  }
+};
+
+const fetchVideos = async () => {
+  try {
+    const apiVideos = await getVideos({ audience: selectedAudience.value });
+    videos.value = [...dummyVideos, ...apiVideos];
+  } catch (err) {
+    console.error("Error fetching videos:", err);
+    videos.value = [...dummyVideos]; // fallback
+  }
+}; 
 
 const getEmbedUrl = (youtubeUrl) => {
   const url = new URL(youtubeUrl);
