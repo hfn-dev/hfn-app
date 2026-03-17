@@ -25,12 +25,28 @@ const downloadingMinutes = ref(false);
 const minutesError = ref(null);
 const latestMinutes = ref(null);
 
+// const getEmbedUrl = (youtubeUrl) => {
+//   const url = new URL(youtubeUrl);
+//   const videoId = url.searchParams.get("v");
+//   return `https://www.youtube.com/embed/${videoId}`;
+// };
 const getEmbedUrl = (youtubeUrl) => {
-  const url = new URL(youtubeUrl);
-  const videoId = url.searchParams.get("v");
-  return `https://www.youtube.com/embed/${videoId}`;
-};
+  if (!youtubeUrl) return "";
 
+  try {
+    const url = new URL(youtubeUrl);
+    const videoId = url.searchParams.get("v");
+
+    if (videoId) {
+      return `https://www.youtube.com/embed/${videoId}`;
+    }
+
+    return youtubeUrl.replace("watch?v=", "embed/");
+  } catch {
+    return youtubeUrl;
+  }
+};
+  
 const videos = ref([
   {
     title:
@@ -69,20 +85,51 @@ const videos = ref([
   },
 ]);
 
+// const fetchVideos = async () => {
+//   try {
+//     const data = await newsApi.listArticles({ limit: 20 });
+
+//     const apiVideos = data
+//       .filter((a) => a.videos && a.videos.length)
+//       .flatMap((a) =>
+//         a.videos.map((v) => ({
+//           title: a.title,
+//           url: v,
+//         }))
+//       );
+
+//     videos.value = [...apiVideos, ...videos.value];
+//   } catch (err) {
+//     console.error("Failed to fetch videos", err);
+//   }
+// };
 const fetchVideos = async () => {
   try {
-    const data = await newsApi.listArticles({ limit: 20 });
+    const articles = await newsApi.listArticles({ limit: 20 });
 
-    const apiVideos = data
+    const articleVideos = articles
       .filter((a) => a.videos && a.videos.length)
       .flatMap((a) =>
         a.videos.map((v) => ({
           title: a.title,
-          url: v,
+          url: typeof v === "string" ? v : v.youtube_url,
         }))
       );
 
-    videos.value = [...apiVideos, ...videos.value];
+    const galleryData = await contentUploadsApi.gallery();
+
+    const galleryVideos = galleryData
+      .filter((item) => item.media_type === "youtube" && item.youtube_url)
+      .map((item) => ({
+        title: item.title || "HFN Video",
+        url: item.youtube_url,
+      }));
+
+    videos.value = [
+      ...galleryVideos,   
+      ...articleVideos,
+      ...videos.value,    
+    ];
   } catch (err) {
     console.error("Failed to fetch videos", err);
   }
