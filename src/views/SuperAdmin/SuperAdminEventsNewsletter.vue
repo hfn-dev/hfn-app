@@ -725,33 +725,8 @@ onMounted(() => {
               />
             </div>
 
-            <div>
-              <label class="block mb-1 font-medium">Video links</label>
-              <div class="flex gap-2">
-                <input v-model="videoInput" class="input flex-1" />
-                <button @click="addVideo" class="btn-secondary">Add</button>
-              </div>
-
-              <ul class="mt-2 text-sm">
-                <li
-                  v-for="(video, i) in newsForm.videos"
-                  :key="i"
-                  class="flex justify-between"
-                >
-                  {{ video.youtube_url || video }}
-                  <button @click="removeVideo(i)" class="text-red-600">
-                    ✕
-                  </button>
-                </li>
-              </ul>
-            </div>
-
-            <iframe
-  v-for="(video, i) in newsForm.videos"
-  :key="i"
-  :src="getYoutubeEmbed(video)"
-  class="w-full h-40 mt-2"
-/>
+            
+            
             <div class="flex gap-4">
               <select v-model="newsForm.status" class="input">
                 <option value="draft">Draft</option>
@@ -934,6 +909,13 @@ onMounted(() => {
   v-model="uploadForm.youtube_url"
   class="input mb-4"
   placeholder="Paste YouTube link"
+/>
+
+            <iframe
+  v-for="(video, i) in newsForm.videos"
+  :key="i"
+  :src="getYoutubeEmbed(video)"
+  class="w-full h-40 mt-2"
 />
 
             <input type="file" @change="uploadFile" class="mb-4" />
