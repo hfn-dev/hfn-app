@@ -2,9 +2,12 @@
 import messagingApi from '@/api/messaging.js';
 import userRegister from '@/api/userRegister.js';
 import AdminSidebar from '@/views/Admin/AdminSidebar.vue';
+import { useAuth } from '@/store/authStore';
 import { computed, onMounted, ref, watch } from 'vue';
 const DARK_GREEN = '#004d33';
 const LIGHT_GREEN = '#f2f9f3';
+
+const { user } = useAuth();
 
 const currentTab = ref('Direct Messages');
 const currentGroup = ref('General');
@@ -147,18 +150,30 @@ const loadMessages = async (userId) => {
       user_id: userId,
     });
 
-    chatMessages.value = res.results.map((m) => ({
-      id: m.id,
-      sender: m.sender.full_name,
-      time: new Date(m.created_at).toLocaleTimeString(),
-      initial: m.sender.full_name
+    const currentUserId = user.value?.id;
+
+    // Ensure messages are shown in chronological order (oldest first)
+    const messages = [...(res.results || [])].sort(
+      (a, b) => new Date(a.created_at) - new Date(b.created_at)
+    );
+
+    chatMessages.value = messages.map((m) => {
+      const senderName = m.sender === currentUserId ? 'You' : m.sender_name;
+      const initial = senderName
         .split(' ')
         .map((n) => n[0])
         .join('')
-        .slice(0, 2),
-      color: m.sender.is_admin ? 'bg-green-600' : 'bg-gray-500',
-      body: m.content,
-    }));
+        .slice(0, 2);
+
+      return {
+        id: m.id,
+        sender: senderName,
+        time: new Date(m.created_at).toLocaleTimeString(),
+        initial,
+        color: m.sender === currentUserId ? 'bg-green-600' : 'bg-gray-500',
+        body: m.content,
+      };
+    });
   } catch (err) {
     console.error(err);
   }
@@ -178,7 +193,7 @@ const sendMessage = async () => {
       });
     } else if (selectedUserId.value) {
       res = await messagingApi.sendMessage({
-        receiver_id: selectedUserId.value,
+        receiver: selectedUserId.value,
         content: messageInput.value,
       });
     } else {
@@ -512,7 +527,7 @@ onMounted(async () => {
               <span class="text-xs text-gray-400">January 10</span>
             </div>
 
-            <div v-for="(message, idx) in chatMessages" :key="idx" class="flex space-x-3">
+            <div v-for="message in chatMessages" :key="message.id" class="flex space-x-3">
               <div v-if="message.type === 'file'" class="ml-12 w-full">
                 <a href="#"
                   class="inline-flex items-center p-2 text-sm bg-gray-100 rounded-lg text-gray-700 hover:bg-gray-200 transition">
