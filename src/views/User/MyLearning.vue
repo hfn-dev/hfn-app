@@ -170,7 +170,7 @@ const submitReview = async () => {
     }
 
     await learningModule.createReview({
-      course: selectedEnrollment.value.course,
+      course: selectedEnrollment.value.course.id,
       rating: reviewForm.value.rating,
       review_text: reviewForm.value.review_text,
     });
