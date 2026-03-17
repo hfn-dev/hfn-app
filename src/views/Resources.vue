@@ -301,7 +301,11 @@
 import hands from "@/assets/hands.png";
 import latest from "@/assets/latest_news.png";
 import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import contentUploadApi from "@/api/contentUploadsApi";
 
+const newsletters = ref([]);
+const publications = ref([]);
 const showPaymentDialog = ref(false);
 const showSuccessDialog = ref(false);
 const selectedPublication = ref(null);
@@ -364,7 +368,7 @@ const confirmPayment = () => {
   return url.replace("/upload/", "/upload/pg_1,w_600/").replace(".pdf", ".jpg");
 };
 
-const publications = [
+const dummyPublications = [
   {
     title: "HFN 2025 Year in Review",
     description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
@@ -415,7 +419,7 @@ const publications = [
   
 ];
 
-const newsletters = [
+const dummyNewsletters = [
   {
     date: "October 8, 2025",
     comments: 0,
@@ -453,6 +457,48 @@ const newsletters = [
   },
   
 ];
+
+
+const fetchDocuments = async () => {
+  try {
+    const res = await contentUploadApi.gallery({
+      type: "document",
+      audience: "all",
+    });
+
+    const data = Array.isArray(res) ? res : res.results || [];
+
+    const apiNewsletters = data
+      .filter(item => item.category === "newsletter" && item.file)
+      .map(item => ({
+        text: item.title,
+        pdfUrl: item.file,
+        date: new Date(item.created_at).toDateString(),
+      }));
+
+    const apiPublications = data
+      .filter(item => item.category === "publication" && item.file)
+      .map(item => ({
+        title: item.title,
+        pdfUrl: item.file,
+        description: item.caption || "",
+      }));
+
+    newsletters.value = [...dummyNewsletters, ...apiNewsletters];
+    publications.value = [...dummyPublications, ...apiPublications];
+
+  } catch (error) {
+    console.error("Error fetching documents:", error);
+
+    // fallback to dummy
+    newsletters.value = [...dummyNewsletters];
+    publications.value = [...dummyPublications];
+  }
+};
+
+ onMounted(() => {
+  fetchDocuments();
+}); 
 </script>
 
 
