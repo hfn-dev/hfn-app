@@ -121,7 +121,17 @@
             <RouterLink
   :to="{
     path: `/blog/${article.slug}`,
-    state: { article }
+    state: {
+      article: {
+        title: article.title,
+        description: article.description || article.content || article.excerpt || "",
+        image: article.featured_image || article.image || "event.png",
+        date: new Date(article.created_at || article.date).toDateString(),
+        tag: article.tag || "News",
+        caption: article.caption || "",
+        comments: article.commentCount || 0,
+      }
+    }
   }"
   class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors"
 >
