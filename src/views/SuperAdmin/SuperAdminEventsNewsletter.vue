@@ -805,6 +805,10 @@ onMounted(() => {
   <option value="image">Upload File</option>
   <option value="video">YouTube Video</option>
 </select>
+            <select v-model="uploadForm.media_type" class="input mb-3">
+  <option value="image">Upload File</option>
+  <option value="video">YouTube Video</option>
+</select>
 
             <input type="file" @change="uploadFile" class="mb-4" />
 
