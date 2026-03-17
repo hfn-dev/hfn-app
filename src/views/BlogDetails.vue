@@ -125,7 +125,40 @@ import { newsPageSchema } from "@/schemas/pages/news.schema";
 import { computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import wef from "@/assets/wef.jpg";
+import newsModule from "@/api/newsModule";
 
+const blog = ref(null);
+
+const fetchSingleArticle = async () => {
+  try {
+    const res = await newsModule.listArticles({
+      slug: route.params.slug
+    });
+
+    const data = Array.isArray(res) ? res : res.results || [];
+
+    const found = data.find(item => item.slug === route.params.slug);
+
+    if (found) {
+      blog.value = {
+        title: found.title,
+        description: found.content,
+        image: found.featured_image,
+        date: new Date(found.publish_date).toDateString(),
+      };
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+onMounted(() => {
+  blog.value = route.state?.article || null;
+
+  if (!blog.value) {
+    fetchSingleArticle();
+  }
+});
 const route = useRoute();
 const slug = computed(() => route.params.slug);
 
@@ -178,21 +211,6 @@ const imageMap = {
 };
 
 
-// const resolveImage = (item) => {
-//   if (!item) return "/images/placeholder-news.jpg";
-
-//   const img =
-//     item.image ||
-//     item.thumbnail ||
-//     item.coverImage ||
-//     item.featured_image;
-
-//   if (!img) return "/images/placeholder-news.jpg";
-
-//   if (img.startsWith("http")) return img;
-
-//   return imageMap[img] || "/images/placeholder-news.jpg";
-// };
 const resolveImage = (item) => {
   if (!item) return "/images/placeholder-news.jpg";
 
