@@ -43,7 +43,7 @@ const galleries = [
     slug: "digital-skills-bootcamp-2025",
     title: "Digital Skills Bootcamp 2025",
     category: "Workshop",
-    date: "November 20, 2025",
+    date: "November 27, 2025",
     images: [
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739050/850a9bd13a177b57467b2c6d7c3dfec3_L_g8tmki.jpg",
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739049/47ed312dbee39b4feb4a261300270374_M_1_jqdrbm.jpg",
