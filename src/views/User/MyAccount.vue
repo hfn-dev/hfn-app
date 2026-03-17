@@ -44,28 +44,30 @@ const individualDetailsKeys = [
 const currentView = ref('My Profile');
 const activeTab = ref('My Profile');
 
-const viewCertificateInNewTab = () => {
-  if (certificateUrl.value) {
-    window.open(certificateUrl.value, '_blank');
-  }
-};
+
 
 
 const fetchCertificates = async () => {
   try {
     const res = await learningModule.getCertificate();
 
-    const certs = Array.isArray(res)
-      ? res
-      : res.results || [];
+    // Make it always an array
+    const certs = Array.isArray(res) ? res : res.results ? res.results : [res];
 
     certificates.value = certs;
 
+    // Default to first certificate for preview
     if (certs.length > 0) {
-      certificateUrl.value = certs[0].certificate_file || certs[0].certificate_url || '';
+      certificateUrl.value = certs[0].pdf_file || '';
     }
   } catch (error) {
     console.error("Error fetching certificates:", error);
+  }
+};
+
+const viewCertificateInNewTab = (cert) => {
+  if (cert.pdf_file) {
+    window.open(cert.pdf_file, "_blank");
   }
 };
 
