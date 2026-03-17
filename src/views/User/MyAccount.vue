@@ -673,39 +673,48 @@ onMounted(() => {
           </div>
         </div>
         <div v-else-if="activeTab === 'My Certificate'" class="space-y-10">
-          <div class="p-10 bg-white rounded-xl shadow-lg border border-gray-200">
-            <h2 class="text-2xl font-semibold mb-4 text-gray-800">
-              My Certificate
-            </h2>
+  <div class="p-10 bg-white rounded-xl shadow-lg border border-gray-200">
+    <h2 class="text-2xl font-semibold mb-4 text-gray-800">
+      My Certificates
+    </h2>
 
-            <p class="text-gray-600 mb-6">
-              Preview and download your certificate below.
-            </p>
+    <div v-if="certificates.length > 0" class="space-y-8">
+      <div v-for="cert in certificates" :key="cert.id" class="space-y-4">
+        <h3 class="text-lg font-semibold text-gray-700">{{ cert.course_title }}</h3>
+        <p class="text-sm text-gray-500">Issued on: {{ new Date(cert.issued_date).toLocaleDateString() }}</p>
 
-            <!-- Certificate Preview Box -->
-            <div
-              class="w-full border border-gray-300 rounded-lg overflow-hidden shadow-md bg-gray-50 flex justify-center items-center h-80">
-              <iframe v-if="certificateUrl" :src="certificateUrl" class="w-full h-full"></iframe>
-
-              <div v-else class="text-center text-gray-500">
-                Certificate preview unavailable
-              </div>
-            </div>
-
-            <!-- Actions -->
-            <div class="mt-6 flex justify-center space-x-4">
-              <a v-if="certificateUrl" :href="certificateUrl" download="certificate.pdf"
-                class="px-6 py-2 bg-[#0c6b39] hover:bg-[#09572d] text-white rounded-lg shadow">
-                Download Certificate
-              </a>
-
-              <button @click="viewCertificateInNewTab"
-                class="px-6 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100">
-                Open in New Tab
-              </button>
-            </div>
+        <!-- Certificate Preview -->
+        <div class="w-full border border-gray-300 rounded-lg overflow-hidden shadow-md bg-gray-50 flex justify-center items-center h-80">
+          <iframe v-if="cert.pdf_file" :src="cert.pdf_file" class="w-full h-full"></iframe>
+          <div v-else class="text-center text-gray-500">
+            Certificate preview unavailable
           </div>
         </div>
+
+        <!-- Actions -->
+        <div class="mt-2 flex justify-center space-x-4">
+          <a v-if="cert.download_url" :href="cert.download_url" download
+             class="px-6 py-2 bg-[#0c6b39] hover:bg-[#09572d] text-white rounded-lg shadow">
+            Download
+          </a>
+          <button v-if="cert.pdf_file" @click="viewCertificateInNewTab(cert)"
+                  class="px-6 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100">
+            Open in New Tab
+          </button>
+          <a v-if="cert.verify_url" :href="cert.verify_url" target="_blank"
+             class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow">
+            Verify Certificate
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div v-else class="text-center text-gray-500">
+      No certificates available
+    </div>
+  </div>
+</div>
+        
 
         <div v-else class="p-10 text-center bg-white rounded-xl shadow-lg text-gray-500">
           <h2 class="text-2xl font-semibold mb-3">
