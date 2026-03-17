@@ -458,6 +458,10 @@ const dummyNewsletters = [
 ];
 
 
+const isPublicContent = (item) => {
+  return item.audience === "all" || item.audience === "non-members";
+};
+
 const fetchDocuments = async () => {
   try {
     const [newslettersRes, publicationsRes] = await Promise.all([
@@ -473,17 +477,21 @@ const fetchDocuments = async () => {
       ? publicationsRes
       : publicationsRes.results || [];
 
-    const apiNewsletters = newslettersData.map(item => ({
-      text: item.title,
-      pdfUrl: item.file || item.pdf || item.document,
-      date: new Date(item.created_at).toDateString(),
-    }));
+    const apiNewsletters = newslettersData
+      .filter(isPublicContent)
+      .map(item => ({
+        text: item.title,
+        pdfUrl: item.file || item.pdf || item.document,
+        date: new Date(item.created_at).toDateString(),
+      }));
 
-    const apiPublications = publicationsData.map(item => ({
-      title: item.title,
-      pdfUrl: item.file || item.pdf || item.document,
-      description: item.caption || item.description || "",
-    }));
+    const apiPublications = publicationsData
+      .filter(isPublicContent)
+      .map(item => ({
+        title: item.title,
+        pdfUrl: item.file || item.pdf || item.document,
+        description: item.caption || item.description || "",
+      }));
 
     newsletters.value = [...dummyNewsletters, ...apiNewsletters];
     publications.value = [...dummyPublications, ...apiPublications];
@@ -494,8 +502,7 @@ const fetchDocuments = async () => {
     newsletters.value = [...dummyNewsletters];
     publications.value = [...dummyPublications];
   }
-};
-  
+};  
  onMounted(() => {
   fetchDocuments();
 }); 
