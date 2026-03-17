@@ -344,6 +344,8 @@ const fetchArticles = async () => {
       slug: item.slug,
       excerpt: item.excerpt || item.content?.slice(0, 120),
       image: item.featured_image || "event.png",
+      title: item.title,
+  description: item.content,
       created_at: item.publish_date,
       date: new Date(item.publish_date).toDateString(),
       commentCount: item.comment_count || 0,
