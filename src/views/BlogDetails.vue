@@ -122,7 +122,7 @@
 <script setup>
 import { homePageSchema } from "@/schemas/pages/home.schema";
 import { newsPageSchema } from "@/schemas/pages/news.schema";
-import { computed, watch } from "vue";
+import { computed, watch, ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import wef from "@/assets/wef.jpg";
 import newsModule from "@/api/newsModule";
@@ -169,14 +169,7 @@ const allBlogs = [
   ...Object.values(homePageSchema.news.months).map((m) => m.featured),
 ];
 
-// const blog = computed(() =>
-//   allBlogs.find((item) => item.slug === slug.value)
-// );
-
-const blog = computed(() => {
-  return route.state?.article || 
-    allBlogs.find((item) => item.slug === route.params.slug);
-});  
+ 
 
 const otherNews = computed(() =>
   allBlogs.filter((item) => item.slug !== slug.value).slice(0, 3)
