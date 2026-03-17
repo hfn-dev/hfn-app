@@ -363,10 +363,16 @@ const confirmPayment = () => {
 };
 
 
-  const getPdfPreview = (url) => {
+//   const getPdfPreview = (url) => {
+//   return url.replace("/upload/", "/upload/pg_1,w_600/").replace(".pdf", ".jpg");
+// };
+const getPdfPreview = (url) => {
+  if (!url) return newsletter_placeholder;
+
+  if (url.match(/\.(jpg|jpeg|png)$/i)) return url;
+
   return url.replace("/upload/", "/upload/pg_1,w_600/").replace(".pdf", ".jpg");
 };
-
 const dummyPublications = [
   {
     title: "HFN 2025 Year in Review",
