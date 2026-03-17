@@ -430,4 +430,13 @@ export default {
       throw error;
     }
   },
+  async generateCertificate(payload) {
+  try {
+    const response = await api.post('/learning/certificates/generate/', payload);
+    return response.data;
+  } catch (error) {
+    console.error('generate certificate API error:', error);
+    throw error;
+  }
+}
 };
