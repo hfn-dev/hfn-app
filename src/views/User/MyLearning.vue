@@ -15,7 +15,8 @@ const isLoading = ref(true);
 const userEnrollments = ref([]);
 const activeCourses = ref([]);
 const completedCourses = ref([]);
-
+const certificate = ref(null);
+const selectedEnrollmentForCert = ref(null);
 const activePage = ref(1);
 const activePerPage = 5;
 const completedPage = ref(1);
@@ -141,18 +142,6 @@ const continueLearning = (enrollment) => {
   }
 };
 
-// const reviewCourse = async (enrollment) => {
-//   try {
-//     if (enrollment.certificate_url) {
-//       window.open(enrollment.certificate_url, '_blank');
-//     } else {
-//       router.push(`/courses/${enrollment.course.slug || enrollment.course.id}`);
-//     }
-//   } catch (error) {
-//     console.error('Error reviewing course:', error);
-//     toast.error('Failed to open course');
-//   }
-// };
 const reviewCourse = (enrollment) => {
   selectedEnrollment.value = enrollment;
   reviewForm.value = {
@@ -187,6 +176,20 @@ const submitReview = async () => {
   }
 };
 
+const fetchCertificate = async (enrollment) => {
+  if (!enrollment?.id) return;
+  selectedEnrollmentForCert.value = enrollment;
+  try {
+    const res = await learningModule.generateCertificate({
+      enrollment_id: enrollment.id,
+    });
+    certificate.value = res.data || res;
+  } catch (err) {
+    console.error("Certificate fetch/generate failed", err);
+    toast.error("Failed to fetch certificate");
+  }
+};
+  
 const formatProgress = (progress) => {
   return Math.round(progress || 0);
 };
