@@ -119,20 +119,7 @@
             </p>
 
             <RouterLink
-  :to="{
-    path: `/blog/${article.slug}`,
-    state: {
-      article: {
-        title: article.title,
-        description: article.description || article.content || article.excerpt || "",
-        image: article.featured_image || article.image || "event.png",
-        date: new Date(article.created_at || article.date).toDateString(),
-        tag: article.tag || "News",
-        caption: article.caption || "",
-        comments: article.commentCount || 0,
-      }
-    }
-  }"
+  :to="getArticleLink(article)"
   class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors"
 >
   Read More
@@ -299,6 +286,24 @@ const hands1 =
 const hands2 =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769716176/dc2a1ae8ac60464700aa7be25ea2c408_L_dt5us8.jpg";
 
+
+const getArticleLink = (article) => {
+  return {
+    path: `/blog/${article.slug}`,
+    state: {
+      article: {
+        title: article.title,
+        description: article.description || article.content || article.excerpt || "",
+        image: article.featured_image || article.image || "event.png",
+        date: new Date(article.created_at || article.date).toDateString(),
+        tag: article.tag || "News",
+        caption: article.caption || "",
+        comments: article.commentCount || 0,
+      }
+    }
+  };
+};
+  
 const imageMap = {
   "event.png": event,
   "group.png": group,
