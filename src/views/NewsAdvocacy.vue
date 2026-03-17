@@ -228,7 +228,6 @@
 <script setup>
 import wef from "@/assets/wef.jpg";
 import { newsPageSchema } from "@/schemas/pages/news.schema";
-import { computed } from "vue";
 import { ref, reactive, computed, onMounted } from "vue";
 import contentUploadApi from "@/api/contentUploadsApi";
 import newsModule from "@/api/newsModule";
@@ -266,7 +265,7 @@ const imageMap = {
 
 };
 
-
+const allowedAudiences = ["all", "non_members"];
 
 const dummyArticles = [...newsPageSchema.news.latestNewsSection.articles]; 
 const dummyVideos = [
@@ -316,6 +315,7 @@ const fetchArticles = async () => {
       created_at: item.created_at,
       date: new Date(item.created_at).toDateString(),
       commentCount: item.comment_count || 0,
+      audience: item.audience, 
     }));
 
     articles.value = [...dummyArticles, ...normalizedApiArticles];
@@ -338,10 +338,11 @@ const fetchVideos = async () => {
 
     const normalizedApiVideos = apiVideos.map((item) => ({
       title: item.title,
-      url: item.video_url || item.url,
+      url: item.youtube_url || item.video_url || item.url,
       date: item.created_at
         ? new Date(item.created_at).toDateString()
         : "",
+      audience: item.audience,
     }));
 
     videos.value = [...dummyVideos, ...normalizedApiVideos];
@@ -364,11 +365,16 @@ const filteredArticles = computed(() => {
         ? d.getFullYear() === Number(selectedDate.year)
         : true;
 
-      return matchMonth && matchYear;
-    })
-    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-});
+      const matchAudience = allowedAudiences.includes(article.audience || "all");
 
+      return matchMonth && matchYear && matchAudience;
+    })
+    .sort(
+      (a, b) =>
+        new Date(b.created_at || b.date) -
+        new Date(a.created_at || a.date)
+    );
+});
 
 const filteredVideos = computed(() => {
   return videos.value.filter((video) => {
@@ -382,10 +388,11 @@ const filteredVideos = computed(() => {
       ? d.getFullYear() === Number(selectedDate.year)
       : true;
 
-    return matchMonth && matchYear;
+    const matchAudience = allowedAudiences.includes(video.audience || "all");
+
+    return matchMonth && matchYear && matchAudience;
   });
 });  
-  
 const getEmbedUrl = (youtubeUrl) => {
   const url = new URL(youtubeUrl);
   const videoId = url.searchParams.get("v");
