@@ -106,7 +106,7 @@ const normalizePayment = (item) => {
       completion: item.amount || "-",
       amount: item.amount,
       status: item.status,
-      lastUpdate: item.payment_date
+      lastUpdate: item.last_payment_date
         ? new Date(item.payment_date).toLocaleDateString()
         : "-",
       raw: item,
