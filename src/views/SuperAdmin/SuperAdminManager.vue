@@ -39,6 +39,50 @@ const getStatusBadgeClass = (status) => {
   }
 };
 
+// const fetchUsers = async () => {
+//   try {
+//     const [userRes, inviteRes] = await Promise.all([
+//       accessAPI.viewAccessLogs(),
+//       accessAPI.listRoleInvites(),
+//     ]);
+
+//     const existingUsers = (userRes.users || []).map((user) => ({
+//       id: user.id,
+//       name: `${user.first_name || ""} ${user.last_name || ""}`.trim(),
+//       role: user.role?.charAt(0).toUpperCase() + user.role?.slice(1),
+//       invitedOn: user.created_at
+//         ? new Date(user.created_at).toLocaleDateString()
+//         : "",
+//       status:
+//   invite.status === "pending"
+//     ? "Pending"
+//     : invite.status === "accepted"
+//       ? "Accepted"
+//       : invite.status === "sent"
+//         ? "Sent"
+//         : "Removed",
+//       isSelected: false,
+//     }));
+
+//     const invites = (inviteRes.data || inviteRes).map((invite) => ({
+//       id: invite.id,
+//       name: invite.invited_email,
+//       role: invite.role.charAt(0).toUpperCase() + invite.role.slice(1),
+//       invitedOn: new Date(invite.created_at).toLocaleDateString(),
+//       status:
+//         invite.status === "pending"
+//           ? "Pending"
+//           : invite.status === "accepted"
+//             ? "Accepted"
+//             : "Removed",
+//       isSelected: false,
+//     }));
+
+//     USERS.value = [...existingUsers, ...invites];
+//   } catch (error) {
+//     console.error("Failed to fetch users or invitations", error);
+//   }
+// };
 const fetchUsers = async () => {
   try {
     const [userRes, inviteRes] = await Promise.all([
@@ -53,14 +97,7 @@ const fetchUsers = async () => {
       invitedOn: user.created_at
         ? new Date(user.created_at).toLocaleDateString()
         : "",
-      status:
-  invite.status === "pending"
-    ? "Pending"
-    : invite.status === "accepted"
-      ? "Accepted"
-      : invite.status === "sent"
-        ? "Sent"
-        : "Removed",
+      status: "Accepted",
       isSelected: false,
     }));
 
@@ -68,13 +105,17 @@ const fetchUsers = async () => {
       id: invite.id,
       name: invite.invited_email,
       role: invite.role.charAt(0).toUpperCase() + invite.role.slice(1),
-      invitedOn: new Date(invite.created_at).toLocaleDateString(),
+      invitedOn: invite.created_at
+        ? new Date(invite.created_at).toLocaleDateString()
+        : "",
       status:
         invite.status === "pending"
           ? "Pending"
           : invite.status === "accepted"
-            ? "Accepted"
-            : "Removed",
+          ? "Accepted"
+          : invite.status === "sent"
+          ? "Sent"
+          : "Removed",
       isSelected: false,
     }));
 
@@ -83,7 +124,6 @@ const fetchUsers = async () => {
     console.error("Failed to fetch users or invitations", error);
   }
 };
-
 
 const revokeInvitation = async (inviteId) => {
   try {
