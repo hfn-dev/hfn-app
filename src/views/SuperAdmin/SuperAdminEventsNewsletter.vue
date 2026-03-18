@@ -283,7 +283,7 @@ const createEvent = async () => {
 
     Object.entries(eventForm.value).forEach(([key, value]) => {
       if (key === "banner" && value instanceof File) {
-        formData.append("banner_image", value); // backend field
+        formData.append("banner", value); 
         return;
       }
 
