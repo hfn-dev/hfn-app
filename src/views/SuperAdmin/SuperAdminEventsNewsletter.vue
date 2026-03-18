@@ -656,9 +656,7 @@ onMounted(() => {
               <input type="file" @change="uploadNewsImage" />
               <img
   v-if="newsForm.featured_image"
-  :src="isFile(newsForm.featured_image) 
-    ? URL.createObjectURL(newsForm.featured_image) 
-    : newsForm.featured_image"
+  :src="previewUrl(newsForm.featured_image) || newsForm.featured_image"
   class="h-40 mt-2 rounded"
 />
             </div>
