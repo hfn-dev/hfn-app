@@ -60,7 +60,7 @@ const activeTab = ref('My Profile');
 // };
 const fetchCertificates = async () => {
   try {
-    const res = await learningModule.getEnrollments();
+    const res = await learningModule.getEnrollment();
     const data = res.data?.results || res.data;
 
     const certs = data
