@@ -561,12 +561,12 @@ onMounted(() => {
             />
 
             <div v-if="eventForm.banner" class="mt-3">
-              <img
-                :src="eventForm.banner"
-                alt="Event Banner"
-                class="h-40 w-full object-cover rounded-md shadow-md"
-              />
-            </div>
+  <img
+    :src="previewUrl(eventForm.banner) || eventForm.banner"
+    alt="Event Banner"
+    class="h-40 w-full object-cover rounded-md shadow-md"
+  />
+</div>
           </div>
 
           <div class="flex items-center gap-4 mt-4">
