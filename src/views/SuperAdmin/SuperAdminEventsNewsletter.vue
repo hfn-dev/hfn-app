@@ -156,47 +156,23 @@ const publishArticle = async (slug) => {
   }
 };
 
-// const saveNews = async () => {
-//   try {
-//     const formData = new FormData();
-
-//     Object.entries(newsForm.value).forEach(([key, value]) => {
-//       if (Array.isArray(value)) {
-//         value.forEach((v) => formData.append(`${key}[]`, v));
-//       } else {
-//         formData.append(key, value);
-//       }
-//     });
-
-//     if (isEditing.value) {
-//       await newsApi.partialUpdateArticle(editingSlug.value, formData);
-//     } else {
-//       await newsApi.createArticle(formData);
-//     }
-
-//     await fetchArticles();
-//     resetNewsForm();
-//   } catch (e) {
-//     console.error(e);
-//     console.log("Failed to save article");
-//   }
-// };
 
 const saveNews = async () => {
   try {
     const formData = new FormData();
 
     Object.entries(newsForm.value).forEach(([key, value]) => {
+      if (key === "featured_image") {
+        if (isFile(value)) {
+          formData.append("featured_image", value);
+        }
+        return;
+      }
+
       if (Array.isArray(value)) {
         value.forEach((v) => {
-          if (typeof v === "object") {
-            formData.append(`${key}[]`, JSON.stringify(v));
-          } else {
-            formData.append(`${key}[]`, v);
-          }
+          formData.append(`${key}[]`, JSON.stringify(v));
         });
-      } else if (typeof value === "object" && value !== null) {
-        formData.append(key, JSON.stringify(value));
       } else {
         formData.append(key, value ?? "");
       }
@@ -204,8 +180,10 @@ const saveNews = async () => {
 
     if (isEditing.value) {
       await newsApi.partialUpdateArticle(editingSlug.value, formData);
+      toast.success("Article updated");
     } else {
       await newsApi.createArticle(formData);
+      toast.success("Article created");
     }
 
     await fetchArticles();
@@ -213,7 +191,7 @@ const saveNews = async () => {
 
   } catch (e) {
     console.error(e);
-    console.log("Failed to save article");
+    toast.error("Failed to save article");
   }
 };
 
