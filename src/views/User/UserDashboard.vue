@@ -433,7 +433,6 @@ const fetchNewsletterPdfs = async () => {
 const fetchEvents = async () => {
   try {
     const data = await eventsApi.listEvents({
-      status: "upcoming, completed",
       ordering: "start_datetime",
       limit: 6,
     });
