@@ -12,7 +12,7 @@ const resources = ref([]);
 const searchQuery = ref("");
 const selectedType = ref("all");
 const loadingResources = ref(false);
-
+const userIsMember = true;
 const newsletters = ref([]);
 const events = ref([]);
 const topics = ref([]);
@@ -25,11 +25,7 @@ const downloadingMinutes = ref(false);
 const minutesError = ref(null);
 const latestMinutes = ref(null);
 
-// const getEmbedUrl = (youtubeUrl) => {
-//   const url = new URL(youtubeUrl);
-//   const videoId = url.searchParams.get("v");
-//   return `https://www.youtube.com/embed/${videoId}`;
-// };
+
 const getEmbedUrl = (youtubeUrl) => {
   if (!youtubeUrl) return "";
 
@@ -85,24 +81,7 @@ const videos = ref([
   },
 ]);
 
-// const fetchVideos = async () => {
-//   try {
-//     const data = await newsApi.listArticles({ limit: 20 });
 
-//     const apiVideos = data
-//       .filter((a) => a.videos && a.videos.length)
-//       .flatMap((a) =>
-//         a.videos.map((v) => ({
-//           title: a.title,
-//           url: v,
-//         }))
-//       );
-
-//     videos.value = [...apiVideos, ...videos.value];
-//   } catch (err) {
-//     console.error("Failed to fetch videos", err);
-//   }
-// };
 const fetchVideos = async () => {
   try {
     const articles = await newsApi.listArticles({ limit: 20 });
@@ -218,19 +197,97 @@ const dummyResources = [
   },
 ];
 
+// const fetchResources = async () => {
+//   loadingResources.value = true;
+
+//   try {
+//     const data = await memberApi.listResources();
+
+//     const apiResources = (data || []).map((item) => ({
+//       ...item,
+//       source: "api",
+//       audience: item.audience?.toLowerCase() || "all",
+
+//     }));
+
+//     const localResources = dummyResources.map((item) => ({
+//       ...item,
+//       source: "dummy",
+//       audience: "all",
+//     }));
+
+//     resources.value = [...apiResources, ...localResources];
+
+//   } catch (err) {
+//     console.error("Failed to load resources", err);
+
+//     resources.value = dummyResources.map((item) => ({
+//       ...item,
+//       source: "dummy",
+//       audience: "all",
+//     }));
+//   } finally {
+//     loadingResources.value = false;
+//   }
+// };
 const fetchResources = async () => {
   loadingResources.value = true;
+
   try {
     const data = await memberApi.listResources();
-    resources.value = data && data.length ? data : dummyResources;
+
+    const apiResources = (data || []).map((item) => ({
+      ...item,
+      audience: item.audience?.toLowerCase() || "all",
+    }));
+
+    const localResources = dummyResources.map((item) => ({
+      ...item,
+      audience: item.audience || "all",
+    }));
+
+    let merged = [...apiResources, ...localResources];
+
+    merged = merged.filter((item) => {
+      if (userIsMember) {
+        return ["all", "members"].includes(item.audience);
+      } else {
+        return item.audience === "all";
+      }
+    });
+
+    resources.value = merged;
+
   } catch (err) {
     console.error("Failed to load resources", err);
-    resources.value = dummyResources;
+
+    resources.value = dummyResources.filter((item) =>
+      userIsMember
+        ? ["all", "members"].includes(item.audience || "all")
+        : (item.audience || "all") === "all"
+    );
   } finally {
     loadingResources.value = false;
   }
 };
+  
+const filteredResources = computed(() => {
+  return resources.value.filter((item) => {
+    const matchesSearch = item.title
+      ?.toLowerCase()
+      .includes(searchQuery.value.toLowerCase());
 
+    const matchesType =
+      selectedType.value === "all" || item.type === selectedType.value;
+
+    const matchesAudience =
+      selectedAudience.value === "all" ||
+      item.audience === selectedAudience.value;
+
+    return matchesSearch && matchesType && matchesAudience;
+  });
+});  
+  
 const dummyEvents = [
   {
     slug: "dummy-1",
@@ -392,7 +449,7 @@ const fetchNewsletterPdfs = async () => {
 const fetchEvents = async () => {
   try {
     const data = await eventsApi.listEvents({
-      status: "upcoming",
+      status: "upcoming, completed",
       ordering: "start_datetime",
       limit: 6,
     });
@@ -776,19 +833,19 @@ onMounted(() => {
               <a
                 v-if="item.file_url"
                 :href="item.file_url"
+                download
                 target="_blank"
                 class="inline-flex items-center text-green-700 font-medium hover:underline"
               >
                 Download →
               </a>
-
-              <router-link
-                v-else-if="item.slug"
-                :to="`/news/${item.slug}`"
-                class="inline-flex items-center text-green-700 font-medium hover:underline"
-              >
-                Read →
-              </router-link>
+              <button
+    v-else
+    class="inline-flex items-center text-gray-400 font-medium cursor-not-allowed"
+  >
+    No file available
+  </button>
+              
             </div>
           </div>
         </div>
