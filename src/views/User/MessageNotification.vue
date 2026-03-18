@@ -423,7 +423,7 @@ const fetchGroupMessages = async (groupId) => {
     const el = document.querySelector(".overflow-y-auto");
     el?.scrollTo({ top: el.scrollHeight });
   } catch {
-    toast.error("Failed to load group messages");
+    console.log("Failed to load group messages");
   } finally {
     isLoading.value.messages = false;
   }
