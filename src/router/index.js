@@ -39,6 +39,7 @@ import LearnerCourseDetails from '@/views/Learner/LearnerCourseDetails.vue';
 import LearnerSupport from '@/views/Learner/LearnerSupport.vue';
 import ArticleDetail from '@/views/User/ArticleDetail.vue';
 import CourseDetails from '@/views/User/CourseDetails.vue';
+import UserCourseDetails from '@/views/User/CourseDetails.vue';
 import MessageNotification from '@/views/User/MessageNotification.vue';
 import MyAccount from '@/views/User/MyAccount.vue';
 import MyLearning from '@/views/User/MyLearning.vue';
@@ -146,6 +147,11 @@ const routes = [
     name: 'CourseDetails',
     component: CourseDetails,
   },
+  {
+  path: '/user/courses/:slug',
+  name: 'UserCourseDetails',
+  component: CourseDetails,
+},
   {
     path: '/learning/courses/:slug',
     name: 'CourseDetails',
