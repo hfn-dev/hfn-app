@@ -579,9 +579,10 @@ const sendMessage = async () => {
 
       messageInput.value = "";
 
-      await messagingApi.sendGroupMessage(groupId, {
-        content: tempMessage.body,
-      });
+      await messagingApi.sendGroupMessage({
+  group_id: groupId,
+  content: tempMessage.body,
+});
 
       fetchGroupMessages(groupId);
     } catch {
@@ -708,6 +709,40 @@ const fetchUnreadNotifications = async () => {
   const response = await messagingApi.listUnreadNotifications();
   unreadCount.value = response.count ?? response.results.length;
 };
+
+const joinGroup = async (group) => {
+  try {
+    await messagingApi.joinGroup(group.id);
+
+    toast.success(`Joined ${group.name}`);
+
+    await fetchGroups();
+
+  } catch (error) {
+    console.error("Join group failed:", error);
+    toast.error("Failed to join group");
+  }
+};
+
+const leaveGroup = async (group) => {
+  try {
+    await messagingApi.leaveGroup(group.id);
+
+    toast.success(`Left ${group.name}`);
+
+    await fetchGroups();
+
+    if (currentGroup.value?.id === group.id) {
+      currentGroup.value = null;
+      chatMessages.value = [];
+    }
+
+  } catch (error) {
+    console.error("Leave group failed:", error);
+    toast.error("Failed to leave group");
+  }
+};
+  
 
 const blockConnectionRequest = async (id) => {
   try {
