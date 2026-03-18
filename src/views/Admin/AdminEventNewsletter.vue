@@ -5,7 +5,10 @@ import newsApi from "@/api/newsModule";
 import { useAuth } from "@/store/authStore";
 import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
 import { computed, onMounted, ref } from "vue";
+import { useToast } from "vue-toastification";
 
+  
+const toast = useToast();
 const events = ref([]);
 const loadingEvents = ref(false);
 const articles = ref([]);
@@ -36,23 +39,8 @@ const uploadBanner = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", "your_preset");
-
-  const res = await fetch(
-    "https://api.cloudinary.com/v1_1/dawrem2mi/image/upload",
-    {
-      method: "POST",
-      body: formData,
-    }
-  );
-
-  const data = await res.json();
-
-  eventForm.value.banner = data.secure_url;
+  eventForm.value.banner = file; 
 };
-
 const loading = ref(false);
 
 const editArticle = (article) => {
@@ -67,7 +55,13 @@ const editArticle = (article) => {
     audience: article.audience,
     is_featured: article.is_featured ?? false,
     featured_order: article.featured_order ?? 0,
-    videos: article.videos ? [...article.videos] : [],
+    // videos: article.videos ? [...article.videos] : [],
+    videos: (article.videos || []).map((v) =>
+      typeof v === "string"
+        ? { media_type: "youtube", youtube_url: v }
+        : v
+    ),
+
   };
 
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -100,6 +94,7 @@ const deleteArticle = (slug) => {
     } catch (e) {
       console.error(e);
       console.log("Failed to delete article");
+      toast.error("Failed to delete article");
     } finally {
       deletingSlug.value = null;
       confirmLoading.value = false;
@@ -142,46 +137,81 @@ const publishArticle = async (slug) => {
   } catch (e) {
     console.error(e);
     console.log("Failed to publish article");
+    toast.error("Failed to publish article");
   } finally {
     publishingSlug.value = null;
   }
 };
+
 
 const saveNews = async () => {
   try {
     const formData = new FormData();
 
     Object.entries(newsForm.value).forEach(([key, value]) => {
+      if (key === "featured_image") {
+        if (isFile(value)) {
+          formData.append("featured_image", value);
+        }
+        return;
+      }
+
       if (Array.isArray(value)) {
-        value.forEach((v) => formData.append(`${key}[]`, v));
+        value.forEach((v) => {
+          formData.append(`${key}[]`, JSON.stringify(v));
+        });
       } else {
-        formData.append(key, value);
+        formData.append(key, value ?? "");
       }
     });
 
     if (isEditing.value) {
       await newsApi.partialUpdateArticle(editingSlug.value, formData);
+      toast.success("Article updated");
     } else {
       await newsApi.createArticle(formData);
+      toast.success("Article created");
     }
 
     await fetchArticles();
     resetNewsForm();
+
   } catch (e) {
     console.error(e);
-    console.log("Failed to save article");
+    toast.error("Failed to save article");
   }
 };
 
+const getYoutubeEmbed = (video) => {
+  if (!video) return "";
+
+  if (typeof video === "string") {
+    return video.replace("watch?v=", "embed/");
+  }
+
+  if (video.youtube_url) {
+    return video.youtube_url.replace("watch?v=", "embed/");
+  }
+
+  return "";
+};
+  
 const uploadNewsImage = (e) => {
   newsForm.value.featured_image = e.target.files[0];
 };
 
+
+
 const addVideo = () => {
   if (!videoInput.value) return;
-  newsForm.value.videos.push(videoInput.value);
+
+  newsForm.value.videos.push({
+    media_type: "youtube",
+    youtube_url: videoInput.value,
+  });
+
   videoInput.value = "";
-};
+};  
 
 const removeVideo = (index) => {
   newsForm.value.videos.splice(index, 1);
@@ -209,6 +239,7 @@ const eventForm = ref({
   start_datetime: "",
   end_datetime: "",
   location: "",
+  audience: "all",
   meeting_url: "",
   max_attendees: null,
   registration_deadline: "",
@@ -247,41 +278,71 @@ const deleteEvent = (event) => {
 };
 
 const createEvent = async () => {
-  const payload = {
-    ...eventForm.value,
-    banner: eventForm.value.banner,
-    price: eventForm.value.is_free ? undefined : Number(eventForm.value.price),
-  };
-  if (eventForm.value.is_free) {
-    delete payload.price;
+  try {
+    const formData = new FormData();
+
+    Object.entries(eventForm.value).forEach(([key, value]) => {
+      if (key === "banner" && value instanceof File) {
+        formData.append("banner_image", value); 
+        return;
+      }
+
+      if (key === "price") {
+        if (!eventForm.value.is_free && value) {
+          formData.append("price", Number(value));
+        }
+        return;
+      }
+
+      if (value !== null && value !== undefined) {
+        formData.append(key, value);
+      }
+    });
+
+    await eventsApi.createCalenderEvent(formData);
+
+    toast.success("Event created successfully");
+    await fetchEvents();
+
+    // reset form (kept your original)
+    Object.assign(eventForm.value, {
+      title: "",
+      description: "",
+      event_type: "webinar",
+      status: "upcoming",
+      start_datetime: "",
+      end_datetime: "",
+      location: "",
+      audience: "all",
+      meeting_url: "",
+      max_attendees: null,
+      registration_deadline: "",
+      is_free: true,
+      price: "",
+      banner: "",
+    });
+
+  } catch (error) {
+    console.error("Create event error:", error);
+
+    const message =
+      error.response?.data?.non_field_errors?.[0] ||
+      error.response?.data?.error?.message ||
+      "Failed to create event";
+
+    toast.error(message);
   }
-
-  await eventsApi.createCalenderEvent(payload);
-  await fetchEvents();
-
-  Object.assign(eventForm.value, {
-    title: "",
-    description: "",
-    event_type: "webinar",
-    status: "upcoming",
-    start_datetime: "",
-    end_datetime: "",
-    location: "",
-    meeting_url: "",
-    max_attendees: null,
-    registration_deadline: "",
-    is_free: true,
-    price: "",
-    banner: "",
-  });
 };
-
+  
 const uploads = ref([]);
 
 const uploadForm = ref({
   title: "",
   type: "newsletter",
   description: "",
+  audience: "all",
+  media_type: "image",
+  youtube_url: "",
   files: [],
   bannerIndex: 0,
 });
@@ -347,41 +408,54 @@ const uploadFile = (e) => {
   }
 };
 
+
 const createUpload = async () => {
-  if (!uploadForm.value.title || !uploadForm.value.files.length) return;
+  if (!uploadForm.value.title) return;
 
   try {
     const formData = new FormData();
+
     formData.append("title", uploadForm.value.title);
-    formData.append("description", uploadForm.value.description);
+    formData.append("caption", uploadForm.value.description);
+    formData.append("audience", uploadForm.value.audience);
+    formData.append("media_type", uploadForm.value.media_type);
     formData.append("type", uploadForm.value.type);
 
-    if (uploadForm.value.type === "gallery") {
-      uploadForm.value.files.forEach((file, i) => {
-        formData.append("image", file);
-      });
-      formData.append("banner_index", uploadForm.value.bannerIndex);
-    } else {
-      formData.append("file", uploadForm.value.files[0]);
+    if (uploadForm.value.media_type === "youtube") {
+      if (!uploadForm.value.youtube_url) return;
+      formData.append("youtube_url", uploadForm.value.youtube_url);
     }
 
-    let res;
+    else {
+      if (!uploadForm.value.files.length) return;
+
+      if (uploadForm.value.type === "gallery") {
+        uploadForm.value.files.forEach((file) => {
+          formData.append("image", file);
+        });
+
+        formData.append("banner_index", uploadForm.value.bannerIndex);
+      } else {
+        formData.append("file", uploadForm.value.files[0]);
+      }
+    }
+
     switch (uploadForm.value.type) {
       case "gallery":
-        res = await uploadsApi.createGallery(formData);
-        break;
-      case "newsletter":
-        res = await uploadsApi.createNewsletters(formData);
-        break;
-      case "minute":
-        res = await uploadsApi.createMinutes(formData);
-        break;
-      case "document":
-        res = await uploadsApi.create(formData);
+        await uploadsApi.createGallery(formData);
         break;
 
+      case "newsletter":
+        await uploadsApi.createNewsletters(formData);
+        break;
+
+      case "minute":
+        await uploadsApi.createMinutes(formData);
+        break;
+
+      case "document":
       default:
-        res = await uploadsApi.create(formData);
+        await uploadsApi.create(formData);
     }
 
     await fetchUploads();
@@ -390,14 +464,18 @@ const createUpload = async () => {
       title: "",
       type: "newsletter",
       description: "",
-      image: "",
+      audience: "all",
+      media_type: "image",
+      youtube_url: "",
+      files: [],
       bannerIndex: 0,
     };
+
   } catch (error) {
     console.error("Upload failed:", error);
   }
 };
-
+  
 onMounted(() => {
   fetchEvents();
   fetchUploads();
@@ -420,28 +498,33 @@ onMounted(() => {
             <input
               v-model="eventForm.title"
               class="input"
-              placeholder="Title"
+              placeholder="Enter Title"
             />
-            <select v-model="eventForm.event_type" class="input">
+            <select v-model="eventForm.event_type" class="input" placeholder="Select event type">
               <option value="webinar">Webinar</option>
               <option value="physical">Physical</option>
             </select>
 
-            <input
-              type="datetime-local"
-              v-model="eventForm.start_datetime"
-              class="input"
-            />
-            <input
-              type="datetime-local"
-              v-model="eventForm.end_datetime"
-              class="input"
-            />
+            <select v-model="eventForm.audience" class="input" placeholder="Select audience type">
+  <option value="all">All</option>
+  <option value="members">Members Only</option>
+  <option value="non_members">Non Members Only</option>
+</select>
+
+
+            <div>
+  <label class="text-xs text-gray-500">Start Date & Time</label>
+  <input type="datetime-local" v-model="eventForm.start_datetime" class="input" />
+</div>
+            <div>
+  <label class="text-xs text-gray-500">End Date & Time</label>
+  <input type="datetime-local" v-model="eventForm.end_datetime" class="input" />
+</div>
 
             <input
               v-model="eventForm.location"
               class="input"
-              placeholder="Location"
+              placeholder="Enter Location"
             />
             <input
               v-model="eventForm.meeting_url"
@@ -455,11 +538,10 @@ onMounted(() => {
               class="input"
               placeholder="Max attendees"
             />
-            <input
-              type="datetime-local"
-              v-model="eventForm.registration_deadline"
-              class="input"
-            />
+            <div>
+  <label class="text-xs text-gray-500">Registration Deadline</label>
+  <input type="datetime-local" v-model="eventForm.registration_deadline" class="input" />
+</div>
           </div>
 
           <textarea
@@ -479,12 +561,12 @@ onMounted(() => {
             />
 
             <div v-if="eventForm.banner" class="mt-3">
-              <img
-                :src="eventForm.banner"
-                alt="Event Banner"
-                class="h-40 w-full object-cover rounded-md shadow-md"
-              />
-            </div>
+  <img
+    :src="previewUrl(eventForm.banner) || eventForm.banner"
+    alt="Event Banner"
+    class="h-40 w-full object-cover rounded-md shadow-md"
+  />
+</div>
           </div>
 
           <div class="flex items-center gap-4 mt-4">
@@ -573,33 +655,14 @@ onMounted(() => {
               <label class="block mb-2">Featured Image</label>
               <input type="file" @change="uploadNewsImage" />
               <img
-                v-if="newsForm.featured_image"
-                :src="newsForm.featured_image"
-                class="h-40 mt-2 rounded"
-              />
+  v-if="newsForm.featured_image"
+  :src="previewUrl(newsForm.featured_image) || newsForm.featured_image"
+  class="h-40 mt-2 rounded"
+/>
             </div>
 
-            <div>
-              <label class="block mb-1 font-medium">Video links</label>
-              <div class="flex gap-2">
-                <input v-model="videoInput" class="input flex-1" />
-                <button @click="addVideo" class="btn-secondary">Add</button>
-              </div>
-
-              <ul class="mt-2 text-sm">
-                <li
-                  v-for="(video, i) in newsForm.videos"
-                  :key="i"
-                  class="flex justify-between"
-                >
-                  {{ video }}
-                  <button @click="removeVideo(i)" class="text-red-600">
-                    ✕
-                  </button>
-                </li>
-              </ul>
-            </div>
-
+            
+            
             <div class="flex gap-4">
               <select v-model="newsForm.status" class="input">
                 <option value="draft">Draft</option>
@@ -609,12 +672,22 @@ onMounted(() => {
               <select v-model="newsForm.audience" class="input">
                 <option value="all">All</option>
                 <option value="members">Members only</option>
+                <option value="non_members">Non Members Only</option>
+
               </select>
             </div>
 
-            <button @click="saveNews" class="btn-primary">
-              {{ isEditing ? "Update Article" : "Save as Draft" }}
-            </button>
+          
+
+              <button @click="saveNews" class="btn-primary">
+  {{ 
+    isEditing 
+      ? "Update Article" 
+      : newsForm.status === "published"
+        ? "Save & Publish"
+        : "Save as Draft"
+  }}
+</button>
 
             <button
               v-if="isEditing"
@@ -756,11 +829,38 @@ onMounted(() => {
               <option value="minute">Minute</option>
             </select>
 
+            <select v-model="uploadForm.audience" class="input mb-3">
+  <option value="all">All</option>
+  <option value="members">Members Only</option>
+  <option value="non_members">Non Members Only</option>
+</select>
+
+
             <textarea
               v-model="uploadForm.description"
               class="input mb-3"
               placeholder="Description"
             ></textarea>
+
+            <select v-model="uploadForm.media_type" class="input mb-3">
+  <option value="image">Upload File</option>
+  <option value="youtube">YouTube Video</option>
+</select>
+            
+
+            <input
+  v-if="uploadForm.media_type === 'youtube'"
+  v-model="uploadForm.youtube_url"
+  class="input mb-4"
+  placeholder="Paste YouTube link"
+/>
+
+            <iframe
+  v-for="(video, i) in newsForm.videos"
+  :key="i"
+  :src="getYoutubeEmbed(video)"
+  class="w-full h-40 mt-2"
+/>
 
             <input type="file" @change="uploadFile" class="mb-4" />
 
@@ -799,22 +899,36 @@ onMounted(() => {
                       {{ item.type }}
                     </span>
                   </td>
+                  
                   <td class="p-3">
-                    <a
-                      v-if="item.file"
-                      :href="item.file"
-                      target="_blank"
-                      class="text-primary"
-                    >
-                      <img
-                        v-if="item.type === 'gallery'"
-                        :src="item.file"
-                        class="h-16 w-16 object-cover rounded"
-                      />
-                      <span v-else>View</span>
-                    </a>
-                    <span v-else class="text-gray-400">No file</span>
-                  </td>
+
+  <!-- IMAGE -->
+  <img
+    v-if="item.file && item.type === 'gallery'"
+    :src="item.file"
+    class="h-16 w-16 object-cover rounded"
+  />
+
+  <!-- VIDEO -->
+  <iframe
+    v-else-if="item.youtube_url"
+    :src="item.youtube_url.replace('watch?v=', 'embed/')"
+    class="w-32 h-20"
+  ></iframe>
+
+  <!-- FILE -->
+  <a
+    v-else-if="item.file"
+    :href="item.file"
+    target="_blank"
+    class="text-primary"
+  >
+    View
+  </a>
+
+  <span v-else class="text-gray-400">No media</span>
+
+</td>
                 </tr>
                 <tr v-if="!uploads.length">
                   <td colspan="3" class="p-6 text-center text-gray-500">
