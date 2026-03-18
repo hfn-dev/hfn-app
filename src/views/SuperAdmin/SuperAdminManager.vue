@@ -127,7 +127,7 @@ const fetchUsers = async () => {
 
 const revokeInvitation = async (inviteId) => {
   try {
-    await accessAPI.revokeRoleInvite(inviteId);
+    await accessAPI.revokeRoleInvite({ user_id: inviteId });
 
     toast.success("Invitation revoked");
 
