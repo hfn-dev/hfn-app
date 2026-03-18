@@ -94,7 +94,7 @@ const fetchPayments = async () => {
 
       const purchasesData = (purchasesRes || []).map(normalizePayment);
 
-      const downloadsData = (downloadsRes || []).map(normalizeDownload);
+const downloadsData = (downloadsRes?.submissions || []).map(normalizeDownload);
 
       purchases.value = [...purchasesData, ...downloadsData];
     }
