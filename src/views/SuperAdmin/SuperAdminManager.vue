@@ -365,40 +365,33 @@ const resendInvitation = async (inviteId) => {
                         {{ user.status }}
                       </span>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button @click="
-                        handleAction(
-                          user.status === 'Removed' ||
-                            user.status === 'Pending'
-                            ? 'view'
-                            : 'delete',
-                          user
-                        )
-                        " :class="[
-                          'p-1 rounded-full transition',
-                          user.status === 'Removed' || user.status === 'Pending'
-                            ? 'text-gray-500 hover:text-indigo-600'
-                            : 'text-red-500 hover:text-red-700',
-                        ]">
-                        <svg v-if="
-                          user.status === 'Removed' ||
-                          user.status === 'Pending'
-                        " class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
-                          </path>
-                        </svg>
-                        <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                          </path>
-                        </svg>
-                      </button>
-                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+  
+  <button
+    v-if="user.status === 'Pending'"
+    @click="revokeInvitation(user.id)"
+    class="text-red-600 text-xs hover:underline"
+  >
+    Revoke
+  </button>
+
+  <button
+    v-if="user.status === 'Pending' || user.status === 'Removed'"
+    @click="handleAction('view', user)"
+    class="text-gray-500 hover:text-indigo-600"
+  >
+    View
+  </button>
+
+  <button
+    v-if="user.status === 'Accepted'"
+    @click="handleAction('delete', user)"
+    class="text-red-500 hover:text-red-700"
+  >
+    Delete
+  </button>
+
+</td>
                   </tr>
                   <tr v-if="filteredUsers.length === 0">
                     <td colspan="6" class="px-6 py-10 text-center text-gray-500 text-lg">
