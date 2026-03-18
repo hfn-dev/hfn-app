@@ -104,6 +104,23 @@ const fetchPayments = async () => {
   }
 };
 
+
+ const normalizeDownload = (item) => {
+  return {
+    id: `download-${item.id}`, 
+    title: item.full_name || item.email || "Download User",
+    email: item.email || "-",
+    enrollments: "Download",
+    completion: "-", 
+    amount: "-", 
+    status: "completed",
+    lastUpdate: item.submitted_at
+      ? new Date(item.submitted_at).toLocaleDateString()
+      : "-",
+    raw: item,
+  };
+}; 
+
 const normalizePayment = (item) => {
 
   if (item.user) {
