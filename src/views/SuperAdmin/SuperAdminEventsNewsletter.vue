@@ -6,6 +6,8 @@ import { useAuth } from "@/store/authStore";
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import { computed, onMounted, ref } from "vue";
 import { useToast } from "vue-toastification";
+
+  
 const toast = useToast();
 const events = ref([]);
 const loadingEvents = ref(false);
@@ -213,11 +215,7 @@ const uploadNewsImage = (e) => {
   newsForm.value.featured_image = e.target.files[0];
 };
 
-// const addVideo = () => {
-//   if (!videoInput.value) return;
-//   newsForm.value.videos.push(videoInput.value);
-//   videoInput.value = "";
-// };
+
 
 const addVideo = () => {
   if (!videoInput.value) return;
@@ -400,57 +398,6 @@ const uploadFile = (e) => {
   }
 };
 
-// const createUpload = async () => {
-//   if (!uploadForm.value.title || !uploadForm.value.files.length) return;
-
-//   try {
-//     const formData = new FormData();
-//     formData.append("title", uploadForm.value.title);
-//     formData.append("description", uploadForm.value.description);
-//     formData.append("type", uploadForm.value.type);
-// formData.append("audience", uploadForm.value.audience);
-//     if (uploadForm.value.type === "gallery") {
-//       uploadForm.value.files.forEach((file, i) => {
-//         formData.append("image", file);
-//       });
-//       formData.append("banner_index", uploadForm.value.bannerIndex);
-//     } else {
-//       formData.append("file", uploadForm.value.files[0]);
-//     }
-
-//     let res;
-//     switch (uploadForm.value.type) {
-//       case "gallery":
-//         res = await uploadsApi.createGallery(formData);
-//         break;
-//       case "newsletter":
-//         res = await uploadsApi.createNewsletters(formData);
-//         break;
-//       case "minute":
-//         res = await uploadsApi.createMinutes(formData);
-//         break;
-//       case "document":
-//         res = await uploadsApi.create(formData);
-//         break;
-
-//       default:
-//         res = await uploadsApi.create(formData);
-//     }
-
-//     await fetchUploads();
-
-//     uploadForm.value = {
-//       title: "",
-//       type: "newsletter",
-//       description: "",
-//       image: "",
-//       audience: "all",
-//       bannerIndex: 0,
-//     };
-//   } catch (error) {
-//     console.error("Upload failed:", error);
-//   }
-// };
 
 const createUpload = async () => {
   if (!uploadForm.value.title) return;
@@ -555,18 +502,14 @@ onMounted(() => {
 </select>
 
 
-            <input
-              type="datetime-local"
-              v-model="eventForm.start_datetime"
-              class="input"
-              placeholder="Select start date"
-            />
-            <input
-              type="datetime-local"
-              v-model="eventForm.end_datetime"
-              class="input"
-              placeholder="Select end date"
-            />
+            <div>
+  <label class="text-xs text-gray-500">Start Date & Time</label>
+  <input type="datetime-local" v-model="eventForm.start_datetime" class="input" />
+</div>
+            <div>
+  <label class="text-xs text-gray-500">End Date & Time</label>
+  <input type="datetime-local" v-model="eventForm.end_datetime" class="input" />
+</div>
 
             <input
               v-model="eventForm.location"
@@ -585,12 +528,10 @@ onMounted(() => {
               class="input"
               placeholder="Max attendees"
             />
-            <input
-              type="datetime-local"
-              v-model="eventForm.registration_deadline"
-              class="input"
-              placeholder="Enter registration deadline"
-            />
+            <div>
+  <label class="text-xs text-gray-500">Registration Deadline</label>
+  <input type="datetime-local" v-model="eventForm.registration_deadline" class="input" />
+</div>
           </div>
 
           <textarea
