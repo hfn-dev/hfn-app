@@ -500,15 +500,15 @@ const isCompleted = () => {
 
                 <div class="border rounded-lg overflow-hidden h-[500px]">
                   <iframe
-  v-if="certificate?.pdf_file"
-  :src="certificate.pdf_file"
+  v-if="certificate?.pdf_file || certificate?.download_url"
+  :src="certificate.pdf_file || certificate.download_url"
   class="w-full h-full"
 ></iframe>
                 </div>
 
                 <a
-  v-if="certificate?.pdf_file"
-  :href="certificate.pdf_file"
+  v-if="certificate?.download_url"
+  :href="certificate.download_url"
   target="_blank"
   class="inline-block px-6 py-3 rounded-lg font-semibold text-white"
   :style="{ backgroundColor: DARK_GREEN }"
