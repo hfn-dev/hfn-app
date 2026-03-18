@@ -22,6 +22,17 @@ export default {
     }
   },
 
+  async revokeRoleInvite(payload) {
+    try {
+      const response = await api.post("/access/roles/remove/", payload);
+      return response.data;
+    } catch (error) {
+      console.error("Remove user role API error:", error);
+      throw error;
+    }
+  },
+
+
   async viewRoleHistory(params = {}) {
     try {
       const response = await api.get("/access/roles/history/", { params });
