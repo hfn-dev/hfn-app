@@ -404,16 +404,14 @@ const fetchGroupMessages = async (groupId) => {
     groupMessagesMap.value[groupId] = response
       .map((msg) => ({
         id: msg.id,
-        sender: msg.sender.full_name,
+        sender: msg.sender_name,
         time: formatTime(msg.created_at),
-        initial:
-          (msg.sender.first_name?.[0] || "") +
-            (msg.sender.last_name?.[0] || "") || "??",
+        initial: (msg.sender_name?.[0] || "U").toUpperCase(),
         color: getColorForUser(msg.sender.id),
-        isMine: msg.sender.id === currentUserId.value,
+        isMine: msg.sender === currentUserId.value,
         body: msg.content,
         type: msg.attachment ? "file" : "text",
-        senderId: msg.sender.id,
+        senderId: msg.sender,
       }))
       .reverse();
 
