@@ -6,10 +6,11 @@ import student from "@/assets/student.jpg";
 import UserSidebar from "@/components/layout/UserSidebar.vue";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
-
+import { useToast } from "vue-toastification";
+  
 const DARK_GREEN = "#004d33";
 const LIGHT_GREEN = "#f2f9f3";
-
+const toast = useToast();
 const activeTab = ref("courseInfo");
 const activeModule = ref(null);
 
@@ -25,7 +26,33 @@ const modules = ref([]);
 const instructor = ref(null);
 const similarCourses = ref([]);
 const completedLessons = ref(new Set());
+const enrolling = ref(false);
 
+const enrollCourse = async () => {
+  if (!course.value?.slug) return;
+
+  if (enrollment.value) {
+    activeTab.value = "courseInfo";
+    return;
+  }
+
+  try {
+    enrolling.value = true;
+
+    await learningModule.courseEnrollment(course.value.slug);
+
+    await fetchEnrollment();
+
+    toast.success("Successfully enrolled!");
+
+  } catch (error) {
+    console.error("Enrollment failed", error);
+    toast.error("Failed to enroll. Please try again.");
+  } finally {
+    enrolling.value = false;
+  }
+};
+  
 const toggleModule = (moduleId) => {
   activeModule.value = activeModule.value === moduleId ? null : moduleId;
 };
@@ -150,18 +177,20 @@ onMounted(() => {
                 class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center"
               >
                 <p class="text-white text-xl md:text-2xl font-bold mb-4">
-                  Subscrib to continue join the class
+                  Subscribe to continue join the class
                 </p>
                 <p class="text-gray-200 text-sm mb-6">
                   Become a member of HFN and get exclusive discounts on all
                   courses.
                 </p>
                 <button
-                  class="py-3 px-8 rounded-full font-bold text-white transition duration-200 hover:scale-105 shadow-lg"
-                  :style="{ backgroundColor: DARK_GREEN }"
-                >
-                  Join Now
-                </button>
+  @click="enrollCourse"
+  :disabled="enrolling"
+  class="py-3 px-8 rounded-full font-bold text-white transition duration-200 hover:scale-105 shadow-lg disabled:opacity-50"
+  :style="{ backgroundColor: DARK_GREEN }"
+>
+  {{ enrollment ? "Continue Course" : "Join Now" }}
+</button>
               </div>
               <div
                 class="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white text-sm"
@@ -485,11 +514,13 @@ onMounted(() => {
               </p>
               <div class="flex space-x-2 mb-4">
                 <button
-                  class="flex-grow py-3 rounded-lg font-semibold text-white transition duration-200 hover:scale-105 shadow-md"
-                  :style="{ backgroundColor: DARK_GREEN }"
-                >
-                  Buy Now
-                </button>
+  @click="enrollCourse"
+  :disabled="enrolling"
+  class="flex-grow py-3 rounded-lg font-semibold text-white transition duration-200 hover:scale-105 shadow-md disabled:opacity-50"
+  :style="{ backgroundColor: DARK_GREEN }"
+>
+  {{ enrollment ? "Continue Learning" : enrolling ? "Processing..." : "Buy Now" }}
+</button>
                 <button
                   class="flex-grow py-3 rounded-lg font-semibold border transition duration-200 hover:scale-105 shadow-md"
                   :style="{
