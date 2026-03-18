@@ -2,7 +2,7 @@
 import learningModule from '@/api/learningModule';
 import courses from '@/assets/courses.jpg';
 import student from '@/assets/student.jpg';
-
+import { useToast } from "vue-toastification";
 import LearnerSidebar from './LearnerSidebar.vue';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
@@ -24,6 +24,34 @@ const modules = ref([]);
 const instructor = ref(null);
 const similarCourses = ref([]);
 const enrollment = ref(null);
+const enrolling = ref(false);
+const toast = useToast();
+  
+const enrollCourse = async () => {
+  if (!course.value?.slug) return;
+
+  if (enrollment.value) {
+    activeTab.value = "courseInfo";
+    return;
+  }
+
+  try {
+    enrolling.value = true;
+
+    await learningModule.courseEnrollment(course.value.slug);
+
+    await fetchEnrollment();
+
+    toast.success("Successfully enrolled!");
+
+  } catch (error) {
+    console.error("Enrollment failed", error);
+    toast.error("Failed to enroll. Please try again.");
+  } finally {
+    enrolling.value = false;
+  }
+};
+  
 const toggleModule = (moduleId) => {
   activeModule.value = activeModule.value === moduleId ? null : moduleId;
 };
@@ -132,11 +160,13 @@ onMounted(() => {
                   courses.
                 </p>
                 <button
-                  class="py-3 px-8 rounded-full font-bold text-white transition duration-200 hover:scale-105 shadow-lg"
-                  :style="{ backgroundColor: DARK_GREEN }"
-                >
-                  Join Now
-                </button>
+  @click="enrollCourse"
+  :disabled="enrolling"
+  class="py-3 px-8 rounded-full font-bold text-white transition duration-200 hover:scale-105 shadow-lg disabled:opacity-50"
+  :style="{ backgroundColor: DARK_GREEN }"
+>
+  {{ enrollment ? "Continue Course" : "Join Now" }}
+</button>
               </div>
               <div
                 class="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white text-sm"
@@ -464,11 +494,13 @@ onMounted(() => {
               </p>
               <div class="flex space-x-2 mb-4">
                 <button
-                  class="flex-grow py-3 rounded-lg font-semibold text-white transition duration-200 hover:scale-105 shadow-md"
-                  :style="{ backgroundColor: DARK_GREEN }"
-                >
-                  Buy Now
-                </button>
+  @click="enrollCourse"
+  :disabled="enrolling"
+  class="flex-grow py-3 rounded-lg font-semibold text-white transition duration-200 hover:scale-105 shadow-md disabled:opacity-50"
+  :style="{ backgroundColor: DARK_GREEN }"
+>
+  {{ enrollment ? "Continue Learning" : enrolling ? "Processing..." : "Buy Now" }}
+</button>
                 <button
                   class="flex-grow py-3 rounded-lg font-semibold border transition duration-200 hover:scale-105 shadow-md"
                   :style="{
