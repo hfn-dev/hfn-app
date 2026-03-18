@@ -5,7 +5,8 @@ import newsApi from "@/api/newsModule";
 import { useAuth } from "@/store/authStore";
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import { computed, onMounted, ref } from "vue";
-
+import { useToast } from "vue-toastification";
+const toast = useToast();
 const events = ref([]);
 const loadingEvents = ref(false);
 const articles = ref([]);
@@ -106,6 +107,7 @@ const deleteArticle = (slug) => {
     } catch (e) {
       console.error(e);
       console.log("Failed to delete article");
+      toast.error("Failed to delete article");
     } finally {
       deletingSlug.value = null;
       confirmLoading.value = false;
@@ -148,6 +150,7 @@ const publishArticle = async (slug) => {
   } catch (e) {
     console.error(e);
     console.log("Failed to publish article");
+    toast.error("Failed to publish article");
   } finally {
     publishingSlug.value = null;
   }
@@ -324,6 +327,7 @@ const createEvent = async () => {
   }
 
   await eventsApi.createCalenderEvent(payload);
+  toast.success("Event created successfully");
   await fetchEvents();
 
   Object.assign(eventForm.value, {
