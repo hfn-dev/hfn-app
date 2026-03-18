@@ -340,32 +340,62 @@ const startTimer = () => {
   }, 1000);
 };
 
-const confirmPayment = () => {
+// const confirmPayment = () => {
+//   if (!form.value.buyerEmail || !form.value.name || !form.value.organization) {
+//     toast.warning("Please enter your email.");
+//     return;
+//   }
+
+//   clearInterval(interval);
+//   showPaymentDialog.value = false;
+  
+//   if (selectedPublication.value) {
+//     const link = document.createElement("a");
+//     link.href = selectedPublication.value.pdfUrl;
+//     link.download = selectedPublication.value.title + ".pdf";
+//     document.body.appendChild(link);
+//     link.click();
+//     document.body.removeChild(link);
+//   }
+
+//   showSuccessDialog.value = true;
+
+// };
+
+const confirmPayment = async () => {
   if (!form.value.buyerEmail || !form.value.name || !form.value.organization) {
-    alert("Please enter your email.");
+    alert("Please fill in all required fields.");
     return;
   }
 
-  clearInterval(interval);
-  showPaymentDialog.value = false;
-  
-  if (selectedPublication.value) {
+  if (!selectedPublication.value) return;
+
+  try {
+    await postDownloadList(selectedPublication.value.id || "publication-id", {
+      email: form.value.buyerEmail,
+      name: form.value.name,
+      organization: form.value.organization,
+    });
+
+    clearInterval(interval);
+    showPaymentDialog.value = false;
+
     const link = document.createElement("a");
     link.href = selectedPublication.value.pdfUrl;
     link.download = selectedPublication.value.title + ".pdf";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+
+    showSuccessDialog.value = true;
+
+  } catch (error) {
+    console.error("Failed to submit form:", error);
+    alert("Failed to submit your details. Please try again.");
   }
-
-  showSuccessDialog.value = true;
-
 };
 
-
-//   const getPdfPreview = (url) => {
-//   return url.replace("/upload/", "/upload/pg_1,w_600/").replace(".pdf", ".jpg");
-// };
+  
 const getPdfPreview = (url) => {
   if (!url) return newsletter_placeholder;
 
@@ -373,6 +403,7 @@ const getPdfPreview = (url) => {
 
   return url.replace("/upload/", "/upload/pg_1,w_600/").replace(".pdf", ".jpg");
 };
+  
 const dummyPublications = [
   {
     title: "HFN 2025 Year in Review",
