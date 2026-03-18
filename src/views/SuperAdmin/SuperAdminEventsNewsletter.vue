@@ -704,10 +704,12 @@ onMounted(() => {
               <label class="block mb-2">Featured Image</label>
               <input type="file" @change="uploadNewsImage" />
               <img
-                v-if="newsForm.featured_image"
-                :src="newsForm.featured_image"
-                class="h-40 mt-2 rounded"
-              />
+  v-if="newsForm.featured_image"
+  :src="isFile(newsForm.featured_image) 
+    ? URL.createObjectURL(newsForm.featured_image) 
+    : newsForm.featured_image"
+  class="h-40 mt-2 rounded"
+/>
             </div>
 
             
@@ -726,9 +728,17 @@ onMounted(() => {
               </select>
             </div>
 
-            <button @click="saveNews" class="btn-primary">
-              {{ isEditing ? "Update Article" : "Save as Draft" }}
-            </button>
+          
+
+              <button @click="saveNews" class="btn-primary">
+  {{ 
+    isEditing 
+      ? "Update Article" 
+      : newsForm.status === "published"
+        ? "Save & Publish"
+        : "Save as Draft"
+  }}
+</button>
 
             <button
               v-if="isEditing"
@@ -940,22 +950,7 @@ onMounted(() => {
                       {{ item.type }}
                     </span>
                   </td>
-                  <td class="p-3">
-                    <a
-                      v-if="item.file"
-                      :href="item.file"
-                      target="_blank"
-                      class="text-primary"
-                    >
-                      <img
-                        v-if="item.type === 'gallery'"
-                        :src="item.file"
-                        class="h-16 w-16 object-cover rounded"
-                      />
-                      <span v-else>View</span>
-                    </a>
-                    <span v-else class="text-gray-400">No file</span>
-                  </td>
+                  
                   <td class="p-3">
 
   <!-- IMAGE -->
