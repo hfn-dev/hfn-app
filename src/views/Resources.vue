@@ -340,38 +340,18 @@ const startTimer = () => {
   }, 1000);
 };
 
-// const confirmPayment = () => {
-//   if (!form.value.buyerEmail || !form.value.name || !form.value.organization) {
-//     toast.warning("Please enter your email.");
-//     return;
-//   }
 
-//   clearInterval(interval);
-//   showPaymentDialog.value = false;
-  
-//   if (selectedPublication.value) {
-//     const link = document.createElement("a");
-//     link.href = selectedPublication.value.pdfUrl;
-//     link.download = selectedPublication.value.title + ".pdf";
-//     document.body.appendChild(link);
-//     link.click();
-//     document.body.removeChild(link);
-//   }
-
-//   showSuccessDialog.value = true;
-
-// };
 
 const confirmPayment = async () => {
   if (!form.value.buyerEmail || !form.value.name || !form.value.organization) {
-    alert("Please fill in all required fields.");
+    toast.error("Please fill in all required fields.");
     return;
   }
 
   if (!selectedPublication.value) return;
 
   try {
-    await postDownloadList(selectedPublication.value.id || "publication-id", {
+    await postDownloadList(selectedPublication.value.id, {
       email: form.value.buyerEmail,
       name: form.value.name,
       organization: form.value.organization,
@@ -391,7 +371,7 @@ const confirmPayment = async () => {
 
   } catch (error) {
     console.error("Failed to submit form:", error);
-    alert("Failed to submit your details. Please try again.");
+    toast.error("Failed to submit your details. Please try again.");
   }
 };
 
@@ -406,24 +386,28 @@ const getPdfPreview = (url) => {
   
 const dummyPublications = [
   {
+    id: 1,
     title: "HFN 2025 Year in Review",
     description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
     pdfUrl:
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1773326667/HFN_2025_Year_in_Review__eicos6.pdf",
   },
   {
+    id: 2,
     title: "AGM Impact Brief",
     description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
     pdfUrl:
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1773302477/AGM_Impact_Brief_cuw7td.pdf",
   },
   {
+    id: 3,
     title: "Nigeria Private Health Sector Market Outlook 2026",
     description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
     pdfUrl:
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772817006/Nigeria_Private_Health_Sector_Market_Outlook_2026_c4ql1j.pdf",
   },
   {
+    id: 4,
     title:
       "Transforming Nigeria’s Healthcare Landscape Through Strategic Advocacy and Private Sector Leadership",
     description:
@@ -432,6 +416,7 @@ const dummyPublications = [
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf",
   },
   {
+    id: 5,
     title: "THE HEALTHCARE FEDERATION OF NIGERIA In partnership with WHX Lagos",
     description:
       "The 2025 Healthcare Leadership Conference hosted by the Healthcare Federation of Nigeria (HFN), in partnership with WHX Lagos, themed “Accelerating UHC and Health Sovereignty: Scaling Up Best Practices Through Public-Private Integration,” convened distinguished leaders, policymakers, and system innovators to advance Nigeria’s journey toward Universal Health Coverage (UHC) and health sovereignty. The conference delivered not just vision, but actionable roadmaps.",
@@ -439,6 +424,7 @@ const dummyPublications = [
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067796/2025-hfn-hlc-report_fyxosp.pdf",
   },
   {
+    id: 6,
     title:
       "Expanding Access to Quality Healthcare: Transforming Nigeria through Innovation, Partnership, and Sustainability",
     description:
@@ -447,6 +433,7 @@ const dummyPublications = [
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067793/2025-hfn-conference-report_hapfj9.pdf",
   },
   {
+    id: 7,
     title: "High-Level Roundtable on Local Manufacturing of Medicines in Nigeria",
     description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
     pdfUrl:
