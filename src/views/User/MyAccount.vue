@@ -61,8 +61,10 @@ const activeTab = ref('My Profile');
 const fetchCertificates = async () => {
   try {
     const res = await learningModule.getEnrollment();
-    const data = res.data?.results || res.data;
-
+    // const data = res.data?.results || res.data;
+    const data = Array.isArray(res.data)
+  ? res.data
+  : res.data?.results || [];
     const certs = data
       .filter((e) => e.certificate_issued && e.certificate)
       .map((e) => ({
