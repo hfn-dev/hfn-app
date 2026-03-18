@@ -126,7 +126,7 @@ const continueLearning = (enrollment) => {
 
   const fetchUserReviews = async () => {
   try {
-    const res = await learningModule.ReviewCourse(); 
+    const res = await learningModule.reviewCourse(); 
 
     const reviews = Array.isArray(res.data)
       ? res.data
