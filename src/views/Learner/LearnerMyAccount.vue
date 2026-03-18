@@ -1,6 +1,6 @@
 <script setup>
 import authApi from "@/api/userRegister";
-import LearnerSidebar from '@/components/layout/LearnerSidebar.vue';
+import LearnerSidebar from './LearnerSidebar.vue';
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import learningModule from "@/api/learningModule";
