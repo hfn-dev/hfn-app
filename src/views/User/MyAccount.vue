@@ -703,7 +703,7 @@ onMounted(() => {
         <div class="w-full border border-gray-300 rounded-lg overflow-hidden shadow-md bg-gray-50 flex justify-center items-center h-80">
           <iframe
   v-if="cert.pdf_file || cert.download_url"
-  :src="cert.pdf_file || cert.download_url"
+  :src="`https://docs.google.com/gview?url=${cert.pdf_file || cert.download_url}&embedded=true`"
   class="w-full h-full"
 ></iframe>
           <div v-else class="text-center text-gray-500">
