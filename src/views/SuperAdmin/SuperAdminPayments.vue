@@ -109,7 +109,7 @@ const normalizeDownload = (item) => {
     id: `download-${item.id}`,
     title: `${item.first_name || ""} ${item.last_name || ""}`.trim() || item.email,
     email: item.email || "-",
-    enrollments: item.organization || "Download",
+    enrollments: "Download",
     completion: "-",
     amount: "-",
     status: "completed",
