@@ -150,7 +150,7 @@ onMounted(() => {
                 class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center"
               >
                 <p class="text-white text-xl md:text-2xl font-bold mb-4">
-                  Subscribe to continue join the class
+                  Subscrib to continue join the class
                 </p>
                 <p class="text-gray-200 text-sm mb-6">
                   Become a member of HFN and get exclusive discounts on all
