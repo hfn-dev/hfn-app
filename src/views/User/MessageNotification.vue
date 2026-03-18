@@ -400,8 +400,9 @@ const fetchGroupMessages = async (groupId) => {
   isLoading.value.messages = true;
   try {
     const response = await messagingApi.getGroupMessages(groupId);
+    const messagesArray = response.results || response;
 
-    groupMessagesMap.value[groupId] = response
+    groupMessagesMap.value[groupId] = messagesArray
       .map((msg) => ({
         id: msg.id,
         sender: msg.sender_name,
