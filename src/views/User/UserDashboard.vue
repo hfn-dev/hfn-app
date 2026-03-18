@@ -771,7 +771,6 @@ onMounted(() => {
           >
             <option value="all">All</option>
             <option value="document">Documents</option>
-            <option value="news">News</option>
             <option value="publication">Publications</option>
             <option value="report">Reports</option>
           </select>
