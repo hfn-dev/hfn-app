@@ -551,8 +551,10 @@ const sendMessage = async () => {
   }
 
   if (currentTab.value === "Groups" && currentGroup.value?.id) {
+    const groupId = currentGroup.value.id;
+    const messageContent = messageInput.value;
     try {
-      const groupId = currentGroup.value.id;
+      // const groupId = currentGroup.value.id;
 
       const tempMessage = {
         id: Date.now(),
@@ -561,7 +563,7 @@ const sendMessage = async () => {
         initial: "ME",
         color: "bg-green-700",
         isMine: true,
-        body: messageInput.value,
+        body: messageContent,
         type: "text",
         senderId: currentUserId.value,
       };
@@ -571,21 +573,20 @@ const sendMessage = async () => {
       }
 
       groupMessagesMap.value[groupId].push(tempMessage);
-      chatMessages.value = groupMessagesMap.value[groupId];
-
+      // chatMessages.value = groupMessagesMap.value[groupId];
+      chatMessages.value = [...groupMessagesMap.value[groupId]]; 
+messageInput.value = "";
       await nextTick();
       const el = document.querySelector(".overflow-y-auto");
-      el?.scrollTo({ top: el.scrollHeight });
-
-      messageInput.value = "";
+      el?.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
 
       await messagingApi.sendGroupMessage({
   group_id: groupId,
-  content: tempMessage.body,
+  content: messageContent,
 });
 
-      fetchGroupMessages(groupId);
-    } catch {
+      await fetchGroupMessages(groupId);
+    } catch (error) {
         console.error("GROUP SEND ERROR:", error.response?.data || error);
       toast.error("Failed to send group message");
     }
