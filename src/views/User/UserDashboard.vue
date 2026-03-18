@@ -822,13 +822,7 @@ onMounted(() => {
               >
                 Download →
               </a>
-              <button
-    v-else
-    class="inline-flex items-center text-gray-400 font-medium cursor-not-allowed"
-  >
-    No file available
-  </button>
-              
+                            
             </div>
           </div>
         </div>
