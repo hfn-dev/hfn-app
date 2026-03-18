@@ -563,14 +563,14 @@ onMounted(() => {
             <input
               v-model="eventForm.title"
               class="input"
-              placeholder="Title"
+              placeholder="Enter Title"
             />
-            <select v-model="eventForm.event_type" class="input">
+            <select v-model="eventForm.event_type" class="input" placeholder="Select event type">
               <option value="webinar">Webinar</option>
               <option value="physical">Physical</option>
             </select>
 
-            <select v-model="eventForm.audience" class="input">
+            <select v-model="eventForm.audience" class="input" placeholder="Select audience type">
   <option value="all">All</option>
   <option value="members">Members Only</option>
   <option value="non_members">Non Members Only</option>
@@ -581,17 +581,19 @@ onMounted(() => {
               type="datetime-local"
               v-model="eventForm.start_datetime"
               class="input"
+              placeholder="Select start date"
             />
             <input
               type="datetime-local"
               v-model="eventForm.end_datetime"
               class="input"
+              placeholder="Select end date"
             />
 
             <input
               v-model="eventForm.location"
               class="input"
-              placeholder="Location"
+              placeholder="Enter Location"
             />
             <input
               v-model="eventForm.meeting_url"
@@ -609,6 +611,7 @@ onMounted(() => {
               type="datetime-local"
               v-model="eventForm.registration_deadline"
               class="input"
+              placeholder="Enter registration deadline"
             />
           </div>
 
