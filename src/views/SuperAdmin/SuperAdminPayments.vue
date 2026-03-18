@@ -3,6 +3,7 @@ import analyticsApi from '@/api/dashboard.js';
 import paymentApi from '@/api/payments.js';
 import messagingApi from '@/api/messaging.js';
 import membershipApi from '@/api/membership.js';
+import memberResourcesApi from '@/api/memberResources.js';  
 import { useToast } from 'vue-toastification';
 import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
 import { computed, onMounted, ref, watch } from 'vue';
@@ -87,8 +88,16 @@ const fetchPayments = async () => {
       const res = await paymentApi.getUnpaidMembers();
       registration.value = (res.results || []).map(normalizePayment);
     } else {
-      const res = await paymentApi.getPurchases();
-purchases.value = res.map(normalizePayment);    
+      const [purchasesRes, downloadsRes] = await Promise.all([
+        paymentApi.getPurchases(),
+        memberResourcesApi.getDownloadList(1)
+      ]);
+
+      const purchasesData = (purchasesRes || []).map(normalizePayment);
+
+      const downloadsData = (downloadsRes || []).map(normalizeDownload);
+
+      purchases.value = [...purchasesData, ...downloadsData];    
     }
   } finally {
     loading.value = false;
