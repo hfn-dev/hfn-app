@@ -303,7 +303,7 @@ import latest from "@/assets/latest_news.png";
 import { ref, onMounted } from "vue";
 import contentUploadApi from "@/api/contentUploadsApi";
 import { useToast } from "vue-toastification";
-
+import postDownload from "@/api/memberResources";
   
 const newsletters = ref([]);
 const publications = ref([]);
@@ -355,7 +355,7 @@ const confirmPayment = async () => {
   if (!selectedPublication.value) return;
 
   try {
-    await postDownloadList(selectedPublication.value.id, {
+    await postDownload.postDownloadList(selectedPublication.value.id, {
       email: form.value.buyerEmail,
       name: form.value.name,
       organization: form.value.organization,
