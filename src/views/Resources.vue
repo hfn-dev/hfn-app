@@ -302,11 +302,15 @@ import hands from "@/assets/hands.png";
 import latest from "@/assets/latest_news.png";
 import { ref, onMounted } from "vue";
 import contentUploadApi from "@/api/contentUploadsApi";
+import { useToast } from "vue-toastification";
 
+  
 const newsletters = ref([]);
 const publications = ref([]);
 const showPaymentDialog = ref(false);
 const showSuccessDialog = ref(false);
+const toast = useToast();
+  
 const selectedPublication = ref(null);
   const form = ref({
   buyerEmail: "",
