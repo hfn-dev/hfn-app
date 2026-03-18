@@ -233,12 +233,21 @@
       />
     </div>
     <div class="mb-4">
-      <label class="text-sm font-medium text-gray-700">Your Name</label>
+      <label class="text-sm font-medium text-gray-700">Your First Name</label>
       <input
-        v-model="form.name"
-        type="name"
+        v-model="form.first_name"
+        type="first_name"
         class="w-full border rounded-lg px-3 py-2 mt-1"
-        placeholder="Enter name"
+        placeholder="Enter first name"
+      />
+    </div>
+    <div class="mb-4">
+      <label class="text-sm font-medium text-gray-700">Your Last Name</label>
+      <input
+        v-model="form.last_name"
+        type="last_name"
+        class="w-full border rounded-lg px-3 py-2 mt-1"
+        placeholder="Enter last name"
       />
     </div>
 <div class="mb-4">
@@ -314,7 +323,8 @@ const toast = useToast();
 const selectedPublication = ref(null);
   const form = ref({
   buyerEmail: "",
-  name: "",
+  first_name: "",
+  last_name: "",   
   organization: ""
 })
 const timer = ref(300); // 5 minutes
@@ -347,7 +357,7 @@ const startTimer = () => {
 
 
 const confirmPayment = async () => {
-  if (!form.value.buyerEmail || !form.value.name || !form.value.organization) {
+  if (!form.value.buyerEmail || !form.value.first_name || !form.value.organization) {
     toast.error("Please fill in all required fields.");
     return;
   }
@@ -357,7 +367,8 @@ const confirmPayment = async () => {
   try {
     await postDownload.postDownloadList(selectedPublication.value.id, {
       email: form.value.buyerEmail,
-      name: form.value.name,
+      first_name: form.value.first_name,
+      last_name: form.value.last_name,
       organization: form.value.organization,
     });
 
