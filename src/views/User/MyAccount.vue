@@ -3,7 +3,8 @@ import authApi from "@/api/userRegister";
 import UserSidebar from '@/components/layout/UserSidebar.vue';
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-
+import learningModule from "@/api/learningModule";
+  
 const router = useRouter();
 const isOrganization = ref(false);
 const orgDetails = reactive({});
