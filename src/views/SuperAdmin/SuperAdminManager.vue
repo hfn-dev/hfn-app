@@ -53,7 +53,14 @@ const fetchUsers = async () => {
       invitedOn: user.created_at
         ? new Date(user.created_at).toLocaleDateString()
         : "",
-      status: "Accepted",
+      status:
+  invite.status === "pending"
+    ? "Pending"
+    : invite.status === "accepted"
+      ? "Accepted"
+      : invite.status === "sent"
+        ? "Sent"
+        : "Removed",
       isSelected: false,
     }));
 
