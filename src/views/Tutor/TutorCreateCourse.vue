@@ -1,9 +1,12 @@
 <script setup>
-import learningModule from "@/api/learningModule.js";
+import courseApi from "@/api/learningModule.js";
+import courses from "@/assets/courses.jpg";
 import {
+  Check,
   ChevronDown,
   DollarSign,
   Lock,
+  Minimize2,
   Plus,
   Trash2,
   UploadCloud,
@@ -11,26 +14,27 @@ import {
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
+import draggable from "vuedraggable";
 import TutorSidebar from "./TutorSidebar.vue";
 
-const router = useRouter();
-const route = useRoute();
+const activeModuleId = ref(null);
+const categories = ref([]);
+const loadingCategories = ref(false);
+const selectedInstructorId = ref(null);
+
 const toast = useToast();
-
-const courseSlug = route.params.slug;
-
+const router = useRouter();
 const currentStep = ref(1);
-const isLoading = ref(false);
 
-const mode = computed(() => {
-  if (!courseSlug) return "create";
-  if (route.path.includes("/edit")) return "edit";
-  return "preview";
+const route = useRoute();
+const props = defineProps({
+  mode: {
+    type: String,
+    default: "create", // create | edit | view
+  },
 });
 
-const isCreateMode = computed(() => mode.value === "create");
-const isEditMode = computed(() => mode.value === "edit");
-const isPreviewMode = computed(() => mode.value === "preview");
+
 
 const categorySearch = ref("");
 const showCategoryDropdown = ref(false);
@@ -51,7 +55,6 @@ const canCreateCategory = computed(() => {
     (c) => c.name.toLowerCase() === categorySearch.value.toLowerCase()
   );
 });
-
 
 
 const createCategory = async () => {
@@ -87,28 +90,41 @@ const basicInfoForm = ref({
   shortDescription: "",
   category: "",
   level: "",
-  tags_list: [],
-  prerequisites: "",
-  thumbnail: null,
   fullOverview: "",
-  durationHours: "",
-  durationMinutes: "",
-  durationSeconds: "",
-  certificate_available: false,
-  max_students: null,
-  learnOutcomes: [{ id: Date.now(), text: "", charCount: 0 }],
+  durationHours: "00",
+  durationMinutes: "00",
+  durationSeconds: "00",
+  learnOutcomes: [],
 });
 
 const curriculumForm = ref({
   modules: [],
   newLessonTitle: "",
-  materialsIncluded: [{ id: Date.now(), text: "", charCount: 0 }],
+  materialsIncluded: [],
   instructorName: "",
   briefBiography: "",
 });
 
+const fetchCategories = async () => {
+  loadingCategories.value = true;
+  try {
+    const res = await courseApi.getCategories();
+    categories.value = res.data?.results || res.data || [];
+  } catch (err) {
+    console.error("Failed to fetch categories", err);
+    toast.error("Failed to load categories");
+  } finally {
+    loadingCategories.value = false;
+  }
+};
+
+const openAddLessonDialog = (moduleId) => {
+  activeModuleId.value = moduleId;
+  isLessonDialogOpen.value = true;
+};
+
 const pricingAccessForm = ref({
-  courseAccessType: "free",
+  courseAccessType: "paid",
   courseVisibility: "public",
   price: 0,
   currency: "NGN",
@@ -116,26 +132,8 @@ const pricingAccessForm = ref({
   discountAvailability: "all",
 });
 
-const categories = ref([]);
-
-const fetchCategories = async () => {
-  try {
-    const response = await learningModule.getCategories();
-    if (Array.isArray(response.data)) {
-      categories.value = response.data;
-    } else {
-      categories.value = [];
-    }
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-    toast.error("Failed to load categories");
-  }
-};
-
 const pricingStatus = computed(() => {
   const access = pricingAccessForm.value.courseAccessType;
-  const visibility = pricingAccessForm.value.courseVisibility;
-
   if (access === "free") return { main: "Free", sub: "Public Access" };
   if (access === "paid")
     return {
@@ -146,7 +144,6 @@ const pricingStatus = computed(() => {
     };
   if (access === "membership")
     return { main: "Members Only", sub: "Subscription" };
-
   return { main: "Unknown", sub: "" };
 });
 
@@ -164,24 +161,11 @@ const totalLessons = computed(() => {
   }, 0);
 });
 
-const totalDurationHours = computed(() => {
-  const totalSeconds = curriculumForm.value.modules.reduce((total, module) => {
-    return (
-      total +
-      module.lessons.reduce((moduleTotal, lesson) => {
-        return moduleTotal + lesson.video_duration;
-      }, 0)
-    );
-  }, 0);
-
-  return (totalSeconds / 3600).toFixed(2);
-});
-
 const steps = [
   { id: 1, title: "Basic Information" },
   { id: 2, title: "Curriculum Builder" },
   { id: 3, title: "Pricing & Access" },
-  { id: 4, title: "Preview & Submit" },
+  { id: 4, title: "Preview & Publish" },
 ];
 
 const addOutcome = () => {
@@ -191,7 +175,7 @@ const addOutcome = () => {
       : 1;
   basicInfoForm.value.learnOutcomes.push({
     id: newId,
-    text: "What you will teach in this course...",
+    text: "",
     charCount: 0,
   });
 };
@@ -204,64 +188,9 @@ const updateCharCount = (outcome) => {
   outcome.charCount = outcome.text.length;
 };
 
-// Handle thumbnail upload
-const handleThumbnailUpload = (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    if (!file.type.startsWith("image/")) {
-      toast.error("Please upload an image file");
-      return;
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("Image size should be less than 5MB");
-      return;
-    }
-
-    basicInfoForm.value.thumbnail = file;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      console.log("Thumbnail uploaded:", file.name);
-    };
-    reader.readAsDataURL(file);
-
-    toast.success("Thumbnail uploaded successfully");
-  }
-};
-
 const toggleModule = (module) => {
   module.isOpen = !module.isOpen;
 };
-
-const addModule = () => {
-  const newId =
-    curriculumForm.value.modules.length > 0
-      ? Math.max(...curriculumForm.value.modules.map((m) => m.id)) + 1
-      : 1;
-
-  curriculumForm.value.modules.push({
-    id: newId,
-    title: `Module ${newId}: New Module`,
-    isOpen: true,
-    description: "",
-    order: newId,
-    is_published: true,
-    lessons: [],
-    quizzes: [],
-    resources: "",
-  });
-};
-
-const removeModule = (id) => {
-  curriculumForm.value.modules = curriculumForm.value.modules.filter(
-    (m) => m.id !== id
-  );
-  curriculumForm.value.modules.forEach((module, index) => {
-    module.order = index + 1;
-  });
-};
-
 const addMaterial = () => {
   const newId =
     curriculumForm.value.materialsIncluded.length > 0
@@ -269,7 +198,7 @@ const addMaterial = () => {
       : 1;
   curriculumForm.value.materialsIncluded.push({
     id: newId,
-    text: "What materials are included...",
+    text: "",
     charCount: 0,
   });
 };
@@ -281,78 +210,24 @@ const updateMaterialCharCount = (material) => {
   material.charCount = material.text.length;
 };
 
-const saveAndContinue = () => {
+const saveAndContinue = async () => {
   if (currentStep.value < 4) {
-    console.log(
-      `Saving Step ${currentStep.value} and continuing to Step ${
-        currentStep.value + 1
-      }: ${steps[currentStep.value].title}`
-    );
-
-    if (validateCurrentStep()) {
-      currentStep.value += 1;
-    }
+    currentStep.value += 1;
   } else {
-    submitCourse();
-  }
-};
-
-const validateCurrentStep = () => {
-  switch (currentStep.value) {
-    case 1:
-      if (!basicInfoForm.value.title.trim()) {
-        toast.error("Course title is required");
-        return false;
-      }
-      if (!basicInfoForm.value.shortDescription.trim()) {
-        toast.error("Short description is required");
-        return false;
-      }
-      if (!basicInfoForm.value.category) {
-        toast.error("Category is required");
-        return false;
-      }
-      if (!basicInfoForm.value.level) {
-        toast.error("Level is required");
-        return false;
-      }
-      if (!basicInfoForm.value.fullOverview.trim()) {
-        toast.error("Course overview is required");
-        return false;
-      }
-      if (basicInfoForm.value.learnOutcomes.length === 0) {
-        toast.error("Please add at least one learning outcome");
-        return false;
-      }
-      return true;
-
-    case 2:
-      console.log("Validating step 2 - Curriculum Builder");
-
-      console.log("Step 2 validation passed");
-      return true;
-
-    case 3:
-      if (
-        pricingAccessForm.value.courseAccessType === "paid" &&
-        !pricingAccessForm.value.price
-      ) {
-        toast.error("Price is required for paid courses");
-        return false;
-      }
-      return true;
-
-    default:
-      return true;
+    await submitCourse();
   }
 };
 
 const goBack = () => {
   if (currentStep.value > 1) {
+    console.log(
+      `Going back to Step ${currentStep.value - 1}: ${
+        steps[currentStep.value - 2].title
+      }`
+    );
     currentStep.value -= 1;
   } else {
-    // Navigate back to courses list
-    window.history.back();
+    toast.success("Navigating back to My Courses list.");
   }
 };
 
@@ -361,67 +236,20 @@ const isQuizDialogOpen = ref(false);
 
 const lessonForm = ref({
   title: "",
-  durationHours: "00",
-  durationMinutes: "00",
-  durationSeconds: "00",
-  contentType: "video",
+  contentType: "",
   videoUrl: "",
+  videoSource: "url",
+  videoFile: null,
   articleContent: "",
+  documentFile: null,
+  liveDate: "",
+  liveLink: "",
+  durationHours: 0,
+  durationMinutes: 0,
+  durationSeconds: 0,
+
   isPreview: false,
-  currentModuleId: null,
 });
-
-const openAddLessonDialog = (moduleId) => {
-  resetLessonForm();
-  lessonForm.value.currentModuleId = moduleId;
-  isLessonDialogOpen.value = true;
-};
-
-const handleQuizAdded = () => {
-  const module = curriculumForm.value.modules.find(
-    (m) => m.id === quizForm.value.currentModuleId
-  );
-
-  if (!module) {
-    toast.error("Module not found");
-    return;
-  }
-
-  if (!module.quizzes) module.quizzes = [];
-
-  const newQuiz = {
-    id:
-      module.quizzes.length > 0
-        ? Math.max(...module.quizzes.map((q) => q.id)) + 1
-        : module.id * 1000 + 1,
-    title: quizForm.value.title || "Untitled Quiz",
-    questions: quizForm.value.questions,
-    order: module.quizzes.length + 1,
-    is_published: true,
-  };
-
-  module.quizzes.push(newQuiz);
-
-  toast.success("Quiz added successfully");
-  closeAddQuizDialog();
-};
-
-const addQuizQuestion = () => {
-  if (!quizForm.value.newQuestion.trim()) return;
-
-  quizForm.value.questions.push({
-    id: Date.now(),
-    text: quizForm.value.newQuestion.trim(),
-  });
-
-  quizForm.value.newQuestion = "";
-};
-
-const removeQuizQuestion = (id) => {
-  quizForm.value.questions = quizForm.value.questions.filter(
-    (q) => q.id !== id
-  );
-};
 
 const closeAddLessonDialog = () => {
   isLessonDialogOpen.value = false;
@@ -434,288 +262,307 @@ const resetLessonForm = () => {
     durationHours: "00",
     durationMinutes: "00",
     durationSeconds: "00",
-    contentType: "video",
-    videoUrl: "",
-    articleContent: "",
-    isPreview: false,
-    currentModuleId: null,
+    contentType: "Select Option",
   };
-};
-
-const activeModuleId = ref(null);
-
-const activeModule = computed(() => {
-  return (
-    curriculumForm.value.modules.find((m) => m.id === activeModuleId.value) ||
-    null
-  );
-});
-
-const handleLessonAdded = () => {
-  if (!lessonForm.value.currentModuleId) {
-    toast.error("No module selected");
-    return;
-  }
-
-  const module = curriculumForm.value.modules.find(
-    (m) => m.id === lessonForm.value.currentModuleId
-  );
-  if (!module) {
-    toast.error("Module not found");
-    return;
-  }
-
-  if (!module.lessons) {
-    module.lessons = [];
-  }
-
-  const newId =
-    module.lessons.length > 0
-      ? Math.max(...module.lessons.map((l) => l.id)) + 1
-      : module.id * 100 + 1;
-
-  const durationInSeconds =
-    parseInt(lessonForm.value.durationHours) * 3600 +
-    parseInt(lessonForm.value.durationMinutes) * 60 +
-    parseInt(lessonForm.value.durationSeconds);
-
-  const newLesson = {
-    id: newId,
-    title: lessonForm.value.title.trim(),
-    duration: {
-      hours: Number(lessonForm.value.durationHours),
-      minutes: Number(lessonForm.value.durationMinutes),
-      seconds: Number(lessonForm.value.durationSeconds),
-    },
-    content_type: lessonForm.value.contentType,
-    video_url: lessonForm.value.videoUrl || "",
-    video_duration: durationInSeconds,
-    order: module.lessons.length + 1,
-    is_preview: lessonForm.value.isPreview || false,
-    is_published: true,
-    content:
-      lessonForm.value.contentType === "text"
-        ? lessonForm.value.articleContent || ""
-        : "",
-  };
-
-  console.log("Adding new lesson:", newLesson);
-
-  module.lessons.push(newLesson);
-
-  toast.success("Lesson added successfully");
-  closeAddLessonDialog();
-};
-
-const closeAddQuizDialog = () => {
-  isQuizDialogOpen.value = false;
-};
-
-const prepareCourseData = () => {
-  const payload = {
-    title: basicInfoForm.value.title,
-    description: basicInfoForm.value.fullOverview,
-    short_description: basicInfoForm.value.shortDescription,
-    category: parseInt(basicInfoForm.value.category),
-    level: basicInfoForm.value.level,
-    status: pricingAccessForm.value.status,
-    duration_hours: parseFloat(totalDurationHours.value),
-    price:
-      pricingAccessForm.value.courseAccessType === "paid"
-        ? parseFloat(pricingAccessForm.value.price)
-        : 0,
-    is_free: pricingAccessForm.value.courseAccessType === "free",
-    max_students: basicInfoForm.value.max_students
-      ? parseInt(basicInfoForm.value.max_students)
-      : null,
-    certificate_available: basicInfoForm.value.certificate_available,
-    prerequisites: basicInfoForm.value.prerequisites || "",
-    learning_outcomes: basicInfoForm.value.learnOutcomes.map(
-      (outcome) => outcome.text
-    ),
-    tags_list: basicInfoForm.value.tags_list,
-    modules: curriculumForm.value.modules.map((module) => ({
-      title: module.title,
-      description: module.description || "",
-      order: module.order,
-      is_published: module.is_published,
-      lessons: module.lessons.map((lesson) => ({
-        title: lesson.title,
-        content_type: lesson.content_type,
-        video_url: lesson.video_url,
-        video_duration: lesson.video_duration,
-        order: lesson.order,
-        is_preview: lesson.is_preview,
-        is_published: lesson.is_published,
-        content: lesson.content || "",
-      })),
-    })),
-  };
-
-  return payload;
-};
-
-const populateCourse = (course) => {
-  basicInfoForm.value = {
-    title: course.title || "",
-    shortDescription: course.short_description || "",
-    fullOverview: course.description || "",
-    level: course.level || "",
-    category: course.category?.id || "",
-    tags_list: course.tags_list || [],
-    prerequisites: course.prerequisites || "",
-    certificate_available: !!course.certificate_available,
-    max_students: course.max_students || null,
-
-    learnOutcomes: course.learning_outcomes?.length
-      ? course.learning_outcomes.map((text, index) => ({
-          id: index + 1,
-          text: text,
-          charCount: text.length,
-        }))
-      : [{ id: Date.now(), text: "", charCount: 0 }],
-  };
-
-  curriculumForm.value.modules = (course.modules || []).map((module) => ({
-    id: module.id,
-    title: module.title,
-    description: module.description || "",
-    isOpen: true,
-    order: module.order,
-    is_published: module.is_published,
-    quizzes: [],
-    lessons: (module.lessons || []).map((lesson) => ({
-      id: lesson.id,
-      title: lesson.title,
-      duration: {
-        hours: Math.floor(lesson.video_duration / 3600),
-        minutes: Math.floor((lesson.video_duration % 3600) / 60),
-        seconds: lesson.video_duration % 60,
-      },
-
-      content_type: lesson.content_type,
-      video_url: lesson.video_url || "",
-      video_duration: lesson.video_duration || 0,
-      is_preview: !!lesson.is_preview,
-      is_published: !!lesson.is_published,
-      order: lesson.order,
-      content: lesson.content || "",
-    })),
-  }));
-
-  pricingAccessForm.value = {
-    courseAccessType: course.is_free ? "free" : "paid",
-    courseVisibility: course.status === "published" ? "public" : "private",
-    price: course.price ? parseFloat(course.price) : 0,
-    currency: "NGN",
-    discountAmount: "none",
-    discountAvailability: "all",
-  };
-
-  if (course.thumbnail) {
-    console.log("Current Thumbnail URL:", course.thumbnail);
-  }
-};
-
-const removeLesson = (moduleId, lessonId) => {
-  const module = curriculumForm.value.modules.find((m) => m.id === moduleId);
-  if (!module) return;
-
-  module.lessons = module.lessons.filter((l) => l.id !== lessonId);
-};
-
-watch(
-  () => curriculumForm.value.modules.length,
-  (len) => {
-    if (len > 0 && !activeModuleId.value) {
-      activeModuleId.value = curriculumForm.value.modules[0].id;
-    }
-  },
-  { immediate: true }
-);
-
-const openAddQuizDialog = (moduleId) => {
-  quizForm.value = {
-    title: "",
-    questions: [],
-    newQuestion: "",
-    currentModuleId: moduleId,
-  };
-  isQuizDialogOpen.value = true;
 };
 
 const quizForm = ref({
   title: "",
   questions: [],
   newQuestion: "",
-  currentModuleId: null,
 });
 
+const addQuizQuestion = () => {
+  if (!quizForm.value.newQuestion.trim()) return;
+
+  quizForm.value.questions.push({
+    id: Date.now(),
+    text: quizForm.value.newQuestion,
+  });
+
+  quizForm.value.newQuestion = "";
+};
+
+const removeQuizQuestion = (id) => {
+  quizForm.value.questions = quizForm.value.questions.filter(
+    (q) => q.id !== id
+  );
+};
+
+const handleQuizAdded = () => {
+  const module = curriculumForm.value.modules.find(
+    (m) => m.id === activeModuleId.value
+  );
+
+  if (!module) return;
+
+  module.quizzes.push({
+    id: Date.now(),
+    title: quizForm.value.title,
+    questions: quizForm.value.questions,
+  });
+
+  quizForm.value.title = "";
+  quizForm.value.questions = [];
+  quizForm.value.newQuestion = "";
+
+  closeAddQuizDialog();
+};
+
+watch(
+  () => lessonForm.value.contentType,
+  () => {
+    lessonForm.value.videoUrl = "";
+    lessonForm.value.videoFile = null;
+    lessonForm.value.videoSource = "url";
+    lessonForm.value.articleContent = "";
+    lessonForm.value.documentFile = null;
+    lessonForm.value.liveDate = "";
+    lessonForm.value.liveLink = "";
+  }
+);
+
+const handleLessonAdded = () => {
+  const module = curriculumForm.value.modules.find(
+    (m) => m.id === activeModuleId.value
+  );
+
+  if (!module) return;
+
+  module.lessons.push({
+    id: Date.now(),
+    title: lessonForm.value.title,
+    content_type: lessonForm.value.contentType,
+    duration: {
+      hours: Number(lessonForm.value.durationHours),
+      minutes: Number(lessonForm.value.durationMinutes),
+      seconds: Number(lessonForm.value.durationSeconds),
+    },
+    video_url:
+      lessonForm.value.contentType === "video"
+        ? lessonForm.value.videoUrl || ""
+        : null,
+
+    article_content: lessonForm.value.articleContent,
+    document_file: lessonForm.value.documentFile,
+
+    live_class:
+      lessonForm.value.contentType === "live"
+        ? {
+            date: lessonForm.value.liveDate,
+            link: lessonForm.value.liveLink,
+          }
+        : null,
+    is_preview: false,
+  });
+
+  closeAddLessonDialog();
+};
+
+const openAddQuizDialog = () => {
+  isQuizDialogOpen.value = true;
+};
+
+const closeAddQuizDialog = () => {
+  isQuizDialogOpen.value = false;
+};
+
+const totalDurationHours =
+  Number(basicInfoForm.value.durationHours) +
+  Number(basicInfoForm.value.durationMinutes) / 60 +
+  Number(basicInfoForm.value.durationSeconds) / 3600;
+
+const buildPayload = () => ({
+  title: basicInfoForm.value.title,
+  short_description: basicInfoForm.value.shortDescription,
+  description: basicInfoForm.value.fullOverview,
+  category: basicInfoForm.value.category,
+  level: basicInfoForm.value.level,
+
+  duration: totalDurationHours,
+
+  learning_outcomes: basicInfoForm.value.learnOutcomes.map((o) => o.text),
+
+  modules: curriculumForm.value.modules.map((module) => ({
+    title: module.title,
+    description: module.description,
+    resources: module.resources,
+
+    lessons: module.lessons.map((lesson) => {
+      const lessonPayload = {
+        title: lesson.title,
+        content_type: lesson.content_type,
+        duration: lesson.duration,
+        is_preview: lesson.is_preview,
+      };
+
+      if (lesson.content_type === "video") {
+        lessonPayload.video_url = lesson.video_url?.url || lesson.video_url;
+      }
+
+      if (lesson.content_type === "text") {
+        lessonPayload.article_content = lesson.article_content || "";
+      }
+
+      return lessonPayload;
+    }),
+  })),
+
+  materials: curriculumForm.value.materialsIncluded.map((m) => m.text),
+  instructor: selectedInstructorId.value,
+  pricing: {
+    access_type: pricingAccessForm.value.courseAccessType,
+    visibility: pricingAccessForm.value.courseVisibility,
+    price:
+      pricingAccessForm.value.courseAccessType === "free"
+        ? 0
+        : pricingAccessForm.value.price,
+
+    is_free: pricingAccessForm.value.courseAccessType === "free",
+
+    currency: pricingAccessForm.value.currency,
+    discount_amount: pricingAccessForm.value.discountAmount,
+    discount_availability: pricingAccessForm.value.discountAvailability,
+  },
+
+  status: "draft",
+  created_by_role: "tutor",
+});
+
+const activeModule = computed(() =>
+  curriculumForm.value.modules.find((m) => m.id === activeModuleId.value)
+);
+
+const addModule = () => {
+  const newModule = {
+    id: Date.now(),
+    title: `Module ${curriculumForm.value.modules.length + 1}`,
+    description: "",
+    lessons: [],
+    quizzes: [],
+    resources: "",
+    isOpen: true,
+  };
+
+  curriculumForm.value.modules.forEach((m) => (m.isOpen = false));
+
+  curriculumForm.value.modules.push(newModule);
+  activeModuleId.value = newModule.id;
+};
+
+const removeModule = (moduleId) => {
+  curriculumForm.value.modules = curriculumForm.value.modules.filter(
+    (m) => m.id !== moduleId
+  );
+
+  if (activeModuleId.value === moduleId) {
+    activeModuleId.value = curriculumForm.value.modules[0]?.id || null;
+  }
+};
+
+const removeLesson = (moduleId, lessonId) => {
+  const module = curriculumForm.value.modules.find((m) => m.id === moduleId);
+
+  if (!module) return;
+
+  module.lessons = module.lessons.filter((l) => l.id !== lessonId);
+};
+
 const submitCourse = async () => {
-  if (isPreviewMode.value) return;
-
-  if (!validateCurrentStep()) return;
-
-  isLoading.value = true;
-
   try {
-    const payload = prepareCourseData();
+    const payload = buildPayload();
 
-    if (isEditMode.value) {
-      await learningModule.updateCourses(courseSlug, payload);
+    if (props.mode === "edit") {
+      await courseApi.updateCourses(route.params.slug, payload);
       toast.success("Course updated successfully");
     } else {
-      await learningModule.createCourses(payload);
+      await courseApi.createCourses(payload);
       toast.success("Course created successfully");
     }
 
-    router.push({ name: "TutorCourseList" });
-
-    // router.push("/tutor/courses");
-  } catch (error) {
-    console.error(error);
+    router.push("/tutor/courses");
+  } catch (err) {
+    console.error(err);
     toast.error("Failed to save course");
-  } finally {
-    isLoading.value = false;
   }
 };
 
-const uploadThumbnail = async (courseId) => {
-  try {
-    if (!basicInfoForm.value.thumbnail) return;
+const hydrateCurriculum = (backendCurriculum) => {
+  curriculumForm.value.modules = backendCurriculum.map((module) => ({
+    id: Date.now() + Math.random(),
+    title: module.title,
+    description: module.description,
+    resources: module.resources,
+    isOpen: false,
 
-    const formData = new FormData();
-    formData.append("thumbnail", basicInfoForm.value.thumbnail);
-
-    await learningModule.uploadThumbnail(courseId, formData);
-
-    toast.success("Thumbnail uploaded successfully");
-  } catch (error) {
-    console.error("Thumbnail upload error:", error);
-    toast.error("Failed to upload thumbnail");
-  }
+    lessons: module.lessons.map((lesson) => ({
+      id: Date.now() + Math.random(),
+      title: lesson.title,
+      content_type: lesson.content_type,
+      duration: lesson.duration,
+      video_url: lesson.video_url,
+      article_content: lesson.article_content,
+      is_preview: lesson.is_preview,
+    })),
+  }));
 };
+
+watch(
+  () => currentStep.value,
+  (step) => {
+    if (step === 2 && curriculumForm.value.modules.length === 0) {
+      curriculumForm.value.modules.push({
+        id: Date.now(),
+        title: "Module 1",
+        description: "",
+        lessons: [],
+        quizzes: [],
+        resources: "",
+        isOpen: true,
+      });
+
+      activeModuleId.value = curriculumForm.value.modules[0].id;
+    }
+  }
+);
 
 onMounted(async () => {
   await fetchCategories();
 
-  if (isCreateMode.value) return;
+  if (props.mode === "edit") {
+    const res = await courseApi.getCourseBySlug(route.params.slug);
+    const course = res.data;
 
-  try {
-    const response = await learningModule.getCoursesDetails(courseSlug);
-    const course = response.data;
-    populateCourse(course);
+    basicInfoForm.value.title = course.title;
+    basicInfoForm.value.shortDescription = course.short_description;
+    basicInfoForm.value.fullOverview = course.overview;
+    basicInfoForm.value.category = course.category?.slug;
+    basicInfoForm.value.level = course.level;
+  selectedInstructorId.value = course.instructor?.id || null;
 
+    hydrateCurriculum(course.curriculum);
     const selectedCategory = categories.value.find(
-      (c) => c.id === course.category?.id
-    );
+  (c) => c.id === course.category?.id
+);
 
-    if (selectedCategory) {
-      categorySearch.value = selectedCategory.name;
-    }
-  } catch (error) {
-    console.error(error);
-    toast.error("Failed to load course");
+if (selectedCategory) {
+  categorySearch.value = selectedCategory.name;
+}
+
+
+  }
+
+  if (props.mode === "view") {
+    const res = await courseApi.getCourseBySlug(route.params.slug);
+    const course = res.data;
+
+    basicInfoForm.value.title = course.title;
+    basicInfoForm.value.shortDescription = course.short_description;
+    basicInfoForm.value.fullOverview = course.overview;
+    basicInfoForm.value.category = course.category?.slug;
+    basicInfoForm.value.level = course.level;
+
+    hydrateCurriculum(course.curriculum);
   }
 });
 </script>
@@ -729,14 +576,10 @@ onMounted(async () => {
         <span class="text-gray-700 font-medium">Create New Course</span>
       </div>
 
-      <h1 class="text-4xl font-bold text-gray-800 mb-8">
-        {{
-          isCreateMode
-            ? "Create New Course"
-            : isEditMode
-            ? "Edit Course"
-            : "Course Preview"
-        }}
+      <h1
+        class="text-4xl font-bold text-gray-800 mb-8 border-b border-gray-200 pb-4"
+      >
+        Create New Course
       </h1>
 
       <div class="flex justify-between items-start mb-12 relative">
@@ -787,15 +630,14 @@ onMounted(async () => {
                 <label
                   for="course-title"
                   class="block text-sm font-medium text-gray-700"
-                  >Course Title*</label
+                  >Course Title</label
                 >
                 <input
                   type="text"
                   id="course-title"
                   v-model="basicInfoForm.title"
-                  placeholder="Enter course title"
+                  placeholder="Enter Title"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
-                  required
                 />
               </div>
 
@@ -803,15 +645,14 @@ onMounted(async () => {
                 <label
                   for="short-description"
                   class="block text-sm font-medium text-gray-700"
-                  >Short Description*</label
+                  >Short Description</label
                 >
                 <input
                   type="text"
                   id="short-description"
                   v-model="basicInfoForm.shortDescription"
-                  placeholder="Brief description of the course"
+                  placeholder="Enter Description"
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
-                  required
                 />
               </div>
 
@@ -870,90 +711,28 @@ onMounted(async () => {
                   <label
                     for="level"
                     class="block text-sm font-medium text-gray-700"
-                    >Level*</label
+                    >Level</label
                   >
                   <select
                     id="level"
                     v-model="basicInfoForm.level"
+                    placeholder="Select level"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border bg-white"
-                    required
                   >
-                    <option value="">Select Level</option>
                     <option value="beginner">Beginner</option>
                     <option value="intermediate">Intermediate</option>
                     <option value="advanced">Advanced</option>
-                    <option value="all">All Levels</option>
                   </select>
                 </div>
               </div>
-
-              <div>
-                <label
-                  for="tags"
-                  class="block text-sm font-medium text-gray-700"
-                  >Tags (comma-separated)</label
-                >
-                <input
-                  type="text"
-                  id="tags"
-                  v-model="basicInfoForm.tags_list"
-                  placeholder="python, programming, beginner"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
-                  @input="
-                    (e) =>
-                      (basicInfoForm.tags_list = e.target.value
-                        .split(',')
-                        .map((tag) => tag.trim()))
-                  "
-                />
-                <p class="text-xs text-gray-500 mt-1">
-                  Separate tags with commas
-                </p>
-              </div>
-
-              <div>
-                <label
-                  for="prerequisites"
-                  class="block text-sm font-medium text-gray-700"
-                  >Prerequisites</label
-                >
-                <textarea
-                  id="prerequisites"
-                  rows="2"
-                  v-model="basicInfoForm.prerequisites"
-                  placeholder="What students should know before taking this course"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border resize-none"
-                ></textarea>
-              </div>
             </div>
 
-            <div class="lg:w-1/3">
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                Course Thumbnail
-              </label>
-              <div
-                class="flex flex-col items-center justify-center p-6 border-2 border-gray-300 border-dashed rounded-xl bg-gray-50 h-56 cursor-pointer hover:border-[#00cc66] transition-colors"
-                @click="document.getElementById('thumbnail-upload').click()"
-              >
-                <UploadCloud class="w-10 h-10 text-gray-400 mb-3" />
-                <p class="text-sm text-gray-600 font-medium">
-                  Click to upload thumbnail
-                </p>
-                <p class="text-xs text-gray-500 mt-1">PNG, JPG up to 5MB</p>
-                <input
-                  type="file"
-                  id="thumbnail-upload"
-                  accept="image/*"
-                  @change="handleThumbnailUpload"
-                  class="hidden"
-                />
-                <p
-                  v-if="basicInfoForm.thumbnail"
-                  class="text-xs text-green-600 mt-2"
-                >
-                  ✓ {{ basicInfoForm.thumbnail.name }}
-                </p>
-              </div>
+            <div
+              class="lg:w-1/3 flex flex-col items-center justify-center p-6 border-2 border-gray-300 border-dashed rounded-xl bg-gray-50 h-56"
+            >
+              <UploadCloud class="w-10 h-10 text-gray-400 mb-3" />
+              <p class="text-sm text-gray-600 font-medium">Thumbnail Upload</p>
+              <p class="text-xs text-gray-500 mt-1">PNG, JPG up to 5MB</p>
             </div>
           </div>
 
@@ -961,56 +740,62 @@ onMounted(async () => {
             <label
               for="full-overview"
               class="block text-sm font-medium text-gray-700"
-              >Full Course Overview*</label
+              >Full Course Overview</label
             >
             <textarea
               id="full-overview"
               rows="4"
               v-model="basicInfoForm.fullOverview"
-              placeholder="Detailed description of the course content"
+              placeholder="Enter Overview"
               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border resize-none"
-              required
             ></textarea>
           </div>
 
-          <div class="mt-6 flex items-center">
-            <input
-              id="certificate-available"
-              type="checkbox"
-              v-model="basicInfoForm.certificate_available"
-              class="h-4 w-4 text-[#00cc66] focus:ring-[#00cc66] border-gray-300 rounded"
-            />
-            <label
-              for="certificate-available"
-              class="ml-2 block text-sm text-gray-900"
-            >
-              Certificate of Completion available
-            </label>
-          </div>
-
           <div class="mt-6">
-            <label
-              for="max-students"
-              class="block text-sm font-medium text-gray-700"
-              >Maximum Students (optional)</label
+            <label class="block text-sm font-medium text-gray-700 mb-2"
+              >Estimated Duration</label
             >
-            <input
-              type="number"
-              id="max-students"
-              v-model="basicInfoForm.max_students"
-              placeholder="Leave empty for unlimited"
-              min="1"
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
-            />
-            <p class="text-xs text-gray-500 mt-1">
-              Leave empty for unlimited enrollment
-            </p>
+            <div class="flex space-x-4">
+              <div class="flex flex-col items-center">
+                <input
+                  type="number"
+                  v-model="basicInfoForm.durationHours"
+                  placeholder="00"
+                  min="0"
+                  max="99"
+                  class="w-16 text-center rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
+                />
+                <span class="text-xs text-gray-500 mt-1">Hours</span>
+              </div>
+              <div class="flex flex-col items-center">
+                <input
+                  type="number"
+                  v-model="basicInfoForm.durationMinutes"
+                  placeholder="00"
+                  min="0"
+                  max="59"
+                  class="w-16 text-center rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
+                />
+                <span class="text-xs text-gray-500 mt-1">Minutes</span>
+              </div>
+              <div class="flex flex-col items-center">
+                <input
+                  type="number"
+                  v-model="basicInfoForm.durationSeconds"
+                  placeholder="00"
+                  min="0"
+                  max="59"
+                  class="w-16 text-center rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
+                />
+                <span class="text-xs text-gray-500 mt-1">Seconds</span>
+              </div>
+            </div>
           </div>
 
           <div class="mt-8 pt-4 border-t border-gray-200">
             <div class="flex justify-between items-center mb-4">
               <h3 class="text-lg font-semibold text-gray-800">
-                What users will learn*
+                What users will learn
               </h3>
               <button
                 @click="addOutcome"
@@ -1034,9 +819,7 @@ onMounted(async () => {
                 v-model="outcome.text"
                 @input="updateCharCount(outcome)"
                 maxlength="120"
-                placeholder="What students will learn from this course"
                 class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border"
-                required
               />
               <span class="text-xs text-gray-500 w-12 text-right ml-2"
                 >{{ outcome.charCount }}/120</span
@@ -1045,14 +828,12 @@ onMounted(async () => {
                 @click="removeOutcome(outcome.id)"
                 type="button"
                 class="ml-4 text-red-500 hover:text-red-700"
-                v-if="basicInfoForm.learnOutcomes.length > 1"
               >
                 <Trash2 class="w-5 h-5" />
               </button>
             </div>
           </div>
         </div>
-
         <div v-if="currentStep === 2">
           <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">
             Curriculum Builder
@@ -1075,10 +856,7 @@ onMounted(async () => {
                 class="border border-gray-200 rounded-xl shadow-sm bg-white overflow-hidden w-full"
               >
                 <div
-                  @click="
-                    activeModuleId = module.id;
-                    toggleModule(module);
-                  "
+                  @click="toggleModule(module)"
                   class="bg-[#F1F8F4] p-5 flex justify-between items-center border-b border-gray-100 cursor-pointer"
                 >
                   <span class="font-bold text-gray-800 text-lg">
@@ -1086,7 +864,6 @@ onMounted(async () => {
                   </span>
                   <div class="flex items-center gap-3">
                     <button
-                      type="button"
                       v-if="curriculumForm.modules.length > 1"
                       @click.stop="removeModule(module.id)"
                       class="text-red-500 hover:text-red-700"
@@ -1181,25 +958,17 @@ onMounted(async () => {
                 >Module Title</label
               >
               <input
-                v-if="activeModule"
                 type="text"
                 placeholder="Enter Title"
                 v-model="activeModule.title"
                 class="w-full border-b border-gray-300 py-2 outline-none focus:border-[#006633]"
-              />
-
-              <input
-                v-else
-                type="text"
-                placeholder="Select a module first"
-                disabled
-                class="w-full border-b border-gray-200 py-2 text-gray-400"
+                :disabled="!activeModule"
               />
             </div>
             <div class="space-y-1">
               <button
-                type="button"
                 @click="addModule()"
+                type="button"
                 class="w-full border border-dashed border-[#006633] py-2 rounded text-[#006633] text-sm font-medium hover:bg-green-50 transition"
               >
                 + Add New Module
@@ -1209,7 +978,6 @@ onMounted(async () => {
 
           <div class="grid grid-cols-2 gap-4 mb-10">
             <button
-              type="button"
               @click="
                 openAddLessonDialog(
                   activeModuleId || curriculumForm.modules[0]?.id
@@ -1221,11 +989,10 @@ onMounted(async () => {
             </button>
 
             <button
-              type="button"
               @click="
-                openAddQuizDialog(
-                  activeModuleId || curriculumForm.modules[0]?.id
-                )
+                activeModuleId =
+                  activeModuleId || curriculumForm.modules[0]?.id;
+                openAddQuizDialog();
               "
               class="border border-gray-200 rounded py-2 text-[#006633] text-sm font-medium flex items-center justify-center gap-2 hover:bg-gray-50"
             >
@@ -1308,7 +1075,7 @@ onMounted(async () => {
                 id="biography"
                 rows="3"
                 v-model="curriculumForm.briefBiography"
-                placeholder="Sample text about the instructor, their experience, and credentials."
+                placeholder="Enter Bio"
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#00cc66] focus:ring-[#00cc66] p-2 border resize-none"
               ></textarea>
             </div>
@@ -1901,6 +1668,19 @@ onMounted(async () => {
                   </li>
                 </ul>
               </div>
+
+              <button
+                @click="goBack"
+                class="w-full px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+              >
+                Edit
+              </button>
+              <button
+                @click="saveAndContinue"
+                class="w-full px-6 py-2 bg-[#00cc66] text-white rounded-lg font-medium hover:bg-[#00994d] transition-colors shadow-md"
+              >
+                Submit
+              </button>
             </div>
           </div>
         </div>
@@ -1912,82 +1692,14 @@ onMounted(async () => {
           <button
             @click="goBack"
             class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
-            :disabled="isLoading"
           >
             Back
           </button>
           <button
             @click="saveAndContinue"
-            :disabled="isLoading"
-            class="px-6 py-2 bg-[#00cc66] text-white rounded-lg font-medium hover:bg-[#00994d] transition-colors shadow-md flex items-center justify-center min-w-[120px]"
+            class="px-6 py-2 bg-[#00cc66] text-white rounded-lg font-medium hover:bg-[#00994d] transition-colors shadow-md"
           >
-            <span v-if="isLoading" class="flex items-center">
-              <svg
-                class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  class="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  stroke-width="4"
-                ></circle>
-                <path
-                  class="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              Processing...
-            </span>
-            <span v-else>Save & Continue</span>
-          </button>
-        </div>
-
-        <div
-          v-if="currentStep === 4"
-          class="flex justify-end space-x-4 pt-8 border-t border-gray-200"
-        >
-          <button
-            @click="goBack"
-            class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
-            :disabled="isLoading"
-          >
-            Edit Course
-          </button>
-          <button
-            @click="submitCourse"
-            :disabled="isLoading"
-            class="px-6 py-2 bg-[#00cc66] text-white rounded-lg font-medium hover:bg-[#00994d] transition-colors shadow-md flex items-center justify-center min-w-[120px]"
-          >
-            <span v-if="isLoading" class="flex items-center">
-              <svg
-                class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  class="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  stroke-width="4"
-                ></circle>
-                <path
-                  class="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              Creating Course...
-            </span>
-            <span v-else>Submit Course</span>
+            {{ currentStep < 4 ? "Save & Continue" : "Submit Course" }}
           </button>
         </div>
       </div>

@@ -283,7 +283,7 @@ const downloadSignature = (imageUrl, fileName) => {
           >
             My Profile
           </button>
-          <button
+          <!-- <button
             @click="activeTab = 'Signatures'"
             :class="[
               'py-2 px-1 border-b-2 transition duration-150 font-medium',
@@ -293,7 +293,7 @@ const downloadSignature = (imageUrl, fileName) => {
             ]"
           >
             Signatures
-          </button>
+          </button> -->
         </div>
 
         <div v-if="activeTab === 'My Profile'" class="space-y-10">
@@ -537,7 +537,7 @@ const downloadSignature = (imageUrl, fileName) => {
           </div>
         </div>
 
-        <div v-else-if="activeTab === 'Signatures'" class="space-y-10">
+        <!-- <div v-else-if="activeTab === 'Signatures'" class="space-y-10">
           <div class="p-6 bg-white shadow-lg space-y-6">
             <h2 class="text-xl font-semibold text-gray-800">
               Certificate Template
@@ -696,7 +696,7 @@ const downloadSignature = (imageUrl, fileName) => {
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <div

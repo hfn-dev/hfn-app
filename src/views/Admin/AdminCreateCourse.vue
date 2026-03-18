@@ -426,7 +426,7 @@ const buildPayload = () => ({
   },
 
   status: "draft",
-  created_by_role: "super_admin",
+  created_by_role: "admin",
 });
 
 const activeModule = computed(() =>
@@ -480,7 +480,7 @@ const submitCourse = async () => {
       toast.success("Course created successfully");
     }
 
-    router.push("/superadmin/courses");
+    router.push("/admin/courses");
   } catch (err) {
     console.error(err);
     toast.error("Failed to save course");

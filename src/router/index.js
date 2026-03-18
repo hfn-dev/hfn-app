@@ -217,17 +217,21 @@ const routes = [
     name: 'TutorCreateCourse',
     component: TutorCreateCourse,
   },
+  
   {
     path: '/tutor/courses/:slug/edit',
     name: 'TutorEditCourse',
     component: TutorCreateCourse,
+    props: (route) => ({ slug: route.params.slug, mode: 'edit' }),
   },
 
   {
     path: '/tutor/courses/:slug',
     name: 'PreviewCourse',
     component: TutorCreateCourse,
+    props: (route) => ({ slug: route.params.slug, mode: 'view' }),
   },
+
   {
     path: '/tutor/dashboard',
     name: 'TutorDashboard',
