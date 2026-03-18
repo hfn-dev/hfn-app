@@ -95,8 +95,7 @@ const fetchPayments = async () => {
 
       const purchasesData = (purchasesRes || []).map(normalizePayment);
 
-      const downloadsData = (downloadsRes || []).map(normalizeDownload);
-
+const downloadsData = (downloadsRes?.submissions || []).map(normalizeDownload);
       purchases.value = [...purchasesData, ...downloadsData];    
     }
   } finally {
@@ -105,22 +104,22 @@ const fetchPayments = async () => {
 };
 
 
- const normalizeDownload = (item) => {
+const normalizeDownload = (item) => {
   return {
-    id: `download-${item.id}`, 
-    title: item.full_name || item.email || "Download User",
+    id: `download-${item.id}`,
+    title: `${item.first_name || ""} ${item.last_name || ""}`.trim() || item.email,
     email: item.email || "-",
-    enrollments: "Download",
-    completion: "-", 
-    amount: "-", 
+    enrollments: item.organization || "Download",
+    completion: "-",
+    amount: "-",
     status: "completed",
-    lastUpdate: item.submitted_at
-      ? new Date(item.submitted_at).toLocaleDateString()
+    lastUpdate: item.created_at
+      ? new Date(item.created_at).toLocaleDateString()
       : "-",
     raw: item,
   };
-}; 
-
+};
+  
 const normalizePayment = (item) => {
 
   if (item.user) {
