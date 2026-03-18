@@ -37,7 +37,7 @@ const reviewForm = ref({
     return;
   }
 
-  router.push(`/learning/courses/${slug}?tab=certificate`);
+  router.push(`/user/courses/${slug}?tab=certificate`);
 };
 
 const fetchUserEnrollments = async () => {
@@ -120,7 +120,7 @@ const continueLearning = (enrollment) => {
     return;
   }
 
-  router.push(`/learning/courses/${slug}`);
+  router.push(`/user/courses/${slug}`);
 };
 
 
