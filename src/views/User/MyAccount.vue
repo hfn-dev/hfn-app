@@ -59,7 +59,7 @@ const activeTab = ref('My Profile');
 //   }
 // };
 
-const downloadCertificate = (certId) => {
+const downloadCertificate = async (certId) => {
   try {
     const response = await learningModule.downloadCertificate(certId);
 
