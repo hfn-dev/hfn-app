@@ -586,6 +586,7 @@ const sendMessage = async () => {
 
       fetchGroupMessages(groupId);
     } catch {
+        console.error("GROUP SEND ERROR:", error.response?.data || error);
       toast.error("Failed to send group message");
     }
   }
