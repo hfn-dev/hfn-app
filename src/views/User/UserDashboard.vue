@@ -271,22 +271,6 @@ const fetchResources = async () => {
   }
 };
   
-const filteredResources = computed(() => {
-  return resources.value.filter((item) => {
-    const matchesSearch = item.title
-      ?.toLowerCase()
-      .includes(searchQuery.value.toLowerCase());
-
-    const matchesType =
-      selectedType.value === "all" || item.type === selectedType.value;
-
-    const matchesAudience =
-      selectedAudience.value === "all" ||
-      item.audience === selectedAudience.value;
-
-    return matchesSearch && matchesType && matchesAudience;
-  });
-});  
   
 const dummyEvents = [
   {
