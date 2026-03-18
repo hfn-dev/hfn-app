@@ -3,6 +3,7 @@ import analyticsApi from '@/api/dashboard.js';
 import paymentApi from '@/api/payments.js';
 import messagingApi from '@/api/messaging.js';
 import membershipApi from '@/api/membership.js';
+import memberResourcesApi from '@/api/memberResources.js';  
 import { useToast } from 'vue-toastification';
 import AdminSidebar from '@/views/Admin/AdminSidebar.vue';
 import { computed, onMounted, ref, watch } from 'vue';
@@ -79,7 +80,6 @@ const openMessageModal = async (title) => {
   }
 };
 
-
 const fetchPayments = async () => {
   loading.value = true;
   try {
@@ -87,13 +87,38 @@ const fetchPayments = async () => {
       const res = await paymentApi.getUnpaidMembers();
       registration.value = (res.results || []).map(normalizePayment);
     } else {
-      const res = await paymentApi.getPurchases();
-purchases.value = res.map(normalizePayment);
+      const [purchasesRes, downloadsRes] = await Promise.all([
+        paymentApi.getPurchases(),
+        memberResourcesApi.getDownloadList(1)
+      ]);
+
+      const purchasesData = (purchasesRes || []).map(normalizePayment);
+
+      const downloadsData = (downloadsRes || []).map(normalizeDownload);
+
+      purchases.value = [...purchasesData, ...downloadsData];
     }
   } finally {
     loading.value = false;
   }
+};  
+
+const normalizeDownload = (item) => {
+  return {
+    id: `download-${item.id}`,
+    title: item.full_name || item.email || "Download User",
+    email: item.email || "-",
+    enrollments: "Download",
+    completion: "-", 
+    amount: "-", 
+    status: "completed",
+    lastUpdate: item.submitted_at
+      ? new Date(item.submitted_at).toLocaleDateString()
+      : "-",
+    raw: item,
+  };
 };
+
 
 const normalizePayment = (item) => {
 
