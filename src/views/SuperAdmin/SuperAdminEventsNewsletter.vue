@@ -280,7 +280,15 @@ const deleteEvent = (event) => {
 const createEvent = async () => {
   const payload = {
     ...eventForm.value,
-    banner: eventForm.value.banner,
+    const formData = new FormData();
+
+Object.entries(eventForm.value).forEach(([key, value]) => {
+  if (key === "banner" && value instanceof File) {
+    formData.append("banner_image", value);
+  } else {
+    formData.append(key, value ?? "");
+  }
+});
     price: eventForm.value.is_free ? undefined : Number(eventForm.value.price),
   };
   if (eventForm.value.is_free) {
