@@ -277,46 +277,74 @@ const deleteEvent = (event) => {
   };
 };
 
+// const createEvent = async () => {
+//   const payload = {
+//     ...eventForm.value,
+//     const formData = new FormData();
+
+// Object.entries(eventForm.value).forEach(([key, value]) => {
+//   if (key === "banner" && value instanceof File) {
+//     formData.append("banner_image", value);
+//   } else {
+//     formData.append(key, value ?? "");
+//   }
+// });
+//     price: eventForm.value.is_free ? undefined : Number(eventForm.value.price),
+//   };
+//   if (eventForm.value.is_free) {
+//     delete payload.price;
+//   }
+
+//   await eventsApi.createCalenderEvent(payload);
+//   toast.success("Event created successfully");
+//   await fetchEvents();
+
+//   Object.assign(eventForm.value, {
+//     title: "",
+//     description: "",
+//     event_type: "webinar",
+//     status: "upcoming",
+//     start_datetime: "",
+//     end_datetime: "",
+//     location: "",
+//     audience: "all",
+//     meeting_url: "",
+//     max_attendees: null,
+//     registration_deadline: "",
+//     is_free: true,
+//     price: "",
+//     banner: "",
+//   });
+// };
 const createEvent = async () => {
-  const payload = {
-    ...eventForm.value,
-    const formData = new FormData();
+  try {
+    const payload = {
+      ...eventForm.value,
+      price: eventForm.value.is_free
+        ? undefined
+        : Number(eventForm.value.price),
+    };
 
-Object.entries(eventForm.value).forEach(([key, value]) => {
-  if (key === "banner" && value instanceof File) {
-    formData.append("banner_image", value);
-  } else {
-    formData.append(key, value ?? "");
+    if (eventForm.value.is_free) {
+      delete payload.price;
+    }
+
+    await eventsApi.createCalenderEvent(payload);
+
+    toast.success("Event created successfully");
+    await fetchEvents();
+
+  } catch (error) {
+    console.error(error);
+
+    const message =
+      error.response?.data?.non_field_errors?.[0] ||
+      error.response?.data?.error?.message ||
+      "Failed to create event";
+
+    toast.error(message);
   }
-});
-    price: eventForm.value.is_free ? undefined : Number(eventForm.value.price),
-  };
-  if (eventForm.value.is_free) {
-    delete payload.price;
-  }
-
-  await eventsApi.createCalenderEvent(payload);
-  toast.success("Event created successfully");
-  await fetchEvents();
-
-  Object.assign(eventForm.value, {
-    title: "",
-    description: "",
-    event_type: "webinar",
-    status: "upcoming",
-    start_datetime: "",
-    end_datetime: "",
-    location: "",
-    audience: "all",
-    meeting_url: "",
-    max_attendees: null,
-    registration_deadline: "",
-    is_free: true,
-    price: "",
-    banner: "",
-  });
 };
-
 const uploads = ref([]);
 
 const uploadForm = ref({
