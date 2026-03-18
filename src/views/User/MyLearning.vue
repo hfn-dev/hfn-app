@@ -166,6 +166,7 @@ const submitReview = async () => {
 
     // mark as reviewed instantly
     reviewedCourses.value.add(selectedEnrollment.value.course.id);
+    selectedEnrollment.value.has_reviewed = true;
 
     toast.success("Review submitted successfully");
 
@@ -462,7 +463,7 @@ onMounted(() => {
 
               <!-- If NOT reviewed -->
 <button
-  v-if="!reviewedCourses.has(enrollment.course.id)"
+  v-if="!enrollment.has_reviewed"
   @click="reviewCourse(enrollment)"
   class="mt-auto py-2 rounded-lg font-semibold transition duration-200"
   :style="{
