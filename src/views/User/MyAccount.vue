@@ -42,22 +42,44 @@ const individualDetailsKeys = [
 const currentView = ref('My Profile');
 const activeTab = ref('My Profile');
 
+// const fetchCertificates = async () => {
+//   try {
+//     const res = await learningModule.getCertificate();
+
+//     const certs = Array.isArray(res) ? res : res.results ? res.results : [res];
+
+//     certificates.value = certs;
+
+//     if (certs.length > 0) {
+//       certificateUrl.value = certs[0].pdf_file || '';
+//     }
+//   } catch (error) {
+//     console.error("Error fetching certificates:", error);
+//   }
+// };
 const fetchCertificates = async () => {
   try {
-    const res = await learningModule.getCertificate();
+    const res = await learningModule.getEnrollments();
+    const data = res.data?.results || res.data;
 
-    const certs = Array.isArray(res) ? res : res.results ? res.results : [res];
+    const certs = data
+      .filter((e) => e.certificate_issued && e.certificate)
+      .map((e) => ({
+        id: e.certificate.id,
+        course_title: e.course_title,
+        issued_date: e.completed_at,
+        pdf_file: e.certificate.pdf_file,
+        download_url: e.certificate.download_url,
+        verify_url: e.certificate.verify_url,
+      }));
 
     certificates.value = certs;
 
-    if (certs.length > 0) {
-      certificateUrl.value = certs[0].pdf_file || '';
-    }
   } catch (error) {
     console.error("Error fetching certificates:", error);
   }
 };
-
+  
 const viewCertificateInNewTab = (cert) => {
   if (cert.pdf_file) {
     window.open(cert.pdf_file, "_blank");
@@ -678,7 +700,11 @@ onMounted(() => {
 
         <!-- Certificate Preview -->
         <div class="w-full border border-gray-300 rounded-lg overflow-hidden shadow-md bg-gray-50 flex justify-center items-center h-80">
-          <iframe v-if="cert.pdf_file" :src="cert.pdf_file" class="w-full h-full"></iframe>
+          <iframe
+  v-if="cert.pdf_file || cert.download_url"
+  :src="cert.pdf_file || cert.download_url"
+  class="w-full h-full"
+></iframe>
           <div v-else class="text-center text-gray-500">
             Certificate preview unavailable
           </div>
