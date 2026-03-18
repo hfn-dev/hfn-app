@@ -401,7 +401,7 @@ const getPdfPreview = (url) => {
   
 const dummyPublications = [
   {
-    id: 1,
+    id: 3,
     title: "HFN 2025 Year in Review",
     description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
     pdfUrl:
@@ -415,7 +415,7 @@ const dummyPublications = [
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1773302477/AGM_Impact_Brief_cuw7td.pdf",
   },
   {
-    id: 3,
+    id: 1,
     title: "Nigeria Private Health Sector Market Outlook 2026",
     description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
     pdfUrl:
