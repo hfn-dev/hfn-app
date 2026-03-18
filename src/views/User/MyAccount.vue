@@ -58,6 +58,36 @@ const activeTab = ref('My Profile');
 //     console.error("Error fetching certificates:", error);
 //   }
 // };
+
+const downloadCertificate = (certId) => {
+  try {
+    const response = await learningModule.downloadCertificate(certId);
+
+    if (response.download_url) {
+      const link = document.createElement('a');
+      link.href = response.download_url;
+      link.target = '_blank';
+      link.download = `certificate_${certId}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      return;
+    }
+
+    const blob = new Blob([response], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `certificate_${certId}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(link);
+  } catch (error) {
+    console.error('Error downloading certificate:', error);
+  }
+}
+  
 const fetchCertificates = async () => {
   try {
     const res = await learningModule.getEnrollment();
@@ -715,10 +745,11 @@ onMounted(() => {
 
         <!-- Actions -->
         <div class="mt-2 flex justify-center space-x-4">
-          <a v-if="cert.download_url" :href="cert.download_url" download
-             class="px-6 py-2 bg-[#0c6b39] hover:bg-[#09572d] text-white rounded-lg shadow">
-            Download
-          </a>
+          
+          <button @click="downloadCertificate(cert.id)"
+        class="px-6 py-2 bg-[#0c6b39] hover:bg-[#09572d] text-white rounded-lg shadow">
+  Download
+</button>
           <button v-if="cert.pdf_file" @click="viewCertificateInNewTab(cert)"
                   class="px-6 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100">
             Open in New Tab
