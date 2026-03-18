@@ -73,31 +73,50 @@ const completeLesson = async (lessonId) => {
   }
 };
   
+// const fetchEnrollment = async () => {
+//   try {
+//     const res = await learningModule.getEnrollment({
+//       expand: "course",
+//     });
+
+//     const enrollments = Array.isArray(res.data)
+//       ? res.data
+//       : res.data.results || [];
+
+//     enrollment.value = enrollments.find(
+//       (e) => e.course_slug === courseParam || e.course === courseParam
+//     );
+//     if (
+//       enrollment.value &&
+//       (enrollment.value.status === "completed" ||
+//         Number(enrollment.value.progress_percentage) === 100)
+//     ) {
+//       fetchCertificate();
+//     }
+//   } catch (error) {
+//     console.error("Failed to fetch enrollment", error);
+//   }
+// };
 const fetchEnrollment = async () => {
   try {
-    const res = await learningModule.getEnrollment({
-      expand: "course",
-    });
+    const res = await learningModule.getEnrollments();
+    const data = res.data?.results || res.data;
 
-    const enrollments = Array.isArray(res.data)
-      ? res.data
-      : res.data.results || [];
-
-    enrollment.value = enrollments.find(
-      (e) => e.course_slug === courseParam || e.course === courseParam
+    const match = data.find(
+      (e) => e.course_slug === course.value.slug
     );
-    if (
-      enrollment.value &&
-      (enrollment.value.status === "completed" ||
-        Number(enrollment.value.progress_percentage) === 100)
-    ) {
-      fetchCertificate();
+
+    enrollment.value = match;
+
+    if (match?.certificate) {
+      certificate.value = match.certificate;
     }
-  } catch (error) {
-    console.error("Failed to fetch enrollment", error);
+
+  } catch (err) {
+    console.error("Error fetching enrollment:", err);
   }
 };
-
+  
 const fetchCourse = async () => {
   try {
     loading.value = true;
@@ -126,25 +145,24 @@ const isCompleted = () => {
 };
 
 
-  const fetchCertificate = async () => {
-  try {
-    if (!enrollment.value?.id) return;
+//   const fetchCertificate = async () => {
+//   try {
+//     if (!enrollment.value?.id) return;
 
-    // Try generating (safe — backend handles duplicates)
-    const res = await learningModule.generateCertificate({
-      enrollment_id: enrollment.value.id,
-    });
+//     const res = await learningModule.generateCertificate({
+//       enrollment_id: enrollment.value.id,
+//     });
 
-    certificate.value = res.data;
+//     certificate.value = res.data;
 
-  } catch (err) {
-    console.error("Certificate fetch/generate failed", err);
-  }
-};
+//   } catch (err) {
+//     console.error("Certificate fetch/generate failed", err);
+//   }
+// };
 
-onMounted(() => {
-  fetchCourse();
-  fetchEnrollment();
+  onMounted(async () => {
+  await fetchCourse();
+  await fetchEnrollment();
 });
 </script>
 
