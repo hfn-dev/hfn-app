@@ -205,7 +205,7 @@ const changeTab = (tab) => {
 const handleAction = async (action, user) => {
   try {
     if (action === "delete") {
-      await accessAPI.removeUserRole({ userId: user.id });
+      await accessAPI.removeUserRole({ user_id: user.id });
       USERS.value = USERS.value.filter((u) => u.id !== user.id);
       toast.success("User removed successfully");
     } else if (action === "view") {
