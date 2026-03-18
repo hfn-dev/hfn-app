@@ -39,23 +39,8 @@ const uploadBanner = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", "your_preset");
-
-  const res = await fetch(
-    "https://api.cloudinary.com/v1_1/dawrem2mi/image/upload",
-    {
-      method: "POST",
-      body: formData,
-    }
-  );
-
-  const data = await res.json();
-
-  eventForm.value.banner = data.secure_url;
+  eventForm.value.banner = file; 
 };
-
 const loading = ref(false);
 
 const editArticle = (article) => {
