@@ -423,7 +423,7 @@ const fetchGroupMessages = async (groupId) => {
     const el = document.querySelector(".overflow-y-auto");
     el?.scrollTo({ top: el.scrollHeight });
   } catch {
-    toast.error("Failed to load group messages");
+    console.log("Failed to load group messages");
   } finally {
     isLoading.value.messages = false;
   }
@@ -551,8 +551,10 @@ const sendMessage = async () => {
   }
 
   if (currentTab.value === "Groups" && currentGroup.value?.id) {
+    const groupId = currentGroup.value.id;
+    const messageContent = messageInput.value;
     try {
-      const groupId = currentGroup.value.id;
+      // const groupId = currentGroup.value.id;
 
       const tempMessage = {
         id: Date.now(),
@@ -561,7 +563,7 @@ const sendMessage = async () => {
         initial: "ME",
         color: "bg-green-700",
         isMine: true,
-        body: messageInput.value,
+        body: messageContent,
         type: "text",
         senderId: currentUserId.value,
       };
@@ -571,20 +573,21 @@ const sendMessage = async () => {
       }
 
       groupMessagesMap.value[groupId].push(tempMessage);
-      chatMessages.value = groupMessagesMap.value[groupId];
-
+      // chatMessages.value = groupMessagesMap.value[groupId];
+      chatMessages.value = [...groupMessagesMap.value[groupId]]; 
+messageInput.value = "";
       await nextTick();
       const el = document.querySelector(".overflow-y-auto");
-      el?.scrollTo({ top: el.scrollHeight });
+      el?.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
 
-      messageInput.value = "";
+      await messagingApi.sendGroupMessage({
+  group_id: groupId,
+  content: messageContent,
+});
 
-      await messagingApi.sendGroupMessage(groupId, {
-        content: tempMessage.body,
-      });
-
-      fetchGroupMessages(groupId);
-    } catch {
+      await fetchGroupMessages(groupId);
+    } catch (error) {
+        console.error("GROUP SEND ERROR:", error.response?.data || error);
       toast.error("Failed to send group message");
     }
   }
@@ -708,6 +711,40 @@ const fetchUnreadNotifications = async () => {
   const response = await messagingApi.listUnreadNotifications();
   unreadCount.value = response.count ?? response.results.length;
 };
+
+const joinGroup = async (group) => {
+  try {
+    await messagingApi.joinGroup(group.id);
+
+    toast.success(`Joined ${group.name}`);
+
+    await fetchGroups();
+
+  } catch (error) {
+    console.error("Join group failed:", error);
+    toast.error("Failed to join group");
+  }
+};
+
+const leaveGroup = async (group) => {
+  try {
+    await messagingApi.leaveGroup(group.id);
+
+    toast.success(`Left ${group.name}`);
+
+    await fetchGroups();
+
+    if (currentGroup.value?.id === group.id) {
+      currentGroup.value = null;
+      chatMessages.value = [];
+    }
+
+  } catch (error) {
+    console.error("Leave group failed:", error);
+    toast.error("Failed to leave group");
+  }
+};
+  
 
 const blockConnectionRequest = async (id) => {
   try {
@@ -1386,46 +1423,47 @@ onUnmounted(() => {
             </div>
 
             <div v-else-if="currentTab === 'Groups'" class="space-y-1">
-              <button
-                v-for="group in groups"
-                :key="group.id"
-                @click="selectGroup(group)"
-                class="flex justify-between items-center w-full p-2 rounded-lg transition-colors"
-                :class="
-                  isGroupActive(group)
-                    ? 'font-semibold'
-                    : 'hover:bg-gray-50 text-gray-600'
-                "
-                :style="
-                  isGroupActive(group)
-                    ? { backgroundColor: LIGHT_GREEN, color: DARK_GREEN }
-                    : {}
-                "
-              >
-                <span class="flex items-center truncate">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="w-4 h-4 mr-2 flex-shrink-0"
-                  >
-                    <line x1="16" y1="3" x2="8" y2="21"></line>
-                    <line x1="21" y1="8" x2="3" y2="16"></line>
-                  </svg>
-                  <span class="truncate">{{ group.name }}</span>
-                </span>
-                <span
-                  v-if="group.count > 0"
-                  class="text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full text-white bg-green-700 flex-shrink-0"
-                >
-                  {{ group.count }}
-                </span>
-              </button>
+              <div
+  v-for="group in groups"
+  :key="group.id"
+  class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50"
+>
+  <!-- LEFT: Select group -->
+  <button
+    @click="selectGroup(group)"
+    class="flex items-center truncate flex-1 text-left"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="w-4 h-4 mr-2"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+    >
+      <line x1="16" y1="3" x2="8" y2="21"></line>
+      <line x1="21" y1="8" x2="3" y2="16"></line>
+    </svg>
 
+    <span class="truncate">{{ group.name }}</span>
+  </button>
+
+  <!-- RIGHT: Join / Leave -->
+  <button
+    v-if="!group.isMember"
+    @click.stop="joinGroup(group)"
+    class="text-xs px-3 py-1 rounded bg-green-600 text-white"
+  >
+    Join
+  </button>
+
+  <button
+    v-else
+    @click.stop="leaveGroup(group)"
+    class="text-xs px-3 py-1 rounded bg-red-500 text-white"
+  >
+    Leave
+  </button>
+</div>
               <div
                 v-if="groups.length === 0"
                 class="text-center py-4 text-gray-500"
