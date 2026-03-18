@@ -277,65 +277,53 @@ const deleteEvent = (event) => {
   };
 };
 
-// const createEvent = async () => {
-//   const payload = {
-//     ...eventForm.value,
-//     const formData = new FormData();
-
-// Object.entries(eventForm.value).forEach(([key, value]) => {
-//   if (key === "banner" && value instanceof File) {
-//     formData.append("banner_image", value);
-//   } else {
-//     formData.append(key, value ?? "");
-//   }
-// });
-//     price: eventForm.value.is_free ? undefined : Number(eventForm.value.price),
-//   };
-//   if (eventForm.value.is_free) {
-//     delete payload.price;
-//   }
-
-//   await eventsApi.createCalenderEvent(payload);
-//   toast.success("Event created successfully");
-//   await fetchEvents();
-
-//   Object.assign(eventForm.value, {
-//     title: "",
-//     description: "",
-//     event_type: "webinar",
-//     status: "upcoming",
-//     start_datetime: "",
-//     end_datetime: "",
-//     location: "",
-//     audience: "all",
-//     meeting_url: "",
-//     max_attendees: null,
-//     registration_deadline: "",
-//     is_free: true,
-//     price: "",
-//     banner: "",
-//   });
-// };
 const createEvent = async () => {
   try {
-    const payload = {
-      ...eventForm.value,
-      price: eventForm.value.is_free
-        ? undefined
-        : Number(eventForm.value.price),
-    };
+    const formData = new FormData();
 
-    if (eventForm.value.is_free) {
-      delete payload.price;
-    }
+    Object.entries(eventForm.value).forEach(([key, value]) => {
+      if (key === "banner" && value instanceof File) {
+        formData.append("banner_image", value); // backend field
+        return;
+      }
 
-    await eventsApi.createCalenderEvent(payload);
+      if (key === "price") {
+        if (!eventForm.value.is_free && value) {
+          formData.append("price", Number(value));
+        }
+        return;
+      }
+
+      if (value !== null && value !== undefined) {
+        formData.append(key, value);
+      }
+    });
+
+    await eventsApi.createCalenderEvent(formData);
 
     toast.success("Event created successfully");
     await fetchEvents();
 
+    // reset form (kept your original)
+    Object.assign(eventForm.value, {
+      title: "",
+      description: "",
+      event_type: "webinar",
+      status: "upcoming",
+      start_datetime: "",
+      end_datetime: "",
+      location: "",
+      audience: "all",
+      meeting_url: "",
+      max_attendees: null,
+      registration_deadline: "",
+      is_free: true,
+      price: "",
+      banner: "",
+    });
+
   } catch (error) {
-    console.error(error);
+    console.error("Create event error:", error);
 
     const message =
       error.response?.data?.non_field_errors?.[0] ||
@@ -345,6 +333,7 @@ const createEvent = async () => {
     toast.error(message);
   }
 };
+  
 const uploads = ref([]);
 
 const uploadForm = ref({
