@@ -2,6 +2,9 @@
 import accessAPI from "@/api/accessManagement.js";
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import { computed, onMounted, ref } from "vue";
+import { useToast } from "vue-toastification";
+
+const toast = useToast();
 
 const TABS = ["Overview", "Invitations"];
 const overviewHeaders = ["Name", "Role", "Invited On", "Status"];
@@ -73,6 +76,28 @@ const fetchUsers = async () => {
     console.error("Failed to fetch users or invitations", error);
   }
 };
+
+
+const revokeInvitation = async (inviteId) => {
+  try {
+    await accessAPI.revokeRoleInvite(inviteId);
+
+    toast.success("Invitation revoked");
+
+    await fetchInvitations();
+    await fetchUsers();
+  } catch (error) {
+    console.error("Failed to revoke invite", error);
+
+    const message =
+      error.response?.data?.detail ||
+      error.response?.data?.message ||
+      "Failed to revoke invitation";
+
+    toast.error(message);
+  }
+};
+  
 
 const fetchInvitations = async () => {
   try {
@@ -175,6 +200,7 @@ const handleAction = async (action, user) => {
     if (action === "delete") {
       await accessAPI.removeUserRole({ userId: user.id });
       USERS.value = USERS.value.filter((u) => u.id !== user.id);
+      toast.success("User removed successfully");
     } else if (action === "view") {
       const history = await accessAPI.viewRoleHistory({ userId: user.id });
       console.log("Role History:", history);
@@ -217,17 +243,30 @@ const sendInvitation = async (invite, roleKey, index) => {
     };
     await accessAPI.createRoleInvite(payload);
     INVITATIONS_DATA.value[roleKey][index].status = "Sent";
+    toast.success("Invitation sent successfully");
   } catch (error) {
     console.error("Failed to send invitation:", error);
+    const message =
+    error.response?.data?.detail ||
+    error.response?.data?.message ||
+    "Failed to send invitation";
+
+  toast.error(message);
   }
 };
 
 const resendInvitation = async (inviteId) => {
   try {
     await accessAPI.resendRoleInvite(inviteId);
-    alert("Invite resent!");
+    toast.success("Invite resent!");
   } catch (error) {
     console.error("Failed to resend invite", error);
+    const message =
+      error.response?.data?.detail ||
+      error.response?.data?.message ||
+      "Failed to resend invite";
+
+    toast.error(message);
   }
 };
 </script>
