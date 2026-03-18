@@ -193,9 +193,9 @@ const fetchDashboardAnalytics = async () => {
     const membership = await analyticsApi.fetchMembershipAnalytics();
 
     dashboardStats.value = {
-      registrations: dashboard.total_registrations,
-      individuals: dashboard.total_individuals,
-      organizations: dashboard.total_organizations,
+      registrations: dashboard.total_members,
+      individuals: dashboard.total_individual,
+      organizations: dashboard.total_associations,
       unpaid: membership.unpaid_members,
       purchases: dashboard.total_purchases,
       memberPurchases: dashboard.member_purchases,
