@@ -197,15 +197,22 @@ const handleCourseAction = async (item) => {
   }
 
   if (isUserEnrolled(courseId)) {
-    router.push(`/learning/courses/${slug}`);
+    router.push(`/learner/courses/${slug}`);
     return;
   }
 
-  if (courseData.is_free) {
+  const isFreeCourse =
+    courseData.is_free ||
+    Number(courseData.price) === 0 ||
+    Number(courseData.discount_price) === 0;
+
+  if (isFreeCourse) {
     try {
       await learningModule.courseEnrollment(slug);
       toast.success(`Successfully enrolled in ${courseData.title}`);
       await fetchUserEnrollments();
+            router.push(`/learner/courses/${slug}`);
+
     } catch (error) {
       const serverMessage =
         error.response?.data?.error || error.response?.data?.message;
