@@ -597,25 +597,7 @@ onMounted(() => {
           <p v-if="minutesError" class="text-red-600 text-sm mt-3">
             {{ minutesError }}
           </p>
-          <RouterLink
-            to="/publication"
-            class="inline-flex items-center ml-4 gap-2 px-5 py-3 mt-3 border border-green-700 text-green-700 rounded-lg font-semibold hover:bg-green-900 hover:text-white transition"
-          >
-            <svg
-              class="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-            See Publications
-          </RouterLink>
+          
         </section>
       </div>
       <section class="mt-10 max-w-6xl mx-auto px-4">
