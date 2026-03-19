@@ -120,19 +120,18 @@ const continueLearning = (enrollment) => {
     return;
   }
 
-  router.push(`/learning/courses/${slug}`);
+  router.push(`/learner/courses/${slug}`);
 };
 
 
   const fetchUserReviews = async () => {
   try {
-    const res = await learningModule.getReviews(); // adjust if needed
+    const res = await learningModule.getReviews(); 
 
     const reviews = Array.isArray(res.data)
       ? res.data
       : res.data.results || [];
 
-    // store reviewed course IDs
     reviewedCourses.value = new Set(
       reviews.map((r) => r.course)
     );
