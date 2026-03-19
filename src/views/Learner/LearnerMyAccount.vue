@@ -474,12 +474,7 @@ onMounted(() => {
           <div v-else class="p-6 bg-white rounded-xl shadow-lg space-y-8">
             <div class="flex justify-between items-center mb-6">
               <h2 class="text-xl font-semibold">My Personal Profile</h2>
-              <button @click="toggleIndividualEdit" :class="isIndividualEditing
-                  ? 'bg-red-600 hover:bg-red-700'
-                  : 'bg-[#0c6b39] hover:bg-[#09572d]'
-                " class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150">
-                {{ isIndividualEditing ? 'Save Changes' : 'Change Password' }}
-              </button>
+              
             </div>
 
             <div class="grid md:grid-cols-2 gap-8">
