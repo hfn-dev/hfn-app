@@ -4,7 +4,9 @@ import LearnerSidebar from './LearnerSidebar.vue';
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import learningModule from "@/api/learningModule";
-  
+import { useToast } from "vue-toastification";
+
+const toast = useToast();  
 const router = useRouter();
 const isOrganization = ref(false);
 const orgDetails = reactive({});
@@ -28,6 +30,9 @@ const individualDetails = reactive({
   lastName: '',
   email: '',
   phone: '',
+  old_password: '',
+  new_password: '',
+  confirm_password: '',
 });
 
 const isIndividualEditing = ref(false);
@@ -197,16 +202,64 @@ const toggleOrgEdit = () => {
   isOrgEditing.value = !isOrgEditing.value;
 };
 
-const toggleIndividualEdit = () => {
-  if (isIndividualEditing.value) {
-    console.log(
-      'Saving Individual Details:',
-      JSON.parse(JSON.stringify(individualDetails))
-    );
-  }
-  isIndividualEditing.value = !isIndividualEditing.value;
-};
+// const toggleIndividualEdit = () => {
+//   if (isIndividualEditing.value) {
+//     console.log(
+//       'Saving Individual Details:',
+//       JSON.parse(JSON.stringify(individualDetails))
+//     );
+//   }
+//   isIndividualEditing.value = !isIndividualEditing.value;
+// };
 
+const toggleIndividualEdit = async () => {
+  if (isIndividualEditing.value) {
+    // Validate first
+    if (
+      !individualDetails.old_password ||
+      !individualDetails.new_password ||
+      !individualDetails.confirm_password
+    ) {
+      toast.error("All password fields are required");
+      return;
+    }
+
+    if (
+      individualDetails.new_password !==
+      individualDetails.confirm_password
+    ) {
+      toast.error("New password and confirm password do not match");
+      return;
+    }
+
+    try {
+      await authApi.changePassword({
+        old_password: individualDetails.old_password,
+        new_password: individualDetails.new_password,
+        confirm_password: individualDetails.confirm_password,
+      });
+
+      toast.success("Password changed successfully");
+
+      individualDetails.old_password = '';
+      individualDetails.new_password = '';
+      individualDetails.confirm_password = '';
+
+      isIndividualEditing.value = false;
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        error.response?.data?.message ||
+        "Failed to change password"
+      );
+    }
+
+    return;
+  }
+
+  isIndividualEditing.value = true;
+};
+  
 const toggleOtherDetailsEdit = () => {
   if (isOtherDetailsEditing.value) {
     console.log(
@@ -462,14 +515,28 @@ onMounted(() => {
                   <div v-for="detail in individualDetailsKeys" :key="detail.key"
                     class="flex justify-between items-center">
                     <span class="font-semibold text-gray-600">{{ detail.label }}:</span>
-                    <input :type="detail.key === 'password' ? 'password' : 'text'"
-                      v-model="individualDetails[detail.key]" :disabled="detail.key !== 'password' || !isIndividualEditing
-                        " :class="[
-                        'text-right w-2/3 transition duration-150',
-                        detail.key === 'password' && isIndividualEditing
-                          ? 'bg-white border border-gray-400 rounded-md p-1.5'
-                          : 'bg-transparent border-none',
-                      ]" />
+                    <div v-if="isIndividualEditing" class="space-y-3 mt-4">
+  <input
+    type="password"
+    placeholder="Old Password"
+    v-model="individualDetails.old_password"
+    class="w-full p-2 border rounded"
+  />
+
+  <input
+    type="password"
+    placeholder="New Password"
+    v-model="individualDetails.new_password"
+    class="w-full p-2 border rounded"
+  />
+
+  <input
+    type="password"
+    placeholder="Confirm Password"
+    v-model="individualDetails.confirm_password"
+    class="w-full p-2 border rounded"
+  />
+</div>
                   </div>
                 </div>
                 <div class="flex justify-end mt-6">
@@ -477,7 +544,7 @@ onMounted(() => {
                       ? 'bg-red-600 hover:bg-red-700'
                       : 'bg-[#0c6b39] hover:bg-[#09572d]'
                     " class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150">
-                    {{ isIndividualEditing ? 'Save Changes' : 'Edit' }}
+                    {{ isIndividualEditing ? 'Save Password' : 'Change Password' }}
                   </button>
                 </div>
               </div>
