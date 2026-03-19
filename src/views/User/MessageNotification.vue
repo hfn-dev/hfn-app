@@ -220,8 +220,8 @@ const fetchPendingConnections = async () => {
       // const name = otherUser ? otherUser.name : `User ${otherUserId}`;
       // const initial = otherUser ? otherUser.initial : "U";
       const name = isSender
-        ? req.sender_name
-        : req.receiver_name;
+  ? req.receiver_name
+  : req.sender_name;
 
       return {
         id: req.id,
@@ -286,6 +286,20 @@ const fetchConnections = async () => {
     isLoading.value.connections = false;
   }
 };
+
+const cancelConnectionRequest = async (requestId) => {
+  try {
+    await messagingApi.cancelConnectionRequest(requestId);
+    toast.success("Request cancelled");
+
+    connectionRequests.value = connectionRequests.value.filter(
+      (req) => req.id !== requestId
+    );
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to cancel request");
+  }
+};  
 
 const fetchNotifications = async () => {
   isLoading.value.notifications = true;
@@ -1277,21 +1291,18 @@ onUnmounted(() => {
                 v-if="request.status?.toLowerCase() === 'pending'"
                 class="flex items-center space-x-4"
               >
-                <button
-                   v-if="!request.isSender"
-                  @click="declineConnectionRequest(request.id)"
-                  class="text-sm font-bold text-red-500 hover:underline transition-all"
-                >
-                  Decline
-                </button>
+                <!-- If receiver -->
+<div v-if="!request.isSender">
+  <button @click="declineConnectionRequest(request.id)">Decline</button>
+  <button @click="acceptConnectionRequest(request.id)">Accept</button>
+</div>
 
-                <button
-                  v-if="!request.isSender"
-                  @click="acceptConnectionRequest(request.id)"
-                  class="text-sm font-bold text-green-600 hover:underline transition-all"
-                >
-                  Accept
-                </button>
+<!-- If sender -->
+<div v-else>
+  <button @click="cancelConnectionRequest(request.id)">
+    Cancel Request
+  </button>
+</div>
               </div>
             </div>
           </div>
