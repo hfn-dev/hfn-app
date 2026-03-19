@@ -21,9 +21,9 @@ export default {
     }
   },
 
-  async viewTicketDetails(params = {}) {
+  async viewTicketDetails(id, params = {}) {
     try {
-      const response = await api.get(`/ticket/details/${slug}`, { params });
+      const response = await api.get(`/ticket/details/${id}`, { params });
       return response.data;
     } catch (error) {
       console.error('View ticket details API error:', error);
