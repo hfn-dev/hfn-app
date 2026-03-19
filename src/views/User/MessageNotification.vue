@@ -220,8 +220,8 @@ const fetchPendingConnections = async () => {
       // const name = otherUser ? otherUser.name : `User ${otherUserId}`;
       // const initial = otherUser ? otherUser.initial : "U";
       const name = isSender
-        ? req.receiver_name
-        : req.sender_name;
+        ? req.sender_name
+        : req.receiver_name;
 
       return {
         id: req.id,
@@ -255,7 +255,7 @@ const fetchConnections = async () => {
       const isSender = conn.sender === currentUserId.value;
 
       const otherUserId = isSender ? conn.receiver : conn.sender;
-      const otherUserName = isSender ? conn.receiver_name : conn.sender_name;
+      const otherUserName = isSender ? conn.sender_name : conn.receiver_name;
 
       return {
         id: conn.id,
