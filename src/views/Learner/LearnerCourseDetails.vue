@@ -614,86 +614,30 @@ onMounted(() => {
                 Material Includes
               </h3>
               <ul class="space-y-2 text-gray-700 text-sm">
-                <li class="flex items-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-5 h-5 mr-2 flex-shrink-0"
-                    :style="{ color: DARK_GREEN }"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                  36 hours on-demand video.
-                </li>
-                <li class="flex items-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-5 h-5 mr-2 flex-shrink-0"
-                    :style="{ color: DARK_GREEN }"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                  Unlimited access.
-                </li>
-                <li class="flex items-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-5 h-5 mr-2 flex-shrink-0"
-                    :style="{ color: DARK_GREEN }"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                  Accessible on mobile and desktop.
-                </li>
-                <li class="flex items-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-5 h-5 mr-2 flex-shrink-0"
-                    :style="{ color: DARK_GREEN }"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                  Downloadable additional resources.
-                </li>
-                <li class="flex items-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-5 h-5 mr-2 flex-shrink-0"
-                    :style="{ color: DARK_GREEN }"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                  Euismod magna id purus eget nunc
-                </li>
+                <li
+      v-for="(item, index) in course?.materials_included || []"
+      :key="index"
+      class="flex items-start"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-5 h-5 mr-2 flex-shrink-0"
+        :style="{ color: DARK_GREEN }"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+
+      {{ item }}
+    </li>
+    <li v-if="!course?.materials_included?.length" class="text-gray-400">
+      No materials provided for this course.
+    </li>
               </ul>
             </div>
 
