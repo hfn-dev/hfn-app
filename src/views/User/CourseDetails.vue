@@ -167,11 +167,10 @@ const isCompleted = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 flex flex-col">
-    <div class="flex flex-grow">
+  <div class="flex min-h-screen bg-gray-50">
       <UserSidebar />
 
-      <main class="flex-grow p-4 md:p-8 lg:p-12">
+      <main class="flex-1 p-4 md:p-8 lg:p-12">
         <div class="mb-8">
           <p class="text-sm text-gray-500 mb-1">
             Home > Course: {{ course?.title }}
@@ -795,7 +794,7 @@ const isCompleted = () => {
           </div>
         </div>
       </main>
-    </div>
+    
   </div>
 </template>
 
