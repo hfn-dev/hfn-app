@@ -1337,7 +1337,7 @@ onUnmounted(() => {
           class="flex h-[80vh] min-h-[600px] max-w-7xl border border-gray-200 rounded-xl shadow-lg overflow-hidden"
         >
           <aside
-            class="w-72 bg-white p-4 border-r border-gray-100 flex-shrink-0 overflow-y-auto"
+            class="w-84 bg-white p-4 border-r border-gray-100 flex-shrink-0 overflow-y-auto"
           >
             <h2 class="text-xl font-bold text-gray-800 mb-4">
               {{ currentTab }}
