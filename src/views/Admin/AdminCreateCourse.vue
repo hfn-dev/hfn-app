@@ -21,7 +21,7 @@ const activeModuleId = ref(null);
 const categories = ref([]);
 const loadingCategories = ref(false);
 const selectedInstructorId = ref(null);
-
+const editingCategoryId = ref(null);
 const toast = useToast();
 const router = useRouter();
 const currentStep = ref(1);
@@ -613,6 +613,41 @@ onMounted(async () => {
     }
   }
 });
+
+const updateCategoryHandler = async (category) => {
+  try {
+    await courseApi.updateCategory(category.slug, {
+      name: category.name,
+    });
+
+    editingCategoryId.value = null;
+    toast.success("Category updated");
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to update category");
+  }
+};
+
+const deleteCategoryHandler = async (category) => {
+  try {
+    await courseApi.deleteCategory(category.slug);
+
+    categories.value = categories.value.filter(
+      (c) => c.id !== category.id
+    );
+
+    // reset if selected
+    if (basicInfoForm.value.category === category.id) {
+      basicInfoForm.value.category = "";
+      categorySearch.value = "";
+    }
+
+    toast.success("Category deleted");
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to delete category");
+  }
+};
 </script>
 
 <template>
@@ -726,7 +761,7 @@ onMounted(async () => {
                       v-if="showCategoryDropdown"
                       class="absolute z-20 w-full bg-white border border-gray-200 rounded-md mt-1 shadow-lg max-h-56 overflow-auto"
                     >
-                      <div
+                      <!-- <div
                         v-for="category in filteredCategories"
                         :key="category.id"
                         @click="
@@ -737,7 +772,61 @@ onMounted(async () => {
                         class="px-4 py-2 hover:bg-green-50 cursor-pointer text-sm"
                       >
                         {{ category.icon }} {{ category.name }}
-                      </div>
+                      </div> -->
+                      <div
+  v-for="category in filteredCategories"
+  :key="category.id"
+  class="flex items-center justify-between px-4 py-2 hover:bg-green-50"
+>
+  <!-- LEFT: SELECT / EDIT -->
+  <div
+    class="flex-1 cursor-pointer text-sm"
+    @click="
+      basicInfoForm.category = category.id;
+      categorySearch = category.name;
+      showCategoryDropdown = false;
+    "
+  >
+    <template v-if="editingCategoryId === category.id">
+      <input
+        v-model="category.name"
+        class="border px-2 py-1 rounded w-full text-sm"
+      />
+    </template>
+
+    <template v-else>
+      {{ category.name }}
+    </template>
+  </div>
+
+  <!-- RIGHT: ACTIONS -->
+  <div class="flex items-center gap-2 ml-2">
+    <!-- EDIT -->
+    <button
+      @click.stop="editingCategoryId = category.id"
+      class="text-xs text-blue-500 hover:underline"
+    >
+      Edit
+    </button>
+
+    <!-- SAVE -->
+    <button
+      v-if="editingCategoryId === category.id"
+      @click.stop="updateCategoryHandler(category)"
+      class="text-xs text-green-600 hover:underline"
+    >
+      Save
+    </button>
+
+    <!-- DELETE -->
+    <button
+      @click.stop="deleteCategoryHandler(category)"
+      class="text-xs text-red-500 hover:underline"
+    >
+      Delete
+    </button>
+  </div>
+</div>
 
                       <div
                         v-if="canCreateCategory"
@@ -1159,25 +1248,29 @@ onMounted(async () => {
                   />
                 </div>
 
-                <div class="flex gap-2">
-                  <input
-                    type="number"
-                    v-model="lessonForm.durationHours"
-                    placeholder="HH"
-                    class="w-1/3 border rounded p-2"
-                  />
-                  <input
-                    type="number"
-                    v-model="lessonForm.durationMinutes"
-                    placeholder="MM"
-                    class="w-1/3 border rounded p-2"
-                  />
-                  <input
-                    type="number"
-                    v-model="lessonForm.durationSeconds"
-                    placeholder="SS"
-                    class="w-1/3 border rounded p-2"
-                  />
+                <div>
+                  <label class="text-sm text-gray-600 block mb-1">Duration</label>
+
+                  <div class="flex gap-2">
+    <input
+      type="number"
+      v-model="lessonForm.durationHours"
+      placeholder="HH"
+      class="w-1/3 border rounded p-2"
+    />
+    <input
+      type="number"
+      v-model="lessonForm.durationMinutes"
+      placeholder="MM"
+      class="w-1/3 border rounded p-2"
+    />
+    <input
+      type="number"
+      v-model="lessonForm.durationSeconds"
+      placeholder="SS"
+      class="w-1/3 border rounded p-2"
+    />
+  </div>
                 </div>
 
                 <select

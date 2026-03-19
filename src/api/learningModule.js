@@ -440,17 +440,7 @@ export default {
     throw error;
   }
 },
-  // async downloadCertificate(id) {
-  //   try {
-  //     const response = await api.get(
-  //       `/learning/certificates/${id}/download/`
-  //     );
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error('verify certificate API error:', error);
-  //     throw error;
-  //   }
-  // },
+
   async downloadCertificate(id) {
   try {
     const token = localStorage.getItem('accessToken'); 
