@@ -78,22 +78,43 @@ const fetchEnrollment = async () => {
   }
 };
 
+// const fetchCourse = async () => {
+//   try {
+//     loading.value = true;
+//     const data = await learningModule.getCoursesDetails(slug);
+
+//     course.value = data.course;
+//     modules.value = data.modules || [];
+//     instructor.value = data.instructor;
+//     similarCourses.value = data.similar_courses || [];
+//   } catch (err) {
+//     console.error('Failed to load course', err);
+//   } finally {
+//     loading.value = false;
+//   }
+// };
 const fetchCourse = async () => {
   try {
     loading.value = true;
-    const data = await learningModule.getCoursesDetails(slug);
 
-    course.value = data.course;
+    const res = await learningModule.getCoursesDetails(slug);
+
+    const data = res.data;
+
+    course.value = data;
+
     modules.value = data.modules || [];
-    instructor.value = data.instructor;
+
+    instructor.value = data.instructor || null;
+
     similarCourses.value = data.similar_courses || [];
+
   } catch (err) {
     console.error('Failed to load course', err);
   } finally {
     loading.value = false;
   }
 };
-
 
 const completeLesson = async (lessonId) => {
   try {
