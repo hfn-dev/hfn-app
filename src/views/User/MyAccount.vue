@@ -4,7 +4,10 @@ import UserSidebar from '@/components/layout/UserSidebar.vue';
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import learningModule from "@/api/learningModule";
-  
+import { useToast } from "vue-toastification";  
+
+
+const toast = useToast();  
 const router = useRouter();
 const isOrganization = ref(false);
 const orgDetails = reactive({});
@@ -28,6 +31,9 @@ const individualDetails = reactive({
   lastName: '',
   email: '',
   phone: '',
+  old_password: '',
+  new_password: '',
+  confirm_password: '',
 });
 
 const isIndividualEditing = ref(false);
@@ -198,16 +204,64 @@ const toggleOrgEdit = () => {
   isOrgEditing.value = !isOrgEditing.value;
 };
 
-const toggleIndividualEdit = () => {
+// const toggleIndividualEdit = () => {
+//   if (isIndividualEditing.value) {
+//     console.log(
+//       'Saving Individual Details:',
+//       JSON.parse(JSON.stringify(individualDetails))
+//     );
+//   }
+//   isIndividualEditing.value = !isIndividualEditing.value;
+// };
+const toggleIndividualEdit = async () => {
   if (isIndividualEditing.value) {
-    console.log(
-      'Saving Individual Details:',
-      JSON.parse(JSON.stringify(individualDetails))
-    );
-  }
-  isIndividualEditing.value = !isIndividualEditing.value;
-};
+    // Validate first
+    if (
+      !individualDetails.old_password ||
+      !individualDetails.new_password ||
+      !individualDetails.confirm_password
+    ) {
+      toast.error("All password fields are required");
+      return;
+    }
 
+    if (
+      individualDetails.new_password !==
+      individualDetails.confirm_password
+    ) {
+      toast.error("New password and confirm password do not match");
+      return;
+    }
+
+    try {
+      await authApi.changePassword({
+        old_password: individualDetails.old_password,
+        new_password: individualDetails.new_password,
+        confirm_password: individualDetails.confirm_password,
+      });
+
+      toast.success("Password changed successfully");
+
+      // Clear fields
+      individualDetails.old_password = '';
+      individualDetails.new_password = '';
+      individualDetails.confirm_password = '';
+
+      isIndividualEditing.value = false;
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        error.response?.data?.message ||
+        "Failed to change password"
+      );
+    }
+
+    return;
+  }
+
+  isIndividualEditing.value = true;
+};
+  
 const toggleOtherDetailsEdit = () => {
   if (isOtherDetailsEditing.value) {
     console.log(
@@ -472,6 +526,28 @@ onMounted(() => {
                           : 'bg-transparent border-none',
                       ]" />
                   </div>
+                  <div v-if="isIndividualEditing" class="mt-6 space-y-3">
+  <input
+    type="password"
+    placeholder="Old Password"
+    v-model="individualDetails.old_password"
+    class="w-full p-2 border rounded"
+  />
+
+  <input
+    type="password"
+    placeholder="New Password"
+    v-model="individualDetails.new_password"
+    class="w-full p-2 border rounded"
+  />
+
+  <input
+    type="password"
+    placeholder="Confirm Password"
+    v-model="individualDetails.confirm_password"
+    class="w-full p-2 border rounded"
+  />
+</div>
                 </div>
                 <div class="flex justify-end mt-6">
                   <button @click="toggleIndividualEdit" :class="isIndividualEditing
