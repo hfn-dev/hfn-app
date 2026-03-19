@@ -216,16 +216,24 @@ const fetchPendingConnections = async () => {
       const isSender = req.sender === currentUserId.value;
       const otherUserId = isSender ? req.receiver : req.sender;
 
-      const otherUser = directoryUsers.value.find((u) => u.id === otherUserId);
-      const name = otherUser ? otherUser.name : `User ${otherUserId}`;
-      const initial = otherUser ? otherUser.initial : "U";
+      // const otherUser = directoryUsers.value.find((u) => u.id === otherUserId);
+      // const name = otherUser ? otherUser.name : `User ${otherUserId}`;
+      // const initial = otherUser ? otherUser.initial : "U";
+      const name = isSender
+        ? req.receiver_name
+        : req.sender_name;
 
       return {
         id: req.id,
         status: req.status,
         name,
         userId: otherUserId,
-        initial,
+        initial: name
+          ?.split(" ")
+          .map((n) => n[0])
+          .join("")
+          .slice(0, 2)
+          .toUpperCase() || "U",
         isIncoming: !isSender,
       };
     });
@@ -1244,7 +1252,7 @@ onUnmounted(() => {
                     {{ request.name }}
                   </p>
                   <p class="text-xs text-gray-500 italic">
-                    {{ request.role || "Member" }} wants to connect.
+                    {{ request.name }} wants to connect.
                   </p>
                 </div>
               </div>
@@ -1314,7 +1322,7 @@ onUnmounted(() => {
                     <span
                       class="w-2 h-2 bg-green-500 rounded-full mr-1.5"
                     ></span>
-                    <span class="text-xs text-gray-500">Connected</span>
+                    <span class="text-xs text-gray-500">Connected with {{ connection.name }}</span>
                   </div>
                 </div>
               </div>
