@@ -249,32 +249,57 @@ const fetchBlog = async () => {
 };  
 
 
-onMounted(() => {
+// onMounted(() => {
+//   blog.value = route.state?.article || null;
+
+//   if (!blog.value) {
+//     fetchBlog();
+//     fetchSingleArticle().then(() => {
+//       if (!blog.value) {
+//         const dummyFound = newsPageSchema.news.latestNewsSection.articles.find(
+//           (a) => a.slug === route.params.slug
+//         ) || newsPageSchema.news.policyAdvocacySection.updates.find(
+//           (a) => a.slug === route.params.slug
+//         );
+
+//         if (dummyFound) {
+//           blog.value = {
+//             title: dummyFound.title,
+//             description: dummyFound.description || dummyFound.excerpt || "",
+//             image: dummyFound.featured_image || dummyFound.image || "event.png",
+//             date: new Date(dummyFound.created_at || dummyFound.date).toDateString(),
+//             tag: dummyFound.tag || "News",
+//             caption: dummyFound.caption || "",
+//             comments: dummyFound.commentCount || 0,
+//           };
+//         }
+//       }
+//     });
+//   }
+// });  
+
+onMounted(async () => {
   blog.value = route.state?.article || null;
 
   if (!blog.value) {
-    fetchBlog();
-    fetchSingleArticle().then(() => {
-      if (!blog.value) {
-        const dummyFound = newsPageSchema.news.latestNewsSection.articles.find(
-          (a) => a.slug === route.params.slug
-        ) || newsPageSchema.news.policyAdvocacySection.updates.find(
-          (a) => a.slug === route.params.slug
-        );
+    await fetchBlog(); 
+    
+    if (!blog.value) {
+      const found = allBlogs.find((a) => a.slug === route.params.slug);
 
-        if (dummyFound) {
-          blog.value = {
-            title: dummyFound.title,
-            description: dummyFound.description || dummyFound.excerpt || "",
-            image: dummyFound.featured_image || dummyFound.image || "event.png",
-            date: new Date(dummyFound.created_at || dummyFound.date).toDateString(),
-            tag: dummyFound.tag || "News",
-            caption: dummyFound.caption || "",
-            comments: dummyFound.commentCount || 0,
-          };
-        }
+      if (found) {
+        blog.value = {
+          title: found.title,
+          description: found.description || found.content || found.excerpt || "",
+          image: found.image || found.featured_image || "event.png",
+          date: found.date ? new Date(found.date).toDateString() : "Recent",
+          tag: found.tag || "News",
+          caption: found.caption || "",
+          comments: found.comments || 0,
+          views: found.views || 0
+        };
       }
-    });
+    }
   }
 });  
 </script>
