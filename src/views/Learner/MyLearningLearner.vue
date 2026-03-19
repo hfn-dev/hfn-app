@@ -130,7 +130,7 @@ const continueLearning = (enrollment) => {
 
     const reviews = Array.isArray(res.data)
       ? res.data
-      : res.data.results || [];
+      : res.data?.results || [];
 
     reviewedCourses.value = new Set(
       reviews.map((r) => r.course)
