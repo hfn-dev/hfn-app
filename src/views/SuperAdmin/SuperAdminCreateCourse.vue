@@ -66,7 +66,6 @@ const fetchCategories = async () => {
   }
 };
 
-
 const categorySearch = ref("");
 const showCategoryDropdown = ref(false);
 const creatingCategory = ref(false);
@@ -87,8 +86,7 @@ const canCreateCategory = computed(() => {
   );
 });
 
-
- const createCategory = async () => {
+const createCategory = async () => {
   if (!categorySearch.value.trim()) return;
 
   try {
@@ -114,7 +112,6 @@ const canCreateCategory = computed(() => {
     creatingCategory.value = false;
   }
 };
- 
 
 const openAddLessonDialog = (moduleId) => {
   activeModuleId.value = moduleId;
@@ -493,21 +490,26 @@ const submitCourse = async () => {
 
 const hydrateCurriculum = (backendCurriculum) => {
   curriculumForm.value.modules = backendCurriculum.map((module) => ({
-    id: Date.now() + Math.random(),
+    id: module.id,
     title: module.title,
     description: module.description,
     resources: module.resources,
     isOpen: false,
 
     lessons: module.lessons.map((lesson) => ({
-      id: Date.now() + Math.random(),
+      id: lesson.id,
       title: lesson.title,
       content_type: lesson.content_type,
-      duration: lesson.duration,
+      duration: lesson.duration || {
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+      },
       video_url: lesson.video_url,
       content: lesson.content,
       is_preview: lesson.is_preview,
     })),
+    quizzes: module.quizzes || [],
   }));
 };
 
@@ -539,21 +541,39 @@ onMounted(async () => {
 
     basicInfoForm.value.title = course.title;
     basicInfoForm.value.shortDescription = course.short_description;
-    basicInfoForm.value.fullOverview = course.overview;
-    basicInfoForm.value.category = course.category?.slug;
+    basicInfoForm.value.fullOverview = course.description;
+    basicInfoForm.value.category = course.category?.id;
     basicInfoForm.value.level = course.level;
-  selectedInstructorId.value = course.instructor?.id || null;
+    selectedInstructorId.value = course.instructor?.id || null;
+    basicInfoForm.value.learnOutcomes =
+      course.learning_outcomes?.map((text, index) => ({
+        id: index + 1,
+        text,
+        charCount: text.length,
+      })) || [];
 
-    hydrateCurriculum(course.curriculum);
-
+    // MATERIALS
+    curriculumForm.value.materialsIncluded =
+      course.materials?.map((text, index) => ({
+        id: index + 1,
+        text,
+        charCount: text.length,
+      })) || [];
+    curriculumForm.value.instructorName = `${
+      course.instructor?.first_name || ""
+    } ${course.instructor?.last_name || ""}`.trim();
+    curriculumForm.value.briefBiography =
+      course.instructor?.bio || "No biography available.";
+    if (course.modules) {
+      hydrateCurriculum(course.modules);
+    }
     const selectedCategory = categories.value.find(
-  (c) => c.id === course.category?.id
-);
+      (c) => c.id === course.category?.id
+    );
 
-if (selectedCategory) {
-  categorySearch.value = selectedCategory.name;
-}
-
+    if (selectedCategory) {
+      categorySearch.value = selectedCategory.name;
+    }
   }
 
   if (props.mode === "view") {
@@ -562,11 +582,39 @@ if (selectedCategory) {
 
     basicInfoForm.value.title = course.title;
     basicInfoForm.value.shortDescription = course.short_description;
-    basicInfoForm.value.fullOverview = course.overview;
-    basicInfoForm.value.category = course.category?.slug;
+    basicInfoForm.value.fullOverview = course.description;
+    basicInfoForm.value.category = course.category?.id;
     basicInfoForm.value.level = course.level;
+    basicInfoForm.value.learnOutcomes =
+      course.learning_outcomes?.map((text, index) => ({
+        id: index + 1,
+        text,
+        charCount: text.length,
+      })) || [];
 
-    hydrateCurriculum(course.curriculum);
+    // MATERIALS
+    curriculumForm.value.materialsIncluded =
+      course.materials?.map((text, index) => ({
+        id: index + 1,
+        text,
+        charCount: text.length,
+      })) || [];
+    curriculumForm.value.instructorName = `${
+      course.instructor?.first_name || ""
+    } ${course.instructor?.last_name || ""}`.trim();
+    curriculumForm.value.briefBiography =
+      course.instructor?.bio || "No biography available.";
+
+    if (course.modules) {
+      hydrateCurriculum(course.modules);
+    }
+    const selectedCategory = categories.value.find(
+      (c) => c.id === course.category?.id
+    );
+
+    if (selectedCategory) {
+      categorySearch.value = selectedCategory.name;
+    }
   }
 });
 </script>
@@ -583,7 +631,13 @@ if (selectedCategory) {
       <h1
         class="text-4xl font-bold text-gray-800 mb-8 border-b border-gray-200 pb-4"
       >
-        Create New Course
+        {{
+          props.mode === "edit"
+            ? "Edit Course"
+            : props.mode === "view"
+            ? "View Course"
+            : "Create New Course"
+        }}
       </h1>
 
       <div class="flex justify-between items-start mb-12 relative">
@@ -662,54 +716,58 @@ if (selectedCategory) {
 
               <div class="grid grid-cols-2 gap-4">
                 <div>
-  <label class="block text-sm font-medium text-gray-700">
-    Category
-  </label>
+                  <label class="block text-sm font-medium text-gray-700">
+                    Category
+                  </label>
 
-  <div class="relative">
-    <input
-      type="text"
-      v-model="categorySearch"
-      @focus="showCategoryDropdown = true"
-      @blur="setTimeout(() => (showCategoryDropdown = false), 150)"
-      placeholder="Select or create category"
-      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66]"
-    />
+                  <div class="relative">
+                    <input
+                      type="text"
+                      v-model="categorySearch"
+                      @focus="showCategoryDropdown = true"
+                      @blur="
+                        setTimeout(() => (showCategoryDropdown = false), 150)
+                      "
+                      placeholder="Select or create category"
+                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66]"
+                    />
 
-    <div
-      v-if="showCategoryDropdown"
-      class="absolute z-20 w-full bg-white border border-gray-200 rounded-md mt-1 shadow-lg max-h-56 overflow-auto"
-    >
-      <div
-        v-for="category in filteredCategories"
-        :key="category.id"
-        @click="
-          basicInfoForm.category = category.id;
-          categorySearch = category.name;
-          showCategoryDropdown = false;
-        "
-        class="px-4 py-2 hover:bg-green-50 cursor-pointer text-sm"
-      >
-        {{ category.icon }} {{ category.name }}
-      </div>
+                    <div
+                      v-if="showCategoryDropdown"
+                      class="absolute z-20 w-full bg-white border border-gray-200 rounded-md mt-1 shadow-lg max-h-56 overflow-auto"
+                    >
+                      <div
+                        v-for="category in filteredCategories"
+                        :key="category.id"
+                        @click="
+                          basicInfoForm.category = category.id;
+                          categorySearch = category.name;
+                          showCategoryDropdown = false;
+                        "
+                        class="px-4 py-2 hover:bg-green-50 cursor-pointer text-sm"
+                      >
+                        {{ category.icon }} {{ category.name }}
+                      </div>
 
-      <div
-        v-if="canCreateCategory"
-        @click="createCategory"
-        class="px-4 py-2 bg-green-50 hover:bg-green-100 cursor-pointer text-sm text-[#006633] font-medium"
-      >
-        ➕ Create category “{{ categorySearch }}”
-      </div>
+                      <div
+                        v-if="canCreateCategory"
+                        @click="createCategory"
+                        class="px-4 py-2 bg-green-50 hover:bg-green-100 cursor-pointer text-sm text-[#006633] font-medium"
+                      >
+                        ➕ Create category “{{ categorySearch }}”
+                      </div>
 
-      <div
-        v-if="filteredCategories.length === 0 && !canCreateCategory"
-        class="px-4 py-2 text-sm text-gray-400"
-      >
-        No categories found
-      </div>
-    </div>
-  </div>
-</div>
+                      <div
+                        v-if="
+                          filteredCategories.length === 0 && !canCreateCategory
+                        "
+                        class="px-4 py-2 text-sm text-gray-400"
+                      >
+                        No categories found
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
                 <div>
                   <label
@@ -913,9 +971,18 @@ if (selectedCategory) {
                           >
                             ⋮⋮
                           </span>
-                          <span class="text-base text-gray-700 font-medium">
-                            {{ lesson.title }}
-                          </span>
+                          <div class="flex flex-col">
+                            <span class="text-base text-gray-700 font-medium">
+                              {{ lesson.title }}
+                            </span>
+
+                            <span
+                              v-if="lesson.content"
+                              class="text-xs text-gray-500 mt-1 line-clamp-2"
+                            >
+                              {{ lesson.content }}
+                            </span>
+                          </div>
                         </div>
 
                         <span
@@ -963,6 +1030,7 @@ if (selectedCategory) {
                 >Module Title</label
               >
               <input
+                v-if="activeModule"
                 type="text"
                 placeholder="Enter Title"
                 v-model="activeModule.title"
@@ -1091,7 +1159,7 @@ if (selectedCategory) {
             v-if="isLessonDialogOpen"
             class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4"
           >
-            <div class="bg-white w-full max-w-lg rounded-xl p-6 shadow-xl">
+            <div class="bg-white w-full max-w-lg rounded-xl p-6 shadow-xl mb-2">
               <h3 class="text-lg font-semibold mb-4">Add Lesson</h3>
 
               <form @submit.prevent="handleLessonAdded" class="space-y-4">
@@ -1127,13 +1195,13 @@ if (selectedCategory) {
 
                 <select
                   v-model="lessonForm.contentType"
-                  class="w-full border rounded px-3 py-2 text-sm"
+                  class="w-full border rounded px-3 py-2 text-sm mb-2"
                 >
                   <option value="" disabled>Select content type</option>
                   <option value="video">Video</option>
                   <option value="text">Article</option>
-                  <option value="document">Document</option>
-                  <option value="live">Live Class</option>
+                  <!-- <option value="document">Document</option>
+                  <option value="live">Live Class</option> -->
                 </select>
                 <div
                   v-if="lessonForm.contentType === 'video'"
@@ -1546,7 +1614,16 @@ if (selectedCategory) {
                       >
                         <div class="flex items-center">
                           <Minimize2 class="w-3 h-3 mr-2 text-gray-400" />
-                          <span>{{ lesson.title }}</span>
+                          <div class="flex flex-col">
+                            <span>{{ lesson.title }}</span>
+
+                            <span
+                              v-if="lesson.content"
+                              class="text-xs text-gray-400"
+                            >
+                              {{ lesson.content }}
+                            </span>
+                          </div>
                         </div>
                         <span class="text-xs text-gray-500"
                           >{{ lesson.duration.hours }}h

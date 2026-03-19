@@ -226,7 +226,7 @@ const routes = [
   },
 
   {
-    path: '/tutor/courses/:slug',
+    path: '/tutor/courses/:slug/view',
     name: 'PreviewCourse',
     component: TutorCreateCourse,
     props: (route) => ({ slug: route.params.slug, mode: 'view' }),
@@ -360,7 +360,7 @@ const routes = [
   },
 
   {
-    path: '/admin/courses/:slug',
+    path: '/admin/courses/:slug/view',
     name: 'AdminViewCourse',
     component: AdminCreateCourse,
     props: (route) => ({ slug: route.params.slug, mode: 'view' }),

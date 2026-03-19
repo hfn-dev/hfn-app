@@ -34,8 +34,6 @@ const props = defineProps({
   },
 });
 
-
-
 const categorySearch = ref("");
 const showCategoryDropdown = ref(false);
 const creatingCategory = ref(false);
@@ -55,7 +53,6 @@ const canCreateCategory = computed(() => {
     (c) => c.name.toLowerCase() === categorySearch.value.toLowerCase()
   );
 });
-
 
 const createCategory = async () => {
   if (!categorySearch.value.trim()) return;
@@ -83,7 +80,6 @@ const createCategory = async () => {
     creatingCategory.value = false;
   }
 };
-  
 
 const basicInfoForm = ref({
   title: "",
@@ -433,6 +429,12 @@ const activeModule = computed(() =>
   curriculumForm.value.modules.find((m) => m.id === activeModuleId.value)
 );
 
+const pageTitle = computed(() => {
+  if (props.mode === "edit") return "Edit Course";
+  if (props.mode === "view") return "View Course";
+  return "Create New Course";
+});
+
 const addModule = () => {
   const newModule = {
     id: Date.now(),
@@ -480,7 +482,7 @@ const submitCourse = async () => {
       toast.success("Course created successfully");
     }
 
-    router.push("/tutor/courses");
+    router.push("/tutor/mycourses");
   } catch (err) {
     console.error(err);
     toast.error("Failed to save course");
@@ -489,21 +491,26 @@ const submitCourse = async () => {
 
 const hydrateCurriculum = (backendCurriculum) => {
   curriculumForm.value.modules = backendCurriculum.map((module) => ({
-    id: Date.now() + Math.random(),
+    id: module.id,
     title: module.title,
     description: module.description,
     resources: module.resources,
     isOpen: false,
 
     lessons: module.lessons.map((lesson) => ({
-      id: Date.now() + Math.random(),
+      id: lesson.id,
       title: lesson.title,
       content_type: lesson.content_type,
-      duration: lesson.duration,
+      duration: {
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+      },
       video_url: lesson.video_url,
-      article_content: lesson.article_content,
+      article_content: lesson.content,
       is_preview: lesson.is_preview,
     })),
+    quizzes: [],
   }));
 };
 
@@ -535,21 +542,38 @@ onMounted(async () => {
 
     basicInfoForm.value.title = course.title;
     basicInfoForm.value.shortDescription = course.short_description;
-    basicInfoForm.value.fullOverview = course.overview;
-    basicInfoForm.value.category = course.category?.slug;
+    basicInfoForm.value.fullOverview = course.description;
+    basicInfoForm.value.category = course.category?.id;
     basicInfoForm.value.level = course.level;
-  selectedInstructorId.value = course.instructor?.id || null;
-
-    hydrateCurriculum(course.curriculum);
+    selectedInstructorId.value = course.instructor?.id || null;
+    basicInfoForm.value.learnOutcomes =
+      course.learning_outcomes?.map((text, index) => ({
+        id: index + 1,
+        text,
+        charCount: text.length,
+      })) || [];
+    curriculumForm.value.materialsIncluded =
+      course.materials?.map((text, index) => ({
+        id: index + 1,
+        text,
+        charCount: text.length,
+      })) || [];
+    curriculumForm.value.instructorName = `${
+      course.instructor?.first_name || ""
+    } ${course.instructor?.last_name || ""}`.trim();
+    curriculumForm.value.briefBiography =
+      course.instructor?.bio || "No biography available.";
+    // hydrateCurriculum(course.curriculum);
+    if (course.modules) {
+      hydrateCurriculum(course.modules);
+    }
     const selectedCategory = categories.value.find(
-  (c) => c.id === course.category?.id
-);
+      (c) => c.id === course.category?.id
+    );
 
-if (selectedCategory) {
-  categorySearch.value = selectedCategory.name;
-}
-
-
+    if (selectedCategory) {
+      categorySearch.value = selectedCategory.name;
+    }
   }
 
   if (props.mode === "view") {
@@ -558,11 +582,36 @@ if (selectedCategory) {
 
     basicInfoForm.value.title = course.title;
     basicInfoForm.value.shortDescription = course.short_description;
-    basicInfoForm.value.fullOverview = course.overview;
-    basicInfoForm.value.category = course.category?.slug;
+    basicInfoForm.value.fullOverview = course.description;
+    basicInfoForm.value.category = course.category?.id;
     basicInfoForm.value.level = course.level;
+    selectedInstructorId.value = course.instructor?.id || null;
+    basicInfoForm.value.learnOutcomes =
+      course.learning_outcomes?.map((text, index) => ({
+        id: index + 1,
+        text,
+        charCount: text.length,
+      })) || [];
+    curriculumForm.value.materialsIncluded =
+      course.materials?.map((text, index) => ({
+        id: index + 1,
+        text,
+        charCount: text.length,
+      })) || [];
+    curriculumForm.value.instructorName = course.instructor?.name || "";
 
-    hydrateCurriculum(course.curriculum);
+    curriculumForm.value.briefBiography = course.instructor?.bio || "";
+    // hydrateCurriculum(course.curriculum);
+    if (course.modules) {
+      hydrateCurriculum(course.modules);
+    }
+    const selectedCategory = categories.value.find(
+      (c) => c.id === course.category?.id
+    );
+
+    if (selectedCategory) {
+      categorySearch.value = selectedCategory.name;
+    }
   }
 });
 </script>
@@ -573,13 +622,13 @@ if (selectedCategory) {
     <main class="flex-1 p-8 overflow-auto bg-white">
       <div class="text-sm text-gray-500 mb-6">
         <span class="text-[#006633]">Home</span> > My Courses >
-        <span class="text-gray-700 font-medium">Create New Course</span>
+        <span class="text-gray-700 font-medium">{{ pageTitle }}</span>
       </div>
 
       <h1
         class="text-4xl font-bold text-gray-800 mb-8 border-b border-gray-200 pb-4"
       >
-        Create New Course
+        {{ pageTitle }}
       </h1>
 
       <div class="flex justify-between items-start mb-12 relative">
@@ -658,54 +707,58 @@ if (selectedCategory) {
 
               <div class="grid grid-cols-2 gap-4">
                 <div>
-  <label class="block text-sm font-medium text-gray-700">
-    Category
-  </label>
+                  <label class="block text-sm font-medium text-gray-700">
+                    Category
+                  </label>
 
-  <div class="relative">
-    <input
-      type="text"
-      v-model="categorySearch"
-      @focus="showCategoryDropdown = true"
-      @blur="setTimeout(() => (showCategoryDropdown = false), 150)"
-      placeholder="Select or create category"
-      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66]"
-    />
+                  <div class="relative">
+                    <input
+                      type="text"
+                      v-model="categorySearch"
+                      @focus="showCategoryDropdown = true"
+                      @blur="
+                        setTimeout(() => (showCategoryDropdown = false), 150)
+                      "
+                      placeholder="Select or create category"
+                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border focus:border-[#00cc66]"
+                    />
 
-    <div
-      v-if="showCategoryDropdown"
-      class="absolute z-20 w-full bg-white border border-gray-200 rounded-md mt-1 shadow-lg max-h-56 overflow-auto"
-    >
-      <div
-        v-for="category in filteredCategories"
-        :key="category.id"
-        @click="
-          basicInfoForm.category = category.id;
-          categorySearch = category.name;
-          showCategoryDropdown = false;
-        "
-        class="px-4 py-2 hover:bg-green-50 cursor-pointer text-sm"
-      >
-        {{ category.icon }} {{ category.name }}
-      </div>
+                    <div
+                      v-if="showCategoryDropdown"
+                      class="absolute z-20 w-full bg-white border border-gray-200 rounded-md mt-1 shadow-lg max-h-56 overflow-auto"
+                    >
+                      <div
+                        v-for="category in filteredCategories"
+                        :key="category.id"
+                        @click="
+                          basicInfoForm.category = category.id;
+                          categorySearch = category.name;
+                          showCategoryDropdown = false;
+                        "
+                        class="px-4 py-2 hover:bg-green-50 cursor-pointer text-sm"
+                      >
+                        {{ category.icon }} {{ category.name }}
+                      </div>
 
-      <div
-        v-if="canCreateCategory"
-        @click="createCategory"
-        class="px-4 py-2 bg-green-50 hover:bg-green-100 cursor-pointer text-sm text-[#006633] font-medium"
-      >
-        ➕ Create category “{{ categorySearch }}”
-      </div>
+                      <div
+                        v-if="canCreateCategory"
+                        @click="createCategory"
+                        class="px-4 py-2 bg-green-50 hover:bg-green-100 cursor-pointer text-sm text-[#006633] font-medium"
+                      >
+                        ➕ Create category “{{ categorySearch }}”
+                      </div>
 
-      <div
-        v-if="filteredCategories.length === 0 && !canCreateCategory"
-        class="px-4 py-2 text-sm text-gray-400"
-      >
-        No categories found
-      </div>
-    </div>
-  </div>
-</div>
+                      <div
+                        v-if="
+                          filteredCategories.length === 0 && !canCreateCategory
+                        "
+                        class="px-4 py-2 text-sm text-gray-400"
+                      >
+                        No categories found
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
                 <div>
                   <label
@@ -908,9 +961,18 @@ if (selectedCategory) {
                           >
                             ⋮⋮
                           </span>
-                          <span class="text-base text-gray-700 font-medium">
-                            {{ lesson.title }}
-                          </span>
+                          <div class="flex flex-col">
+                            <span class="text-base text-gray-700 font-medium">
+                              {{ lesson.title }}
+                            </span>
+
+                            <span
+                              v-if="lesson.article_content"
+                              class="text-xs text-gray-500 mt-1"
+                            >
+                              {{ lesson.article_content }}
+                            </span>
+                          </div>
                         </div>
 
                         <span
@@ -958,6 +1020,7 @@ if (selectedCategory) {
                 >Module Title</label
               >
               <input
+                v-if="activeModule"
                 type="text"
                 placeholder="Enter Title"
                 v-model="activeModule.title"
@@ -1125,8 +1188,8 @@ if (selectedCategory) {
                   <option value="" disabled>Select content type</option>
                   <option value="video">Video</option>
                   <option value="text">Article</option>
-                  <option value="document">Document</option>
-                  <option value="live">Live Class</option>
+                  <!-- <option value="document">Document</option>
+                  <option value="live">Live Class</option> -->
                 </select>
                 <div
                   v-if="lessonForm.contentType === 'video'"
@@ -1536,7 +1599,16 @@ if (selectedCategory) {
                       >
                         <div class="flex items-center">
                           <Minimize2 class="w-3 h-3 mr-2 text-gray-400" />
-                          <span>{{ lesson.title }}</span>
+                          <div class="flex flex-col">
+                            <span>{{ lesson.title }}</span>
+
+                            <span
+                              v-if="lesson.article_content"
+                              class="text-xs text-gray-400"
+                            >
+                              {{ lesson.article_content }}
+                            </span>
+                          </div>
                         </div>
                         <span class="text-xs text-gray-500"
                           >{{ lesson.duration.hours }}h
