@@ -198,12 +198,12 @@ const isUserEnrolled = (courseId) => {
 
 const handleCourseAction = async (course) => {
   if (isUserEnrolled(course.id)) {
-    router.push(`/learning/courses/${course.slug || course.id}`);
+    router.push(`/user/courses/${course.slug || course.id}`);
     return;
   }
 
   if (userRole.value === "member") {
-    router.push(`/learning/courses/${course.slug || course.id}`);
+    router.push(`/user/courses/${course.slug || course.id}`);
     return;
   }
 
