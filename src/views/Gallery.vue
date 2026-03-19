@@ -123,7 +123,6 @@ import awards from "@/assets/awards.png";
 import { ref, onMounted, computed } from "vue";
 import gallery from "@/api/contentUploadsApi";
 
-const galleryItems = ref([...dummyGalleryItems]);
 const loading = ref(false);
 const error = ref(null);
 const event =
@@ -190,6 +189,7 @@ const dummyGalleryItems = [
   },
 ];
 
+const galleryItems = ref([...dummyGalleryItems]);
 
 const fetchGalleryFromApi = async () => {
   loading.value = true;
