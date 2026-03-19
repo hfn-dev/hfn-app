@@ -1,5 +1,3 @@
-
-
 <template>
   <div v-if="gallery" class="container mx-auto px-4 py-12">
     <h1 class="text-3xl font-bold text-gray-900 mb-2">
@@ -24,10 +22,14 @@
 </template>
 
 <script setup>
+import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
-import { computed } from "vue";
+import galleryApi from "@/api/contentUploadsApi"; 
 
 const route = useRoute();
+const gallery = ref(null);
+const loading = ref(false);
+const error = ref(null);
 
 const event =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739050/850a9bd13a177b57467b2c6d7c3dfec3_L_g8tmki.jpg";
@@ -38,7 +40,7 @@ const event2 =
 const event3 =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739049/47ed312dbee39b4feb4a261300270374_M_1_jqdrbm.jpg";
 
-const galleries = [
+const dummyGalleries = [
   {
     slug: "digital-skills-bootcamp-2025",
     title: "Digital Skills Bootcamp 2025",
@@ -58,7 +60,42 @@ const galleries = [
   },
 ];
 
-const gallery = computed(() =>
-  galleries.find((g) => g.slug === route.params.slug)
-);
+// const gallery = computed(() =>
+//   galleries.find((g) => g.slug === route.params.slug)
+// );
+
+
+const fetchGallery = async () => {
+  loading.value = true;
+  error.value = null;
+
+  try {
+    const res = await galleryApi.list({ audience: "all" });
+    const apiItems = res.results || res;
+
+    const mappedApiItems = apiItems.map((item) => ({
+      slug: item.slug,
+      title: item.title,
+      category: item.category || "General",
+      date: formatDate(item.date),
+      images: item.images || [],
+    }));
+
+    const combinedGalleries = [...dummyGalleries, ...mappedApiItems];
+
+    gallery.value = combinedGalleries.find(
+      (g) => g.slug === route.params.slug
+    );
+  } catch (err) {
+    console.error("Failed to load gallery", err);
+    error.value = "Failed to load gallery";
+    gallery.value = dummyGalleries.find((g) => g.slug === route.params.slug);
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(() => {
+  fetchGallery();
+});  
 </script>
