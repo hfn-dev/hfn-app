@@ -606,6 +606,7 @@ onMounted(async () => {
             </p>
 
             <RouterLink
+              v-if="featured?.slug"
               :to="`/blog/${featured.slug}`"
               class="inline-flex items-center gap-2 bg-green-700 text-white px-5 py-2 rounded-full font-medium hover:bg-green-800 transition"
             >
