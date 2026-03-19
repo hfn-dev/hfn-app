@@ -282,30 +282,6 @@ onMounted(() => {
   }
 });  
 
-// onMounted(async () => {
-//   blog.value = route.state?.article || null;
-
-//   if (!blog.value) {
-//     await fetchBlog(); 
-    
-//     if (!blog.value) {
-//       const found = allBlogs.find((a) => a.slug === route.params.slug);
-
-//       if (found) {
-//         blog.value = {
-//           title: found.title,
-//           description: found.description || found.content || found.excerpt || "",
-//           image: found.image || found.featured_image || "event.png",
-//           date: found.date ? new Date(found.date).toDateString() : "Recent",
-//           tag: found.tag || "News",
-//           caption: found.caption || "",
-//           comments: found.comments || 0,
-//           views: found.views || 0
-//         };
-//       }
-//     }
-//   }
-// });  
 </script>
 
 <style scoped>
