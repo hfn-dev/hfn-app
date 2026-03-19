@@ -260,7 +260,9 @@ onMounted(() => {
           (a) => a.slug === route.params.slug
         ) || newsPageSchema.news.policyAdvocacySection.updates.find(
           (a) => a.slug === route.params.slug
-        ) || || homePageSchema.news.policyAdvocacySection.updates.find(
+        ) || Object.values(homePageSchema.news.months).flatMap((m) => m.newsList).find(
+          (a) => a.slug === route.params.slug
+        ) || Object.values(homePageSchema.news.months).map((m) => m.featured).find(
           (a) => a.slug === route.params.slug
         );    
 
