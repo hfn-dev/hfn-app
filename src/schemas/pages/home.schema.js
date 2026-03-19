@@ -104,6 +104,8 @@ export const homePageSchema = {
       },
       'September 2025': {
         featured: {
+          title: 'Strengthening Healthcare Policy Frameworks', 
+    slug: 'strengthening-policy-frameworks',
           image: group,
           tag: 'Health Policy',
           date: 'September 18, 2025',
@@ -113,6 +115,8 @@ export const homePageSchema = {
         },
         newsList: [
           {
+            title: 'Pharmaceutical Collaboration for Quality Medicine',
+      slug: 'pharmaceutical-collaboration-quality-medicine',
             image: pharm,
             tag: 'Programs & Initiatives',
             date: 'September 15, 2025',
@@ -121,6 +125,9 @@ export const homePageSchema = {
               'HFN continues its collaboration with pharmaceutical partners to ensure access to quality medicines.',
           },
           {
+            title:
+              'Oando Foundation and HFN partner to improve workplace health and wellness programs.',
+            slug: 'oando-foundation-and-hfn-partner',
             image: oando,
             tag: 'Health Alert',
             date: 'September 10, 2025',
@@ -129,6 +136,9 @@ export const homePageSchema = {
               'Oando Foundation and HFN partner to improve workplace health and wellness programs.',
           },
           {
+            title:
+              'HFN hosted a national workshop on healthcare business sustainability strategies.',
+            slug: 'hfn-hosted-a-national-workshop',
             image: hba,
             tag: 'Public Health Stories',
             date: 'September 2, 2025',
@@ -140,6 +150,9 @@ export const homePageSchema = {
       },
       'August 2025': {
         featured: {
+          title:
+              'HFN collaborated with Emzor Pharmaceuticals to discuss the future of local drug production.',
+            slug: 'hfn-collaborated-with-emzor',
           image: emzor,
           tag: 'Programs & Initiatives',
           date: 'August 20, 2025',
@@ -149,6 +162,9 @@ export const homePageSchema = {
         },
         newsList: [
           {
+            title:
+              'Society for Family Health and HFN partner to improve primary care delivery systems.',
+            slug: 'society-for-family-health',
             image: society,
             tag: 'Health Alert',
             date: 'August 18, 2025',
@@ -157,6 +173,9 @@ export const homePageSchema = {
               'Society for Family Health and HFN partner to improve primary care delivery systems.',
           },
           {
+            title:
+              'Bridge Clinic joins HFN network to promote advanced fertility care across Nigeria.',
+            slug: 'bridge-clinic-joins-hfn',
             image: bridge,
             tag: 'Public Health Stories',
             date: 'August 12, 2025',
@@ -166,6 +185,7 @@ export const homePageSchema = {
           },
           {
             title: 'INAUGURATION OF THE IMPLEMENTATION COMMITTEE FOR THE NATIONAL STAKEHOLDERS DIALOGUE ON POWER IN THE HEALTH SECTOR',
+            slug: 'inauguration-of-the-implementation-committee',
             image: health,
             tag: 'Programs & Initiatives',
             date: 'August 5, 2025',
