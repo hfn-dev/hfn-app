@@ -379,7 +379,7 @@ const routes = [
     component: LearnerCourseDetails,
   },
   {
-    path: '/learning/courses/:slug',
+    path: '/learner/courses/:slug',
     name: 'LearnerCourseDetails',
     component: LearnerCourseDetails,
   },
