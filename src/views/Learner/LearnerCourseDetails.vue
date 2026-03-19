@@ -545,7 +545,7 @@ onMounted(() => {
                   <p class="font-bold text-gray-800">
                     {{ instructor?.name }}
                   </p>
-                  <p class="text-sm text-gray-600">{{ instructor.title }}</p>
+                  <p class="text-sm text-gray-600">{{ instructor?.title }}</p>
                 </div>
               </div>
               <p class="text-gray-700 text-sm leading-relaxed">
