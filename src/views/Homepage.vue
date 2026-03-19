@@ -673,6 +673,7 @@ onMounted(async () => {
                   {{ news.tag }}
                 </span>
                 <RouterLink
+                  v-if="news.slug"
                   :to="`/blog/${news.slug}`"
                   class="text-green-700 text-xs font-bold hover:underline"
                 >
