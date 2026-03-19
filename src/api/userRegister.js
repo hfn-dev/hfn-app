@@ -117,4 +117,13 @@ export default {
   const response = await api.get('/contact/', { params });
   return response.data;
 },
+  async changePassword(payload) {
+    try {
+      const response = await api.post('/account/change-password', payload);
+      return response.data;
+    } catch (error) {
+      console.error('Change password API error:', error);
+      throw error;
+    }
+  },
 };
