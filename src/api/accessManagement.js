@@ -22,12 +22,12 @@ export default {
     }
   },
 
-  async revokeRoleInvite(payload) {
+  async revokeRoleInvite(id) {
     try {
-      const response = await api.post("/access/roles/remove/", payload);
+      const response = await api.post(`/access/invites/${id}/revoke/`);
       return response.data;
     } catch (error) {
-      console.error("Remove user role API error:", error);
+      console.error("Revoke user role API error:", error);
       throw error;
     }
   },
