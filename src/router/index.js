@@ -153,12 +153,6 @@ const routes = [
   component: CourseDetails,
 },
   {
-    path: '/learning/courses/:slug',
-    name: 'CourseDetails',
-    component: CourseDetails,
-  },
-
-  {
     path: '/news/:slug',
     name: 'ArticleDetail',
     component: ArticleDetail,
@@ -384,7 +378,11 @@ const routes = [
     name: 'LearnerCourseDetails',
     component: LearnerCourseDetails,
   },
-
+  {
+    path: '/learning/courses/:slug',
+    name: 'LearnerCourseDetails',
+    component: LearnerCourseDetails,
+  },
   {
     path: '/learner/account',
     name: 'LearnerMyAccount',
