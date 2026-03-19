@@ -120,7 +120,12 @@
 <script setup>
 import awards from "@/assets/awards.png";
 // import latest from "@/assets/latest_news.png";
+import { ref, onMounted, computed } from "vue";
+import gallery from "@/api/contentUploadsApi";
 
+const galleryItems = ref([...dummyGalleryItems]);
+const loading = ref(false);
+const error = ref(null);
 const event =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769739050/850a9bd13a177b57467b2c6d7c3dfec3_L_g8tmki.jpg";
 const event1 =
@@ -134,7 +139,7 @@ const event4 =
 const latest =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769738844/675362aef61a36df3271398e6ff1e414_S_c6duhw.jpg";
 
-const galleryItems = [
+const dummyGalleryItems = [
   {
     slug: "digital-skills-bootcamp-2025",
     title: "Digital Skills Bootcamp 2025",
@@ -184,6 +189,33 @@ const galleryItems = [
     images: [event, event1, event2, event3],
   },
 ];
+
+
+const fetchGalleryFromApi = async () => {
+  loading.value = true;
+  error.value = null;
+
+  try {
+    const res = await gallery.list();
+    const apiData = res.data?.results || res.data;
+
+    const mappedApiItems = apiData.map((item) => ({
+      slug: item.slug,
+      title: item.title,
+      category: item.category || "General",
+      date: formatDate(item.date),
+      cover: resolveImage(item),
+      images: item.images || [],
+    }));
+
+    galleryItems.value = [...dummyGalleryItems, ...mappedApiItems];
+  } catch (err) {
+    console.error("Failed to load gallery", err);
+    error.value = "Failed to load gallery items";
+  } finally {
+    loading.value = false;
+  }
+};  
 </script>
 
 <style scoped>
