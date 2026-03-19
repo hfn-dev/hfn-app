@@ -130,12 +130,12 @@ onMounted(() => {
       <LearnerSidebar />
 
       <main class="flex-grow p-4 md:p-8 lg:p-12">
-        <div class="mb-8">
+        <div v-if="!loading && course" class="mb-8">
           <p class="text-sm text-gray-500 mb-1">
-            Home > Course: {{ course?.title }}
+            Home > Course: {{ course.title }}
           </p>
           <h1 class="text-4xl font-semibold text-gray-800">
-            {{ course?.title }}
+            {{ course.title }}
           </h1>
         </div>
 
