@@ -513,9 +513,19 @@ onMounted(() => {
               <div class="p-6 rounded-xl shadow-md bg-[#F2F9F3] relative">
                 <div class="space-y-4 text-sm text-gray-700">
                   <div v-for="detail in individualDetailsKeys" :key="detail.key"
-                    class="flex justify-between items-center">
-                    <span class="font-semibold text-gray-600">{{ detail.label }}:</span>
-                    <div v-if="isIndividualEditing" class="space-y-3 mt-4">
+  class="flex justify-between items-center">
+
+  <span class="font-semibold text-gray-600">{{ detail.label }}:</span>
+
+  <input
+    v-if="detail.key !== 'password'"
+    type="text"
+    v-model="individualDetails[detail.key]"
+    disabled
+    class="text-right bg-transparent border-none"
+  />
+</div>
+                  <div v-if="isIndividualEditing" class="mt-6 space-y-3">
   <input
     type="password"
     placeholder="Old Password"
@@ -537,7 +547,6 @@ onMounted(() => {
     class="w-full p-2 border rounded"
   />
 </div>
-                  </div>
                 </div>
                 <div class="flex justify-end mt-6">
                   <button @click="toggleIndividualEdit" :class="isIndividualEditing
