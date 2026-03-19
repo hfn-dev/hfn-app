@@ -196,8 +196,15 @@ const fetchGalleryFromApi = async () => {
   error.value = null;
 
   try {
-    const res = await gallery.list();
-    const apiData = res.data?.results || res.data;
+    const [allRes, nonMembersRes] = await Promise.all([
+      gallery.list({ audience: "all" }),
+      gallery.list({ audience: "non-members" }),
+    ]);
+
+    const apiData = [
+      ...(allRes.results || allRes),
+      ...(nonMembersRes.results || nonMembersRes),
+    ];
 
     const mappedApiItems = apiData.map((item) => ({
       slug: item.slug,
@@ -215,7 +222,11 @@ const fetchGalleryFromApi = async () => {
   } finally {
     loading.value = false;
   }
-};  
+};
+  
+onMounted(() => {
+  fetchGalleryFromApi();
+});  
 </script>
 
 <style scoped>
