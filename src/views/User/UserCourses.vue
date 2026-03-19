@@ -175,9 +175,10 @@ const formatPrice = (course) => {
 };
 
 const formatRating = (course) => {
-  return course.rating_average?.toFixed(1) || "0.0";
+  const rating = Number(course.rating_average);
+  return isNaN(rating) ? "0.0" : rating.toFixed(1);
 };
-
+  
 const formatReviewCount = (course) => {
   return course.rating_count?.toLocaleString() || "0";
 };
