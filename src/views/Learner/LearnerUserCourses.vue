@@ -123,8 +123,8 @@ const filterCoursesByTrack = () => {
     if (category) {
       filteredCourses.value = courses.value.filter(
         (course) =>
-          course.category?.name === activeCourseTrack.value ||
-          course.category?.id === category.id
+          course.category === category.id ||
+          course.category_name === activeCourseTrack.value
       );
     } else {
       filteredCourses.value = courses.value;
@@ -165,9 +165,10 @@ const formatPrice = (course) => {
 };
 
 const formatRating = (course) => {
-  return course.rating_average?.toFixed(1) || "0.0";
+  const rating = Number(course.rating_average);
+  return isNaN(rating) ? "0.0" : rating.toFixed(1);
 };
-
+  
 const formatReviewCount = (course) => {
   return course.rating_count?.toLocaleString() || "0";
 };
