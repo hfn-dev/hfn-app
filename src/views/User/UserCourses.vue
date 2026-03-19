@@ -133,8 +133,8 @@ const filterCoursesByTrack = () => {
     if (category) {
       filteredCourses.value = courses.value.filter(
         (course) =>
-          course.category?.name === activeCourseTrack.value ||
-          course.category?.id === category.id
+          course.category === category.id || 
+          course.category_name === activeCourseTrack.value
       );
     } else {
       filteredCourses.value = courses.value;
@@ -537,7 +537,7 @@ onMounted(() => {
 
                 <div class="p-4">
                   <p class="text-xs text-gray-500 font-semibold uppercase mb-1">
-                    {{ course.category?.name || "Uncategorized" }}
+                    {{ course.category_name || "Uncategorized" }}
                   </p>
                   <h3
                     @click="goToCourseDetails(course)"
