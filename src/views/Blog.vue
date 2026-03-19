@@ -340,7 +340,7 @@ import latest from "@/assets/latest_news.png";
                     dialogue a success.
                   </p>
                   <RouterLink
-                    :to="{ name: 'BlogDetails', params: { id: 1 } }"
+                    :to="{ name: 'BlogDetails', params: { slug: news.slug } }"
                     class="inline-flex items-center justify-center px-9 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-green-700 hover:bg-green-800 transition"
                   >
                     Read More ->
