@@ -255,13 +255,16 @@ const fetchConnections = async () => {
       const isSender = conn.sender === currentUserId.value;
 
       const otherUserId = isSender ? conn.receiver : conn.sender;
-      const otherUserName = isSender ? conn.sender_name : conn.receiver_name;
+      const otherUserName = isSender ? conn.receiver_name : conn.sender_name;
 
       return {
         id: conn.id,
         status: conn.status,
         userId: otherUserId,
         name: otherUserName,
+    sender: conn.sender,
+    receiver: conn.receiver,
+        isSender,
         initial:
           otherUserName
             ?.split(" ")
@@ -505,6 +508,11 @@ const acceptAdminRequest = async (notification) => {
 
 const removeConnection = async (connectionId) => {
   try {
+        const connection = allConnections.value.find(c => c.id === connectionId);
+if (!connection || connection.status !== "accepted") {
+      toast.error("Invalid connection");
+      return;
+    }
     await messagingApi.removeConnection(connectionId);
     toast.success("Connection removed");
     fetchConnections();
@@ -697,9 +705,17 @@ const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const isGroupActive = (group) =>
   currentGroup.value && group.id === currentGroup.value.id;
 
+// const pendingRequests = computed(() => {
+//   return allConnections.value.filter((conn) => conn.status === "pending");
+// });
+
 const pendingRequests = computed(() => {
-  return allConnections.value.filter((conn) => conn.status === "pending");
-});
+  return allConnections.value.filter(
+    (conn) =>
+      conn.status === "pending" &&
+      conn.receiver === currentUserId.value 
+  );
+});  
 
 const activeConnections = computed(() => {
   return allConnections.value.filter((conn) => conn.status === "accepted");
@@ -1262,6 +1278,7 @@ onUnmounted(() => {
                 class="flex items-center space-x-4"
               >
                 <button
+                   v-if="!request.isSender"
                   @click="declineConnectionRequest(request.id)"
                   class="text-sm font-bold text-red-500 hover:underline transition-all"
                 >
@@ -1269,6 +1286,7 @@ onUnmounted(() => {
                 </button>
 
                 <button
+                  v-if="!request.isSender"
                   @click="acceptConnectionRequest(request.id)"
                   class="text-sm font-bold text-green-600 hover:underline transition-all"
                 >
