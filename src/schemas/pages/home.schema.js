@@ -27,7 +27,7 @@ export const homePageSchema = {
     titleMain: 'Private Health Sector',
     introLine: 'Advancing Universal Health Coverage',
     introText: 'through private sector activation.',
-    subText: 'Join the coalition of leaders transforming healthcare delivery in Nigeria.',
+    subText: '',
     ctaText: 'Join The Coalition ->',
     ctaLink: '/register',
     slides: [
