@@ -537,16 +537,6 @@ const toggleVisibility = async (page) => {
   }
 };
 
-const addFaq = () => {
-  currentSectionData.value.push({
-    question: "",
-    answer: "",
-  });
-};
-
-const removeFaq = (index) => {
-  currentSectionData.value.splice(index, 1);
-};
 </script>
 
 <template>
