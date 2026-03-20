@@ -854,50 +854,7 @@ const toggleVisibility = async (page) => {
   :is="componentMap.home?.[activeSection]"
   v-model="currentSectionData"
 />
-          <HomePartnerEditor
-            v-if="
-              activePage.page_type.toLowerCase() === 'home' &&
-              activeSection === 'partners'
-            "
-            v-model="currentSectionData"
-          /> 
-          <HomeAboutEditor
-            v-if="
-              activePage.page_type.toLowerCase() === 'home' &&
-              activeSection === 'about'
-            "
-            v-model="currentSectionData"
-          /> 
-          <HomeMandateEditor
-            v-if="
-              activePage.page_type.toLowerCase() === 'home' &&
-              activeSection === 'mandate'
-            "
-            v-model="currentSectionData"
-          /> 
-          <HomeNewsEditor
-            v-if="
-              activePage.page_type.toLowerCase() === 'home' &&
-              activeSection === 'news'
-            "
-            v-model="currentSectionData"
-          /> 
           
-          <HomeExecutivesEditor
-  v-if="
-    activePage.page_type.toLowerCase() === 'home' &&
-    activeSection === 'executives'
-  "
-  v-model="currentSectionData"
-/>     
-          
-          <HomeFaqsEditor
-  v-if="
-    activePage.page_type.toLowerCase() === 'home' &&
-    activeSection === 'faqs'
-  "
-  v-model="currentSectionData"
-/>        
           
           <!-- ABOUT HERO SECTION -->
           <div
