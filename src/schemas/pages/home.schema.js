@@ -64,7 +64,7 @@ export const homePageSchema = {
     actions: [
       {
         title: "Policy Advocacy",
-        description: "We engage policymakers to shape evidence-based reforms that enable effective regulation, sustainable financing, and private sector participation.",
+        description: "We engage policymakers to shape evidence-based reforms that enable effective regulation, sustainable financing, and private sector participation in health system strengthening.",
         icon: "ScaleIcon",
         tags: ["Policy", "Reform"]
       },
@@ -75,14 +75,14 @@ export const homePageSchema = {
         tags: ["Networking", "Unity"]
       },
       {
-        title: "Sector Intelligence",
+        title: "Sector Intelligence & Thought Leadership",
         description: "We generate insights, reports, and high-level dialogues that inform policy decisions and investment across the health sector.",
         icon: "LightBulbIcon",
         tags: ["Data", "Insights"]
       },
       {
         title: "Public–Private Collaboration",
-        description: "We support partnerships that leverage private sector capacity to improve service delivery and emergency care.",
+        description: "We support partnerships that leverage private sector capacity to improve service delivery and emergency care, and access to quality healthcare.",
         icon: "HandRaisedIcon",
         tags: ["Partnership", "Delivery"]
       }
