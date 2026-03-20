@@ -537,6 +537,19 @@ const toggleVisibility = async (page) => {
   }
 };
 
+const addMandateAction = () => {
+  currentSectionData.value.actions.push({
+    title: "",
+    description: "",
+    icon: "LightBulbIcon",
+    tags: ["New Tag"]
+  });
+};
+
+const removeMandateAction = (index) => {
+  currentSectionData.value.actions.splice(index, 1);
+};
+  
 </script>
 
 <template>
@@ -973,6 +986,44 @@ const toggleVisibility = async (page) => {
               </div>
             </div>
           </div>
+          <div v-if="activePage.page_type.toLowerCase() === 'home' && activeSection === 'about'">
+  <div class="space-y-6">
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">Badge</label>
+      <input v-model="currentSectionData.badge" type="text" class="w-full border-none focus:ring-0" />
+    </div>
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
+      <input v-model="currentSectionData.title" type="text" class="w-full border-none focus:ring-0" />
+    </div>
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">Description</label>
+      <textarea v-model="currentSectionData.description" rows="4" class="w-full border-none focus:ring-0 resize-none" />
+    </div>
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">Image URL</label>
+      <input v-model="currentSectionData.image" type="text" class="w-full border-none focus:ring-0" />
+    </div>
+  </div>
+</div>
+
+<div v-if="activePage.page_type.toLowerCase() === 'home' && activeSection === 'mandate'">
+  <div class="space-y-6">
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
+      <input v-model="currentSectionData.title" type="text" class="w-full border-none focus:ring-0" />
+    </div>
+    
+    <label class="block text-xs font-semibold uppercase text-gray-500">Mandate Actions</label>
+    <div v-for="(action, index) in currentSectionData.actions" :key="index" class="p-4 border border-gray-200 rounded-lg space-y-3 bg-gray-50">
+      <input v-model="action.title" placeholder="Action Title" class="w-full font-bold bg-transparent border-none focus:ring-0" />
+      <textarea v-model="action.description" placeholder="Description" rows="2" class="w-full text-sm bg-transparent border-none focus:ring-0" />
+      <div class="flex gap-2">
+        <input v-for="(tag, tIdx) in action.tags" :key="tIdx" v-model="action.tags[tIdx]" class="text-xs border rounded px-2 py-1 w-24" />
+      </div>
+    </div>
+  </div>
+</div>
           <div
             v-if="
               activePage.page_type.toLowerCase() === 'home' &&
