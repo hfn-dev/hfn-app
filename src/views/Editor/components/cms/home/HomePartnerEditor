@@ -24,6 +24,13 @@ watch(
   { deep: true }
 );
   
+const addPartnerLogo = () => {
+  currentSectionData.value.logos.push("");
+};
+
+const removePartnerLogo = (index) => {
+  currentSectionData.value.logos.splice(index, 1);
+};
 
 
 </script>  
