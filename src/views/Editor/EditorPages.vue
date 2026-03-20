@@ -424,30 +424,6 @@ const toggleSecondaryContent = (itemId) => {
 };
 
 
-const addMonth = () => {
-  currentSectionData.value.months["New Month"] = {
-    featured: { image: "", tag: "", date: "", comments: 0, description: "" },
-    newsList: [],
-  };
-};
-
-const removeMonth = (month) => {
-  delete currentSectionData.value.months[month];
-};
-
-const addNewsItem = (month) => {
-  currentSectionData.value.months[month].newsList.push({
-    image: "",
-    tag: "",
-    date: "",
-    comments: 0,
-    description: "",
-  });
-};
-
-const removeNewsItem = (month, index) => {
-  currentSectionData.value.months[month].newsList.splice(index, 1);
-};
 
 const saveChanges = async () => {
   try {
@@ -515,18 +491,6 @@ const toggleVisibility = async (page) => {
   }
 };
 
-const addMandateAction = () => {
-  currentSectionData.value.actions.push({
-    title: "",
-    description: "",
-    icon: "LightBulbIcon",
-    tags: ["New Tag"]
-  });
-};
-
-const removeMandateAction = (index) => {
-  currentSectionData.value.actions.splice(index, 1);
-};
   
 </script>
 
