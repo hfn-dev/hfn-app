@@ -1,125 +1,151 @@
 <script setup>
 import { ref } from 'vue'
 
-const heroUploadRef = ref(null)            
 const props = defineProps({
-  modelValue: Object
+  modelValue: {
+    type: Object,
+    required: true
+  }
 })
 
-const emit = defineEmits(['update:modelValue'])
-const resetHeroColor = () => {
-  props.modelValue.backgroundColor = '#FFFFFF'
-}
-const handleHeroImageUpload = (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  if (file.size > 1024 * 1024) {
-    alert("Image must be less than 1MB");
-    return;
-  }
-
-  currentSectionData.value.heroImage = file;
-
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    currentSectionData.value.heroImagePreview = e.target.result;
-  };
-  reader.readAsDataURL(file);
-};
-
-const addHeroSlide = () => {
-  props.modelValue.hero.slides.push("")
-}
-const removeHeroSlide = (index) => {
-  props.modelValue.hero.slides.splice(index, 1)
+// Helper to get News Months keys
+const getNewsMonths = () => {
+  return props.modelValue.news?.months ? Object.keys(props.modelValue.news.months) : []
 }
 
-const getMonths = () => Object.keys(props.modelValue.news.months)  
-            
+// Helper to add/remove FAQ items
+const addFAQ = () => props.modelValue.faqs.push({ question: '', answer: '' })
+const removeFAQ = (index) => props.modelValue.faqs.splice(index, 1)
 </script>
 
 <template>
-  <div class="space-y-12 p-6 bg-gray-50">
+  <div class="max-w-5xl mx-auto p-6 space-y-10 bg-gray-50 min-h-screen">
     
-    <section class="bg-white p-6 rounded-xl shadow-sm space-y-4">
-      <h2 class="text-lg font-bold border-b pb-2">Hero Section</h2>
-      <div class="grid grid-cols-2 gap-4">
-        <div class="space-y-2">
-          <label class="text-xs font-bold text-gray-500 uppercase">Title Highlight</label>
-          <input v-model="modelValue.titleHighlight" type="text" class="w-full border rounded p-2" />
-        </div>
-        <div class="space-y-2">
-          <label class="text-xs font-bold text-gray-500 uppercase">Main Title</label>
-          <input v-model="modelValue.titleMain" type="text" class="w-full border rounded p-2" />
-        </div>
+    <div class="flex justify-between items-center border-b pb-4">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-800">Home Page Content Manager</h1>
+        <p class="text-sm text-slate-500">Edit hero, mandates, news, and team details</p>
       </div>
+    </div>
 
-      <div class="space-y-2">
-        <label class="text-xs font-bold text-gray-500 uppercase">Hero Slides (Image URLs)</label>
-        <div v-for="(slide, index) in modelValue.slides" :key="index" class="flex items-center gap-2 mb-2">
-          <input v-model="modelValue.slides[index]" type="text" class="flex-grow border rounded p-2 text-sm" placeholder="https://..." />
-          <button @click="removeHeroSlide(index)" class="text-red-500 text-xs">Remove</button>
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+      <h2 class="text-lg font-bold text-blue-700 mb-4 flex items-center gap-2">
+        <span class="w-2 h-6 bg-blue-600 rounded-full"></span> Hero Section
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="space-y-4">
+          <div class="group">
+            <label class="text-[10px] font-bold uppercase text-slate-400">Title Highlight</label>
+            <input v-model="modelValue.hero.titleHighlight" type="text" class="w-full border-b focus:border-blue-500 outline-none py-1 text-lg font-medium" />
+          </div>
+          <div class="group">
+            <label class="text-[10px] font-bold uppercase text-slate-400">Main Title</label>
+            <input v-model="modelValue.hero.titleMain" type="text" class="w-full border-b focus:border-blue-500 outline-none py-1 text-lg font-bold" />
+          </div>
+          <div class="group">
+            <label class="text-[10px] font-bold uppercase text-slate-400">Intro Line</label>
+            <input v-model="modelValue.hero.introLine" type="text" class="w-full border-b focus:border-blue-500 outline-none py-1" />
+          </div>
         </div>
-        <button @click="addHeroSlide" class="text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded">+ Add Slide</button>
-      </div>
-    </section>
-
-    <section class="bg-white p-6 rounded-xl shadow-sm space-y-4">
-      <h2 class="text-lg font-bold border-b pb-2">About Section</h2>
-      <div class="grid grid-cols-2 gap-4">
-        <div class="space-y-2">
-          <label class="text-xs font-bold text-gray-500 uppercase">Stats Number</label>
-          <input v-model="modelValue.about.stats.number" type="text" class="w-full border rounded p-2" />
-        </div>
-        <div class="space-y-2">
-          <label class="text-xs font-bold text-gray-500 uppercase">Stats Label</label>
-          <input v-model="modelValue.about.stats.label" type="text" class="w-full border rounded p-2" />
-        </div>
-      </div>
-      <div class="space-y-2">
-        <label class="text-xs font-bold text-gray-500 uppercase">Tags/Features</label>
-        <div v-for="(feat, index) in modelValue.about.features" :key="index" class="grid grid-cols-2 gap-2 p-2 border rounded">
-          <input v-model="feat.title" placeholder="Title" class="text-sm border-none" />
-          <input v-model="feat.sub" placeholder="Sub-text" class="text-sm border-none" />
+        <div class="space-y-4">
+          <div class="group">
+            <label class="text-[10px] font-bold uppercase text-slate-400">CTA Text</label>
+            <input v-model="modelValue.hero.ctaText" type="text" class="w-full border-b focus:border-blue-500 outline-none py-1" />
+          </div>
+          <div class="group">
+            <label class="text-[10px] font-bold uppercase text-slate-400">Slide Image URLs (Cloudinary)</label>
+            <div v-for="(slide, i) in modelValue.hero.slides" :key="i" class="mt-2">
+              <input v-model="modelValue.hero.slides[i]" type="text" class="w-full text-xs border rounded p-2 bg-slate-50 font-mono" />
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="bg-white p-6 rounded-xl shadow-sm space-y-4">
-      <h2 class="text-lg font-bold border-b pb-2">Mandate Section</h2>
-      <div class="space-y-2">
-        <label class="text-xs font-bold text-gray-500 uppercase">Mandate Badge</label>
-        <input v-model="modelValue.mandate.badge" type="text" class="w-full border rounded p-2" />
-      </div>
-      <div class="space-y-2">
-        <label class="text-xs font-bold text-gray-500 uppercase">Main Description</label>
-        <textarea v-model="modelValue.mandate.description" class="w-full border rounded p-2"></textarea>
-      </div>
-    </section>
-
-    <section class="bg-white p-6 rounded-xl shadow-sm space-y-4">
-      <h2 class="text-lg font-bold border-b pb-2">Executives Section (Images)</h2>
-      <div class="grid grid-cols-2 gap-4">
-        <div v-for="(exec, index) in modelValue.executives" :key="index" class="border p-3 rounded">
-          <p class="font-bold text-sm">{{ exec.name }}</p>
-          <label class="text-[10px] text-gray-400">IMAGE URL/PATH</label>
-          <input v-model="modelValue.executives[index].image" type="text" class="w-full border p-1 text-xs" />
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+      <h2 class="text-lg font-bold text-blue-700 mb-4 flex items-center gap-2">
+        <span class="w-2 h-6 bg-blue-600 rounded-full"></span> About & Statistics
+      </h2>
+      <div class="space-y-4">
+        <div class="grid grid-cols-3 gap-4">
+          <div class="col-span-1 border p-3 rounded-lg">
+            <label class="text-[10px] font-bold text-slate-400 uppercase">Stats Number</label>
+            <input v-model="modelValue.about.stats.number" class="w-full text-xl font-bold text-blue-600 outline-none" />
+          </div>
+          <div class="col-span-2 border p-3 rounded-lg">
+            <label class="text-[10px] font-bold text-slate-400 uppercase">Stats Label</label>
+            <input v-model="modelValue.about.stats.label" class="w-full text-lg outline-none" />
+          </div>
+        </div>
+        <div class="border p-3 rounded-lg">
+          <label class="text-[10px] font-bold text-slate-400 uppercase">About Description</label>
+          <textarea v-model="modelValue.about.description" rows="4" class="w-full text-sm outline-none resize-none"></textarea>
         </div>
       </div>
     </section>
 
-    <section class="bg-white p-6 rounded-xl shadow-sm space-y-4">
-      <h2 class="text-lg font-bold border-b pb-2">News Section (Images)</h2>
-      <div v-for="month in getMonths()" :key="month" class="space-y-4">
-        <h3 class="text-sm font-bold text-blue-600">{{ month }}</h3>
-        <div class="ml-4 p-2 border-l-2">
-          <label class="text-xs font-bold">Featured Image URL</label>
-          <input v-model="modelValue.news.months[month].featured.image" class="w-full border p-1 text-xs" />
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+      <h2 class="text-lg font-bold text-blue-700 mb-4 flex items-center gap-2">
+        <span class="w-2 h-6 bg-blue-600 rounded-full"></span> Mandate Pillars
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div v-for="(action, i) in modelValue.mandate.actions" :key="i" class="p-4 border rounded-lg bg-slate-50/50">
+          <input v-model="action.title" class="font-bold text-slate-700 mb-1 w-full bg-transparent border-b border-transparent focus:border-blue-400 outline-none" />
+          <textarea v-model="action.description" rows="2" class="text-xs text-slate-500 w-full bg-transparent outline-none resize-none"></textarea>
         </div>
-        <div v-for="(item, idx) in modelValue.news.months[month].newsList" :key="idx" class="ml-8 p-2 border-b">
-          <label class="text-[10px]">{{ item.title }}</label>
-          <input v-model="item.image" class="w-full border p-1 text-xs" placeholder="Image link" />
+      </div>
+    </section>
+
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+      <h2 class="text-lg font-bold text-blue-700 mb-4 flex items-center gap-2">
+        <span class="w-2 h-6 bg-blue-600 rounded-full"></span> Executive Images
+      </h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div v-for="(exec, i) in modelValue.executives" :key="i" class="flex items-center gap-3 p-3 border rounded-lg bg-white">
+          <div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden flex-shrink-0">
+            <img v-if="typeof exec.image === 'string'" :src="exec.image" class="w-full h-full object-cover" />
+          </div>
+          <div class="overflow-hidden">
+            <p class="text-[10px] font-bold truncate">{{ exec.name }}</p>
+            <input v-model="modelValue.executives[i].image" type="text" class="w-full text-[8px] border p-1 rounded" placeholder="Image URL" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+      <h2 class="text-lg font-bold text-blue-700 mb-4 flex items-center gap-2">
+        <span class="w-2 h-6 bg-blue-600 rounded-full"></span> News Feed Images
+      </h2>
+      <div class="space-y-6">
+        <div v-for="month in getNewsMonths()" :key="month" class="p-4 border rounded-xl bg-slate-50">
+          <h3 class="font-bold text-slate-700 mb-3">{{ month }}</h3>
+          <div class="space-y-3">
+            <div class="bg-white p-2 rounded border">
+              <label class="text-[9px] font-bold text-blue-500 block uppercase">Featured Article Image</label>
+              <input v-model="modelValue.news.months[month].featured.image" type="text" class="w-full text-xs font-mono p-1" />
+            </div>
+            <div v-for="(news, ni) in modelValue.news.months[month].newsList" :key="ni" class="bg-white p-2 rounded border">
+              <label class="text-[9px] font-bold text-slate-400 block uppercase truncate">{{ news.title }}</label>
+              <input v-model="news.image" type="text" class="w-full text-xs font-mono p-1" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-bold text-blue-700 flex items-center gap-2">
+          <span class="w-2 h-6 bg-blue-600 rounded-full"></span> Frequently Asked Questions
+        </h2>
+        <button @click="addFAQ" class="text-xs bg-blue-600 text-white px-3 py-1 rounded-full hover:bg-blue-700">+ Add FAQ</button>
+      </div>
+      <div class="space-y-4">
+        <div v-for="(faq, i) in modelValue.faqs" :key="i" class="p-4 border rounded-lg relative group">
+          <button @click="removeFAQ(i)" class="absolute top-2 right-2 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">×</button>
+          <input v-model="faq.question" placeholder="Question" class="w-full font-bold text-sm mb-2 outline-none border-b border-transparent focus:border-blue-200" />
+          <textarea v-model="faq.answer" placeholder="Answer text..." rows="2" class="w-full text-sm text-slate-600 outline-none resize-none"></textarea>
         </div>
       </div>
     </section>
