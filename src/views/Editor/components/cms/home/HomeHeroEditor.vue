@@ -99,13 +99,12 @@ const handleHeroImageUpload = (event) => {
                   <label
                     class="block text-xs font-semibold uppercase text-gray-500"
                   >
-                    Sub Text
+                    Slide urls
                   </label>
-                  <textarea
-                    v-model="modelValue.subText"
-                    rows="4"
-                    class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-                  />
+                  
+                    <div v-for="(slide, i) in modelValue.hero.slides" :key="i" class="mt-2">
+              <input v-model="modelValue.hero.slides[i]" type="text" class="w-full text-xs border rounded p-2 bg-slate-50 font-mono" />
+            </div>
                 </div>
 
                 <!-- CTA Text -->
