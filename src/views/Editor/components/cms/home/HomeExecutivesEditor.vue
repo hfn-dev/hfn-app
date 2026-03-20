@@ -54,6 +54,21 @@ const removeExecutive = (index) => {
                 :key="index"
                 class="border rounded p-4 space-y-2"
               >
+                <div class="flex items-center gap-3">
+    <div class="w-14 h-14 rounded-full bg-gray-200 overflow-hidden">
+      <img
+        v-if="exec.image"
+        :src="exec.image"
+        class="w-full h-full object-cover"
+      />
+    </div>
+
+    <input
+      v-model="exec.image"
+      placeholder="Image URL"
+      class="flex-1 text-xs border rounded px-2 py-1 font-mono"
+    />
+  </div>
                 <input
                   v-model="exec.name"
                   placeholder="Name"
