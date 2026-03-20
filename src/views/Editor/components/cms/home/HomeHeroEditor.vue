@@ -47,18 +47,18 @@ const getMonths = () => Object.keys(props.modelValue.news.months)
       <div class="grid grid-cols-2 gap-4">
         <div class="space-y-2">
           <label class="text-xs font-bold text-gray-500 uppercase">Title Highlight</label>
-          <input v-model="modelValue.hero.titleHighlight" type="text" class="w-full border rounded p-2" />
+          <input v-model="modelValue.titleHighlight" type="text" class="w-full border rounded p-2" />
         </div>
         <div class="space-y-2">
           <label class="text-xs font-bold text-gray-500 uppercase">Main Title</label>
-          <input v-model="modelValue.hero.titleMain" type="text" class="w-full border rounded p-2" />
+          <input v-model="modelValue.titleMain" type="text" class="w-full border rounded p-2" />
         </div>
       </div>
 
       <div class="space-y-2">
         <label class="text-xs font-bold text-gray-500 uppercase">Hero Slides (Image URLs)</label>
-        <div v-for="(slide, index) in modelValue.hero.slides" :key="index" class="flex items-center gap-2 mb-2">
-          <input v-model="modelValue.hero.slides[index]" type="text" class="flex-grow border rounded p-2 text-sm" placeholder="https://..." />
+        <div v-for="(slide, index) in modelValue.slides" :key="index" class="flex items-center gap-2 mb-2">
+          <input v-model="modelValue.slides[index]" type="text" class="flex-grow border rounded p-2 text-sm" placeholder="https://..." />
           <button @click="removeHeroSlide(index)" class="text-red-500 text-xs">Remove</button>
         </div>
         <button @click="addHeroSlide" class="text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded">+ Add Slide</button>
