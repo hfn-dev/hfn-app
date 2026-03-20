@@ -432,19 +432,22 @@ const saveChanges = async () => {
   }
 };
 
-const addExecutive = () => {
-  currentSectionData.value.push({
+const addExecutives = () => {
+  currentSectionData.value.members.push({
     name: "",
-    position: "",
     role: "",
+    slug: "",
     image: "",
+    profile: "",
+    socials: [],
   });
 };
 
-const removeExecutive = (index) => {
-  currentSectionData.value.splice(index, 1);
+const removeExecutives = (index) => {
+  currentSectionData.value.members.splice(index, 1);
 };
 
+  
 const breadcrumbViewName = computed(() => {
   if (currentView.value === "view") return `View: ${activePage.value.title}`;
   if (currentView.value === "editor") return `Edit: ${activePage.value.title}`;
