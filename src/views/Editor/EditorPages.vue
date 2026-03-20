@@ -396,13 +396,6 @@ const deleteMetric = (metricId) => {
   }
 };
 
-const addPartnerLogo = () => {
-  currentSectionData.value.logos.push("");
-};
-
-const removePartnerLogo = (index) => {
-  currentSectionData.value.logos.splice(index, 1);
-};
 
 const activeSecondaryContent = ref(null);
 
