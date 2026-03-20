@@ -28,23 +28,90 @@ watch(
 
 </script>  
 <template>
-<div class="space-y-6">
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">Badge</label>
-      <input v-model="currentSectionData.badge" type="text" class="w-full border-none focus:ring-0" />
-    </div>
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
-      <input v-model="currentSectionData.title" type="text" class="w-full border-none focus:ring-0" />
-    </div>
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">Description</label>
-      <textarea v-model="currentSectionData.description" rows="4" class="w-full border-none focus:ring-0 resize-none" />
-    </div>
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">Image URL</label>
-      <input v-model="currentSectionData.image" type="text" class="w-full border-none focus:ring-0" />
-    </div>
-  </div>
-            
- </template> 
+
+            <div class="space-y-8">
+              <div
+                v-for="(monthData, monthName) in currentSectionData.months"
+                :key="monthName"
+                class="border border-gray-300 rounded-lg p-4 space-y-6"
+              >
+                <!-- Month Header -->
+                <div class="flex justify-between items-center">
+                  <h3 class="font-semibold">{{ monthName }}</h3>
+                  <button
+                    class="text-red-500 text-sm"
+                    @click="removeMonth(monthName)"
+                  >
+                    Delete Month
+                  </button>
+                </div>
+
+                <!-- Featured -->
+                <div class="space-y-2">
+                  <label class="text-xs font-semibold uppercase text-gray-500">
+                    Featured Description
+                  </label>
+                  <textarea
+                    v-model="monthData.featured.description"
+                    rows="3"
+                    class="w-full border-none focus:ring-0 resize-none"
+                  />
+                </div>
+
+                <!-- News List -->
+                <div class="space-y-4">
+                  <div class="flex justify-between">
+                    <label
+                      class="text-xs font-semibold uppercase text-gray-500"
+                    >
+                      News List
+                    </label>
+                    <button
+                      class="text-sm bg-black text-white px-2 py-1 rounded"
+                      @click="addNewsItem(monthName)"
+                    >
+                      + Add News
+                    </button>
+                  </div>
+
+                  <div
+                    v-for="(news, index) in monthData.newsList"
+                    :key="index"
+                    class="border rounded p-3 space-y-2"
+                  >
+                    <input
+                      v-model="news.tag"
+                      placeholder="Tag"
+                      class="w-full border-none focus:ring-0"
+                    />
+                    <input
+                      v-model="news.date"
+                      placeholder="Date"
+                      class="w-full border-none focus:ring-0"
+                    />
+                    <textarea
+                      v-model="news.description"
+                      rows="2"
+                      class="w-full border-none focus:ring-0 resize-none"
+                    />
+
+                    <button
+                      class="text-red-500 text-sm"
+                      @click="removeNewsItem(monthName, index)"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                class="bg-black text-white px-4 py-2 rounded"
+                @click="addMonth"
+              >
+                + Add New Month
+              </button>
+            </div>
+          
+
+</template> 
