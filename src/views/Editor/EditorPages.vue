@@ -1182,45 +1182,14 @@ const toggleVisibility = async (page) => {
               </div>
             </div>
           </div>
-          <div
-            v-if="
-              activePage.page_type.toLowerCase() === 'home' &&
-              activeSection === 'faqs'
-            "
-          >
-            <div class="space-y-6">
-              <button
-                class="bg-black text-white px-3 py-2 rounded"
-                @click="addFaq"
-              >
-                + Add FAQ
-              </button>
-
-              <div
-                v-for="(faq, index) in currentSectionData"
-                :key="index"
-                class="border rounded p-4 space-y-3"
-              >
-                <input
-                  v-model="faq.question"
-                  placeholder="Question"
-                  class="w-full border-none focus:ring-0"
-                />
-
-                <textarea
-                  v-model="faq.answer"
-                  rows="3"
-                  placeholder="Answer"
-                  class="w-full border-none focus:ring-0 resize-none"
-                />
-
-                <button class="text-red-500 text-sm" @click="removeFaq(index)">
-                  Remove
-                </button>
-              </div>
-            </div>
-          </div>
-
+          <HomeFaqsEditor
+  v-if="
+    activePage.page_type.toLowerCase() === 'home' &&
+    activeSection === 'faqs'
+  "
+  v-model="currentSectionData"
+/>        
+          
           <!-- ABOUT HERO SECTION -->
           <div
             v-else-if="
