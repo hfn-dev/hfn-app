@@ -5,6 +5,7 @@ import { useRouter } from "vue-router";
 import HomeHeroEditor from './components/cms/home/HomeHeroEditor.vue'
 import { computed, onMounted, ref, watch } from "vue";
 import EditorSidebar from "./EditorSidebar.vue";
+import HomeFaqsEditor from '@/components/cms/home/HomeFaqsEditor.vue'
 
 const newYear = ref("");
 const newCategory = ref("");
@@ -19,7 +20,8 @@ const currentSectionData = ref(null);
 
 const componentMap = {
   home: {
-    hero: HomeHeroEditor
+    hero: HomeHeroEditor,
+    faqs: HomeFaqsEditor
   }
 }  
   
