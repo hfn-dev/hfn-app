@@ -2,7 +2,7 @@
 import pagesApi from "@/api/pageManagement";
 import { pageSchemas } from "@/schemas/pageSchemas";
 import { useRouter } from "vue-router";
-import HomeHeroEditor from '@/components/cms/home/HomeHeroEditor.vue'
+import HomeHeroEditor from './components/cms/home/HomeHeroEditor.vue'
 import { computed, onMounted, ref, watch } from "vue";
 import EditorSidebar from "./EditorSidebar.vue";
 
