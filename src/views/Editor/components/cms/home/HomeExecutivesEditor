@@ -24,19 +24,17 @@ watch(
   { deep: true }
 );
   
-const addExecutives = () => {
-  currentSectionData.value.members.push({
+const addExecutive = () => {
+  currentSectionData.value.push({
     name: "",
+    position: "",
     role: "",
-    slug: "",
     image: "",
-    profile: "",
-    socials: [],
   });
 };
 
-const removeExecutives = (index) => {
-  currentSectionData.value.members.splice(index, 1);
+const removeExecutive = (index) => {
+  currentSectionData.value.splice(index, 1);
 };
 
 
