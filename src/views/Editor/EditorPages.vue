@@ -141,20 +141,6 @@ const removePastEvent = (index) => {
   currentSectionData.value.pastEvents.items.splice(index, 1);
 };
 
-const addExecutives = () => {
-  currentSectionData.value.members.push({
-    name: "",
-    role: "",
-    slug: "",
-    image: "",
-    profile: "",
-    socials: [],
-  });
-};
-
-const removeExecutives = (index) => {
-  currentSectionData.value.members.splice(index, 1);
-};
 
 const addSocial = (memberIndex) => {
   currentSectionData.value.members[memberIndex].socials.push({
