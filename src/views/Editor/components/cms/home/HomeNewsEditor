@@ -24,6 +24,30 @@ watch(
   { deep: true }
 );
   
+const addMonth = () => {
+  currentSectionData.value.months["New Month"] = {
+    featured: { image: "", tag: "", date: "", comments: 0, description: "" },
+    newsList: [],
+  };
+};
+
+const removeMonth = (month) => {
+  delete currentSectionData.value.months[month];
+};
+
+const addNewsItem = (month) => {
+  currentSectionData.value.months[month].newsList.push({
+    image: "",
+    tag: "",
+    date: "",
+    comments: 0,
+    description: "",
+  });
+};
+
+const removeNewsItem = (month, index) => {
+  currentSectionData.value.months[month].newsList.splice(index, 1);
+};
 
 
 </script>  
