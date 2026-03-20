@@ -10,6 +10,7 @@ import HomeAboutEditor from './components/cms/home/HomeAboutEditor.vue'
 import HomeMandateEditor from './components/cms/home/HomeMandateEditor.vue'
 import HomeNewsEditor from './components/cms/home/HomeNewsEditor.vue'
 import HomeExecutivesEditor from './components/cms/home/HomeExecutivesEditor.vue'
+import HomePartnerEditor from './components/cms/home/HomePartnerEditor.vue'
 
   
 const newYear = ref("");
@@ -31,7 +32,7 @@ const componentMap = {
     mandate: HomeMandateEditor,
     news: HomeNewsEditor,
     executives: HomeExecutivesEditor,
-
+    partners: HomePartnerEditor,
   }
 }  
   
@@ -860,64 +861,13 @@ const toggleVisibility = async (page) => {
   :is="componentMap.home?.[activeSection]"
   v-model="currentSectionData"
 />
-          <div
+          <HomePartnerEditor
             v-if="
               activePage.page_type.toLowerCase() === 'home' &&
               activeSection === 'partners'
             "
-          >
-            <div class="space-y-6">
-              <!-- Title -->
-              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                <label
-                  class="block text-xs font-semibold uppercase text-gray-500"
-                >
-                  Section Title
-                </label>
-                <input
-                  v-model="currentSectionData.title"
-                  type="text"
-                  class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-                />
-              </div>
-
-              <!-- Logos -->
-              <div class="border border-gray-300 rounded-lg p-4 space-y-4">
-                <div class="flex justify-between items-center">
-                  <label class="text-xs font-semibold uppercase text-gray-500">
-                    Partner Logos
-                  </label>
-
-                  <button
-                    class="text-sm bg-black text-white px-3 py-1 rounded"
-                    @click="addPartnerLogo"
-                  >
-                    + Add Logo
-                  </button>
-                </div>
-
-                <div
-                  v-for="(logo, index) in currentSectionData.logos"
-                  :key="index"
-                  class="flex items-center space-x-3 border rounded p-2"
-                >
-                  <input
-                    v-model="currentSectionData.logos[index]"
-                    type="text"
-                    class="flex-grow border-none focus:ring-0"
-                    placeholder="logo-key or cloudinary-id"
-                  />
-
-                  <button
-                    class="text-red-500 text-sm"
-                    @click="removePartnerLogo(index)"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+            v-model="currentSectionData"
+          /> 
           <HomeAboutEditor
             v-if="
               activePage.page_type.toLowerCase() === 'home' &&
