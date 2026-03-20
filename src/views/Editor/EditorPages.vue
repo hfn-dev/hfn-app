@@ -8,6 +8,7 @@ import EditorSidebar from "./EditorSidebar.vue";
 import HomeFaqsEditor from './components/cms/home/HomeFaqsEditor.vue'
 import HomeAboutEditor from './components/cms/home/HomeAboutEditor.vue'
 import HomeMandateEditor from './components/cms/home/HomeMandateEditor.vue'
+import HomeNewsEditor from './components/cms/home/HomeNewsEditor.vue'
 
 
   
@@ -28,6 +29,8 @@ const componentMap = {
     faqs: HomeFaqsEditor,
     about: HomeAboutEditor,
     mandate: HomeMandateEditor,
+    news: HomeNewsEditor,
+
   }
 }  
   
@@ -298,37 +301,6 @@ const fetchPages = async () => {
   };
 });
 
-
-    // pages.value = rawPages.map((page) => {
-      // const schema = pageSchemas[page.page_type.toLowerCase()];
-      // const schema = pageSchemas[page.page_type?.toLowerCase()] ?? {};
-
-    //   const content = structuredClone(schema);
-
-    //   if (
-    //     page.content &&
-    //     typeof page.content === "object" &&
-    //     Object.keys(page.content).length > 0
-    //   ) {
-    //     for (const sectionKey in schema) {
-    //       if (page.content[sectionKey]) {
-    //         content[sectionKey] = {
-    //           ...schema[sectionKey],
-    //           ...page.content[sectionKey],
-    //         };
-    //       }
-    //     }
-    //   }
-
-    //   return {
-    //     ...page,
-    //     title: page.name ?? page.page_type_display,
-    //     slug: `/${(page.name ?? page.page_type)
-    //       .toLowerCase()
-    //       .replace(/\s+/g, "-")}`,
-    //     sections: content,
-    //   };
-    // });
   } catch (e) {
     console.error("Failed to load pages", e);
   } finally {
