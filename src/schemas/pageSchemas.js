@@ -34,7 +34,7 @@ const chairImage =
   'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769894247/Bola_Adesola_lr8vif.png';
 
 export const pageSchemas = {
-  home: homePageSchema
+  home: homePageSchema,
   // home: {
   //   hero: {
   //     titleHighlight: 'Healthcare',
