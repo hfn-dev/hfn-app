@@ -28,185 +28,101 @@ const handleHeroImageUpload = (event) => {
   reader.readAsDataURL(file);
 };
 
+const addHeroSlide = () => {
+  props.modelValue.hero.slides.push("")
+}
+const removeHeroSlide = (index) => {
+  props.modelValue.hero.slides.splice(index, 1)
+}
+
+const getMonths = () => Object.keys(props.modelValue.news.months)  
             
 </script>
 
 <template>
-            <div class="flex space-x-6">
-              <!-- LEFT SIDE -->
-              <div class="w-3/5 space-y-6">
-                <!-- Highlight Title -->
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                  >
-                    Highlight Title
-                  </label>
-                  <input
-                    v-model="modelValue.titleHighlight"
-                    type="text"
-                    class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-                    placeholder="Healthcare"
-                  />
-                </div>
+  <div class="space-y-12 p-6 bg-gray-50">
+    
+    <section class="bg-white p-6 rounded-xl shadow-sm space-y-4">
+      <h2 class="text-lg font-bold border-b pb-2">Hero Section</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <label class="text-xs font-bold text-gray-500 uppercase">Title Highlight</label>
+          <input v-model="modelValue.hero.titleHighlight" type="text" class="w-full border rounded p-2" />
+        </div>
+        <div class="space-y-2">
+          <label class="text-xs font-bold text-gray-500 uppercase">Main Title</label>
+          <input v-model="modelValue.hero.titleMain" type="text" class="w-full border rounded p-2" />
+        </div>
+      </div>
 
-                <!-- Main Title -->
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                  >
-                    Main Title
-                  </label>
-                  <input
-                    v-model="modelValue.titleMain"
-                    type="text"
-                    class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-                    placeholder="Advocacy."
-                  />
-                </div>
+      <div class="space-y-2">
+        <label class="text-xs font-bold text-gray-500 uppercase">Hero Slides (Image URLs)</label>
+        <div v-for="(slide, index) in modelValue.hero.slides" :key="index" class="flex items-center gap-2 mb-2">
+          <input v-model="modelValue.hero.slides[index]" type="text" class="flex-grow border rounded p-2 text-sm" placeholder="https://..." />
+          <button @click="removeHeroSlide(index)" class="text-red-500 text-xs">Remove</button>
+        </div>
+        <button @click="addHeroSlide" class="text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded">+ Add Slide</button>
+      </div>
+    </section>
 
-                <!-- Intro Line -->
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                  >
-                    Intro Line
-                  </label>
-                  <textarea
-                    v-model="modelValue.introLine"
-                    rows="2"
-                    class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-                  />
-                </div>
+    <section class="bg-white p-6 rounded-xl shadow-sm space-y-4">
+      <h2 class="text-lg font-bold border-b pb-2">About Section</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <label class="text-xs font-bold text-gray-500 uppercase">Stats Number</label>
+          <input v-model="modelValue.about.stats.number" type="text" class="w-full border rounded p-2" />
+        </div>
+        <div class="space-y-2">
+          <label class="text-xs font-bold text-gray-500 uppercase">Stats Label</label>
+          <input v-model="modelValue.about.stats.label" type="text" class="w-full border rounded p-2" />
+        </div>
+      </div>
+      <div class="space-y-2">
+        <label class="text-xs font-bold text-gray-500 uppercase">Tags/Features</label>
+        <div v-for="(feat, index) in modelValue.about.features" :key="index" class="grid grid-cols-2 gap-2 p-2 border rounded">
+          <input v-model="feat.title" placeholder="Title" class="text-sm border-none" />
+          <input v-model="feat.sub" placeholder="Sub-text" class="text-sm border-none" />
+        </div>
+      </div>
+    </section>
 
-                <!-- Intro Text -->
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                  >
-                    Intro Text
-                  </label>
-                  <textarea
-                    v-model="modelValue.introText"
-                    rows="2"
-                    class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-                  />
-                </div>
+    <section class="bg-white p-6 rounded-xl shadow-sm space-y-4">
+      <h2 class="text-lg font-bold border-b pb-2">Mandate Section</h2>
+      <div class="space-y-2">
+        <label class="text-xs font-bold text-gray-500 uppercase">Mandate Badge</label>
+        <input v-model="modelValue.mandate.badge" type="text" class="w-full border rounded p-2" />
+      </div>
+      <div class="space-y-2">
+        <label class="text-xs font-bold text-gray-500 uppercase">Main Description</label>
+        <textarea v-model="modelValue.mandate.description" class="w-full border rounded p-2"></textarea>
+      </div>
+    </section>
 
-                <!-- Sub Text -->
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                  >
-                    Sub Text
-                  </label>
-                  <textarea
-                    v-model="modelValue.subText"
-                    rows="4"
-                    class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-                  />
-                </div>
+    <section class="bg-white p-6 rounded-xl shadow-sm space-y-4">
+      <h2 class="text-lg font-bold border-b pb-2">Executives Section (Images)</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <div v-for="(exec, index) in modelValue.executives" :key="index" class="border p-3 rounded">
+          <p class="font-bold text-sm">{{ exec.name }}</p>
+          <label class="text-[10px] text-gray-400">IMAGE URL/PATH</label>
+          <input v-model="modelValue.executives[index].image" type="text" class="w-full border p-1 text-xs" />
+        </div>
+      </div>
+    </section>
 
-                <!-- CTA Text -->
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                  >
-                    CTA Text
-                  </label>
-                  <input
-                    v-model="modelValue.ctaText"
-                    type="text"
-                    class="w-full text-base border-none focus:ring-0 p-0 m-0"
-                  />
-                </div>
+    <section class="bg-white p-6 rounded-xl shadow-sm space-y-4">
+      <h2 class="text-lg font-bold border-b pb-2">News Section (Images)</h2>
+      <div v-for="month in getMonths()" :key="month" class="space-y-4">
+        <h3 class="text-sm font-bold text-blue-600">{{ month }}</h3>
+        <div class="ml-4 p-2 border-l-2">
+          <label class="text-xs font-bold">Featured Image URL</label>
+          <input v-model="modelValue.news.months[month].featured.image" class="w-full border p-1 text-xs" />
+        </div>
+        <div v-for="(item, idx) in modelValue.news.months[month].newsList" :key="idx" class="ml-8 p-2 border-b">
+          <label class="text-[10px]">{{ item.title }}</label>
+          <input v-model="item.image" class="w-full border p-1 text-xs" placeholder="Image link" />
+        </div>
+      </div>
+    </section>
 
-                <!-- CTA Link -->
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                  >
-                    CTA Link
-                  </label>
-                  <input
-                    v-model="modelValue.ctaLink"
-                    type="text"
-                    class="w-full text-base border-none focus:ring-0 p-0 m-0"
-                    placeholder="/register"
-                  />
-                </div>
-              </div>
-
-              <!-- RIGHT SIDE -->
-              <div class="w-2/5 space-y-6">
-                <!-- IMAGE UPLOAD -->
-                <div
-                  class="border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center bg-white shadow-inner"
-                >
-                  <input
-                    type="file"
-                    accept="image/png, image/jpeg"
-                    class="hidden"
-                    ref="heroUploadRef"
-                    @change="handleHeroImageUpload"
-                  />
-
-                  <div
-                    class="bg-red-50 h-40 w-full mb-4 border border-dashed border-gray-400 rounded-lg flex items-center justify-center cursor-pointer"
-                    @click="heroUploadRef.click()"
-                  >
-                    <img
-                      v-if="modelValue.heroImagePreview"
-                      :src="modelValue.heroImagePreview"
-                      class="h-full object-contain"
-                    />
-
-                    <span v-else class="text-sm text-gray-600">
-                      Click to upload hero image
-                    </span>
-                  </div>
-
-                  <div class="text-xs text-gray-500 space-y-1 w-full">
-                    <p class="font-semibold">Image Requirements:</p>
-                    <ul class="list-disc list-inside">
-                      <li>jpeg, jpg, png</li>
-                      <li>Max 1MB</li>
-                      <li>1024x1024px recommended</li>
-                    </ul>
-                  </div>
-                </div>
-
-                <!-- BACKGROUND COLOR -->
-                <div
-                  class="border border-gray-300 rounded-lg p-3 space-y-2 bg-white"
-                >
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                  >
-                    Background Colour
-                  </label>
-
-                  <div class="flex items-center space-x-2">
-                    <input
-                      v-model="modelValue.backgroundColor"
-                      type="color"
-                      class="w-8 h-8 rounded border-none p-0 cursor-pointer"
-                    />
-
-                    <input
-                      v-model="modelValue.backgroundColor"
-                      type="text"
-                      class="flex-grow text-base border-none focus:ring-0 p-0 m-0 font-mono uppercase"
-                    />
-
-                    <button
-                      class="text-gray-500 hover:text-green-600"
-                      @click="resetHeroColor"
-                    >
-                      Reset
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </template>
+  </div>
+</template>
