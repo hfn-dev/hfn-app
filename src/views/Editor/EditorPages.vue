@@ -6,7 +6,11 @@ import HomeHeroEditor from './components/cms/home/HomeHeroEditor.vue'
 import { computed, onMounted, ref, watch } from "vue";
 import EditorSidebar from "./EditorSidebar.vue";
 import HomeFaqsEditor from './components/cms/home/HomeFaqsEditor.vue'
+import HomeAboutEditor from './components/cms/home/HomeAboutEditor.vue'
+import HomeMandateEditor from './components/cms/home/HomeMandateEditor.vue'
 
+
+  
 const newYear = ref("");
 const newCategory = ref("");
 const newGalleryYear = ref("");
@@ -21,7 +25,9 @@ const currentSectionData = ref(null);
 const componentMap = {
   home: {
     hero: HomeHeroEditor,
-    faqs: HomeFaqsEditor
+    faqs: HomeFaqsEditor,
+    about: HomeAboutEditor,
+    mandate: HomeMandateEditor,
   }
 }  
   
@@ -986,119 +992,21 @@ const removeMandateAction = (index) => {
               </div>
             </div>
           </div>
-          <div v-if="activePage.page_type.toLowerCase() === 'home' && activeSection === 'about'">
-  <div class="space-y-6">
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">Badge</label>
-      <input v-model="currentSectionData.badge" type="text" class="w-full border-none focus:ring-0" />
-    </div>
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
-      <input v-model="currentSectionData.title" type="text" class="w-full border-none focus:ring-0" />
-    </div>
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">Description</label>
-      <textarea v-model="currentSectionData.description" rows="4" class="w-full border-none focus:ring-0 resize-none" />
-    </div>
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">Image URL</label>
-      <input v-model="currentSectionData.image" type="text" class="w-full border-none focus:ring-0" />
-    </div>
-  </div>
-</div>
-
-<div v-if="activePage.page_type.toLowerCase() === 'home' && activeSection === 'mandate'">
-  <div class="space-y-6">
-    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-      <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
-      <input v-model="currentSectionData.title" type="text" class="w-full border-none focus:ring-0" />
-    </div>
-    
-    <label class="block text-xs font-semibold uppercase text-gray-500">Mandate Actions</label>
-    <div v-for="(action, index) in currentSectionData.actions" :key="index" class="p-4 border border-gray-200 rounded-lg space-y-3 bg-gray-50">
-      <input v-model="action.title" placeholder="Action Title" class="w-full font-bold bg-transparent border-none focus:ring-0" />
-      <textarea v-model="action.description" placeholder="Description" rows="2" class="w-full text-sm bg-transparent border-none focus:ring-0" />
-      <div class="flex gap-2">
-        <input v-for="(tag, tIdx) in action.tags" :key="tIdx" v-model="action.tags[tIdx]" class="text-xs border rounded px-2 py-1 w-24" />
-      </div>
-    </div>
-  </div>
-</div>
-          <div
+          <HomeAboutEditor
             v-if="
               activePage.page_type.toLowerCase() === 'home' &&
-              activeSection === 'story'
+              activeSection === 'about'
             "
-          >
-            <div class="space-y-6">
-              <!-- Title -->
-              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                <label
-                  class="block text-xs font-semibold uppercase text-gray-500"
-                >
-                  Story Title
-                </label>
-                <input
-                  v-model="currentSectionData.title"
-                  type="text"
-                  class="w-full border-none focus:ring-0"
-                />
-              </div>
-
-              <!-- Body -->
-              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                <label
-                  class="block text-xs font-semibold uppercase text-gray-500"
-                >
-                  Story Body
-                </label>
-                <textarea
-                  v-model="currentSectionData.body"
-                  rows="6"
-                  class="w-full border-none focus:ring-0 resize-none"
-                />
-              </div>
-
-              <!-- Stats -->
-              <div class="border border-gray-300 rounded-lg p-4 space-y-4">
-                <div class="flex justify-between items-center">
-                  <label class="text-xs font-semibold uppercase text-gray-500">
-                    Statistics
-                  </label>
-                  <button
-                    class="text-sm bg-black text-white px-3 py-1 rounded"
-                    @click="addStoryStat"
-                  >
-                    + Add Stat
-                  </button>
-                </div>
-
-                <div
-                  v-for="(stat, index) in currentSectionData.stats"
-                  :key="index"
-                  class="grid grid-cols-2 gap-3 border rounded p-3"
-                >
-                  <input
-                    v-model="stat.label"
-                    placeholder="Label"
-                    class="border-none focus:ring-0"
-                  />
-                  <input
-                    v-model="stat.value"
-                    placeholder="Value"
-                    class="border-none focus:ring-0"
-                  />
-
-                  <button
-                    class="col-span-2 text-red-500 text-sm text-left"
-                    @click="removeStoryStat(index)"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+            v-model="currentSectionData"
+          /> 
+          <HomeMandateEditor
+            v-if="
+              activePage.page_type.toLowerCase() === 'home' &&
+              activeSection === 'mandate'
+            "
+            v-model="currentSectionData"
+          /> 
+          
           <div
             v-if="
               activePage.page_type.toLowerCase() === 'home' &&
