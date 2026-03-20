@@ -102,8 +102,8 @@ const handleHeroImageUpload = (event) => {
                     Slide urls
                   </label>
                   
-                    <div v-for="(slide, i) in modelValue.hero.slides" :key="i" class="mt-2">
-              <input v-model="modelValue.hero.slides[i]" type="text" class="w-full text-xs border rounded p-2 bg-slate-50 font-mono" />
+                    <div v-for="(slide, i) in modelValue.slides" :key="i" class="mt-2">
+              <input v-model="modelValue.slides[i]" type="text" class="w-full text-xs border rounded p-2 bg-slate-50 font-mono" />
             </div>
                 </div>
 
