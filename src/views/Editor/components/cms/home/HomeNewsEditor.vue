@@ -1,10 +1,16 @@
 <script setup>
 import { ref, watch } from "vue";
 
+// const props = defineProps({
+//   modelValue: Array
+// });
 const props = defineProps({
-  modelValue: Array
+  modelValue: {
+    type: Object,
+    required: true
+  }
 });
-
+  
 const emit = defineEmits(["update:modelValue"]);
 
 const currentSectionData = ref(props.modelValue || []);
@@ -71,16 +77,42 @@ const removeNewsItem = (month, index) => {
                 </div>
 
                 <!-- Featured -->
-                <div class="space-y-2">
-                  <label class="text-xs font-semibold uppercase text-gray-500">
-                    Featured Description
-                  </label>
-                  <textarea
-                    v-model="monthData.featured.description"
-                    rows="3"
-                    class="w-full border-none focus:ring-0 resize-none"
-                  />
-                </div>
+                <!-- Featured -->
+<div class="space-y-3 border rounded p-3 bg-gray-50">
+  <label class="text-xs font-semibold uppercase text-gray-500">
+    Featured Article
+  </label>
+
+  <input
+    v-model="monthData.featured.title"
+    placeholder="Title"
+    class="w-full border-none focus:ring-0 font-semibold"
+  />
+
+  <input
+    v-model="monthData.featured.image"
+    placeholder="Image URL"
+    class="w-full text-xs border rounded p-2 font-mono"
+  />
+
+  <input
+    v-model="monthData.featured.tag"
+    placeholder="Tag"
+    class="w-full border-none focus:ring-0"
+  />
+
+  <input
+    v-model="monthData.featured.date"
+    placeholder="Date"
+    class="w-full border-none focus:ring-0"
+  />
+
+  <textarea
+    v-model="monthData.featured.description"
+    rows="3"
+    class="w-full border-none focus:ring-0 resize-none"
+  />
+</div>
 
                 <!-- News List -->
                 <div class="space-y-4">
@@ -103,6 +135,17 @@ const removeNewsItem = (month, index) => {
                     :key="index"
                     class="border rounded p-3 space-y-2"
                   >
+                    <input
+    v-model="news.title"
+    placeholder="Title"
+    class="w-full font-semibold border-none focus:ring-0"
+  />
+
+  <input
+    v-model="news.image"
+    placeholder="Image URL"
+    class="w-full text-xs border rounded p-2 font-mono"
+  />
                     <input
                       v-model="news.tag"
                       placeholder="Tag"
