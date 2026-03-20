@@ -23,17 +23,18 @@ const hfn_partner = "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v17697
 const society = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769734457/Society_For_Family_Health_Logo_1_a5qcrp.png';
 export const homePageSchema = {
   hero: {
-    titleHighlight: 'The Voice of Nigeria’s Private Health Sector',
-    titleMain: '',
-    introLine:
-      'Advancing Universal Health Coverage through private sector activation.',
-    introText:
-      '',
-    subText:
-      '',
+    titleHighlight: 'The Voice of Nigeria’s',
+    titleMain: 'Private Health Sector',
+    introLine: 'Advancing Universal Health Coverage',
+    introText: 'through private sector activation.',
+    subText: '',
     ctaText: 'Join The Coalition ->',
     ctaLink: '/register',
-    heroImage: 'hero-main',
+    slides: [
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769773405/1_1_uebqmc.jpg",
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769801024/2_evqlkd.jpg",
+      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769773393/3_nvepaa.jpg",
+    ]
   },
 
   partners: {
@@ -41,18 +42,51 @@ export const homePageSchema = {
     logos: ['pharm', 'society', 'bridge', 'emzor', 'hba'],
   },
 
-  story: {
-    title: 'Our HFN Story',
-    body: 'The Healthcare Federation of Nigeria (HFN) is the umbrella body for private healthcare stakeholders in Nigeria, representing the interests of health professionals, companies, investors, associations, and institutions. HFN provides members with access to advocacy platforms, strategic collaborations, knowledge-sharing, and investment opportunities aimed at building a stronger, more resilient health system.',
+  about: {
+    badge: 'Who We Are',
+    title: "Strengthening Nigeria's Healthcare System",
+    description: `Healthcare Federation of Nigeria (HFN) is a coalition of private healthcare stakeholders committed to strengthening Nigeria’s health system through strategic advocacy, collaboration, and private sector leadership. HFN serves as a unified platform for engaging government, influencing health policy, and enabling private sector contributions that expand access, improve quality, and accelerate progress toward Universal Health Coverage.`,
+    image: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769803836/1_hkuaio.jpg",
+    stats: {
+      number: '6+',
+      label: 'Health Guardians'
+    },
+    features: [
+      { title: 'Unified Platform', sub: 'Engagement & Policy' },
+      { title: 'Universal Progress', sub: 'Universal Coverage' }
+    ]
+  },
 
-    stats: [
-      // { label: 'Vision', value: '1' },
-      // { label: 'Registered Health Guardians', value: '6+' },
-      // { label: 'Partners', value: '5+' },
-      // { label: 'Projects Executed', value: '10' },
-      // { label: "Patient's assistance", value: '20' },
-      // { label: 'Registered Diasporians', value: '5+' },
-    ],
+  mandate: {
+    badge: 'Our Core Mandate',
+    title: 'What We Do',
+    description: "Driving measurable change in Nigeria's healthcare landscape through four strategic pillars.",
+    actions: [
+      {
+        title: "Policy Advocacy",
+        description: "We engage policymakers to shape evidence-based reforms that enable effective regulation, sustainable financing, and private sector participation in health system strengthening.",
+        icon: "ScaleIcon",
+        tags: ["Policy", "Reform"]
+      },
+      {
+        title: "Stakeholder Convening",
+        description: "We bring together private sector actors, government institutions, and development partners to align priorities and drive collective action.",
+        icon: "UserGroupIcon",
+        tags: ["Networking", "Unity"]
+      },
+      {
+        title: "Sector Intelligence & Thought Leadership",
+        description: "We generate insights, reports, and high-level dialogues that inform policy decisions and investment across the health sector.",
+        icon: "LightBulbIcon",
+        tags: ["Data", "Insights"]
+      },
+      {
+        title: "Public–Private Collaboration",
+        description: "We support partnerships that leverage private sector capacity to improve service delivery and emergency care, and access to quality healthcare.",
+        icon: "HandRaisedIcon",
+        tags: ["Partnership", "Delivery"]
+      }
+    ]
   },
 
   news: {
@@ -62,7 +96,6 @@ export const homePageSchema = {
           title: 'Driving Nigeria Toward Universal Health Coverage: A Landmark HFN–NHIA Private Sector Roundtable, theme: Leveraging the Private Sector to Accelerate Health Insurance Coverage in Nigeria',
           slug: 'hfn-nhia-private-sector-roundtable',
           image: hfn_partner,
-          title: '',
           tag: 'Programs & Initiatives',
           date: 'December 1, 2025',
           comments: 0,

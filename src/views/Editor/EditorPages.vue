@@ -2,10 +2,17 @@
 import pagesApi from "@/api/pageManagement";
 import { pageSchemas } from "@/schemas/pageSchemas";
 import { useRouter } from "vue-router";
-
+import HomeHeroEditor from './components/cms/home/HomeHeroEditor.vue'
 import { computed, onMounted, ref, watch } from "vue";
 import EditorSidebar from "./EditorSidebar.vue";
+import HomeFaqsEditor from './components/cms/home/HomeFaqsEditor.vue'
+import HomeAboutEditor from './components/cms/home/HomeAboutEditor.vue'
+import HomeMandateEditor from './components/cms/home/HomeMandateEditor.vue'
+import HomeNewsEditor from './components/cms/home/HomeNewsEditor.vue'
+import HomeExecutivesEditor from './components/cms/home/HomeExecutivesEditor.vue'
+import HomePartnerEditor from './components/cms/home/HomePartnerEditor.vue'
 
+  
 const newYear = ref("");
 const newCategory = ref("");
 const newGalleryYear = ref("");
@@ -17,6 +24,18 @@ const router = useRouter();
 const hasPages = computed(() => pages.value && pages.value.length > 0);
 const currentSectionData = ref(null);
 
+const componentMap = {
+  home: {
+    hero: HomeHeroEditor,
+    faqs: HomeFaqsEditor,
+    about: HomeAboutEditor,
+    mandate: HomeMandateEditor,
+    news: HomeNewsEditor,
+    executives: HomeExecutivesEditor,
+    partners: HomePartnerEditor,
+  }
+}  
+  
 const availablePageTypes = computed(() => Object.keys(pageSchemas));
 
 const addGalleryYear = () => {
@@ -123,20 +142,6 @@ const removePastEvent = (index) => {
   currentSectionData.value.pastEvents.items.splice(index, 1);
 };
 
-const addExecutives = () => {
-  currentSectionData.value.members.push({
-    name: "",
-    role: "",
-    slug: "",
-    image: "",
-    profile: "",
-    socials: [],
-  });
-};
-
-const removeExecutives = (index) => {
-  currentSectionData.value.members.splice(index, 1);
-};
 
 const addSocial = (memberIndex) => {
   currentSectionData.value.members[memberIndex].socials.push({
@@ -151,30 +156,6 @@ const removeSocial = (memberIndex, socialIndex) => {
 
 const pages = ref([]);
 const isLoading = ref(false);
-
-const heroUploadRef = ref(null);
-
-const handleHeroImageUpload = (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  if (file.size > 1024 * 1024) {
-    alert("Image must be less than 1MB");
-    return;
-  }
-
-  currentSectionData.value.heroImage = file;
-
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    currentSectionData.value.heroImagePreview = e.target.result;
-  };
-  reader.readAsDataURL(file);
-};
-
-const resetHeroColor = () => {
-  currentSectionData.value.backgroundColor = "#FFFFFF";
-};
 
 const addItem = () => {
   if (activeSection.value === "donations") {
@@ -308,37 +289,6 @@ const fetchPages = async () => {
   };
 });
 
-
-    // pages.value = rawPages.map((page) => {
-      // const schema = pageSchemas[page.page_type.toLowerCase()];
-      // const schema = pageSchemas[page.page_type?.toLowerCase()] ?? {};
-
-    //   const content = structuredClone(schema);
-
-    //   if (
-    //     page.content &&
-    //     typeof page.content === "object" &&
-    //     Object.keys(page.content).length > 0
-    //   ) {
-    //     for (const sectionKey in schema) {
-    //       if (page.content[sectionKey]) {
-    //         content[sectionKey] = {
-    //           ...schema[sectionKey],
-    //           ...page.content[sectionKey],
-    //         };
-    //       }
-    //     }
-    //   }
-
-    //   return {
-    //     ...page,
-    //     title: page.name ?? page.page_type_display,
-    //     slug: `/${(page.name ?? page.page_type)
-    //       .toLowerCase()
-    //       .replace(/\s+/g, "-")}`,
-    //     sections: content,
-    //   };
-    // });
   } catch (e) {
     console.error("Failed to load pages", e);
   } finally {
@@ -446,13 +396,6 @@ const deleteMetric = (metricId) => {
   }
 };
 
-const addPartnerLogo = () => {
-  currentSectionData.value.logos.push("");
-};
-
-const removePartnerLogo = (index) => {
-  currentSectionData.value.logos.splice(index, 1);
-};
 
 const activeSecondaryContent = ref(null);
 
@@ -461,51 +404,7 @@ const toggleSecondaryContent = (itemId) => {
     activeSecondaryContent.value === itemId ? null : itemId;
 };
 
-const addNewFaq = () => {
-  const section = activePage.value.sections["section5"];
-  if (section && section.faqs) {
-    const newId = Math.max(...section.faqs.map((f) => f.id), 0) + 1;
-    section.faqs.push({
-      id: newId,
-      question: `Question ${newId}: New FAQ Question here...`,
-      response: "New answer text here...",
-    });
-  }
-  console.log("Added new FAQ item.");
-};
 
-const deleteFaq = (faqId) => {
-  const section = activePage.value.sections["section5"];
-  if (section && section.faqs) {
-    section.faqs = section.faqs.filter((faq) => faq.id !== faqId);
-    console.log(`Deleted FAQ with ID: ${faqId}`);
-  }
-};
-
-const addMonth = () => {
-  currentSectionData.value.months["New Month"] = {
-    featured: { image: "", tag: "", date: "", comments: 0, description: "" },
-    newsList: [],
-  };
-};
-
-const removeMonth = (month) => {
-  delete currentSectionData.value.months[month];
-};
-
-const addNewsItem = (month) => {
-  currentSectionData.value.months[month].newsList.push({
-    image: "",
-    tag: "",
-    date: "",
-    comments: 0,
-    description: "",
-  });
-};
-
-const removeNewsItem = (month, index) => {
-  currentSectionData.value.months[month].newsList.splice(index, 1);
-};
 
 const saveChanges = async () => {
   try {
@@ -527,19 +426,22 @@ const saveChanges = async () => {
   }
 };
 
-const addExecutive = () => {
-  currentSectionData.value.push({
+const addExecutives = () => {
+  currentSectionData.value.members.push({
     name: "",
-    position: "",
     role: "",
+    slug: "",
     image: "",
+    profile: "",
+    socials: [],
   });
 };
 
-const removeExecutive = (index) => {
-  currentSectionData.value.splice(index, 1);
+const removeExecutives = (index) => {
+  currentSectionData.value.members.splice(index, 1);
 };
 
+  
 const breadcrumbViewName = computed(() => {
   if (currentView.value === "view") return `View: ${activePage.value.title}`;
   if (currentView.value === "editor") return `Edit: ${activePage.value.title}`;
@@ -573,16 +475,7 @@ const toggleVisibility = async (page) => {
   }
 };
 
-const addFaq = () => {
-  currentSectionData.value.push({
-    question: "",
-    answer: "",
-  });
-};
-
-const removeFaq = (index) => {
-  currentSectionData.value.splice(index, 1);
-};
+  
 </script>
 
 <template>
@@ -956,496 +849,13 @@ const removeFaq = (index) => {
             </button>
           </div>
 
-          <div
-            v-if="
-              activePage.page_type.toLowerCase() === 'home' &&
-              activeSection === 'hero'
-            "
-          >
-            <div class="flex space-x-6">
-              <!-- LEFT SIDE -->
-              <div class="w-3/5 space-y-6">
-                <!-- Highlight Title -->
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                  >
-                    Highlight Title
-                  </label>
-                  <input
-                    v-model="currentSectionData.titleHighlight"
-                    type="text"
-                    class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-                    placeholder="Healthcare"
-                  />
-                </div>
-
-                <!-- Main Title -->
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                  >
-                    Main Title
-                  </label>
-                  <input
-                    v-model="currentSectionData.titleMain"
-                    type="text"
-                    class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-                    placeholder="Advocacy."
-                  />
-                </div>
-
-                <!-- Intro Line -->
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                  >
-                    Intro Line
-                  </label>
-                  <textarea
-                    v-model="currentSectionData.introLine"
-                    rows="2"
-                    class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-                  />
-                </div>
-
-                <!-- Intro Text -->
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                  >
-                    Intro Text
-                  </label>
-                  <textarea
-                    v-model="currentSectionData.introText"
-                    rows="2"
-                    class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-                  />
-                </div>
-
-                <!-- Sub Text -->
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                  >
-                    Sub Text
-                  </label>
-                  <textarea
-                    v-model="currentSectionData.subText"
-                    rows="4"
-                    class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-                  />
-                </div>
-
-                <!-- CTA Text -->
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                  >
-                    CTA Text
-                  </label>
-                  <input
-                    v-model="currentSectionData.ctaText"
-                    type="text"
-                    class="w-full text-base border-none focus:ring-0 p-0 m-0"
-                  />
-                </div>
-
-                <!-- CTA Link -->
-                <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                  >
-                    CTA Link
-                  </label>
-                  <input
-                    v-model="currentSectionData.ctaLink"
-                    type="text"
-                    class="w-full text-base border-none focus:ring-0 p-0 m-0"
-                    placeholder="/register"
-                  />
-                </div>
-              </div>
-
-              <!-- RIGHT SIDE -->
-              <div class="w-2/5 space-y-6">
-                <!-- IMAGE UPLOAD -->
-                <div
-                  class="border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center bg-white shadow-inner"
-                >
-                  <input
-                    type="file"
-                    accept="image/png, image/jpeg"
-                    class="hidden"
-                    ref="heroUploadRef"
-                    @change="handleHeroImageUpload"
-                  />
-
-                  <div
-                    class="bg-red-50 h-40 w-full mb-4 border border-dashed border-gray-400 rounded-lg flex items-center justify-center cursor-pointer"
-                    @click="heroUploadRef.click()"
-                  >
-                    <img
-                      v-if="currentSectionData.heroImagePreview"
-                      :src="currentSectionData.heroImagePreview"
-                      class="h-full object-contain"
-                    />
-
-                    <span v-else class="text-sm text-gray-600">
-                      Click to upload hero image
-                    </span>
-                  </div>
-
-                  <div class="text-xs text-gray-500 space-y-1 w-full">
-                    <p class="font-semibold">Image Requirements:</p>
-                    <ul class="list-disc list-inside">
-                      <li>jpeg, jpg, png</li>
-                      <li>Max 1MB</li>
-                      <li>1024x1024px recommended</li>
-                    </ul>
-                  </div>
-                </div>
-
-                <!-- BACKGROUND COLOR -->
-                <div
-                  class="border border-gray-300 rounded-lg p-3 space-y-2 bg-white"
-                >
-                  <label
-                    class="block text-xs font-semibold uppercase text-gray-500"
-                  >
-                    Background Colour
-                  </label>
-
-                  <div class="flex items-center space-x-2">
-                    <input
-                      v-model="currentSectionData.backgroundColor"
-                      type="color"
-                      class="w-8 h-8 rounded border-none p-0 cursor-pointer"
-                    />
-
-                    <input
-                      v-model="currentSectionData.backgroundColor"
-                      type="text"
-                      class="flex-grow text-base border-none focus:ring-0 p-0 m-0 font-mono uppercase"
-                    />
-
-                    <button
-                      class="text-gray-500 hover:text-green-600"
-                      @click="resetHeroColor"
-                    >
-                      Reset
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            v-if="
-              activePage.page_type.toLowerCase() === 'home' &&
-              activeSection === 'partners'
-            "
-          >
-            <div class="space-y-6">
-              <!-- Title -->
-              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                <label
-                  class="block text-xs font-semibold uppercase text-gray-500"
-                >
-                  Section Title
-                </label>
-                <input
-                  v-model="currentSectionData.title"
-                  type="text"
-                  class="w-full text-lg border-none focus:ring-0 p-0 m-0"
-                />
-              </div>
-
-              <!-- Logos -->
-              <div class="border border-gray-300 rounded-lg p-4 space-y-4">
-                <div class="flex justify-between items-center">
-                  <label class="text-xs font-semibold uppercase text-gray-500">
-                    Partner Logos
-                  </label>
-
-                  <button
-                    class="text-sm bg-black text-white px-3 py-1 rounded"
-                    @click="addPartnerLogo"
-                  >
-                    + Add Logo
-                  </button>
-                </div>
-
-                <div
-                  v-for="(logo, index) in currentSectionData.logos"
-                  :key="index"
-                  class="flex items-center space-x-3 border rounded p-2"
-                >
-                  <input
-                    v-model="currentSectionData.logos[index]"
-                    type="text"
-                    class="flex-grow border-none focus:ring-0"
-                    placeholder="logo-key or cloudinary-id"
-                  />
-
-                  <button
-                    class="text-red-500 text-sm"
-                    @click="removePartnerLogo(index)"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            v-if="
-              activePage.page_type.toLowerCase() === 'home' &&
-              activeSection === 'story'
-            "
-          >
-            <div class="space-y-6">
-              <!-- Title -->
-              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                <label
-                  class="block text-xs font-semibold uppercase text-gray-500"
-                >
-                  Story Title
-                </label>
-                <input
-                  v-model="currentSectionData.title"
-                  type="text"
-                  class="w-full border-none focus:ring-0"
-                />
-              </div>
-
-              <!-- Body -->
-              <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-                <label
-                  class="block text-xs font-semibold uppercase text-gray-500"
-                >
-                  Story Body
-                </label>
-                <textarea
-                  v-model="currentSectionData.body"
-                  rows="6"
-                  class="w-full border-none focus:ring-0 resize-none"
-                />
-              </div>
-
-              <!-- Stats -->
-              <div class="border border-gray-300 rounded-lg p-4 space-y-4">
-                <div class="flex justify-between items-center">
-                  <label class="text-xs font-semibold uppercase text-gray-500">
-                    Statistics
-                  </label>
-                  <button
-                    class="text-sm bg-black text-white px-3 py-1 rounded"
-                    @click="addStoryStat"
-                  >
-                    + Add Stat
-                  </button>
-                </div>
-
-                <div
-                  v-for="(stat, index) in currentSectionData.stats"
-                  :key="index"
-                  class="grid grid-cols-2 gap-3 border rounded p-3"
-                >
-                  <input
-                    v-model="stat.label"
-                    placeholder="Label"
-                    class="border-none focus:ring-0"
-                  />
-                  <input
-                    v-model="stat.value"
-                    placeholder="Value"
-                    class="border-none focus:ring-0"
-                  />
-
-                  <button
-                    class="col-span-2 text-red-500 text-sm text-left"
-                    @click="removeStoryStat(index)"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            v-if="
-              activePage.page_type.toLowerCase() === 'home' &&
-              activeSection === 'news'
-            "
-          >
-            <div class="space-y-8">
-              <div
-                v-for="(monthData, monthName) in currentSectionData.months"
-                :key="monthName"
-                class="border border-gray-300 rounded-lg p-4 space-y-6"
-              >
-                <!-- Month Header -->
-                <div class="flex justify-between items-center">
-                  <h3 class="font-semibold">{{ monthName }}</h3>
-                  <button
-                    class="text-red-500 text-sm"
-                    @click="removeMonth(monthName)"
-                  >
-                    Delete Month
-                  </button>
-                </div>
-
-                <!-- Featured -->
-                <div class="space-y-2">
-                  <label class="text-xs font-semibold uppercase text-gray-500">
-                    Featured Description
-                  </label>
-                  <textarea
-                    v-model="monthData.featured.description"
-                    rows="3"
-                    class="w-full border-none focus:ring-0 resize-none"
-                  />
-                </div>
-
-                <!-- News List -->
-                <div class="space-y-4">
-                  <div class="flex justify-between">
-                    <label
-                      class="text-xs font-semibold uppercase text-gray-500"
-                    >
-                      News List
-                    </label>
-                    <button
-                      class="text-sm bg-black text-white px-2 py-1 rounded"
-                      @click="addNewsItem(monthName)"
-                    >
-                      + Add News
-                    </button>
-                  </div>
-
-                  <div
-                    v-for="(news, index) in monthData.newsList"
-                    :key="index"
-                    class="border rounded p-3 space-y-2"
-                  >
-                    <input
-                      v-model="news.tag"
-                      placeholder="Tag"
-                      class="w-full border-none focus:ring-0"
-                    />
-                    <input
-                      v-model="news.date"
-                      placeholder="Date"
-                      class="w-full border-none focus:ring-0"
-                    />
-                    <textarea
-                      v-model="news.description"
-                      rows="2"
-                      class="w-full border-none focus:ring-0 resize-none"
-                    />
-
-                    <button
-                      class="text-red-500 text-sm"
-                      @click="removeNewsItem(monthName, index)"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <button
-                class="bg-black text-white px-4 py-2 rounded"
-                @click="addMonth"
-              >
-                + Add New Month
-              </button>
-            </div>
-          </div>
-          <div
-            v-if="
-              activePage.page_type.toLowerCase() === 'home' &&
-              activeSection === 'executives'
-            "
-          >
-            <div class="space-y-6">
-              <button
-                class="bg-black text-white px-3 py-2 rounded"
-                @click="addExecutive"
-              >
-                + Add Executive
-              </button>
-
-              <div
-                v-for="(exec, index) in currentSectionData"
-                :key="index"
-                class="border rounded p-4 space-y-2"
-              >
-                <input
-                  v-model="exec.name"
-                  placeholder="Name"
-                  class="w-full border-none focus:ring-0"
-                />
-                <input
-                  v-model="exec.position"
-                  placeholder="Position"
-                  class="w-full border-none focus:ring-0"
-                />
-                <input
-                  v-model="exec.role"
-                  placeholder="Role"
-                  class="w-full border-none focus:ring-0"
-                />
-
-                <button
-                  class="text-red-500 text-sm"
-                  @click="removeExecutive(index)"
-                >
-                  Remove
-                </button>
-              </div>
-            </div>
-          </div>
-          <div
-            v-if="
-              activePage.page_type.toLowerCase() === 'home' &&
-              activeSection === 'faqs'
-            "
-          >
-            <div class="space-y-6">
-              <button
-                class="bg-black text-white px-3 py-2 rounded"
-                @click="addFaq"
-              >
-                + Add FAQ
-              </button>
-
-              <div
-                v-for="(faq, index) in currentSectionData"
-                :key="index"
-                class="border rounded p-4 space-y-3"
-              >
-                <input
-                  v-model="faq.question"
-                  placeholder="Question"
-                  class="w-full border-none focus:ring-0"
-                />
-
-                <textarea
-                  v-model="faq.answer"
-                  rows="3"
-                  placeholder="Answer"
-                  class="w-full border-none focus:ring-0 resize-none"
-                />
-
-                <button class="text-red-500 text-sm" @click="removeFaq(index)">
-                  Remove
-                </button>
-              </div>
-            </div>
-          </div>
-
+          <component
+  v-if="activePage.page_type.toLowerCase() === 'home'"
+  :is="componentMap.home?.[activeSection]"
+  v-model="currentSectionData"
+/>
+          
+          
           <!-- ABOUT HERO SECTION -->
           <div
             v-else-if="
