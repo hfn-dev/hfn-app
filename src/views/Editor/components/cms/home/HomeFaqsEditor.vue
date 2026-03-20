@@ -1,4 +1,16 @@
 <script>
+const addFaq = () => {
+  currentSectionData.value.push({
+    question: "",
+    answer: "",
+  });
+};
+
+const removeFaq = (index) => {
+  currentSectionData.value.splice(index, 1);
+};
+
+  
 const addNewFaq = () => {
   const section = activePage.value.sections["section5"];
   if (section && section.faqs) {
