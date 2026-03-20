@@ -9,7 +9,7 @@ import HomeFaqsEditor from './components/cms/home/HomeFaqsEditor.vue'
 import HomeAboutEditor from './components/cms/home/HomeAboutEditor.vue'
 import HomeMandateEditor from './components/cms/home/HomeMandateEditor.vue'
 import HomeNewsEditor from './components/cms/home/HomeNewsEditor.vue'
-
+import HomeExecutivesEditor from './components/cms/home/HomeExecutivesEditor.vue'
 
   
 const newYear = ref("");
@@ -30,6 +30,7 @@ const componentMap = {
     about: HomeAboutEditor,
     mandate: HomeMandateEditor,
     news: HomeNewsEditor,
+    executives: HomeExecutivesEditor,
 
   }
 }  
@@ -942,141 +943,22 @@ const toggleVisibility = async (page) => {
             "
             v-model="currentSectionData"
           /> 
-          
-          <div
+          <HomeNewsEditor
             v-if="
               activePage.page_type.toLowerCase() === 'home' &&
               activeSection === 'news'
             "
-          >
-            <div class="space-y-8">
-              <div
-                v-for="(monthData, monthName) in currentSectionData.months"
-                :key="monthName"
-                class="border border-gray-300 rounded-lg p-4 space-y-6"
-              >
-                <!-- Month Header -->
-                <div class="flex justify-between items-center">
-                  <h3 class="font-semibold">{{ monthName }}</h3>
-                  <button
-                    class="text-red-500 text-sm"
-                    @click="removeMonth(monthName)"
-                  >
-                    Delete Month
-                  </button>
-                </div>
-
-                <!-- Featured -->
-                <div class="space-y-2">
-                  <label class="text-xs font-semibold uppercase text-gray-500">
-                    Featured Description
-                  </label>
-                  <textarea
-                    v-model="monthData.featured.description"
-                    rows="3"
-                    class="w-full border-none focus:ring-0 resize-none"
-                  />
-                </div>
-
-                <!-- News List -->
-                <div class="space-y-4">
-                  <div class="flex justify-between">
-                    <label
-                      class="text-xs font-semibold uppercase text-gray-500"
-                    >
-                      News List
-                    </label>
-                    <button
-                      class="text-sm bg-black text-white px-2 py-1 rounded"
-                      @click="addNewsItem(monthName)"
-                    >
-                      + Add News
-                    </button>
-                  </div>
-
-                  <div
-                    v-for="(news, index) in monthData.newsList"
-                    :key="index"
-                    class="border rounded p-3 space-y-2"
-                  >
-                    <input
-                      v-model="news.tag"
-                      placeholder="Tag"
-                      class="w-full border-none focus:ring-0"
-                    />
-                    <input
-                      v-model="news.date"
-                      placeholder="Date"
-                      class="w-full border-none focus:ring-0"
-                    />
-                    <textarea
-                      v-model="news.description"
-                      rows="2"
-                      class="w-full border-none focus:ring-0 resize-none"
-                    />
-
-                    <button
-                      class="text-red-500 text-sm"
-                      @click="removeNewsItem(monthName, index)"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <button
-                class="bg-black text-white px-4 py-2 rounded"
-                @click="addMonth"
-              >
-                + Add New Month
-              </button>
-            </div>
-          </div>
-          <div
-            v-if="
-              activePage.page_type.toLowerCase() === 'home' &&
-              activeSection === 'executives'
-            "
-          >
-            <div class="space-y-6">
-              <button
-                class="bg-black text-white px-3 py-2 rounded"
-                @click="addExecutive"
-              >
-                + Add Executive
-              </button>
-
-              <div
-                v-for="(exec, index) in currentSectionData"
-                :key="index"
-                class="border rounded p-4 space-y-2"
-              >
-                <input
-                  v-model="exec.name"
-                  placeholder="Name"
-                  class="w-full border-none focus:ring-0"
-                />
-                <input
-                  v-model="exec.position"
-                  placeholder="Position"
-                  class="w-full border-none focus:ring-0"
-                />
-                <input
-                  v-model="exec.role"
-                  placeholder="Role"
-                  class="w-full border-none focus:ring-0"
-                />
-
-                <button
-                  class="text-red-500 text-sm"
-                  @click="removeExecutive(index)"
-                >
-                  Remove
-                </button>
-              </div>
-            </div>
-          </div>
+            v-model="currentSectionData"
+          /> 
+          
+          <HomeExecutivesEditor
+  v-if="
+    activePage.page_type.toLowerCase() === 'home' &&
+    activeSection === 'executives'
+  "
+  v-model="currentSectionData"
+/>     
+          
           <HomeFaqsEditor
   v-if="
     activePage.page_type.toLowerCase() === 'home' &&
