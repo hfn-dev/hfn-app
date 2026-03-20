@@ -14,7 +14,7 @@ import oando from '@/assets/oando_logo.png';
 import pharm from '@/assets/pharm.png';
 import reagan from '@/assets/reagan.png';
 // import society from '@/assets/society.png';
-import homePageSchema from './pages/home.schema.js';
+import { homePageSchema } from './pages/home.schema.js';
 import wef from '@/assets/wef.jpg';
 const eventImage =
   'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769883047/events-CNRYrGt8_trfhaz.png';
