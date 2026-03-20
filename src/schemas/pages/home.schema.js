@@ -23,14 +23,11 @@ const hfn_partner = "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v17697
 const society = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769734457/Society_For_Family_Health_Logo_1_a5qcrp.png';
 export const homePageSchema = {
   hero: {
-    titleHighlight: 'The Voice of Nigeria’s Private Health Sector',
-    titleMain: '',
-    introLine:
-      'Advancing Universal Health Coverage through private sector activation.',
-    introText:
-      '',
-    subText:
-      '',
+    titleHighlight: 'The Voice of Nigeria’s',
+    titleMain: 'Private Health Sector',
+    introLine: 'Advancing Universal Health Coverage',
+    introText: 'through private sector activation.',
+    // subText: 'Join the coalition of leaders transforming healthcare delivery in Nigeria.',
     ctaText: 'Join The Coalition ->',
     ctaLink: '/register',
     heroImage: 'hero-main',
@@ -45,14 +42,6 @@ export const homePageSchema = {
     title: 'Our HFN Story',
     body: 'The Healthcare Federation of Nigeria (HFN) is the umbrella body for private healthcare stakeholders in Nigeria, representing the interests of health professionals, companies, investors, associations, and institutions. HFN provides members with access to advocacy platforms, strategic collaborations, knowledge-sharing, and investment opportunities aimed at building a stronger, more resilient health system.',
 
-    stats: [
-      // { label: 'Vision', value: '1' },
-      // { label: 'Registered Health Guardians', value: '6+' },
-      // { label: 'Partners', value: '5+' },
-      // { label: 'Projects Executed', value: '10' },
-      // { label: "Patient's assistance", value: '20' },
-      // { label: 'Registered Diasporians', value: '5+' },
-    ],
   },
 
   news: {
