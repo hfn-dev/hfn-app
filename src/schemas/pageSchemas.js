@@ -38,7 +38,7 @@ const chairImage =
 
 export const pageSchemas = {
   home: homePageSchema,
-  about: aboutPageSchema
+  about: aboutPageSchema,
 
   contact: {
     hero: {
