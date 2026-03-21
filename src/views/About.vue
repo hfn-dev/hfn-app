@@ -28,19 +28,19 @@ const handleScroll = () => {
   }
 };
 
-const rolePoints = [
-  "Providing a credible, coordinated voice for private sector stakeholders",
-  "Ensuring private sector perspectives are embedded in national health policies and reforms",
-  "Facilitating constructive public–private collaboration",
-  "Supporting reforms that unlock investment and improve service delivery",
-];
+// const rolePoints = [
+//   "Providing a credible, coordinated voice for private sector stakeholders",
+//   "Ensuring private sector perspectives are embedded in national health policies and reforms",
+//   "Facilitating constructive public–private collaboration",
+//   "Supporting reforms that unlock investment and improve service delivery",
+// ];
 
-const commitmentGoals = [
-  "Policy is informed by evidence and practice",
-  "Private sector contributions are coordinated",
-  "Investment supports quality and access",
-  "Patients remain at the centre of care",
-];
+// const commitmentGoals = [
+//   "Policy is informed by evidence and practice",
+//   "Private sector contributions are coordinated",
+//   "Investment supports quality and access",
+//   "Patients remain at the centre of care",
+// ];
 
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
@@ -50,36 +50,36 @@ onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
 });
 
-const items = [
-  {
-    title: "Policy Advocacy",
-    shortDesc: "Strategic Engagement.",
-    fullDesc:
-      "We engage with legislators, regulators, and government institutions to shape evidence-based policies that enable effective regulation, sustainable financing, and private sector participation in health system strengthening.",
-    colorClass: "leaf-green",
-  },
-  {
-    title: "Stakeholder Convening",
-    shortDesc: "Unified Voice.",
-    fullDesc:
-      "We bring together healthcare providers, manufacturers, insurers, digital health innovators, development partners, and policymakers to align priorities, share knowledge, and drive collective action.",
-    colorClass: "leaf-tan",
-  },
-  {
-    title: "Sector Intelligence",
-    shortDesc: "Thought Leadership.",
-    fullDesc:
-      "We produce research, industry insights, and high-level dialogues that inform policy decisions, investment strategies, and national health discourse.",
-    colorClass: "leaf-green",
-  },
-  {
-    title: "Public–Private Collaboration",
-    shortDesc: "Practical Solutions.",
-    fullDesc:
-      "We support partnerships that leverage private sector expertise and resources to improve service delivery, emergency care, health financing, and access to quality healthcare.",
-    colorClass: "leaf-tan",
-  },
-];
+// const items = [
+//   {
+//     title: "Policy Advocacy",
+//     shortDesc: "Strategic Engagement.",
+//     fullDesc:
+//       "We engage with legislators, regulators, and government institutions to shape evidence-based policies that enable effective regulation, sustainable financing, and private sector participation in health system strengthening.",
+//     colorClass: "leaf-green",
+//   },
+//   {
+//     title: "Stakeholder Convening",
+//     shortDesc: "Unified Voice.",
+//     fullDesc:
+//       "We bring together healthcare providers, manufacturers, insurers, digital health innovators, development partners, and policymakers to align priorities, share knowledge, and drive collective action.",
+//     colorClass: "leaf-tan",
+//   },
+//   {
+//     title: "Sector Intelligence",
+//     shortDesc: "Thought Leadership.",
+//     fullDesc:
+//       "We produce research, industry insights, and high-level dialogues that inform policy decisions, investment strategies, and national health discourse.",
+//     colorClass: "leaf-green",
+//   },
+//   {
+//     title: "Public–Private Collaboration",
+//     shortDesc: "Practical Solutions.",
+//     fullDesc:
+//       "We support partnerships that leverage private sector expertise and resources to improve service delivery, emergency care, health financing, and access to quality healthcare.",
+//     colorClass: "leaf-tan",
+//   },
+// ];
 
 const imageMap = {
   "about-us.png": aboutImage,
@@ -334,7 +334,7 @@ const resolveImage = (image) => imageMap[image] || image;
 
             <ul class="space-y-4 pt-4">
               <li
-                v-for="(item, i) in rolePoints"
+                v-for="(item, i) in page.roleSection.points"
                 :key="i"
                 class="flex items-start gap-4 group"
               >
@@ -369,12 +369,7 @@ const resolveImage = (image) => imageMap[image] || image;
             </p>
             <div class="grid grid-cols-2 gap-4">
               <div
-                v-for="tag in [
-                  'Policymakers',
-                  'Regulators',
-                  'Investors',
-                  'Partners',
-                ]"
+                v-for="tag in page.roleSection.tags"
                 :key="tag"
                 class="bg-white p-4 rounded-2xl shadow-sm text-center font-bold text-[#004d33] border border-white hover:border-[#004d33]/20 transition-all"
               >
@@ -512,7 +507,7 @@ const resolveImage = (image) => imageMap[image] || image;
               class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 max-w-6xl relative z-20 w-full place-items-center"
             >
               <div
-                v-for="(item, index) in items"
+                v-for="(item, index) in page.ctaSection.items"
                 :key="index"
                 class="leaf-wrapper w-full max-w-[400px]"
                 :style="{
