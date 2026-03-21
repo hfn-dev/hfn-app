@@ -23,6 +23,62 @@ watch(
   },
   { deep: true }
 )  
+
+
+const addItem = () => {
+  if (activeSection.value === "donations") {
+    currentSectionData.value.paragraphs.push("");
+  }
+
+  if (activeSection.value === "partnerships") {
+    currentSectionData.value.items.push({
+      title: "",
+      description: "",
+      buttonText: "",
+    });
+  }
+
+  if (activeSection.value === "opportunities") {
+    currentSectionData.value.items.push({
+      title: "",
+      description: "",
+      buttonText: "",
+    });
+  }
+
+  if (activeSection.value === "donationModal") {
+    currentSectionData.value.options.push({
+      title: "",
+      description: "",
+    });
+  }
+  if (activeSection.value === "newsletterSection") {
+    currentSectionData.value.items.push({
+      date: "",
+      text: "",
+      pdfUrl: "",
+    });
+  }
+
+  if (activeSection.value === "publicationsSection") {
+    currentSectionData.value.items.push({
+      title: "",
+      description: "",
+      pdfUrl: "",
+    });
+  }
+};
+
+const deleteItem = (index) => {
+  if (activeSection.value === "donations") {
+    currentSectionData.value.paragraphs.splice(index, 1);
+  } else if (activeSection.value === "donationModal") {
+    currentSectionData.value.options.splice(index, 1);
+  } else {
+    currentSectionData.value.items.splice(index, 1);
+  }
+};
+  
 </script>
 
 
