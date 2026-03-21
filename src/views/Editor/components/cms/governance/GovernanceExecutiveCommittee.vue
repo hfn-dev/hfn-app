@@ -148,6 +148,15 @@ const removeSocial = (memberIndex, socialIndex) => {
                 rows="3"
                 class="w-full border-none focus:ring-0 resize-none"
               ></textarea>
+              <label class="text-xs font-semibold uppercase text-gray-500"
+                >Bio</label
+              >
+              <textarea
+                v-model="member.bio"
+                rows="3"
+                class="w-full border-none focus:ring-0 resize-none"
+              ></textarea>
+
 
               <div
                 v-for="(social, sIndex) in member.socials"
