@@ -26,116 +26,95 @@ export const aboutPageSchema = {
       'To support the achievement of Universal Health Coverage through the activation and empowerment of the private health sector.',
   },
 
+  roleSection: {
+    title: "Our Role in Nigeria’s Health System",
+    description:
+      "Nigeria’s private health sector delivers a significant share of healthcare services, yet has historically been underrepresented in policy formulation & system design.",
+    highlightText: "HFN exists to bridge this gap.",
+    points: [
+      "Providing a credible, coordinated voice for private sector stakeholders",
+      "Ensuring private sector perspectives are embedded in national health policies and reforms",
+      "Facilitating constructive public–private collaboration",
+      "Supporting reforms that unlock investment and improve service delivery"
+    ],
+    tags: [
+      "Policymakers",
+      "Regulators",
+      "Investors",
+      "Partners"
+    ],
+    tagDescription: "Through sustained engagement with policymakers, regulators, development partners, and investors, HFN works to ensure that private sector capacity is effectively aligned with national health priorities."
+  },
+
+  history: {
+    year: '2015',
+    title: 'Our History',
+    subtitle:
+      'A Coordinated Platform for Policy Engagement & System Reform',
+    description: 'HFN was established to bring together stakeholders across Nigeria’s private health sector. Today, we are a nationally recognised voice, contributing to major policy reforms and public–private partnerships that have strengthened healthcare delivery across Nigeria.',
+  },
+
+  governance: {
+      title: 'Governance & Leadership',
+      note:
+        'This structure ensures accountability and effective execution of HFN’s mandate, while reflecting the diversity of Nigeria’s private health sector.',
+      units: [
+        'Board of Trustees',
+        'National Executive Council',
+        'Executive Committee',
+        'Secretariat',
+      ],
+    },
+
+
   ctaSection: {
     title: 'What We Do',
     image: 'partnership-01.png',
-  },
-
-  leadership: {
-    title: 'Our Leadership',
-    executives: [
+    items: [
       {
-        name: 'Njide Ndili',
-        position: 'President, HFN',
-        organization: 'Country Director, PharmAccess',
-        image: 'njide.png',
-        themeColor: '#f0f7f5',
-        borderColor: 'border-green-300',
-        textColor: 'text-green-700',
-        bio: 'Njide Ndili is the Nigeria Country Director at PharmAccess, an international organisation that leverages digital innovation and market-based solutions to strengthen health systems across sub-Saharan Africa. PharmAccess works across both the demand and supply sides of healthcare to improve access, quality, and financial protection. She serves as President of the Healthcare Federation of Nigeria (HFN), where she leads private sector advocacy and engagement to advance policy reforms and strengthen Nigeria’s healthcare system. Njide is also a founding member of the Digital Transformation for Health Lab, which identifies and supports digital technologies that accelerate progress toward Universal Health Coverage, particularly in low- and middle-income countries. In addition, she serves on the Steering Committee of the Nigerian Economic Summit Group (NESG) Health Policy Commission. Njide holds an MSc in Health Economics, Policy, and Management from the London School of Economics, an Advanced Management Programme (AMP) from INSEAD, an MBA from the University of Houston, a Postgraduate Diploma in Finance, and a BSc in Computer Science.',
-        quote:
-          'True leadership in healthcare is measured not by titles, but by the lives we touch and the systems we transform.',
-        socials: [
-          { platform: 'linkedin', url: 'https://www.linkedin.com/in/njide-ndili/' },
-          { platform: 'twitter', url: 'https://twitter.com/' },
-          { platform: 'instagram', url: 'https://instagram.com/' },
-        ],
+        title: 'Policy Advocacy',
+        shortDesc: 'Strategic Engagement.',
+        fullDesc:
+          'We engage with legislators, regulators, and government institutions to shape evidence-based policies that enable effective regulation, sustainable financing, and private sector participation in health system strengthening.',
+        colorClass: 'leaf-green',
       },
       {
-        name: 'Dr. Ayodele Benson-Cole',
-        position: '1st Vice-President, HFN',
-        organization: 'CEO, Benson Coleman & Associates',
-        image: 'ayodele.png',
-        themeColor: '#fcefe7',
-        borderColor: 'border-orange-300',
-        textColor: 'text-orange-700',
-        bio: 'Dr. Ayodele Benson-Cole is a respected physician and healthcare strategist with over 18 years of clinical and administrative experience. He has built a reputation for promoting quality healthcare standards and patient-centered innovations in both urban and underserved communities. Dr. Benson-Cole earned his medical degree from the University of Ibadan and holds certifications in Healthcare Leadership and Quality Improvement. He has served as a consultant to various public health projects and continues to advocate for accessible healthcare systems that prioritize prevention, education, and technology integration.',
-        quote:
-          'Medicine is not just about curing the sick; it is about inspiring hope, preserving dignity, and leading with compassion.',
-        socials: [
-          { platform: 'linkedin', url: 'https://www.linkedin.com/in/ayodele-cole-benson-93b79027/' },
-          { platform: 'twitter', url: 'https://twitter.com/' },
-          { platform: 'instagram', url: 'https://instagram.com/' },
-        ],
+        title: 'Stakeholder Convening',
+        shortDesc: 'Unified Voice.',
+        fullDesc:
+          'We bring together healthcare providers, manufacturers, insurers, digital health innovators, development partners, and policymakers to align priorities, share knowledge, and drive collective action.',
+        colorClass: 'leaf-tan',
       },
       {
-        name: 'Dr. Jennifer Anyati',
-        position: '2nd Vice President, HFN',
-        organization: 'Deputy Managing Director, Society for Family Health',
-        image: 'jennifer.png',
-        themeColor: '#f0f7f5',
-        borderColor: 'border-green-300',
-        textColor: 'text-green-700',
-        bio: 'Dr. Jennifer Anyati is a dynamic public health professional and advocate for equitable healthcare delivery. With a strong background in epidemiology and healthcare planning, she has led numerous community health programs aimed at improving maternal and child health outcomes. Her work emphasizes the power of data-driven decision-making and collaboration between government, private, and non-profit sectors. Dr. Anyati has also served as a mentor to emerging healthcare practitioners, encouraging innovation and ethical practice in all aspects of healthcare delivery.',
-        quote:
-          'When we uplift communities through healthcare, we heal not just individuals but the future of our nation.',
-        socials: [
-          { platform: 'linkedin', url: 'https://www.linkedin.com/in/jennifer-anyanti/' },
-          { platform: 'twitter', url: 'https://twitter.com/' },
-          { platform: 'instagram', url: 'https://instagram.com/' },
-        ],
+        title: 'Sector Intelligence',
+        shortDesc: 'Thought Leadership.',
+        fullDesc:
+          'We produce research, industry insights, and high-level dialogues that inform policy decisions, investment strategies, and national health discourse.',
+        colorClass: 'leaf-green',
       },
       {
-        name: 'Chinyere Okorocha',
-        position: 'Public Relations Secretary, HFN',
-        organization: 'Head of Sectors, Jackson, Etti & Edu',
-        image: 'chinyere.png',
-        themeColor: '#fcefe7',
-        borderColor: 'border-orange-300',
-        textColor: 'text-orange-700',
-        bio: 'Mrs. Chinyere Okorocha is an accomplished communications professional with over 15 years of experience in healthcare public relations and stakeholder engagement. She has successfully managed campaigns that increased public awareness about preventive health, vaccination, and patient rights. Her expertise lies in crafting clear and empathetic messages that bridge the gap between healthcare providers and the public. Mrs. Okorocha believes that effective communication is vital to trust, transparency, and health system strengthening.',
-        quote:
-          'When people understand healthcare, they make choices that transform lives — communication is the heartbeat of progress.',
-        socials: [
-          { platform: 'linkedin', url: 'https://www.linkedin.com/in/chinyere-okorocha-a1bb19bb/' },
-          { platform: 'twitter', url: 'https://twitter.com/' },
-          { platform: 'instagram', url: 'https://instagram.com/' },
-        ],
-      },
-      {
-        name: 'Olayode Babarinde',
-        position: 'Financial Secretary, HFN',
-        organization: 'Healthcare System Partner – Policy, Roche',
-        image: 'babarinde.png',
-        themeColor: '#f0f7f5',
-        borderColor: 'border-green-300',
-        textColor: 'text-green-700',
-        bio: 'Mr. Babarinde Olayode is a certified finance professional with over 12 years of experience managing budgets, investments, and financial systems within the healthcare sector. His strategic financial planning has enabled organizations to allocate resources efficiently while maintaining accountability and transparency. With a background in Accounting and an MBA in Health Economics, Mr. Olayode is passionate about improving financial sustainability in healthcare institutions and driving innovations in health financing.',
-        quote:
-          'Financial integrity in healthcare is not just about numbers — it’s about ensuring every naira spent saves a life.',
-        socials: [
-          { platform: 'linkedin', url: 'https://www.linkedin.com/in/olayode-babarinde-26863276/' },
-          { platform: 'twitter', url: 'https://twitter.com/' },
-          { platform: 'instagram', url: 'https://instagram.com/' },
-        ],
-      },
-      {
-        name: 'Reagan Rowland',
-        position: 'Treasurer, HFN',
-        organization: 'Founder/CEO, OneClick Med',
-        image: 'reagan.png',
-        themeColor: '#fcefe7',
-        borderColor: 'border-orange-300',
-        textColor: 'text-orange-700',
-        bio: 'Mr. Reagan Rowland is a results-oriented finance administrator dedicated to promoting accountability and fiscal discipline in the healthcare industry. With over a decade of experience in financial management and audit processes, he has supported several healthcare organizations in achieving operational excellence through strategic cost control and transparent reporting. He is known for his collaborative leadership and ability to translate financial insights into actionable growth strategies that strengthen healthcare systems.',
-        quote:
-          'Transparency is the foundation upon which trust and progress in healthcare are built.',
-        socials: [
-          { platform: 'linkedin', url: 'https://www.linkedin.com/in/reagan-rowland/' },
-          { platform: 'twitter', url: 'https://twitter.com/' },
-          { platform: 'instagram', url: 'https://instagram.com/' },
-        ],
+        title: 'Public–Private Collaboration',
+        shortDesc: 'Practical Solutions.',
+        fullDesc:
+          'We support partnerships that leverage private sector expertise and resources to improve service delivery, emergency care, health financing, and access to quality healthcare.',
+        colorClass: 'leaf-tan',
       },
     ],
+    commitment: {
+    title: 'Our Commitment',
+    description:
+      'HFN remains committed to advancing a health system where every Nigerian has access to quality, affordable healthcare.',
+    buttonText: 'Join the Movement',
+    goals: [
+      "Policy is informed by evidence and practice",
+      "Private sector contributions are coordinated",
+      "Investment supports quality and access",
+      "Patients remain at the centre of care"
+    ],
   },
+  },
+
+  
+
+  
 };
