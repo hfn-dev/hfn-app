@@ -6,8 +6,55 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue'])
+const currentSectionData = ref(props.modelValue || {})
+watch(
+  () => props.modelValue,
+  (val) => {
+    currentSectionData.value = val || {}
+  }
+)
 
-            
+watch(
+  currentSectionData,
+  (val) => {
+    emit('update:modelValue', val)
+  },
+  { deep: true }
+)
+
+
+const addParagraph = () => {
+  if (!currentSectionData.value.paragraphs) {
+    currentSectionData.value.paragraphs = []
+  }
+  currentSectionData.value.paragraphs.push('')
+}
+
+const deleteParagraph = (index) => {
+  currentSectionData.value.paragraphs.splice(index, 1)
+}
+
+const addRolePoint = () => {
+  if (!currentSectionData.value.rolePoints) {
+    currentSectionData.value.rolePoints = []
+  }
+  currentSectionData.value.rolePoints.push('')
+}
+
+const deleteRolePoint = (index) => {
+  currentSectionData.value.rolePoints.splice(index, 1)
+}
+
+const addCommitmentGoal = () => {
+  if (!currentSectionData.value.commitmentGoals) {
+    currentSectionData.value.commitmentGoals = []
+  }
+  currentSectionData.value.commitmentGoals.push('')
+}
+
+const deleteGoal = (index) => {
+  currentSectionData.value.commitmentGoals.splice(index, 1)
+}  
 </script>
 
 
