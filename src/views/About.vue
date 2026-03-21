@@ -79,13 +79,27 @@ const page = computed(() => {
       ...aboutPageSchema.story,
       ...(pageFromApi.value?.story || {}),
     },
+    roleSection: {
+      ...aboutPageSchema.roleSection,
+      ...(pageFromApi.value?.roleSection || {}),
+    },
+
+    history: {
+      ...aboutPageSchema.history,
+      ...(pageFromApi.value?.history || {}),
+    },
+
+    governance: {
+      ...aboutPageSchema.governance,
+      ...(pageFromApi.value?.governance || {}),
+    },
     ctaSection: {
       ...aboutPageSchema.ctaSection,
       ...(pageFromApi.value?.ctaSection || {}),
     },
-    leadership: {
-      ...aboutPageSchema.leadership,
-      ...(pageFromApi.value?.leadership || {}),
+    commitment: {
+      ...aboutPageSchema.commitment,
+      ...(pageFromApi.value?.commitment || {}),
     },
   };
 });
