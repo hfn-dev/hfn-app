@@ -28,19 +28,7 @@ const handleScroll = () => {
   }
 };
 
-const rolePoints = [
-  "Providing a credible, coordinated voice for private sector stakeholders",
-  "Ensuring private sector perspectives are embedded in national health policies and reforms",
-  "Facilitating constructive public–private collaboration",
-  "Supporting reforms that unlock investment and improve service delivery",
-];
 
-const commitmentGoals = [
-  "Policy is informed by evidence and practice",
-  "Private sector contributions are coordinated",
-  "Investment supports quality and access",
-  "Patients remain at the centre of care",
-];
 
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
@@ -50,36 +38,7 @@ onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
 });
 
-const items = [
-  {
-    title: "Policy Advocacy",
-    shortDesc: "Strategic Engagement.",
-    fullDesc:
-      "We engage with legislators, regulators, and government institutions to shape evidence-based policies that enable effective regulation, sustainable financing, and private sector participation in health system strengthening.",
-    colorClass: "leaf-green",
-  },
-  {
-    title: "Stakeholder Convening",
-    shortDesc: "Unified Voice.",
-    fullDesc:
-      "We bring together healthcare providers, manufacturers, insurers, digital health innovators, development partners, and policymakers to align priorities, share knowledge, and drive collective action.",
-    colorClass: "leaf-tan",
-  },
-  {
-    title: "Sector Intelligence",
-    shortDesc: "Thought Leadership.",
-    fullDesc:
-      "We produce research, industry insights, and high-level dialogues that inform policy decisions, investment strategies, and national health discourse.",
-    colorClass: "leaf-green",
-  },
-  {
-    title: "Public–Private Collaboration",
-    shortDesc: "Practical Solutions.",
-    fullDesc:
-      "We support partnerships that leverage private sector expertise and resources to improve service delivery, emergency care, health financing, and access to quality healthcare.",
-    colorClass: "leaf-tan",
-  },
-];
+
 
 const imageMap = {
   "about-us.png": aboutImage,
@@ -107,9 +66,7 @@ onMounted(async () => {
   }
 });
 
-// const page = computed(() => {
-//   return pageFromApi.value || aboutPageSchema;
-// });
+
 const page = computed(() => {
   return {
     ...aboutPageSchema,
@@ -122,13 +79,27 @@ const page = computed(() => {
       ...aboutPageSchema.story,
       ...(pageFromApi.value?.story || {}),
     },
+    roleSection: {
+      ...aboutPageSchema.roleSection,
+      ...(pageFromApi.value?.roleSection || {}),
+    },
+
+    history: {
+      ...aboutPageSchema.history,
+      ...(pageFromApi.value?.history || {}),
+    },
+
+    governance: {
+      ...aboutPageSchema.governance,
+      ...(pageFromApi.value?.governance || {}),
+    },
     ctaSection: {
       ...aboutPageSchema.ctaSection,
       ...(pageFromApi.value?.ctaSection || {}),
     },
-    leadership: {
-      ...aboutPageSchema.leadership,
-      ...(pageFromApi.value?.leadership || {}),
+    commitment: {
+      ...aboutPageSchema.commitment,
+      ...(pageFromApi.value?.commitment || {}),
     },
   };
 });
@@ -323,18 +294,16 @@ const resolveImage = (image) => imageMap[image] || image;
               Health System
             </h2>
             <p class="text-gray-600 text-lg leading-relaxed">
-              Nigeria’s private health sector delivers a significant share of
-              healthcare services, yet has historically been underrepresented in
-              policy formulation & system design.
+              {{ page.roleSection.description }}
               <span
                 class="text-[#004d33] font-bold underline decoration-orange-400"
-                >HFN exists to bridge this gap.</span
+                >{{ page.roleSection.highlightText }}</span
               >
             </p>
 
             <ul class="space-y-4 pt-4">
               <li
-                v-for="(item, i) in rolePoints"
+                v-for="(item, i) in page.roleSection.points"
                 :key="i"
                 class="flex items-start gap-4 group"
               >
@@ -364,17 +333,11 @@ const resolveImage = (image) => imageMap[image] || image;
             class="relative mt-12 lg:mt-0 p-8 bg-[#f2f9f3] rounded-[3rem] border border-[#004d33]/5 shadow-inner"
           >
             <p class="text-sm italic text-gray-500 mb-6 font-medium">
-              Through sustained engagement with policymakers, regulators, development partners, and investors, HFN works to ensure that private sector capacity is effectively aligned with national health priorities.
-             
+             {{ page.roleSection.tagDescription}}             
             </p>
             <div class="grid grid-cols-2 gap-4">
               <div
-                v-for="tag in [
-                  'Policymakers',
-                  'Regulators',
-                  'Investors',
-                  'Partners',
-                ]"
+                v-for="tag in page.roleSection.tags"
                 :key="tag"
                 class="bg-white p-4 rounded-2xl shadow-sm text-center font-bold text-[#004d33] border border-white hover:border-[#004d33]/20 transition-all"
               >
@@ -389,22 +352,18 @@ const resolveImage = (image) => imageMap[image] || image;
     <section class="py-20 bg-[#004d33] text-white overflow-hidden relative">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="flex flex-col md:flex-row gap-12 items-center">
-          <div class="text-8xl font-black opacity-20 select-none">2015</div>
+          <div class="text-8xl font-black opacity-20 select-none">{{ page.history.year }}</div>
           <div class="space-y-4">
             <h3
               class="text-orange-400 font-black uppercase tracking-widest text-sm"
             >
-              Our History
+              {{ page.history.title }}
             </h3>
             <h4 class="text-3xl font-bold">
-              A Coordinated Platform for Policy Engagement & System Reform
+              {{ page.history.subtitle }}
             </h4>
             <p class="text-green-50/80 text-lg max-w-4xl leading-relaxed">
-              HFN was established to bring together stakeholders across
-              Nigeria’s private health sector. Today, we are a nationally
-              recognised voice, contributing to major policy reforms and
-              public–private partnerships that have strengthened healthcare
-              delivery across Nigeria.
+              {{ page.history.description }}
             </p>
           </div>
         </div>
@@ -423,19 +382,14 @@ const resolveImage = (image) => imageMap[image] || image;
             class="w-full px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-50 bg-white shadow-md text-center"
           >
             <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">
-              Governance & Leadership
+              {{ page.governance.title}}
             </h2>
           </div>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
           <router-link
-            v-for="unit in [
-              'Board of Trustees',
-              'National Executive Council',
-              'Executive Committee',
-              'Secretariat',
-            ]"
+            v-for="unit in page.governance.units"
             :key="unit"
             to="/governance"
             class="p-6 rounded-3xl border border-gray-100 bg-[#f8fdf9] hover:bg-white hover:shadow-xl hover:-translate-y-2 transition-all duration-500"
@@ -463,9 +417,7 @@ const resolveImage = (image) => imageMap[image] || image;
         <p
           class="mt-12 text-gray-500 max-w-3xl mx-auto font-medium leading-relaxed italic"
         >
-          "This structure ensures accountability and effective execution of
-          HFN’s mandate, while reflecting the diversity of Nigeria’s private
-          health sector."
+          "{{ page.governance.note }}"
         </p>
       </div>
     </section>
@@ -512,7 +464,7 @@ const resolveImage = (image) => imageMap[image] || image;
               class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 max-w-6xl relative z-20 w-full place-items-center"
             >
               <div
-                v-for="(item, index) in items"
+                v-for="(item, index) in page.ctaSection.items"
                 :key="index"
                 class="leaf-wrapper w-full max-w-[400px]"
                 :style="{
@@ -611,22 +563,21 @@ const resolveImage = (image) => imageMap[image] || image;
         <div class="relative z-10 grid lg:grid-cols-2 gap-12 items-center">
           <div>
             <h2 class="text-4xl font-black text-[#004d33] mb-6">
-              Our Commitment
+              {{ page.commitment.title}}
             </h2>
             <p class="text-gray-600 text-lg mb-8">
-              HFN remains committed to advancing a health system where every
-              Nigerian has access to quality, affordable healthcare.
+              {{ page.commitment.description}}
             </p>
             <button
               class="px-10 py-4 bg-[#004d33] text-white rounded-full font-bold shadow-lg hover:shadow-green-900/20 transition-all"
             >
-              Join the Movement
+              {{ page.commitment.buttonText}}
             </button>
           </div>
 
           <div class="space-y-4">
             <div
-              v-for="(goal, i) in commitmentGoals"
+              v-for="(goal, i) in page.commitment.goals"
               :key="i"
               class="bg-white p-6 rounded-[2rem] shadow-sm flex items-center gap-6 border border-white hover:border-[#004d33]/10 transition-all"
             >
