@@ -20,8 +20,8 @@ import AboutCtaSectionEditor from './components/cms/about/AboutCtaSectionEditor.
 import AboutCommitmentSection from './components/cms/about/AboutCommitmentSection.vue'
 import AboutRoleSectionEditor from './components/cms/about/AboutRoleSectionEditor.vue'
 import GovernanceHeroEditor from './components/cms/governance/GovernanceHeroEditor.vue'
-import BoardOfTrusteesEditor from './components/cms/governance/BoardOfTrusteesEditor.vue'
-import ExecutiveCommitteeEditor from './components/cms/governance/ExecutiveCommitteeEditor.vue'
+import BoardOfTrusteesEditor from './components/cms/governance/GovernanceBoardOfTrustees.vue'
+import ExecutiveCommitteeEditor from './components/cms/governance/GovernanceExecutiveCommittee.vue'
   
 const newYear = ref("");
 const newCategory = ref("");
