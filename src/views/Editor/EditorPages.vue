@@ -13,7 +13,7 @@ import HomeExecutivesEditor from './components/cms/home/HomeExecutivesEditor.vue
 import HomePartnerEditor from './components/cms/home/HomePartnerEditor.vue'
 import AboutHeroEditor from './components/cms/about/AboutHeroEditor.vue'
 import AboutStoryEditor from './components/cms/about/AboutStoryEditor.vue'
-import AboutItemsEditor from './components/cms/about/AboutItemsEditor.vue'
+import AboutItemEditor from './components/cms/about/AboutItemEditor.vue'
 import AboutHistoryEditor from './components/cms/about/AboutHistoryEditor.vue'
 import AboutGovernanceEditor from './components/cms/about/AboutGovernanceEditor.vue'
 
@@ -42,7 +42,7 @@ const componentMap = {
   about: {
     hero: AboutHeroEditor,
     story: AboutStoryEditor,
-    items: AboutItemsEditor,
+    items: AboutItemEditor,
     history: AboutHistoryEditor,
     governance: AboutGovernanceEditor,
     
