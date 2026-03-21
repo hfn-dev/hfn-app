@@ -100,7 +100,9 @@ export const aboutPageSchema = {
         colorClass: 'leaf-tan',
       },
     ],
-    commitment: {
+    
+  },
+  commitment: {
     title: 'Our Commitment',
     description:
       'HFN remains committed to advancing a health system where every Nigerian has access to quality, affordable healthcare.',
@@ -112,8 +114,6 @@ export const aboutPageSchema = {
       "Patients remain at the centre of care"
     ],
   },
-  },
-
   
 
   
