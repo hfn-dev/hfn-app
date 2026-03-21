@@ -101,19 +101,6 @@ const removeGalleryItem = (index) => {
   currentSectionData.value.galleryList.items.splice(index, 1);
 };
 
-const addTrustee = () => {
-  currentSectionData.value.trustees.push({
-    name: "",
-    title: "",
-    image: "",
-    slug: "",
-  });
-};
-
-const removeTrustee = (index) => {
-  currentSectionData.value.trustees.splice(index, 1);
-};
-
 const addYear = () => {
   if (!newYear.value.trim()) return;
 
