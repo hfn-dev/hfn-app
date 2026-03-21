@@ -7,8 +7,22 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue'])
+const currentSectionData = ref(props.modelValue || {})
 
-            
+watch(
+  () => props.modelValue,
+  (val) => {
+    currentSectionData.value = val || {}
+  }
+)
+
+watch(
+  currentSectionData,
+  (val) => {
+    emit('update:modelValue', val)
+  },
+  { deep: true }
+)  
 </script>
 
 <template>
