@@ -7,13 +7,11 @@
             <h2
               class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4"
             >
-              <span class="text-orange-500 block">Governance & Leadership</span>
+              <span class="text-orange-500 block">{{ page.hero.titleHighlight }}</span>
               <span class="text-green-700 block mt-2"></span>
             </h2>
             <p class="mt-6 text-lg text-gray-600 max-w-xl">
-              HFN is guided by a Board of Trustees and an Executive Committee
-              providing strategic oversight and leadership for Nigeria’s private
-              health sector.
+              {{ page.hero.titleMain }}
             </p>
           </div>
 
@@ -35,7 +33,7 @@
     <section class="py-24 max-w-7xl mx-auto px-4">
       <div class="flex items-center gap-4 mb-16">
         <h2 class="text-3xl font-black text-gray-900 uppercase tracking-tight">
-          Board of Trustees
+          {{ page.boardOfTrustees.title }}
         </h2>
         <div class="h-[2px] flex-grow bg-gray-100"></div>
       </div>
@@ -64,11 +62,11 @@
                 />
               </div>
               <div class="text-center">
-                <h3 class="text-3xl font-black text-[#004d33]">Bola Adesola</h3>
+                <h3 class="text-3xl font-black text-[#004d33]">{{ page.boardOfTrustees.chair.name }}</h3>
                 <p
                   class="text-orange-600 font-bold text-sm uppercase tracking-[0.2em] mt-2"
                 >
-                  Chair, Board of Trustees
+                  {{ page.boardOfTrustees.chair.role }}
                 </p>
               </div>
             </div>
@@ -114,7 +112,7 @@
           <h2
             class="text-3xl font-black text-[#004d33] uppercase tracking-tight"
           >
-            Executive Committee
+            {{ page.executiveCommittee.title }}
           </h2>
         </div>
 
@@ -176,12 +174,39 @@
 <script setup>
 // import { trustees, executives, chair } from "@/data/leadership.js";
 import { governanceSchema } from "@/schemas/pages/governance.schema";
-import { computed } from "vue";
+import { ref, computed } from "vue";
 
-const page = computed(() => ({
-  ...governanceSchema,
-  ...(pageFromApi.value || {}),
-}));
+const pageFromApi = ref(null); 
+const page = computed(() => {
+  const api = pageFromApi.value || {};
+
+  return {
+    hero: {
+      ...governanceSchema.hero,
+      ...(api.hero || {}),
+    },
+
+    boardOfTrustees: {
+      ...governanceSchema.boardOfTrustees,
+      ...(api.boardOfTrustees || {}),
+      chair: {
+        ...governanceSchema.boardOfTrustees.chair,
+        ...(api.boardOfTrustees?.chair || {}),
+      },
+      trustees:
+        api.boardOfTrustees?.trustees ||
+        governanceSchema.boardOfTrustees.trustees,
+    },
+
+    executiveCommittee: {
+      ...governanceSchema.executiveCommittee,
+      ...(api.executiveCommittee || {}),
+      executives:
+        api.executiveCommittee?.executives ||
+        governanceSchema.executiveCommittee.executives,
+    },
+  };
+});
   
 const slugify = (name) =>
   name
