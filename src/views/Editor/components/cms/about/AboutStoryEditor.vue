@@ -1,3 +1,16 @@
+<script setup>
+import { ref } from 'vue'
+
+const props = defineProps({
+  modelValue: Object
+})
+
+const emit = defineEmits(['update:modelValue'])
+
+            
+</script>
+
+
 <template>
 
             <div class="space-y-6">
