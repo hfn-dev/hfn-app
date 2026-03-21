@@ -7,8 +7,11 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue'])
-const currentSectionData = ref(props.modelValue || {})
-
+const currentSectionData = ref({
+  milestones: [],
+  ...props.modelValue
+})
+  
 watch(
   () => props.modelValue,
   (val) => {
@@ -23,6 +26,22 @@ watch(
   },
   { deep: true }
 )  
+
+
+const addMilestone = () => {
+  if (!currentSectionData.value.milestones) {
+    currentSectionData.value.milestones = []
+  }
+
+  currentSectionData.value.milestones.push({
+    year: "",
+    event: ""
+  })
+}
+
+const deleteMilestone = (index) => {
+  currentSectionData.value.milestones.splice(index, 1)
+}  
 </script>
 
 
