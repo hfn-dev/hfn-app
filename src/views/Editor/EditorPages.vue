@@ -16,6 +16,9 @@ import AboutStoryEditor from './components/cms/about/AboutStoryEditor.vue'
 import AboutItemEditor from './components/cms/about/AboutItemEditor.vue'
 import AboutHistoryEditor from './components/cms/about/AboutHistoryEditor.vue'
 import AboutGovernanceEditor from './components/cms/about/AboutGovernanceEditor.vue'
+import AboutCtaSectionEditor from './components/cms/about/AboutCtaSectionEditor.vue'
+import AboutCommitmentSection from './components/cms/about/AboutCommitmentSection.vue'
+import AboutRoleSectionEditor from './components/cms/about/AboutRoleSectionEditor.vue'
 
   
 const newYear = ref("");
@@ -42,10 +45,12 @@ const componentMap = {
   about: {
     hero: AboutHeroEditor,
     story: AboutStoryEditor,
-    items: AboutItemEditor,
+    roleSection: AboutRoleSectionEditor,
     history: AboutHistoryEditor,
     governance: AboutGovernanceEditor,
-    
+    items: AboutItemEditor,
+    ctaSection: AboutCtaSectionEditor,
+    commitment: AboutCommitmentSection,
   }
 }  
   
