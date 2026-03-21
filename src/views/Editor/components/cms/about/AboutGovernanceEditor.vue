@@ -1,3 +1,46 @@
+<script setup>
+import { ref, watch } from 'vue'
+
+// Props
+const props = defineProps({
+  modelValue: Object
+})
+
+// Emits
+const emit = defineEmits(['update:modelValue'])
+
+const currentSectionData = ref({
+  units: [],
+  ...props.modelValue
+})
+
+watch(
+  () => props.modelValue,
+  (val) => {
+    currentSectionData.value = { units: [], ...val }
+  }
+)
+
+watch(
+  currentSectionData,
+  (val) => {
+    emit('update:modelValue', val)
+  },
+  { deep: true }
+)
+
+const addUnit = () => {
+  if (!currentSectionData.value.units) {
+    currentSectionData.value.units = []
+  }
+  currentSectionData.value.units.push('')
+}
+
+const deleteUnit = (index) => {
+  currentSectionData.value.units.splice(index, 1)
+}
+</script>
+
 <template>
 
             <div class="border border-gray-300 rounded-lg p-3 mb-4">
