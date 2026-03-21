@@ -7,7 +7,6 @@ import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
 import { computed, onMounted, ref } from "vue";
 import { useToast } from "vue-toastification";
 
-  
 const toast = useToast();
 const events = ref([]);
 const loadingEvents = ref(false);
@@ -39,7 +38,7 @@ const uploadBanner = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  eventForm.value.banner = file; 
+  eventForm.value.banner = file;
 };
 const loading = ref(false);
 
@@ -57,11 +56,8 @@ const editArticle = (article) => {
     featured_order: article.featured_order ?? 0,
     // videos: article.videos ? [...article.videos] : [],
     videos: (article.videos || []).map((v) =>
-      typeof v === "string"
-        ? { media_type: "youtube", youtube_url: v }
-        : v
+      typeof v === "string" ? { media_type: "youtube", youtube_url: v } : v
     ),
-
   };
 
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -143,7 +139,6 @@ const publishArticle = async (slug) => {
   }
 };
 
-
 const saveNews = async () => {
   try {
     const formData = new FormData();
@@ -175,7 +170,6 @@ const saveNews = async () => {
 
     await fetchArticles();
     resetNewsForm();
-
   } catch (e) {
     console.error(e);
     toast.error("Failed to save article");
@@ -195,12 +189,10 @@ const getYoutubeEmbed = (video) => {
 
   return "";
 };
-  
+
 const uploadNewsImage = (e) => {
   newsForm.value.featured_image = e.target.files[0];
 };
-
-
 
 const addVideo = () => {
   if (!videoInput.value) return;
@@ -211,7 +203,7 @@ const addVideo = () => {
   });
 
   videoInput.value = "";
-};  
+};
 
 const removeVideo = (index) => {
   newsForm.value.videos.splice(index, 1);
@@ -283,7 +275,7 @@ const createEvent = async () => {
 
     Object.entries(eventForm.value).forEach(([key, value]) => {
       if (key === "banner" && value instanceof File) {
-        formData.append("banner_image", value); 
+        formData.append("banner_image", value);
         return;
       }
 
@@ -321,7 +313,6 @@ const createEvent = async () => {
       price: "",
       banner: "",
     });
-
   } catch (error) {
     console.error("Create event error:", error);
 
@@ -333,7 +324,7 @@ const createEvent = async () => {
     toast.error(message);
   }
 };
-  
+
 const uploads = ref([]);
 
 const uploadForm = ref({
@@ -349,11 +340,13 @@ const uploadForm = ref({
 
 const fetchUploads = async () => {
   try {
-    const [newsletters, minutes, documents, galleries] = await Promise.all([
+    const [newsletters, minutes, documents, galleries, publications] = await Promise.all([
       uploadsApi.listNewsletters(),
       uploadsApi.getMinutes(),
       uploadsApi.list(),
       uploadsApi.gallery(),
+              uploadsApi.listPublications(),
+
     ]);
 
     const normalizedNewsletters = newsletters.map((n) => ({
@@ -362,6 +355,16 @@ const fetchUploads = async () => {
       type: "newsletter",
       file: n.file,
       created_at: n.created_at,
+      slug: n.slug,
+    }));
+
+    const normalizedPublications = publications.map((n) => ({
+      id: n.id,
+      title: n.title,
+      type: "publications",
+      file: n.file,
+      created_at: n.created_at,
+      slug: n.slug,
     }));
 
     const normalizedMinutes = minutes.map((m) => ({
@@ -370,6 +373,7 @@ const fetchUploads = async () => {
       type: "minute",
       file: m.file,
       created_at: m.created_at,
+      slug: m.slug,
     }));
 
     const normalizedDocuments = documents.map((d) => ({
@@ -377,6 +381,7 @@ const fetchUploads = async () => {
       title: d.title,
       type: "document",
       file: d.file,
+      slug: d.slug,
       created_at: d.created_at,
     }));
 
@@ -386,6 +391,7 @@ const fetchUploads = async () => {
       type: "gallery",
       file: g.image,
       created_at: g.created_at,
+      slug: g.slug,
     }));
 
     uploads.value = [
@@ -393,6 +399,7 @@ const fetchUploads = async () => {
       ...normalizedMinutes,
       ...normalizedDocuments,
       ...normalizedGalleries,
+      ...normalizedPublications,
     ];
   } catch (error) {
     console.error("Failed to fetch uploads:", error);
@@ -407,7 +414,6 @@ const uploadFile = (e) => {
     uploadForm.value.files = selectedFiles.slice(0, 1);
   }
 };
-
 
 const createUpload = async () => {
   if (!uploadForm.value.title) return;
@@ -424,9 +430,7 @@ const createUpload = async () => {
     if (uploadForm.value.media_type === "youtube") {
       if (!uploadForm.value.youtube_url) return;
       formData.append("youtube_url", uploadForm.value.youtube_url);
-    }
-
-    else {
+    } else {
       if (!uploadForm.value.files.length) return;
 
       if (uploadForm.value.type === "gallery") {
@@ -444,6 +448,10 @@ const createUpload = async () => {
       case "gallery":
         await uploadsApi.createGallery(formData);
         break;
+
+      case "publications":
+        await uploadsApi.createPublications(formData);
+        break;  
 
       case "newsletter":
         await uploadsApi.createNewsletters(formData);
@@ -470,12 +478,46 @@ const createUpload = async () => {
       files: [],
       bannerIndex: 0,
     };
-
   } catch (error) {
     console.error("Upload failed:", error);
   }
 };
-  
+
+const handleDeleteUpload = async (item) => {
+  if (!confirm(`Are you sure you want to delete "${item.title}"?`)) return;
+
+  try {
+    switch (item.type) {
+      case "gallery":
+        await uploadsApi.deleteGallery(item.id);
+        break;
+      case "minute":
+        await uploadsApi.deleteMinutes(item.slug);
+        break;
+      case "newsletter":
+        await uploadsApi.deleteNewsletters(item.slug);
+        break;
+      case "publications":
+        await uploadsApi.deletepublications(item.slug);
+        break;
+      case "document":
+        await uploadsApi.deletepublications(item.slug);
+        break;
+      default:
+        console.warn("Unknown type", item.type);
+        return;
+    }
+
+    uploads.value = uploads.value.filter(
+      (u) => u.id !== item.id && u.slug !== item.slug
+    );
+  } catch (error) {
+    console.error(`Failed to delete ${item.type}:`, error);
+    toast.error("Failed to delete item. See console for details.");
+  }
+};
+
+
 onMounted(() => {
   fetchEvents();
   fetchUploads();
@@ -500,26 +542,41 @@ onMounted(() => {
               class="input"
               placeholder="Enter Title"
             />
-            <select v-model="eventForm.event_type" class="input" placeholder="Select event type">
+            <select
+              v-model="eventForm.event_type"
+              class="input"
+              placeholder="Select event type"
+            >
               <option value="webinar">Webinar</option>
               <option value="physical">Physical</option>
             </select>
 
-            <select v-model="eventForm.audience" class="input" placeholder="Select audience type">
-  <option value="all">All</option>
-  <option value="members">Members Only</option>
-  <option value="non_members">Non Members Only</option>
-</select>
-
+            <select
+              v-model="eventForm.audience"
+              class="input"
+              placeholder="Select audience type"
+            >
+              <option value="all">All</option>
+              <option value="members">Members Only</option>
+              <option value="non_members">Non Members Only</option>
+            </select>
 
             <div>
-  <label class="text-xs text-gray-500">Start Date & Time</label>
-  <input type="datetime-local" v-model="eventForm.start_datetime" class="input" />
-</div>
+              <label class="text-xs text-gray-500">Start Date & Time</label>
+              <input
+                type="datetime-local"
+                v-model="eventForm.start_datetime"
+                class="input"
+              />
+            </div>
             <div>
-  <label class="text-xs text-gray-500">End Date & Time</label>
-  <input type="datetime-local" v-model="eventForm.end_datetime" class="input" />
-</div>
+              <label class="text-xs text-gray-500">End Date & Time</label>
+              <input
+                type="datetime-local"
+                v-model="eventForm.end_datetime"
+                class="input"
+              />
+            </div>
 
             <input
               v-model="eventForm.location"
@@ -539,9 +596,13 @@ onMounted(() => {
               placeholder="Max attendees"
             />
             <div>
-  <label class="text-xs text-gray-500">Registration Deadline</label>
-  <input type="datetime-local" v-model="eventForm.registration_deadline" class="input" />
-</div>
+              <label class="text-xs text-gray-500">Registration Deadline</label>
+              <input
+                type="datetime-local"
+                v-model="eventForm.registration_deadline"
+                class="input"
+              />
+            </div>
           </div>
 
           <textarea
@@ -561,12 +622,12 @@ onMounted(() => {
             />
 
             <div v-if="eventForm.banner" class="mt-3">
-  <img
-    :src="previewUrl(eventForm.banner) || eventForm.banner"
-    alt="Event Banner"
-    class="h-40 w-full object-cover rounded-md shadow-md"
-  />
-</div>
+              <img
+                :src="previewUrl(eventForm.banner) || eventForm.banner"
+                alt="Event Banner"
+                class="h-40 w-full object-cover rounded-md shadow-md"
+              />
+            </div>
           </div>
 
           <div class="flex items-center gap-4 mt-4">
@@ -655,14 +716,14 @@ onMounted(() => {
               <label class="block mb-2">Featured Image</label>
               <input type="file" @change="uploadNewsImage" />
               <img
-  v-if="newsForm.featured_image"
-  :src="previewUrl(newsForm.featured_image) || newsForm.featured_image"
-  class="h-40 mt-2 rounded"
-/>
+                v-if="newsForm.featured_image"
+                :src="
+                  previewUrl(newsForm.featured_image) || newsForm.featured_image
+                "
+                class="h-40 mt-2 rounded"
+              />
             </div>
 
-            
-            
             <div class="flex gap-4">
               <select v-model="newsForm.status" class="input">
                 <option value="draft">Draft</option>
@@ -673,21 +734,18 @@ onMounted(() => {
                 <option value="all">All</option>
                 <option value="members">Members only</option>
                 <option value="non_members">Non Members Only</option>
-
               </select>
             </div>
 
-          
-
-              <button @click="saveNews" class="btn-primary">
-  {{ 
-    isEditing 
-      ? "Update Article" 
-      : newsForm.status === "published"
-        ? "Save & Publish"
-        : "Save as Draft"
-  }}
-</button>
+            <button @click="saveNews" class="btn-primary">
+              {{
+                isEditing
+                  ? "Update Article"
+                  : newsForm.status === "published"
+                  ? "Save & Publish"
+                  : "Save as Draft"
+              }}
+            </button>
 
             <button
               v-if="isEditing"
@@ -827,14 +885,15 @@ onMounted(() => {
               <option value="document">Document</option>
               <option value="gallery">Gallery</option>
               <option value="minute">Minute</option>
+                            <option value="publications">Publications</option>
+
             </select>
 
             <select v-model="uploadForm.audience" class="input mb-3">
-  <option value="all">All</option>
-  <option value="members">Members Only</option>
-  <option value="non_members">Non Members Only</option>
-</select>
-
+              <option value="all">All</option>
+              <option value="members">Members Only</option>
+              <option value="non_members">Non Members Only</option>
+            </select>
 
             <textarea
               v-model="uploadForm.description"
@@ -843,24 +902,23 @@ onMounted(() => {
             ></textarea>
 
             <select v-model="uploadForm.media_type" class="input mb-3">
-  <option value="image">Upload File</option>
-  <option value="youtube">YouTube Video</option>
-</select>
-            
+              <option value="image">Upload File</option>
+              <option value="youtube">YouTube Video</option>
+            </select>
 
             <input
-  v-if="uploadForm.media_type === 'youtube'"
-  v-model="uploadForm.youtube_url"
-  class="input mb-4"
-  placeholder="Paste YouTube link"
-/>
+              v-if="uploadForm.media_type === 'youtube'"
+              v-model="uploadForm.youtube_url"
+              class="input mb-4"
+              placeholder="Paste YouTube link"
+            />
 
             <iframe
-  v-for="(video, i) in newsForm.videos"
-  :key="i"
-  :src="getYoutubeEmbed(video)"
-  class="w-full h-40 mt-2"
-/>
+              v-for="(video, i) in newsForm.videos"
+              :key="i"
+              :src="getYoutubeEmbed(video)"
+              class="w-full h-40 mt-2"
+            />
 
             <input type="file" @change="uploadFile" class="mb-4" />
 
@@ -876,6 +934,8 @@ onMounted(() => {
                   <th class="p-3">Title</th>
                   <th>Type</th>
                   <th class="p-3">Preview / File</th>
+                                    <th class="p-3">Action</th>
+
                 </tr>
               </thead>
               <tbody>
@@ -892,6 +952,8 @@ onMounted(() => {
                         'bg-blue-100 text-blue-700': item.type === 'newsletter',
                         'bg-green-100 text-green-700': item.type === 'minute',
                         'bg-gray-200 text-gray-700': item.type === 'document',
+                        'bg-orange-500 text-gray-100':
+                          item.type === 'publications',
                         'bg-purple-100 text-purple-700':
                           item.type === 'gallery',
                       }"
@@ -899,36 +961,42 @@ onMounted(() => {
                       {{ item.type }}
                     </span>
                   </td>
-                  
+
                   <td class="p-3">
+                    <!-- IMAGE -->
+                    <img
+                      v-if="item.file && item.type === 'gallery'"
+                      :src="item.file"
+                      class="h-16 w-16 object-cover rounded"
+                    />
 
-  <!-- IMAGE -->
-  <img
-    v-if="item.file && item.type === 'gallery'"
-    :src="item.file"
-    class="h-16 w-16 object-cover rounded"
-  />
+                    <!-- VIDEO -->
+                    <iframe
+                      v-else-if="item.youtube_url"
+                      :src="item.youtube_url.replace('watch?v=', 'embed/')"
+                      class="w-32 h-20"
+                    ></iframe>
 
-  <!-- VIDEO -->
-  <iframe
-    v-else-if="item.youtube_url"
-    :src="item.youtube_url.replace('watch?v=', 'embed/')"
-    class="w-32 h-20"
-  ></iframe>
+                    <!-- FILE -->
+                    <a
+                      v-else-if="item.file"
+                      :href="item.file"
+                      target="_blank"
+                      class="text-primary"
+                    >
+                      View
+                    </a>
 
-  <!-- FILE -->
-  <a
-    v-else-if="item.file"
-    :href="item.file"
-    target="_blank"
-    class="text-primary"
-  >
-    View
-  </a>
-
-  <span v-else class="text-gray-400">No media</span>
-
-</td>
+                    <span v-else class="text-gray-400">No media</span>
+                  </td>
+                  <td class="p-3">
+                    <button
+                      class="text-red-500 hover:text-red-700 font-semibold text-sm"
+                      @click="handleDeleteUpload(item)"
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
                 <tr v-if="!uploads.length">
                   <td colspan="3" class="p-6 text-center text-gray-500">

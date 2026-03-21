@@ -1,23 +1,22 @@
-import ayodele from '@/assets/ayodele.png';
-import babarinde from '@/assets/babarinde.png';
-import bridge from '@/assets/bridge.png';
-import chinyere from '@/assets/chinyere.png';
-import emzor from '@/assets/emzor.png';
-import event from '@/assets/event.png';
-import group from '@/assets/group.png';
-import hba from '@/assets/hba-africa.png';
-import health from '@/assets/health.png';
-import hfn_partner from '@/assets/hfn_partner.png';
-import jennifer from '@/assets/jennifer.png';
-import njide from '@/assets/njide.png';
-import oando from '@/assets/oando_logo.png';
-import pharm from '@/assets/pharm.png';
-import reagan from '@/assets/reagan.png';
-// import society from '@/assets/society.png';
-import wef from '@/assets/wef.jpg';
+// import ayodele from '@/assets/ayodele.png';
+// import babarinde from '@/assets/babarinde.png';
+// import bridge from '@/assets/bridge.png';
+// import chinyere from '@/assets/chinyere.png';
+// import emzor from '@/assets/emzor.png';
+// import event from '@/assets/event.png';
+// import group from '@/assets/group.png';
+// import hba from '@/assets/hba-africa.png';
+// import health from '@/assets/health.png';
+// import hfn_partner from '@/assets/hfn_partner.png';
+// import jennifer from '@/assets/jennifer.png';
+// import njide from '@/assets/njide.png';
+// import oando from '@/assets/oando_logo.png';
+// import pharm from '@/assets/pharm.png';
+// import reagan from '@/assets/reagan.png';
+// import wef from '@/assets/wef.jpg';
 import { homePageSchema } from './pages/home.schema.js';
 import { aboutPageSchema } from './pages/about.schema.js';
-import { governanceSchema } from './pages/governance.schema.js'; 
+import { governanceSchema } from './pages/governance.schema.js';
 
 const eventImage =
   'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769883047/events-CNRYrGt8_trfhaz.png';
@@ -167,7 +166,6 @@ export const pageSchemas = {
       ],
     },
 
-    // This maps to the big horizontal card in your template
 
     featuredEvent: {
       tag: 'Members Only',
@@ -186,7 +184,6 @@ export const pageSchemas = {
       registerLink: 'https://tix.africa/claim/2026-hfn-annual-conference/...',
     },
 
-    // This maps to the 3-column grid below featured
 
     latestEvents: {
       title: 'Latest Events',
@@ -212,7 +209,8 @@ export const pageSchemas = {
 
           image: eventImage,
 
-          registerLink: 'https://tix.africa/discover/2026-hfn-annual-conference',
+          registerLink:
+            'https://tix.africa/discover/2026-hfn-annual-conference',
         },
 
         {
@@ -235,7 +233,8 @@ export const pageSchemas = {
 
           image: eventImage,
 
-          registerLink: 'https://www.eventbrite.com/e/2026-hfn-annual-conference-tickets-1980514831174?aff=oddtdtcreator',
+          registerLink:
+            'https://www.eventbrite.com/e/2026-hfn-annual-conference-tickets-1980514831174?aff=oddtdtcreator',
         },
 
         {
@@ -258,7 +257,8 @@ export const pageSchemas = {
 
           image: eventImage,
 
-          registerLink: 'https://tix.africa/discover/2026-hfn-annual-conference',
+          registerLink:
+            'https://tix.africa/discover/2026-hfn-annual-conference',
         },
       ],
     },
@@ -964,14 +964,14 @@ The roundtable reinforced the urgency of collaborative investment and structured
     },
   },
   resources: {
-  hero: {
-    titleLine1: 'Stay Informed:',
-    titleLine2: 'Latest Healthcare News & Updates',
-    description:
-      'Get the latest insights, announcements, and policy developments from the Healthcare Federation of Nigeria and across the health sector.',
-    image: 'latest_news.png',
-    backgroundColor: '#E87A1814',
-  },
+    hero: {
+      titleLine1: 'Stay Informed:',
+      titleLine2: 'Latest Healthcare News & Updates',
+      description:
+        'Get the latest insights, announcements, and policy developments from the Healthcare Federation of Nigeria and across the health sector.',
+      image: 'latest_news.png',
+      backgroundColor: '#E87A1814',
+    },
 
     newsletterSection: {
       title: 'Newsletters',
@@ -1018,15 +1018,9 @@ The roundtable reinforced the urgency of collaborative investment and structured
         nextPageUrl:
           'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf',
       },
-      
-    // ],
-    // pagination: {
-    //   currentPage: 1,
-    //   totalPages: 2,
-    //   nextPageUrl:
-    //     'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf',
-    // },
-  },
+
+    
+    },
 
     publicationsSection: {
       title: 'Publications',
@@ -1073,12 +1067,7 @@ The roundtable reinforced the urgency of collaborative investment and structured
         currentPage: 1,
         totalPages: 2,
       },
-    // ],
-    // pagination: {
-    //   currentPage: 1,
-    //   totalPages: 2,
-    // },
+     
+    },
   },
-  
-},
-}
+};

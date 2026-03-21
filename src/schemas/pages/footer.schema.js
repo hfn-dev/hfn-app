@@ -1,5 +1,4 @@
 export const footerSchema = {
-  // Brand & Contact Information
   contact: {
     address: `3rd floor, 109, Awolowo Road, \nOpposite Standard Chartered \nBank, Ikoyi, Lagos State, Nigeria`,
     email: "info@hfnigeria.com",
@@ -7,7 +6,6 @@ export const footerSchema = {
     phoneLink: "tel:+2347030567554"
   },
 
-  // Dynamic Navigation Columns
   navColumns: [
     {
       title: "Home",
@@ -40,19 +38,16 @@ export const footerSchema = {
     }
   ],
 
-  // Social Media Links
   socials: [
     { platform: "Instagram", url: "https://www.instagram.com/hfn_nigeria", icon: "fab fa-square-instagram" },
     { platform: "LinkedIn", url: "https://www.linkedin.com/company/healthcare-federation-of-nigeria-hfn", icon: "fa-brands fa-linkedin" },
     { platform: "Twitter", url: "https://x.com/hfn_nigeria", icon: "fab fa-square-x-twitter" }
   ],
 
-  // Legal Links (Right aligned)
   legal: [
     { label: "Privacy Policy", url: "/privacy" },
     { label: "Terms of Service", url: "/terms" }
   ],
 
-  // Copyright Text (Dynamic Year is handled in code, but text can be here)
   copyrightSuffix: "Healthcare Federation of Nigeria. All Rights Reserved."
 };

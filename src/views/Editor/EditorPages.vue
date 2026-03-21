@@ -1,35 +1,35 @@
 <script setup>
-import pagesApi from "@/api/pageManagement";
-import { pageSchemas } from "@/schemas/pageSchemas";
-import { useRouter } from "vue-router";
-import HomeHeroEditor from './components/cms/home/HomeHeroEditor.vue'
-import { computed, onMounted, ref, watch } from "vue";
-import EditorSidebar from "./EditorSidebar.vue";
-import HomeFaqsEditor from './components/cms/home/HomeFaqsEditor.vue'
-import HomeAboutEditor from './components/cms/home/HomeAboutEditor.vue'
-import HomeMandateEditor from './components/cms/home/HomeMandateEditor.vue'
-import HomeNewsEditor from './components/cms/home/HomeNewsEditor.vue'
-import HomeExecutivesEditor from './components/cms/home/HomeExecutivesEditor.vue'
-import HomePartnerEditor from './components/cms/home/HomePartnerEditor.vue'
-import AboutHeroEditor from './components/cms/about/AboutHeroEditor.vue'
-import AboutStoryEditor from './components/cms/about/AboutStoryEditor.vue'
-import AboutItemEditor from './components/cms/about/AboutItemEditor.vue'
-import AboutHistoryEditor from './components/cms/about/AboutHistoryEditor.vue'
-import AboutGovernanceEditor from './components/cms/about/AboutGovernanceEditor.vue'
-import AboutCtaSectionEditor from './components/cms/about/AboutCtaSectionEditor.vue'
-import AboutCommitmentSection from './components/cms/about/AboutCommitmentSection.vue'
-import AboutRoleSectionEditor from './components/cms/about/AboutRoleSectionEditor.vue'
-import GovernanceHeroEditor from './components/cms/governance/GovernanceHeroEditor.vue'
-import BoardOfTrusteesEditor from './components/cms/governance/GovernanceBoardOfTrustees.vue'
-import ExecutiveCommitteeEditor from './components/cms/governance/GovernanceExecutiveCommittee.vue'
-  
-const newYear = ref("");
-const newCategory = ref("");
-const newGalleryYear = ref("");
-const newGalleryCategory = ref("");
-const currentView = ref("manager");
+import pagesApi from '@/api/pageManagement';
+import { pageSchemas } from '@/schemas/pageSchemas';
+import { useRouter } from 'vue-router';
+import HomeHeroEditor from './components/cms/home/HomeHeroEditor.vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import EditorSidebar from './EditorSidebar.vue';
+import HomeFaqsEditor from './components/cms/home/HomeFaqsEditor.vue';
+import HomeAboutEditor from './components/cms/home/HomeAboutEditor.vue';
+import HomeMandateEditor from './components/cms/home/HomeMandateEditor.vue';
+import HomeNewsEditor from './components/cms/home/HomeNewsEditor.vue';
+import HomeExecutivesEditor from './components/cms/home/HomeExecutivesEditor.vue';
+import HomePartnerEditor from './components/cms/home/HomePartnerEditor.vue';
+import AboutHeroEditor from './components/cms/about/AboutHeroEditor.vue';
+import AboutStoryEditor from './components/cms/about/AboutStoryEditor.vue';
+import AboutItemEditor from './components/cms/about/AboutItemEditor.vue';
+import AboutHistoryEditor from './components/cms/about/AboutHistoryEditor.vue';
+import AboutGovernanceEditor from './components/cms/about/AboutGovernanceEditor.vue';
+import AboutCtaSectionEditor from './components/cms/about/AboutCtaSectionEditor.vue';
+import AboutCommitmentSection from './components/cms/about/AboutCommitmentSection.vue';
+import AboutRoleSectionEditor from './components/cms/about/AboutRoleSectionEditor.vue';
+import GovernanceHeroEditor from './components/cms/governance/GovernanceHeroEditor.vue';
+import BoardOfTrusteesEditor from './components/cms/governance/GovernanceBoardOfTrustees.vue';
+import ExecutiveCommitteeEditor from './components/cms/governance/GovernanceExecutiveCommittee.vue';
+
+const newYear = ref('');
+const newCategory = ref('');
+const newGalleryYear = ref('');
+const newGalleryCategory = ref('');
+const currentView = ref('manager');
 const activePage = ref(null);
-const activeSection = ref("hero");
+const activeSection = ref('hero');
 const router = useRouter();
 const hasPages = computed(() => pages.value && pages.value.length > 0);
 const currentSectionData = ref(null);
@@ -58,16 +58,15 @@ const componentMap = {
     hero: GovernanceHeroEditor,
     boardOfTrustees: BoardOfTrusteesEditor,
     executiveCommittee: ExecutiveCommitteeEditor,
-    
-  }
-}  
-  
+  },
+};
+
 const availablePageTypes = computed(() => Object.keys(pageSchemas));
 
 const addGalleryYear = () => {
   if (!newGalleryYear.value.trim()) return;
   currentSectionData.value.filtering.years.push(newGalleryYear.value.trim());
-  newGalleryYear.value = "";
+  newGalleryYear.value = '';
 };
 
 const removeGalleryYear = (index) => {
@@ -79,7 +78,7 @@ const addGalleryCategory = () => {
   currentSectionData.value.filtering.categories.push(
     newGalleryCategory.value.trim()
   );
-  newGalleryCategory.value = "";
+  newGalleryCategory.value = '';
 };
 
 const removeGalleryCategory = (index) => {
@@ -89,11 +88,11 @@ const removeGalleryCategory = (index) => {
 const addGalleryItem = () => {
   currentSectionData.value.galleryList.items.push({
     id: Date.now(),
-    title: "",
-    category: "",
-    date: "",
-    image: "",
-    year: "",
+    title: '',
+    category: '',
+    date: '',
+    image: '',
+    year: '',
   });
 };
 
@@ -105,7 +104,7 @@ const addYear = () => {
   if (!newYear.value.trim()) return;
 
   currentSectionData.value.searchAndFilter.years.push(newYear.value.trim());
-  newYear.value = "";
+  newYear.value = '';
 };
 const removeYear = (index) => {
   currentSectionData.value.searchAndFilter.years.splice(index, 1);
@@ -116,7 +115,7 @@ const addCategory = () => {
   currentSectionData.value.searchAndFilter.categories.push(
     newCategory.value.trim()
   );
-  newCategory.value = "";
+  newCategory.value = '';
 };
 const removeCategory = (index) => {
   currentSectionData.value.searchAndFilter.categories.splice(index, 1);
@@ -125,15 +124,15 @@ const removeCategory = (index) => {
 const addLatestEvent = () => {
   currentSectionData.value.latestEvents.items.push({
     id: Date.now(),
-    title: "",
-    category: "",
-    date: "",
-    time: "",
-    location: "",
-    frequency: "",
-    description: "",
-    image: "",
-    registerLink: "",
+    title: '',
+    category: '',
+    date: '',
+    time: '',
+    location: '',
+    frequency: '',
+    description: '',
+    image: '',
+    registerLink: '',
   });
 };
 
@@ -143,11 +142,11 @@ const removeLatestEvent = (index) => {
 
 const addPastEvent = () => {
   currentSectionData.value.pastEvents.items.push({
-    title: "",
-    category: "",
-    date: "",
-    theme: "",
-    image: "",
+    title: '',
+    category: '',
+    date: '',
+    theme: '',
+    image: '',
   });
 };
 
@@ -155,14 +154,11 @@ const removePastEvent = (index) => {
   currentSectionData.value.pastEvents.items.splice(index, 1);
 };
 
-
-
 const pages = ref([]);
 const isLoading = ref(false);
 
-
 const addStoryStat = () => {
-  currentSectionData.value.stats.push({ label: "", value: "" });
+  currentSectionData.value.stats.push({ label: '', value: '' });
 };
 
 const removeStoryStat = (index) => {
@@ -171,7 +167,7 @@ const removeStoryStat = (index) => {
 
 const createPage = async (pageName) => {
   try {
-    const pageType = pageName.toLowerCase().trim().replace(/\s+/g, "-");
+    const pageType = pageName.toLowerCase().trim().replace(/\s+/g, '-');
     const schema = structuredClone(pageSchemas[pageType]);
 
     const exists = pages.value.some((p) => p.page_type === pageType);
@@ -183,7 +179,7 @@ const createPage = async (pageName) => {
     const payload = {
       page_type: pageType,
       name: pageName,
-      status: "draft",
+      status: 'draft',
       is_visible: false,
       content: schema,
     };
@@ -199,7 +195,7 @@ const createPage = async (pageName) => {
     await fetchPages();
     editPage(newPage);
   } catch (e) {
-    console.error("Failed to create page", e);
+    console.error('Failed to create page', e);
   }
 };
 
@@ -208,39 +204,37 @@ const fetchPages = async () => {
   try {
     const rawPages = await pagesApi.listPages();
     pages.value = rawPages.map((page) => {
-  const schema =
-    pageSchemas[page.page_type?.toLowerCase()] ?? {};
+      const schema = pageSchemas[page.page_type?.toLowerCase()] ?? {};
 
-  const content = structuredClone(schema ?? {});
+      const content = structuredClone(schema ?? {});
 
-  if (
-    schema &&
-    Object.keys(schema).length > 0 &&
-    page.content &&
-    typeof page.content === "object"
-  ) {
-    for (const sectionKey in schema) {
-      if (page.content?.[sectionKey]) {
-        content[sectionKey] = {
-          ...schema[sectionKey],
-          ...page.content[sectionKey],
-        };
+      if (
+        schema &&
+        Object.keys(schema).length > 0 &&
+        page.content &&
+        typeof page.content === 'object'
+      ) {
+        for (const sectionKey in schema) {
+          if (page.content?.[sectionKey]) {
+            content[sectionKey] = {
+              ...schema[sectionKey],
+              ...page.content[sectionKey],
+            };
+          }
+        }
       }
-    }
-  }
 
-  return {
-    ...page,
-    title: page.name ?? page.page_type_display,
-    slug: `/${(page.name ?? page.page_type)
-      .toLowerCase()
-      .replace(/\s+/g, "-")}`,
-    sections: content,
-  };
-});
-
+      return {
+        ...page,
+        title: page.name ?? page.page_type_display,
+        slug: `/${(page.name ?? page.page_type)
+          .toLowerCase()
+          .replace(/\s+/g, '-')}`,
+        sections: content,
+      };
+    });
   } catch (e) {
-    console.error("Failed to load pages", e);
+    console.error('Failed to load pages', e);
   } finally {
     isLoading.value = false;
   }
@@ -253,12 +247,12 @@ const sectionKeys = computed(() => {
   return Object.keys(activePage.value.sections);
 });
 
-const newPageTitle = ref("");
+const newPageTitle = ref('');
 
 const viewPage = (page) => {
   router.push({
     path: page.slug,
-    query: { preview: "true" },
+    query: { preview: 'true' },
   });
 };
 
@@ -271,23 +265,23 @@ const uploadSectionImage = async (event, sectionKey) => {
     activePage.value.sections[sectionKey].imageUrl = url;
     activePage.value.sections[sectionKey].previewUrl = url;
   } catch (e) {
-    console.error("Image upload failed", e);
+    console.error('Image upload failed', e);
   }
 };
 
 const editPage = (page) => {
   activePage.value = page;
-  activeSection.value = "hero";
-  currentView.value = "editor";
+  activeSection.value = 'hero';
+  currentView.value = 'editor';
 };
 
 const goBackToManager = () => {
-  currentView.value = "manager";
+  currentView.value = 'manager';
   activePage.value = null;
 };
 
 const deletePage = async (id) => {
-  if (!confirm("Are you sure you want to delete this page?")) return;
+  if (!confirm('Are you sure you want to delete this page?')) return;
 
   try {
     await pagesApi.deletePage(id);
@@ -295,7 +289,7 @@ const deletePage = async (id) => {
     fetchPages();
     console.log(`Deleted page with slug: ${id}`);
   } catch (e) {
-    console.error("Failed to delete page", e);
+    console.error('Failed to delete page', e);
   }
 };
 
@@ -311,13 +305,13 @@ const addNewLogo = async (event) => {
 
   activePage.value.sections.section1.logos.push({
     id: Date.now(),
-    name: "New Logo",
+    name: 'New Logo',
     src: url,
   });
 };
 
 const deleteLogo = (logoId) => {
-  const section = activePage.value.sections["section1"];
+  const section = activePage.value.sections['section1'];
   if (section && section.logos) {
     section.logos = section.logos.filter((logo) => logo.id !== logoId);
     console.log(`Deleted logo with ID: ${logoId}`);
@@ -325,27 +319,26 @@ const deleteLogo = (logoId) => {
 };
 
 const addNewMetric = () => {
-  const section = activePage.value.sections["section2"];
+  const section = activePage.value.sections['section2'];
   if (section && section.metrics) {
     const newId = Math.max(...section.metrics.map((m) => m.id), 0) + 1;
     section.metrics.push({
       id: newId,
       label: `New Metric ${newId}`,
-      color: "text-gray-600",
-      text: "New detail text here.",
+      color: 'text-gray-600',
+      text: 'New detail text here.',
     });
   }
-  console.log("Added new metric placeholder.");
+  console.log('Added new metric placeholder.');
 };
 
 const deleteMetric = (metricId) => {
-  const section = activePage.value.sections["section2"];
+  const section = activePage.value.sections['section2'];
   if (section && section.metrics) {
     section.metrics = section.metrics.filter((m) => m.id !== metricId);
     console.log(`Deleted metric with ID: ${metricId}`);
   }
 };
-
 
 const activeSecondaryContent = ref(null);
 
@@ -353,8 +346,6 @@ const toggleSecondaryContent = (itemId) => {
   activeSecondaryContent.value =
     activeSecondaryContent.value === itemId ? null : itemId;
 };
-
-
 
 const saveChanges = async () => {
   try {
@@ -372,14 +363,14 @@ const saveChanges = async () => {
 
     goBackToManager();
   } catch (e) {
-    console.error("Failed to save section", e);
+    console.error('Failed to save section', e);
   }
 };
-  
+
 const breadcrumbViewName = computed(() => {
-  if (currentView.value === "view") return `View: ${activePage.value.title}`;
-  if (currentView.value === "editor") return `Edit: ${activePage.value.title}`;
-  return "Page Manager";
+  if (currentView.value === 'view') return `View: ${activePage.value.title}`;
+  if (currentView.value === 'editor') return `Edit: ${activePage.value.title}`;
+  return 'Page Manager';
 });
 
 watch(
@@ -393,8 +384,9 @@ watch(
       section ??
       structuredClone(
         // pageSchemas[activePage.value.page_type]?.[activeSection.value] ?? {}
-        pageSchemas[activePage.value.page_type?.toLowerCase()]?.[activeSection.value]
-
+        pageSchemas[activePage.value.page_type?.toLowerCase()]?.[
+          activeSection.value
+        ]
       );
   },
   { immediate: true }
@@ -403,13 +395,14 @@ watch(
 const toggleVisibility = async (page) => {
   page.is_visible = !page.is_visible;
   try {
-    await pagesApi.updatePageVisibility(page.page_type.toLowerCase(), page.is_visible);
+    await pagesApi.updatePageVisibility(
+      page.page_type.toLowerCase(),
+      page.is_visible
+    );
   } catch (e) {
     page.is_visible = !page.is_visible;
   }
 };
-
-  
 </script>
 
 <template>
@@ -477,15 +470,15 @@ const toggleVisibility = async (page) => {
           >
             <div class="flex items-center space-x-3">
               <button
-  @click="toggleVisibility(page)"
-  class="relative inline-flex h-6 w-11 items-center rounded-full transition"
-  :class="page.is_visible ? 'bg-green-600' : 'bg-gray-300'"
->
-  <span
-    class="inline-block h-4 w-4 transform rounded-full bg-white transition"
-    :class="page.is_visible ? 'translate-x-6' : 'translate-x-1'"
-  />
-</button>
+                @click="toggleVisibility(page)"
+                class="relative inline-flex h-6 w-11 items-center rounded-full transition"
+                :class="page.is_visible ? 'bg-green-600' : 'bg-gray-300'"
+              >
+                <span
+                  class="inline-block h-4 w-4 transform rounded-full bg-white transition"
+                  :class="page.is_visible ? 'translate-x-6' : 'translate-x-1'"
+                />
+              </button>
 
               <span
                 class="px-3 py-1 text-xs font-semibold rounded-full min-w-[70px] text-center cursor-pointer"
@@ -497,7 +490,7 @@ const toggleVisibility = async (page) => {
                 @click="toggleVisibility(page)"
                 title="Click to toggle visibility"
               >
-                {{ page.is_visible ? "VISIBLE" : "HIDDEN" }}
+                {{ page.is_visible ? 'VISIBLE' : 'HIDDEN' }}
               </span>
               <span class="text-gray-700 font-medium">{{
                 page.page_type
@@ -601,7 +594,7 @@ const toggleVisibility = async (page) => {
           >
             {{
               activePage.sections[key]?.name ||
-              key.replace("section", "Section ")
+              key.replace('section', 'Section ')
             }}
           </button>
         </div>
@@ -787,7 +780,7 @@ const toggleVisibility = async (page) => {
             v-if="activePage.page_type.toLowerCase() === 'home'"
             :is="componentMap.home?.[activeSection]"
             v-model="currentSectionData"
-          />    
+          />
           <component
             v-if="activePage.page_type.toLowerCase() === 'about'"
             :is="componentMap.about?.[activeSection]"
@@ -798,9 +791,7 @@ const toggleVisibility = async (page) => {
             :is="componentMap.governance?.[activeSection]"
             v-model="currentSectionData"
           />
-          
-        
-          
+
           <div
             v-else-if="
               activePage.page_type.toLowerCase() === 'contact' &&
@@ -824,7 +815,6 @@ const toggleVisibility = async (page) => {
                   />
                 </div>
 
-                <!-- Headline Line 1 -->
                 <div class="border border-gray-300 rounded-lg p-3 space-y-2">
                   <label
                     class="block text-xs font-semibold uppercase text-gray-500"
@@ -883,10 +873,8 @@ const toggleVisibility = async (page) => {
 
               <!-- RIGHT SIDE -->
               <div class="w-2/5 space-y-6">
-                <!-- Image Upload -->
                 <image-uploader v-model="currentSectionData.image.src" />
 
-                <!-- Image Alt -->
                 <div class="border border-gray-300 rounded-lg p-3 space-y-2">
                   <label
                     class="block text-xs font-semibold uppercase text-gray-500"
@@ -2396,7 +2384,7 @@ const toggleVisibility = async (page) => {
               + Add Update
             </button>
           </div>
-          
+
           <div
             v-if="
               activePage.page_type.toLowerCase() === 'events' &&
@@ -3048,10 +3036,10 @@ const toggleVisibility = async (page) => {
 </template>
 
 <style scoped>
-input[type="color"]::-webkit-color-swatch-wrapper {
+input[type='color']::-webkit-color-swatch-wrapper {
   padding: 0;
 }
-input[type="color"]::-webkit-color-swatch {
+input[type='color']::-webkit-color-swatch {
   border: 1px solid #ccc;
   border-radius: 4px;
 }

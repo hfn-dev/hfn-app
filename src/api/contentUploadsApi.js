@@ -282,4 +282,46 @@ export default {
       throw error;
     }
   },
+
+  async createPublications(payload) {
+    try {
+      const { data } = await api.post(
+        '/media/publications/',
+        payload,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      );
+      return data;
+    } catch (error) {
+      console.error('Create publication error:', error);
+      throw error;
+    }
+  },
+
+  async updatepublications(slug, payload) {
+    try {
+      const { data } = await api.patch(
+        `/media/publications/${slug}/`,
+        payload,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      );
+      return data;
+    } catch (error) {
+      console.error('Update publication error:', error);
+      throw error;
+    }
+  },
+
+  async deletepublications(slug) {
+    try {
+      const { data } = await api.delete(`/media/publications/${slug}/`);
+      return data;
+    } catch (error) {
+      console.error('Delete publication error:', error);
+      throw error;
+    }
+  },
 };

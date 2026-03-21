@@ -4,13 +4,9 @@ import group from '@/assets/group.png';
 import health from '@/assets/hfn-news5.PNG';
 import wef from '@/assets/hfn-news6.PNG';
 import event from '@/assets/hfn-news7.PNG';
-// import hfn_partner from '@/assets/hfn_partner.png';
-
 import hba from '@/assets/hba-africa.png';
 import oando from '@/assets/oando_logo.png';
 import pharm from '@/assets/pharm.png';
-// import society from '@/assets/society.png';
-
 import ayodele from '@/assets/ayodele.png';
 import babarinde from '@/assets/babarinde.png';
 import chinyere from '@/assets/chinyere.png';
@@ -18,9 +14,11 @@ import jennifer from '@/assets/jennifer.png';
 import njide from '@/assets/njide.png';
 import reagan from '@/assets/reagan.png';
 
-const hfn_partner = "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715457/16268da44f149e859e5069f5fcdbf9fb_S_j9rsms.jpg";
+const hfn_partner =
+  'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715457/16268da44f149e859e5069f5fcdbf9fb_S_j9rsms.jpg';
 
-const society = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769734457/Society_For_Family_Health_Logo_1_a5qcrp.png';
+const society =
+  'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769734457/Society_For_Family_Health_Logo_1_a5qcrp.png';
 export const homePageSchema = {
   hero: {
     titleHighlight: 'The Voice of Nigeria’s',
@@ -31,10 +29,10 @@ export const homePageSchema = {
     ctaText: 'Join The Coalition ->',
     ctaLink: '/register',
     slides: [
-      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769773405/1_1_uebqmc.jpg",
-      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769801024/2_evqlkd.jpg",
-      "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769773393/3_nvepaa.jpg",
-    ]
+      'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769773405/1_1_uebqmc.jpg',
+      'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769801024/2_evqlkd.jpg',
+      'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769773393/3_nvepaa.jpg',
+    ],
   },
 
   partners: {
@@ -46,54 +44,61 @@ export const homePageSchema = {
     badge: 'Who We Are',
     title: "Strengthening Nigeria's Healthcare System",
     description: `Healthcare Federation of Nigeria (HFN) is a coalition of private healthcare stakeholders committed to strengthening Nigeria’s health system through strategic advocacy, collaboration, and private sector leadership. HFN serves as a unified platform for engaging government, influencing health policy, and enabling private sector contributions that expand access, improve quality, and accelerate progress toward Universal Health Coverage.`,
-    image: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769803836/1_hkuaio.jpg",
+    image:
+      'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769803836/1_hkuaio.jpg',
     stats: {
       number: '6+',
-      label: 'Health Guardians'
+      label: 'Health Guardians',
     },
     features: [
       { title: 'Unified Platform', sub: 'Engagement & Policy' },
-      { title: 'Universal Progress', sub: 'Universal Coverage' }
-    ]
+      { title: 'Universal Progress', sub: 'Universal Coverage' },
+    ],
   },
 
   mandate: {
     badge: 'Our Core Mandate',
     title: 'What We Do',
-    description: "Driving measurable change in Nigeria's healthcare landscape through four strategic pillars.",
+    description:
+      "Driving measurable change in Nigeria's healthcare landscape through four strategic pillars.",
     actions: [
       {
-        title: "Policy Advocacy",
-        description: "We engage policymakers to shape evidence-based reforms that enable effective regulation, sustainable financing, and private sector participation in health system strengthening.",
-        icon: "ScaleIcon",
-        tags: ["Policy", "Reform"]
+        title: 'Policy Advocacy',
+        description:
+          'We engage policymakers to shape evidence-based reforms that enable effective regulation, sustainable financing, and private sector participation in health system strengthening.',
+        icon: 'ScaleIcon',
+        tags: ['Policy', 'Reform'],
       },
       {
-        title: "Stakeholder Convening",
-        description: "We bring together private sector actors, government institutions, and development partners to align priorities and drive collective action.",
-        icon: "UserGroupIcon",
-        tags: ["Networking", "Unity"]
+        title: 'Stakeholder Convening',
+        description:
+          'We bring together private sector actors, government institutions, and development partners to align priorities and drive collective action.',
+        icon: 'UserGroupIcon',
+        tags: ['Networking', 'Unity'],
       },
       {
-        title: "Sector Intelligence & Thought Leadership",
-        description: "We generate insights, reports, and high-level dialogues that inform policy decisions and investment across the health sector.",
-        icon: "LightBulbIcon",
-        tags: ["Data", "Insights"]
+        title: 'Sector Intelligence & Thought Leadership',
+        description:
+          'We generate insights, reports, and high-level dialogues that inform policy decisions and investment across the health sector.',
+        icon: 'LightBulbIcon',
+        tags: ['Data', 'Insights'],
       },
       {
-        title: "Public–Private Collaboration",
-        description: "We support partnerships that leverage private sector capacity to improve service delivery and emergency care, and access to quality healthcare.",
-        icon: "HandRaisedIcon",
-        tags: ["Partnership", "Delivery"]
-      }
-    ]
+        title: 'Public–Private Collaboration',
+        description:
+          'We support partnerships that leverage private sector capacity to improve service delivery and emergency care, and access to quality healthcare.',
+        icon: 'HandRaisedIcon',
+        tags: ['Partnership', 'Delivery'],
+      },
+    ],
   },
 
   news: {
     months: {
       'December 2025': {
         featured: {
-          title: 'Driving Nigeria Toward Universal Health Coverage: A Landmark HFN–NHIA Private Sector Roundtable, theme: Leveraging the Private Sector to Accelerate Health Insurance Coverage in Nigeria',
+          title:
+            'Driving Nigeria Toward Universal Health Coverage: A Landmark HFN–NHIA Private Sector Roundtable, theme: Leveraging the Private Sector to Accelerate Health Insurance Coverage in Nigeria',
           slug: 'hfn-nhia-private-sector-roundtable',
           image: hfn_partner,
           tag: 'Programs & Initiatives',
@@ -114,7 +119,8 @@ export const homePageSchema = {
               'At the Global Digital Health Forum 2025 in Nairobi, the President Healthcare Federation of Nigeria and Country Director PharmAccess Nigeria, Njide Ndili, a Founding Member of the Digital Transformation for Health Lab(DTH-Lab), delivered a powerful keynote on Digital Determinants of Health Framework. Her presentation underscored a critical message: digital systems are no longer optional layers in health; they are now core determinants that shape equity, access, safety, and well-being.',
           },
           {
-            title: 'NCDC Private Sector Engagement Roundtable on National Health Security',
+            title:
+              'NCDC Private Sector Engagement Roundtable on National Health Security',
             slug: 'ncdc-private-sector-engagement',
             image: wef,
             tag: 'Health Alert',
@@ -124,7 +130,8 @@ export const homePageSchema = {
               'The Nigeria Centre for Disease Control and Prevention (NCDC) convened a high-level Private Sector Engagement Roundtable focused on strengthening national health security through strategic collaboration. Healthcare Federation of Nigeria(HFN) was duly represented by Dr Benson Ayodele Cole(First Vice President 1), Mr Olufemi Akingbade(Executive Secretary), and Uchechi Amiloat the session.',
           },
           {
-            title: 'The Digital Health Revolution – Unlocking Investment in Africa’s HealthTech Ecosystem',
+            title:
+              'The Digital Health Revolution – Unlocking Investment in Africa’s HealthTech Ecosystem',
             slug: 'the-digital-health-revolution',
             image: event,
             tag: 'Public Health Stories',
@@ -137,8 +144,8 @@ export const homePageSchema = {
       },
       'September 2025': {
         featured: {
-          title: 'Strengthening Healthcare Policy Frameworks', 
-    slug: 'strengthening-policy-frameworks',
+          title: 'Strengthening Healthcare Policy Frameworks',
+          slug: 'strengthening-policy-frameworks',
           image: group,
           tag: 'Health Policy',
           date: 'September 18, 2025',
@@ -149,7 +156,7 @@ export const homePageSchema = {
         newsList: [
           {
             title: 'Pharmaceutical Collaboration for Quality Medicine',
-      slug: 'pharmaceutical-collaboration-quality-medicine',
+            slug: 'pharmaceutical-collaboration-quality-medicine',
             image: pharm,
             tag: 'Programs & Initiatives',
             date: 'September 15, 2025',
@@ -184,8 +191,8 @@ export const homePageSchema = {
       'August 2025': {
         featured: {
           title:
-              'HFN collaborated with Emzor Pharmaceuticals to discuss the future of local drug production.',
-            slug: 'hfn-collaborated-with-emzor',
+            'HFN collaborated with Emzor Pharmaceuticals to discuss the future of local drug production.',
+          slug: 'hfn-collaborated-with-emzor',
           image: emzor,
           tag: 'Programs & Initiatives',
           date: 'August 20, 2025',
@@ -217,7 +224,8 @@ export const homePageSchema = {
               'Bridge Clinic joins HFN network to promote advanced fertility care across Nigeria.',
           },
           {
-            title: 'INAUGURATION OF THE IMPLEMENTATION COMMITTEE FOR THE NATIONAL STAKEHOLDERS DIALOGUE ON POWER IN THE HEALTH SECTOR',
+            title:
+              'INAUGURATION OF THE IMPLEMENTATION COMMITTEE FOR THE NATIONAL STAKEHOLDERS DIALOGUE ON POWER IN THE HEALTH SECTOR',
             slug: 'inauguration-of-the-implementation-committee',
             image: health,
             tag: 'Programs & Initiatives',
