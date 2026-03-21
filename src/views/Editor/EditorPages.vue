@@ -169,16 +169,6 @@ const removePastEvent = (index) => {
 };
 
 
-const addSocial = (memberIndex) => {
-  currentSectionData.value.members[memberIndex].socials.push({
-    platform: "",
-    url: "",
-  });
-};
-
-const removeSocial = (memberIndex, socialIndex) => {
-  currentSectionData.value.members[memberIndex].socials.splice(socialIndex, 1);
-};
 
 const pages = ref([]);
 const isLoading = ref(false);
@@ -398,22 +388,6 @@ const saveChanges = async () => {
     console.error("Failed to save section", e);
   }
 };
-
-const addExecutives = () => {
-  currentSectionData.value.members.push({
-    name: "",
-    role: "",
-    slug: "",
-    image: "",
-    profile: "",
-    socials: [],
-  });
-};
-
-const removeExecutives = (index) => {
-  currentSectionData.value.members.splice(index, 1);
-};
-
   
 const breadcrumbViewName = computed(() => {
   if (currentView.value === "view") return `View: ${activePage.value.title}`;
