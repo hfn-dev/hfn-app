@@ -333,7 +333,7 @@ const resolveImage = (image) => imageMap[image] || image;
             class="relative mt-12 lg:mt-0 p-8 bg-[#f2f9f3] rounded-[3rem] border border-[#004d33]/5 shadow-inner"
           >
             <p class="text-sm italic text-gray-500 mb-6 font-medium">
-             {{ page.roleSection.tageDescription}}             
+             {{ page.roleSection.tagDescription}}             
             </p>
             <div class="grid grid-cols-2 gap-4">
               <div
