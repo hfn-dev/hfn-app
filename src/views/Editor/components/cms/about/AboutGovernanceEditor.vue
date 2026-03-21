@@ -59,7 +59,7 @@ const deleteUnit = (index) => {
                 >Description</label
               >
               <textarea
-                v-model="currentSectionData.description"
+                v-model="currentSectionData.note"
                 rows="3"
                 class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
               ></textarea>
