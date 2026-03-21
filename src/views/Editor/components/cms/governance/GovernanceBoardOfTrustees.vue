@@ -74,7 +74,8 @@ const addTrustee = () => {
     name: '',
     title: '',
     slug: '',
-    image: ''
+    image: '',
+    bio: ''
   })
 }
 
