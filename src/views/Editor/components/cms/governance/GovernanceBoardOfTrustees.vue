@@ -42,7 +42,11 @@ watch(
         ...(val?.chair || {})
       },
 
-      trustees: (val?.trustees || []).map((t) => ({
+      trustees: (
+        val?.trustees?.length
+          ? val.trustees
+          : defaultData.trustees
+      ).map((t) => ({
         name: '',
         title: '',
         slug: '',
@@ -55,7 +59,6 @@ watch(
   { immediate: true }
 );
   
-// Sync to parent
 watch(
   currentSectionData,
   (val) => {
