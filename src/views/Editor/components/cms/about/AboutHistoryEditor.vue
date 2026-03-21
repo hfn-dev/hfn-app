@@ -57,6 +57,16 @@ const deleteMilestone = (index) => {
                 class="w-full border-none focus:ring-0 p-0 m-0"
               />
             </div>
+  <div class="border border-gray-300 rounded-lg p-3 mb-4">
+              <label class="block text-xs font-semibold uppercase text-gray-500"
+                >Sub Title</label
+              >
+              <input
+                v-model="currentSectionData.subtitle"
+                type="text"
+                class="w-full border-none focus:ring-0 p-0 m-0"
+              />
+            </div>
 
             <div
               v-for="(milestone, index) in currentSectionData.milestones"
