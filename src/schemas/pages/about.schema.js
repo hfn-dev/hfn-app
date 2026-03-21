@@ -54,7 +54,7 @@ export const aboutPageSchema = {
       year: '2015',
       event: 'HFN was established to bring together stakeholders across Nigeria’s private health sector. Today, we are a nationally recognised voice, contributing to major policy reforms and public–private partnerships that have strengthened healthcare delivery across Nigeria.'
     }
-  ]
+  ],
     subtitle:
       'A Coordinated Platform for Policy Engagement & System Reform',
   },
