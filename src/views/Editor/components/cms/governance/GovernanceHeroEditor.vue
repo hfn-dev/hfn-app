@@ -9,9 +9,12 @@ const props = defineProps({
 // Emits
 const emit = defineEmits(['update:modelValue'])
 
-// Local state (with defaults)
+// Local state
 const currentSectionData = ref({
-  units: [],
+  titleHighlight: '',
+  titleMain: '',
+  description: '',
+  image: '',
   ...props.modelValue
 })
 
@@ -20,7 +23,10 @@ watch(
   () => props.modelValue,
   (val) => {
     currentSectionData.value = {
-      units: [],
+      titleHighlight: '',
+      titleMain: '',
+      description: '',
+      image: '',
       ...val
     }
   }
@@ -34,75 +40,61 @@ watch(
   },
   { deep: true }
 )
-
-// Add unit
-const addUnit = () => {
-  if (!currentSectionData.value.units) {
-    currentSectionData.value.units = []
-  }
-  currentSectionData.value.units.push('')
-}
-
-// Delete unit
-const deleteUnit = (index) => {
-  currentSectionData.value.units.splice(index, 1)
-}
 </script>
 
 <template>
-  <!-- TITLE -->
+  <!-- TITLE HIGHLIGHT -->
   <div class="border border-gray-300 rounded-lg p-3 space-y-2">
     <label class="block text-xs font-semibold uppercase text-gray-500">
-      Title
+      Title Highlight
     </label>
     <input
-      v-model="currentSectionData.title"
+      v-model="currentSectionData.titleHighlight"
       type="text"
       class="w-full border-none focus:ring-0"
     />
   </div>
 
-  <!-- NOTE / DESCRIPTION -->
+  <!-- TITLE MAIN -->
   <div class="border border-gray-300 rounded-lg p-3 space-y-2">
     <label class="block text-xs font-semibold uppercase text-gray-500">
-      Note
+      Title Main
+    </label>
+    <input
+      v-model="currentSectionData.titleMain"
+      type="text"
+      class="w-full border-none focus:ring-0"
+    />
+  </div>
+
+  <!-- DESCRIPTION -->
+  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+    <label class="block text-xs font-semibold uppercase text-gray-500">
+      Description
     </label>
     <textarea
-      v-model="currentSectionData.note"
-      rows="3"
+      v-model="currentSectionData.description"
+      rows="4"
       class="w-full border-none focus:ring-0 resize-none"
     ></textarea>
   </div>
 
-  <!-- UNITS -->
+  <!-- IMAGE -->
   <div class="border border-gray-300 rounded-lg p-3 space-y-2">
     <label class="block text-xs font-semibold uppercase text-gray-500">
-      Units
+      Image
     </label>
 
-    <div
-      v-for="(unit, index) in currentSectionData.units"
-      :key="index"
-      class="flex items-center space-x-2"
-    >
-      <input
-        v-model="currentSectionData.units[index]"
-        type="text"
-        class="flex-grow border-none focus:ring-0"
-      />
-      <button
-        class="text-red-500 text-sm"
-        @click="deleteUnit(index)"
-      >
-        Delete
-      </button>
-    </div>
+    <!-- If you use uploader -->
+    <image-uploader v-model="currentSectionData.image" />
 
-    <button
-      class="bg-black text-white px-3 py-1 rounded mt-2"
-      @click="addUnit"
-    >
-      Add Unit
-    </button>
+    <!-- OR fallback input -->
+    <!--
+    <input
+      v-model="currentSectionData.image"
+      type="text"
+      class="w-full border-none focus:ring-0"
+    />
+    -->
   </div>
 </template>
