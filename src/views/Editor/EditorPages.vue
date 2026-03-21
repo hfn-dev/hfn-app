@@ -19,7 +19,9 @@ import AboutGovernanceEditor from './components/cms/about/AboutGovernanceEditor.
 import AboutCtaSectionEditor from './components/cms/about/AboutCtaSectionEditor.vue'
 import AboutCommitmentSection from './components/cms/about/AboutCommitmentSection.vue'
 import AboutRoleSectionEditor from './components/cms/about/AboutRoleSectionEditor.vue'
-
+import GovernanceHeroEditor from './components/cms/governance/GovernanceHeroEditor.vue'
+import BoardOfTrusteesEditor from './components/cms/governance/BoardOfTrusteesEditor.vue'
+import ExecutiveCommitteeEditor from './components/cms/governance/ExecutiveCommitteeEditor.vue'
   
 const newYear = ref("");
 const newCategory = ref("");
@@ -51,6 +53,12 @@ const componentMap = {
     items: AboutItemEditor,
     ctaSection: AboutCtaSectionEditor,
     commitment: AboutCommitmentSection,
+  },
+  governance: {
+    hero: GovernanceHeroEditor,
+    boardOfTrustees: BoardOfTrusteesEditor,
+    executiveCommittee: ExecutiveCommitteeEditor,
+    
   }
 }  
   
@@ -815,18 +823,20 @@ const toggleVisibility = async (page) => {
           </div>
 
           <component
-  v-if="activePage.page_type.toLowerCase() === 'home'"
-  :is="componentMap.home?.[activeSection]"
-  v-model="currentSectionData"
-/>
-          
-          
-          <!-- ABOUT HERO SECTION -->
+            v-if="activePage.page_type.toLowerCase() === 'home'"
+            :is="componentMap.home?.[activeSection]"
+            v-model="currentSectionData"
+          />    
           <component
-  v-if="activePage.page_type.toLowerCase() === 'about'"
-  :is="componentMap.about?.[activeSection]"
-  v-model="currentSectionData"
-/>
+            v-if="activePage.page_type.toLowerCase() === 'about'"
+            :is="componentMap.about?.[activeSection]"
+            v-model="currentSectionData"
+          />
+          <component
+            v-if="activePage.page_type.toLowerCase() === 'governance'"
+            :is="componentMap.governance?.[activeSection]"
+            v-model="currentSectionData"
+          />
           
         
           
@@ -2425,299 +2435,7 @@ const toggleVisibility = async (page) => {
               + Add Update
             </button>
           </div>
-          <div
-            v-if="
-              activePage.page_type.toLowerCase() === 'governance' &&
-              activeSection === 'hero'
-            "
-            class="space-y-6"
-          >
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Title Highlight
-              </label>
-              <input
-                v-model="currentSectionData.titleHighlight"
-                type="text"
-                class="w-full border-none focus:ring-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Title Main
-              </label>
-              <input
-                v-model="currentSectionData.titleMain"
-                type="text"
-                class="w-full border-none focus:ring-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Description
-              </label>
-              <textarea
-                v-model="currentSectionData.description"
-                rows="4"
-                class="w-full border-none focus:ring-0 resize-none"
-              ></textarea>
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Hero Image URL
-              </label>
-              <input
-                v-model="currentSectionData.image"
-                type="text"
-                class="w-full border-none focus:ring-0"
-              />
-            </div>
-          </div>
-
-          <div
-            v-if="
-              activePage.page_type.toLowerCase() === 'governance' &&
-              activeSection === 'boardOfTrustees'
-            "
-            class="space-y-8"
-          >
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Section Title
-              </label>
-              <input
-                v-model="currentSectionData.title"
-                type="text"
-                class="w-full border-none focus:ring-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-4 space-y-3">
-              <h4 class="font-semibold text-sm">Chair</h4>
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Name</label
-              >
-              <input
-                v-model="currentSectionData.chair.name"
-                class="w-full border-none focus:ring-0"
-              />
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Role</label
-              >
-              <input
-                v-model="currentSectionData.chair.role"
-                class="w-full border-none focus:ring-0"
-              />
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Slug</label
-              >
-              <input
-                v-model="currentSectionData.chair.slug"
-                class="w-full border-none focus:ring-0"
-              />
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Tag</label
-              >
-              <input
-                v-model="currentSectionData.chair.tag"
-                class="w-full border-none focus:ring-0"
-              />
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Image URL</label
-              >
-              <input
-                v-model="currentSectionData.chair.image"
-                class="w-full border-none focus:ring-0"
-              />
-            </div>
-
-            <div
-              v-for="(trustee, index) in currentSectionData.trustees"
-              :key="index"
-              class="border border-gray-300 rounded-lg p-4 space-y-3"
-            >
-              <div class="flex justify-between items-center">
-                <h4 class="font-semibold text-sm">Trustee {{ index + 1 }}</h4>
-                <button
-                  @click="removeTrustee(index)"
-                  class="text-red-500 text-sm"
-                >
-                  Delete
-                </button>
-              </div>
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Name</label
-              >
-              <input
-                v-model="trustee.name"
-                class="w-full border-none focus:ring-0"
-              />
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Title</label
-              >
-              <input
-                v-model="trustee.title"
-                class="w-full border-none focus:ring-0"
-              />
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Slug</label
-              >
-              <input
-                v-model="trustee.slug"
-                class="w-full border-none focus:ring-0"
-              />
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Image URL</label
-              >
-              <input
-                v-model="trustee.image"
-                class="w-full border-none focus:ring-0"
-              />
-            </div>
-
-            <button
-              @click="addTrustee"
-              class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800"
-            >
-              + Add Trustee
-            </button>
-          </div>
-          <div
-            v-if="
-              activePage.page_type.toLowerCase() === 'governance' &&
-              activeSection === 'executiveCommittee'
-            "
-            class="space-y-8"
-          >
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Section Title
-              </label>
-              <input
-                v-model="currentSectionData.title"
-                type="text"
-                class="w-full border-none focus:ring-0"
-              />
-            </div>
-
-            <div
-              v-for="(member, index) in currentSectionData.members"
-              :key="index"
-              class="border border-gray-300 rounded-lg p-4 space-y-3"
-            >
-              <div class="flex justify-between items-center">
-                <h4 class="font-semibold text-sm">Member {{ index + 1 }}</h4>
-                <button
-                  @click="removeExecutives(index)"
-                  class="text-red-500 text-sm"
-                >
-                  Delete
-                </button>
-              </div>
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Name</label
-              >
-              <input
-                v-model="member.name"
-                class="w-full border-none focus:ring-0"
-              />
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Role</label
-              >
-              <input
-                v-model="member.role"
-                class="w-full border-none focus:ring-0"
-              />
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Slug</label
-              >
-              <input
-                v-model="member.slug"
-                class="w-full border-none focus:ring-0"
-              />
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Image URL</label
-              >
-              <input
-                v-model="member.image"
-                class="w-full border-none focus:ring-0"
-              />
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Profile</label
-              >
-              <textarea
-                v-model="member.profile"
-                rows="3"
-                class="w-full border-none focus:ring-0 resize-none"
-              ></textarea>
-
-              <div
-                v-for="(social, sIndex) in member.socials"
-                :key="sIndex"
-                class="flex gap-2 items-center"
-              >
-                <input
-                  v-model="social.platform"
-                  placeholder="Platform"
-                  class="border p-1 rounded focus:ring-0 w-32"
-                />
-                <input
-                  v-model="social.url"
-                  placeholder="URL"
-                  class="border p-1 rounded focus:ring-0 flex-1"
-                />
-                <button
-                  @click="removeSocial(index, sIndex)"
-                  class="text-red-500"
-                >
-                  ×
-                </button>
-              </div>
-
-              <button
-                @click="addSocial(index)"
-                class="bg-gray-200 px-3 py-1 rounded text-sm"
-              >
-                + Add Social
-              </button>
-            </div>
-
-            <button
-              @click="addExecutives"
-              class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800"
-            >
-              + Add Member
-            </button>
-          </div>
+          
           <div
             v-if="
               activePage.page_type.toLowerCase() === 'events' &&
