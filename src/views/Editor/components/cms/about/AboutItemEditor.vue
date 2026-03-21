@@ -1,18 +1,22 @@
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 const props = defineProps({
   modelValue: Object
 })
 
 const emit = defineEmits(['update:modelValue'])
-const currentSectionData = ref(props.modelValue || {})
+
+const currentSectionData = ref({
+  items: [],
+  ...props.modelValue
+})
 
 watch(
   () => props.modelValue,
   (val) => {
-    currentSectionData.value = val || {}
+    currentSectionData.value = val || { items: [] }
   }
 )
 
@@ -22,65 +26,21 @@ watch(
     emit('update:modelValue', val)
   },
   { deep: true }
-)  
-
+)
 
 const addItem = () => {
-  if (activeSection.value === "donations") {
-    currentSectionData.value.paragraphs.push("");
-  }
-
-  if (activeSection.value === "partnerships") {
-    currentSectionData.value.items.push({
-      title: "",
-      description: "",
-      buttonText: "",
-    });
-  }
-
-  if (activeSection.value === "opportunities") {
-    currentSectionData.value.items.push({
-      title: "",
-      description: "",
-      buttonText: "",
-    });
-  }
-
-  if (activeSection.value === "donationModal") {
-    currentSectionData.value.options.push({
-      title: "",
-      description: "",
-    });
-  }
-  if (activeSection.value === "newsletterSection") {
-    currentSectionData.value.items.push({
-      date: "",
-      text: "",
-      pdfUrl: "",
-    });
-  }
-
-  if (activeSection.value === "publicationsSection") {
-    currentSectionData.value.items.push({
-      title: "",
-      description: "",
-      pdfUrl: "",
-    });
-  }
-};
+  currentSectionData.value.items.push({
+    title: "",
+    shortDesc: "",
+    fullDesc: "",
+    colorClass: "",
+  })
+}
 
 const deleteItem = (index) => {
-  if (activeSection.value === "donations") {
-    currentSectionData.value.paragraphs.splice(index, 1);
-  } else if (activeSection.value === "donationModal") {
-    currentSectionData.value.options.splice(index, 1);
-  } else {
-    currentSectionData.value.items.splice(index, 1);
-  }
-};
-  
+  currentSectionData.value.items.splice(index, 1)
+}
 </script>
-
 
 <template>
 
