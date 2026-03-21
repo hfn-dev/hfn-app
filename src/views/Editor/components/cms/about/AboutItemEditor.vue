@@ -1,3 +1,31 @@
+
+<script setup>
+import { ref } from 'vue'
+
+const props = defineProps({
+  modelValue: Object
+})
+
+const emit = defineEmits(['update:modelValue'])
+const currentSectionData = ref(props.modelValue || {})
+
+watch(
+  () => props.modelValue,
+  (val) => {
+    currentSectionData.value = val || {}
+  }
+)
+
+watch(
+  currentSectionData,
+  (val) => {
+    emit('update:modelValue', val)
+  },
+  { deep: true }
+)  
+</script>
+
+
 <template>
 
             <div
