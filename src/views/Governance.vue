@@ -175,7 +175,11 @@
 
 <script setup>
 import { trustees, executives, chair } from "@/data/leadership.js";
+import { governanceSchema } from "@/schemas/pages/governance.schema";
+import { computed } from "vue";
 
+const page = computed(() => governanceSchema);
+  
 const slugify = (name) =>
   name
     .toLowerCase()
