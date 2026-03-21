@@ -9,7 +9,6 @@ const props = defineProps({
 // Emits
 const emit = defineEmits(['update:modelValue'])
 
-// Default structure (VERY IMPORTANT for nested fields)
 const getDefaultData = () => ({
   title: '',
   chair: {
@@ -29,22 +28,33 @@ const currentSectionData = ref({
   ...props.modelValue
 })
 
-// Sync from parent
 watch(
   () => props.modelValue,
   (val) => {
+    const defaultData = getDefaultData();
+
     currentSectionData.value = {
-      ...getDefaultData(),
+      ...defaultData,
       ...val,
+
       chair: {
-        ...getDefaultData().chair,
+        ...defaultData.chair,
         ...(val?.chair || {})
       },
-      trustees: val?.trustees || []
-    }
-  }
-)
 
+      trustees: (val?.trustees || []).map((t) => ({
+        name: '',
+        title: '',
+        slug: '',
+        image: '',
+        bio: '',
+        ...t
+      }))
+    };
+  },
+  { immediate: true }
+);
+  
 // Sync to parent
 watch(
   currentSectionData,
@@ -77,6 +87,7 @@ const removeTrustee = (index) => {
 <template>
 
             <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              
               <label
                 class="block text-xs font-semibold uppercase text-gray-500"
               >
@@ -88,6 +99,16 @@ const removeTrustee = (index) => {
                 class="w-full border-none focus:ring-0"
               />
             </div>
+            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+              
+              <label class="text-xs font-semibold uppercase text-gray-500">Bio</label>
+<textarea
+  v-model="trustee.bio"
+  class="w-full border-none focus:ring-0"
+  rows="4"
+/>
+            </div>
+
 
             <div class="border border-gray-300 rounded-lg p-4 space-y-3">
               <h4 class="font-semibold text-sm">Chair</h4>
