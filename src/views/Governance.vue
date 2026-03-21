@@ -7,13 +7,11 @@
             <h2
               class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4"
             >
-              <span class="text-orange-500 block">Governance & Leadership</span>
+              <span class="text-orange-500 block">{{ page.hero.titleHighlight }}</span>
               <span class="text-green-700 block mt-2"></span>
             </h2>
             <p class="mt-6 text-lg text-gray-600 max-w-xl">
-              HFN is guided by a Board of Trustees and an Executive Committee
-              providing strategic oversight and leadership for Nigeria’s private
-              health sector.
+              {{ page.hero.titleMain }}
             </p>
           </div>
 
@@ -22,7 +20,7 @@
               class="relative w-[320px] h-[240px] sm:w-[400px] sm:h-[300px] lg:w-[500px] lg:h-[375px] rounded-[30px] overflow-hidden shadow-2xl"
             >
               <img
-                :src="handsJoining"
+                :src="page.hero.image"
                 alt="Diverse hands joining in a heart shape, symbolizing unity and healthcare"
                 class="object-cover w-full h-full"
               />
@@ -35,7 +33,7 @@
     <section class="py-24 max-w-7xl mx-auto px-4">
       <div class="flex items-center gap-4 mb-16">
         <h2 class="text-3xl font-black text-gray-900 uppercase tracking-tight">
-          Board of Trustees
+          {{ page.boardOfTrustees.title }}
         </h2>
         <div class="h-[2px] flex-grow bg-gray-100"></div>
       </div>
@@ -43,7 +41,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
         <div class="lg:col-span-3 flex justify-center mb-10">
           <RouterLink
-            :to="`/team/${chair.slug}`"
+:to="`/team/${page.boardOfTrustees.chair.slug}`"
             class="group relative w-full max-w-md"
           >
             <div
@@ -58,24 +56,24 @@
                 class="aspect-square rounded-[2.5rem] overflow-hidden bg-gray-100 mb-6 border-4 border-[#f2f9f3]"
               >
                 <img
-                  :src="chairImage"
+                  :src="page.boardOfTrustees.chair.image"
                   alt="Bola Adesola"
                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
               </div>
               <div class="text-center">
-                <h3 class="text-3xl font-black text-[#004d33]">Bola Adesola</h3>
+                <h3 class="text-3xl font-black text-[#004d33]">{{ page.boardOfTrustees.chair.name }}</h3>
                 <p
                   class="text-orange-600 font-bold text-sm uppercase tracking-[0.2em] mt-2"
                 >
-                  Chair, Board of Trustees
+                  {{ page.boardOfTrustees.chair.role }}
                 </p>
               </div>
             </div>
           </RouterLink>
         </div>
 
-        <div v-for="trustee in trustees" :key="trustee.name">
+        <div v-for="trustee in page.boardOfTrustees.trustees" :key="trustee.name">
           <RouterLink :to="`/team/${trustee.slug}`">
             <div
               class="bg-white p-6 rounded-[3rem] shadow-lg border border-gray-50 hover:shadow-2xl transition-all group"
@@ -114,13 +112,13 @@
           <h2
             class="text-3xl font-black text-[#004d33] uppercase tracking-tight"
           >
-            Executive Committee
+            {{ page.executiveCommittee.title }}
           </h2>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           <RouterLink
-            v-for="exec in executives"
+            v-for="exec in page.executiveCommittee.executives"
             :key="exec.name"
             :to="`/team/${exec.slug}`"
             class="flex flex-col sm:flex-row gap-8 p-8 rounded-[2.5rem] bg-[#f8fdf9] border border-gray-50 hover:bg-white hover:shadow-xl transition-all group"
@@ -174,8 +172,42 @@
 </template>
 
 <script setup>
-import { trustees, executives, chair } from "@/data/leadership.js";
+// import { trustees, executives, chair } from "@/data/leadership.js";
+import { governanceSchema } from "@/schemas/pages/governance.schema";
+import { ref, computed } from "vue";
 
+const pageFromApi = ref(null); 
+const page = computed(() => {
+  const api = pageFromApi.value || {};
+
+  return {
+    hero: {
+      ...governanceSchema.hero,
+      ...(api.hero || {}),
+    },
+
+    boardOfTrustees: {
+      ...governanceSchema.boardOfTrustees,
+      ...(api.boardOfTrustees || {}),
+      chair: {
+        ...governanceSchema.boardOfTrustees.chair,
+        ...(api.boardOfTrustees?.chair || {}),
+      },
+      trustees:
+        api.boardOfTrustees?.trustees ||
+        governanceSchema.boardOfTrustees.trustees,
+    },
+
+    executiveCommittee: {
+      ...governanceSchema.executiveCommittee,
+      ...(api.executiveCommittee || {}),
+      executives:
+        api.executiveCommittee?.executives ||
+        governanceSchema.executiveCommittee.executives,
+    },
+  };
+});
+  
 const slugify = (name) =>
   name
     .toLowerCase()
