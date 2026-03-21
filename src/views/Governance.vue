@@ -22,7 +22,7 @@
               class="relative w-[320px] h-[240px] sm:w-[400px] sm:h-[300px] lg:w-[500px] lg:h-[375px] rounded-[30px] overflow-hidden shadow-2xl"
             >
               <img
-                :src="handsJoining"
+                :src="page.hero.image"
                 alt="Diverse hands joining in a heart shape, symbolizing unity and healthcare"
                 class="object-cover w-full h-full"
               />
@@ -43,7 +43,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
         <div class="lg:col-span-3 flex justify-center mb-10">
           <RouterLink
-            :to="`/team/${chair.slug}`"
+:to="`/team/${page.boardOfTrustees.chair.slug}`"
             class="group relative w-full max-w-md"
           >
             <div
@@ -58,7 +58,7 @@
                 class="aspect-square rounded-[2.5rem] overflow-hidden bg-gray-100 mb-6 border-4 border-[#f2f9f3]"
               >
                 <img
-                  :src="chairImage"
+                  :src="page.boardOfTrustees.chair.image"
                   alt="Bola Adesola"
                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
@@ -75,7 +75,7 @@
           </RouterLink>
         </div>
 
-        <div v-for="trustee in trustees" :key="trustee.name">
+        <div v-for="trustee in page.boardOfTrustees.trustees" :key="trustee.name">
           <RouterLink :to="`/team/${trustee.slug}`">
             <div
               class="bg-white p-6 rounded-[3rem] shadow-lg border border-gray-50 hover:shadow-2xl transition-all group"
@@ -120,7 +120,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           <RouterLink
-            v-for="exec in executives"
+            v-for="exec in page.executiveCommittee.executives"
             :key="exec.name"
             :to="`/team/${exec.slug}`"
             class="flex flex-col sm:flex-row gap-8 p-8 rounded-[2.5rem] bg-[#f8fdf9] border border-gray-50 hover:bg-white hover:shadow-xl transition-all group"
@@ -174,11 +174,14 @@
 </template>
 
 <script setup>
-import { trustees, executives, chair } from "@/data/leadership.js";
+// import { trustees, executives, chair } from "@/data/leadership.js";
 import { governanceSchema } from "@/schemas/pages/governance.schema";
 import { computed } from "vue";
 
-const page = computed(() => governanceSchema);
+const page = computed(() => ({
+  ...governanceSchema,
+  ...(pageFromApi.value || {}),
+}));
   
 const slugify = (name) =>
   name
