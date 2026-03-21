@@ -100,16 +100,7 @@ const removeTrustee = (index) => {
                 class="w-full border-none focus:ring-0"
               />
             </div>
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              
-              <label class="text-xs font-semibold uppercase text-gray-500">Bio</label>
-<textarea
-  v-model="trustee.bio"
-  class="w-full border-none focus:ring-0"
-  rows="4"
-/>
-            </div>
-
+            
 
             <div class="border border-gray-300 rounded-lg p-4 space-y-3">
               <h4 class="font-semibold text-sm">Chair</h4>
@@ -202,7 +193,19 @@ const removeTrustee = (index) => {
                 class="w-full border-none focus:ring-0"
               />
             </div>
+            <div
+  v-for="(trustee, index) in currentSectionData.trustees"
+  :key="index"
+>
+  ...
 
+  <label class="text-xs font-semibold uppercase text-gray-500">Bio</label>
+  <textarea
+    v-model="trustee.bio"
+    class="w-full border-none focus:ring-0"
+    rows="4"
+  />
+</div>
             <button
               @click="addTrustee"
               class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800"
