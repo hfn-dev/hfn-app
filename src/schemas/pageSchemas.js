@@ -39,7 +39,7 @@ const chairImage =
 export const pageSchemas = {
   home: homePageSchema,
   about: aboutPageSchema,
-
+  governance: governanceSchema,
   contact: {
     hero: {
       headline: 'Get in touch with HFN Nigeria',
@@ -1079,6 +1079,6 @@ The roundtable reinforced the urgency of collaborative investment and structured
     //   totalPages: 2,
     // },
   },
-  governance: governanceSchema,
+  
 },
 }
