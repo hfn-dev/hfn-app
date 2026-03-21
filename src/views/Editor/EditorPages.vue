@@ -11,6 +11,11 @@ import HomeMandateEditor from './components/cms/home/HomeMandateEditor.vue'
 import HomeNewsEditor from './components/cms/home/HomeNewsEditor.vue'
 import HomeExecutivesEditor from './components/cms/home/HomeExecutivesEditor.vue'
 import HomePartnerEditor from './components/cms/home/HomePartnerEditor.vue'
+import AboutHeroEditor from './components/cms/about/AboutHeroEditor.vue'
+import AboutStoryEditor from './components/cms/about/AboutStoryEditor.vue'
+import AboutItemsEditor from './components/cms/about/AboutItemsEditor.vue'
+import AboutHistoryEditor from './components/cms/about/AboutHistoryEditor.vue'
+import AboutGovernanceEditor from './components/cms/about/AboutGovernanceEditor.vue'
 
   
 const newYear = ref("");
@@ -33,6 +38,14 @@ const componentMap = {
     news: HomeNewsEditor,
     executives: HomeExecutivesEditor,
     partners: HomePartnerEditor,
+  },
+  about: {
+    hero: AboutHeroEditor,
+    story: AboutStoryEditor,
+    items: AboutItemsEditor,
+    history: AboutHistoryEditor,
+    governance: AboutGovernanceEditor,
+    
   }
 }  
   
