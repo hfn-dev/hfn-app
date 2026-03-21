@@ -857,6 +857,11 @@ const toggleVisibility = async (page) => {
           
           
           <!-- ABOUT HERO SECTION -->
+          <component
+  v-if="activePage.page_type.toLowerCase() === 'about'"
+  :is="componentMap.about?.[activeSection]"
+  v-model="currentSectionData"
+/>
           <div
             v-else-if="
               activePage.page_type.toLowerCase() === 'about' &&
