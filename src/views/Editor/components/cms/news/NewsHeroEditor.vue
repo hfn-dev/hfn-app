@@ -1,3 +1,45 @@
+<script setup>
+import { ref, watch } from "vue";
+
+const props = defineProps({
+  modelValue: Object,
+});
+
+const emit = defineEmits(["update:modelValue"]);
+
+const currentSectionData = ref({
+  titleLine1: "",
+  titleLine2: "",
+  description: "",
+  image: "",
+  backgroundColor: "#ffffff",
+  ...props.modelValue,
+});
+
+watch(
+  () => props.modelValue,
+  (val) => {
+    currentSectionData.value = {
+      titleLine1: "",
+      titleLine2: "",
+      description: "",
+      image: "",
+      backgroundColor: "#ffffff",
+      ...(val || {}),
+    };
+  },
+  { immediate: true }
+);
+
+// sync FROM local → parent
+watch(
+  currentSectionData,
+  (val) => {
+    emit("update:modelValue", val);
+  },
+  { deep: true }
+);
+</script>
 <template>
 
             <div class="border border-gray-300 rounded-lg p-3 space-y-2">
