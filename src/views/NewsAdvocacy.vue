@@ -24,7 +24,11 @@
             class="lg:w-1/2 flex justify-center w-full h-64 sm:h-80 lg:h-96 relative"
           >
             <img
-              :src="latest"
+              :src="
+    page.hero.image.startsWith('http')
+      ? page.hero.image
+      : imageMap[page.hero.image]
+  "
               alt="Latest news and updates"
               class="object-cover w-full h-full rounded-lg"
             />
@@ -35,7 +39,7 @@
 
     <main class="container mx-auto px-4 md:px-8 py-16">
       <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">
-        Latest News
+        {{ page.latestNewsSection.title }}
       </h2>
 
       <div class="max-w-7xl mx-auto mb-10 flex flex-wrap items-center gap-4 justify-center">
@@ -187,7 +191,7 @@
       </section>
 
       <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">
-        Policy & Advocacy
+        {{ page.policyAdvocacySection.title }}
       </h2>
 
       <div
@@ -216,7 +220,7 @@
           </h4>
 
           <p class="text-gray-600 text-sm mb-3">
-            {{ item.excerpt }}
+            {{ item.description }}
           </p>
 
           <RouterLink
@@ -268,8 +272,8 @@ const sortedArticles = computed(() => {
     return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
 });
-const policyUpdates = newsPageSchema.news.policyAdvocacySection.updates;
-
+// const policyUpdates = newsPageSchema.news.policyAdvocacySection.updates;
+const policyUpdates = computed(() => page.value.policyAdvocacySection.updates);
 const latest =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769896360/243A8355_r47c3t.jpg";
 const event =
@@ -311,7 +315,7 @@ const imageMap = {
   "hands.png": hands,
     "hands1.png": hands1,
   "hands2.png": hands2,
-
+"latest_news.png": latest,
 };
 
 const allowedAudiences = ["all", "non_members"];
