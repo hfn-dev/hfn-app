@@ -76,5 +76,34 @@ export const eventsPageSchema = {
         },
       ],
     },
+    pastEventsSection: {
+  title: "Past Events",
+  items: [
+    {
+      id: 1,
+      title: "HFN Healthcare Leadership Conference 2025",
+      category: "Conference",
+      date: "June 2, 2025",
+      theme: "Accelerating UHC and Health Sovereignty Through Public-Private Integration",
+      image: "hfn2025.png",
+    },
+    {
+      id: 2,
+      title: "High-Level Roundtable on Local Manufacturing of Medicines in Nigeria",
+      category: "Roundtable",
+      date: "October 22, 2025",
+      theme: "Strengthening Local Pharmaceutical Manufacturing for Sustainable Health Security in Africa",
+      image: "roundtable2025.png",
+    },
+    {
+      id: 3,
+      title: "HFN–NHIA Private Sector Roundtable Breakfast Meeting",
+      category: "Roundtable",
+      date: "December 1, 2025",
+      theme: "Leveraging Private Sector to Accelerate Health Insurance Coverage in Nigeria",
+      image: "breakfast2025.png",
+    },
+  ],
+},
   },
 };
