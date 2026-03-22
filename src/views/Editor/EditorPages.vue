@@ -26,6 +26,10 @@ import ExecutiveCommitteeEditor from './components/cms/governance/GovernanceExec
 import NewsHeroEditor from './components/cms/news/NewsHeroEditor.vue';
 import NewsLatestEditor from './components/cms/news/NewsLatestEditor.vue';
 import NewsPolicyEditor from './components/cms/news/NewsPolicyEditor.vue';
+
+import ResourcesHeroEditor from './components/cms/resources/ResourcesHeroEditor.vue';
+import ResourcesNewsletterEditor from './components/cms/resources/ResourcesNewsletterEditor.vue';
+import ResourcesPublicationEditor from './components/cms/resources/ResourcesPublicationEditor.vue';
   
 const newYear = ref('');
 const newCategory = ref('');
@@ -67,6 +71,11 @@ const componentMap = {
     hero: NewsHeroEditor,
     latestNewsSection: NewsLatestEditor,
     policyAdvocacySection: NewsPolicyEditor,
+  },
+  resources: {
+    hero: ResourcesHeroEditor,
+    newsletterSection: ResourcesNewsletterEditor,
+    publicationsSection: ResourcesPublicationEditor,
   },
 };
 
@@ -805,6 +814,11 @@ const toggleVisibility = async (page) => {
             :is="componentMap.latestnews?.[activeSection]"
             v-model="currentSectionData"
           />
+          <component
+            v-if="activePage.page_type.toLowerCase() === 'resources'"
+            :is="componentMap.resources?.[activeSection]"
+            v-model="currentSectionData"
+          />
 
 
           <div
@@ -1128,290 +1142,7 @@ const toggleVisibility = async (page) => {
               </div>
             </div>
           </div>
-          <div
-            v-else-if="
-              activePage.page_type.toLowerCase() === 'resources' &&
-              activeSection === 'hero'
-            "
-            class="space-y-6"
-          >
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Title Line 1
-              </label>
-              <input
-                v-model="currentSectionData.titleLine1"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Title Line 2
-              </label>
-              <input
-                v-model="currentSectionData.titleLine2"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Description
-              </label>
-              <textarea
-                v-model="currentSectionData.description"
-                rows="3"
-                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-              ></textarea>
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Background Color
-              </label>
-              <input
-                v-model="currentSectionData.backgroundColor"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <image-uploader
-              v-model="currentSectionData.image"
-              label="Hero Image"
-            />
-          </div>
-          <div
-            v-else-if="
-              activePage.page_type.toLowerCase() === 'resources' &&
-              activeSection === 'newsletterSection'
-            "
-          >
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Section Title
-              </label>
-              <input
-                v-model="currentSectionData.title"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <!-- Newsletter Items -->
-            <div
-              v-for="(item, index) in currentSectionData.items"
-              :key="index"
-              class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
-            >
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Date
-              </label>
-              <input
-                v-model="item.date"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Title
-              </label>
-              <input
-                v-model="item.text"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                PDF URL
-              </label>
-              <input
-                v-model="item.pdfUrl"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-
-              <button
-                class="text-red-500 text-sm mt-2"
-                @click="deleteItem(index)"
-              >
-                Delete Newsletter
-              </button>
-            </div>
-
-            <button
-              class="bg-black text-white px-4 py-2 rounded"
-              @click="addItem"
-            >
-              Add Newsletter
-            </button>
-
-            <!-- Pagination -->
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mt-6">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Current Page
-              </label>
-              <input
-                v-model="currentSectionData.pagination.currentPage"
-                type="number"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Total Pages
-              </label>
-              <input
-                v-model="currentSectionData.pagination.totalPages"
-                type="number"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Next Page URL
-              </label>
-              <input
-                v-model="currentSectionData.pagination.nextPageUrl"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-          </div>
-          <div
-            v-else-if="
-              activePage.page_type.toLowerCase() === 'resources' &&
-              activeSection === 'publicationsSection'
-            "
-          >
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Section Title
-              </label>
-              <input
-                v-model="currentSectionData.title"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Background Color
-              </label>
-              <input
-                v-model="currentSectionData.backgroundColor"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <div
-              v-for="(item, index) in currentSectionData.items"
-              :key="index"
-              class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
-            >
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Title
-              </label>
-              <input
-                v-model="item.title"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Description
-              </label>
-              <textarea
-                v-model="item.description"
-                rows="3"
-                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-              ></textarea>
-
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                PDF URL
-              </label>
-              <input
-                v-model="item.pdfUrl"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-
-              <button
-                class="text-red-500 text-sm mt-2"
-                @click="deleteItem(index)"
-              >
-                Delete Publication
-              </button>
-            </div>
-
-            <button
-              class="bg-black text-white px-4 py-2 rounded"
-              @click="addItem"
-            >
-              Add Publication
-            </button>
-
-            <!-- Pagination -->
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mt-6">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Current Page
-              </label>
-              <input
-                v-model="currentSectionData.pagination.currentPage"
-                type="number"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Total Pages
-              </label>
-              <input
-                v-model="currentSectionData.pagination.totalPages"
-                type="number"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-          </div>
-
+          
           <div
             v-else-if="
               activePage.page_type.toLowerCase() === 'getinvolved' &&
