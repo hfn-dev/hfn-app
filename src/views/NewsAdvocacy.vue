@@ -12,7 +12,7 @@
               <span class="text-green-700">{{ page.hero.titleLine1 }}</span>
               <br />
               <span class="text-gray-900"
-                >{{ page.hero.titleLine1 }}</span
+                >{{ page.hero.titleLine2 }}</span
               >
             </h1>
             <p class="mt-4 text-gray-600 max-w-lg">
