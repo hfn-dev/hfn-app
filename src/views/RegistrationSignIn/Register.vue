@@ -7,9 +7,10 @@ import { useToast } from "vue-toastification";
 
 const router = useRouter();
 const toast = useToast();
-  const showSuccessDialog = ref(false)
+const showSuccessDialog = ref(false);
 const registerImage =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769798445/HFN_Office_h0se9v.jpg";
+
 const form = ref({
   firstName: "",
   otherName: "",
@@ -22,30 +23,62 @@ const form = ref({
   confirmPassword: "",
   organizationName: "",
   organizationContactPerson: "",
+
+  professionalBackground: "",
+  healthcareInterest: "",
+  statementOfInterest: "",
 });
 
-// const membershipCategories = ref([
-//   { id: 1, name: "Individual", amount: 50000, currency: "NGN" },
-//   { id: 2, name: "Association", amount: 150000, currency: "NGN" },
-//   { id: 3, name: "Corporate", amount: 200000, currency: "NGN" },
-//   { id: 4, name: "Multinational", amount: 750000, currency: "NGN" },
-//   { id: 5, name: "Diaspora", amount: 50, currency: "USD" },
-// ]);
+const membershipCategories = ref([
+  {
+    id: 1,
+    name: "Individual",
+    type: "individual",
+    amount: 50000,
+    currency: "NGN",
+  },
+  {
+    id: 2,
+    name: "Association",
+    type: "organization",
+    amount: 150000,
+    currency: "NGN",
+  },
+  {
+    id: 3,
+    name: "Corporate",
+    type: "organization",
+    amount: 200000,
+    currency: "NGN",
+  },
+  {
+    id: 4,
+    name: "Multinational",
+    type: "organization",
+    amount: 750000,
+    currency: "NGN",
+  },
+  {
+    id: 5,
+    name: "Diaspora (Individual)",
+    type: "individual",
+    amount: 50,
+    currency: "USD",
+  },
+  {
+    id: 6,
+    name: "Diaspora (Organization)",
+    type: "organization",
+    amount: 100,
+    currency: "USD",
+  },
+]);
 
- const membershipCategories = ref([
-  { id: 1, name: "Individual", type: "individual", amount: 50000, currency: "NGN" },
-  { id: 2, name: "Association", type: "organization", amount: 150000, currency: "NGN" },
-  { id: 3, name: "Corporate", type: "organization", amount: 200000, currency: "NGN" },
-  { id: 4, name: "Multinational", type: "organization", amount: 750000, currency: "NGN" },
-  { id: 5, name: "Diaspora (Individual)", type: "individual", amount: 50, currency: "USD" },
-  { id: 6, name: "Diaspora (Organization)", type: "organization", amount: 100, currency: "USD" },
-]); 
-
- const filteredCategories = computed(() => {
+const filteredCategories = computed(() => {
   return membershipCategories.value.filter(
     (category) => category.type === activeTab.value
   );
-}); 
+});
 
 const selectedCategoryId = ref("");
 
@@ -120,6 +153,10 @@ const prepareIndividualPayload = () => {
     phone_number: formatPhoneNumber(form.value.phone),
     password: form.value.password,
     role: "learner",
+
+    professional_background: form.value.professionalBackground.trim(),
+    healthcare_interest: form.value.healthcareInterest.trim(),
+    statement_of_interest: form.value.statementOfInterest.trim(),
   };
 
   if (form.value.otherName && form.value.otherName.trim()) {
@@ -138,6 +175,20 @@ const validateForm = () => {
 
     if (!form.value.lastName.trim()) {
       showCustomAlert("Last name is required", "error");
+      return false;
+    }
+    if (!form.value.professionalBackground.trim()) {
+      showCustomAlert("Professional background is required", "error");
+      return false;
+    }
+
+    if (!form.value.healthcareInterest.trim()) {
+      showCustomAlert("Healthcare interest is required", "error");
+      return false;
+    }
+
+    if (!form.value.statementOfInterest.trim()) {
+      showCustomAlert("Statement of interest is required", "error");
       return false;
     }
   }
@@ -169,7 +220,10 @@ const validateForm = () => {
     return false;
   }
 
-  if (form.value.email !== form.value.confirmEmail && activeTab.value === "individual") {
+  if (
+    form.value.email !== form.value.confirmEmail &&
+    activeTab.value === "individual"
+  ) {
     showCustomAlert("Email addresses do not match", "error");
     return false;
   }
@@ -219,65 +273,52 @@ const handleRegistration = async () => {
       toast.success(response.messages?.[0] || "Registration successful!");
 
       if (activeTab.value === "individual") {
+        showSuccessDialog.value = true;
 
-    showSuccessDialog.value = true;
+        form.value = {
+          firstName: "",
+          otherName: "",
+          lastName: "",
+          phone: "",
+          alternatePhone: "",
+          email: "",
+          confirmEmail: "",
+          password: "",
+          confirmPassword: "",
+          organizationName: "",
+          organizationContactPerson: "",
 
-    form.value = {
-      firstName: "",
-      otherName: "",
-      lastName: "",
-      phone: "",
-      alternatePhone: "",
-      email: "",
-      confirmEmail: "",
-      password: "",
-      confirmPassword: "",
-      organizationName: "",
-      organizationContactPerson: "",
-    };
+          professionalBackground: "",
+          healthcareInterest: "",
+          statementOfInterest: "",
+        };
 
-    return;
-  }
+        return;
+      }
 
-  if (activeTab.value === "organization") {
+      if (activeTab.value === "organization") {
+        if (selectedCategory.value) {
+          localStorage.setItem(
+            "membership_payment",
+            JSON.stringify({
+              category_id: selectedCategory.value.id,
+              category_name: selectedCategory.value.name,
+              amount: selectedCategory.value.amount,
+              currency: selectedCategory.value.currency,
+              email: payload.email,
+            })
+          );
+        }
 
-    if (selectedCategory.value) {
-      localStorage.setItem(
-        "membership_payment",
-        JSON.stringify({
-          category_id: selectedCategory.value.id,
-          category_name: selectedCategory.value.name,
-          amount: selectedCategory.value.amount,
-          currency: selectedCategory.value.currency,
-          email: payload.email,
-        })
-      );
-    }
+        router.push("/registration-payment");
+      }
 
-    router.push("/registration-payment");
-  }
-
-      // if (selectedCategory.value) {
-      //   localStorage.setItem(
-      //     "membership_payment",
-      //     JSON.stringify({
-      //       category_id: selectedCategory.value.id,
-      //       category_name: selectedCategory.value.name,
-      //       amount: selectedCategory.value.amount,
-      //       currency: selectedCategory.value.currency,
-      //       email: payload.email,
-      //     })
-      //   );
-      // }
-
-      // If email verification is required
       if (response.actions_required?.includes("verify_email")) {
         localStorage.setItem("pendingVerificationEmail", payload.email);
         router.push("/signinverification");
         return;
       }
 
-      // If payment required immediately
       if (response.actions_required?.includes("make_payment")) {
         router.push("/registration-payment");
         return;
@@ -291,37 +332,36 @@ const handleRegistration = async () => {
       showCustomAlert(errorMessage, "error");
     }
   } catch (error) {
-  console.error("Registration error:", error);
+    console.error("Registration error:", error);
 
-  if (error.response) {
-    const data = error.response.data;
+    if (error.response) {
+      const data = error.response.data;
 
-    let errorMsg = "Registration failed. Please try again.";
+      let errorMsg = "Registration failed. Please try again.";
 
-    if (typeof data === "object") {
-      const firstKey = Object.keys(data)[0];
+      if (typeof data === "object") {
+        const firstKey = Object.keys(data)[0];
 
-      if (Array.isArray(data[firstKey])) {
-        errorMsg = data[firstKey][0];
-      } else if (typeof data[firstKey] === "string") {
-        errorMsg = data[firstKey];
+        if (Array.isArray(data[firstKey])) {
+          errorMsg = data[firstKey][0];
+        } else if (typeof data[firstKey] === "string") {
+          errorMsg = data[firstKey];
+        }
       }
+
+      showCustomAlert(errorMsg, "error");
+    } else if (error.request) {
+      showCustomAlert(
+        "Network error. Please check your connection and try again.",
+        "error"
+      );
+    } else {
+      showCustomAlert(
+        "An unexpected error occurred. Please try again.",
+        "error"
+      );
     }
-
-    showCustomAlert(errorMsg, "error");
-
-  } else if (error.request) {
-    showCustomAlert(
-      "Network error. Please check your connection and try again.",
-      "error"
-    );
-  } else {
-    showCustomAlert(
-      "An unexpected error occurred. Please try again.",
-      "error"
-    );
-  }
-} finally {
+  } finally {
     isLoading.value = false;
   }
 };
@@ -340,7 +380,7 @@ const showCustomAlert = (message, type = "error") => {
 
 const changeTab = (tab) => {
   activeTab.value = tab;
-  selectedCategoryId.value = ""; 
+  selectedCategoryId.value = "";
   form.value = {
     firstName: "",
     otherName: "",
@@ -489,29 +529,6 @@ const changeTab = (tab) => {
           <button
             class="flex items-center justify-center w-full py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition duration-150 mb-6 shadow-sm"
           >
-            <!-- <svg
-            class="w-5 h-5 mr-3"
-            viewBox="0 0 48 48"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill="#FFC107"
-              d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.312-5.748 7.257-10.666 7.257-6.046 0-10.923-4.908-10.923-10.953 0-6.045 4.877-10.953 10.923-10.953 3.03 0 5.673 1.25 7.627 3.097l5.48-5.353C33.723 9.47 28.536 7 24 7c-9.06 0-16.398 7.373-16.398 16.423 0 9.05 7.338 16.423 16.398 16.423 9.324 0 16.634-6.52 16.634-16.22C40.634 22.924 43.431 20.835 43.611 20.083z"
-            />
-            <path
-              fill="#FF3D00"
-              d="M7.674 24.327l-.004-.004L7.673 24.321C7.397 23.376 7.25 22.395 7.25 21.378c0-1.02.147-2.003.424-2.95l-.004-.004L3.65 14.54l-.005.011C2.56 16.409 2 18.804 2 21.378c0 2.574.56 4.969 1.645 6.828l4.029-3.834z"
-            />
-            <path
-              fill="#4CAF50"
-              d="M24 39.75c6.241 0 11.458-4.321 12.868-10.038H24v-7.917h17.653c.123.70.187 1.432.187 2.183 0 1.93-.357 3.792-1.033 5.487-.71 1.83-1.64 3.498-2.825 5.044-3.564 4.79-8.995 7.917-15.982 7.917z"
-            />
-            <path
-              fill="#1976D2"
-              d="M24 8.75c3.27 0 6.27.79 8.94 2.164l5.48-5.354C34.78 3.518 29.593 1 24 1 18.96 1 14.28 2.872 10.667 6.036l4.029 3.833C17.31 8.5 20.59 7.75 24 7.75z"
-            />
-          </svg> -->
             <router-link
               to="/signin"
               class="text-green-700 font-semibold hover:text-green-800 transition duration-150"
@@ -681,6 +698,42 @@ const changeTab = (tab) => {
                 </p>
               </div>
 
+              <!-- Professional Background -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700">
+                  Professional Background / Current Organization*
+                </label>
+                <input
+                  type="text"
+                  v-model="form.professionalBackground"
+                  class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
+                />
+              </div>
+
+              <!-- Area of Interest -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700">
+                  Area of Interest in Healthcare*
+                </label>
+                <input
+                  type="text"
+                  v-model="form.healthcareInterest"
+                  class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
+                />
+              </div>
+
+              <!-- Statement -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700">
+                  Brief Statement of Interest*
+                </label>
+                <textarea
+                  v-model="form.statementOfInterest"
+                  rows="4"
+                  class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
+                ></textarea>
+              </div>
+
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label
@@ -781,138 +834,135 @@ const changeTab = (tab) => {
               </div>
             </template>
 
-             <template v-else>
-  <div class="space-y-4">
+            <template v-else>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">
+                    Organization Name*
+                  </label>
+                  <input
+                    type="text"
+                    v-model="form.organizationName"
+                    required
+                    class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
+                  />
+                </div>
 
-    <div>
-      <label class="block text-sm font-medium text-gray-700">
-        Organization Name*
-      </label>
-      <input
-        type="text"
-        v-model="form.organizationName"
-        required
-        class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
-      />
-    </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">
+                    Contact Person*
+                  </label>
+                  <input
+                    type="text"
+                    v-model="form.organizationContactPerson"
+                    required
+                    class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
+                  />
+                </div>
 
-    <div>
-      <label class="block text-sm font-medium text-gray-700">
-        Contact Person*
-      </label>
-      <input
-        type="text"
-        v-model="form.organizationContactPerson"
-        required
-        class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
-      />
-    </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">
+                    Official Email*
+                  </label>
+                  <input
+                    type="email"
+                    v-model="form.email"
+                    required
+                    class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
+                  />
+                </div>
 
-    <div>
-      <label class="block text-sm font-medium text-gray-700">
-        Official Email*
-      </label>
-      <input
-        type="email"
-        v-model="form.email"
-        required
-        class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
-      />
-    </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">
+                    Phone Number*
+                  </label>
+                  <div class="mt-1 flex rounded-lg shadow-sm">
+                    <span
+                      class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm"
+                    >
+                      +234
+                    </span>
+                    <input
+                      type="tel"
+                      v-model="form.phone"
+                      required
+                      class="flex-1 block w-full border-gray-300 rounded-r-lg focus:border-green-500 focus:ring-green-500 p-2.5"
+                    />
+                  </div>
+                </div>
 
-    <div>
-      <label class="block text-sm font-medium text-gray-700">
-        Phone Number*
-      </label>
-      <div class="mt-1 flex rounded-lg shadow-sm">
-        <span
-          class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm"
-        >
-          +234
-        </span>
-        <input
-          type="tel"
-          v-model="form.phone"
-          required
-          class="flex-1 block w-full border-gray-300 rounded-r-lg focus:border-green-500 focus:ring-green-500 p-2.5"
-        />
-      </div>
-    </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">
+                    Membership Category*
+                  </label>
 
-    <div>
-  <label class="block text-sm font-medium text-gray-700">
-    Membership Category*
-  </label>
+                  <select
+                    v-model="selectedCategoryId"
+                    required
+                    class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm p-2.5"
+                  >
+                    <option disabled value="">Select a category</option>
 
-  <select
-    v-model="selectedCategoryId"
-    required
-    class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm p-2.5"
-  >
-    <option disabled value="">Select a category</option>
+                    <option
+                      v-for="category in filteredCategories"
+                      :key="category.id"
+                      :value="category.id"
+                    >
+                      {{ category.name }}
+                    </option>
+                  </select>
 
-    <option
-      v-for="category in filteredCategories"
-      :key="category.id"
-      :value="category.id"
-    >
-      {{ category.name }}
-    </option>
-  </select>
+                  <p
+                    v-if="selectedCategory"
+                    class="mt-2 font-semibold text-green-700"
+                  >
+                    Amount:
+                    {{ currencySymbol }}
+                    {{ selectedCategory.amount.toLocaleString() }}
+                    <span class="text-sm text-gray-500">
+                      ({{ selectedCategory.currency }})
+                    </span>
+                  </p>
+                </div>
 
-  <p
-    v-if="selectedCategory"
-    class="mt-2 font-semibold text-green-700"
-  >
-    Amount:
-    {{ currencySymbol }}
-    {{ selectedCategory.amount.toLocaleString() }}
-    <span class="text-sm text-gray-500">
-      ({{ selectedCategory.currency }})
-    </span>
-  </p>
-</div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700">
+                      Password*
+                    </label>
+                    <input
+                      type="password"
+                      v-model="form.password"
+                      required
+                      class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
+                    />
+                  </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <label class="block text-sm font-medium text-gray-700">
-          Password*
-        </label>
-        <input
-          type="password"
-          v-model="form.password"
-          required
-          class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
-        />
-      </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700">
+                      Confirm Password*
+                    </label>
+                    <input
+                      type="password"
+                      v-model="form.confirmPassword"
+                      required
+                      class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
+                    />
+                  </div>
+                </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700">
-          Confirm Password*
-        </label>
-        <input
-          type="password"
-          v-model="form.confirmPassword"
-          required
-          class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
-        />
-      </div>
-    </div>
-
-    <div class="pt-4 flex justify-center">
-      <button
-        type="submit"
-        :disabled="!isPasswordValid || isLoading"
-        class="w-full md:w-auto px-10 py-3 bg-green-700 text-white font-semibold rounded-lg shadow-md hover:bg-green-800 transition duration-150 disabled:bg-gray-400"
-      >
-        <span v-if="isLoading">Processing...</span>
-        <span v-else>Register Organization</span>
-      </button>
-    </div>
-
-  </div>
-</template>
-
+                <div class="pt-4 flex justify-center">
+                  <button
+                    type="submit"
+                    :disabled="!isPasswordValid || isLoading"
+                    class="w-full md:w-auto px-10 py-3 bg-green-700 text-white font-semibold rounded-lg shadow-md hover:bg-green-800 transition duration-150 disabled:bg-gray-400"
+                  >
+                    <span v-if="isLoading">Processing...</span>
+                    <span v-else>Register Organization</span>
+                  </button>
+                </div>
+              </div>
+            </template>
           </form>
 
           <div class="mt-6 text-center text-gray-600">
@@ -927,29 +977,28 @@ const changeTab = (tab) => {
       </div>
     </div>
   </div>
-  <div v-if="showSuccessDialog" class="fixed inset-0 flex items-center justify-center bg-black/40">
+  <div
+    v-if="showSuccessDialog"
+    class="fixed inset-0 flex items-center justify-center bg-black/40"
+  >
+    <div class="bg-white rounded-xl p-6 max-w-md text-center">
+      <h3 class="text-xl font-bold text-green-700 mb-3">
+        Application Submitted
+      </h3>
 
-  <div class="bg-white rounded-xl p-6 max-w-md text-center">
+      <p class="text-gray-600">
+        Your membership registration has been received. Our team will review
+        your application before approval.
+      </p>
 
-    <h3 class="text-xl font-bold text-green-700 mb-3">
-      Application Submitted
-    </h3>
-
-    <p class="text-gray-600">
-      Your membership registration has been received.
-      Our team will review your application before approval.
-    </p>
-
-    <button
-      @click="showSuccessDialog = false"
-      class="mt-6 bg-green-700 text-white px-6 py-2 rounded-lg"
-    >
-      Okay
-    </button>
-
+      <button
+        @click="showSuccessDialog = false"
+        class="mt-6 bg-green-700 text-white px-6 py-2 rounded-lg"
+      >
+        Okay
+      </button>
+    </div>
   </div>
-
-</div>
 </template>
 
 <style scoped>
@@ -973,6 +1022,7 @@ input:focus {
 button[type="submit"] {
   transition: transform 0.2s ease;
 }
+
 button[type="submit"]:hover:not(:disabled) {
   transform: scale(1.02);
 }
@@ -981,6 +1031,7 @@ button[type="submit"]:hover:not(:disabled) {
 .fade-leave-active {
   transition: opacity 0.3s;
 }
+
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
