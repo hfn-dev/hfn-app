@@ -2469,7 +2469,7 @@ const toggleVisibility = async (page) => {
               @click="saveChanges"
               class="px-6 py-3 bg-green-800 text-white rounded-2xl hover:bg-green-900 transition duration-200 shadow-lg shadow-green-200"
             >
-              Edit
+              Save Changes
             </button>
           </div>
         </div>
