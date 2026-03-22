@@ -9,16 +9,14 @@
             <h1
               class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight"
             >
-              <span class="text-green-700">Stay Informed:</span>
+              <span class="text-green-700">{{ page.hero.titleLine1 }}</span>
               <br />
               <span class="text-gray-900"
-                >Latest Healthcare News & Updates</span
+                >{{ page.hero.titleLine1 }}</span
               >
             </h1>
             <p class="mt-4 text-gray-600 max-w-lg">
-              Get the latest insights, announcements, and policy developments
-              from the Healthcare Federation of Nigeria and across the health
-              sector.
+              {{ page.hero.description }}
             </p>
           </div>
 
@@ -264,6 +262,7 @@ import { ref, reactive, computed, onMounted } from "vue";
 import contentUploadApi from "@/api/contentUploadsApi";
 import newsModule from "@/api/newsModule";
 
+const page = computed(() => newsPageSchema.news);  
 const sortedArticles = computed(() => {
   return [...newsPageSchema.news.latestNewsSection.articles].sort((a, b) => {
     return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
