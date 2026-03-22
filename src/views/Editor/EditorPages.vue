@@ -23,6 +23,10 @@ import GovernanceHeroEditor from './components/cms/governance/GovernanceHeroEdit
 import BoardOfTrusteesEditor from './components/cms/governance/GovernanceBoardOfTrustees.vue';
 import ExecutiveCommitteeEditor from './components/cms/governance/GovernanceExecutiveCommittee.vue';
 
+import NewsHeroEditor from './components/cms/news/NewsHeroEditor.vue';
+import NewsLatestEditor from './components/cms/news/NewsLatestEditor.vue';
+import NewsPolicyEditor from './components/cms/news/NewsPolicyEditor.vue';
+  
 const newYear = ref('');
 const newCategory = ref('');
 const newGalleryYear = ref('');
@@ -58,6 +62,11 @@ const componentMap = {
     hero: GovernanceHeroEditor,
     boardOfTrustees: BoardOfTrusteesEditor,
     executiveCommittee: ExecutiveCommitteeEditor,
+  },
+  latestnews: {
+    hero: NewsHeroEditor,
+    latestNewsSection: NewsLatestEditor,
+    policyAdvocacySection: NewsPolicyEditor,
   },
 };
 
@@ -791,6 +800,12 @@ const toggleVisibility = async (page) => {
             :is="componentMap.governance?.[activeSection]"
             v-model="currentSectionData"
           />
+          <component
+            v-if="activePage.page_type.toLowerCase() === 'latestnews'"
+            :is="componentMap.latestnews?.[activeSection]"
+            v-model="currentSectionData"
+          />
+
 
           <div
             v-else-if="
@@ -2081,310 +2096,7 @@ const toggleVisibility = async (page) => {
             </button>
           </div>
 
-          <div
-            v-if="
-              activePage.page_type.toLowerCase() === 'latestnews' &&
-              activeSection === 'hero'
-            "
-            class="space-y-6"
-          >
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Hero Title Line 1
-              </label>
-              <input
-                v-model="currentSectionData.titleLine1"
-                type="text"
-                class="w-full border-none focus:ring-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Hero Title Line 2
-              </label>
-              <input
-                v-model="currentSectionData.titleLine2"
-                type="text"
-                class="w-full border-none focus:ring-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Hero Description
-              </label>
-              <textarea
-                v-model="currentSectionData.description"
-                rows="4"
-                class="w-full border-none focus:ring-0 resize-none"
-              ></textarea>
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Hero Image URL
-              </label>
-              <input
-                v-model="currentSectionData.image"
-                type="text"
-                class="w-full border-none focus:ring-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Hero Background Color
-              </label>
-              <input
-                v-model="currentSectionData.backgroundColor"
-                type="color"
-                class="w-16 h-10 p-0 border-none focus:ring-0"
-              />
-            </div>
-          </div>
-
-          <div
-            v-if="
-              activePage.page_type.toLowerCase() === 'latestnews' &&
-              activeSection === 'latestNewsSection'
-            "
-            class="space-y-8"
-          >
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Filters
-              </label>
-              <div class="flex gap-2 flex-wrap">
-                <span
-                  v-for="(filter, index) in currentSectionData.filters"
-                  :key="index"
-                  class="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2"
-                >
-                  {{ filter }}
-                  <button
-                    @click="removeFilter(index)"
-                    class="text-red-500 font-bold"
-                  >
-                    ×
-                  </button>
-                </span>
-                <input
-                  v-model="newFilter"
-                  @keyup.enter="addFilter"
-                  placeholder="Add filter"
-                  class="border p-1 rounded focus:ring-0 w-32"
-                />
-              </div>
-            </div>
-
-            <div
-              v-for="(article, index) in currentSectionData.articles"
-              :key="article.id"
-              class="border border-gray-300 rounded-lg p-4 space-y-3"
-            >
-              <div class="flex justify-between items-center">
-                <h4 class="font-semibold text-sm">Article {{ index + 1 }}</h4>
-                <button
-                  @click="removeArticle(index)"
-                  class="text-red-500 text-sm"
-                >
-                  Delete
-                </button>
-              </div>
-
-              <div class="space-y-2">
-                <label class="text-xs font-semibold uppercase text-gray-500"
-                  >Title</label
-                >
-                <input
-                  v-model="article.title"
-                  class="w-full border-none focus:ring-0"
-                />
-
-                <label class="text-xs font-semibold uppercase text-gray-500"
-                  >Excerpt</label
-                >
-                <textarea
-                  v-model="article.excerpt"
-                  rows="3"
-                  class="w-full border-none focus:ring-0 resize-none"
-                ></textarea>
-
-                <label class="text-xs font-semibold uppercase text-gray-500"
-                  >Description</label
-                >
-                <textarea
-                  v-model="article.description"
-                  rows="5"
-                  class="w-full border-none focus:ring-0 resize-none"
-                ></textarea>
-
-                <label class="text-xs font-semibold uppercase text-gray-500"
-                  >Image URL</label
-                >
-                <input
-                  v-model="article.image"
-                  class="w-full border-none focus:ring-0"
-                />
-
-                <label class="text-xs font-semibold uppercase text-gray-500"
-                  >Date</label
-                >
-                <input
-                  v-model="article.date"
-                  type="date"
-                  class="w-full border-none focus:ring-0"
-                />
-
-                <label class="text-xs font-semibold uppercase text-gray-500"
-                  >Link</label
-                >
-                <input
-                  v-model="article.link"
-                  class="w-full border-none focus:ring-0"
-                />
-
-                <label class="text-xs font-semibold uppercase text-gray-500"
-                  >Slug</label
-                >
-                <input
-                  v-model="article.slug"
-                  class="w-full border-none focus:ring-0"
-                />
-
-                <label class="text-xs font-semibold uppercase text-gray-500"
-                  >Tag</label
-                >
-                <input
-                  v-model="article.tag"
-                  class="w-full border-none focus:ring-0"
-                />
-              </div>
-            </div>
-
-            <button
-              @click="addArticle"
-              class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800"
-            >
-              + Add Article
-            </button>
-          </div>
-
-          <div
-            v-if="
-              activePage.page_type.toLowerCase() === 'latestnews' &&
-              activeSection === 'policyAdvocacySection'
-            "
-            class="space-y-6"
-          >
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Section Title</label
-              >
-              <input
-                v-model="currentSectionData.title"
-                type="text"
-                class="w-full border-none focus:ring-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Background Color</label
-              >
-              <input
-                v-model="currentSectionData.backgroundColor"
-                type="color"
-                class="w-16 h-10 border-none focus:ring-0"
-              />
-            </div>
-
-            <div
-              v-for="(update, index) in currentSectionData.updates"
-              :key="update.id"
-              class="border border-gray-300 rounded-lg p-4 space-y-2"
-            >
-              <div class="flex justify-between items-center">
-                <h4 class="font-semibold text-sm">Update {{ index + 1 }}</h4>
-                <button
-                  @click="removeUpdate(index)"
-                  class="text-red-500 text-sm"
-                >
-                  Delete
-                </button>
-              </div>
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Title</label
-              >
-              <input
-                v-model="update.title"
-                class="w-full border-none focus:ring-0"
-              />
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Description</label
-              >
-              <textarea
-                v-model="update.description"
-                rows="3"
-                class="w-full border-none focus:ring-0 resize-none"
-              ></textarea>
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Image URL</label
-              >
-              <input
-                v-model="update.image"
-                class="w-full border-none focus:ring-0"
-              />
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Link</label
-              >
-              <input
-                v-model="update.link"
-                class="w-full border-none focus:ring-0"
-              />
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Slug</label
-              >
-              <input
-                v-model="update.slug"
-                class="w-full border-none focus:ring-0"
-              />
-
-              <label class="text-xs font-semibold uppercase text-gray-500"
-                >Tag</label
-              >
-              <input
-                v-model="update.tag"
-                class="w-full border-none focus:ring-0"
-              />
-            </div>
-
-            <button
-              @click="addUpdate"
-              class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800"
-            >
-              + Add Update
-            </button>
-          </div>
-
+          
           <div
             v-if="
               activePage.page_type.toLowerCase() === 'events' &&
