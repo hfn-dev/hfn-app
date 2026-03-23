@@ -1,7 +1,8 @@
 export const getInvolvedPageSchema = {
   
     hero: {
-      titleLine1: 'Engage With HFN',
+      titleLine1: 'Engage With',
+      subTitle: 'HFN',
       titleLine2: 'Beyond Membership',
       description:
         'Healthcare Federation of Nigeria (HFN) provides multiple pathways for individuals, organisations, and partners to support and engage with our work strengthening Nigeria’s healthcare system.',
