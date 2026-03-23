@@ -50,6 +50,12 @@ import GetinvolvedPartnershipsEditor from './components/cms/getinvolved/Getinvol
 import GetinvolvedOpportunitiesEditor from './components/cms/getinvolved/GetinvolvedOpportunitiesEditor.vue'; 
 import GetinvolvedVolunteeringEditor from './components/cms/getinvolved/GetinvolvedVolunteeringEditor.vue'; 
 import GetinvolvedModalEditor from './components/cms/getinvolved/GetinvolvedModalEditor.vue'; 
+
+
+import MemberHeroEditor from './components/cms/member/MemberHeroEditor.vue';
+import MemberSectionTitleEditor from './components/cms/member/MemberSectionTitleEditor.vue';
+import MemberCategoriesEditor from './components/cms/member/MemberCategoriesEditor.vue';
+
   
 const newYear = ref('');
 const newCategory = ref('');
@@ -93,7 +99,7 @@ const componentMap = {
   resources: {
     hero: ResourcesHeroEditor,
     newsletterSection: ResourcesNewsletterEditor,
-    publicationsSection: ResourcesPublicationEditor,
+    publicationsSection: ResourcesPublicationEdit or,
   },
   events: {
     hero: EventHeroEditor,
@@ -118,11 +124,9 @@ const componentMap = {
   },
   member: {
     hero: MemberHeroEditor,
-    donations: GetinvolvedDonationsEditor,
-    partnerships: GetinvolvedPartnershipsEditor,
-    opportunities: GetinvolvedOpportunitiesEditor,
-    volunteering: GetinvolvedVolunteeringEditor,
-    donationModal: GetinvolvedModalEditor,
+    sectionTitle: MemberSectionTitleEditor,
+    categories: MemberCategoriesEditor,
+  
   },
 };
 
@@ -843,6 +847,11 @@ const toggleVisibility = async (page) => {
           <component
             v-if="activePage.page_type.toLowerCase() === 'getinvolved'"
             :is="componentMap.getinvolved?.[activeSection]"
+            v-model="currentSectionData"
+          />
+          <component
+            v-if="activePage.page_type.toLowerCase() === 'member'"
+            :is="componentMap.member?.[activeSection]"
             v-model="currentSectionData"
           />
 
