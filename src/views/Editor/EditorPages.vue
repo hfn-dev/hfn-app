@@ -5,12 +5,14 @@ import { useRouter } from 'vue-router';
 import HomeHeroEditor from './components/cms/home/HomeHeroEditor.vue';
 import { computed, onMounted, ref, watch } from 'vue';
 import EditorSidebar from './EditorSidebar.vue';
+  
 import HomeFaqsEditor from './components/cms/home/HomeFaqsEditor.vue';
 import HomeAboutEditor from './components/cms/home/HomeAboutEditor.vue';
 import HomeMandateEditor from './components/cms/home/HomeMandateEditor.vue';
 import HomeNewsEditor from './components/cms/home/HomeNewsEditor.vue';
 import HomeExecutivesEditor from './components/cms/home/HomeExecutivesEditor.vue';
 import HomePartnerEditor from './components/cms/home/HomePartnerEditor.vue';
+  
 import AboutHeroEditor from './components/cms/about/AboutHeroEditor.vue';
 import AboutStoryEditor from './components/cms/about/AboutStoryEditor.vue';
 import AboutItemEditor from './components/cms/about/AboutItemEditor.vue';
@@ -19,6 +21,7 @@ import AboutGovernanceEditor from './components/cms/about/AboutGovernanceEditor.
 import AboutCtaSectionEditor from './components/cms/about/AboutCtaSectionEditor.vue';
 import AboutCommitmentSection from './components/cms/about/AboutCommitmentSection.vue';
 import AboutRoleSectionEditor from './components/cms/about/AboutRoleSectionEditor.vue';
+  
 import GovernanceHeroEditor from './components/cms/governance/GovernanceHeroEditor.vue';
 import BoardOfTrusteesEditor from './components/cms/governance/GovernanceBoardOfTrustees.vue';
 import ExecutiveCommitteeEditor from './components/cms/governance/GovernanceExecutiveCommittee.vue';
@@ -40,6 +43,13 @@ import EventPastEditor from './components/cms/events/EventPastEditor.vue';
 import GalleryHeroEditor from './components/cms/gallery/GalleryHeroEditor.vue';
 import GalleryFilterEditor from './components/cms/gallery/GalleryFilterEditor.vue';
 import GalleryListEditor from './components/cms/gallery/GalleryListEditor.vue'; 
+  
+import GetinvolvedHeroEditor from './components/cms/getinvolved/GetinvolvedHeroEditor.vue';
+import GetinvolvedDonationsEditor from './components/cms/getinvolved/GetinvolvedDonationsEditor.vue';
+import GetinvolvedPartnershipsEditor from './components/cms/getinvolved/GetinvolvedPartnershipsEditor.vue'; 
+import GetinvolvedOpportunitiesEditor from './components/cms/getinvolved/GetinvolvedOpportunitiesEditor.vue'; 
+import GetinvolvedVolunteeringEditor from './components/cms/getinvolved/GetinvolvedVolunteeringEditor.vue'; 
+import GetinvolvedModalEditor from './components/cms/getinvolved/GetinvolvedModalEditor.vue'; 
   
 const newYear = ref('');
 const newCategory = ref('');
@@ -97,6 +107,14 @@ const componentMap = {
     filtering: GalleryFilterEditor,
     galleryList: GalleryListEditor,
     
+  },
+  getinvolved: {
+    hero: GetinvolvedHeroEditor,
+    donations: GetinvolvedDonationsEditor,
+    partnerships: GetinvolvedPartnershipsEditor,
+    opportunities: GetinvolvedOpportunitiesEditor,
+    volunteering: GetinvolvedVolunteeringEditor,
+    donationModal: GetinvolvedModalEditor,
   },
 };
 
@@ -814,7 +832,11 @@ const toggleVisibility = async (page) => {
             :is="componentMap.gallery?.[activeSection]"
             v-model="currentSectionData"
           />
-
+          <component
+            v-if="activePage.page_type.toLowerCase() === 'getinvolved'"
+            :is="componentMap.getinvolved?.[activeSection]"
+            v-model="currentSectionData"
+          />
 
           <div
             v-else-if="
@@ -1138,422 +1160,7 @@ const toggleVisibility = async (page) => {
             </div>
           </div>
           
-          <div
-            v-else-if="
-              activePage.page_type.toLowerCase() === 'getinvolved' &&
-              activeSection === 'hero'
-            "
-            class="space-y-6"
-          >
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Title Line 1</label
-              >
-              <input
-                v-model="currentSectionData.titleLine1"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Title Line 2</label
-              >
-              <input
-                v-model="currentSectionData.titleLine2"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Description</label
-              >
-              <textarea
-                v-model="currentSectionData.description"
-                rows="3"
-                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-              ></textarea>
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Background Color</label
-              >
-              <input
-                v-model="currentSectionData.backgroundColor"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <image-uploader
-              v-model="currentSectionData.image"
-              label="Hero Image"
-            />
-          </div>
-          <div
-            v-else-if="
-              activePage.page_type.toLowerCase() === 'getinvolved' &&
-              activeSection === 'donations'
-            "
-          >
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Title</label
-              >
-              <input
-                v-model="currentSectionData.title"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Subtitle</label
-              >
-              <input
-                v-model="currentSectionData.subtitle"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <!-- Paragraphs -->
-            <div
-              v-for="(paragraph, index) in currentSectionData.paragraphs"
-              :key="index"
-              class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
-            >
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Paragraph {{ index + 1 }}
-              </label>
-              <textarea
-                v-model="currentSectionData.paragraphs[index]"
-                rows="3"
-                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-              ></textarea>
-
-              <button
-                class="text-red-500 text-sm mt-2"
-                @click="deleteItem(index)"
-              >
-                Delete Paragraph
-              </button>
-            </div>
-
-            <button
-              class="bg-black text-white px-4 py-2 rounded mb-6"
-              @click="addItem"
-            >
-              Add Paragraph
-            </button>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Note</label
-              >
-              <textarea
-                v-model="currentSectionData.note"
-                rows="2"
-                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-              ></textarea>
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Quote</label
-              >
-              <textarea
-                v-model="currentSectionData.quote"
-                rows="2"
-                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-              ></textarea>
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Button Text</label
-              >
-              <input
-                v-model="currentSectionData.buttonText"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-          </div>
-          <div
-            v-else-if="
-              activePage.page_type.toLowerCase() === 'getinvolved' &&
-              activeSection === 'partnerships'
-            "
-          >
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Title</label
-              >
-              <input
-                v-model="currentSectionData.title"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Tagline</label
-              >
-              <input
-                v-model="currentSectionData.tagline"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Description</label
-              >
-              <textarea
-                v-model="currentSectionData.description"
-                rows="3"
-                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-              ></textarea>
-            </div>
-
-            <div
-              v-for="(item, index) in currentSectionData.items"
-              :key="index"
-              class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
-            >
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Title</label
-              >
-              <input
-                v-model="item.title"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Description</label
-              >
-              <textarea
-                v-model="item.description"
-                rows="3"
-                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-              ></textarea>
-
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Button Text</label
-              >
-              <input
-                v-model="item.buttonText"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-
-              <button
-                class="text-red-500 text-sm mt-2"
-                @click="deleteItem(index)"
-              >
-                Delete Item
-              </button>
-            </div>
-
-            <button
-              class="bg-black text-white px-4 py-2 rounded"
-              @click="addItem"
-            >
-              Add Partnership Item
-            </button>
-          </div>
-          <div
-            v-else-if="
-              activePage.page_type.toLowerCase() === 'getinvolved' &&
-              activeSection === 'opportunities'
-            "
-          >
-            <div
-              v-for="(item, index) in currentSectionData.items"
-              :key="index"
-              class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
-            >
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Title</label
-              >
-              <input
-                v-model="item.title"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Description</label
-              >
-              <textarea
-                v-model="item.description"
-                rows="3"
-                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-              ></textarea>
-
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Button Text</label
-              >
-              <input
-                v-model="item.buttonText"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-
-              <button
-                class="text-red-500 text-sm mt-2"
-                @click="deleteItem(index)"
-              >
-                Delete Item
-              </button>
-            </div>
-
-            <button
-              class="bg-black text-white px-4 py-2 rounded"
-              @click="addItem"
-            >
-              Add Opportunity
-            </button>
-          </div>
-          <div
-            v-else-if="
-              activePage.page_type.toLowerCase() === 'getinvolved' &&
-              activeSection === 'volunteering'
-            "
-            class="space-y-6"
-          >
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Title</label
-              >
-              <input
-                v-model="currentSectionData.title"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Subtitle</label
-              >
-              <input
-                v-model="currentSectionData.subtitle"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Description</label
-              >
-              <textarea
-                v-model="currentSectionData.description"
-                rows="3"
-                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-              ></textarea>
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Button Text</label
-              >
-              <input
-                v-model="currentSectionData.buttonText"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Background Color</label
-              >
-              <input
-                v-model="currentSectionData.backgroundColor"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-          </div>
-          <div
-            v-else-if="
-              activePage.page_type.toLowerCase() === 'getinvolved' &&
-              activeSection === 'donationModal'
-            "
-          >
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Modal Title</label
-              >
-              <input
-                v-model="currentSectionData.title"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2 mb-6">
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Subtitle</label
-              >
-              <input
-                v-model="currentSectionData.subtitle"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <div
-              v-for="(item, index) in currentSectionData.options"
-              :key="index"
-              class="border border-gray-300 rounded-lg p-3 space-y-2 mb-4"
-            >
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Option Title</label
-              >
-              <input
-                v-model="item.title"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-
-              <label class="block text-xs font-semibold uppercase text-gray-500"
-                >Description</label
-              >
-              <textarea
-                v-model="item.description"
-                rows="2"
-                class="w-full text-sm border-none focus:ring-0 p-0 m-0 resize-none"
-              ></textarea>
-
-              <button
-                class="text-red-500 text-sm mt-2"
-                @click="deleteItem(index)"
-              >
-                Delete Option
-              </button>
-            </div>
-
-            <button
-              class="bg-black text-white px-4 py-2 rounded"
-              @click="addItem"
-            >
-              Add Option
-            </button>
-          </div>
+          
           <div
             v-else-if="
               activePage.page_type.toLowerCase() === 'member' &&
