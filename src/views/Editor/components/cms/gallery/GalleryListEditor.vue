@@ -1,34 +1,48 @@
 <script setup>
-import { computed } from "vue";
+import { ref, watch } from "vue";
 
 // Props
 const props = defineProps({
-  modelValue: {
-    type: Object,
-    default: () => ({}),
-  },
+  modelValue: Object,
 });
 
 // Emits
 const emit = defineEmits(["update:modelValue"]);
 
+// Default gallery section
 const getDefaultData = () => ({
   items: [],
   hasMore: true,
   nextCursor: 2,
 });
 
-const currentSectionData = computed({
-  get() {
-    return {
-      ...getDefaultData(),
-      ...props.modelValue,
-    };
+// Local reactive state
+const currentSectionData = ref({
+  ...getDefaultData(),
+  ...props.modelValue,
+});
+
+// Watch for parent changes
+watch(
+  () => props.modelValue,
+  (val) => {
+    if (!val || Object.keys(val).length === 0) {
+      currentSectionData.value = getDefaultData();
+      emit("update:modelValue", getDefaultData());
+    } else {
+      currentSectionData.value = { ...getDefaultData(), ...val };
+    }
   },
-  set(val) {
+  { deep: true, immediate: true }
+);
+
+watch(
+  currentSectionData,
+  (val) => {
     emit("update:modelValue", val);
   },
-});
+  { deep: true }
+);
 
 const addGalleryItem = () => {
   currentSectionData.value.items.push({
@@ -36,8 +50,8 @@ const addGalleryItem = () => {
     title: "",
     category: "",
     date: "",
-    image: "",
     year: "",
+    image: "",
   });
 };
 
