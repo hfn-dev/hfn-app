@@ -1,48 +1,34 @@
 <script setup>
 import { ref, watch } from "vue";
 
-// Props
 const props = defineProps({
   modelValue: Object,
 });
 
-// Emits
 const emit = defineEmits(["update:modelValue"]);
 
-// Default gallery section
 const getDefaultData = () => ({
   items: [],
   hasMore: true,
   nextCursor: 2,
 });
 
-// Local reactive state
-const currentSectionData = ref({
-  ...getDefaultData(),
-  ...props.modelValue,
-});
+const currentSectionData = ref(getDefaultData());
 
-// Watch for parent changes
 watch(
   () => props.modelValue,
   (val) => {
-    if (!val || Object.keys(val).length === 0) {
-      currentSectionData.value = getDefaultData();
-      emit("update:modelValue", getDefaultData());
-    } else {
-      currentSectionData.value = { ...getDefaultData(), ...val };
-    }
+    currentSectionData.value = {
+      ...getDefaultData(),
+      ...(val || {}),
+    };
   },
-  { deep: true, immediate: true }
+  { immediate: true }
 );
 
-watch(
-  currentSectionData,
-  (val) => {
-    emit("update:modelValue", val);
-  },
-  { deep: true }
-);
+const updateParent = () => {
+  emit("update:modelValue", { ...currentSectionData.value });
+};
 
 const addGalleryItem = () => {
   currentSectionData.value.items.push({
@@ -53,10 +39,13 @@ const addGalleryItem = () => {
     year: "",
     image: "",
   });
+
+  updateParent();
 };
 
 const removeGalleryItem = (index) => {
   currentSectionData.value.items.splice(index, 1);
+  updateParent();
 };
 </script>
 
