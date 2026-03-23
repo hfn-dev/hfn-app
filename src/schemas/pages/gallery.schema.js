@@ -1,5 +1,4 @@
 export const galleryPageSchema = {
-  gallery: {
     hero: {
       titleLine1: "Event Gallery",
       titleLine2: "Relive Our Moments",
@@ -21,7 +20,6 @@ export const galleryPageSchema = {
     },
 
     galleryList: {
-      // Designed for the columns-1 md:columns-2 lg:columns-3 masonry layout
       items: [
         {
           id: 1,
@@ -72,9 +70,7 @@ export const galleryPageSchema = {
           year: "2026"
         }
       ],
-      // For the "View More Photos" button
       hasMore: true,
       nextCursor: 2
     }
-  }
 };

@@ -198,7 +198,7 @@ const fetchGalleryFromApi = async () => {
   try {
     const [allRes, nonMembersRes] = await Promise.all([
       gallery.list({ audience: "all" }),
-      gallery.list({ audience: "non-members" }),
+      gallery.list({ audience: "non_members" }),
     ]);
 
     const apiData = [

@@ -7,29 +7,6 @@ import membership from "@/assets/membership.jpg";
 const router = useRouter()
 const isSubmitting = ref(false);
 
-// const joinNow = async () => {
-//   if (isSubmitting.value) return;
-
-//   isSubmitting.value = true;
-
-//   try {
-//     const payload = {
-//       payment_type: "subscription",
-//       subscription_id: 0,
-//       course_id: 0,
-//       payment_method: "cash",
-//     };
-
-//     const response = await paymentApi.memberPayment(payload);
-
-//     console.log("Payment intent created:", response);
-//   } catch (error) {
-//     console.error("Failed to initiate membership payment", error);
-//   } finally {
-//     isSubmitting.value = false;
-//   }
-// };
-
 const joinNow = () => {
   router.push("/register");
 };
