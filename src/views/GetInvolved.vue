@@ -256,7 +256,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { getInvolvedPageSchema } from "@/schemas/getInvolve.schema.js"; 
+import { getInvolvedPageSchema } from "@/schemas/pages/getInvolve.schema.js"; 
 
 const data = getInvolvedPageSchema;
 const latest =
