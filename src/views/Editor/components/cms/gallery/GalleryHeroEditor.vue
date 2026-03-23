@@ -1,46 +1,50 @@
 <script setup>
-import { computed, watch } from "vue";
+import { ref, watch } from "vue";
 
 // Props
 const props = defineProps({
-  modelValue: {
-    type: Object,
-    default: () => ({}),
-  },
+  modelValue: Object,
 });
 
 // Emits
 const emit = defineEmits(["update:modelValue"]);
 
+// Default hero schema
 const getDefaultData = () => ({
   titleLine1: "",
   titleLine2: "",
-  description:
-    "",
+  description: "",
   image: "latest_news.png",
   backgroundColor: "#E87A1814",
 });
 
-const currentSectionData = computed({
-  get() {
-    return {
-      ...getDefaultData(),
-      ...props.modelValue,
-    };
-  },
-  set(value) {
-    emit("update:modelValue", value);
-  },
+// Local reactive state
+const currentSectionData = ref({
+  ...getDefaultData(),
+  ...props.modelValue,
 });
 
+// Sync parent changes immediately
 watch(
   () => props.modelValue,
   (val) => {
     if (!val || Object.keys(val).length === 0) {
+      currentSectionData.value = getDefaultData();
       emit("update:modelValue", getDefaultData());
+    } else {
+      currentSectionData.value = { ...getDefaultData(), ...val };
     }
   },
-  { immediate: true }
+  { deep: true, immediate: true }
+);
+
+// Emit updates when local state changes
+watch(
+  currentSectionData,
+  (val) => {
+    emit("update:modelValue", val);
+  },
+  { deep: true }
 );
 </script>
 
