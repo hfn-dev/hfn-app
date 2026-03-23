@@ -1,15 +1,12 @@
 <script setup>
 import { ref, watch } from "vue";
 
-// Props
 const props = defineProps({
   modelValue: Object,
 });
 
-// Emits
 const emit = defineEmits(["update:modelValue"]);
 
-// Default hero schema
 const getDefaultData = () => ({
   titleLine1: "",
   titleLine2: "",
@@ -18,34 +15,23 @@ const getDefaultData = () => ({
   backgroundColor: "#E87A1814",
 });
 
-// Local reactive state
-const currentSectionData = ref({
-  ...getDefaultData(),
-  ...props.modelValue,
-});
+const currentSectionData = ref(getDefaultData());
 
-// Sync parent changes immediately
+// Sync from parent
 watch(
   () => props.modelValue,
   (val) => {
-    if (!val || Object.keys(val).length === 0) {
-      currentSectionData.value = getDefaultData();
-      emit("update:modelValue", getDefaultData());
-    } else {
-      currentSectionData.value = { ...getDefaultData(), ...val };
-    }
+    currentSectionData.value = {
+      ...getDefaultData(),
+      ...(val || {}),
+    };
   },
-  { deep: true, immediate: true }
+  { immediate: true }
 );
 
-// Emit updates when local state changes
-watch(
-  currentSectionData,
-  (val) => {
-    emit("update:modelValue", val);
-  },
-  { deep: true }
-);
+const updateParent = () => {
+  emit("update:modelValue", { ...currentSectionData.value });
+};
 </script>
 
 <template>
