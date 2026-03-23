@@ -1,12 +1,15 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, watch } from "vue";
 
+// Props
 const props = defineProps({
   modelValue: Object,
 });
 
+// Emits
 const emit = defineEmits(["update:modelValue"]);
 
+// Default filter data
 const getDefaultData = () => ({
   title: "Filter Memories",
   years: ["2026", "2025", "2024"],
@@ -19,17 +22,34 @@ const getDefaultData = () => ({
   ],
 });
 
-const currentSectionData = computed({
-  get() {
-    return {
-      ...getDefaultData(),
-      ...props.modelValue,
-    };
+// Local reactive state
+const currentSectionData = ref({
+  ...getDefaultData(),
+  ...props.modelValue,
+});
+
+// Watch for parent modelValue changes
+watch(
+  () => props.modelValue,
+  (val) => {
+    if (!val || Object.keys(val).length === 0) {
+      currentSectionData.value = getDefaultData();
+      emit("update:modelValue", getDefaultData());
+    } else {
+      currentSectionData.value = { ...getDefaultData(), ...val };
+    }
   },
-  set(val) {
+  { deep: true, immediate: true }
+);
+
+// Emit updates when local state changes
+watch(
+  currentSectionData,
+  (val) => {
     emit("update:modelValue", val);
   },
-});
+  { deep: true }
+);
 
 const newGalleryYear = ref("");
 const newGalleryCategory = ref("");
@@ -39,19 +59,15 @@ const addGalleryYear = () => {
   currentSectionData.value.years.push(newGalleryYear.value.trim());
   newGalleryYear.value = "";
 };
-
 const removeGalleryYear = (index) => {
   currentSectionData.value.years.splice(index, 1);
 };
 
 const addGalleryCategory = () => {
   if (!newGalleryCategory.value.trim()) return;
-  currentSectionData.value.categories.push(
-    newGalleryCategory.value.trim()
-  );
+  currentSectionData.value.categories.push(newGalleryCategory.value.trim());
   newGalleryCategory.value = "";
 };
-
 const removeGalleryCategory = (index) => {
   currentSectionData.value.categories.splice(index, 1);
 };
