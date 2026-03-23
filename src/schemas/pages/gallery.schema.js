@@ -1,5 +1,4 @@
 export const galleryPageSchema = {
-  gallery: {
     hero: {
       titleLine1: "Event Gallery",
       titleLine2: "Relive Our Moments",
@@ -74,5 +73,4 @@ export const galleryPageSchema = {
       hasMore: true,
       nextCursor: 2
     }
-  }
 };
