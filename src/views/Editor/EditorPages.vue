@@ -52,11 +52,9 @@ import GetinvolvedVolunteeringEditor from "./components/cms/getinvolved/Getinvol
 import GetinvolvedModalEditor from "./components/cms/getinvolved/GetinvolvedModalEditor.vue";
 
 import MemberHeroEditor from "./components/cms/member/MemberHeroEditor.vue";
-import MemberSectionTitleEditor from "./components/cms/member/MemberSectionTitleEditor.vue";
 import MemberCategoriesEditor from "./components/cms/member/MemberCategoriesEditor.vue";
 
-const newYear = ref("");
-const newCategory = ref("");
+
 const currentView = ref("manager");
 const activePage = ref(null);
 const activeSection = ref("hero");
@@ -121,7 +119,6 @@ const componentMap = {
   },
   member: {
     hero: MemberHeroEditor,
-    sectionTitle: MemberSectionTitleEditor,
     categories: MemberCategoriesEditor,
   },
 };

@@ -339,19 +339,14 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
               class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4"
             >
               <span class="text-orange-500 block"
-                >Engagement Access Quality</span
+                >{{ hero.headlineTop }}</span
               >
               <span class="text-green-700 block mt-2"
-                >A coalition driving policy and innovation</span
+                >{{ hero.headlineBottom }}</span
               >
             </h2>
             <p class="mt-6 text-lg text-gray-600 max-w-xl">
-              Membership of the Healthcare Federation of Nigeria (HFN) provides
-              access to a trusted professional network that strengthens private
-              sector participation in policy, investment, and health system
-              reform. HFN members engage through structured advocacy platforms,
-              strategic partnerships, and sector-wide collaborations that shape
-              Nigeria’s healthcare landscape.
+              {{ hero.description }}
             </p>
           </div>
 
@@ -374,7 +369,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
         <h2
           class="text-3xl px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md sm:text-4xl font-sans font-extrabold text-gray-900 text-center mb-12"
         >
-          Membership Categories
+          {{ hero.sectionTitle }}
         </h2>
 
         <div class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">

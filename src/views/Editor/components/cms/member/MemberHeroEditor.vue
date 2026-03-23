@@ -21,6 +21,7 @@ const currentSectionData = reactive({
   headlineBottom: "",
   description: "",
   image: "",
+  sectionTitle: "",
 });
 
 watch(
@@ -86,4 +87,14 @@ watch(
       class="w-full border-none focus:ring-0 p-0 m-0"
     />
   </div>
+  <div>
+  <label class="block text-xs font-semibold uppercase text-gray-500">
+    Section Title
+  </label>
+  <input
+    v-model="currentSectionData.sectionTitle"
+    type="text"
+    class="w-full border-none focus:ring-0 p-0 m-0"
+  />
+</div>
 </template>
