@@ -17,7 +17,7 @@
 import { homePageSchema } from './pages/home.schema.js';
 import { aboutPageSchema } from './pages/about.schema.js';
 import { governanceSchema } from './pages/governance.schema.js';
-import { gallerySchema } from './pages/gallery.schema.js';
+import { galleryPageSchema } from './pages/gallery.schema.js';
 
 const eventImage =
   'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769883047/events-CNRYrGt8_trfhaz.png';
@@ -40,7 +40,7 @@ export const pageSchemas = {
   home: homePageSchema,
   about: aboutPageSchema,
   governance: governanceSchema,
-  gallery: gallerySchema,
+  gallery: galleryPageSchema,
   contact: {
     hero: {
       headline: 'Get in touch with HFN Nigeria',
