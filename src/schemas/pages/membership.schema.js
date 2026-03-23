@@ -92,4 +92,29 @@ export const membershipPageSchema = {
           },
         ],
       },
+      {
+        id: 'diaspora',
+        name: 'Diaspora',
+        description:
+          'For professionals or organizations abroad supporting local development',
+        plans: [
+          {
+            title: 'Diaspora Partner',
+            price: '$50 per year',
+            audience: 'Ideal for Nigerians in diaspora',
+            benefits: [
+              'Advocacy/Public-Private Engagement project',
+              'Networking/High Profile Breakfast Meetings',
+              'Access to Finance',
+              'Promotion & Brand Visibility',
+              'Access to Industry Information for Members Only',
+              'Partnership & Engagement with International Organizations',
+            ],
+          },
+        ],
+      },
+    ],
+
+    
+  },
 };
