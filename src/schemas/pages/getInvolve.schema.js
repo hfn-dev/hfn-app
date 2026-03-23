@@ -1,5 +1,5 @@
 export const getInvolvedPageSchema = {
-  getinvolved: {
+  
     hero: {
       titleLine1: 'Engage With HFN',
       titleLine2: 'Beyond Membership',
@@ -112,6 +112,6 @@ export const getInvolvedPageSchema = {
         },
       ],
     },
-  },
+  
   
 };
