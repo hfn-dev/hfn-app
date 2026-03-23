@@ -51,4 +51,24 @@ export const membershipPageSchema = {
           },
         ],
       },
+      {
+        id: 'corporate',
+        name: 'Corporate',
+        description: 'Ideal for private and insurance companies',
+        plans: [
+          {
+            title: 'Corporate',
+            price: '₦200,000 per year',
+            audience: 'Ideal for private companies',
+            benefits: [
+              'Advocacy/Public-Private Engagement project',
+              'Networking/High Profile Breakfast Meetings',
+              'Access to Finance',
+              'Promotion & Brand Visibility',
+              'Access to Industry Information for Members Only',
+              'Partnership & Engagement with International Organizations',
+            ],
+          },
+        ],
+      },
 };
