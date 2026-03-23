@@ -116,6 +116,14 @@ const componentMap = {
     volunteering: GetinvolvedVolunteeringEditor,
     donationModal: GetinvolvedModalEditor,
   },
+  member: {
+    hero: MemberHeroEditor,
+    donations: GetinvolvedDonationsEditor,
+    partnerships: GetinvolvedPartnershipsEditor,
+    opportunities: GetinvolvedOpportunitiesEditor,
+    volunteering: GetinvolvedVolunteeringEditor,
+    donationModal: GetinvolvedModalEditor,
+  },
 };
 
 const availablePageTypes = computed(() => Object.keys(pageSchemas));
