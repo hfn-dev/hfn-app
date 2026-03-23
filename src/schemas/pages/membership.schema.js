@@ -31,4 +31,24 @@ export const membershipPageSchema = {
           },
         ],
       },
+      {
+        id: 'association',
+        name: 'Association',
+        description: 'For registered professional or trade associations',
+        plans: [
+          {
+            title: 'Association Member',
+            price: '₦150,000 per year',
+            audience: 'Ideal for professional bodies',
+            benefits: [
+              'Advocacy/Public-Private Engagement project',
+              'Networking/High Profile Breakfast Meetings',
+              'Access to Finance',
+              'Promotion & Brand Visibility',
+              'Access to Industry Information for Members Only',
+              'Partnership & Engagement with International Organizations',
+            ],
+          },
+        ],
+      },
 };
