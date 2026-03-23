@@ -13,16 +13,14 @@
             <h1
               class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight"
             >
-              Engage With <span class="text-green-700">HFN</span>
+              {{ data.hero?.titleLine1 }} <span class="text-green-700">{{ data.hero?.subTitle }}</span>
               <br />
               <span class="text-gray-800 text-3xl md:text-4xl font-semibold"
-                >Beyond Membership</span
+                >{{ data.hero?.titleLine2 }}</span
               >
             </h1>
             <p class="mt-6 text-gray-600 text-lg max-w-lg leading-relaxed">
-              Healthcare Federation of Nigeria (HFN) provides multiple pathways
-              for individuals, organisations, and partners to support and engage
-              with our work strengthening Nigeria’s healthcare system.
+              {{ data.hero?.description }}
             </p>
           </div>
 
@@ -31,7 +29,7 @@
               class="relative h-64 sm:h-80 lg:h-[400px] overflow-hidden rounded-2xl shadow-xl border-4 border-white"
             >
               <img
-                :src="latest"
+                :src="data.hero?.image"
                 alt="HFN Impact"
                 class="object-cover w-full h-full"
               />
