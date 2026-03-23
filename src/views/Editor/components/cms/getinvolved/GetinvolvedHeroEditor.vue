@@ -1,3 +1,38 @@
+<script setup>
+import { computed } from "vue";
+
+// Props
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    default: () => ({}),
+  },
+});
+
+// Emits
+const emit = defineEmits(["update:modelValue"]);
+
+const getDefaultData = () => ({
+  titleLine1: "",
+  titleLine2: "",
+  description: "",
+  image: "",
+  backgroundColor: "#ffffff",
+});
+
+const currentSectionData = computed({
+  get() {
+    return {
+      ...getDefaultData(),
+      ...props.modelValue,
+    };
+  },
+  set(val) {
+    emit("update:modelValue", val);
+  },
+});
+</script>
+
 <template>
 
             <div class="border border-gray-300 rounded-lg p-3 space-y-2">
