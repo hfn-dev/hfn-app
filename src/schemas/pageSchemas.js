@@ -432,66 +432,7 @@ export const pageSchemas = {
       },
     ],
 
-    valuePropositionTabs: [
-      {
-        id: 'policy',
-        name: 'Policy Influence and Advocacy.',
-        titleHtml: 'Policy Influence <br />and Advocacy.',
-        color: 'default',
-        contentHtml: `
-        <p>
-          <strong>Representation in Policy and Decision-Making:</strong>
-          Members are represented in high-level national health policy
-          discussions through HFN’s recognized advocacy platforms.
-        </p>
-        <p>
-          <strong>Policy Advocacy:</strong> As the officially recognized
-          body for the private health sector, HFN maintains close rapport
-          with government policymakers while ensuring constant feedback on
-          critical health matters.
-        </p>
-        <p>
-          <strong>Improvement of the Operating Environment:</strong> HFN
-          actively engages in lobbying and advocacy to create a more
-          enabling and sustainable environment for healthcare operations.
-        </p>
-        <p>
-          <strong>Opportunity to Shape the Future:</strong> Members enjoy
-          ongoing opportunity to contribute to shaping the policies and
-          frameworks that determine the fortunes of Nigeria’s healthcare
-          sector.
-        </p>
-      `,
-      },
-      {
-        id: 'collaboration',
-        name: 'Collaboration, Networking, and Exposure.',
-        titleHtml: 'Collaboration, <br />Networking, <br />and Exposure.',
-        color: 'orange',
-        contentHtml: `...same exact HTML as page...`,
-      },
-      {
-        id: 'knowledge',
-        name: 'Information, Knowledge, and Capacity Development.',
-        titleHtml: 'Information, Knowledge, <br /> and Capacity Development.',
-        color: 'green',
-        contentHtml: `...same exact HTML as page...`,
-      },
-      {
-        id: 'digital',
-        name: 'Digital and Media Visibility.',
-        titleHtml: 'Digital and <br />Media Visibility.',
-        color: 'orange',
-        contentHtml: `...same exact HTML as page...`,
-      },
-      {
-        id: 'support',
-        name: 'Member Support, Benefits, and Privileges.',
-        titleHtml: 'Member Support, Benefits, <br /> and Privileges.',
-        color: 'green',
-        contentHtml: `...same exact HTML as page...`,
-      },
-    ],
+    
   },
 
   latestnews: {
