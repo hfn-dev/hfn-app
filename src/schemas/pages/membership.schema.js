@@ -71,4 +71,25 @@ export const membershipPageSchema = {
           },
         ],
       },
+      {
+        id: 'multinational',
+        name: 'Multinational',
+        description:
+          'Designed for international and cross-border organizations',
+        plans: [
+          {
+            title: 'Global Partner',
+            price: '₦750,000 per year',
+            audience: 'Ideal for international firms',
+            benefits: [
+              'Advocacy/Public-Private Engagement project',
+              'Networking/High Profile Breakfast Meetings',
+              'Access to Finance',
+              'Promotion & Brand Visibility',
+              'Access to Industry Information for Members Only',
+              'Partnership & Engagement with International Organizations',
+            ],
+          },
+        ],
+      },
 };
