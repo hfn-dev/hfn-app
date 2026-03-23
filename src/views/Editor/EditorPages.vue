@@ -1,67 +1,65 @@
 <script setup>
-import pagesApi from '@/api/pageManagement';
-import { pageSchemas } from '@/schemas/pageSchemas';
-import { useRouter } from 'vue-router';
-import HomeHeroEditor from './components/cms/home/HomeHeroEditor.vue';
-import { computed, onMounted, ref, watch } from 'vue';
-import EditorSidebar from './EditorSidebar.vue';
-  
-import HomeFaqsEditor from './components/cms/home/HomeFaqsEditor.vue';
-import HomeAboutEditor from './components/cms/home/HomeAboutEditor.vue';
-import HomeMandateEditor from './components/cms/home/HomeMandateEditor.vue';
-import HomeNewsEditor from './components/cms/home/HomeNewsEditor.vue';
-import HomeExecutivesEditor from './components/cms/home/HomeExecutivesEditor.vue';
-import HomePartnerEditor from './components/cms/home/HomePartnerEditor.vue';
-  
-import AboutHeroEditor from './components/cms/about/AboutHeroEditor.vue';
-import AboutStoryEditor from './components/cms/about/AboutStoryEditor.vue';
-import AboutItemEditor from './components/cms/about/AboutItemEditor.vue';
-import AboutHistoryEditor from './components/cms/about/AboutHistoryEditor.vue';
-import AboutGovernanceEditor from './components/cms/about/AboutGovernanceEditor.vue';
-import AboutCtaSectionEditor from './components/cms/about/AboutCtaSectionEditor.vue';
-import AboutCommitmentSection from './components/cms/about/AboutCommitmentSection.vue';
-import AboutRoleSectionEditor from './components/cms/about/AboutRoleSectionEditor.vue';
-  
-import GovernanceHeroEditor from './components/cms/governance/GovernanceHeroEditor.vue';
-import BoardOfTrusteesEditor from './components/cms/governance/GovernanceBoardOfTrustees.vue';
-import ExecutiveCommitteeEditor from './components/cms/governance/GovernanceExecutiveCommittee.vue';
+import pagesApi from "@/api/pageManagement";
+import { pageSchemas } from "@/schemas/pageSchemas";
+import { useRouter } from "vue-router";
+import HomeHeroEditor from "./components/cms/home/HomeHeroEditor.vue";
+import { computed, onMounted, ref, watch } from "vue";
+import EditorSidebar from "./EditorSidebar.vue";
 
-import NewsHeroEditor from './components/cms/news/NewsHeroEditor.vue';
-import NewsLatestEditor from './components/cms/news/NewsLatestEditor.vue';
-import NewsPolicyEditor from './components/cms/news/NewsPolicyEditor.vue';
+import HomeFaqsEditor from "./components/cms/home/HomeFaqsEditor.vue";
+import HomeAboutEditor from "./components/cms/home/HomeAboutEditor.vue";
+import HomeMandateEditor from "./components/cms/home/HomeMandateEditor.vue";
+import HomeNewsEditor from "./components/cms/home/HomeNewsEditor.vue";
+import HomeExecutivesEditor from "./components/cms/home/HomeExecutivesEditor.vue";
+import HomePartnerEditor from "./components/cms/home/HomePartnerEditor.vue";
 
-import ResourcesHeroEditor from './components/cms/resources/ResourcesHeroEditor.vue';
-import ResourcesNewsletterEditor from './components/cms/resources/ResourcesNewsletterEditor.vue';
-import ResourcesPublicationEditor from './components/cms/resources/ResourcesPublicationEditor.vue';
+import AboutHeroEditor from "./components/cms/about/AboutHeroEditor.vue";
+import AboutStoryEditor from "./components/cms/about/AboutStoryEditor.vue";
+import AboutItemEditor from "./components/cms/about/AboutItemEditor.vue";
+import AboutHistoryEditor from "./components/cms/about/AboutHistoryEditor.vue";
+import AboutGovernanceEditor from "./components/cms/about/AboutGovernanceEditor.vue";
+import AboutCtaSectionEditor from "./components/cms/about/AboutCtaSectionEditor.vue";
+import AboutCommitmentSection from "./components/cms/about/AboutCommitmentSection.vue";
+import AboutRoleSectionEditor from "./components/cms/about/AboutRoleSectionEditor.vue";
 
-import EventHeroEditor from './components/cms/events/EventHeroEditor.vue';
-import EventSearchAndFilterEditor from './components/cms/events/EventSearchAndFilterEditor.vue';
-import EventFeaturedEditor from './components/cms/events/EventFeaturedEditor.vue';
-import EventLatestEditor from './components/cms/events/EventLatestEditor.vue';
-import EventPastEditor from './components/cms/events/EventPastEditor.vue';  
+import GovernanceHeroEditor from "./components/cms/governance/GovernanceHeroEditor.vue";
+import BoardOfTrusteesEditor from "./components/cms/governance/GovernanceBoardOfTrustees.vue";
+import ExecutiveCommitteeEditor from "./components/cms/governance/GovernanceExecutiveCommittee.vue";
 
-import GalleryHeroEditor from './components/cms/gallery/GalleryHeroEditor.vue';
-import GalleryFilterEditor from './components/cms/gallery/GalleryFilterEditor.vue';
-import GalleryListEditor from './components/cms/gallery/GalleryListEditor.vue'; 
-  
-import GetinvolvedHeroEditor from './components/cms/getinvolved/GetinvolvedHeroEditor.vue';
-import GetinvolvedDonationsEditor from './components/cms/getinvolved/GetinvolvedDonationsEditor.vue';
-import GetinvolvedPartnershipsEditor from './components/cms/getinvolved/GetinvolvedPartnershipsEditor.vue'; 
-import GetinvolvedOpportunitiesEditor from './components/cms/getinvolved/GetinvolvedOpportunitiesEditor.vue'; 
-import GetinvolvedVolunteeringEditor from './components/cms/getinvolved/GetinvolvedVolunteeringEditor.vue'; 
-import GetinvolvedModalEditor from './components/cms/getinvolved/GetinvolvedModalEditor.vue'; 
+import NewsHeroEditor from "./components/cms/news/NewsHeroEditor.vue";
+import NewsLatestEditor from "./components/cms/news/NewsLatestEditor.vue";
+import NewsPolicyEditor from "./components/cms/news/NewsPolicyEditor.vue";
 
+import ResourcesHeroEditor from "./components/cms/resources/ResourcesHeroEditor.vue";
+import ResourcesNewsletterEditor from "./components/cms/resources/ResourcesNewsletterEditor.vue";
+import ResourcesPublicationEditor from "./components/cms/resources/ResourcesPublicationEditor.vue";
 
-import MemberHeroEditor from './components/cms/member/MemberHeroEditor.vue';
-import MemberSectionTitleEditor from './components/cms/member/MemberSectionTitleEditor.vue';
-import MemberCategoriesEditor from './components/cms/member/MemberCategoriesEditor.vue';
+import EventHeroEditor from "./components/cms/events/EventHeroEditor.vue";
+import EventSearchAndFilterEditor from "./components/cms/events/EventSearchAndFilterEditor.vue";
+import EventFeaturedEditor from "./components/cms/events/EventFeaturedEditor.vue";
+import EventLatestEditor from "./components/cms/events/EventLatestEditor.vue";
+import EventPastEditor from "./components/cms/events/EventPastEditor.vue";
 
-  
-const newYear = ref('');
-const newCategory = ref('');
-const currentView = ref('manager');
+import GalleryHeroEditor from "./components/cms/gallery/GalleryHeroEditor.vue";
+import GalleryFilterEditor from "./components/cms/gallery/GalleryFilterEditor.vue";
+import GalleryListEditor from "./components/cms/gallery/GalleryListEditor.vue";
+
+import GetinvolvedHeroEditor from "./components/cms/getinvolved/GetinvolvedHeroEditor.vue";
+import GetinvolvedDonationsEditor from "./components/cms/getinvolved/GetinvolvedDonationsEditor.vue";
+import GetinvolvedPartnershipsEditor from "./components/cms/getinvolved/GetinvolvedPartnershipsEditor.vue";
+import GetinvolvedOpportunitiesEditor from "./components/cms/getinvolved/GetinvolvedOpportunitiesEditor.vue";
+import GetinvolvedVolunteeringEditor from "./components/cms/getinvolved/GetinvolvedVolunteeringEditor.vue";
+import GetinvolvedModalEditor from "./components/cms/getinvolved/GetinvolvedModalEditor.vue";
+
+import MemberHeroEditor from "./components/cms/member/MemberHeroEditor.vue";
+import MemberSectionTitleEditor from "./components/cms/member/MemberSectionTitleEditor.vue";
+import MemberCategoriesEditor from "./components/cms/member/MemberCategoriesEditor.vue";
+
+const newYear = ref("");
+const newCategory = ref("");
+const currentView = ref("manager");
 const activePage = ref(null);
-const activeSection = ref('hero');
+const activeSection = ref("hero");
 const router = useRouter();
 const hasPages = computed(() => pages.value && pages.value.length > 0);
 const currentSectionData = ref(null);
@@ -99,7 +97,7 @@ const componentMap = {
   resources: {
     hero: ResourcesHeroEditor,
     newsletterSection: ResourcesNewsletterEditor,
-    publicationsSection: ResourcesPublicationEdit or,
+    publicationsSection: ResourcesPublicationEditor,
   },
   events: {
     hero: EventHeroEditor,
@@ -112,7 +110,6 @@ const componentMap = {
     hero: GalleryHeroEditor,
     filtering: GalleryFilterEditor,
     galleryList: GalleryListEditor,
-    
   },
   getinvolved: {
     hero: GetinvolvedHeroEditor,
@@ -126,81 +123,17 @@ const componentMap = {
     hero: MemberHeroEditor,
     sectionTitle: MemberSectionTitleEditor,
     categories: MemberCategoriesEditor,
-  
   },
 };
 
 const availablePageTypes = computed(() => Object.keys(pageSchemas));
 
-
-const addYear = () => {
-  if (!newYear.value.trim()) return;
-
-  currentSectionData.value.searchAndFilter.years.push(newYear.value.trim());
-  newYear.value = '';
-};
-const removeYear = (index) => {
-  currentSectionData.value.searchAndFilter.years.splice(index, 1);
-};
-const addCategory = () => {
-  if (!newCategory.value.trim()) return;
-
-  currentSectionData.value.searchAndFilter.categories.push(
-    newCategory.value.trim()
-  );
-  newCategory.value = '';
-};
-const removeCategory = (index) => {
-  currentSectionData.value.searchAndFilter.categories.splice(index, 1);
-};
-
-const addLatestEvent = () => {
-  currentSectionData.value.latestEvents.items.push({
-    id: Date.now(),
-    title: '',
-    category: '',
-    date: '',
-    time: '',
-    location: '',
-    frequency: '',
-    description: '',
-    image: '',
-    registerLink: '',
-  });
-};
-
-const removeLatestEvent = (index) => {
-  currentSectionData.value.latestEvents.items.splice(index, 1);
-};
-
-const addPastEvent = () => {
-  currentSectionData.value.pastEvents.items.push({
-    title: '',
-    category: '',
-    date: '',
-    theme: '',
-    image: '',
-  });
-};
-
-const removePastEvent = (index) => {
-  currentSectionData.value.pastEvents.items.splice(index, 1);
-};
-
 const pages = ref([]);
 const isLoading = ref(false);
 
-const addStoryStat = () => {
-  currentSectionData.value.stats.push({ label: '', value: '' });
-};
-
-const removeStoryStat = (index) => {
-  currentSectionData.value.stats.splice(index, 1);
-};
-
 const createPage = async (pageName) => {
   try {
-    const pageType = pageName.toLowerCase().trim().replace(/\s+/g, '-');
+    const pageType = pageName.toLowerCase().trim().replace(/\s+/g, "-");
     const schema = structuredClone(pageSchemas[pageType]);
 
     const exists = pages.value.some((p) => p.page_type === pageType);
@@ -212,7 +145,7 @@ const createPage = async (pageName) => {
     const payload = {
       page_type: pageType,
       name: pageName,
-      status: 'draft',
+      status: "draft",
       is_visible: false,
       content: schema,
     };
@@ -228,7 +161,7 @@ const createPage = async (pageName) => {
     await fetchPages();
     editPage(newPage);
   } catch (e) {
-    console.error('Failed to create page', e);
+    console.error("Failed to create page", e);
   }
 };
 
@@ -245,7 +178,7 @@ const fetchPages = async () => {
         schema &&
         Object.keys(schema).length > 0 &&
         page.content &&
-        typeof page.content === 'object'
+        typeof page.content === "object"
       ) {
         for (const sectionKey in schema) {
           if (page.content?.[sectionKey]) {
@@ -262,12 +195,12 @@ const fetchPages = async () => {
         title: page.name ?? page.page_type_display,
         slug: `/${(page.name ?? page.page_type)
           .toLowerCase()
-          .replace(/\s+/g, '-')}`,
+          .replace(/\s+/g, "-")}`,
         sections: content,
       };
     });
   } catch (e) {
-    console.error('Failed to load pages', e);
+    console.error("Failed to load pages", e);
   } finally {
     isLoading.value = false;
   }
@@ -280,12 +213,12 @@ const sectionKeys = computed(() => {
   return Object.keys(activePage.value.sections);
 });
 
-const newPageTitle = ref('');
+const newPageTitle = ref("");
 
 const viewPage = (page) => {
   router.push({
     path: page.slug,
-    query: { preview: 'true' },
+    query: { preview: "true" },
   });
 };
 
@@ -298,23 +231,23 @@ const uploadSectionImage = async (event, sectionKey) => {
     activePage.value.sections[sectionKey].imageUrl = url;
     activePage.value.sections[sectionKey].previewUrl = url;
   } catch (e) {
-    console.error('Image upload failed', e);
+    console.error("Image upload failed", e);
   }
 };
 
 const editPage = (page) => {
   activePage.value = page;
-  activeSection.value = 'hero';
-  currentView.value = 'editor';
+  activeSection.value = "hero";
+  currentView.value = "editor";
 };
 
 const goBackToManager = () => {
-  currentView.value = 'manager';
+  currentView.value = "manager";
   activePage.value = null;
 };
 
 const deletePage = async (id) => {
-  if (!confirm('Are you sure you want to delete this page?')) return;
+  if (!confirm("Are you sure you want to delete this page?")) return;
 
   try {
     await pagesApi.deletePage(id);
@@ -322,7 +255,7 @@ const deletePage = async (id) => {
     fetchPages();
     console.log(`Deleted page with slug: ${id}`);
   } catch (e) {
-    console.error('Failed to delete page', e);
+    console.error("Failed to delete page", e);
   }
 };
 
@@ -338,13 +271,13 @@ const addNewLogo = async (event) => {
 
   activePage.value.sections.section1.logos.push({
     id: Date.now(),
-    name: 'New Logo',
+    name: "New Logo",
     src: url,
   });
 };
 
 const deleteLogo = (logoId) => {
-  const section = activePage.value.sections['section1'];
+  const section = activePage.value.sections["section1"];
   if (section && section.logos) {
     section.logos = section.logos.filter((logo) => logo.id !== logoId);
     console.log(`Deleted logo with ID: ${logoId}`);
@@ -352,21 +285,21 @@ const deleteLogo = (logoId) => {
 };
 
 const addNewMetric = () => {
-  const section = activePage.value.sections['section2'];
+  const section = activePage.value.sections["section2"];
   if (section && section.metrics) {
     const newId = Math.max(...section.metrics.map((m) => m.id), 0) + 1;
     section.metrics.push({
       id: newId,
       label: `New Metric ${newId}`,
-      color: 'text-gray-600',
-      text: 'New detail text here.',
+      color: "text-gray-600",
+      text: "New detail text here.",
     });
   }
-  console.log('Added new metric placeholder.');
+  console.log("Added new metric placeholder.");
 };
 
 const deleteMetric = (metricId) => {
-  const section = activePage.value.sections['section2'];
+  const section = activePage.value.sections["section2"];
   if (section && section.metrics) {
     section.metrics = section.metrics.filter((m) => m.id !== metricId);
     console.log(`Deleted metric with ID: ${metricId}`);
@@ -396,14 +329,14 @@ const saveChanges = async () => {
 
     goBackToManager();
   } catch (e) {
-    console.error('Failed to save section', e);
+    console.error("Failed to save section", e);
   }
 };
 
 const breadcrumbViewName = computed(() => {
-  if (currentView.value === 'view') return `View: ${activePage.value.title}`;
-  if (currentView.value === 'editor') return `Edit: ${activePage.value.title}`;
-  return 'Page Manager';
+  if (currentView.value === "view") return `View: ${activePage.value.title}`;
+  if (currentView.value === "editor") return `Edit: ${activePage.value.title}`;
+  return "Page Manager";
 });
 
 watch(
@@ -416,7 +349,6 @@ watch(
     currentSectionData.value =
       section ??
       structuredClone(
-        // pageSchemas[activePage.value.page_type]?.[activeSection.value] ?? {}
         pageSchemas[activePage.value.page_type?.toLowerCase()]?.[
           activeSection.value
         ]
@@ -523,7 +455,7 @@ const toggleVisibility = async (page) => {
                 @click="toggleVisibility(page)"
                 title="Click to toggle visibility"
               >
-                {{ page.is_visible ? 'VISIBLE' : 'HIDDEN' }}
+                {{ page.is_visible ? "VISIBLE" : "HIDDEN" }}
               </span>
               <span class="text-gray-700 font-medium">{{
                 page.page_type
@@ -627,7 +559,7 @@ const toggleVisibility = async (page) => {
           >
             {{
               activePage.sections[key]?.name ||
-              key.replace('section', 'Section ')
+              key.replace("section", "Section ")
             }}
           </button>
         </div>
@@ -1176,275 +1108,6 @@ const toggleVisibility = async (page) => {
               </div>
             </div>
           </div>
-          
-          
-          <div
-            v-else-if="
-              activePage.page_type.toLowerCase() === 'member' &&
-              activeSection === 'hero'
-            "
-            class="space-y-4"
-          >
-            <div>
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Headline Top
-              </label>
-              <input
-                v-model="currentSectionData.headlineTop"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <div>
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Headline Bottom
-              </label>
-              <input
-                v-model="currentSectionData.headlineBottom"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-
-            <div>
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Description
-              </label>
-              <textarea
-                v-model="currentSectionData.description"
-                rows="4"
-                class="w-full border-none focus:ring-0 p-0 m-0 resize-none"
-              />
-            </div>
-
-            <div>
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Hero Image
-              </label>
-              <input
-                v-model="currentSectionData.image"
-                type="text"
-                class="w-full border-none focus:ring-0 p-0 m-0"
-              />
-            </div>
-          </div>
-          <div
-            v-else-if="
-              activePage.page_type.toLowerCase() === 'member' &&
-              activeSection === 'sectionTitle'
-            "
-          >
-            <label class="block text-xs font-semibold uppercase text-gray-500">
-              Section Title
-            </label>
-            <input
-              v-model="currentSectionData"
-              type="text"
-              class="w-full border-none focus:ring-0 p-0 m-0"
-            />
-          </div>
-
-          <div
-            v-else-if="
-              activePage.page_type.toLowerCase() === 'member' &&
-              activeSection === 'categories'
-            "
-            class="space-y-6"
-          >
-            <div
-              v-for="(category, catIndex) in currentSectionData"
-              :key="catIndex"
-              class="border border-gray-300 rounded-lg p-4 space-y-4"
-            >
-              <!-- Category Info -->
-              <div>
-                <label
-                  class="block text-xs font-semibold uppercase text-gray-500"
-                >
-                  Category Name
-                </label>
-                <input
-                  v-model="category.name"
-                  type="text"
-                  class="w-full border-none focus:ring-0 p-0 m-0"
-                />
-              </div>
-
-              <div>
-                <label
-                  class="block text-xs font-semibold uppercase text-gray-500"
-                >
-                  Description
-                </label>
-                <input
-                  v-model="category.description"
-                  type="text"
-                  class="w-full border-none focus:ring-0 p-0 m-0"
-                />
-              </div>
-
-              <!-- Plans -->
-              <div
-                v-for="(plan, planIndex) in category.plans"
-                :key="planIndex"
-                class="border border-gray-200 rounded-md p-3 space-y-2"
-              >
-                <input
-                  v-model="plan.title"
-                  placeholder="Plan Title"
-                  class="w-full border-none p-0 m-0"
-                />
-                <input
-                  v-model="plan.price"
-                  placeholder="Price"
-                  class="w-full border-none p-0 m-0"
-                />
-                <input
-                  v-model="plan.audience"
-                  placeholder="Audience"
-                  class="w-full border-none p-0 m-0"
-                />
-
-                <!-- Benefits -->
-                <div
-                  v-for="(benefit, benefitIndex) in plan.benefits"
-                  :key="benefitIndex"
-                  class="flex items-center gap-2"
-                >
-                  <input
-                    v-model="plan.benefits[benefitIndex]"
-                    class="flex-1 border-none p-0 m-0"
-                  />
-                  <button
-                    class="text-red-500 text-sm"
-                    @click="plan.benefits.splice(benefitIndex, 1)"
-                  >
-                    X
-                  </button>
-                </div>
-
-                <button
-                  class="text-sm text-black"
-                  @click="plan.benefits.push('New benefit')"
-                >
-                  + Add Benefit
-                </button>
-
-                <button
-                  class="text-red-500 text-sm"
-                  @click="category.plans.splice(planIndex, 1)"
-                >
-                  Delete Plan
-                </button>
-              </div>
-
-              <button
-                class="text-sm bg-black text-white px-3 py-1 rounded"
-                @click="
-                  category.plans.push({
-                    title: '',
-                    price: '',
-                    audience: '',
-                    benefits: [],
-                  })
-                "
-              >
-                + Add Plan
-              </button>
-
-              <button
-                class="text-red-500 text-sm"
-                @click="currentSectionData.splice(catIndex, 1)"
-              >
-                Delete Category
-              </button>
-            </div>
-
-            <button
-              class="bg-black text-white px-4 py-2 rounded"
-              @click="
-                currentSectionData.push({
-                  id: '',
-                  name: '',
-                  description: '',
-                  plans: [],
-                })
-              "
-            >
-              + Add Category
-            </button>
-          </div>
-          <div
-            v-else-if="
-              activePage.page_type.toLowerCase() === 'member' &&
-              activeSection === 'valuePropositionTabs'
-            "
-            class="space-y-6"
-          >
-            <div
-              v-for="(tab, index) in currentSectionData"
-              :key="index"
-              class="border border-gray-300 rounded-lg p-4 space-y-3"
-            >
-              <input
-                v-model="tab.name"
-                placeholder="Tab Name"
-                class="w-full border-none p-0 m-0"
-              />
-              <input
-                v-model="tab.titleHtml"
-                placeholder="Title HTML"
-                class="w-full border-none p-0 m-0"
-              />
-              <input
-                v-model="tab.color"
-                placeholder="Color"
-                class="w-full border-none p-0 m-0"
-              />
-
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Content HTML
-              </label>
-              <textarea
-                v-model="tab.contentHtml"
-                rows="6"
-                class="w-full border-none resize-none p-0 m-0"
-              />
-
-              <button
-                class="text-red-500 text-sm"
-                @click="currentSectionData.splice(index, 1)"
-              >
-                Delete Tab
-              </button>
-            </div>
-
-            <button
-              class="bg-black text-white px-4 py-2 rounded"
-              @click="
-                currentSectionData.push({
-                  id: '',
-                  name: '',
-                  titleHtml: '',
-                  color: '',
-                  contentHtml: '',
-                })
-              "
-            >
-              + Add Tab
-            </button>
-          </div>
 
           <div
             class="mt-10 flex justify-end space-x-4 border-t pt-4 border-gray-200"
@@ -1469,10 +1132,10 @@ const toggleVisibility = async (page) => {
 </template>
 
 <style scoped>
-input[type='color']::-webkit-color-swatch-wrapper {
+input[type="color"]::-webkit-color-swatch-wrapper {
   padding: 0;
 }
-input[type='color']::-webkit-color-swatch {
+input[type="color"]::-webkit-color-swatch {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
