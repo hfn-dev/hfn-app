@@ -1,11 +1,12 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, computed } from "vue";
 
 const props = defineProps({
   modelValue: Object,
 });
 
 const emit = defineEmits(["update:modelValue"]);
+
 const getDefaultData = () => ({
   title: "Filter Memories",
   years: ["2026", "2025", "2024"],
@@ -29,10 +30,9 @@ const currentSectionData = computed({
     emit("update:modelValue", val);
   },
 });
-  
-const newGalleryYear = ref('');
-const newGalleryCategory = ref('');
 
+const newGalleryYear = ref("");
+const newGalleryCategory = ref("");
 
 const addGalleryYear = () => {
   if (!newGalleryYear.value.trim()) return;
@@ -55,32 +55,7 @@ const addGalleryCategory = () => {
 const removeGalleryCategory = (index) => {
   currentSectionData.value.categories.splice(index, 1);
 };
-  
-// const addGalleryItem = () => {
-//   currentSectionData.value.galleryList.items.push({
-//     id: Date.now(),
-//     title: '',
-//     category: '',
-//     date: '',
-//     image: '',
-//     year: '',
-//   });
-// };
-
-// const removeGalleryItem = (index) => {
-//   currentSectionData.value.galleryList.items.splice(index, 1);
-// };
-
-
-watch(
-  currentSectionData,
-  (val) => {
-    emit("update:modelValue", val);
-  },
-  { deep: true }
-);
 </script>
-
 
 <template>
         
