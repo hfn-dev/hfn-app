@@ -918,10 +918,66 @@ onMounted(() => {
               class="w-full h-40 mt-2"
             />
 
-            <input type="file" @change="uploadFile" class="mb-4" />
+            <div class="mb-4">
+  <input
+    type="file"
+    @change="uploadFile"
+    class="border border-gray-300 rounded-md px-3 py-2 w-full"
+    :multiple="uploadForm.type === 'gallery'"
+  />
 
-            <button @click="createUpload" class="btn-primary">Upload</button>
-          </div>
+  <!-- PREVIEW -->
+  <div
+    v-if="uploadForm.type === 'gallery' && uploadForm.files.length"
+    class="mt-4"
+  >
+    <p class="font-medium mb-2">Gallery Preview (Select Banner)</p>
+
+    <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
+      <div
+        v-for="(file, index) in uploadForm.files"
+        :key="index"
+        class="relative group"
+      >
+        <img
+          :src="previewUrl(file)"
+          class="h-24 w-full object-cover rounded cursor-pointer border-2 transition"
+          :class="{
+            'border-green-600 scale-105': uploadForm.bannerIndex === index,
+            'border-gray-300': uploadForm.bannerIndex !== index,
+          }"
+          @click="uploadForm.bannerIndex = index"
+        />
+
+        <!-- delete -->
+        <button
+          class="absolute top-1 right-1 bg-white text-red-600 rounded-full w-5 h-5 text-xs hidden group-hover:flex items-center justify-center shadow"
+          @click.prevent="uploadForm.files.splice(index, 1)"
+        >
+          ✕
+        </button>
+
+        <!-- banner badge -->
+        <span
+          v-if="uploadForm.bannerIndex === index"
+          class="absolute bottom-1 left-1 text-[10px] bg-green-600 text-white px-2 py-0.5 rounded"
+        >
+          Banner
+        </span>
+      </div>
+    </div>
+
+    <p class="text-xs text-gray-500 mt-2">
+      Click an image to set as banner thumbnail
+    </p>
+  </div>
+</div>
+
+<div class="flex justify-end mt-4">
+  <button @click="createUpload" class="btn-primary px-6">
+    Upload
+  </button>
+</div>          </div>
 
           <div class="mt-8">
             <h3 class="font-semibold mb-3">Uploaded Content</h3>
@@ -1005,39 +1061,7 @@ onMounted(() => {
             </table>
           </div>
         </section>
-        <div
-          v-if="uploadForm.type === 'gallery' && uploadForm.files.length"
-          class="mb-4"
-        >
-          <p class="font-medium mb-1">Gallery Images (choose banner)</p>
-          <div class="flex gap-3 overflow-x-auto">
-            <div
-              v-for="(file, index) in uploadForm.files"
-              :key="index"
-              class="relative"
-            >
-              <img
-                v-if="previewUrl(file)"
-                :src="previewUrl(file)"
-                class="h-24 w-24 object-cover rounded cursor-pointer border-2"
-                :class="{
-                  'border-green-500': uploadForm.bannerIndex === index,
-                  'border-gray-300': uploadForm.bannerIndex !== index,
-                }"
-                @click="uploadForm.bannerIndex = index"
-              />
-              <button
-                class="absolute top-0 right-0 text-red-600 font-bold"
-                @click.prevent="uploadForm.files.splice(index, 1)"
-              >
-                ✕
-              </button>
-            </div>
-          </div>
-          <p class="text-xs text-gray-500 mt-1">
-            Click an image to mark as banner/thumbnail
-          </p>
-        </div>
+        
       </div>
     </main>
   </div>
