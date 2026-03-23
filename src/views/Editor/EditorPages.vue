@@ -36,11 +36,13 @@ import EventSearchAndFilterEditor from './components/cms/events/EventSearchAndFi
 import EventFeaturedEditor from './components/cms/events/EventFeaturedEditor.vue';
 import EventLatestEditor from './components/cms/events/EventLatestEditor.vue';
 import EventPastEditor from './components/cms/events/EventPastEditor.vue';  
+
+import GalleryHeroEditor from './components/cms/gallery/GalleryHeroEditor.vue';
+import GalleryFilterEditor from './components/cms/gallery/GalleryFilterEditor.vue';
+import GalleryListEditor from './components/cms/gallery/GalleryListEditor.vue'; 
   
 const newYear = ref('');
 const newCategory = ref('');
-const newGalleryYear = ref('');
-const newGalleryCategory = ref('');
 const currentView = ref('manager');
 const activePage = ref(null);
 const activeSection = ref('hero');
@@ -90,46 +92,16 @@ const componentMap = {
     latestEvents: EventLatestEditor,
     pastEvents: EventPastEditor,
   },
+  gallery: {
+    hero: GalleryHeroEditor,
+    filtering: GalleryFilterEditor,
+    galleryList: GalleryListEditor,
+    
+  },
 };
 
 const availablePageTypes = computed(() => Object.keys(pageSchemas));
 
-const addGalleryYear = () => {
-  if (!newGalleryYear.value.trim()) return;
-  currentSectionData.value.filtering.years.push(newGalleryYear.value.trim());
-  newGalleryYear.value = '';
-};
-
-const removeGalleryYear = (index) => {
-  currentSectionData.value.filtering.years.splice(index, 1);
-};
-
-const addGalleryCategory = () => {
-  if (!newGalleryCategory.value.trim()) return;
-  currentSectionData.value.filtering.categories.push(
-    newGalleryCategory.value.trim()
-  );
-  newGalleryCategory.value = '';
-};
-
-const removeGalleryCategory = (index) => {
-  currentSectionData.value.filtering.categories.splice(index, 1);
-};
-
-const addGalleryItem = () => {
-  currentSectionData.value.galleryList.items.push({
-    id: Date.now(),
-    title: '',
-    category: '',
-    date: '',
-    image: '',
-    year: '',
-  });
-};
-
-const removeGalleryItem = (index) => {
-  currentSectionData.value.galleryList.items.splice(index, 1);
-};
 
 const addYear = () => {
   if (!newYear.value.trim()) return;
@@ -835,6 +807,11 @@ const toggleVisibility = async (page) => {
           <component
             v-if="activePage.page_type.toLowerCase() === 'events'"
             :is="componentMap.events?.[activeSection]"
+            v-model="currentSectionData"
+          />
+          <component
+            v-if="activePage.page_type.toLowerCase() === 'gallery'"
+            :is="componentMap.gallery?.[activeSection]"
             v-model="currentSectionData"
           />
 
@@ -1843,236 +1820,6 @@ const toggleVisibility = async (page) => {
             >
               + Add Tab
             </button>
-          </div>
-
-          
-          
-          <div
-            v-if="
-              activePage.page_type.toLowerCase() === 'gallery' &&
-              activeSection === 'hero'
-            "
-            class="space-y-6"
-          >
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Hero Title Line 1
-              </label>
-              <input
-                v-model="currentSectionData.titleLine1"
-                type="text"
-                class="w-full border-none focus:ring-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Hero Title Line 2
-              </label>
-              <input
-                v-model="currentSectionData.titleLine2"
-                type="text"
-                class="w-full border-none focus:ring-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Description
-              </label>
-              <textarea
-                v-model="currentSectionData.description"
-                rows="4"
-                class="w-full border-none focus:ring-0 resize-none"
-              ></textarea>
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Image URL
-              </label>
-              <input
-                v-model="currentSectionData.image"
-                type="text"
-                class="w-full border-none focus:ring-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Background Color
-              </label>
-              <input
-                v-model="currentSectionData.backgroundColor"
-                type="color"
-                class="w-16 h-10 p-0 border-none focus:ring-0"
-              />
-            </div>
-          </div>
-          <div
-            v-if="
-              activePage.page_type.toLowerCase() === 'gallery' &&
-              activeSection === 'filtering'
-            "
-            class="space-y-8"
-          >
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Section Title
-              </label>
-              <input
-                v-model="currentSectionData.title"
-                class="w-full border-none focus:ring-0"
-              />
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Years
-              </label>
-              <div class="flex gap-2 flex-wrap">
-                <span
-                  v-for="(year, index) in currentSectionData.years"
-                  :key="index"
-                  class="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2"
-                >
-                  {{ year }}
-                  <button
-                    @click="removeGalleryYear(index)"
-                    class="text-red-500 font-bold"
-                  >
-                    ×
-                  </button>
-                </span>
-                <input
-                  v-model="newGalleryYear"
-                  @keyup.enter="addGalleryYear"
-                  placeholder="Add year"
-                  class="border p-1 rounded focus:ring-0 w-24"
-                />
-              </div>
-            </div>
-
-            <div class="border border-gray-300 rounded-lg p-3 space-y-2">
-              <label
-                class="block text-xs font-semibold uppercase text-gray-500"
-              >
-                Categories
-              </label>
-              <div class="flex gap-2 flex-wrap">
-                <span
-                  v-for="(category, index) in currentSectionData.categories"
-                  :key="index"
-                  class="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2"
-                >
-                  {{ category }}
-                  <button
-                    @click="removeGalleryCategory(index)"
-                    class="text-red-500 font-bold"
-                  >
-                    ×
-                  </button>
-                </span>
-                <input
-                  v-model="newGalleryCategory"
-                  @keyup.enter="addGalleryCategory"
-                  placeholder="Add category"
-                  class="border p-1 rounded focus:ring-0 w-32"
-                />
-              </div>
-            </div>
-          </div>
-          <div
-            v-if="
-              activePage.page_type.toLowerCase() === 'gallery' &&
-              activeSection === 'galleryList'
-            "
-            class="space-y-8"
-          >
-            <div
-              v-for="(item, index) in currentSectionData.items"
-              :key="item.id"
-              class="border border-gray-300 rounded-lg p-4 space-y-3"
-            >
-              <div class="flex justify-between items-center">
-                <h4 class="font-semibold text-sm">
-                  Gallery Item {{ index + 1 }}
-                </h4>
-                <button
-                  @click="removeGalleryItem(index)"
-                  class="text-red-500 text-sm"
-                >
-                  Delete
-                </button>
-              </div>
-
-              <input
-                v-model="item.title"
-                placeholder="Title"
-                class="w-full border-none focus:ring-0"
-              />
-              <input
-                v-model="item.category"
-                placeholder="Category"
-                class="w-full border-none focus:ring-0"
-              />
-              <input
-                v-model="item.date"
-                placeholder="Date"
-                class="w-full border-none focus:ring-0"
-              />
-              <input
-                v-model="item.year"
-                placeholder="Year"
-                class="w-full border-none focus:ring-0"
-              />
-              <input
-                v-model="item.image"
-                placeholder="Image URL"
-                class="w-full border-none focus:ring-0"
-              />
-            </div>
-
-            <button
-              @click="addGalleryItem"
-              class="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-800"
-            >
-              + Add Gallery Item
-            </button>
-
-            <div class="border border-gray-300 rounded-lg p-4 space-y-3">
-              <label class="flex items-center gap-2 text-sm">
-                <input type="checkbox" v-model="currentSectionData.hasMore" />
-                Has More
-              </label>
-
-              <div>
-                <label
-                  class="block text-xs font-semibold uppercase text-gray-500"
-                >
-                  Next Cursor
-                </label>
-                <input
-                  v-model="currentSectionData.nextCursor"
-                  type="number"
-                  class="w-full border-none focus:ring-0"
-                />
-              </div>
-            </div>
           </div>
 
           <div
