@@ -1,3 +1,6 @@
+const latestHero =
+  'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770045591/243A7993_wxlzkg.jpg';
+
 export const eventsPageSchema = {
   events: {
     hero: {
