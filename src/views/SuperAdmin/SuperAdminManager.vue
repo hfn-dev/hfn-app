@@ -270,9 +270,7 @@ const addNewInvitation = (roleKey) => {
 };
 
 const sendInvitation = async (invite, roleKey, index) => {
-  if (
-    !invite.email ||
-  ) {
+  if (!invite.email) {
     console.error("Please fill in email before sending the invitation.");
     toast.error("Please fill in email before sending the invitation.");
     return;
