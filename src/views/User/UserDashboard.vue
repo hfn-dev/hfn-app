@@ -234,7 +234,7 @@ const fetchResources = async () => {
   loadingResources.value = true;
 
   try {
-    const data = await memberApi.listResources();
+    const data = await contentUploadsApi.listPublications();
 
     const apiResources = (data || []).map((item) => ({
       ...item,
