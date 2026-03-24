@@ -350,29 +350,6 @@ const resolveImage = (image) => imageMap[image] || image;
     </section>
 
     <section class="py-20 bg-[#004d33] text-white overflow-hidden relative">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="flex flex-col md:flex-row gap-12 items-center">
-          <div class="text-8xl font-black opacity-20 select-none">{{ page.history.year }}</div>
-          <div class="space-y-4">
-            <h3
-              class="text-orange-400 font-black uppercase tracking-widest text-sm"
-            >
-              {{ page.history.title }}
-            </h3>
-            <h4 class="text-3xl font-bold">
-              {{ page.history.subtitle }}
-            </h4>
-            <p class="text-green-50/80 text-lg max-w-4xl leading-relaxed">
-              {{ page.history.description }}
-            </p>
-          </div>
-        </div>
-      </div>
-      <div
-        class="absolute bottom-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mb-32"
-      ></div>
-    </section>
-    <section class="py-20 bg-[#004d33] text-white overflow-hidden relative">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
     <div class="space-y-16">
