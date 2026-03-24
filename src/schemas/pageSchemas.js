@@ -25,6 +25,8 @@ import { eventsPageSchema } from './pages/events.schema.js';
 import { newsPageSchema } from './pages/news.schema.js';
 import { resourcesPageSchema } from './pages/resources.schema.js';
 import { programsPageSchema } from './pages/programs.schema.js';
+import { footerSchema } from './pages/footer.schema.js';
+
 
 const eventImage =
   'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769883047/events-CNRYrGt8_trfhaz.png';
@@ -55,4 +57,5 @@ export const pageSchemas = {
   latestnews: newsPageSchema,
   programs: programsPageSchema,
   resources: resourcesPageSchema,
+  footer: footerSchema,
 };
