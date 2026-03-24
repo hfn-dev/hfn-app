@@ -21,6 +21,8 @@ import { galleryPageSchema } from './pages/gallery.schema.js';
 import { getInvolvedPageSchema } from './pages/getInvolve.schema.js';
 import { membershipPageSchema } from './pages/membership.schema.js';
 import { contactPageSchema } from './pages/contact.schema.js';
+import { eventsPageSchema } from './pages/events.schema.js';
+
 
 const eventImage =
   'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769883047/events-CNRYrGt8_trfhaz.png';
@@ -46,7 +48,7 @@ export const pageSchemas = {
   gallery: galleryPageSchema,
   getinvolved: getInvolvedPageSchema,
   contact: contactPageSchema,
-  events: eventPageSchema,  
+  events: eventsPageSchema,  
   member: membershipPageSchema,
 
   latestnews: {
