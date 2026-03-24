@@ -59,6 +59,7 @@ import ContactFormEditor from "./components/cms/contact/ContactFormEditor.vue";
 import ContactDetailsEditor from "./components/cms/contact/ContactDetailsEditor.vue";
 import ContactMapEditor from "./components/cms/contact/ContactMapEditor.vue";  
 
+import FooterEditor from "./components/cms/footer/FooterEditor.vue";  
 
 const currentView = ref("manager");
 const activePage = ref(null);
@@ -134,7 +135,7 @@ const componentMap = {
 
   },
   footer: {
-    
+    main: FooterEditor,
   }
 };
 
