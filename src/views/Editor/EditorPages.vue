@@ -133,6 +133,9 @@ const componentMap = {
      map: ContactMapEditor,
 
   },
+  footer: {
+    
+  }
 };
 
 const availablePageTypes = computed(() => Object.keys(pageSchemas));
@@ -798,6 +801,11 @@ const toggleVisibility = async (page) => {
           <component
             v-if="activePage.page_type.toLowerCase() === 'contact'"
             :is="componentMap.contact?.[activeSection]"
+            v-model="currentSectionData"
+          />
+          <component
+            v-if="activePage.page_type.toLowerCase() === 'footer'"
+            :is="componentMap.footer?.[activeSection]"
             v-model="currentSectionData"
           />
 
