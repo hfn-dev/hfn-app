@@ -381,6 +381,24 @@ const toggleVisibility = async (page) => {
     page.is_visible = !page.is_visible;
   }
 };
+
+
+watch(activePage, (page) => {
+  if (!page) return;
+
+  const pageType = page.page_type?.toLowerCase();
+
+  if (pageType === "footer") {
+    activeSection.value = "main";
+    return;
+  }
+
+  const schema = pageSchemas[pageType];
+  const firstSection = schema ? Object.keys(schema)[0] : "hero";
+
+  activeSection.value = firstSection;
+});
+  
 </script>
 
 <template>
