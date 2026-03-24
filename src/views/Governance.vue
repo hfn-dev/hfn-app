@@ -8,10 +8,10 @@
               class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4"
             >
               <span class="text-orange-500 block">{{ page.hero.titleHighlight }}</span>
-              <span class="text-green-700 block mt-2">{{ page.hero.description }}</span>
+              <span class="text-green-700 block mt-2"></span>
             </h2>
             <p class="mt-6 text-lg text-gray-600 max-w-xl">
-              {{ page.hero.titleMain }}
+              {{ page.hero.description }}
             </p>
           </div>
 
