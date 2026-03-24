@@ -271,21 +271,16 @@ const addNewInvitation = (roleKey) => {
 
 const sendInvitation = async (invite, roleKey, index) => {
   if (
-    !invite.firstName ||
-    !invite.surname ||
     !invite.email ||
-    !invite.organization
   ) {
-    console.error("Please fill in all fields before sending the invitation.");
+    console.error("Please fill in email before sending the invitation.");
+    toast.error("Please fill in email before sending the invitation.");
     return;
   }
 
   try {
     const payload = {
-      firstName: invite.firstName,
-      surname: invite.surname,
       email: invite.email,
-      organization: invite.organization,
       role: roleKey,
     };
     await accessAPI.createRoleInvite(payload);
