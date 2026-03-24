@@ -126,4 +126,13 @@ export default {
       throw error;
     }
   },
+  async forgotPassword(payload) {
+    try {
+      const response = await api.post('/account/forgot-password', payload);
+      return response.data;
+    } catch (error) {
+      console.error('Change password API error:', error);
+      throw error;
+    }
+  },
 };
