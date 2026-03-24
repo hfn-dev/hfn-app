@@ -58,9 +58,18 @@ export default {
   },
 
 
+  // async listApplications(params = {}) {
+  //   try {
+  //     const response = await api.get("/membership/applications/", { params });
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error("List applications API error:", error);
+  //     throw error;
+  //   }
+  // },
   async listApplications(params = {}) {
     try {
-      const response = await api.get("/membership/applications/", { params });
+      const response = await api.get("/account/admin/individual-applications/", { params });
       return response.data;
     } catch (error) {
       console.error("List applications API error:", error);
@@ -123,10 +132,22 @@ export default {
     }
   },
 
-  async approveApplication(id, payload) {
+  // async approveApplication(id, payload) {
+  //   try {
+  //     const response = await api.post(
+  //       `/membership/applications/${id}/approve/`,
+  //       payload
+  //     );
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error("Approve application API error:", error);
+  //     throw error;
+  //   }
+  // },
+  async approveApplication(payload) {
     try {
       const response = await api.post(
-        `/membership/applications/${id}/approve/`,
+        `/account/admin/individual-applications/approve/`,
         payload
       );
       return response.data;
