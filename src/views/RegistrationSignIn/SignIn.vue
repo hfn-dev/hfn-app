@@ -14,6 +14,9 @@ const isLoading = ref(false);
 const router = useRouter();
 const toast = useToast();
 const { login } = useAuth();
+const showForgotModal = ref(false);
+const forgotEmail = ref("");
+const forgotLoading = ref(false);  
 const registerImage =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769798445/HFN_Office_h0se9v.jpg";
 
@@ -160,16 +163,53 @@ const handleGoogleSignIn = () => {
   toast.info("Google Sign-in will be implemented soon.");
 };
 
+// const handleForgotPassword = () => {
+//   if (!username.value.trim()) {
+//     toast.warning("Please enter your email first to reset password");
+//     return;
+//   }
+
+//   localStorage.setItem("passwordResetEmail", username.value.trim());
+
+//   router.push("/forgot-password");
+// };
+
 const handleForgotPassword = () => {
-  if (!username.value.trim()) {
-    toast.warning("Please enter your email first to reset password");
+  forgotEmail.value = username.value || "";
+  showForgotModal.value = true;
+};
+
+const submitForgotPassword = async () => {
+  if (!forgotEmail.value.trim()) {
+    toast.error("Please enter your email");
     return;
   }
 
-  localStorage.setItem("passwordResetEmail", username.value.trim());
+  try {
+    forgotLoading.value = true;
 
-  router.push("/forgot-password");
+    const payload = {
+      email: forgotEmail.value.trim(),
+    };
+
+    const res = await userRegister.forgotPassword(payload);
+
+    toast.success(res?.message || "Password reset link sent!");
+    showForgotModal.value = false;
+
+  } catch (error) {
+    console.error("Forgot password error:", error);
+
+    const msg =
+      error.response?.data?.message ||
+      "Failed to send reset link. Try again.";
+
+    toast.error(msg);
+  } finally {
+    forgotLoading.value = false;
+  }
 };
+  
 </script>
 
 <template>
@@ -318,6 +358,46 @@ const handleForgotPassword = () => {
         </div>
       </div>
     </div>
+    <!-- Forgot Password Modal -->
+<div
+  v-if="showForgotModal"
+  class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
+>
+  <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
+    <h3 class="text-xl font-bold text-[#333] mb-4">
+      Reset Password
+    </h3>
+
+    <p class="text-sm text-gray-600 mb-4">
+      Enter your email address to receive a password reset link.
+    </p>
+
+    <input
+      type="email"
+      v-model="forgotEmail"
+      placeholder="your@email.com"
+      class="w-full border border-gray-300 rounded-lg px-4 py-3 mb-4 focus:ring-[#0c6b39] focus:border-[#0c6b39]"
+    />
+
+    <div class="flex gap-3">
+      <button
+        @click="showForgotModal = false"
+        class="flex-1 border border-gray-300 rounded-lg py-2"
+      >
+        Cancel
+      </button>
+
+      <button
+        @click="submitForgotPassword"
+        :disabled="forgotLoading"
+        class="flex-1 bg-[#0c6b39] text-white rounded-lg py-2 font-semibold hover:bg-[#09572d]"
+      >
+        <span v-if="forgotLoading">Sending...</span>
+        <span v-else>Send Link</span>
+      </button>
+    </div>
+  </div>
+</div>
   </div>
 </template>
 
