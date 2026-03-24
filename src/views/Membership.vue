@@ -6,7 +6,9 @@ import membership from "@/assets/membership.jpg";
 
 const router = useRouter()
 const isSubmitting = ref(false);
+const pageData = ref(membershipPageSchema);
 
+const hero = computed(() => pageData.value.hero);
 const joinNow = () => {
   router.push("/register");
 };
