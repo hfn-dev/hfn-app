@@ -3,7 +3,8 @@
 import { computed, ref } from "vue";
   import { useRouter } from "vue-router";
 import membership from "@/assets/membership.jpg";
-
+import membershipPageSchema from "@/schemas/pages/membership.schema.js";
+  
 const router = useRouter()
 const isSubmitting = ref(false);
 const pageData = ref(membershipPageSchema);
