@@ -579,7 +579,7 @@ onMounted(async () => {
             <img
               :src="resolveImage(featured)"
               alt="Featured news"
-              class="w-full h-72 object-contain"
+              class="w-full h-[400px] object-cover object-top"
             />
             <span
               class="absolute bottom-4 left-4 bg-green-700 text-white text-xs font-semibold px-3 py-1 rounded-full"
