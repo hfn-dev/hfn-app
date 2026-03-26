@@ -8,6 +8,11 @@ import { useToast } from "vue-toastification";
 const router = useRouter();
 const toast = useToast();
 const showSuccessDialog = ref(false);
+const showForgotPasswordDialog = ref(false);
+const showResetCodeDialog = ref(false);
+const resetEmail = ref("");
+const resetCode = ref("");
+  
 const registerImage =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769798445/HFN_Office_h0se9v.jpg";
 
@@ -29,6 +34,8 @@ const form = ref({
   statementOfInterest: "",
 });
 
+
+  
 const membershipCategories = ref([
   {
     id: 1,
