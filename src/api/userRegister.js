@@ -119,7 +119,7 @@ export default {
 },
   async changePassword(payload) {
     try {
-      const response = await api.post('/account/change-password', payload);
+      const response = await api.post('/account/change-password/', payload);
       return response.data;
     } catch (error) {
       console.error('Change password API error:', error);
@@ -128,7 +128,7 @@ export default {
   },
   async forgotPassword(payload) {
     try {
-      const response = await api.post('/account/forgot-password', payload);
+      const response = await api.post('/account/forgot-password/', payload);
       return response.data;
     } catch (error) {
       console.error('Change password API error:', error);
