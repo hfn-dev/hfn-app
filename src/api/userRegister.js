@@ -1,6 +1,15 @@
 import api from './axios.js';
 
 export default {
+  async createApplication(payload) {
+    try {
+      const response = await api.post('/account/individual-applications/', payload);
+      return response.data;
+    } catch (error) {
+      console.error('Registration API error:', error);
+      throw error;
+    }
+  },
   async createUser(payload) {
     try {
       const response = await api.post('/account/register/', payload);
