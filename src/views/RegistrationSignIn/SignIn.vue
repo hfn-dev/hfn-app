@@ -17,6 +17,12 @@ const { login } = useAuth();
 const showForgotModal = ref(false);
 const forgotEmail = ref("");
 const forgotLoading = ref(false);  
+
+const showForgotPasswordDialog = ref(false);
+const showResetCodeDialog = ref(false);
+const resetEmail = ref("");
+const resetCode = ref("");
+  
 const registerImage =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769798445/HFN_Office_h0se9v.jpg";
 
@@ -163,21 +169,50 @@ const handleGoogleSignIn = () => {
   toast.info("Google Sign-in will be implemented soon.");
 };
 
-// const handleForgotPassword = () => {
-//   if (!username.value.trim()) {
-//     toast.warning("Please enter your email first to reset password");
-//     return;
-//   }
-
-//   localStorage.setItem("passwordResetEmail", username.value.trim());
-
-//   router.push("/forgot-password");
-// };
 
 const handleForgotPassword = () => {
   forgotEmail.value = username.value || "";
   showForgotModal.value = true;
 };
+
+const handleForgotPasswordDialog = async () => {
+  try {
+    const response = await userRegister.forgotPassword({
+      email: resetEmail.value,
+    });
+
+    if (response.status === "success") {
+      toast.success(response.messages?.[0]);
+
+      if (response.actions_required?.includes("reset_password")) {
+        showForgotPasswordDialog.value = false; 
+        showResetCodeDialog.value = true; 
+      }
+    }
+  } catch (error) {
+    toast.error("Something went wrong");
+  }
+};  
+
+
+const verifyResetCode = async () => {
+  try {
+    const response = await userRegister.verifyResetCode({
+      email: resetEmail.value,
+      code: resetCode.value,
+    });
+
+    if (response.status === "success") {
+      toast.success("Code verified");
+
+      showResetCodeDialog.value = false;
+
+    }
+  } catch (error) {
+    toast.error("Invalid or expired code");
+  }
+};
+  
 
 const submitForgotPassword = async () => {
   if (!forgotEmail.value.trim()) {
@@ -358,6 +393,39 @@ const submitForgotPassword = async () => {
         </div>
       </div>
     </div>
+    <div
+  v-if="showResetCodeDialog"
+  class="fixed inset-0 flex items-center justify-center bg-black/40 z-50"
+>
+  <div class="bg-white rounded-xl p-6 w-full max-w-md">
+    <h3 class="text-lg font-bold mb-4 text-gray-800">
+      Enter Reset Code
+    </h3>
+
+    <input
+      v-model="resetCode"
+      type="text"
+      placeholder="Enter code sent to your email"
+      class="w-full border border-gray-300 rounded-lg p-2.5 mb-4"
+    />
+
+    <div class="flex justify-end gap-3">
+      <button
+        @click="showResetCodeDialog = false"
+        class="px-4 py-2 bg-gray-200 rounded-lg"
+      >
+        Cancel
+      </button>
+
+      <button
+        @click="verifyResetCode"
+        class="px-4 py-2 bg-green-700 text-white rounded-lg"
+      >
+        Verify
+      </button>
+    </div>
+  </div>
+</div>
     <!-- Forgot Password Modal -->
 <div
   v-if="showForgotModal"
