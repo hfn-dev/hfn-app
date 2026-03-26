@@ -273,7 +273,7 @@ const handleRegistration = async () => {
         response = await userRegister.createApplication(payload);
     } else {
       payload = prepareOrganizationPayload();
-        response = await userRegister.createApplication(payload);
+        response = await userRegister.createUser(payload);
     }
 
     // const response = await userRegister.createUser(payload);
