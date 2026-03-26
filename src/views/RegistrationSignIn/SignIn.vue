@@ -18,7 +18,6 @@ const showForgotModal = ref(false);
 const forgotEmail = ref("");
 const forgotLoading = ref(false);  
 
-const showForgotPasswordDialog = ref(false);
 const showResetCodeDialog = ref(false);
 const resetEmail = ref("");
 const resetCode = ref("");
@@ -175,25 +174,6 @@ const handleForgotPassword = () => {
   showForgotModal.value = true;
 };
 
-const handleForgotPasswordDialog = async () => {
-  try {
-    const response = await userRegister.forgotPassword({
-      email: resetEmail.value,
-    });
-
-    if (response.status === "success") {
-      toast.success(response.messages?.[0]);
-
-      if (response.actions_required?.includes("reset_password")) {
-        showForgotPasswordDialog.value = false; 
-        showResetCodeDialog.value = true; 
-      }
-    }
-  } catch (error) {
-    toast.error("Something went wrong");
-  }
-};  
-
 
 const verifyResetCode = async () => {
   try {
@@ -214,6 +194,36 @@ const verifyResetCode = async () => {
 };
   
 
+// const submitForgotPassword = async () => {
+//   if (!forgotEmail.value.trim()) {
+//     toast.error("Please enter your email");
+//     return;
+//   }
+
+//   try {
+//     forgotLoading.value = true;
+
+//     const payload = {
+//       email: forgotEmail.value.trim(),
+//     };
+
+//     const res = await userRegister.forgotPassword(payload);
+
+//     toast.success(res?.message || "Password reset link sent!");
+//     showForgotModal.value = false;
+
+//   } catch (error) {
+//     console.error("Forgot password error:", error);
+
+//     const msg =
+//       error.response?.data?.message ||
+//       "Failed to send reset link. Try again.";
+
+//     toast.error(msg);
+//   } finally {
+//     forgotLoading.value = false;
+//   }
+// };
 const submitForgotPassword = async () => {
   if (!forgotEmail.value.trim()) {
     toast.error("Please enter your email");
@@ -223,28 +233,29 @@ const submitForgotPassword = async () => {
   try {
     forgotLoading.value = true;
 
-    const payload = {
+    const res = await userRegister.forgotPassword({
       email: forgotEmail.value.trim(),
-    };
+    });
 
-    const res = await userRegister.forgotPassword(payload);
+    if (res.status === "success") {
+      toast.success(res.messages?.[0]);
 
-    toast.success(res?.message || "Password reset link sent!");
-    showForgotModal.value = false;
+      if (res.actions_required?.includes("reset_password")) {
+        showForgotModal.value = false;
+        showResetCodeDialog.value = true;
 
+        resetEmail.value = forgotEmail.value.trim();
+      }
+    }
   } catch (error) {
-    console.error("Forgot password error:", error);
-
-    const msg =
+    toast.error(
       error.response?.data?.message ||
-      "Failed to send reset link. Try again.";
-
-    toast.error(msg);
+        "Failed to send reset code. Try again."
+    );
   } finally {
     forgotLoading.value = false;
   }
-};
-  
+};  
 </script>
 
 <template>
