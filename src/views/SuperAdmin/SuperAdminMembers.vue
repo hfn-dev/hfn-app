@@ -213,7 +213,7 @@ const rejectApplication = async () => {
 
 const fetchMembers = async () => {
   try {
-    const data = await userList.getUserList();
+    const data = await userList.getApplications();
     console.log('response', data)
     members.value = data;
     
