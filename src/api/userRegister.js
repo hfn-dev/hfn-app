@@ -87,6 +87,16 @@ export default {
     }
   },
 
+  async getApplications() {
+    try {
+      const response = await api.get('/account/admin/individual-applications/');
+      return response.data;
+    } catch (error) {
+      console.error('Get User API error:', error);
+      throw error;
+    }
+  },
+
   async generateCertificate(enrollmentId) {
   try {
     const res = await api.post('/learning/certificates/generate/', {
