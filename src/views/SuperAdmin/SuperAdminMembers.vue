@@ -322,7 +322,7 @@ const filteredMembers = computed(() => {
     
     // Search logic
     const matchesSearch =
-      (m.full_name || "").toLowerCase().includes(term) ||
+      (m.first_name || "").toLowerCase().includes(term) ||
       (m.email || "").toLowerCase().includes(term) ||
       (m.membership_type || "").toLowerCase().includes(term);
 
@@ -615,6 +615,12 @@ watch(currentPage, () => {
                   class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
                 />
               </th>
+              <th class="py-3 px-3 text-left flex items-center">
+                Email
+                <MoreVertical
+                  class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
+                />
+              </th>
               <th class="py-3 px-3 text-left">
                 Category
                 <MoreVertical
@@ -653,7 +659,12 @@ watch(currentPage, () => {
               <td
                 class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]"
               >
-                {{ member.full_name }}
+                {{ member.first_name }}
+              </td>
+              <td
+                class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]"
+              >
+                {{ member.email }}
               </td>
               <td class="py-3 px-3">
   {{ member.membership_type || member.role || '-' }}
@@ -662,7 +673,7 @@ watch(currentPage, () => {
   {{ member.phone_number || '-' }}
               </td>
               <td class="py-3 px-3">
-                {{ member.date_joined }}
+                {{ member.created_at }}
               </td>
               <td class="py-3 px-3 text-center">
                 <div class="flex item-center justify-center space-x-2">
@@ -805,7 +816,7 @@ watch(currentPage, () => {
     </div>
 
     <div class="space-y-2">
-      <p><strong>Name:</strong> {{ selectedMember.full_name }}</p>
+      <p><strong>Name:</strong> {{ selectedMember.first_name }}</p>
       <p><strong>Email:</strong> {{ selectedMember.email }}</p>
       <p><strong>Phone:</strong> {{ selectedMember.phone_number }}</p>
       <p><strong>Membership Type:</strong> {{ selectedMember.membership_type }}</p>
