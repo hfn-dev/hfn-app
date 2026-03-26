@@ -270,11 +270,13 @@ const handleRegistration = async () => {
 
     if (activeTab.value === "individual") {
       payload = prepareIndividualPayload();
+        response = await userRegister.createApplication(payload);
     } else {
       payload = prepareOrganizationPayload();
+        response = await userRegister.createApplication(payload);
     }
 
-    const response = await userRegister.createUser(payload);
+    // const response = await userRegister.createUser(payload);
 
     if (response.status === "success") {
       toast.success(response.messages?.[0] || "Registration successful!");
@@ -330,6 +332,12 @@ const handleRegistration = async () => {
         router.push("/registration-payment");
         return;
       }
+
+      if (response.actions_required?.includes("reset_password")) {
+  resetEmail.value = payload.email;
+  showForgotPasswordDialog.value = true;
+  return;
+}
 
       // fallback
       router.push("/signin");
