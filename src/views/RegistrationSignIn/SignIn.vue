@@ -197,7 +197,7 @@ const handleForgotPasswordDialog = async () => {
 
 const verifyResetCode = async () => {
   try {
-    const response = await userRegister.verifyResetCode({
+    const response = await userRegister.verifyUser({
       email: resetEmail.value,
       code: resetCode.value,
     });
