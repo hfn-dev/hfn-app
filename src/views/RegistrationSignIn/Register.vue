@@ -148,7 +148,7 @@ const prepareOrganizationPayload = () => {
     contact_person: form.value.organizationContactPerson.trim(),
     phone_number: formatPhoneNumber(form.value.phone),
     password: form.value.password,
-    member_category: selectedCategory.value.name
+    member_category: selectedCategory.value.name,
     role: "learner",
   };
 };
@@ -160,7 +160,7 @@ const prepareIndividualPayload = () => {
     last_name: form.value.lastName.trim(),
     phone_number: formatPhoneNumber(form.value.phone),
     password: form.value.password,
-    member_category: selectedCategory.value.name
+    member_category: selectedCategory.value.name,
     role: "learner",
 
     professional_background: form.value.professionalBackground.trim(),
