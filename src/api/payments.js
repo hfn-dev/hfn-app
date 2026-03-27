@@ -56,6 +56,10 @@ export default {
     const { data } = await api.get(`/membership/payments/${id}/`);
     return data;
   },
+  async retrieveApplicationPayment(id) {
+    const { data } = await api.get(`/payment/${id}/`);
+    return data;
+  },
   async removePayment(id) {
     const { data } = await api.delete(`/membership/payments/${id}/`);
     return data;
