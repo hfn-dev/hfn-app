@@ -222,12 +222,6 @@ const fetchDashboardAnalytics = async () => {
   }
 };
 
-// const handleDelete = async (id) => {
-//   if (!confirm('Are you sure you want to delete this payment?')) return;
-
-//   await paymentApi.removePayment(id);
-//   fetchPayments();
-// };
 const handleDelete = async (id) => {
   if (!confirm("Are you sure you want to delete this payment?")) return;
 
@@ -264,48 +258,13 @@ const handleAction = (action, course) => {
 };
 
 
-//   const markAsPaid = async (payment) => {
-//   if (!confirm(`Are you sure you want to mark payment for ${payment.title} as PAID?`)) return;
-
-//   try {
-//     loading.value = true;
-
-//     const paymentDetails = await paymentApi.retrievePayment(payment.id);
-
-//     if (!paymentDetails?.transaction_id) {
-//       toast.error("Transaction ID not found for this payment");
-//       return;
-//     }
-
-//     const payload = {
-//       transaction_id: paymentDetails.transaction_id,
-//       status: "completed",
-//       payment_reference: paymentDetails.payment_reference,
-//       metadata: null,
-//     };
-
-//     const response = await paymentApi.confirmPayment(payload, payment.id);
-
-//     toast.success(`Payment for ${payment.title} marked as completed`);
-
-//     fetchPayments();
-//     fetchDashboardAnalytics();
-
-//   } catch (error) {
-//     console.error(error);
-//     toast.error("Error confirming payment. Please try again.");
-//   } finally {
-//     loading.value = false;
-//   }
-// };
-
 const markAsPaid = async () => {
   const payment = paymentToConfirm.value;
 
   try {
     loading.value = true;
 
-    const paymentDetails = await paymentApi.retrievePayment(payment.id);
+    const paymentDetails = await paymentApi.confirmPayment(payment.id);
 
     const payload = {
       transaction_id: paymentDetails.transaction_id,
@@ -422,35 +381,12 @@ const messageContent = ref(
   'Dear user, we noticed your account is currently unpaid. Please complete your payment to continue enjoying full access to our services. Thank you.'
 );
 
-// const openMessageModal = (title) => {
-//   if (title === 'Unpaid members') {
-//     isMessageModalOpen.value = true;
-//   }
-// };
-
 const closeMessageModal = () => {
   isMessageModalOpen.value = false;
 };
 
 const sending = ref(false);
 
-// const sendMessage = async () => {
-//   sending.value = true;
-
-//   try {
-//     await messagingApi.broadcastMessage({
-//       subject: messageSubject.value,
-//       message: messageContent.value,
-//     });
-
-//     toast.success('Message sent to all unpaid members');
-//     closeMessageModal();
-//   } catch (error) {
-//     toast.error('Failed to send message');
-//   } finally {
-//     sending.value = false;
-//   }
-// };
 const sendMessage = async () => {
   sending.value = true;
 
