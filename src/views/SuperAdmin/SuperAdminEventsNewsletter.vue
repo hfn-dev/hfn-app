@@ -457,7 +457,7 @@ const createUpload = async () => {
     const formData = new FormData();
 
     formData.append("title", uploadForm.value.title);
-    formData.append("caption", uploadForm.value.summary);
+    formData.append("summary", uploadForm.value.summary);
     formData.append("audience", uploadForm.value.audience);
     formData.append("media_type", uploadForm.value.media_type);
     formData.append("type", uploadForm.value.type);
