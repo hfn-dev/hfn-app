@@ -98,7 +98,7 @@ const submitUpdate = async () => {
 
       <div class="py-3 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="font-medium text-gray-500">Description:</dt>
-        <dd class="mt-1 sm:mt-0 sm:col-span-2">{{ ticket.description }}</dd>
+        <dd class="mt-1 sm:mt-0 sm:col-span-2">{{ ticket.message }}</dd>
       </div>
 
       <div class="py-3 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-gray-50">
