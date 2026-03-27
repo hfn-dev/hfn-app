@@ -365,6 +365,7 @@ const uploadForm = ref({
   title: "",
   type: "newsletter",
   description: "",
+  summary: "",
   audience: "all",
   media_type: "image",
   youtube_url: "",
@@ -456,7 +457,7 @@ const createUpload = async () => {
     const formData = new FormData();
 
     formData.append("title", uploadForm.value.title);
-    formData.append("caption", uploadForm.value.description);
+    formData.append("caption", uploadForm.value.summary);
     formData.append("audience", uploadForm.value.audience);
     formData.append("media_type", uploadForm.value.media_type);
     formData.append("type", uploadForm.value.type);
@@ -506,6 +507,7 @@ const createUpload = async () => {
       title: "",
       type: "newsletter",
       description: "",
+      summary: "",
       audience: "all",
       media_type: "image",
       youtube_url: "",
@@ -894,7 +896,7 @@ onMounted(() => {
             </select>
 
             <textarea
-              v-model="uploadForm.description"
+              v-model="uploadForm.summary"
               class="input mb-3"
               placeholder="Description"
             ></textarea>
