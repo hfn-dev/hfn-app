@@ -637,7 +637,7 @@ watch(currentPage, () => {
     <!-- Phone -->
     <th class="py-3 px-3 text-left">
       <div class="flex items-center gap-1">
-        Phone Number
+        Phone
         <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
       </div>
     </th>
