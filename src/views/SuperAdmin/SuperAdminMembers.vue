@@ -598,11 +598,10 @@ watch(currentPage, () => {
 
       <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
         
-        <table class="min-w-full divide-y divide-gray-200">
+        <table class="min-w-full table-auto divide-y divide-gray-200">
           <thead>
-  <tr
-    class="bg-[#f0fff0] text-gray-700 uppercase text-sm leading-normal border-b border-[#00cc66]/50"
-  >
+  <tr class="bg-[#f0fff0] text-gray-700 uppercase text-sm leading-normal border-b border-[#00cc66]/50">
+    
     <!-- Checkbox -->
     <th class="py-3 px-3 text-left w-12 rounded-tl-lg">
       <input
@@ -643,7 +642,7 @@ watch(currentPage, () => {
       </div>
     </th>
 
-    <!-- Status (NEW) -->
+    <!-- Status -->
     <th class="py-3 px-3 text-left">
       <div class="flex items-center gap-1">
         Status
@@ -663,6 +662,7 @@ watch(currentPage, () => {
     <th class="py-3 px-3 text-center rounded-tr-lg">
       Action
     </th>
+
   </tr>
 </thead>
           <tbody
