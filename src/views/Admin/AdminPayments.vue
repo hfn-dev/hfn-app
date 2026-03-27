@@ -266,7 +266,7 @@ const markAsPaid = async () => {
   try {
     loading.value = true;
 
-    const paymentDetails = await paymentApi.retrievePayment(payment.id);
+    const paymentDetails = await paymentApi.retrieveApplicationPayment(payment.id);
 
     const payload = {
       transaction_id: paymentDetails.transaction_id,
