@@ -790,7 +790,7 @@ onMounted(() => {
             </h4>
 
             <p class="text-sm text-gray-600 mb-4 line-clamp-3">
-              {{ item.description || "No description available." }}
+              {{ item.description || item.summary || "No description available." }}
             </p>
 
             <div class="mt-auto">
