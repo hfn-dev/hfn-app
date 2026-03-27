@@ -264,7 +264,7 @@ const markAsPaid = async () => {
   try {
     loading.value = true;
 
-    const paymentDetails = await paymentApi.confirmPayment(payment.id);
+    const paymentDetails = await paymentApi.retrieveApplicationPayment(payment.id);
 
     const payload = {
       transaction_id: paymentDetails.transaction_id,
@@ -273,7 +273,7 @@ const markAsPaid = async () => {
       metadata: null,
     };
 
-    await paymentApi.confirmPayment(payload, payment.id);
+    await paymentApi.confirmPayment(payment.id, payload);
 
     toast.success(`Payment for ${payment.title} marked as completed`);
 
