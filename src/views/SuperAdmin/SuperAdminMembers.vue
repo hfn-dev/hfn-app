@@ -600,48 +600,71 @@ watch(currentPage, () => {
         
         <table class="min-w-full divide-y divide-gray-200">
           <thead>
-            <tr
-              class="bg-[#f0fff0] text-gray-700 uppercase text-sm leading-normal border-b border-[#00cc66]/50"
-            >
-              <th class="py-3 px-3 text-left w-12 rounded-tl-lg">
-                <input
-                  type="checkbox"
-                  class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]"
-                />
-              </th>
-              <th class="py-3 px-3 text-left flex items-center">
-                Name
-                <MoreVertical
-                  class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
-                />
-              </th>
-              <th class="py-3 px-3 text-left flex items-center">
-                Email
-                <MoreVertical
-                  class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
-                />
-              </th>
-              <th class="py-3 px-3 text-left">
-                Category
-                <MoreVertical
-                  class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
-                />
-              </th>
-              <th class="py-3 px-3 text-left">
-                Phone Number
-                <MoreVertical
-                  class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
-                />
-              </th>
-              <th class="py-3 px-3 text-left">
-                Date Joined
-                <MoreVertical
-                  class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
-                />
-              </th>
-              <th class="py-3 px-3 text-center rounded-tr-lg">Action</th>
-            </tr>
-          </thead>
+  <tr
+    class="bg-[#f0fff0] text-gray-700 uppercase text-sm leading-normal border-b border-[#00cc66]/50"
+  >
+    <!-- Checkbox -->
+    <th class="py-3 px-3 text-left w-12 rounded-tl-lg">
+      <input
+        type="checkbox"
+        class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]"
+      />
+    </th>
+
+    <!-- Name -->
+    <th class="py-3 px-3 text-left">
+      <div class="flex items-center gap-1">
+        Name
+        <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
+      </div>
+    </th>
+
+    <!-- Email -->
+    <th class="py-3 px-3 text-left">
+      <div class="flex items-center gap-1">
+        Email
+        <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
+      </div>
+    </th>
+
+    <!-- Category -->
+    <th class="py-3 px-3 text-left">
+      <div class="flex items-center gap-1">
+        Category
+        <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
+      </div>
+    </th>
+
+    <!-- Phone -->
+    <th class="py-3 px-3 text-left">
+      <div class="flex items-center gap-1">
+        Phone Number
+        <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
+      </div>
+    </th>
+
+    <!-- Status (NEW) -->
+    <th class="py-3 px-3 text-left">
+      <div class="flex items-center gap-1">
+        Status
+        <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
+      </div>
+    </th>
+
+    <!-- Date -->
+    <th class="py-3 px-3 text-left">
+      <div class="flex items-center gap-1">
+        Date Joined
+        <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
+      </div>
+    </th>
+
+    <!-- Action -->
+    <th class="py-3 px-3 text-center rounded-tr-lg">
+      Action
+    </th>
+  </tr>
+</thead>
           <tbody
             class="text-gray-600 text-sm font-light divide-y divide-gray-100"
           >
@@ -673,8 +696,12 @@ watch(currentPage, () => {
   {{ member.phone_number || '-' }}
               </td>
               <td class="py-3 px-3">
+                {{ member.status }}
+              </td>
+              <td class="py-3 px-3">
                 {{ member.created_at }}
               </td>
+              
               <td class="py-3 px-3 text-center">
                 <div class="flex item-center justify-center space-x-2">
                   <button
