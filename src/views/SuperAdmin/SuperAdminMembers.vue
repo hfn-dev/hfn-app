@@ -183,7 +183,7 @@ const submitNewMember = async () => {
 
  const approveApplication = async () => {
   try {
-    await membershipAPI.approveApplication(selectedMember.value.id);
+    await membershipAPI.approveApplication({ application_id: selectedMember.value.id });
 
     toast.success("Application approved successfully", "success");
 
@@ -198,7 +198,7 @@ const submitNewMember = async () => {
 
 const rejectApplication = async () => {
   try {
-    await membershipAPI.rejectApplication(selectedMember.value.id);
+    await membershipAPI.rejectApplication({ application_id: selectedMember.value.id });
 
     toast.success("Application rejected", "success");
 
