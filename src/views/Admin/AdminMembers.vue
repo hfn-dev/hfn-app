@@ -181,9 +181,39 @@ const submitNewMember = async () => {
 };
 
 
+ const approveApplication = async () => {
+  try {
+    await membershipAPI.approveApplication({ application_id: selectedMember.value.id });
+
+    toast.success("Application approved successfully", "success");
+
+    showMemberDetailsModal.value = false;
+
+    fetchMembers();
+  } catch (error) {
+    console.error("Approval failed:", error);
+    toast.error("Failed to approve application", "error");
+  }
+};
+
+const rejectApplication = async () => {
+  try {
+    await membershipAPI.rejectApplication({ application_id: selectedMember.value.id });
+
+    toast.success("Application rejected", "success");
+
+    showMemberDetailsModal.value = false;
+
+    fetchMembers();
+  } catch (error) {
+    console.error("Rejection failed:", error);
+    toast.error("Failed to reject application", "error");
+  }
+}; 
+
 const fetchMembers = async () => {
   try {
-    const data = await userList.getUserList();
+    const data = await userList.getApplications();
     console.log('response', data)
     members.value = data;
     
@@ -292,7 +322,7 @@ const filteredMembers = computed(() => {
     
     // Search logic
     const matchesSearch =
-      (m.full_name || "").toLowerCase().includes(term) ||
+      (m.first_name || "").toLowerCase().includes(term) ||
       (m.email || "").toLowerCase().includes(term) ||
       (m.membership_type || "").toLowerCase().includes(term);
 
@@ -568,44 +598,73 @@ watch(currentPage, () => {
 
       <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
         
-        <table class="min-w-full divide-y divide-gray-200">
+        <table class="min-w-full table-fixed divide-y divide-gray-200">
           <thead>
-            <tr
-              class="bg-[#f0fff0] text-gray-700 uppercase text-sm leading-normal border-b border-[#00cc66]/50"
-            >
-              <th class="py-3 px-3 text-left w-12 rounded-tl-lg">
-                <input
-                  type="checkbox"
-                  class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]"
-                />
-              </th>
-              <th class="py-3 px-3 text-left flex items-center">
-                Name
-                <MoreVertical
-                  class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
-                />
-              </th>
-              <th class="py-3 px-3 text-left">
-                Category
-                <MoreVertical
-                  class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
-                />
-              </th>
-              <th class="py-3 px-3 text-left">
-                Phone Number
-                <MoreVertical
-                  class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
-                />
-              </th>
-              <th class="py-3 px-3 text-left">
-                Date Joined
-                <MoreVertical
-                  class="w-4 h-4 ml-1 text-gray-500 cursor-pointer"
-                />
-              </th>
-              <th class="py-3 px-3 text-center rounded-tr-lg">Action</th>
-            </tr>
-          </thead>
+  <tr class="bg-[#f0fff0] text-gray-700 uppercase text-sm leading-normal border-b border-[#00cc66]/50">
+    
+    <!-- Checkbox -->
+    <th class="py-3 px-3 text-left w-12 rounded-tl-lg">
+      <input
+        type="checkbox"
+        class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]"
+      />
+    </th>
+
+    <!-- Name -->
+    <th class="py-3 px-3 text-left">
+      <div class="flex items-center gap-1">
+        Name
+        <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
+      </div>
+    </th>
+
+    <!-- Email -->
+    <th class="py-3 px-3 text-left">
+      <div class="flex items-center gap-1">
+        Email
+        <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
+      </div>
+    </th>
+
+    <!-- Category -->
+    <th class="py-3 px-3 text-left">
+      <div class="flex items-center gap-1">
+        Category
+        <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
+      </div>
+    </th>
+
+    <!-- Phone -->
+    <th class="py-3 px-3 text-left">
+      <div class="flex items-center gap-1">
+        Phone
+        <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
+      </div>
+    </th>
+
+    <!-- Status -->
+    <th class="py-3 px-3 text-left">
+      <div class="flex items-center gap-1">
+        Status
+        <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
+      </div>
+    </th>
+
+    <!-- Date -->
+    <th class="py-3 px-3 text-left">
+      <div class="flex items-center gap-1">
+        Date Joined
+        <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
+      </div>
+    </th>
+
+    <!-- Action -->
+    <th class="py-3 px-3 text-center rounded-tr-lg">
+      Action
+    </th>
+
+  </tr>
+</thead>
           <tbody
             class="text-gray-600 text-sm font-light divide-y divide-gray-100"
           >
@@ -623,7 +682,12 @@ watch(currentPage, () => {
               <td
                 class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]"
               >
-                {{ member.full_name }}
+                {{ member.first_name }}
+              </td>
+              <td
+                class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]"
+              >
+                {{ member.email }}
               </td>
               <td class="py-3 px-3">
   {{ member.membership_type || member.role || '-' }}
@@ -632,8 +696,12 @@ watch(currentPage, () => {
   {{ member.phone_number || '-' }}
               </td>
               <td class="py-3 px-3">
-                {{ member.date_joined }}
+                {{ member.status }}
               </td>
+              <td class="py-3 px-3">
+                {{ member.created_at }}
+              </td>
+              
               <td class="py-3 px-3 text-center">
                 <div class="flex item-center justify-center space-x-2">
                   <button
@@ -775,7 +843,7 @@ watch(currentPage, () => {
     </div>
 
     <div class="space-y-2">
-      <p><strong>Name:</strong> {{ selectedMember.full_name }}</p>
+      <p><strong>Name:</strong> {{ selectedMember.first_name }}</p>
       <p><strong>Email:</strong> {{ selectedMember.email }}</p>
       <p><strong>Phone:</strong> {{ selectedMember.phone_number }}</p>
       <p><strong>Membership Type:</strong> {{ selectedMember.membership_type }}</p>
@@ -784,14 +852,30 @@ watch(currentPage, () => {
       <p><strong>Date Joined:</strong> {{ selectedMember.date_joined }}</p>
     </div>
 
-    <div class="flex justify-end pt-4">
-      <button
-        @click="showMemberDetailsModal = false"
-        class="px-4 py-2 bg-[#006633] text-white rounded-lg"
-      >
-        Close
-      </button>
-    </div>
+    <div class="flex justify-between pt-6">
+  <button
+    @click="rejectApplication"
+    class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+  >
+    Reject
+  </button>
+
+  <div class="flex gap-3">
+    <button
+      @click="showMemberDetailsModal = false"
+      class="px-4 py-2 border rounded-lg"
+    >
+      Cancel
+    </button>
+
+    <button
+      @click="approveApplication"
+      class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#005528]"
+    >
+      Approve
+    </button>
+  </div>
+</div>
   </div>
 </div>
 </template>
