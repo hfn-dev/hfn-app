@@ -598,7 +598,7 @@ watch(currentPage, () => {
 
       <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
         
-        <table class="min-w-full table-auto divide-y divide-gray-200">
+        <table class="min-w-full table-fixed divide-y divide-gray-200">
           <thead>
   <tr class="bg-[#f0fff0] text-gray-700 uppercase text-sm leading-normal border-b border-[#00cc66]/50">
     
