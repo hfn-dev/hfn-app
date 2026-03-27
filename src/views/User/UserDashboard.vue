@@ -781,7 +781,7 @@ onMounted(() => {
               </div>
 
               <span class="text-xs font-semibold uppercase text-gray-500">
-                {{ item.type }}
+                {{ item.type || 'report' }}
               </span>
             </div>
 
