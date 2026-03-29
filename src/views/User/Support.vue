@@ -25,7 +25,7 @@ const mapTicket = (t) => ({
   number: t.ticket_number,
   userName: t.user_full_name,
   subject: t.subject,
-  description: t.message,
+  message: t.message,
   status: t.status,
   dateCreated: new Date(t.created_at).toLocaleString(),
   lastUpdate: new Date(t.updated_at).toLocaleString(),

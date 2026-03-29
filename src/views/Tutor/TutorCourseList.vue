@@ -273,7 +273,7 @@ onMounted(fetchCourses);
 
               <template v-else>
                 <td class="py-3 px-3">
-                  {{ course.enrollments_count ?? '-' }}
+                  {{ course.enrollment_count ?? '-' }}
                 </td>
                 <td class="py-3 px-3">
                   <span

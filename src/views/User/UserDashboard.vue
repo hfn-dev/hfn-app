@@ -197,39 +197,6 @@ const dummyResources = [
   },
 ];
 
-// const fetchResources = async () => {
-//   loadingResources.value = true;
-
-//   try {
-//     const data = await memberApi.listResources();
-
-//     const apiResources = (data || []).map((item) => ({
-//       ...item,
-//       source: "api",
-//       audience: item.audience?.toLowerCase() || "all",
-
-//     }));
-
-//     const localResources = dummyResources.map((item) => ({
-//       ...item,
-//       source: "dummy",
-//       audience: "all",
-//     }));
-
-//     resources.value = [...apiResources, ...localResources];
-
-//   } catch (err) {
-//     console.error("Failed to load resources", err);
-
-//     resources.value = dummyResources.map((item) => ({
-//       ...item,
-//       source: "dummy",
-//       audience: "all",
-//     }));
-//   } finally {
-//     loadingResources.value = false;
-//   }
-// };
 const fetchResources = async () => {
   loadingResources.value = true;
 
