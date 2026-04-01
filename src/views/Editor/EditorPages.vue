@@ -1,30 +1,30 @@
 <script setup>
 import pagesApi from "@/api/pageManagement";
 import { pageSchemas } from "@/schemas/pageSchemas";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import HomeHeroEditor from "./components/cms/home/HomeHeroEditor.vue";
-import { computed, onMounted, ref, watch } from "vue";
 import EditorSidebar from "./EditorSidebar.vue";
 
-import HomeFaqsEditor from "./components/cms/home/HomeFaqsEditor.vue";
 import HomeAboutEditor from "./components/cms/home/HomeAboutEditor.vue";
+import HomeExecutivesEditor from "./components/cms/home/HomeExecutivesEditor.vue";
+import HomeFaqsEditor from "./components/cms/home/HomeFaqsEditor.vue";
 import HomeMandateEditor from "./components/cms/home/HomeMandateEditor.vue";
 import HomeNewsEditor from "./components/cms/home/HomeNewsEditor.vue";
-import HomeExecutivesEditor from "./components/cms/home/HomeExecutivesEditor.vue";
 import HomePartnerEditor from "./components/cms/home/HomePartnerEditor.vue";
 
-import AboutHeroEditor from "./components/cms/about/AboutHeroEditor.vue";
-import AboutStoryEditor from "./components/cms/about/AboutStoryEditor.vue";
-import AboutItemEditor from "./components/cms/about/AboutItemEditor.vue";
-import AboutHistoryEditor from "./components/cms/about/AboutHistoryEditor.vue";
-import AboutGovernanceEditor from "./components/cms/about/AboutGovernanceEditor.vue";
-import AboutCtaSectionEditor from "./components/cms/about/AboutCtaSectionEditor.vue";
 import AboutCommitmentSection from "./components/cms/about/AboutCommitmentSection.vue";
+import AboutCtaSectionEditor from "./components/cms/about/AboutCtaSectionEditor.vue";
+import AboutGovernanceEditor from "./components/cms/about/AboutGovernanceEditor.vue";
+import AboutHeroEditor from "./components/cms/about/AboutHeroEditor.vue";
+import AboutHistoryEditor from "./components/cms/about/AboutHistoryEditor.vue";
+import AboutItemEditor from "./components/cms/about/AboutItemEditor.vue";
 import AboutRoleSectionEditor from "./components/cms/about/AboutRoleSectionEditor.vue";
+import AboutStoryEditor from "./components/cms/about/AboutStoryEditor.vue";
 
-import GovernanceHeroEditor from "./components/cms/governance/GovernanceHeroEditor.vue";
 import BoardOfTrusteesEditor from "./components/cms/governance/GovernanceBoardOfTrustees.vue";
 import ExecutiveCommitteeEditor from "./components/cms/governance/GovernanceExecutiveCommittee.vue";
+import GovernanceHeroEditor from "./components/cms/governance/GovernanceHeroEditor.vue";
 
 import NewsHeroEditor from "./components/cms/news/NewsHeroEditor.vue";
 import NewsLatestEditor from "./components/cms/news/NewsLatestEditor.vue";
@@ -34,32 +34,35 @@ import ResourcesHeroEditor from "./components/cms/resources/ResourcesHeroEditor.
 import ResourcesNewsletterEditor from "./components/cms/resources/ResourcesNewsletterEditor.vue";
 import ResourcesPublicationEditor from "./components/cms/resources/ResourcesPublicationEditor.vue";
 
-import EventHeroEditor from "./components/cms/events/EventHeroEditor.vue";
-import EventSearchAndFilterEditor from "./components/cms/events/EventSearchAndFilterEditor.vue";
 import EventFeaturedEditor from "./components/cms/events/EventFeaturedEditor.vue";
+import EventHeroEditor from "./components/cms/events/EventHeroEditor.vue";
 import EventLatestEditor from "./components/cms/events/EventLatestEditor.vue";
 import EventPastEditor from "./components/cms/events/EventPastEditor.vue";
+import EventSearchAndFilterEditor from "./components/cms/events/EventSearchAndFilterEditor.vue";
 
-import GalleryHeroEditor from "./components/cms/gallery/GalleryHeroEditor.vue";
 import GalleryFilterEditor from "./components/cms/gallery/GalleryFilterEditor.vue";
+import GalleryHeroEditor from "./components/cms/gallery/GalleryHeroEditor.vue";
 import GalleryListEditor from "./components/cms/gallery/GalleryListEditor.vue";
 
-import GetinvolvedHeroEditor from "./components/cms/getinvolved/GetinvolvedHeroEditor.vue";
 import GetinvolvedDonationsEditor from "./components/cms/getinvolved/GetinvolvedDonationsEditor.vue";
-import GetinvolvedPartnershipsEditor from "./components/cms/getinvolved/GetinvolvedPartnershipsEditor.vue";
-import GetinvolvedOpportunitiesEditor from "./components/cms/getinvolved/GetinvolvedOpportunitiesEditor.vue";
-import GetinvolvedVolunteeringEditor from "./components/cms/getinvolved/GetinvolvedVolunteeringEditor.vue";
+import GetinvolvedHeroEditor from "./components/cms/getinvolved/GetinvolvedHeroEditor.vue";
 import GetinvolvedModalEditor from "./components/cms/getinvolved/GetinvolvedModalEditor.vue";
+import GetinvolvedOpportunitiesEditor from "./components/cms/getinvolved/GetinvolvedOpportunitiesEditor.vue";
+import GetinvolvedPartnershipsEditor from "./components/cms/getinvolved/GetinvolvedPartnershipsEditor.vue";
+import GetinvolvedVolunteeringEditor from "./components/cms/getinvolved/GetinvolvedVolunteeringEditor.vue";
 
-import MemberHeroEditor from "./components/cms/member/MemberHeroEditor.vue";
 import MemberCategoriesEditor from "./components/cms/member/MemberCategoriesEditor.vue";
+import MemberHeroEditor from "./components/cms/member/MemberHeroEditor.vue";
 
-import ContactHeroEditor from "./components/cms/contact/ContactHeroEditor.vue";
-import ContactFormEditor from "./components/cms/contact/ContactFormEditor.vue";
 import ContactDetailsEditor from "./components/cms/contact/ContactDetailsEditor.vue";
-import ContactMapEditor from "./components/cms/contact/ContactMapEditor.vue";  
+import ContactFormEditor from "./components/cms/contact/ContactFormEditor.vue";
+import ContactHeroEditor from "./components/cms/contact/ContactHeroEditor.vue";
+import ContactMapEditor from "./components/cms/contact/ContactMapEditor.vue";
 
-import FooterEditor from "./components/cms/footer/FooterEditor.vue";  
+import FooterEditor from "./components/cms/footer/FooterEditor.vue";
+import ProgramHero from "./components/cms/programs/ProgramHero.vue";
+import ProgramOngoing from "./components/cms/programs/ProgramOngoing.vue";
+import ProgramPast from "./components/cms/programs/ProgramPast.vue";
 
 const currentView = ref("manager");
 const activePage = ref(null);
@@ -133,6 +136,11 @@ const componentMap = {
      details: ContactDetailsEditor,
      map: ContactMapEditor,
 
+  },
+  programs: {
+    hero: ProgramHero,
+    ongoing: ProgramOngoing,
+     past: ProgramPast,
   },
   footer: {
     main: FooterEditor,
@@ -820,6 +828,11 @@ watch(activePage, (page) => {
           <component
             v-if="activePage.page_type.toLowerCase() === 'contact'"
             :is="componentMap.contact?.[activeSection]"
+            v-model="currentSectionData"
+          />
+          <component
+            v-if="activePage.page_type.toLowerCase() === 'programs'"
+            :is="componentMap.programs?.[activeSection]"
             v-model="currentSectionData"
           />
           <component

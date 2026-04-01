@@ -1,5 +1,14 @@
 <script setup>
 import { ref, watch } from "vue";
+import { computed } from "vue";
+
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    default: () => ({}),
+  },
+});
+
 
 
 const getDefaultSectionData = () => ({
@@ -45,9 +54,26 @@ const getDefaultSectionData = () => ({
     "",
 });
 
+const mergeData = (data = {}) => {
+  const defaults = getDefaultSectionData();
 
-const currentSectionData = ref(getDefaultSectionData());
+  return {
+    ...defaults,
+    ...data,
+    fields: data.fields?.length ? data.fields : defaults.fields,
+  };
+};
 
+// const currentSectionData = ref(getDefaultSectionData());
+
+const currentSectionData = computed({
+  get() {
+    return mergeData(props.modelValue);
+  },
+  set(val) {
+    emit("update:modelValue", val);
+  },
+});
 
 const addField = () => {
   currentSectionData.value.fields.push({
@@ -66,13 +92,13 @@ const deleteField = (index) => {
 
 const emit = defineEmits(["update:modelValue"]);
 
-watch(
-  currentSectionData,
-  (val) => {
-    emit("update:modelValue", val);
-  },
-  { deep: true }
-);
+// watch(
+//   currentSectionData,
+//   (val) => {
+//     emit("update:modelValue", val);
+//   },
+//   { deep: true }
+// );
 </script>
 
 <template>

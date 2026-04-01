@@ -1,27 +1,26 @@
 export const newsPageSchema = {
-  news: {
-    hero: {
-      titleLine1: 'Stay Informed:',
-      titleLine2: 'Latest Healthcare News & Updates',
-      description:
-        'Get the latest insights, announcements, and policy developments from the Healthcare Federation of Nigeria and across the health sector.',
-      image: 'latest_news.png',
-      backgroundColor: '#E87A1814',
-    },
+  hero: {
+    titleLine1: 'Stay Informed:',
+    titleLine2: 'Latest Healthcare News & Updates',
+    description:
+      'Get the latest insights, announcements, and policy developments from the Healthcare Federation of Nigeria and across the health sector.',
+    image: 'latest_news.png',
+    backgroundColor: '#E87A1814',
+  },
 
-    latestNewsSection: {
-      title: 'Latest News',
-      filters: ['January 2026', 'December 2025', 'November 2025'],
-      articles: [
-        {
-          id: 1,
-          title: 'UHC Day 2025 High-Level Convening - 11th December, 2025',
-          excerpt:
-            'Quality on the supply side is the single most important lever to unlock demand for health insurance and finally make Universal Health Coverage real.',
-          image: 'group1.png',
-          date: 'December 11, 2025',
-          created_at: "2025-12-11",
-          description: `Quality on the supply side is the single most important lever to unlock demand for health insurance and finally make Universal Health Coverage real.
+  latestNewsSection: {
+    title: 'Latest News',
+    filters: ['January 2026', 'December 2025', 'November 2025'],
+    articles: [
+      {
+        id: 1,
+        title: 'UHC Day 2025 High-Level Convening - 11th December, 2025',
+        excerpt:
+          'Quality on the supply side is the single most important lever to unlock demand for health insurance and finally make Universal Health Coverage real.',
+        image: 'group1.png',
+        date: 'December 11, 2025',
+        created_at: '2025-12-11',
+        description: `Quality on the supply side is the single most important lever to unlock demand for health insurance and finally make Universal Health Coverage real.
 At the UHC Day 2025 High-Level Convening, themed “Unaffordable health cost? We are sick of it,” the President Healthcare Federation of Nigeria (HFN) and Country Director PharmAccess Nigeria, Njide Ndili, delivered a clear and compelling message:
 Nigeria cannot achieve Universal Health Coverage without strengthening supply-side quality and scaling the solutions that already work.
  
@@ -42,23 +41,23 @@ Njide reiterated that HFN’s mission remains consistent: to ensure that the pri
  
 As she noted, the pathway to UHC requires bold decisions, aligned incentives, and collective action. HFN remains committed to leading with evidence, partnership, and solutions that improve access, affordability, and quality for all Nigerians.
 `,
-          commentCount: 0,
-          link: '/news/kaduna-solar-clinics',
-          slug: 'uhc-day-2025-high-level-convening',
-          tag: 'News',
-        },
-        {
-          id: 2,
-          title:
-            'Driving the Digital Health Agenda Forward at #GDHF2025 - 5th December, 2025',
-          excerpt:
-            'At the Global Digital Health Forum 2025 in Nairobi, the President Healthcare Federation of Nigeria and Country Director PharmAccess Nigeria, Njide Ndili, a Founding Member of the Digital Transformation for Health Lab(DTH-Lab), delivered a powerful keynote on: Digital Determinants of Health Framework.',
-          image:
-            'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715460/84d92881fff843d7a1d8f64ef8dce88f_M_pufrzc.jpg',
-          date: 'December 5, 2025',
-          created_at: "2025-12-05",
-          commentCount: 0,
-          description: `At the Global Digital Health Forum 2025 in Nairobi, the President Healthcare Federation of Nigeria and Country Director PharmAccess Nigeria, Njide Ndili, a Founding Member of the Digital Transformation for Health Lab(DTH-Lab), delivered a powerful keynote on:
+        commentCount: 0,
+        link: '/news/kaduna-solar-clinics',
+        slug: 'uhc-day-2025-high-level-convening',
+        tag: 'News',
+      },
+      {
+        id: 2,
+        title:
+          'Driving the Digital Health Agenda Forward at #GDHF2025 - 5th December, 2025',
+        excerpt:
+          'At the Global Digital Health Forum 2025 in Nairobi, the President Healthcare Federation of Nigeria and Country Director PharmAccess Nigeria, Njide Ndili, a Founding Member of the Digital Transformation for Health Lab(DTH-Lab), delivered a powerful keynote on: Digital Determinants of Health Framework.',
+        image:
+          'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715460/84d92881fff843d7a1d8f64ef8dce88f_M_pufrzc.jpg',
+        date: 'December 5, 2025',
+        created_at: '2025-12-05',
+        commentCount: 0,
+        description: `At the Global Digital Health Forum 2025 in Nairobi, the President Healthcare Federation of Nigeria and Country Director PharmAccess Nigeria, Njide Ndili, a Founding Member of the Digital Transformation for Health Lab(DTH-Lab), delivered a powerful keynote on:
 Digital Determinants of Health Framework.
 
 Her presentation underscored a critical message: digital systems are no longer optional layers in health; they are now core determinants that shape equity, access, safety, and well-being.
@@ -78,22 +77,22 @@ Her contribution today is a reminder that the future of public health will be sh
 
 
 `,
-          link: '/news/digital-health-convention',
-          slug: 'driving-the-digital-health',
-          tag: 'News',
-        },
-        
-        {
-          id: 3,
-          title:
-            'NCDC Private Sector Engagement Roundtable on National Health Security - 5th December, 2025',
-          excerpt:
-            'The Nigeria Centre for Disease Control and Prevention (NCDC) convened a high-level Private Sector Engagement Roundtable focused on strengthening national health security through strategic collaboration.',
-          image: 'wef.jpg',
-          date: 'December 5, 2025',
-          created_at: "2025-12-05",
-          commentCount: 0,
-          description: `The Nigeria Centre for Disease Control and Prevention (NCDC) convened a high-level Private Sector Engagement Roundtable focused on strengthening national health security through strategic collaboration. Healthcare Federation of Nigeria(HFN) was duly represented by Dr Benson Ayodele Cole(First Vice President 1), Mr Olufemi Akingbade(Executive Secretary), and Uchechi Amiloat the session.
+        link: '/news/digital-health-convention',
+        slug: 'driving-the-digital-health',
+        tag: 'News',
+      },
+
+      {
+        id: 3,
+        title:
+          'NCDC Private Sector Engagement Roundtable on National Health Security - 5th December, 2025',
+        excerpt:
+          'The Nigeria Centre for Disease Control and Prevention (NCDC) convened a high-level Private Sector Engagement Roundtable focused on strengthening national health security through strategic collaboration.',
+        image: 'wef.jpg',
+        date: 'December 5, 2025',
+        created_at: '2025-12-05',
+        commentCount: 0,
+        description: `The Nigeria Centre for Disease Control and Prevention (NCDC) convened a high-level Private Sector Engagement Roundtable focused on strengthening national health security through strategic collaboration. Healthcare Federation of Nigeria(HFN) was duly represented by Dr Benson Ayodele Cole(First Vice President 1), Mr Olufemi Akingbade(Executive Secretary), and Uchechi Amiloat the session.
 
 The keynote address, “Nigeria's National Health Security Agenda: Gaps, Needs and Opportunities for Private Sector Collaboration”, was delivered by the Director-General of the NCDC, Dr Jide Idris, outlining urgent national priorities and partnership opportunities. This was complemented by an insightful presentation from Abiola Oshunniyon Nigeria’s health security needs and partnership pathways.
 
@@ -111,21 +110,21 @@ Key Outcomes & Insights:
 ✅ Critical gaps in PPP; funding flows, coordination, capacity gaps, and accountability must be addressed to improve outcomes.
 
 The roundtable reinforced the urgency of collaborative investment and structured partnership models to build a resilient health security system for Nigeria.`,
-          link: '/news/wef-health-innovators',
-          slug: 'ncdc-private-sector-engagement-roundtable',
-          tag: 'News',
-        },
-        {
-          id: 4,
-          created_at: "2025-12-01",
-          title:
-            'Driving Nigeria Toward Universal Health Coverage - 1st December, 2025',
-          excerpt:
-            'Driving Nigeria Toward Universal Health Coverage: A Landmark HFN–NHIA Private Sector Roundtable, theme: Leveraging the Private Sector to Accelerate Health Insurance Coverage in Nigeria - 1st December, 2025',
-          image:
-            'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715457/16268da44f149e859e5069f5fcdbf9fb_S_j9rsms.jpg',
-          date: 'December 1, 2025',
-          description: `The Healthcare Federation of Nigeria (HFN), in partnership with the  National Health Insurance Authority (NHIA),hosted a high-impact Private Sector Roundtable Breakfast Meeting today in Lagos. More than a stakeholder engagement, the event marked a decisive step in reshaping Nigeria’s health insurance landscape, uniting participants around one shared ambition: accelerating coverage through bold private sector leadership.
+        link: '/news/wef-health-innovators',
+        slug: 'ncdc-private-sector-engagement-roundtable',
+        tag: 'News',
+      },
+      {
+        id: 4,
+        created_at: '2025-12-01',
+        title:
+          'Driving Nigeria Toward Universal Health Coverage - 1st December, 2025',
+        excerpt:
+          'Driving Nigeria Toward Universal Health Coverage: A Landmark HFN–NHIA Private Sector Roundtable, theme: Leveraging the Private Sector to Accelerate Health Insurance Coverage in Nigeria - 1st December, 2025',
+        image:
+          'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715457/16268da44f149e859e5069f5fcdbf9fb_S_j9rsms.jpg',
+        date: 'December 1, 2025',
+        description: `The Healthcare Federation of Nigeria (HFN), in partnership with the  National Health Insurance Authority (NHIA),hosted a high-impact Private Sector Roundtable Breakfast Meeting today in Lagos. More than a stakeholder engagement, the event marked a decisive step in reshaping Nigeria’s health insurance landscape, uniting participants around one shared ambition: accelerating coverage through bold private sector leadership.
 
 The session featured a strong in-person turnout and an equally engaged virtual audience from across the globe. Key participants included: Dr Kelechi Ohiri(Director General, NHIA), Wale-Smatt Oyerinde, MCIPM, FMINILS (Director General, NECA), ably represented, Dr Leke Oshunniyi (Chairman, HMCAN), Dr Funmi Adewara (CEO & Founder, Mobihealth International), Dr Segun Ebitanmi (CEO, CareOne Digital Hospitals), Dr Yetunde Ayo-Oyalowo (CEO & Founder, Market Doctors), and Muhammed Gidado (Medtronic)
 
@@ -156,59 +155,57 @@ A Technical Working Group will be set up with some Clear deliverables to be achi
 
 We extend our appreciation to Dr Kelechi Ohiri and the NHIA team for their leadership, clarity, and collaborative spirit. Our valued partners and sponsors, Health and Managed Care Association of Nigeria - HMCAN, Medtronic, and AIICO Multishield Limited
 `,
-          commentCount: 0,
-          link: '/news/lagos-emergency-partnership',
-          slug: 'driving-nigeria-toward-universal-health',
-          tag: 'News',
-        },
-        
-      ],
-      pagination: {
-        currentPage: 1,
-        totalPages: 2,
+        commentCount: 0,
+        link: '/news/lagos-emergency-partnership',
+        slug: 'driving-nigeria-toward-universal-health',
+        tag: 'News',
       },
+    ],
+    pagination: {
+      currentPage: 1,
+      totalPages: 2,
     },
+  },
 
-    policyAdvocacySection: {
-      title: 'Policy & Advocacy',
-      backgroundColor: '#F2F9F3',
-      updates: [
-        {
-          id: 1,
-          title:
-            'Strengthening Emergency Healthcare in Nigeria through Partnership.',
-          description:
-            'HFN and the Federal Ministry of Health jointly announced a new partnership model to enhance emergency medical infrastructure across Nigeria’s six geopolitical zones.',
-          image: 'hands.png',
-          link: '#',
-          slug: 'strengthening-emergency-healthcare',
-          tag: 'News',
-        },
-        {
-          id: 2,
-          title: 'Policy Framework for Health Technology Adoption',
-          description:
-            'HFN’s Policy and Advocacy team released a new white paper encouraging structured regulation and faster adoption of digital health tools in clinical settings.',
-          image: 'hands1.png',
-          link: '#',
-          slug: 'policy-framework-for-health',
-          tag: 'News',
-        },
-        {
-          id: 3,
-          title: 'Public-Private Dialogue on Universal Health Coverage (UHC)',
-          description:
-            'Stakeholders met in Abuja to evaluate funding mechanisms and policy frameworks driving Nigeria’s progress toward universal access to affordable healthcare.',
-          image: 'hands2.png',
-          link: '#',
-          slug: 'public-private-dialogue',
-          tag: 'News',
-        },
-      ],
-      pagination: {
-        currentPage: 1,
-        totalPages: 2,
+  policyAdvocacySection: {
+    title: 'Policy & Advocacy',
+    backgroundColor: '#F2F9F3',
+    updates: [
+      {
+        id: 1,
+        title:
+          'Strengthening Emergency Healthcare in Nigeria through Partnership.',
+        description:
+          'HFN and the Federal Ministry of Health jointly announced a new partnership model to enhance emergency medical infrastructure across Nigeria’s six geopolitical zones.',
+        image: 'hands.png',
+        link: '#',
+        slug: 'strengthening-emergency-healthcare',
+        tag: 'News',
       },
+      {
+        id: 2,
+        title: 'Policy Framework for Health Technology Adoption',
+        description:
+          'HFN’s Policy and Advocacy team released a new white paper encouraging structured regulation and faster adoption of digital health tools in clinical settings.',
+        image: 'hands1.png',
+        link: '#',
+        slug: 'policy-framework-for-health',
+        tag: 'News',
+      },
+      {
+        id: 3,
+        title: 'Public-Private Dialogue on Universal Health Coverage (UHC)',
+        description:
+          'Stakeholders met in Abuja to evaluate funding mechanisms and policy frameworks driving Nigeria’s progress toward universal access to affordable healthcare.',
+        image: 'hands2.png',
+        link: '#',
+        slug: 'public-private-dialogue',
+        tag: 'News',
+      },
+    ],
+    pagination: {
+      currentPage: 1,
+      totalPages: 2,
     },
   },
 };

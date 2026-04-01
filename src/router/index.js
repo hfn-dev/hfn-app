@@ -88,10 +88,14 @@ const routes = [
   { path: '/gallery', name: 'Gallery', component: Gallery },
   { path: '/governance', name: 'Governance', component: Governance },
   { path: '/publication', name: 'Publications', component: Publications },
-    { path: '/confirmation', name: 'Confirmation', component: Confirmation },
+  { path: '/confirmation', name: 'Confirmation', component: Confirmation },
   { path: '/registration-payment', name: 'Payment', component: Payment },
-    { path: '/events/:slug/register-events', name: 'RegisterEvents', component: RegisterEvents },
-  { path: '/conference', name: 'Conference', component: Conference},
+  {
+    path: '/events/:slug/register-events',
+    name: 'RegisterEvents',
+    component: RegisterEvents,
+  },
+  { path: '/conference', name: 'Conference', component: Conference },
 
   { path: '/get-involved', name: 'GetInvolved', component: GetInvolved },
   { path: '/programs', name: 'Programs', component: Programs },
@@ -148,10 +152,10 @@ const routes = [
     component: CourseDetails,
   },
   {
-  path: '/user/courses/:slug',
-  name: 'UserCourseDetails',
-  component: CourseDetails,
-},
+    path: '/user/courses/:slug',
+    name: 'UserCourseDetails',
+    component: CourseDetails,
+  },
   {
     path: '/news/:slug',
     name: 'ArticleDetail',
@@ -211,7 +215,7 @@ const routes = [
     name: 'TutorCreateCourse',
     component: TutorCreateCourse,
   },
-  
+
   {
     path: '/tutor/courses/:slug/edit',
     name: 'TutorEditCourse',
