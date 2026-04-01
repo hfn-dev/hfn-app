@@ -31,7 +31,7 @@ const mergeData = (incoming = {}) => ({
   title: incoming?.title || "",
   description: incoming?.description || "",
   list: Array.isArray(incoming?.list) && incoming.list.length
-    ? incoming.list.map(item => ({ ...item }))
+    ? incoming.list.map((item) => ({ ...item }))
     : getDefaultSectionData().list,
 });
 
@@ -42,10 +42,7 @@ const currentSectionData = ref(mergeData(props.modelValue));
 watch(
   () => props.modelValue,
   (newVal) => {
-    const merged = mergeData(newVal);
-    if (JSON.stringify(merged) !== JSON.stringify(currentSectionData.value)) {
-      currentSectionData.value = merged;
-    }
+    currentSectionData.value = mergeData(newVal);
   },
   { deep: true, immediate: true }
 );
@@ -59,7 +56,7 @@ watch(
   { deep: true }
 );
 
-// Add new initiative
+// Add / remove initiatives
 const addInitiative = () => {
   currentSectionData.value.list.push({
     id: Date.now(),
@@ -70,49 +67,62 @@ const addInitiative = () => {
   });
 };
 
-// Remove initiative by index
 const removeInitiative = (index) => {
   currentSectionData.value.list.splice(index, 1);
 };
 </script>
 
 <template>
-  <div class="space-y-6 bg-white p-4 border rounded-md">
-    <!-- Debug -->
-    <pre class="text-[10px] bg-gray-100 p-2 overflow-auto max-h-32">
-      DEBUG: {{ currentSectionData }}
-    </pre>
+  <div class="space-y-4 max-w-full">
 
-    <!-- Section Title & Description -->
-    <div class="space-y-2">
-      <label class="block text-xs font-bold text-gray-500 uppercase">Section Title</label>
-      <input v-model="currentSectionData.title" type="text" class="w-full p-1 border rounded" />
+    <!-- Section Title -->
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">Section Title</label>
+      <input
+        v-model="currentSectionData.title"
+        type="text"
+        class="w-full border-none focus:ring-0"
+      />
+    </div>
 
-      <label class="block text-xs font-bold text-gray-500 uppercase">Section Description</label>
-      <textarea v-model="currentSectionData.description" rows="3" class="w-full p-1 border rounded resize-none" />
+    <!-- Section Description -->
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">Section Description</label>
+      <textarea
+        v-model="currentSectionData.description"
+        rows="3"
+        class="w-full border-none focus:ring-0 resize-none"
+      ></textarea>
     </div>
 
     <!-- Initiatives List -->
-    <div v-for="(initiative, index) in currentSectionData.list" :key="initiative.id" class="border border-gray-300 rounded p-3 space-y-2">
-      <div class="flex justify-between items-center">
+    <div
+      v-for="(initiative, index) in currentSectionData.list"
+      :key="initiative.id"
+      class="border border-gray-300 rounded-lg p-3 space-y-2"
+    >
+      <div class="flex justify-between items-center mb-2">
         <span class="font-bold text-sm">Initiative {{ index + 1 }}</span>
         <button @click="removeInitiative(index)" class="text-red-500 text-xs">Remove</button>
       </div>
 
-      <label class="block text-xs font-bold text-gray-500 uppercase">Title</label>
-      <input v-model="initiative.title" type="text" class="w-full p-1 border rounded" />
+      <div class="space-y-2">
+        <label class="block text-xs font-semibold uppercase text-gray-500">Title</label>
+        <input v-model="initiative.title" type="text" class="w-full border-none focus:ring-0" />
 
-      <label class="block text-xs font-bold text-gray-500 uppercase">Description</label>
-      <textarea v-model="initiative.description" rows="2" class="w-full p-1 border rounded resize-none" />
+        <label class="block text-xs font-semibold uppercase text-gray-500">Description</label>
+        <textarea v-model="initiative.description" rows="2" class="w-full border-none focus:ring-0 resize-none" />
 
-      <label class="block text-xs font-bold text-gray-500 uppercase">Image</label>
-      <input v-model="initiative.image" type="text" class="w-full p-1 border rounded" />
+        <label class="block text-xs font-semibold uppercase text-gray-500">Image</label>
+        <input v-model="initiative.image" type="text" class="w-full border-none focus:ring-0" />
 
-      <label class="block text-xs font-bold text-xs uppercase">Link</label>
-      <input v-model="initiative.link" type="text" class="w-full p-1 border rounded" />
+        <label class="block text-xs font-semibold uppercase text-gray-500">Link</label>
+        <input v-model="initiative.link" type="text" class="w-full border-none focus:ring-0" />
+      </div>
     </div>
 
-    <!-- Add new initiative -->
+    <!-- Add Initiative Button -->
     <button @click="addInitiative" class="px-3 py-1 bg-green-500 text-white rounded text-xs">Add Initiative</button>
+
   </div>
 </template>
