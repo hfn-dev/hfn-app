@@ -1,18 +1,16 @@
 <script setup>
 import { ref, watch } from "vue";
 
-// Props from parent
+// Props
 const props = defineProps({
-  modelValue: {
-    type: Object,
-    default: () => ({}),
-  },
+  modelValue: Object,
 });
 
+// Emits
 const emit = defineEmits(["update:modelValue"]);
 
 // Default values
-const getDefaultHeroData = () => ({
+const getDefaultData = () => ({
   titleLine1: "",
   titleLine2: "",
   description: "",
@@ -20,98 +18,101 @@ const getDefaultHeroData = () => ({
   backgroundColor: "#ffffff",
 });
 
-// Merge incoming prop with defaults
-const mergeData = (incoming = {}) => ({
-  titleLine1: incoming?.titleLine1 || "",
-  titleLine2: incoming?.titleLine2 || "",
-  description: incoming?.description || "",
-  image: incoming?.image || "",
-  backgroundColor: incoming?.backgroundColor || "#ffffff",
+// Reactive local state
+const currentSectionData = ref({
+  ...getDefaultData(),
+  ...props.modelValue,
 });
 
-// Reactive state
-const currentHeroData = ref(mergeData(props.modelValue));
-
-// Watch for late prop updates
+// Watch for prop updates
 watch(
   () => props.modelValue,
-  (newVal) => {
-    const merged = mergeData(newVal);
-    if (JSON.stringify(merged) !== JSON.stringify(currentHeroData.value)) {
-      currentHeroData.value = merged;
-    }
+  (val) => {
+    currentSectionData.value = {
+      ...getDefaultData(),
+      ...val,
+    };
   },
-  { deep: true, immediate: true }
+  { deep: true }
 );
 
-// Emit changes to parent
+// Emit changes back to parent
 watch(
-  currentHeroData,
-  (val) => emit("update:modelValue", JSON.parse(JSON.stringify(val))),
+  currentSectionData,
+  (val) => {
+    emit("update:modelValue", val);
+  },
   { deep: true }
 );
 </script>
 
 <template>
-  <div class="space-y-6 bg-white p-4 border rounded-md max-w-full overflow-auto">
-    <!-- Debug -->
-    <pre class="text-[10px] bg-gray-100 p-2 overflow-auto max-h-32 max-w-full">
-      DEBUG: {{ currentHeroData }}
-    </pre>
+  <div class="space-y-4 max-w-full">
 
-    <!-- Title Line 1 -->
-    <div class="space-y-1 min-w-0">
-      <label class="block text-xs font-bold text-gray-500 uppercase">Title Line 1</label>
+    <!-- Hero Title Line 1 -->
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Hero Title Line 1
+      </label>
       <input
-        v-model="currentHeroData.titleLine1"
+        v-model="currentSectionData.titleLine1"
         type="text"
-        class="w-full p-1 border rounded"
+        class="w-full border-none focus:ring-0"
         placeholder="Enter first line of title..."
       />
     </div>
 
-    <!-- Title Line 2 -->
-    <div class="space-y-1 min-w-0">
-      <label class="block text-xs font-bold text-gray-500 uppercase">Title Line 2</label>
+    <!-- Hero Title Line 2 -->
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Hero Title Line 2
+      </label>
       <input
-        v-model="currentHeroData.titleLine2"
+        v-model="currentSectionData.titleLine2"
         type="text"
-        class="w-full p-1 border rounded"
+        class="w-full border-none focus:ring-0"
         placeholder="Enter second line of title..."
       />
     </div>
 
-    <!-- Description -->
-    <div class="space-y-1 min-w-0">
-      <label class="block text-xs font-bold text-gray-500 uppercase">Description</label>
+    <!-- Hero Description -->
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Hero Description
+      </label>
       <textarea
-        v-model="currentHeroData.description"
+        v-model="currentSectionData.description"
         rows="4"
-        class="w-full p-1 border rounded resize-none overflow-auto"
+        class="w-full border-none focus:ring-0 resize-none"
         placeholder="Enter hero description..."
-      />
+      ></textarea>
     </div>
 
-    <!-- Image -->
-    <div class="space-y-1 min-w-0">
-      <label class="block text-xs font-bold text-gray-500 uppercase">Image</label>
+    <!-- Hero Image URL -->
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Hero Image URL
+      </label>
       <input
-        v-model="currentHeroData.image"
+        v-model="currentSectionData.image"
         type="text"
-        class="w-full p-1 border rounded"
+        class="w-full border-none focus:ring-0"
         placeholder="Enter image filename or URL..."
       />
     </div>
 
-    <!-- Background Color -->
-    <div class="space-y-1 min-w-0 flex items-center space-x-2">
-      <label class="block text-xs font-bold text-gray-500 uppercase">Background Color</label>
+    <!-- Hero Background Color -->
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2 flex items-center space-x-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Hero Background Color
+      </label>
       <input
-        v-model="currentHeroData.backgroundColor"
+        v-model="currentSectionData.backgroundColor"
         type="color"
-        class="w-12 h-8 border border-gray-300 rounded p-0"
+        class="w-16 h-10 p-0 border-none focus:ring-0"
       />
-      <span class="text-xs text-gray-600">{{ currentHeroData.backgroundColor }}</span>
+      <span class="text-xs text-gray-600">{{ currentSectionData.backgroundColor }}</span>
     </div>
+
   </div>
 </template>
