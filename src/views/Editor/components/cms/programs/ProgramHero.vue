@@ -11,7 +11,7 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue"]);
 
-// Default values in case prop is empty
+// Default values
 const getDefaultHeroData = () => ({
   titleLine1: "",
   titleLine2: "",
@@ -47,72 +47,71 @@ watch(
 // Emit changes to parent
 watch(
   currentHeroData,
-  (val) => {
-    emit("update:modelValue", JSON.parse(JSON.stringify(val)));
-  },
+  (val) => emit("update:modelValue", JSON.parse(JSON.stringify(val))),
   { deep: true }
 );
 </script>
 
 <template>
-  <div class="space-y-6 bg-white p-4 border rounded-md">
-    <!-- DEBUG -->
-    <pre class="text-[10px] bg-gray-100 p-2 overflow-auto max-h-32">
+  <div class="space-y-6 bg-white p-4 border rounded-md max-w-full overflow-auto">
+    <!-- Debug -->
+    <pre class="text-[10px] bg-gray-100 p-2 overflow-auto max-h-32 max-w-full">
       DEBUG: {{ currentHeroData }}
     </pre>
 
     <!-- Title Line 1 -->
-    <div class="space-y-1">
+    <div class="space-y-1 min-w-0">
       <label class="block text-xs font-bold text-gray-500 uppercase">Title Line 1</label>
       <input
         v-model="currentHeroData.titleLine1"
         type="text"
-        class="w-full text-sm border border-gray-300 rounded p-1"
+        class="w-full p-1 border rounded"
         placeholder="Enter first line of title..."
       />
     </div>
 
     <!-- Title Line 2 -->
-    <div class="space-y-1">
+    <div class="space-y-1 min-w-0">
       <label class="block text-xs font-bold text-gray-500 uppercase">Title Line 2</label>
       <input
         v-model="currentHeroData.titleLine2"
         type="text"
-        class="w-full text-sm border border-gray-300 rounded p-1"
+        class="w-full p-1 border rounded"
         placeholder="Enter second line of title..."
       />
     </div>
 
     <!-- Description -->
-    <div class="space-y-1">
+    <div class="space-y-1 min-w-0">
       <label class="block text-xs font-bold text-gray-500 uppercase">Description</label>
       <textarea
         v-model="currentHeroData.description"
         rows="4"
-        class="w-full text-sm border border-gray-300 rounded p-1 resize-none"
+        class="w-full p-1 border rounded resize-none overflow-auto"
         placeholder="Enter hero description..."
       />
     </div>
 
     <!-- Image -->
-    <div class="space-y-1">
+    <div class="space-y-1 min-w-0">
       <label class="block text-xs font-bold text-gray-500 uppercase">Image</label>
       <input
         v-model="currentHeroData.image"
         type="text"
-        class="w-full text-sm border border-gray-300 rounded p-1"
+        class="w-full p-1 border rounded"
         placeholder="Enter image filename or URL..."
       />
     </div>
 
     <!-- Background Color -->
-    <div class="space-y-1">
+    <div class="space-y-1 min-w-0 flex items-center space-x-2">
       <label class="block text-xs font-bold text-gray-500 uppercase">Background Color</label>
       <input
         v-model="currentHeroData.backgroundColor"
         type="color"
-        class="w-12 h-8 border border-gray-300 rounded p-1"
+        class="w-12 h-8 border border-gray-300 rounded p-0"
       />
+      <span class="text-xs text-gray-600">{{ currentHeroData.backgroundColor }}</span>
     </div>
   </div>
 </template>
