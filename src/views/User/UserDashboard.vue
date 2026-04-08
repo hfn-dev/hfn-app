@@ -5,7 +5,7 @@ import newsApi from "@/api/newsModule.js";
 import authApi from "@/api/userRegister.js";
 import UserSidebar from "@/components/layout/UserSidebar.vue";
 import { computed, onMounted, ref } from "vue";
-import newsletter_placeholder from "@/assets/newsletter-placeholder.jpg";
+import newsletter_placeholder from "@/assets/newsletter-placeholder.png";
 import contentUploadsApi from "@/api/contentUploadsApi";
 
 const resources = ref([]);
@@ -205,6 +205,7 @@ const fetchResources = async () => {
 
     const apiResources = (data || []).map((item) => ({
       ...item,
+      file_url: item.file_url || item.file,
       audience: item.audience?.toLowerCase() || "all",
     }));
 
