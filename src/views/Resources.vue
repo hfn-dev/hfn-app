@@ -52,7 +52,7 @@
               :src="getPdfPreview(item.pdfUrl)"
               alt="Newsletter Preview"
               class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-              @error="(e) => (e.target.src = newsletter_placeholder)"
+              @error="handleImageError"
             />
             <div
               class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
@@ -136,7 +136,9 @@
         </a>
       </div>
 
-      <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Publications</h2>
+      <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
+        Publications
+      </h2>
 
       <div
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16 py-10 px-10 rounded-3xl bg-[#F2F9F3]"
@@ -147,7 +149,7 @@
           class="flex flex-col text-center"
         >
           <div
-            style="display: inline-table;"
+            style="display: inline-table"
             class="w-full h-48 mb-4 rounded-xl overflow-hidden border-2 border-green-400/50 shadow-md flex items-center justify-center bg-white"
           >
             <img
@@ -162,9 +164,7 @@
             {{ pub.title }}
           </h4>
 
-          <p class="text-gray-600 text-sm mb-4">
-            
-          </p>
+          <p class="text-gray-600 text-sm mb-4"></p>
 
           <a
             @click="handleDownload(pub)"
@@ -200,133 +200,134 @@
     </main>
   </div>
   <!-- PAYMENT MODAL -->
-<div v-if="showPaymentDialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-  <div class="bg-white rounded-xl p-8 w-[420px] shadow-xl">
-    
-    <h3 class="text-xl font-bold mb-4 text-gray-900">
-      Purchase Document
-    </h3>
+  <div
+    v-if="showPaymentDialog"
+    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+  >
+    <div class="bg-white rounded-xl p-8 w-[420px] shadow-xl">
+      <h3 class="text-xl font-bold mb-4 text-gray-900">Purchase Document</h3>
 
-    <p class="text-gray-600 mb-4">
-      Nigeria Private Health Sector Market Outlook 2026
-    </p>
+      <p class="text-gray-600 mb-4">
+        Nigeria Private Health Sector Market Outlook 2026
+      </p>
 
-    <div class="bg-gray-50 p-4 rounded-lg mb-4">
-      <p class="text-sm text-gray-700">Price</p>
-      <p class="text-lg font-bold text-green-700">Free</p>
+      <div class="bg-gray-50 p-4 rounded-lg mb-4">
+        <p class="text-sm text-gray-700">Price</p>
+        <p class="text-lg font-bold text-green-700">Free</p>
+      </div>
+
+      <div class="bg-green-50 p-4 rounded-lg mb-4">
+        <p class="text-sm font-semibold"></p>
+        <p class="text-sm"></p>
+        <p class="text-sm"></p>
+        <p class="text-sm"></p>
+      </div>
+
+      <div class="mb-4">
+        <label class="text-sm font-medium text-gray-700">Your Email</label>
+        <input
+          v-model="form.buyerEmail"
+          type="email"
+          class="w-full border rounded-lg px-3 py-2 mt-1"
+          placeholder="Enter email to receive document"
+        />
+      </div>
+      <div class="mb-4">
+        <label class="text-sm font-medium text-gray-700">Your First Name</label>
+        <input
+          v-model="form.first_name"
+          type="first_name"
+          class="w-full border rounded-lg px-3 py-2 mt-1"
+          placeholder="Enter first name"
+        />
+      </div>
+      <div class="mb-4">
+        <label class="text-sm font-medium text-gray-700">Your Last Name</label>
+        <input
+          v-model="form.last_name"
+          type="last_name"
+          class="w-full border rounded-lg px-3 py-2 mt-1"
+          placeholder="Enter last name"
+        />
+      </div>
+      <div class="mb-4">
+        <label class="text-sm font-medium text-gray-700"
+          >Your Organization</label
+        >
+        <input
+          v-model="form.organization"
+          type="organization"
+          class="w-full border rounded-lg px-3 py-2 mt-1"
+          placeholder="Enter Organization"
+        />
+      </div>
+
+      <p class="text-xs text-gray-500 mb-4">
+        Session expires in {{ timer }} seconds
+      </p>
+
+      <button
+        @click="confirmPayment"
+        class="w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800"
+      >
+        Send
+      </button>
+
+      <button
+        @click="showPaymentDialog = false"
+        class="w-full mt-3 text-sm text-gray-500"
+      >
+        Cancel
+      </button>
     </div>
-
-    <div class="bg-green-50 p-4 rounded-lg mb-4">
-      <p class="text-sm font-semibold"></p>
-      <p class="text-sm"></p>
-      <p class="text-sm"></p>
-      <p class="text-sm"></p>
-    </div>
-
-    <div class="mb-4">
-      <label class="text-sm font-medium text-gray-700">Your Email</label>
-      <input
-        v-model="form.buyerEmail"
-        type="email"
-        class="w-full border rounded-lg px-3 py-2 mt-1"
-        placeholder="Enter email to receive document"
-      />
-    </div>
-    <div class="mb-4">
-      <label class="text-sm font-medium text-gray-700">Your First Name</label>
-      <input
-        v-model="form.first_name"
-        type="first_name"
-        class="w-full border rounded-lg px-3 py-2 mt-1"
-        placeholder="Enter first name"
-      />
-    </div>
-    <div class="mb-4">
-      <label class="text-sm font-medium text-gray-700">Your Last Name</label>
-      <input
-        v-model="form.last_name"
-        type="last_name"
-        class="w-full border rounded-lg px-3 py-2 mt-1"
-        placeholder="Enter last name"
-      />
-    </div>
-<div class="mb-4">
-      <label class="text-sm font-medium text-gray-700">Your Organization</label>
-      <input
-        v-model="form.organization"
-        type="organization"
-        class="w-full border rounded-lg px-3 py-2 mt-1"
-        placeholder="Enter Organization"
-      />
-    </div>
-
-
-    <p class="text-xs text-gray-500 mb-4">
-      Session expires in {{ timer }} seconds
-    </p>
-
-    <button
-      @click="confirmPayment"
-      class="w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800"
-    >
-      Send
-    </button>
-
-    <button
-      @click="showPaymentDialog = false"
-      class="w-full mt-3 text-sm text-gray-500"
-    >
-      Cancel
-    </button>
-
   </div>
-</div>
 
+  <div
+    v-if="showSuccessDialog"
+    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+  >
+    <div class="bg-white rounded-xl p-8 w-[380px] text-center shadow-xl">
+      <h3 class="text-xl font-bold text-green-700 mb-3">
+        Payment Confirmation
+      </h3>
 
-<!-- SUCCESS MODAL -->
-<div v-if="showSuccessDialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-  <div class="bg-white rounded-xl p-8 w-[380px] text-center shadow-xl">
+      <p class="text-gray-600 mb-6">
+        Your document will be emailed to you shortly.
+      </p>
 
-    <h3 class="text-xl font-bold text-green-700 mb-3">
-      Payment Confirmation
-    </h3>
-
-    <p class="text-gray-600 mb-6">
-      Your document will be emailed to you shortly.
-    </p>
-
-    <button
-      @click="showSuccessDialog = false"
-      class="bg-green-700 text-white px-6 py-2 rounded-lg"
-    >
-      OK
-    </button>
-
+      <button
+        @click="showSuccessDialog = false"
+        class="bg-green-700 text-white px-6 py-2 rounded-lg"
+      >
+        OK
+      </button>
+    </div>
   </div>
-</div>
 </template>
 
 <script setup>
-import hands from "@/assets/hands.png";
-import latest from "@/assets/latest_news.png";
-import { ref, onMounted } from "vue";
 import contentUploadApi from "@/api/contentUploadsApi";
-import { useToast } from "vue-toastification";
 import postDownload from "@/api/memberResources";
-  
+import hands from "@/assets/hands.png";
+import newsletter_placeholder from "@/assets/newsletter-placeholder.png";
+
+import latest from "@/assets/latest_news.png";
+import { onMounted, ref } from "vue";
+import { useToast } from "vue-toastification";
+
 const newsletters = ref([]);
 const publications = ref([]);
 const showPaymentDialog = ref(false);
 const showSuccessDialog = ref(false);
 const toast = useToast();
-  
+
 const selectedPublication = ref(null);
-  const form = ref({
+const form = ref({
   buyerEmail: "",
   first_name: "",
-  last_name: "",   
-  organization: ""
-})
+  last_name: "",
+  organization: "",
+});
 const timer = ref(300); // 5 minutes
 
 let interval = null;
@@ -354,10 +355,12 @@ const startTimer = () => {
   }, 1000);
 };
 
-
-
 const confirmPayment = async () => {
-  if (!form.value.buyerEmail || !form.value.first_name || !form.value.organization) {
+  if (
+    !form.value.buyerEmail ||
+    !form.value.first_name ||
+    !form.value.organization
+  ) {
     toast.error("Please fill in all required fields.");
     return;
   }
@@ -383,41 +386,57 @@ const confirmPayment = async () => {
     document.body.removeChild(link);
 
     showSuccessDialog.value = true;
-
   } catch (error) {
     console.error("Failed to submit form:", error);
     toast.error("Failed to submit your details. Please try again.");
   }
 };
 
-  
+const handleImageError = (e) => {
+  e.target.onerror = null;
+  e.target.src = newsletter_placeholder;
+};
+// const getPdfPreview = (url) => {
+//   if (!url) return newsletter_placeholder;
+
+//   if (url.match(/\.(jpg|jpeg|png)$/i)) return url;
+
+//   return url.replace("/upload/", "/upload/pg_1,w_600/").replace(".pdf", ".jpg");
+// };
 const getPdfPreview = (url) => {
   if (!url) return newsletter_placeholder;
 
   if (url.match(/\.(jpg|jpeg|png)$/i)) return url;
 
-  return url.replace("/upload/", "/upload/pg_1,w_600/").replace(".pdf", ".jpg");
+  let processedUrl = url.replace("/raw/upload/", "/image/upload/");
+
+  return processedUrl
+    .replace("/upload/", "/upload/pg_1,w_600,f_auto/")
+    .replace(".pdf", ".jpg");
 };
-  
+
 const dummyPublications = [
   {
     id: 3,
     title: "HFN 2025 Year in Review",
-    description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
+    description:
+      "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
     pdfUrl:
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1773326667/HFN_2025_Year_in_Review__eicos6.pdf",
   },
   {
     id: 2,
     title: "AGM Impact Brief",
-    description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
+    description:
+      "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
     pdfUrl:
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1773302477/AGM_Impact_Brief_cuw7td.pdf",
   },
   {
     id: 1,
     title: "Nigeria Private Health Sector Market Outlook 2026",
-    description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
+    description:
+      "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
     pdfUrl:
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772817006/Nigeria_Private_Health_Sector_Market_Outlook_2026_c4ql1j.pdf",
   },
@@ -449,12 +468,13 @@ const dummyPublications = [
   },
   {
     id: 7,
-    title: "High-Level Roundtable on Local Manufacturing of Medicines in Nigeria",
-    description: "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
+    title:
+      "High-Level Roundtable on Local Manufacturing of Medicines in Nigeria",
+    description:
+      "The Healthcare Federation of Nigeria (HFN), in collaboration with the West Africa Private Healthcare Federation (FOASPS), the Presidential Initiative for Unlocking the Healthcare Value Chain (PVAC), the African Union Development Agency (AUDA-NEPAD), and the World Bank, convened a High-Level Roundtable on Local Manufacturing of Medicines in Nigeria on Wednesday, October 22, 2025, in Abuja",
     pdfUrl:
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067783/hfn-report_roundtable-on-local-manufacturing_esqq68.pdf",
   },
-  
 ];
 
 const dummyNewsletters = [
@@ -493,9 +513,7 @@ const dummyNewsletters = [
     pdfUrl:
       "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067784/hfn-quarterly-newsletter-q-4_2024_rqpvhf.pdf",
   },
-  
 ];
-
 
 const isPublicContent = (item) => {
   return item.audience === "all" || item.audience === "non-members";
@@ -505,7 +523,7 @@ const fetchDocuments = async () => {
   try {
     const [newslettersRes, publicationsRes] = await Promise.all([
       contentUploadApi.listNewsletters(),
-      contentUploadApi.listPublications()
+      contentUploadApi.listPublications(),
     ]);
 
     const newslettersData = Array.isArray(newslettersRes)
@@ -518,33 +536,72 @@ const fetchDocuments = async () => {
 
     const apiNewsletters = newslettersData
       .filter(isPublicContent)
-      .map(item => ({
+      .map((item) => ({
         text: item.title,
         pdfUrl: item.file || item.pdf || item.document,
         date: new Date(item.created_at).toDateString(),
+        created_at: new Date(item.created_at),
       }));
 
+    const allNewsletters = [
+      ...apiNewsletters,
+      ...dummyNewsletters.map((item) => ({
+        ...item,
+        created_at: new Date(item.date),
+      })),
+    ];
+
+    newsletters.value = allNewsletters.sort(
+      (a, b) => b.created_at - a.created_at
+    );
+
+    // const apiPublications = publicationsData
+    //   .filter(isPublicContent)
+    //   .map((item) => ({
+    //     title: item.title,
+    //     pdfUrl: item.file || item.pdf || item.document,
+    //     description: item.caption || item.description || "",
+    //     created_at: new Date(item.created_at),
+    //   }));
     const apiPublications = publicationsData
-      .filter(isPublicContent)
-      .map(item => ({
+      .filter((item) => {
+        const isPublic = isPublicContent(item);
+
+        const isNewsletter = item.title?.toLowerCase().includes("newsletter");
+
+        return isPublic && !isNewsletter;
+      })
+      .map((item) => ({
         title: item.title,
         pdfUrl: item.file || item.pdf || item.document,
         description: item.caption || item.description || "",
+        created_at: new Date(item.created_at),
       }));
 
-    newsletters.value = [...dummyNewsletters, ...apiNewsletters];
-    publications.value = [...dummyPublications, ...apiPublications];
+    const allPublications = [
+      ...apiPublications,
+      ...dummyPublications.map((item) => ({
+        ...item,
+        created_at: new Date(),
+      })),
+    ];
 
+    publications.value = allPublications.sort(
+      (a, b) => b.created_at - a.created_at
+    );
+
+    // newsletters.value = [...apiNewsletters, ...dummyNewsletters];
+    // publications.value = [...apiPublications, ...dummyPublications];
   } catch (error) {
     console.error("Error fetching documents:", error);
 
     newsletters.value = [...dummyNewsletters];
     publications.value = [...dummyPublications];
   }
-};  
- onMounted(() => {
+};
+onMounted(() => {
   fetchDocuments();
-}); 
+});
 </script>
 
 

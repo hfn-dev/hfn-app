@@ -99,38 +99,82 @@ const deleteArticle = (slug) => {
   };
 };
 
-const handleDeleteUpload = async (item) => {
-  if (!confirm(`Are you sure you want to delete "${item.title}"?`)) return;
+// const handleDeleteUpload = async (item) => {
+//   if (!confirm(`Are you sure you want to delete "${item.title}"?`)) return;
 
-  try {
-    switch (item.type) {
-      case "gallery":
-        await uploadsApi.deleteGallery(item.id);
-        break;
-      case "minute":
-        await uploadsApi.deleteMinutes(item.slug);
-        break;
-      case "newsletter":
-        await uploadsApi.deleteNewsletters(item.slug);
-        break;
-      case "publications":
-        await uploadsApi.deletepublications(item.slug);
-        break;
-      case "document":
-        await uploadsApi.deletepublications(item.slug);
-        break;
-      default:
-        console.warn("Unknown type", item.type);
-        return;
+//   try {
+//     switch (item.type) {
+//       case "gallery":
+//         await uploadsApi.deleteGallery(item.id);
+//         break;
+//       case "minute":
+//         await uploadsApi.deleteMinutes(item.slug);
+//         break;
+//       case "newsletter":
+//         await uploadsApi.deleteNewsletters(item.slug);
+//         break;
+//       case "publications":
+//         await uploadsApi.deletepublications(item.slug);
+//         break;
+//       case "document":
+//         await uploadsApi.deletepublications(item.slug);
+//         break;
+//       default:
+//         console.warn("Unknown type", item.type);
+//         return;
+//     }
+
+//     uploads.value = uploads.value.filter(
+//       (u) => u.id !== item.id && u.slug !== item.slug
+//     );
+//   } catch (error) {
+//     console.error(`Failed to delete ${item.type}:`, error);
+//     toast.error("Failed to delete item. See console for details.");
+//   }
+// };
+const handleDeleteUpload = (item) => {
+  confirmTitle.value = "Delete Item";
+  confirmMessage.value = `Are you sure you want to delete "${item.title}"? This action cannot be undone.`;
+  showConfirm.value = true;
+
+  confirmAction.value = async () => {
+    try {
+      confirmLoading.value = true;
+      deletingUploadId.value = item.id || item.slug;
+
+      switch (item.type) {
+        case "gallery":
+          await uploadsApi.deleteGallery(item.id);
+          break;
+        case "minute":
+          await uploadsApi.deleteMinutes(item.slug);
+          break;
+        case "newsletter":
+          await uploadsApi.deleteNewsletters(item.slug);
+          break;
+        case "publications":
+        case "document":
+          await uploadsApi.deletepublications(item.slug);
+          break;
+        default:
+          console.warn("Unknown type", item.type);
+          return;
+      }
+
+      uploads.value = uploads.value.filter(
+        (u) => u.id !== item.id && u.slug !== item.slug
+      );
+
+      toast.success("Item deleted successfully");
+    } catch (error) {
+      console.error(`Failed to delete ${item.type}:`, error);
+      toast.error("Failed to delete item");
+    } finally {
+      deletingUploadId.value = null;
+      confirmLoading.value = false;
+      showConfirm.value = false;
     }
-
-    uploads.value = uploads.value.filter(
-      (u) => u.id !== item.id && u.slug !== item.slug
-    );
-  } catch (error) {
-    console.error(`Failed to delete ${item.type}:`, error);
-    toast.error("Failed to delete item. See console for details.");
-  }
+  };
 };
 
 const fetchArticles = async () => {
@@ -921,65 +965,67 @@ onMounted(() => {
             />
 
             <div class="mb-4">
-  <input
-    type="file"
-    @change="uploadFile"
-    class="border border-gray-300 rounded-md px-3 py-2 w-full"
-    :multiple="uploadForm.type === 'gallery'"
-  />
+              <input
+                type="file"
+                @change="uploadFile"
+                class="border border-gray-300 rounded-md px-3 py-2 w-full"
+                :multiple="uploadForm.type === 'gallery'"
+              />
 
-  <!-- PREVIEW -->
-  <div
-    v-if="uploadForm.type === 'gallery' && uploadForm.files.length"
-    class="mt-4"
-  >
-    <p class="font-medium mb-2">Gallery Preview (Select Banner)</p>
+              <!-- PREVIEW -->
+              <div
+                v-if="uploadForm.type === 'gallery' && uploadForm.files.length"
+                class="mt-4"
+              >
+                <p class="font-medium mb-2">Gallery Preview (Select Banner)</p>
 
-    <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
-      <div
-        v-for="(file, index) in uploadForm.files"
-        :key="index"
-        class="relative group"
-      >
-        <img
-          :src="previewUrl(file)"
-          class="h-24 w-full object-cover rounded cursor-pointer border-2 transition"
-          :class="{
-            'border-green-600 scale-105': uploadForm.bannerIndex === index,
-            'border-gray-300': uploadForm.bannerIndex !== index,
-          }"
-          @click="uploadForm.bannerIndex = index"
-        />
+                <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                  <div
+                    v-for="(file, index) in uploadForm.files"
+                    :key="index"
+                    class="relative group"
+                  >
+                    <img
+                      :src="previewUrl(file)"
+                      class="h-24 w-full object-cover rounded cursor-pointer border-2 transition"
+                      :class="{
+                        'border-green-600 scale-105':
+                          uploadForm.bannerIndex === index,
+                        'border-gray-300': uploadForm.bannerIndex !== index,
+                      }"
+                      @click="uploadForm.bannerIndex = index"
+                    />
 
-        <!-- delete -->
-        <button
-          class="absolute top-1 right-1 bg-white text-red-600 rounded-full w-5 h-5 text-xs hidden group-hover:flex items-center justify-center shadow"
-          @click.prevent="uploadForm.files.splice(index, 1)"
-        >
-          ✕
-        </button>
+                    <!-- delete -->
+                    <button
+                      class="absolute top-1 right-1 bg-white text-red-600 rounded-full w-5 h-5 text-xs hidden group-hover:flex items-center justify-center shadow"
+                      @click.prevent="uploadForm.files.splice(index, 1)"
+                    >
+                      ✕
+                    </button>
 
-        <!-- banner badge -->
-        <span
-          v-if="uploadForm.bannerIndex === index"
-          class="absolute bottom-1 left-1 text-[10px] bg-green-600 text-white px-2 py-0.5 rounded"
-        >
-          Banner
-        </span>
-      </div>
-    </div>
+                    <!-- banner badge -->
+                    <span
+                      v-if="uploadForm.bannerIndex === index"
+                      class="absolute bottom-1 left-1 text-[10px] bg-green-600 text-white px-2 py-0.5 rounded"
+                    >
+                      Banner
+                    </span>
+                  </div>
+                </div>
 
-    <p class="text-xs text-gray-500 mt-2">
-      Click an image to set as banner thumbnail
-    </p>
-  </div>
-</div>
+                <p class="text-xs text-gray-500 mt-2">
+                  Click an image to set as banner thumbnail
+                </p>
+              </div>
+            </div>
 
-<div class="flex justify-end mt-4">
-  <button @click="createUpload" class="btn-primary px-6">
-    Upload
-  </button>
-</div>          </div>
+            <div class="flex justify-end mt-4">
+              <button @click="createUpload" class="btn-primary px-6">
+                Upload
+              </button>
+            </div>
+          </div>
 
           <div class="mt-8">
             <h3 class="font-semibold mb-3">Uploaded Content</h3>
@@ -1046,11 +1092,22 @@ onMounted(() => {
                     <span v-else class="text-gray-400">No media</span>
                   </td>
                   <td class="p-3">
-                    <button
+                    <!-- <button
                       class="text-red-500 hover:text-red-700 font-semibold text-sm"
                       @click="handleDeleteUpload(item)"
                     >
                       Delete
+                    </button> -->
+                    <button
+                      class="text-red-500 hover:text-red-700 font-semibold text-sm"
+                      @click="handleDeleteUpload(item)"
+                      :disabled="deletingUploadId === (item.id || item.slug)"
+                    >
+                      {{
+                        deletingUploadId === (item.id || item.slug)
+                          ? "Deleting…"
+                          : "Delete"
+                      }}
                     </button>
                   </td>
                 </tr>
@@ -1063,7 +1120,6 @@ onMounted(() => {
             </table>
           </div>
         </section>
-        
       </div>
     </main>
   </div>
