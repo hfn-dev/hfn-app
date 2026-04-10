@@ -8,7 +8,7 @@ export default {
       });
       return response.data;
     } catch (error) {
-      console.error("List directory users API error:", error);
+      console.error("List directory users API error");
       throw error;
     }
   },
@@ -20,7 +20,7 @@ export default {
       });
       return response.data;
     } catch (error) {
-      console.error("Search directory users API error:", error);
+      console.error("Search directory users API error");
       throw error;
     }
   },
@@ -32,7 +32,7 @@ export default {
       });
       return response.data;
     } catch (error) {
-      console.error("Get directory users by letter API error:", error);
+      console.error("Get directory users by letter API error");
       throw error;
     }
   },
@@ -42,7 +42,7 @@ export default {
       const response = await api.get("/users/directory/", { params });
       return response.data;
     } catch (error) {
-      console.error("List users API error:", error);
+      console.error("List users API error");
       throw error;
     }
   },
@@ -52,7 +52,7 @@ export default {
       const response = await api.get(`/users/directory/${id}/`);
       return response.data;
     } catch (error) {
-      console.error("Get user API error:", error);
+      console.error("Get user API error");
       throw error;
     }
   },
@@ -64,7 +64,7 @@ export default {
       });
       return response.data;
     } catch (error) {
-      console.error("Search users API error:", error);
+      console.error("Search users API error");
       throw error;
     }
   },
@@ -74,7 +74,7 @@ export default {
       const response = await api.post("/users/connections/connect/", payload);
       return response.data;
     } catch (error) {
-      console.error("Connect user API error:", error);
+      console.error("Connect user API error");
       throw error;
     }
   },
@@ -87,7 +87,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error("Disconnect user API error:", error);
+      console.error("Disconnect user API error");
       throw error;
     }
   },
@@ -97,7 +97,7 @@ export default {
       const response = await api.get("/users/connections/", { params });
       return response.data;
     } catch (error) {
-      console.error("Get connections API error:", error);
+      console.error("Get connections API error");
       throw error;
     }
   },
@@ -107,7 +107,7 @@ export default {
       const response = await api.post("/users/connections/status/", payload);
       return response.data;
     } catch (error) {
-      console.error("Connection status API error:", error);
+      console.error("Connection status API error");
       throw error;
     }
   },

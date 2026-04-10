@@ -167,7 +167,7 @@ const handleDeleteUpload = (item) => {
 
       toast.success("Item deleted successfully");
     } catch (error) {
-      console.error(`Failed to delete ${item.type}:`, error);
+      console.error(`Failed to delete ${item.type}`);
       toast.error("Failed to delete item");
     } finally {
       deletingUploadId.value = null;
@@ -392,7 +392,7 @@ const createEvent = async () => {
       banner: "",
     });
   } catch (error) {
-    console.error("Create event error:", error);
+    console.error("Create event error");
 
     const message =
       error.response?.data?.non_field_errors?.[0] ||
@@ -481,7 +481,7 @@ const fetchUploads = async () => {
       ...normalizedPublications,
     ];
   } catch (error) {
-    console.error("Failed to fetch uploads:", error);
+    console.error("Failed to fetch uploads");
   }
 };
 
@@ -559,7 +559,7 @@ const createUpload = async () => {
       bannerIndex: 0,
     };
   } catch (error) {
-    console.error("Upload failed:", error);
+    console.error("Upload failed");
   }
 };
 

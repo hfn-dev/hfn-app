@@ -73,7 +73,7 @@ const fetchUserEnrollments = async () => {
       );
     }
   } catch (error) {
-    console.error("Error fetching enrollments:", error);
+    console.error("Error fetching enrollments");
     toast.error("Failed to load your learning progress");
   } finally {
     isLoading.value = false;

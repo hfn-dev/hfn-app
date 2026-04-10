@@ -6,7 +6,7 @@ export default {
       const response = await api.get('/learning/categories/', { params });
       return response;
     } catch (error) {
-      console.error('list categories API error:', error);
+      console.error('list categories API error');
       throw error;
     }
   },
@@ -18,7 +18,7 @@ export default {
       });
       return response;
     } catch (error) {
-      console.error('list categories by id API error:', error);
+      console.error('list categories by id API error');
       throw error;
     }
   },
@@ -30,7 +30,7 @@ export default {
       });
       return response;
     } catch (error) {
-      console.error('list course category API error:', error);
+      console.error('list course category API error');
       throw error;
     }
   },
@@ -40,7 +40,7 @@ export default {
       const response = await api.post('/learning/categories/', payload);
       return response.data;
     } catch (error) {
-      console.error('create category API error:', error);
+      console.error('create category API error');
       throw error;
     }
   },
@@ -50,7 +50,7 @@ export default {
       const response = await api.put(`/learning/categories/${slug}/`, payload);
       return response.data;
     } catch (error) {
-      console.error('update category API error:', error);
+      console.error('update category API error');
       throw error;
     }
   },
@@ -63,7 +63,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('delete category API error:', error);
+      console.error('delete category API error');
       throw error;
     }
   },
@@ -75,7 +75,7 @@ export default {
       });
       return response;
     } catch (error) {
-      console.error('get all courses API error:', error);
+      console.error('get all courses API error');
       throw error;
     }
   },
@@ -87,7 +87,7 @@ export default {
       });
       return response;
     } catch (error) {
-      console.error('get all courses API error:', error);
+      console.error('get all courses API error');
       throw error;
     }
   },
@@ -97,7 +97,7 @@ export default {
       const response = await api.get(`/learning/courses/${slug}/`, { params });
       return response;
     } catch (error) {
-      console.error('get courses details API error:', error);
+      console.error('get courses details API error');
       throw error;
     }
   },
@@ -107,7 +107,7 @@ export default {
       const response = await api.get(`/learning/courses/${slug}/`, { params });
       return response;
     } catch (error) {
-      console.error('get course by slug API error:', error);
+      console.error('get course by slug API error');
       throw error;
     }
   },
@@ -119,7 +119,7 @@ export default {
       console.log('Course created successfully:', response);
       return response.data;
     } catch (error) {
-      console.error('create courses API error:', error);
+      console.error('create courses API error');
       throw error;
     }
   },
@@ -129,7 +129,7 @@ export default {
       const response = await api.put(`/learning/courses/${slug}/`, payload);
       return response.data;
     } catch (error) {
-      console.error('update courses API error:', error);
+      console.error('update courses API error');
       throw error;
     }
   },
@@ -139,7 +139,7 @@ export default {
       const response = await api.delete(`/learning/courses/${slug}`, payload);
       return response.data;
     } catch (error) {
-      console.error('delete course API error:', error);
+      console.error('delete course API error');
       throw error;
     }
   },
@@ -152,7 +152,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('course modules API error:', error);
+      console.error('course modules API error');
       throw error;
     }
   },
@@ -162,7 +162,7 @@ export default {
       const response = await api.get(`/learning/modules/${id}/`, payload);
       return response.data;
     } catch (error) {
-      console.error('get modules detail API error:', error);
+      console.error('get modules detail API error');
       throw error;
     }
   },
@@ -172,7 +172,7 @@ export default {
       const response = await api.get('/learning/enrollments/');
       return response;
     } catch (error) {
-      console.error('get enrollment API error:', error);
+      console.error('get enrollment API error');
       throw error;
     }
   },
@@ -182,7 +182,7 @@ export default {
       const response = await api.get(`/learning/enrollments/${id}`, payload);
       return response.data;
     } catch (error) {
-      console.error('get enrollment details API error:', error);
+      console.error('get enrollment details API error');
       throw error;
     }
   },
@@ -197,7 +197,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('course enrollment API error:', error);
+      console.error('course enrollment API error');
       throw error;
     }
   },
@@ -210,7 +210,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('delete enrollment details API error:', error);
+      console.error('delete enrollment details API error');
       throw error;
     }
   },
@@ -223,7 +223,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('progress tracking API error:', error);
+      console.error('progress tracking API error');
       throw error;
     }
   },
@@ -235,7 +235,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('complete lesson mark API error:', error);
+      console.error('complete lesson mark API error');
       throw error;
     }
   },
@@ -248,7 +248,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('get course quiz API error:', error);
+      console.error('get course quiz API error');
       throw error;
     }
   },
@@ -258,7 +258,7 @@ export default {
       const response = await api.get(`/learning/quizzes/${id}/`, {payload});
       return response.data;
     } catch (error) {
-      console.error('get course quiz details API error:', error);
+      console.error('get course quiz details API error');
       throw error;
     }
   },
@@ -271,7 +271,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('start course quiz API error:', error);
+      console.error('start course quiz API error');
       throw error;
     }
   },
@@ -284,7 +284,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('submit course quiz API error:', error);
+      console.error('submit course quiz API error');
       throw error;
     }
   },
@@ -297,7 +297,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('list comments API error:', error);
+      console.error('list comments API error');
       throw error;
     }
   },
@@ -310,7 +310,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('create comments API error:', error);
+      console.error('create comments API error');
       throw error;
     }
   },
@@ -323,7 +323,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('delete comments API error:', error);
+      console.error('delete comments API error');
       throw error;
     }
   },
@@ -345,7 +345,7 @@ export default {
       const response = await api.get(`/learning/reviews/`, { params });
       return response.data;
     } catch (error) {
-      console.error('review API error:', error);
+      console.error('review API error');
       throw error;
     }
   },
@@ -355,7 +355,7 @@ export default {
       const response = await api.get(`/learning/reviews/${id}/`, payload);
       return response.data;
     } catch (error) {
-      console.error('update review API error:', error);
+      console.error('update review API error');
       throw error;
     }
   },
@@ -365,7 +365,7 @@ export default {
       const response = await api.post('/learning/reviews/', payload);
       return response.data;
     } catch (error) {
-      console.error('create review API error:', error);
+      console.error('create review API error');
       throw error;
     }
   },
@@ -375,7 +375,7 @@ export default {
       const response = await api.put(`/learning/reviews/${id}/`, payload);
       return response.data;
     } catch (error) {
-      console.error('update review API error:', error);
+      console.error('update review API error');
       throw error;
     }
   },
@@ -385,7 +385,7 @@ export default {
       const response = await api.delete(`/learning/reviews/${id}/`, payload);
       return response.data;
     } catch (error) {
-      console.error('update review API error:', error);
+      console.error('update review API error');
       throw error;
     }
   },
@@ -395,7 +395,7 @@ export default {
       const response = await api.get('/learning/certificates/', payload);
       return response.data;
     } catch (error) {
-      console.error('get certificate API error:', error);
+      console.error('get certificate API error');
       throw error;
     }
   },
@@ -405,7 +405,7 @@ export default {
       const response = await api.get(`/learning/certificates/${id}/`, payload);
       return response.data;
     } catch (error) {
-      console.error('get certificate detail API error:', error);
+      console.error('get certificate detail API error');
       throw error;
     }
   },
@@ -417,7 +417,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('verify certificate API error:', error);
+      console.error('verify certificate API error');
       throw error;
     }
   },
@@ -427,7 +427,7 @@ export default {
       const response = await api.post(`/learning/courses/${slug}/publish/`);
       return response.data;
     } catch (error) {
-      console.error('publish course API error:', error);
+      console.error('publish course API error');
       throw error;
     }
   },
@@ -436,7 +436,7 @@ export default {
     const response = await api.post('/learning/certificates/generate/', payload);
     return response.data;
   } catch (error) {
-    console.error('generate certificate API error:', error);
+    console.error('generate certificate API error');
     throw error;
   }
 },
@@ -455,7 +455,7 @@ export default {
     );
     return response.data;
   } catch (error) {
-    console.error('Certificate download API error:', error);
+    console.error('Certificate download API error');
     throw error;
   }
 }

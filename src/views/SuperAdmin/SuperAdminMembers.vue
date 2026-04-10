@@ -127,7 +127,7 @@ const loadMembershipAnalytics = async () => {
       },
     ];
   } catch (error) {
-    console.error("Failed to load membership analytics", error);
+    console.error("Failed to load membership analytics");
   }
 };
 
@@ -176,7 +176,7 @@ const submitNewMember = async () => {
       toast.error("Something went wrong", "error");
     }
 
-    console.error("Failed to add member", error);
+    console.error("Failed to add member");
   }
 };
 
@@ -191,7 +191,7 @@ const submitNewMember = async () => {
 
     fetchMembers();
   } catch (error) {
-    console.error("Approval failed:", error);
+    console.error("Approval failed");
     toast.error("Failed to approve application", "error");
   }
 };
@@ -206,7 +206,7 @@ const rejectApplication = async () => {
 
     fetchMembers();
   } catch (error) {
-    console.error("Rejection failed:", error);
+    console.error("Rejection failed");
     toast.error("Failed to reject application", "error");
   }
 }; 
@@ -218,7 +218,7 @@ const fetchMembers = async () => {
     members.value = data;
     
   } catch (error) {
-    console.error("Failed to fetch members", error);
+    console.error("Failed to fetch members");
   }
 };  
 
@@ -304,7 +304,7 @@ const handleAction = async (action, memberId) => {
 
     }
   } catch (error) {
-    console.error(`${action} failed for member ${memberId}:`, error);
+    console.error(`${action} failed for member ${memberId}`);
   }
 };
 

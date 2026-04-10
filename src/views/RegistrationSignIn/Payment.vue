@@ -36,7 +36,7 @@ const payNow = async () => {
 
     console.log("Payment intent created:", response);
   } catch (error) {
-    console.error("Failed to initiate membership payment", error);
+    console.error("Failed to initiate membership payment");
   } finally {
     isSubmitting.value = false;
   }

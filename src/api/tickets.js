@@ -6,7 +6,7 @@ export default {
       const response = await api.get('/tickets/', payload);
       return response.data;
     } catch (error) {
-      console.error('Error fetching tickets api:', error);
+      console.error('Error fetching tickets api');
       throw error;
     }
   },
@@ -16,7 +16,7 @@ export default {
       const response = await api.post('/tickets/', payload);
       return response.data;
     } catch (error) {
-      console.error('Create ticket API error:', error);
+      console.error('Create ticket API error');
       throw error;
     }
   },
@@ -26,7 +26,7 @@ export default {
       const response = await api.get(`/tickets/${id}`, { params });
       return response.data;
     } catch (error) {
-      console.error('View ticket details API error:', error);
+      console.error('View ticket details API error');
       throw error;
     }
   },
@@ -36,7 +36,7 @@ export default {
       const response = await api.patch(`/tickets/${ticketId}/`, payload);
       return response.data;
     } catch (error) {
-      console.error('Ticket update API error:', error);
+      console.error('Ticket update API error');
       throw error;
     }
   },

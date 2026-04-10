@@ -1,6 +1,6 @@
 <template>
   <div class="events-page font-sans bg-white">
-    <section class="bg-[#E87A1814]">
+    <section class="bg-[#E87A1814]" :style="{ backgroundColor: page.hero.backgroundColor || '#E87A1814' }">
       <div class="container mx-auto px-4 md:px-8 pt-10 pb-16">
         <div
           class="flex flex-col lg:flex-row items-start lg:items-center justify-between"
@@ -9,17 +9,14 @@
             <h1
               class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight"
             >
-              <span class="text-green-700">Events/Engagements</span>
+              <span class="text-green-700">{{ page.hero.titleLine1 }}</span>
               <br />
               <span class="text-gray-900"
-                >Speaking with one voice for the private health sector</span
+                >{{ page.hero.titleLine2 }}</span
               >
             </h1>
             <p class="mt-4 text-gray-600 max-w-lg">
-              Stay updated with our latest conferences, webinars, and community
-              programs. Whether you're looking to expand your knowledge, network
-              with industry leaders, or engage with our vibrant community,
-              there's an event for you.
+              {{ page.hero.description }}
             </p>
           </div>
 
@@ -27,7 +24,7 @@
             class="lg:w-1/2 flex justify-center w-full h-64 sm:h-80 lg:h-96 relative"
           >
             <img
-              :src="latest"
+              :src="resolveImage(page.hero.image)"
               alt="Collage of past events"
               class="object-cover w-full h-full rounded-lg"
             />
@@ -210,13 +207,15 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import eventsApi from "@/api/events.js";
-  
+import pagesApi from "@/api/pageManagement";
+import { eventsPageSchema } from "@/schemas/pages/events.schema";
 import awards from "@/assets/awards.png";
 import newEvent from "@/assets/events.png";
-// import latest from "@/assets/latest_news.png";
 
 const apiEvents = ref([]);
 const loadingEvents = ref(false);
+const loading = ref(true);
+const pageFromApi = ref(null);
 
   const fetchApiEvents = async () => {
   try {
@@ -243,7 +242,7 @@ const loadingEvents = ref(false);
 
     events.value = [...events.value, ...mappedApiEvents];
   } catch (error) {
-    console.error("Failed to fetch API events:", error);
+    console.error("Failed to fetch API events");
   }
 };
 
@@ -265,6 +264,16 @@ const hfn2025 =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769881267/1746181486545_mtao0s.jpg";
 const latest =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770045591/243A7993_wxlzkg.jpg";
+
+const imageMap = {
+  "events-CNRYrGt8_trfhaz.png": event,
+  "1758712162657_yclv7p.jpg": breakfast2025,
+  "1764355254559_g2wv3t.jpg": roundtable2025,
+  "1746181486545_mtao0s.jpg": hfn2025,
+  "243A7993_wxlzkg.jpg": latest,
+};
+
+const resolveImage = (image) => imageMap[image] || image;
 
   
 const staticEvents = [
@@ -338,6 +347,45 @@ const pastEvents = [
 
   onMounted(() => {
   fetchApiEvents();
+  fetchPageFromApi();
+});
+
+const fetchPageFromApi = async () => {
+  try {
+    const res = await pagesApi.getPageByType("events");
+    pageFromApi.value = res?.content || null;
+  } catch (e) {
+    console.warn("Using local Events schema fallback");
+  } finally {
+    loading.value = false;
+  }
+};
+
+const page = computed(() => {
+  return {
+    ...eventsPageSchema,
+    ...(pageFromApi.value || {}),
+    hero: {
+      ...eventsPageSchema.hero,
+      ...(pageFromApi.value?.hero || {}),
+    },
+    searchAndFilter: {
+      ...eventsPageSchema.searchAndFilter,
+      ...(pageFromApi.value?.searchAndFilter || {}),
+    },
+    featuredEvent: {
+      ...eventsPageSchema.featuredEvent,
+      ...(pageFromApi.value?.featuredEvent || {}),
+    },
+    latestEvents: {
+      ...eventsPageSchema.latestEvents,
+      ...(pageFromApi.value?.latestEvents || {}),
+    },
+    pastEvents: {
+      ...eventsPageSchema.pastEvents,
+      ...(pageFromApi.value?.pastEvents || {}),
+    },
+  };
 });
 
 </script>

@@ -79,7 +79,7 @@ const fetchUsers = async () => {
 
     USERS.value = [...existingUsers, ...invites];
   } catch (error) {
-    console.error("Failed to fetch users or invitations", error);
+    console.error("Failed to fetch users or invitations");
   }
 };
 
@@ -92,7 +92,7 @@ const revokeInvitation = async (inviteId) => {
     await fetchInvitations();
     await fetchUsers();
   } catch (error) {
-    console.error("Failed to revoke invite", error);
+    console.error("Failed to revoke invite");
 
     const message =
       error.response?.data?.detail ||
@@ -135,7 +135,7 @@ const fetchInvitations = async () => {
 
     INVITATIONS_DATA.value = grouped;
   } catch (error) {
-    console.error("Failed to fetch invitations", error);
+    console.error("Failed to fetch invitations");
   }
 };
 
@@ -214,7 +214,7 @@ const handleAction = async (action, user) => {
       console.log("Role History:", history);
     }
   } catch (error) {
-    console.error("Action failed:", error);
+    console.error("Action failed");
   }
 };
 
@@ -253,7 +253,7 @@ const sendInvitation = async (invite, roleKey, index) => {
     INVITATIONS_DATA.value[roleKey][index].status = "Sent";
     toast.success("Invitation sent successfully");
   } catch (error) {
-    console.error("Failed to send invitation:", error);
+    console.error("Failed to send invitation");
     const message =
       error.response?.data?.detail ||
       error.response?.data?.message ||
@@ -268,7 +268,7 @@ const resendInvitation = async (inviteId) => {
     await accessAPI.resendRoleInvite(inviteId);
     toast.success("Invite resent!");
   } catch (error) {
-    console.error("Failed to resend invite", error);
+    console.error("Failed to resend invite");
     const message =
       error.response?.data?.detail ||
       error.response?.data?.message ||

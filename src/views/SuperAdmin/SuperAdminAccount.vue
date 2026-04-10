@@ -85,7 +85,7 @@ onMounted(async () => {
     }
     profileImageUrl.value = userData.profile || null;
   } catch (error) {
-    console.error("Failed to fetch user details:", error);
+    console.error("Failed to fetch user details");
   } finally {
     isLoading.value = false;
   }

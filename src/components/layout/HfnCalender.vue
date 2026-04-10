@@ -39,7 +39,7 @@ const eventThumb4 = 'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v17697
 
     events.value = [...events.value, ...mappedApiEvents];
   } catch (error) {
-    console.error("Failed to fetch API events:", error);
+    console.error("Failed to fetch API events");
   }
 };
 
@@ -49,7 +49,7 @@ const registerForEvent = async (event) => {
     toast.success("RSVP successful!");
     showRsvpModal.value = false;
   } catch (error) {
-    console.error("RSVP failed:", error);
+    console.error("RSVP failed");
     console.log("Failed to RSVP. Please try again.");
   }
 };

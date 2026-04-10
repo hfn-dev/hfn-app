@@ -178,7 +178,7 @@ const handleSubmit = async () => {
 
     Object.keys(form).forEach((key) => (form[key] = ""));
   } catch (error) {
-    console.error("Failed to create event:", error);
+    console.error("Failed to create event");
   } finally {
     loading.value = false;
   }

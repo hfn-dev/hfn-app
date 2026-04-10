@@ -6,7 +6,7 @@ export default {
       const response = await api.get('/events/', { params });
       return response.data;
     } catch (error) {
-      console.error('List events API error:', error);
+      console.error('List events API error');
       throw error;
     }
   },
@@ -16,7 +16,7 @@ export default {
       const response = await api.get(`/events/${slug}/`);
       return response.data;
     } catch (error) {
-      console.error('Get event API error:', error);
+      console.error('Get event API error');
       throw error;
     }
   },
@@ -26,7 +26,7 @@ export default {
       const response = await api.post(`/events/${slug}/register/`, payload);
       return response.data;
     } catch (error) {
-      console.error('Create event API error:', error);
+      console.error('Create event API error');
       throw error;
     }
   },
@@ -36,7 +36,7 @@ export default {
       const response = await api.post(`/events/`, payload);
       return response.data;
     } catch (error) {
-      console.error('Create event API error:', error);
+      console.error('Create event API error');
       throw error;
     }
   },
@@ -47,7 +47,7 @@ export default {
       const response = await api.put(`/events/${id}/`, payload);
       return response.data;
     } catch (error) {
-      console.error('Update event API error:', error);
+      console.error('Update event API error');
       throw error;
     }
   },
@@ -57,7 +57,7 @@ export default {
       const response = await api.delete(`/events/${slug}/`);
       return response.data;
     } catch (error) {
-      console.error('Delete event API error:', error);
+      console.error('Delete event API error');
       throw error;
     }
   },
@@ -67,7 +67,7 @@ export default {
       const response = await api.get('/events/event-galleries/', { params });
       return response.data;
     } catch (error) {
-      console.error('List event galleries API error:', error);
+      console.error('List event galleries API error');
       throw error;
     }
   },
@@ -77,7 +77,7 @@ export default {
       const response = await api.get(`/events/event-galleries/${id}/`);
       return response.data;
     } catch (error) {
-      console.error('Get event gallery API error:', error);
+      console.error('Get event gallery API error');
       throw error;
     }
   },
@@ -87,7 +87,7 @@ export default {
       const response = await api.post('/events/event-galleries/', payload);
       return response.data;
     } catch (error) {
-      console.error('Create event gallery API error:', error);
+      console.error('Create event gallery API error');
       throw error;
     }
   },
@@ -97,7 +97,7 @@ export default {
       const response = await api.delete(`/events/event-galleries/${id}/`);
       return response.data;
     } catch (error) {
-      console.error('Delete event gallery API error:', error);
+      console.error('Delete event gallery API error');
       throw error;
     }
   },
@@ -109,7 +109,7 @@ export default {
       });
       return response.data;
     } catch (error) {
-      console.error('List event registrations API error:', error);
+      console.error('List event registrations API error');
       throw error;
     }
   },
@@ -119,7 +119,7 @@ export default {
       const response = await api.get(`/events/event-registrations/${id}/`);
       return response.data;
     } catch (error) {
-      console.error('Get event registration API error:', error);
+      console.error('Get event registration API error');
       throw error;
     }
   },
@@ -129,7 +129,7 @@ export default {
       const response = await api.post('/events/event-registrations/', payload);
       return response.data;
     } catch (error) {
-      console.error('Create event registration API error:', error);
+      console.error('Create event registration API error');
       throw error;
     }
   },
@@ -142,7 +142,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('Update event registration API error:', error);
+      console.error('Update event registration API error');
       throw error;
     }
   },
@@ -152,7 +152,7 @@ export default {
       const response = await api.delete(`/events/event-registrations/${id}/`);
       return response.data;
     } catch (error) {
-      console.error('Delete event registration API error:', error);
+      console.error('Delete event registration API error');
       throw error;
     }
   },
@@ -164,7 +164,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('Get my registrations API error:', error);
+      console.error('Get my registrations API error');
       throw error;
     }
   },
@@ -174,7 +174,7 @@ export default {
       const response = await api.get('/events/event-payments/', { params });
       return response.data;
     } catch (error) {
-      console.error('List event payments API error:', error);
+      console.error('List event payments API error');
       throw error;
     }
   },
@@ -184,7 +184,7 @@ export default {
       const response = await api.get(`/events/event-payments/${id}/`);
       return response.data;
     } catch (error) {
-      console.error('Get event payment API error:', error);
+      console.error('Get event payment API error');
       throw error;
     }
   },
@@ -197,7 +197,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('Initiate event payment API error:', error);
+      console.error('Initiate event payment API error');
       throw error;
     }
   },
@@ -210,7 +210,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('Verify event payment API error:', error);
+      console.error('Verify event payment API error');
       throw error;
     }
   },
@@ -219,7 +219,7 @@ export default {
       const response = await api.post(`/events/${slug}/rsvp/`, {});
       return response.data;
     } catch (error) {
-      console.error('Create event API error:', error);
+      console.error('Create event API error');
       throw error;
     }
   },

@@ -365,7 +365,7 @@ const fetchDashboardData = async () => {
       toast.error("Failed to load dashboard data");
     }
   } catch (error) {
-    console.error("Dashboard fetch error:", error);
+    console.error("Dashboard fetch error");
     toast.error("Failed to load dashboard data. Please try again.");
   } finally {
     isLoading.value = false;

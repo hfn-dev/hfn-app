@@ -6,7 +6,7 @@ export default {
       const response = await api.get('/pages/');
       return response.data;
     } catch (error) {
-      console.error('List Pages API error:', error);
+      console.error('List Pages API error');
       throw error;
     }
   },
@@ -16,7 +16,7 @@ export default {
       const response = await api.get(`/pages/${pageType}/`);
       return response.data;
     } catch (error) {
-      console.error('Get Page By Type API error:', error);
+      console.error('Get Page By Type API error');
       throw error;
     }
   },
@@ -26,7 +26,7 @@ export default {
       const response = await api.post('/pages/', payload);
       return response.data;
     } catch (error) {
-      console.error('Create Page API error:', error);
+      console.error('Create Page API error');
       throw error;
     }
   },
@@ -36,7 +36,7 @@ export default {
       const response = await api.put(`/pages/${pageType}/`, payload);
       return response.data;
     } catch (error) {
-      console.error('Update Page API error:', error);
+      console.error('Update Page API error');
       throw error;
     }
   },
@@ -46,7 +46,7 @@ export default {
       const response = await api.patch(`/pages/${pageType}/`, payload);
       return response.data;
     } catch (error) {
-      console.error('Partial Update Page API error:', error);
+      console.error('Partial Update Page API error');
       throw error;
     }
   },
@@ -56,7 +56,7 @@ export default {
       const response = await api.post(`/pages/${pageType}/publish/`, {});
       return response.data;
     } catch (error) {
-      console.error('Publish Page API error:', error);
+      console.error('Publish Page API error');
       throw error;
     }
   },
@@ -69,7 +69,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('Page Visibility API error:', error);
+      console.error('Page Visibility API error');
       throw error;
     }
   },
@@ -79,7 +79,7 @@ export default {
       const response = await api.delete(`/pages/${pageType}/`);
       return response.data;
     } catch (error) {
-      console.error('Delete Page API error:', error);
+      console.error('Delete Page API error');
       throw error;
     }
   },

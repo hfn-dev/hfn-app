@@ -153,7 +153,7 @@ const fetchDirectoryUsers = async (letter = null, search = "", page = 1) => {
       };
     });
   } catch (error) {
-    console.error("Error fetching directory users:", error);
+    console.error("Error fetching directory users");
     toast.error("Failed to load directory users");
   } finally {
     isLoading.value.directory = false;
@@ -238,7 +238,7 @@ const fetchPendingConnections = async () => {
       };
     });
   } catch (error) {
-    console.error("Error fetching pending connections:", error);
+    console.error("Error fetching pending connections");
     toast.error("Failed to load connection requests");
   } finally {
     isLoading.value.connections = false;
@@ -280,7 +280,7 @@ const fetchConnections = async () => {
       (c) => c.status === "accepted"
     );
   } catch (error) {
-    console.error("Error fetching connections:", error);
+    console.error("Error fetching connections");
     toast.error("Failed to load connections");
   } finally {
     isLoading.value.connections = false;
@@ -317,7 +317,7 @@ const fetchNotifications = async () => {
       isRead: notif.is_read,
     }));
   } catch (error) {
-    console.error("Error fetching notifications:", error);
+    console.error("Error fetching notifications");
     toast.error("Failed to load notifications");
   } finally {
     isLoading.value.notifications = false;
@@ -329,7 +329,7 @@ const fetchUnreadCount = async () => {
     const response = await messagingApi.getUnreadCount();
     unreadCount.value = response.count;
   } catch (error) {
-    console.error("Error fetching unread count:", error);
+    console.error("Error fetching unread count");
   }
 };
 
@@ -349,7 +349,7 @@ const fetchGroups = async () => {
       isMember: group.is_member,
     }));
   } catch (error) {
-    console.error("Error fetching groups:", error);
+    console.error("Error fetching groups");
     toast.error("Failed to load groups");
   } finally {
     isLoading.value.groups = false;
@@ -372,7 +372,7 @@ const fetchConversations = async () => {
       lastMessageTime: conv.created_at,
     }));
   } catch (error) {
-    console.error("Error fetching conversations:", error);
+    console.error("Error fetching conversations");
     toast.error("Failed to load conversations");
   } finally {
     isLoading.value.messages = false;
@@ -465,7 +465,7 @@ const sendConnectionRequest = async (userId) => {
       directoryUsers.value[userIndex].status = "pending";
     }
   } catch (error) {
-    console.error("Error sending connection request:", error);
+    console.error("Error sending connection request");
     toast.error("Failed to send connection request");
   }
 };
@@ -484,7 +484,7 @@ const acceptConnectionRequest = async (requestId) => {
       directoryPagination.value.page
     );
   } catch (error) {
-    console.error("Error accepting connection request:", error);
+    console.error("Error accepting connection request");
     toast.error("Failed to accept connection request");
   }
 };
@@ -502,7 +502,7 @@ const declineConnectionRequest = async (requestId) => {
       directoryPagination.value.page
     );
   } catch (error) {
-    console.error("Error declining connection request:", error);
+    console.error("Error declining connection request");
     toast.error("Failed to decline connection request");
   }
 };
@@ -515,7 +515,7 @@ const acceptAdminRequest = async (notification) => {
       (n) => n.id !== notification.id
     );
   } catch (error) {
-    console.error("Error accepting admin request:", error);
+    console.error("Error accepting admin request");
     toast.error("Failed to accept admin request");
   }
 };
@@ -548,7 +548,7 @@ const declineAdminRequest = async (notification) => {
       (n) => n.id !== notification.id
     );
   } catch (error) {
-    console.error("Error declining admin request:", error);
+    console.error("Error declining admin request");
     toast.error("Failed to decline admin request");
   }
 };
@@ -626,7 +626,7 @@ const markMessageAsRead = async (messageId) => {
   try {
     await messagingApi.markMessageAsRead(messageId);
   } catch (error) {
-    console.error("Error marking message as read:", error);
+    console.error("Error marking message as read");
   }
 };
 
@@ -639,7 +639,7 @@ const markNotificationAsRead = async (notificationId) => {
     }
     fetchUnreadCount();
   } catch (error) {
-    console.error("Error marking notification as read:", error);
+    console.error("Error marking notification as read");
   }
 };
 
@@ -659,7 +659,7 @@ const dismissNotification = async (notificationId) => {
 
     toast.success("Notification removed");
   } catch (error) {
-    console.error("Error removing notification:", error);
+    console.error("Error removing notification");
     toast.error("Failed to remove notification");
   }
 };
@@ -758,7 +758,7 @@ const joinGroup = async (group) => {
     await fetchGroups();
 
   } catch (error) {
-    console.error("Join group failed:", error);
+    console.error("Join group failed");
     toast.error("Failed to join group");
   }
 };
@@ -777,7 +777,7 @@ const leaveGroup = async (group) => {
     }
 
   } catch (error) {
-    console.error("Leave group failed:", error);
+    console.error("Leave group failed");
     toast.error("Failed to leave group");
   }
 };

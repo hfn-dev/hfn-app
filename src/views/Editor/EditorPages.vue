@@ -412,7 +412,7 @@ watch(activePage, (page) => {
 <template>
   <div class="flex min-h-screen font-sans">
     <EditorSidebar />
-    <div class="flex-grow p-6 bg-white border-0">
+    <div class="flex-1 p-6 bg-white border-0 min-w-0">
       <nav class="mb-6 text-sm text-gray-500">
         <a href="#" class="hover:underline">Home</a>
         <span class="mx-1">></span>

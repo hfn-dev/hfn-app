@@ -7,7 +7,7 @@ export default {
       const response = await api.post("/access/roles/change/", payload);
       return response.data;
     } catch (error) {
-      console.error("Change user role API error:", error);
+      console.error("Change user role API error");
       throw error;
     }
   },
@@ -17,7 +17,7 @@ export default {
       const response = await api.post("/access/roles/remove/", payload);
       return response.data;
     } catch (error) {
-      console.error("Remove user role API error:", error);
+      console.error("Remove user role API error");
       throw error;
     }
   },
@@ -27,7 +27,7 @@ export default {
       const response = await api.post(`/access/invites/${id}/revoke/`);
       return response.data;
     } catch (error) {
-      console.error("Revoke user role API error:", error);
+      console.error("Revoke user role API error");
       throw error;
     }
   },
@@ -38,7 +38,7 @@ export default {
       const response = await api.get("/access/roles/history/", { params });
       return response.data;
     } catch (error) {
-      console.error("View role history API error:", error);
+      console.error("View role history API error");
       throw error;
     }
   },
@@ -48,7 +48,7 @@ export default {
       const response = await api.post("/access/invites/create/", payload);
       return response.data;
     } catch (error) {
-      console.error("Create role invite API error:", error);
+      console.error("Create role invite API error");
       throw error;
     }
   },
@@ -58,7 +58,7 @@ export default {
       const response = await api.get("/access/invites/", { params });
       return response.data;
     } catch (error) {
-      console.error("List role invites API error:", error);
+      console.error("List role invites API error");
       throw error;
     }
   },
@@ -70,7 +70,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error("Resend role invite API error:", error);
+      console.error("Resend role invite API error");
       throw error;
     }
   },
@@ -80,7 +80,7 @@ export default {
       const response = await api.post("/access/invites/accept/", payload);
       return response.data;
     } catch (error) {
-      console.error("Accept role invite API error:", error);
+      console.error("Accept role invite API error");
       throw error;
     }
   },
@@ -90,7 +90,7 @@ export default {
       const response = await api.get(`/access/invites/accept/${token}/`);
       return response.data;
     } catch (error) {
-      console.error("Accept role invite by token API error:", error);
+      console.error("Accept role invite by token API error");
       throw error;
     }
   },
@@ -100,7 +100,7 @@ export default {
       const response = await api.post("/access/invites/decline/", payload);
       return response.data;
     } catch (error) {
-      console.error("Decline role invite API error:", error);
+      console.error("Decline role invite API error");
       throw error;
     }
   },
@@ -110,7 +110,7 @@ export default {
       const response = await api.get("/access/logs/", { params });
       return response.data;
     } catch (error) {
-      console.error("View access logs API error:", error);
+      console.error("View access logs API error");
       throw error;
     }
   },

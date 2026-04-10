@@ -6,7 +6,7 @@ export default {
       const response = await api.get("/executives/", { params });
       return response.data;
     } catch (error) {
-      console.error("List executives API error:", error);
+      console.error("List executives API error");
       throw error;
     }
   },
@@ -16,7 +16,7 @@ export default {
       const response = await api.get(`/executives/${id}/`);
       return response.data;
     } catch (error) {
-      console.error("Get executive API error:", error);
+      console.error("Get executive API error");
       throw error;
     }
   },
@@ -26,7 +26,7 @@ export default {
       const response = await api.post("/executives/", payload);
       return response.data;
     } catch (error) {
-      console.error("Create executive API error:", error);
+      console.error("Create executive API error");
       throw error;
     }
   },
@@ -36,7 +36,7 @@ export default {
       const response = await api.put(`/executives/${id}/`, payload);
       return response.data;
     } catch (error) {
-      console.error("Update executive API error:", error);
+      console.error("Update executive API error");
       throw error;
     }
   },
@@ -46,7 +46,7 @@ export default {
       const response = await api.patch(`/executives/${id}/`, payload);
       return response.data;
     } catch (error) {
-      console.error("Partial update executive API error:", error);
+      console.error("Partial update executive API error");
       throw error;
     }
   },
@@ -58,7 +58,7 @@ export default {
       });
       return response.data;
     } catch (error) {
-      console.error("Hide executive API error:", error);
+      console.error("Hide executive API error");
       throw error;
     }
   },
@@ -68,7 +68,7 @@ export default {
       const response = await api.delete(`/executives/${id}/`);
       return response.data;
     } catch (error) {
-      console.error("Delete executive API error:", error);
+      console.error("Delete executive API error");
       throw error;
     }
   },

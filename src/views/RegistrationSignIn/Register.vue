@@ -41,6 +41,7 @@ const membershipCategories = ref([
     id: 1,
     name: "Individual",
     type: "individual",
+    value: "individual",
     amount: 50000,
     currency: "NGN",
   },
@@ -48,6 +49,7 @@ const membershipCategories = ref([
     id: 2,
     name: "Association",
     type: "organization",
+    value: "association",
     amount: 150000,
     currency: "NGN",
   },
@@ -55,6 +57,7 @@ const membershipCategories = ref([
     id: 3,
     name: "Corporate",
     type: "organization",
+    value: "corporate",
     amount: 200000,
     currency: "NGN",
   },
@@ -62,6 +65,7 @@ const membershipCategories = ref([
     id: 4,
     name: "Multinational",
     type: "organization",
+    value: "multinational",
     amount: 750000,
     currency: "NGN",
   },
@@ -69,6 +73,7 @@ const membershipCategories = ref([
     id: 5,
     name: "Diaspora (Individual)",
     type: "individual",
+    value: "diaspora_individual",
     amount: 50,
     currency: "USD",
   },
@@ -76,6 +81,7 @@ const membershipCategories = ref([
     id: 6,
     name: "Diaspora (Organization)",
     type: "organization",
+    value: "diaspora_organization",
     amount: 100,
     currency: "USD",
   },
@@ -148,7 +154,7 @@ const prepareOrganizationPayload = () => {
     contact_person: form.value.organizationContactPerson.trim(),
     phone_number: formatPhoneNumber(form.value.phone),
     password: form.value.password,
-    member_category: selectedCategory.value.name,
+    member_category: selectedCategory.value.value,
     role: "learner",
   };
 };
@@ -160,7 +166,7 @@ const prepareIndividualPayload = () => {
     last_name: form.value.lastName.trim(),
     phone_number: formatPhoneNumber(form.value.phone),
     password: form.value.password,
-    member_category: selectedCategory.value.name,
+    member_category: selectedCategory.value.value,
     role: "learner",
 
     professional_background: form.value.professionalBackground.trim(),
@@ -269,45 +275,27 @@ const handleRegistration = async () => {
     isLoading.value = true;
 
     let payload;
+    let response;
 
     if (activeTab.value === "individual") {
       payload = prepareIndividualPayload();
-        response = await userRegister.createApplication(payload);
+      response = await userRegister.createApplication(payload);
     } else {
       payload = prepareOrganizationPayload();
-        response = await userRegister.createUser(payload);
+      response = await userRegister.createUser(payload);
     }
-
-    // const response = await userRegister.createUser(payload);
 
     if (response.status === "success") {
       toast.success(response.messages?.[0] || "Registration successful!");
 
-      if (activeTab.value === "individual") {
-        showSuccessDialog.value = true;
-
-        form.value = {
-          firstName: "",
-          otherName: "",
-          lastName: "",
-          phone: "",
-          alternatePhone: "",
-          email: "",
-          confirmEmail: "",
-          password: "",
-          confirmPassword: "",
-          organizationName: "",
-          organizationContactPerson: "",
-
-          professionalBackground: "",
-          healthcareInterest: "",
-          statementOfInterest: "",
-        };
-
+      if (response.actions_required?.includes("verify_email")) {
+        localStorage.setItem("pendingVerificationEmail", payload.email);
+        router.push("/signinverification");
+        isLoading.value = false;
         return;
       }
 
-      if (activeTab.value === "organization") {
+      if (response.actions_required?.includes("make_payment")) {
         if (selectedCategory.value) {
           localStorage.setItem(
             "membership_payment",
@@ -320,28 +308,40 @@ const handleRegistration = async () => {
             })
           );
         }
-
         router.push("/registration-payment");
-      }
-
-      if (response.actions_required?.includes("verify_email")) {
-        localStorage.setItem("pendingVerificationEmail", payload.email);
-        router.push("/signinverification");
-        return;
-      }
-
-      if (response.actions_required?.includes("make_payment")) {
-        router.push("/registration-payment");
+        isLoading.value = false;
         return;
       }
 
       if (response.actions_required?.includes("reset_password")) {
-  resetEmail.value = payload.email;
-  showForgotPasswordDialog.value = true;
-  return;
-}
+        resetEmail.value = payload.email;
+        showForgotPasswordDialog.value = true;
+        isLoading.value = false;
+        return;
+      }
 
-      // fallback
+      if (activeTab.value === "individual") {
+        showSuccessDialog.value = true;
+        form.value = {
+          firstName: "",
+          otherName: "",
+          lastName: "",
+          phone: "",
+          alternatePhone: "",
+          email: "",
+          confirmEmail: "",
+          password: "",
+          confirmPassword: "",
+          organizationName: "",
+          organizationContactPerson: "",
+          professionalBackground: "",
+          healthcareInterest: "",
+          statementOfInterest: "",
+        };
+        isLoading.value = false;
+        return;
+      }
+
       router.push("/signin");
     } else {
       const errorMessage =
@@ -349,7 +349,7 @@ const handleRegistration = async () => {
       showCustomAlert(errorMessage, "error");
     }
   } catch (error) {
-    console.error("Registration error:", error);
+    console.error("Registration error");
 
     if (error.response) {
       const data = error.response.data;

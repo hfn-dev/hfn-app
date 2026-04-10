@@ -1,7 +1,9 @@
 <script setup>
 import globe from "@/assets/globe.png";
-import { ref } from "vue";
+import { ref, computed, onMounted } from "vue";
 import contactApi from "@/api/userRegister";
+import pagesApi from "@/api/pageManagement";
+import { contactPageSchema } from "@/schemas/pages/contact.schema";
 
 const form = ref({
   name: "",
@@ -13,6 +15,42 @@ const form = ref({
 const loading = ref(false);
 const successMessage = ref("");
 const errorMessage = ref("");
+const loadingPage = ref(true);
+const pageFromApi = ref(null);
+
+onMounted(async () => {
+  try {
+    const res = await pagesApi.getPageByType("contact");
+    pageFromApi.value = res?.content || null;
+  } catch (e) {
+    console.warn("Using local Contact schema fallback");
+  } finally {
+    loadingPage.value = false;
+  }
+});
+
+const page = computed(() => {
+  return {
+    ...contactPageSchema,
+    ...(pageFromApi.value || {}),
+    hero: {
+      ...contactPageSchema.hero,
+      ...(pageFromApi.value?.hero || {}),
+    },
+    form: {
+      ...contactPageSchema.form,
+      ...(pageFromApi.value?.form || {}),
+    },
+    contactDetails: {
+      ...contactPageSchema.contactDetails,
+      ...(pageFromApi.value?.contactDetails || {}),
+    },
+    map: {
+      ...contactPageSchema.map,
+      ...(pageFromApi.value?.map || {}),
+    },
+  };
+});
 
 const submitForm = async () => {
   loading.value = true;
@@ -43,7 +81,7 @@ const submitForm = async () => {
 
 <template>
   <div>
-    <section class="bg-[#F2F9F3] py-16 lg:py-24">
+    <section class="bg-[#F2F9F3] py-16 lg:py-24" :class="page.hero.backgroundColor || 'bg-[#F2F9F3]'">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center py-16">
           <div class="mb-12 lg:mb-0">
@@ -55,23 +93,21 @@ const submitForm = async () => {
               ></span>
               <span
                 class="text-orange-600 text-xs font-bold uppercase tracking-widest"
-                >Connect With Us</span
+                >{{ page.hero.badgeText || 'Connect With Us' }}</span
               >
             </div>
 
             <h2
               class="text-4xl lg:text-6xl font-black mb-6 text-[#004d33] leading-[1.1]"
             >
-              Get in touch with <br />
-              <span class="text-gray-900">HFN Nigeria</span>
+              {{ page.hero.headline?.line1 || 'Get in touch with' }} <br />
+              <span class="text-gray-900">{{ page.hero.headline?.line2 || 'HFN Nigeria' }}</span>
             </h2>
 
             <p
               class="mt-2 text-lg md:text-xl font-medium text-gray-600 leading-relaxed border-l-4 border-[#004d33] pl-6"
             >
-              Healthcare Federation of Nigeria (HFN) welcomes enquiries from
-              members, partners, policymakers, development organisations, media,
-              and individuals interested in engaging with our work.
+              {{ page.hero.subheadline || 'Healthcare Federation of Nigeria (HFN) welcomes enquiries from members, partners, policymakers, development organisations, media, and individuals interested in engaging with our work.' }}
             </p>
 
             <div class="mt-8 flex items-center gap-4">
@@ -83,7 +119,7 @@ const submitForm = async () => {
                 ></div>
               </div>
               <p class="text-sm text-gray-500 font-semibold">
-                Our team typically responds within 24 hours.
+                {{ page.hero.responseNote || 'Our team typically responds within 24 hours.' }}
               </p>
             </div>
           </div>
@@ -112,13 +148,11 @@ const submitForm = async () => {
           <h2
             class="text-3xl px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md sm:text-4xl font-sans font-extrabold text-gray-900 mb-2"
           >
-            Contact Us
+            {{ page.form?.title || 'Contact Us' }}
           </h2>
           <p class="text-gray-500 max-w-2xl mx-auto mt-5">
             <br class="hidden sm:block" />
-            Whether you are seeking information about membership, partnerships,
-            events, advocacy, or general enquiries, our team is available to
-            assist.
+            {{ page.form?.description || 'Whether you are seeking information about membership, partnerships, events, advocacy, or general enquiries, our team is available to assist.' }}
           </p>
         </div>
 
@@ -253,8 +287,7 @@ const submitForm = async () => {
                 ></path>
               </svg>
               <p class="text-gray-700 text-base">
-                109, Awolowo Road, Ikoyi, Opposite Standard Chartered Bank,
-                Lagos.
+                {{ page.contactDetails?.address?.text || '109, Awolowo Road, Ikoyi, Opposite Standard Chartered Bank, Lagos.' }}
               </p>
             </div>
 
@@ -273,7 +306,7 @@ const submitForm = async () => {
                   d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                 ></path>
               </svg>
-              <p class="text-gray-700 text-base">info@hfnigeria.com</p>
+              <p class="text-gray-700 text-base">{{ page.contactDetails?.emails?.[0]?.address || 'info@hfnigeria.com' }}</p>
             </div>
 
             <div class="flex items-center">
@@ -291,7 +324,7 @@ const submitForm = async () => {
                   d="M16 3h2a2 2 0 012 2v2M16 21h2a2 2 0 002-2v-2M4 21h2a2 2 0 002-2v-2M4 3h2a2 2 0 012 2v2m0 0h8m-8 0H8m0 0a2 2 0 012-2h4a2 2 0 012 2m-2-5v14"
                 ></path>
               </svg>
-              <p class="text-gray-700 text-base">+234 803 975 3274</p>
+              <p class="text-gray-700 text-base">{{ page.contactDetails?.phone || '+234 803 975 3274' }}</p>
             </div>
             <div class="pt-4 border-t border-green-100 space-y-4">
               <h3 class="text-lg font-semibold text-gray-800 flex items-center">
