@@ -9,7 +9,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('Send connection request API error:', error);
+      console.error('Send connection request API error');
       throw error;
     }
   },
@@ -19,7 +19,7 @@ export default {
       const response = await api.get('/messaging/connections/', { params });
       return response.data;
     } catch (error) {
-      console.error('List connections API error:', error);
+      console.error('List connections API error');
       throw error;
     }
   },
@@ -31,7 +31,7 @@ export default {
       });
       return response.data;
     } catch (error) {
-      console.error('Get pending connections API error:', error);
+      console.error('Get pending connections API error');
       throw error;
     }
   },
@@ -44,7 +44,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('Accept connection request API error:', error);
+      console.error('Accept connection request API error');
       throw error;
     }
   },
@@ -57,7 +57,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('Decline connection request API error:', error);
+      console.error('Decline connection request API error');
       throw error;
     }
   },
@@ -67,7 +67,7 @@ export default {
       const response = await api.post(`/messaging/connections/${id}/block/`);
       return response.data;
     } catch (error) {
-      console.error('Block user API error:', error);
+      console.error('Block user API error');
       throw error;
     }
   },
@@ -77,7 +77,7 @@ export default {
       const response = await api.post('/messaging/messages/', payload);
       return response.data;
     } catch (error) {
-      console.error('Send message API error:', error);
+      console.error('Send message API error');
       throw error;
     }
   },
@@ -89,7 +89,7 @@ export default {
       });
       return response.data;
     } catch (error) {
-      console.error('Get messages with user API error:', error);
+      console.error('Get messages with user API error');
       throw error;
     }
   },
@@ -101,7 +101,7 @@ export default {
       });
       return response.data;
     } catch (error) {
-      console.error('Get conversations API error:', error);
+      console.error('Get conversations API error');
       throw error;
     }
   },
@@ -111,7 +111,7 @@ export default {
       const response = await api.patch(`/messaging/messages/${id}/read/`, {});
       return response.data;
     } catch (error) {
-      console.error('Mark message as read API error:', error);
+      console.error('Mark message as read API error');
       throw error;
     }
   },
@@ -121,7 +121,7 @@ export default {
       const response = await api.get('/messaging/groups/', { params });
       return response.data;
     } catch (error) {
-      console.error('List groups API error:', error);
+      console.error('List groups API error');
       throw error;
     }
   },
@@ -131,7 +131,7 @@ export default {
       const response = await api.post('/messaging/groups/', payload);
       return response.data;
     } catch (error) {
-      console.error('Create group API error:', error);
+      console.error('Create group API error');
       throw error;
     }
   },
@@ -141,7 +141,7 @@ export default {
       const response = await api.get(`/messaging/groups/${id}/`);
       return response.data;
     } catch (error) {
-      console.error('Get group details API error:', error);
+      console.error('Get group details API error');
       throw error;
     }
   },
@@ -151,7 +151,7 @@ export default {
       const response = await api.post(`/messaging/groups/${id}/join/`, {});
       return response.data;
     } catch (error) {
-      console.error('Join group API error:', error);
+      console.error('Join group API error');
       throw error;
     }
   },
@@ -161,7 +161,7 @@ export default {
       const response = await api.post(`/messaging/groups/${id}/leave/`, {});
       return response.data;
     } catch (error) {
-      console.error('Leave group API error:', error);
+      console.error('Leave group API error');
       throw error;
     }
   },
@@ -174,7 +174,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('Remove group member API error:', error);
+      console.error('Remove group member API error');
       throw error;
     }
   },
@@ -187,7 +187,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('Send group message API error:', error);
+      console.error('Send group message API error');
       throw error;
     }
   },
@@ -197,7 +197,7 @@ export default {
       const response = await api.get(`/messaging/groups/${group_id}/messages/`);
       return response.data;
     } catch (error) {
-      console.error('Get group messages API error:', error);
+      console.error('Get group messages API error');
       throw error;
     }
   },
@@ -207,7 +207,7 @@ export default {
       const response = await api.get('/messaging/forums/', { params });
       return response.data;
     } catch (error) {
-      console.error('List forums API error:', error);
+      console.error('List forums API error');
       throw error;
     }
   },
@@ -217,7 +217,7 @@ export default {
       const response = await api.post('/messaging/forums/', payload);
       return response.data;
     } catch (error) {
-      console.error('Create forum API error:', error);
+      console.error('Create forum API error');
       throw error;
     }
   },
@@ -227,7 +227,7 @@ export default {
       const response = await api.post('/messaging/posts/', payload);
       return response.data;
     } catch (error) {
-      console.error('Create forum post API error:', error);
+      console.error('Create forum post API error');
       throw error;
     }
   },
@@ -237,7 +237,7 @@ export default {
       const response = await api.get(`/messaging/posts/${id}/`);
       return response.data;
     } catch (error) {
-      console.error('Get post details API error:', error);
+      console.error('Get post details API error');
       throw error;
     }
   },
@@ -250,7 +250,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('Reply to post API error:', error);
+      console.error('Reply to post API error');
       throw error;
     }
   },
@@ -260,7 +260,7 @@ export default {
       const response = await api.post(`/messaging/posts/${id}/pin/`);
       return response.data;
     } catch (error) {
-      console.error('Pin post API error:', error);
+      console.error('Pin post API error');
       throw error;
     }
   },
@@ -270,7 +270,7 @@ export default {
       const response = await api.post(`/messaging/posts/${id}/lock/`);
       return response.data;
     } catch (error) {
-      console.error('Lock post API error:', error);
+      console.error('Lock post API error');
       throw error;
     }
   },
@@ -280,7 +280,7 @@ export default {
       const response = await api.get('/messaging/notifications/', { params });
       return response.data;
     } catch (error) {
-      console.error('List notifications API error:', error);
+      console.error('List notifications API error');
       throw error;
     }
   },
@@ -292,7 +292,7 @@ export default {
       });
       return response.data;
     } catch (error) {
-      console.error('List unread notifications API error:', error);
+      console.error('List unread notifications API error');
       throw error;
     }
   },
@@ -302,7 +302,7 @@ export default {
       const response = await api.get('/messaging/notifications/unread_count/');
       return response.data;
     } catch (error) {
-      console.error('Get unread notifications count API error:', error);
+      console.error('Get unread notifications count API error');
       throw error;
     }
   },
@@ -315,7 +315,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('Mark notification as read API error:', error);
+      console.error('Mark notification as read API error');
       throw error;
     }
   },
@@ -339,7 +339,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('Dismiss notification API error:', error);
+      console.error('Dismiss notification API error');
       throw error;
     }
   },
@@ -349,7 +349,7 @@ export default {
       const response = await api.get('/messaging/notifications/preferences/');
       return response.data;
     } catch (error) {
-      console.error('Get notification preferences API error:', error);
+      console.error('Get notification preferences API error');
       throw error;
     }
   },
@@ -362,7 +362,7 @@ export default {
       );
       return response.data;
     } catch (error) {
-      console.error('Update notification preferences API error:', error);
+      console.error('Update notification preferences API error');
       throw error;
     }
   },
@@ -371,7 +371,7 @@ export default {
       const response = await api.delete(`/messaging/notifications/${id}/`);
       return response.data;
     } catch (error) {
-      console.error('Dismiss notification API error:', error);
+      console.error('Dismiss notification API error');
       throw error;
     }
   },
@@ -380,7 +380,7 @@ export default {
       const response = await api.delete(`/messaging/groups/${id}/`);
       return response.data;
     } catch (error) {
-      console.error('Delete group API error:', error);
+      console.error('Delete group API error');
       throw error;
     }
   },
@@ -389,7 +389,7 @@ export default {
       const response = await api.post('/messaging/notifications/broadcast_unpaid_subscriptions/');
       return response.data;
     } catch (error) {
-      console.error('Message API error:', error);
+      console.error('Message API error');
       throw error;
     }
   },

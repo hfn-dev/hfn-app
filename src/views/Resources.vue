@@ -1,6 +1,6 @@
 <template>
   <div class="news-page font-sans bg-white">
-    <section class="bg-[#E87A1814] pt-10 pb-16">
+    <section class="bg-[#E87A1814] pt-10 pb-16" :style="{ backgroundColor: page.hero.backgroundColor || '#E87A1814' }">
       <div class="container mx-auto px-4 md:px-8">
         <div
           class="flex flex-col lg:flex-row items-start lg:items-center justify-between"
@@ -9,16 +9,14 @@
             <h1
               class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight"
             >
-              <span class="text-green-700">Stay Informed:</span>
+              <span class="text-green-700">{{ page.hero.titleLine1 }}</span>
               <br />
               <span class="text-gray-900"
-                >Latest Healthcare News & Updates</span
+                >{{ page.hero.titleLine2 }}</span
               >
             </h1>
             <p class="mt-4 text-gray-600 max-w-lg">
-              Get the latest insights, announcements, and policy developments
-              from the Healthcare Federation of Nigeria and across the health
-              sector.
+              {{ page.hero.description }}
             </p>
           </div>
 
@@ -26,7 +24,7 @@
             class="lg:w-1/2 flex justify-center w-full h-64 sm:h-80 lg:h-96 relative"
           >
             <img
-              :src="latest"
+              :src="resolveImage(page.hero.image)"
               alt="Latest news and updates"
               class="object-cover w-full h-full rounded-lg"
             />
@@ -308,11 +306,12 @@
 <script setup>
 import contentUploadApi from "@/api/contentUploadsApi";
 import postDownload from "@/api/memberResources";
+import pagesApi from "@/api/pageManagement";
 import hands from "@/assets/hands.png";
 import newsletter_placeholder from "@/assets/newsletter-placeholder.png";
-
 import latest from "@/assets/latest_news.png";
-import { onMounted, ref } from "vue";
+import { resourcesPageSchema } from "@/schemas/pages/resources.schema";
+import { computed, onMounted, ref } from "vue";
 import { useToast } from "vue-toastification";
 
 const newsletters = ref([]);
@@ -320,6 +319,8 @@ const publications = ref([]);
 const showPaymentDialog = ref(false);
 const showSuccessDialog = ref(false);
 const toast = useToast();
+const loading = ref(true);
+const pageFromApi = ref(null);
 
 const selectedPublication = ref(null);
 const form = ref({
@@ -387,7 +388,7 @@ const confirmPayment = async () => {
 
     showSuccessDialog.value = true;
   } catch (error) {
-    console.error("Failed to submit form:", error);
+    console.error("Failed to submit form");
     toast.error("Failed to submit your details. Please try again.");
   }
 };
@@ -593,7 +594,7 @@ const fetchDocuments = async () => {
     // newsletters.value = [...apiNewsletters, ...dummyNewsletters];
     // publications.value = [...apiPublications, ...dummyPublications];
   } catch (error) {
-    console.error("Error fetching documents:", error);
+    console.error("Error fetching documents");
 
     newsletters.value = [...dummyNewsletters];
     publications.value = [...dummyPublications];
@@ -601,7 +602,44 @@ const fetchDocuments = async () => {
 };
 onMounted(() => {
   fetchDocuments();
+  fetchPageFromApi();
 });
+
+const fetchPageFromApi = async () => {
+  try {
+    const res = await pagesApi.getPageByType("resources");
+    pageFromApi.value = res?.content || null;
+  } catch (e) {
+    console.warn("Using local Resources schema fallback");
+  } finally {
+    loading.value = false;
+  }
+};
+
+const page = computed(() => {
+  return {
+    ...resourcesPageSchema,
+    ...(pageFromApi.value || {}),
+    hero: {
+      ...resourcesPageSchema.hero,
+      ...(pageFromApi.value?.hero || {}),
+    },
+    newsletterSection: {
+      ...resourcesPageSchema.newsletterSection,
+      ...(pageFromApi.value?.newsletterSection || {}),
+    },
+    publicationsSection: {
+      ...resourcesPageSchema.publicationsSection,
+      ...(pageFromApi.value?.publicationsSection || {}),
+    },
+  };
+});
+
+const imageMap = {
+  "latest_news.png": latest,
+};
+
+const resolveImage = (image) => imageMap[image] || image || latest;
 </script>
 
 

@@ -6,7 +6,7 @@ export default {
       const response = await api.get('/news/', { params });
       return response.data;
     } catch (error) {
-      console.error('List articles API error:', error);
+      console.error('List articles API error');
       throw error;
     }
   },
@@ -16,7 +16,7 @@ export default {
       const response = await api.get('/news/featured/');
       return response.data;
     } catch (error) {
-      console.error('Get featured articles API error:', error);
+      console.error('Get featured articles API error');
       throw error;
     }
   },
@@ -26,7 +26,7 @@ export default {
       const response = await api.get(`/news/${slug}/`);
       return response.data;
     } catch (error) {
-      console.error('Get single article API error:', error);
+      console.error('Get single article API error');
       throw error;
     }
   },
@@ -36,7 +36,7 @@ export default {
       const response = await api.post('/news/', payload);
       return response.data;
     } catch (error) {
-      console.error('Create article API error:', error);
+      console.error('Create article API error');
       throw error;
     }
   },
@@ -46,7 +46,7 @@ export default {
       const response = await api.put(`/news/${slug}/`, payload);
       return response.data;
     } catch (error) {
-      console.error('Update article API error:', error);
+      console.error('Update article API error');
       throw error;
     }
   },
@@ -56,7 +56,7 @@ export default {
       const response = await api.patch(`/news/${slug}/`, payload);
       return response.data;
     } catch (error) {
-      console.error('Partial update article API error:', error);
+      console.error('Partial update article API error');
       throw error;
     }
   },
@@ -66,7 +66,7 @@ export default {
       const response = await api.post(`/news/${slug}/publish/`, {});
       return response.data;
     } catch (error) {
-      console.error('Publish article API error:', error);
+      console.error('Publish article API error');
       throw error;
     }
   },
@@ -76,7 +76,7 @@ export default {
       const response = await api.delete(`/news/${slug}/`);
       return response.data;
     } catch (error) {
-      console.error('Delete article API error:', error);
+      console.error('Delete article API error');
       throw error;
     }
   },
@@ -86,7 +86,7 @@ export default {
       const response = await api.get(`/news/${slug}/`);
       return response.data;
     } catch (error) {
-      console.error('Delete article API error:', error);
+      console.error('Delete article API error');
       throw error;
     }
   },
@@ -95,7 +95,7 @@ export default {
       const response = await api.get('/media/newsletters/', { params });
       return response.data;
     } catch (error) {
-      console.error('List articles API error:', error);
+      console.error('List articles API error');
       throw error;
     }
   },
@@ -104,7 +104,7 @@ export default {
       const response = await api.get(`/media/newsletters/${slug}`, { params });
       return response.data;
     } catch (error) {
-      console.error('List articles API error:', error);
+      console.error('List articles API error');
       throw error;
     }
   },
@@ -113,7 +113,7 @@ export default {
       const response = await api.post('/media/newsletters/');
       return response.data;
     } catch (error) {
-      console.error('Publish article API error:', error);
+      console.error('Publish article API error');
       throw error;
     }
   },
@@ -122,7 +122,7 @@ export default {
       const response = await api.get('/media/meeting-minutes/', { params });
       return response.data;
     } catch (error) {
-      console.error('List articles API error:', error);
+      console.error('List articles API error');
       throw error;
     }
   },
@@ -131,7 +131,7 @@ export default {
       const response = await api.get(`/media/meeting-minutes/${slug}`, { params });
       return response.data;
     } catch (error) {
-      console.error('List articles API error:', error);
+      console.error('List articles API error');
       throw error;
     }
   },
@@ -140,7 +140,7 @@ export default {
       const response = await api.post('/media/meeting-minutes/');
       return response.data;
     } catch (error) {
-      console.error('Publish article API error:', error);
+      console.error('Publish article API error');
       throw error;
     }
   },

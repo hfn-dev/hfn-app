@@ -10,9 +10,8 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
-  console.log('Retrieved token:', token);
 
-  const publicRoutes = ['/account/login', '/account/register'];
+  const publicRoutes = ['/account/login', '/account/register', '/account/individual-applications/'];
 
   const isPublic = publicRoutes.some((route) => config.url.startsWith(route));
 

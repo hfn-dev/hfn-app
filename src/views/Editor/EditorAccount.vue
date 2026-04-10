@@ -50,7 +50,7 @@ const fetchUserProfile = async () => {
       individualDetails.phone = data.phone_number || "";
     }
   } catch (error) {
-    console.error("Failed to fetch user profile", error);
+    console.error("Failed to fetch user profile");
   }
 };
 

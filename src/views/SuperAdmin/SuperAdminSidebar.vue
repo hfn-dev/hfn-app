@@ -54,7 +54,12 @@ const navLinks = [
   {
     title: "Events & Newsletter",
     path: "/superadmin/events",
-  icon: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8z",
+    icon: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8z",
+  },
+  {
+    title: "Page Manager",
+    path: "/editor/pages",
+    icon: "M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20zm-1-8V7h2v5h4l-5 5-5-5h4z",
   },
   {
     title: 'Access Manager',

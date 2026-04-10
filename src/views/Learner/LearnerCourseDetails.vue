@@ -45,7 +45,7 @@ const enrollCourse = async () => {
     toast.success("Successfully enrolled!");
 
   } catch (error) {
-    console.error("Enrollment failed", error);
+    console.error("Enrollment failed");
     toast.error("Failed to enroll. Please try again.");
   } finally {
     enrolling.value = false;
@@ -74,7 +74,7 @@ const fetchEnrollment = async () => {
       (e) => e.course_slug === courseParam || e.course === courseParam
     );
   } catch (error) {
-    console.error("Failed to fetch enrollment", error);
+    console.error("Failed to fetch enrollment");
   }
 };
 
@@ -124,7 +124,7 @@ completedLessons.value.add(lessonId);
     await fetchEnrollment();
 
   } catch (error) {
-    console.error("Lesson completion failed", error);
+    console.error("Lesson completion failed");
   }
 };  
 

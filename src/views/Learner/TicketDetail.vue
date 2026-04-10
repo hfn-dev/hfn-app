@@ -32,7 +32,7 @@ const submitUpdate = async () => {
     toast.success(`Update submitted for Ticket #${props.ticket.number}.`);
     updateText.value = '';
   } catch (error) {
-    console.error('Failed to submit ticket update:', error);
+    console.error('Failed to submit ticket update');
     toast.error('Failed to submit update. Please try again later.');
   }
 };

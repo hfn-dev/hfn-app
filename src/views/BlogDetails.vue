@@ -156,8 +156,8 @@ const route = useRoute();
 const slug = computed(() => route.params.slug);
 
 const allBlogs = [
-  ...newsPageSchema.news.latestNewsSection.articles,
-  ...newsPageSchema.news.policyAdvocacySection.updates,
+  ...newsPageSchema.latestNewsSection.articles,
+  ...newsPageSchema.policyAdvocacySection.updates,
   ...Object.values(homePageSchema.news.months).flatMap((m) => m.newsList),
   ...Object.values(homePageSchema.news.months).map((m) => m.featured),
 ];
@@ -256,9 +256,9 @@ onMounted(() => {
     fetchBlog();
     fetchSingleArticle().then(() => {
       if (!blog.value) {
-        const dummyFound = newsPageSchema.news.latestNewsSection.articles.find(
+        const dummyFound = newsPageSchema.latestNewsSection.articles.find(
           (a) => a.slug === route.params.slug
-        ) || newsPageSchema.news.policyAdvocacySection.updates.find(
+        ) || newsPageSchema.policyAdvocacySection.updates.find(
           (a) => a.slug === route.params.slug
         ) || Object.values(homePageSchema.news.months).flatMap((m) => m.newsList).find(
           (a) => a.slug === route.params.slug

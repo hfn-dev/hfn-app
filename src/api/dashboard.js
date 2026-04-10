@@ -8,7 +8,7 @@ export default {
       });
       return response.data;
     } catch (error) {
-      console.error("Dashboard API error:", error);
+      console.error("Dashboard API error");
       throw error;
     }
   },
@@ -20,7 +20,7 @@ export default {
       });
       return response.data;
     } catch (error) {
-      console.error("Course Analytics API error:", error);
+      console.error("Course Analytics API error");
       throw error;
     }
   },
@@ -32,7 +32,7 @@ export default {
       });
       return response.data;
     } catch (error) {
-      console.error("User Analytics API error:", error);
+      console.error("User Analytics API error");
       throw error;
     }
   },
@@ -44,7 +44,7 @@ export default {
       });
       return response.data;
     } catch (error) {
-      console.error("Website Analytics API error:", error);
+      console.error("Website Analytics API error");
       throw error;
     }
   },
@@ -56,7 +56,7 @@ export default {
       });
       return response.data;
     } catch (error) {
-      console.error("Revenue Analytics API error:", error);
+      console.error("Revenue Analytics API error");
       throw error;
     }
   },
@@ -66,7 +66,7 @@ export default {
       const response = await api.get("/analytics/membership/");
       return response.data;
     } catch (error) {
-      console.error("Membership Analytics API error:", error);
+      console.error("Membership Analytics API error");
       throw error;
     }
   },

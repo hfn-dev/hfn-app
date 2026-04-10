@@ -7,7 +7,7 @@ export default {
       const response = await api.get('/media/gallery/', { params });
       return response.data;
     } catch (error) {
-      console.error('List uploads API error:', error);
+      console.error('List uploads API error');
       throw error;
     }
   },
@@ -17,7 +17,7 @@ export default {
       const response = await api.get(`/uploads/${id}/`);
       return response.data;
     } catch (error) {
-      console.error('Get upload API error:', error);
+      console.error('Get upload API error');
       throw error;
     }
   },
@@ -33,7 +33,7 @@ export default {
       });
       return response.data; // should return { url: 'file_url_here' }
     } catch (error) {
-      console.error('File upload API error:', error);
+      console.error('File upload API error');
       throw error;
     }
   },
@@ -44,7 +44,7 @@ export default {
       const response = await api.post('/media/gallery/', payload);
       return response.data;
     } catch (error) {
-      console.error('Create upload API error:', error);
+      console.error('Create upload API error');
       throw error;
     }
   },
@@ -55,7 +55,7 @@ export default {
       const response = await api.patch(`/uploads/${id}/`, payload);
       return response.data;
     } catch (error) {
-      console.error('Update upload API error:', error);
+      console.error('Update upload API error');
       throw error;
     }
   },
@@ -66,7 +66,7 @@ export default {
       const response = await api.delete(`/uploads/${id}/`);
       return response.data;
     } catch (error) {
-      console.error('Delete upload API error:', error);
+      console.error('Delete upload API error');
       throw error;
     }
   },
@@ -76,7 +76,7 @@ export default {
       const response = await api.get('/media/gallery/', { params });
       return response.data;
     } catch (error) {
-      console.error('List gallery API error:', error);
+      console.error('List gallery API error');
       throw error;
     }
   },
@@ -85,7 +85,7 @@ export default {
       const response = await api.get(`/media/gallery/${id}`, { params });
       return response.data;
     } catch (error) {
-      console.error('List gallery API error:', error);
+      console.error('List gallery API error');
       throw error;
     }
   },
@@ -94,7 +94,7 @@ export default {
       const response = await api.post(`/media/gallery/`, payload);
       return response.data;
     } catch (error) {
-      console.error('Update upload API error:', error);
+      console.error('Update upload API error');
       throw error;
     }
   },
@@ -103,7 +103,7 @@ export default {
       const { data } = await api.get('/media/meeting-minutes/', { params });
       return data;
     } catch (error) {
-      console.error('List meeting minutes error:', error);
+      console.error('List meeting minutes error');
       throw error;
     }
   },
@@ -113,7 +113,7 @@ export default {
       const { data } = await api.get(`/media/meeting-minutes/${slug}/`);
       return data;
     } catch (error) {
-      console.error('Retrieve meeting minutes error:', error);
+      console.error('Retrieve meeting minutes error');
       throw error;
     }
   },
@@ -129,7 +129,7 @@ export default {
       );
       return data;
     } catch (error) {
-      console.error('Create meeting minutes error:', error);
+      console.error('Create meeting minutes error');
       throw error;
     }
   },
@@ -145,7 +145,7 @@ export default {
       );
       return data;
     } catch (error) {
-      console.error('Update meeting minutes error:', error);
+      console.error('Update meeting minutes error');
       throw error;
     }
   },
@@ -155,7 +155,7 @@ export default {
       const { data } = await api.delete(`/media/meeting-minutes/${slug}/`);
       return data;
     } catch (error) {
-      console.error('Delete meeting minutes error:', error);
+      console.error('Delete meeting minutes error');
       throw error;
     }
   },
@@ -165,7 +165,7 @@ export default {
       const { data } = await api.get(`/media/gallery/${id}/`);
       return data;
     } catch (error) {
-      console.error('Retrieve gallery image error:', error);
+      console.error('Retrieve gallery image error');
       throw error;
     }
   },
@@ -181,7 +181,7 @@ export default {
       );
       return data;
     } catch (error) {
-      console.error('Upload gallery image error:', error);
+      console.error('Upload gallery image error');
       throw error;
     }
   },
@@ -197,7 +197,7 @@ export default {
       );
       return data;
     } catch (error) {
-      console.error('Update gallery image error:', error);
+      console.error('Update gallery image error');
       throw error;
     }
   },
@@ -207,7 +207,7 @@ export default {
       const { data } = await api.delete(`/media/gallery/${id}/`);
       return data;
     } catch (error) {
-      console.error('Delete gallery image error:', error);
+      console.error('Delete gallery image error');
       throw error;
     }
   },
@@ -217,7 +217,7 @@ export default {
       const { data } = await api.get('/media/newsletters/', { params });
       return data;
     } catch (error) {
-      console.error('List newsletters error:', error);
+      console.error('List newsletters error');
       throw error;
     }
   },
@@ -227,7 +227,7 @@ export default {
       const { data } = await api.get(`/media/newsletters/${slug}/`);
       return data;
     } catch (error) {
-      console.error('Retrieve newsletter error:', error);
+      console.error('Retrieve newsletter error');
       throw error;
     }
   },
@@ -243,7 +243,7 @@ export default {
       );
       return data;
     } catch (error) {
-      console.error('Create newsletter error:', error);
+      console.error('Create newsletter error');
       throw error;
     }
   },
@@ -259,7 +259,7 @@ export default {
       );
       return data;
     } catch (error) {
-      console.error('Update newsletter error:', error);
+      console.error('Update newsletter error');
       throw error;
     }
   },
@@ -269,7 +269,7 @@ export default {
       const { data } = await api.delete(`/media/newsletters/${slug}/`);
       return data;
     } catch (error) {
-      console.error('Delete newsletter error:', error);
+      console.error('Delete newsletter error');
       throw error;
     }
   },
@@ -278,7 +278,7 @@ export default {
       const { data } = await api.get('/media/publications/', { params });
       return data;
     } catch (error) {
-      console.error('List publications error:', error);
+      console.error('List publications error');
       throw error;
     }
   },
@@ -294,7 +294,7 @@ export default {
       );
       return data;
     } catch (error) {
-      console.error('Create publication error:', error);
+      console.error('Create publication error');
       throw error;
     }
   },
@@ -310,7 +310,7 @@ export default {
       );
       return data;
     } catch (error) {
-      console.error('Update publication error:', error);
+      console.error('Update publication error');
       throw error;
     }
   },
@@ -320,7 +320,7 @@ export default {
       const { data } = await api.delete(`/media/publications/${slug}/`);
       return data;
     } catch (error) {
-      console.error('Delete publication error:', error);
+      console.error('Delete publication error');
       throw error;
     }
   },

@@ -6,7 +6,7 @@ export default {
       const response = await api.post('/account/individual-applications/', payload);
       return response.data;
     } catch (error) {
-      console.error('Registration API error:', error);
+      console.error('Registration API error');
       throw error;
     }
   },
@@ -15,7 +15,7 @@ export default {
       const response = await api.post('/account/register/', payload);
       return response.data;
     } catch (error) {
-      console.error('Registration API error:', error);
+      console.error('Registration API error');
       throw error;
     }
   },
@@ -25,7 +25,7 @@ export default {
       const response = await api.post('/account/verify-otp/', payload);
       return response.data;
     } catch (error) {
-      console.error('Verification API error:', error);
+      console.error('Verification API error');
       throw error;
     }
   },
@@ -35,7 +35,7 @@ export default {
       const response = await api.post('/account/login/', payload);
       return response.data;
     } catch (error) {
-      console.error('Login API error:', error);
+      console.error('Login API error');
       throw error;
     }
   },
@@ -45,7 +45,7 @@ export default {
       const response = await api.post('/account/resend-otp/', payload);
       return response.data;
     } catch (error) {
-      console.error('Resend OTP API error:', error);
+      console.error('Resend OTP API error');
       throw error;
     }
   },
@@ -55,7 +55,7 @@ export default {
       const response = await api.post('/token/refresh', payload);
       return response.data;
     } catch (error) {
-      console.error('refresh API error:', error);
+      console.error('refresh API error');
       throw error;
     }
   },
@@ -65,7 +65,7 @@ export default {
       const response = await api.get('/account/me/', config);
       return response.data;
     } catch (error) {
-      console.error('Get User API error:', error);
+      console.error('Get User API error');
       throw error;
     }
   },
@@ -82,7 +82,7 @@ export default {
       const response = await api.get('/account/users/');
       return response.data;
     } catch (error) {
-      console.error('Get User API error:', error);
+      console.error('Get User API error');
       throw error;
     }
   },
@@ -92,7 +92,7 @@ export default {
       const response = await api.get('/account/admin/individual-applications/');
       return response.data;
     } catch (error) {
-      console.error('Get User API error:', error);
+      console.error('Get User API error');
       throw error;
     }
   },
@@ -106,7 +106,7 @@ export default {
     return res.data;
 
   } catch (error) {
-    console.error('Certificate generation failed:', error);
+    console.error('Certificate generation failed');
     throw error;
   }
 },
@@ -117,7 +117,7 @@ export default {
     return res.data;
 
   } catch (error) {
-    console.error('Failed to fetch certificate:', error);
+    console.error('Failed to fetch certificate');
     throw error;
   }
 },
@@ -127,7 +127,7 @@ export default {
       const response = await api.post('/contact/', payload);
       return response.data;
     } catch (error) {
-      console.error('Login API error:', error);
+      console.error('Login API error');
       throw error;
     }
   },
@@ -141,7 +141,7 @@ export default {
       const response = await api.post('/account/change-password/', payload);
       return response.data;
     } catch (error) {
-      console.error('Change password API error:', error);
+      console.error('Change password API error');
       throw error;
     }
   },
@@ -150,7 +150,7 @@ export default {
       const response = await api.post('/account/forgot-password/', payload);
       return response.data;
     } catch (error) {
-      console.error('Change password API error:', error);
+      console.error('Change password API error');
       throw error;
     }
   },

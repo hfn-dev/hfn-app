@@ -339,7 +339,7 @@ const fetchUser = async () => {
     const data = await authApi.getUser();
     user.value = data;
   } catch (error) {
-    console.error("Failed to fetch user info:", error);
+    console.error("Failed to fetch user info");
   }
 };
 
@@ -359,7 +359,7 @@ const fetchNewsletters = async () => {
       slug: item.slug,
     }));
   } catch (error) {
-    console.error("Failed to fetch newsletters:", error);
+    console.error("Failed to fetch newsletters");
   }
 };
 
@@ -430,7 +430,7 @@ const fetchEvents = async () => {
       events.value = dummyEvents;
     }
   } catch (error) {
-    console.error("Failed to fetch events:", error);
+    console.error("Failed to fetch events");
     events.value = dummyEvents;
   }
 };
@@ -464,7 +464,7 @@ const fetchTopics = async () => {
       comments: "0 Comments",
     }));
   } catch (error) {
-    console.error("Failed to fetch topics:", error);
+    console.error("Failed to fetch topics");
   }
 };
 const filteredResources = computed(() => {

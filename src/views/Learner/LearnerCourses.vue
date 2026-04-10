@@ -45,7 +45,7 @@ const fetchUserProfile = async () => {
     const userData = JSON.parse(localStorage.getItem('user') || '{}');
     userName.value = userData.full_name || userData.username || "User";
   } catch (error) {
-    console.error('Error fetching user profile:', error);
+    console.error('Error fetching user profile');
   }
 };
 
@@ -64,7 +64,7 @@ const fetchCategories = async () => {
         .slice(0, 6);
     }
   } catch (error) {
-    console.error('Error fetching categories:', error);
+    console.error('Error fetching categories');
     toast.error('Failed to load course categories');
   }
 };
@@ -90,7 +90,7 @@ const fetchCourses = async () => {
       updatePagination();
     }
   } catch (error) {
-    console.error('Error fetching courses:', error);
+    console.error('Error fetching courses');
     toast.error('Failed to load courses');
   }
 };
@@ -105,7 +105,7 @@ const fetchUserEnrollments = async () => {
         : enrollmentResponse.data.results || [];
     }
   } catch (error) {
-    console.error('Error fetching enrollments:', error);
+    console.error('Error fetching enrollments');
   }
 };
 
@@ -278,7 +278,7 @@ const initializeData = async () => {
     }
     
   } catch (error) {
-    console.error('Initialization error:', error);
+    console.error('Initialization error');
     toast.error('Failed to load dashboard data');
   } finally {
     isLoading.value = false;

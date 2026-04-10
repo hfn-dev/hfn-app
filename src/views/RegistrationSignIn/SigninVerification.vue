@@ -139,7 +139,7 @@ const handleVerification = async () => {
     }
 
   } catch (error) {
-    console.error("Verification error:", error);
+    console.error("Verification error");
 
     if (error.response) {
       const errorMsg =
@@ -189,7 +189,7 @@ const handleResend = async () => {
     }
     
   } catch (error) {
-    console.error("Resend error:", error);
+    console.error("Resend error");
     
     if (error.response) {
       const errorMsg = error.response.data?.messages?.[0] || 

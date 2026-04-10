@@ -1,6 +1,6 @@
 <template>
   <div class="get-involved-page font-sans bg-white overflow-x-hidden">
-    <section class="bg-[#f2f9f3] pt-12 pb-20 relative overflow-hidden">
+    <section class="bg-[#f2f9f3] pt-12 pb-20 relative overflow-hidden" :style="{ backgroundColor: page.hero.backgroundColor || '#f2f9f3' }">
       <div
         class="absolute top-0 right-0 w-1/3 h-full bg-green-100/50 skew-x-12 translate-x-1/2"
       ></div>
@@ -13,14 +13,14 @@
             <h1
               class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight"
             >
-              {{ data.hero?.titleLine1 }} <span class="text-green-700">{{ data.hero?.subTitle }}</span>
+              {{ page.hero.titleLine1 }} <span class="text-green-700">{{ page.hero.subTitle }}</span>
               <br />
               <span class="text-gray-800 text-3xl md:text-4xl font-semibold"
-                >{{ data.hero?.titleLine2 }}</span
+                >{{ page.hero.titleLine2 }}</span
               >
             </h1>
             <p class="mt-6 text-gray-600 text-lg max-w-lg leading-relaxed">
-              {{ data.hero?.description }}
+              {{ page.hero.description }}
             </p>
           </div>
 
@@ -29,7 +29,7 @@
               class="relative h-64 sm:h-80 lg:h-[400px] overflow-hidden rounded-2xl shadow-xl border-4 border-white"
             >
               <img
-                :src="data.hero?.image"
+                :src="resolveImage(page.hero.image)"
                 alt="HFN Impact"
                 class="object-cover w-full h-full"
               />
@@ -39,7 +39,7 @@
       </div>
     </section>
 
-    <main class="container mx-auto px-4 md:px-8 py-16">
+<main class="container mx-auto px-4 md:px-8 py-16">
       <section class="mb-24">
         <div
           class="flex flex-col md:flex-row gap-12 items-center bg-white p-8 md:p-12 rounded-3xl border border-gray-100 shadow-sm"
@@ -62,29 +62,25 @@
                   />
                 </svg>
               </span>
-              <h3 class="text-3xl font-bold text-gray-900">Donations</h3>
+              <h3 class="text-3xl font-bold text-gray-900">{{ page.donations?.title || 'Donations' }}</h3>
             </div>
             <h4 class="text-xl font-semibold text-green-700 mb-4">
-              Support HFN’s advocacy and sector-strengthening work
+              {{ page.donations?.subtitle || 'Support HFN\'s advocacy and sector-strengthening work' }}
             </h4>
             <p class="text-gray-600 mb-4 leading-relaxed">
-              HFN welcomes contributions that support our work in policy
-              advocacy, stakeholder convening, research, and public–private
-              collaboration.
+              {{ page.donations?.paragraphs?.[0] || 'HFN welcomes contributions that support our work in policy advocacy, stakeholder convening, research, and public–private collaboration.' }}
             </p>
             <p class="text-gray-600 mb-6 leading-relaxed">
-              Contributions help sustain HFN’s role as a credible platform for
-              private sector engagement in health system reform.
+              {{ page.donations?.paragraphs?.[1] || 'Contributions help sustain HFN\'s role as a credible platform for private sector engagement in health system reform.' }}
               <span class="block mt-2 text-sm italic text-gray-500"
-                >Contributions are voluntary and support institutional
-                activities aligned with HFN’s mission.</span
+                >{{ page.donations?.note || 'Contributions are voluntary and support institutional activities aligned with HFN\'s mission.' }}</span
               >
             </p>
             <button
               @click="showDonateModal = true"
               class="group flex items-center px-8 py-3 bg-green-700 text-white rounded-xl font-bold hover:bg-green-800 transition-all"
             >
-              Donate Now
+              {{ page.donations?.buttonText || 'Donate Now' }}
               <span
                 class="ml-2 group-hover:translate-x-1 transition-transform"
               ></span>
@@ -94,8 +90,7 @@
             class="md:w-1/3 bg-green-50 p-8 rounded-2xl border-l-4 border-green-700"
           >
             <p class="text-green-800 font-medium italic">
-              "Your contribution helps us drive evidence-based reforms and build
-              a more resilient healthcare ecosystem in Nigeria."
+              "{{ page.donations?.quote || 'Your contribution helps us drive evidence-based reforms and build a more resilient healthcare ecosystem in Nigeria.' }}"
             </p>
           </div>
         </div>
@@ -104,12 +99,11 @@
       <section class="mb-24">
         <div class="text-center mb-12">
           <h3 class="text-3xl font-bold text-gray-900">
-            Partnerships & Sponsorships
+            {{ page.partnerships?.title || 'Partnerships & Sponsorships' }}
           </h3>
-          <p class="text-green-700 font-semibold mt-2">Partner with HFN</p>
+          <p class="text-green-700 font-semibold mt-2">{{ page.partnerships?.tagline || 'Partner with HFN' }}</p>
           <p class="text-gray-600 max-w-2xl mx-auto mt-4">
-            HFN works with local and international partners to deliver
-            high-impact convenings, dialogues, and sector initiatives.
+            {{ page.partnerships?.description || 'HFN works with local and international partners to deliver high-impact convenings, dialogues, and sector initiatives.' }}
           </p>
         </div>
 
@@ -119,18 +113,16 @@
           >
             <h4 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
               <span class="w-2 h-2 bg-green-700 rounded-full mr-3"></span>
-              Event Sponsorships
+              {{ page.partnerships?.items?.[0]?.title || 'Event Sponsorships' }}
             </h4>
             <p class="text-gray-600 mb-6 text-sm md:text-base leading-relaxed">
-              Sponsorship of HFN conferences, roundtables, and stakeholder
-              dialogues attended by policymakers, private sector leaders, and
-              development partners.
+              {{ page.partnerships?.items?.[0]?.description || 'Sponsorship of HFN conferences, roundtables, and stakeholder dialogues attended by policymakers, private sector leaders, and development partners.' }}
             </p>
             <button
               @click="contactEmail"
               class="text-green-700 font-bold hover:underline flex items-center"
             >
-              Contact Us to Explore Partnerships
+              {{ page.partnerships?.items?.[0]?.buttonText || 'Contact Us to Explore Partnerships' }}
             </button>
           </div>
 
@@ -139,17 +131,16 @@
           >
             <h4 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
               <span class="w-2 h-2 bg-green-700 rounded-full mr-3"></span>
-              Programme & Initiative Support
+              {{ page.partnerships?.items?.[1]?.title || 'Programme & Initiative Support' }}
             </h4>
             <p class="text-gray-600 mb-6 text-sm md:text-base leading-relaxed">
-              Collaboration on policy dialogues, capacity-building programmes,
-              and sector initiatives aligned with shared objectives.
+              {{ page.partnerships?.items?.[1]?.description || 'Collaboration on policy dialogues, capacity-building programmes, and sector initiatives aligned with shared objectives.' }}
             </p>
             <button
               @click="contactEmail"
               class="text-green-700 font-bold hover:underline flex items-center"
             >
-              Contact Us to Explore Partnerships
+              {{ page.partnerships?.items?.[1]?.buttonText || 'Contact Us to Explore Partnerships' }}
             </button>
           </div>
         </div>
@@ -158,57 +149,51 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
         <div class="bg-gray-50 p-8 rounded-3xl">
           <h3 class="text-2xl font-bold text-gray-900 mb-4">
-            Exhibitor Opportunities
+            {{ page.opportunities?.items?.[0]?.title || 'Exhibitor Opportunities' }}
           </h3>
           <p class="text-gray-600 mb-6 leading-relaxed">
-            HFN events provide opportunities for organisations to showcase
-            products, services, and innovations to a targeted audience of
-            healthcare decision-makers. Exhibitor packages are available for
-            selected events.
+            {{ page.opportunities?.items?.[0]?.description || 'HFN events provide opportunities for organisations to showcase products, services, and innovations to a targeted audience of healthcare decision-makers. Exhibitor packages are available for selected events.' }}
           </p>
           <button
             @click="contactEmail"
             class="text-green-700 font-bold hover:underline"
           >
-            Contact Us for Exhibitor Opportunities
+            {{ page.opportunities?.items?.[0]?.buttonText || 'Contact Us for Exhibitor Opportunities' }}
           </button>
         </div>
 
         <div class="bg-gray-50 p-8 rounded-3xl">
           <h3 class="text-2xl font-bold text-gray-900 mb-4">
-            Advertising & Visibility
+            {{ page.opportunities?.items?.[1]?.title || 'Advertising & Visibility' }}
           </h3>
           <p class="text-gray-600 mb-6 leading-relaxed">
-            HFN offers limited advertising opportunities across its
-            communication platforms, including its newsletter and selected
-            publications, subject to editorial review.
+            {{ page.opportunities?.items?.[1]?.description || 'HFN offers limited advertising opportunities across its communication platforms, including its newsletter and selected publications, subject to editorial review.' }}
           </p>
           <button
             @click="contactEmail"
             class="text-green-700 font-bold hover:underline"
           >
-            Contact Us for Advertising Enquiries
+            {{ page.opportunities?.items?.[1]?.buttonText || 'Contact Us for Advertising Enquiries' }}
           </button>
         </div>
       </div>
 
       <section
-        class="bg-green-900 text-white rounded-[2rem] p-10 md:p-16 relative overflow-hidden"
+        class="text-white rounded-[2rem] p-10 md:p-16 relative overflow-hidden"
+        :style="{ backgroundColor: page.volunteering?.backgroundColor || '#14532D' }"
       >
         <div class="relative z-10">
-          <h3 class="text-3xl font-bold mb-4">Volunteering</h3>
+          <h3 class="text-3xl font-bold mb-4">{{ page.volunteering?.title || 'Volunteering' }}</h3>
           <p class="text-green-100 text-xl font-medium mb-6">
-            Support HFN programmes and events
+            {{ page.volunteering?.subtitle || 'Support HFN programmes and events' }}
           </p>
           <p class="text-green-100/80 mb-8 max-w-3xl leading-relaxed">
-            HFN welcomes volunteers who wish to contribute time and expertise to
-            support events, research, communications, and sector engagement
-            activities. Volunteer opportunities are periodic and role-specific.
+            {{ page.volunteering?.description || 'HFN welcomes volunteers who wish to contribute time and expertise to support events, research, communications, and sector engagement activities. Volunteer opportunities are periodic and role-specific.' }}
           </p>
           <button
             class="bg-white text-green-900 px-10 py-3 rounded-xl font-bold hover:bg-green-50 transition-colors"
           >
-            Sign Up to Volunteer
+            {{ page.volunteering?.buttonText || 'Sign Up to Volunteer' }}
           </button>
         </div>
         <div
@@ -231,14 +216,14 @@
           ✕
         </button>
         <h3 class="text-2xl font-bold text-gray-900 mb-2 text-center">
-          Support HFN's Mission
+          {{ page.donationModal?.title || "Support HFN's Mission" }}
         </h3>
         <p class="text-gray-600 text-center mb-8">
-          Choose a contribution category
+          {{ page.donationModal?.subtitle || 'Choose a contribution category' }}
         </p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <button
-            v-for="option in donationOptions"
+            v-for="option in getDonationOptions()"
             :key="option.key"
             @click="selectDonation(option)"
             class="border-2 border-gray-100 rounded-xl p-5 text-left hover:border-green-700 hover:bg-green-50 transition-all"
@@ -255,19 +240,70 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { getInvolvedPageSchema } from "@/schemas/pages/getInvolve.schema.js"; 
+import { ref, computed, onMounted } from "vue";
+import { getInvolvedPageSchema } from "@/schemas/pages/getInvolve.schema.js";
+import pagesApi from "@/api/pageManagement";
 
-const data = getInvolvedPageSchema;
+const data = ref({});
+const loading = ref(true);
+const pageFromApi = ref(null);
 const latest =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769892500/Women_gnwotm.jpg";
 const showDonateModal = ref(false);
+
+const imageMap = {
+  "Women_gnwotm.jpg": latest,
+};
+
+const resolveImage = (image) => imageMap[image] || image;
+
+onMounted(async () => {
+  try {
+    const res = await pagesApi.getPageByType("getInvolved");
+    pageFromApi.value = res?.content || null;
+  } catch (e) {
+    console.warn("Using local GetInvolved schema fallback");
+  } finally {
+    loading.value = false;
+  }
+});
+
+const page = computed(() => {
+  return {
+    ...getInvolvedPageSchema,
+    ...(pageFromApi.value || {}),
+    hero: {
+      ...getInvolvedPageSchema.hero,
+      ...(pageFromApi.value?.hero || {}),
+    },
+    donations: {
+      ...getInvolvedPageSchema.donations,
+      ...(pageFromApi.value?.donations || {}),
+    },
+    partnerships: {
+      ...getInvolvedPageSchema.partnerships,
+      ...(pageFromApi.value?.partnerships || {}),
+    },
+    opportunities: {
+      ...getInvolvedPageSchema.opportunities,
+      ...(pageFromApi.value?.opportunities || {}),
+    },
+    volunteering: {
+      ...getInvolvedPageSchema.volunteering,
+      ...(pageFromApi.value?.volunteering || {}),
+    },
+    donationModal: {
+      ...getInvolvedPageSchema.donationModal,
+      ...(pageFromApi.value?.donationModal || {}),
+    },
+  };
+});
 
 const donationOptions = [
   {
     key: "advocacy",
     title: "Policy Advocacy",
-    description: "Supporting HFN’s work in legislative and policy reforms.",
+    description: "Supporting HFN's work in legislative and policy reforms.",
   },
   {
     key: "research",
@@ -294,6 +330,10 @@ const selectDonation = (option) => {
 };
 
 const contactEmail = () => {
-  window.location.href = "mailto:partnerships@hfnigeria.com";
+  window.location.href = `mailto:${page.value.partnerships?.contactEmail || "partnerships@hfnigeria.com"}`;
+};
+
+const getDonationOptions = () => {
+  return page.value.donationModal?.options || donationOptions || [];
 };
 </script>

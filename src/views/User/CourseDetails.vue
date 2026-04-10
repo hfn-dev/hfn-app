@@ -46,7 +46,7 @@ const enrollCourse = async () => {
     toast.success("Successfully enrolled!");
 
   } catch (error) {
-    console.error("Enrollment failed", error);
+    console.error("Enrollment failed");
     toast.error("Failed to enroll. Please try again.");
   } finally {
     enrolling.value = false;
@@ -69,7 +69,7 @@ const completeLesson = async (lessonId) => {
     await fetchEnrollment();
 
   } catch (error) {
-    console.error("Lesson completion failed", error);
+    console.error("Lesson completion failed");
   }
 };
   

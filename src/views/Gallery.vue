@@ -123,6 +123,16 @@ import awards from "@/assets/awards.png";
 import { ref, onMounted, computed } from "vue";
 import gallery from "@/api/contentUploadsApi";
 
+const formatDate = (dateStr) => {
+  if (!dateStr) return "";
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
 const loading = ref(false);
 const error = ref(null);
 const event =

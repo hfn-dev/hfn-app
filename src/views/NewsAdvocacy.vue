@@ -266,14 +266,14 @@ import { ref, reactive, computed, onMounted } from "vue";
 import contentUploadApi from "@/api/contentUploadsApi";
 import newsModule from "@/api/newsModule";
 
-const page = computed(() => newsPageSchema.news);  
+const page = newsPageSchema;  
 const sortedArticles = computed(() => {
-  return [...newsPageSchema.news.latestNewsSection.articles].sort((a, b) => {
+  return [...newsPageSchema.latestNewsSection.articles].sort((a, b) => {
     return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
 });
 // const policyUpdates = newsPageSchema.news.policyAdvocacySection.updates;
-const policyUpdates = computed(() => page.value.policyAdvocacySection.updates);
+const policyUpdates = computed(() => page.policyAdvocacySection.updates);
 const latest =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769896360/243A8355_r47c3t.jpg";
 const event =
@@ -320,7 +320,7 @@ const imageMap = {
 
 const allowedAudiences = ["all", "non_members"];
 
-const dummyArticles = [...newsPageSchema.news.latestNewsSection.articles]; 
+const dummyArticles = [...newsPageSchema.latestNewsSection.articles]; 
 const dummyVideos = [
   {
     title: "Special Address by NCDC DG Dr. Jide Idris | HFN Annual Conference 2026",
@@ -375,7 +375,7 @@ const fetchArticles = async () => {
 
     articles.value = [...dummyArticles, ...normalizedApiArticles];
   } catch (error) {
-    console.error("Error fetching articles:", error);
+    console.error("Error fetching articles");
     articles.value = [...dummyArticles];
   }
 };
@@ -402,7 +402,7 @@ const fetchVideos = async () => {
 
     videos.value = [...dummyVideos, ...normalizedApiVideos];
   } catch (error) {
-    console.error("Error fetching videos:", error);
+    console.error("Error fetching videos");
     videos.value = [...dummyVideos];
   }
 };

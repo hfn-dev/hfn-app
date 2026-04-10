@@ -38,7 +38,7 @@ const fetchTickets = async () => {
     tickets.value = data.map(mapTicket);
     filteredTickets.value = tickets.value;
   } catch (error) {
-    console.error('Failed to fetch tickets:', error);
+    console.error('Failed to fetch tickets');
   }
 };
 
@@ -52,7 +52,7 @@ const submitTicket = async () => {
 
     activeTab.value = 'tickets';
   } catch (error) {
-    console.error('Failed to create ticket:', error);
+    console.error('Failed to create ticket');
     toast.error('Failed to submit ticket. Try again later.');
   }
 };
@@ -70,7 +70,7 @@ const viewTicketDetails = async (id) => {
       tickets.value[index] = mapped;
     }
   } catch (error) {
-    console.error('Failed to fetch ticket details:', error);
+    console.error('Failed to fetch ticket details');
   }
 };
 

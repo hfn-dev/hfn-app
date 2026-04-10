@@ -90,7 +90,7 @@ const downloadCertificate = async (certId) => {
     window.URL.revokeObjectURL(url);
     document.body.removeChild(link);
   } catch (error) {
-    console.error('Error downloading certificate:', error);
+    console.error('Error downloading certificate');
   }
 }
   
@@ -115,7 +115,7 @@ const fetchCertificates = async () => {
     certificates.value = certs;
 
   } catch (error) {
-    console.error("Error fetching certificates:", error);
+    console.error("Error fetching certificates");
   }
 };
   
