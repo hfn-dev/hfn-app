@@ -40,7 +40,7 @@ const logos = [
   { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822274/gabbi_Logo_yn9mo3_usuhga.png", scale: "scale-95" },
   { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822279/IHS-Logo-Primary-Large_ia9x2r_dvy9gq.png", scale: "scale-65" },
   { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822269/Instrat_Global_tmpqt0_rjbnon.jpg", scale: "scale-105" },
-  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535481/Iwosan_Logos_2_c4ygwa.png", scale: "scale-135" },
+  { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822273/Iwosan_Logos_2_c4ygwa_nvwzq0.png", scale: "scale-135" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535477/PUREHEALTH_1_fjapth.png", scale: "scale-110" },
 { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535476/logo_bzsp8z.png", scale: "scale-100" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535476/International_SOS_logo_1_gbseap.png", scale: "scale-110" },
