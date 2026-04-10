@@ -81,7 +81,7 @@ const speakerImages = {
   "Dr. Tayo Aduloju":
     "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061212/Dr._Tayo_Aduloju_vl1rew.png",
   "Isabelle Hagner":
-    "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061210/Isabelle_Hagner_nd7qar.jpg",
+    "https://res.cloudinary.com/dmbckag42/image/upload/v1775822270/Isabelle_Hagner_nd7qar_jbl5ly.jpg",
   "Dr. Ebere Okereke":
     "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061211/Dr._Ebere_Okereke_jptyhc.jpg",
   "Jane Egerton-Idehen":
