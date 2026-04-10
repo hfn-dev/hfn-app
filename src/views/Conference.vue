@@ -46,7 +46,7 @@ const logos = [
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535476/International_SOS_logo_1_gbseap.png", scale: "scale-110" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535476/Sam_Pharm_LOGO-01_t80vxt.png", scale: "scale-150" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535475/Logo_-_Transparent_-_black_-_horizontal_e2dojm.png", scale: "scale-130" },
-  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535475/Medbury_qpgjqm.jpg", scale: "scale-105" },
+  { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822272/Medbury_qpgjqm_jzedkp.jpg", scale: "scale-105" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535475/Paga_logo_no_tagline_1_z01viu.png", scale: "scale-105" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535475/R4D_Logo_ngnkfl.png", scale: "scale-135" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535474/Mdoc_Logo_wwu5jj.png", scale: "scale-160" },
