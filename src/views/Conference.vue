@@ -31,7 +31,7 @@ const logos = [
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535525/1688393209448_n5ksfa.jpg", scale: "scale-160" },
   { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822282/Capitol_Hill_Logo_hc_azqqrs_t29yrt.png", scale: "scale-100" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535524/Afrimedical_Logo_epd3ol.jpg", scale: "scale-155" },
-  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535513/Cerba_Lancet_obnoqm.jpg", scale: "scale-195" },
+  { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822283/Cerba_Lancet_obnoqm_smdvxz.jpg", scale: "scale-195" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535511/CH_LOGO_cyints.png", scale: "scale-215" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535511/Codix_Logo_mxkelg.png", scale: "scale-120" },
 { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535509/Copy_of_myitura_tygw31.png", scale: "scale-70" },
