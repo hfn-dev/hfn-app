@@ -48,7 +48,7 @@ const logos = [
   { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822271/Logo_-_Transparent_-_black_-_horizontal_e2dojm_hiddx8.png", scale: "scale-130" },
   { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822272/Medbury_qpgjqm_jzedkp.jpg", scale: "scale-105" },
   { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822261/Paga_logo_no_tagline_1_z01viu_zvhrjx.png", scale: "scale-105" },
-  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535475/R4D_Logo_ngnkfl.png", scale: "scale-135" },
+  { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822264/R4D_Logo_ngnkfl_vv6md1.png", scale: "scale-135" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535474/Mdoc_Logo_wwu5jj.png", scale: "scale-160" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535474/sfhaccess_logo_ouxu9n.jpg", scale: "scale-150" },
 
