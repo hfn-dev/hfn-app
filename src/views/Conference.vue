@@ -1,6 +1,6 @@
 
 <script setup>
-const outlook = "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772037286/IMG-20260224-WA0000_okdvpl.jpg";  
+const outlook = "https://res.cloudinary.com/dmbckag42/image/upload/v1775822267/IMG-20260224-WA0000_okdvpl_ydhszp.jpg";  
 const theme =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772034620/IMG-20260225-WA0000_up3tka.jpg";
 const heroBg =
