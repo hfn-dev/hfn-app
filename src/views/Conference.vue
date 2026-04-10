@@ -71,7 +71,7 @@ const speakerImages = {
   "Mrs. Bola Adesola":
     "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061212/Bola_Adesola_bwql8z.jpg",
   "Sen. Samaila Kaila":
-    "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061210/Senator_Samaila_Kaila_nu9s8m.jpg",
+    "https://res.cloudinary.com/dmbckag42/image/upload/v1775822266/Senator_Samaila_Kaila_nu9s8m_m0ujcy.jpg",
   "Dr. Tomi Coker":
     "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061211/Dr._Tomi_Coker_v1nuaa.png",
   "Prof. Akin Abayomi":
