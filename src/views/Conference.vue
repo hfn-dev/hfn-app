@@ -75,7 +75,7 @@ const speakerImages = {
   "Dr. Tomi Coker":
     "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061211/Dr._Tomi_Coker_v1nuaa.png",
   "Prof. Akin Abayomi":
-    "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061210/Prof-Akin-Abayomi_nfxaru.png",
+    "https://res.cloudinary.com/dmbckag42/image/upload/v1775822262/Prof-Akin-Abayomi_nfxaru_momp0r.png",
   "Njide Ndili (Host)":
     "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061210/Njide_Ndili_Host___ihm2no.jpg",
   "Dr. Tayo Aduloju":
