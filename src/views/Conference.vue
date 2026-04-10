@@ -85,7 +85,7 @@ const speakerImages = {
   "Dr. Ebere Okereke":
     "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061211/Dr._Ebere_Okereke_jptyhc.jpg",
   "Jane Egerton-Idehen":
-    "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061210/Jane_Egerton-Idehen_cfi3kb.jpg",
+    "https://res.cloudinary.com/dmbckag42/image/upload/v1775822270/Jane_Egerton-Idehen_cfi3kb_wbaotu.jpg",
   "Dr. Emmanuella Zamba":
     "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771061211/Dr_Emmanuella_Zamba_kmo73a.jpg",
 
