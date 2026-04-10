@@ -25,7 +25,7 @@ const logos = [
   { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822282/cedarcrest-hospitals-logo-full-color-rgb-1-300x201_plcdzx_huzoho.png", scale: "scale-105" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771066720/emzor-B-OOqpe8_bat5fl.png", scale: "scale-155" },
   { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771066719/hba-africa-BXqx92lp_j2kbgl.png", scale: "scale-135" },
-  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771066720/bridge-BbygTYH0_g9x0si.png", scale: "scale-110" },
+  { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822282/bridge-BbygTYH0_g9x0si_dnqwij.png", scale: "scale-110" },
 
 
   { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822291/1688393209448_n5ksfa_rdsibg.jpg", scale: "scale-160" },
