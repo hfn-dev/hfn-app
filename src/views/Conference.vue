@@ -197,7 +197,7 @@ const agenda = [
               Register Now
             </a>
             <a
-  href="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1771302048/HFN_Annual_Conference_2026_Sponsorship_Packages__ejkxtg.pdf"
+  href="https://res.cloudinary.com/dmbckag42/image/upload/v1775822277/HFN_Annual_Conference_2026_Sponsorship_Packages__ejkxtg_fcoet1.pdf"
   download
   target="_blank"
 >
