@@ -2,7 +2,7 @@
 <script setup>
 const outlook = "https://res.cloudinary.com/dmbckag42/image/upload/v1775822267/IMG-20260224-WA0000_okdvpl_ydhszp.jpg";  
 const theme =
-  "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772034620/IMG-20260225-WA0000_up3tka.jpg";
+  "https://res.cloudinary.com/dmbckag42/image/upload/v1775822268/IMG-20260225-WA0000_up3tka_txovge.jpg";
 const heroBg =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770045591/243A7993_wxlzkg.jpg";
 const roundTable =
