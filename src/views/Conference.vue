@@ -50,10 +50,10 @@ const logos = [
   { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822261/Paga_logo_no_tagline_1_z01viu_zvhrjx.png", scale: "scale-105" },
   { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822264/R4D_Logo_ngnkfl_vv6md1.png", scale: "scale-135" },
   { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822272/Mdoc_Logo_wwu5jj_gregjy.png", scale: "scale-160" },
-  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772535474/sfhaccess_logo_ouxu9n.jpg", scale: "scale-150" },
+  { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822267/sfhaccess_logo_ouxu9n_dedjep.jpg", scale: "scale-150" },
 
   { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822280/AMCE_LOGO_ut8leh_nuae8b.jpg", scale: "scale-150" },
-  { src: "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772552251/Bristole_Scientific_pydixu.png", scale: "scale-180" },
+  { src: "https://res.cloudinary.com/dmbckag42/image/upload/v1775822281/Bristole_Scientific_pydixu_qn3aer.png", scale: "scale-180" },
 
 ]
 
