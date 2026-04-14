@@ -308,7 +308,7 @@ import contentUploadApi from "@/api/contentUploadsApi";
 import postDownload from "@/api/memberResources";
 import pagesApi from "@/api/pageManagement";
 import hands from "@/assets/hands.png";
-import newsletter_placeholder from "@/assets/newsletter-placeholder.png";
+import newsletter_placeholder from "@/assets/newsletter-placeholder.jpeg";
 import latest from "@/assets/latest_news.png";
 import { resourcesPageSchema } from "@/schemas/pages/resources.schema";
 import { computed, onMounted, ref } from "vue";
