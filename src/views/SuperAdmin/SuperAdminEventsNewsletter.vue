@@ -21,7 +21,25 @@ const confirmAction = ref(null);
 const confirmLoading = ref(false);
 const deletingEventSlug = ref(null);
 const deletingUploadId = ref('');
-  
+const fileInputRef = ref(null);
+
+const resetUploadForm = () => {
+  uploadForm.value = {
+    title: "",
+    type: "newsletter",
+    description: "",
+    summary: "",
+    audience: "all",
+    media_type: "image",
+    youtube_url: "",
+    files: [],
+    bannerIndex: 0,
+  };
+
+  if (fileInputRef.value) {
+    fileInputRef.value.value = "";
+  }
+};  
 const isFile = (file) => {
   return (
     typeof window !== "undefined" &&
@@ -572,18 +590,19 @@ const createUpload = async () => {
     }
 
     await fetchUploads();
+    await resetUploadForm();
 
-    uploadForm.value = {
-      title: "",
-      type: "newsletter",
-      description: "",
-      summary: "",
-      audience: "all",
-      media_type: "image",
-      youtube_url: "",
-      files: [],
-      bannerIndex: 0,
-    };
+    // uploadForm.value = {
+    //   title: "",
+    //   type: "newsletter",
+    //   description: "",
+    //   summary: "",
+    //   audience: "all",
+    //   media_type: "image",
+    //   youtube_url: "",
+    //   files: [],
+    //   bannerIndex: 0,
+    // };
   } catch (error) {
     console.error("Upload failed");
   }
