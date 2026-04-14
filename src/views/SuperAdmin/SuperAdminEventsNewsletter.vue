@@ -21,26 +21,9 @@ const confirmAction = ref(null);
 const confirmLoading = ref(false);
 const deletingEventSlug = ref(null);
 const deletingUploadId = ref('');
-const fileInputRef = ref(null);
+const uploading = ref(false);
 
-const resetUploadForm = () => {
-  uploadForm.value = {
-    title: "",
-    type: "newsletter",
-    description: "",
-    summary: "",
-    audience: "all",
-    media_type: "image",
-    youtube_url: "",
-    files: [],
-    bannerIndex: 0,
-  };
-
-  if (fileInputRef.value) {
-    fileInputRef.value.value = "";
-  }
-};  
-const isFile = (file) => {
+  const isFile = (file) => {
   return (
     typeof window !== "undefined" &&
     typeof File !== "undefined" &&
@@ -538,10 +521,33 @@ const uploadFile = (e) => {
   }
 };
 
+
+const fileInputRef = ref(null);
+
+const resetUploadForm = () => {
+  uploadForm.value = {
+    title: "",
+    type: "newsletter",
+    description: "",
+    summary: "",
+    audience: "all",
+    media_type: "image",
+    youtube_url: "",
+    files: [],
+    bannerIndex: 0,
+  };
+
+  if (fileInputRef.value) {
+    fileInputRef.value.value = "";
+  }
+};
+  
+
 const createUpload = async () => {
   if (!uploadForm.value.title) return;
 
   try {
+        uploading.value = true;
     const formData = new FormData();
 
     formData.append("title", uploadForm.value.title);
@@ -590,19 +596,9 @@ const createUpload = async () => {
     }
 
     await fetchUploads();
-    await resetUploadForm();
+    resetUploadForm();
 
-    // uploadForm.value = {
-    //   title: "",
-    //   type: "newsletter",
-    //   description: "",
-    //   summary: "",
-    //   audience: "all",
-    //   media_type: "image",
-    //   youtube_url: "",
-    //   files: [],
-    //   bannerIndex: 0,
-    // };
+    
   } catch (error) {
     console.error("Upload failed");
   }
@@ -873,7 +869,7 @@ onMounted(() => {
           <h3 class="text-lg font-semibold mb-4">Existing Articles</h3>
 
           <div class="bg-white rounded-xl shadow overflow-hidden">
-            <table class=" text-sm">
+            <table class="w-full text-sm">
               <thead class="bg-gray-100 text-left">
                 <tr>
                   <th class="p-3">Title</th>
@@ -1036,6 +1032,7 @@ onMounted(() => {
               <input
                 type="file"
                 @change="uploadFile"
+                  ref="fileInputRef"
                 class="border border-gray-300 rounded-md px-3 py-2 w-full"
                 :multiple="uploadForm.type === 'gallery'"
               />
@@ -1089,9 +1086,13 @@ onMounted(() => {
             </div>
 
             <div class="flex justify-end mt-4">
-              <button @click="createUpload" class="btn-primary px-6">
-                Upload
-              </button>
+              <button
+  @click="createUpload"
+  class="btn-primary px-6"
+  :disabled="uploading"
+>
+  {{ uploading ? "Uploading..." : "Upload" }}
+</button>
             </div>
           </div>
 
