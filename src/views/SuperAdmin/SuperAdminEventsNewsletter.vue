@@ -453,14 +453,24 @@ const fetchUploads = async () => {
       slug: n.slug,
     }));
 
-    const normalizedPublications = publications.map((n) => ({
-      id: n.id,
-      title: n.title,
-      type: "publications",
-      file: n.file,
-      created_at: n.created_at,
-      slug: n.slug,
-    }));
+    // const normalizedPublications = publications.map((n) => ({
+    //   id: n.id,
+    //   title: n.title,
+    //   type: "publications",
+    //   file: n.file,
+    //   created_at: n.created_at,
+    //   slug: n.slug,
+    // }));
+    const normalizedPublications = publications
+  .filter((p) => p.type !== "newsletter")
+  .map((n) => ({
+    id: n.id,
+    title: n.title,
+    type: "publications",
+    file: n.file,
+    created_at: n.created_at,
+    slug: n.slug,
+  }));
 
     const normalizedMinutes = minutes.map((m) => ({
       id: m.id,
