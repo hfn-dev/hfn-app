@@ -873,7 +873,7 @@ onMounted(() => {
           <h3 class="text-lg font-semibold mb-4">Existing Articles</h3>
 
           <div class="bg-white rounded-xl shadow overflow-hidden">
-            <table class="w-full text-sm">
+            <table class=" text-sm">
               <thead class="bg-gray-100 text-left">
                 <tr>
                   <th class="p-3">Title</th>
