@@ -58,6 +58,8 @@ const editArticle = (article) => {
     videos: (article.videos || []).map((v) =>
       typeof v === "string" ? { media_type: "youtube", youtube_url: v } : v
     ),
+    external_link: article.external_link || "",
+    is_external: article.is_external ?? false,
   };
 
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -197,6 +199,8 @@ const resetNewsForm = () => {
     is_featured: false,
     featured_order: 0,
     videos: [],
+    external_link: "",
+    is_external: false,
   };
 };
 
@@ -225,6 +229,15 @@ const saveNews = async () => {
       if (key === "featured_image") {
         if (isFile(value)) {
           formData.append("featured_image", value);
+        }
+        return;
+      }
+
+      if (key === "content") {
+        if (newsForm.value.is_external) {
+          formData.append(key, "external link");
+        } else {
+          formData.append(key, value ?? "");
         }
         return;
       }
@@ -297,6 +310,8 @@ const newsForm = ref({
   is_featured: false,
   featured_order: 0,
   videos: [],
+  external_link: "",
+  is_external: false,
 });
 
 const videoInput = ref("");
@@ -751,11 +766,34 @@ onMounted(() => {
               placeholder="Excerpt"
             />
 
-            <textarea
-              v-model="newsForm.content"
-              class="input h-40"
-              placeholder="Full article content"
-            />
+            <div class="border rounded-lg p-4 bg-gray-50">
+              <label class="flex items-center gap-3 mb-3">
+                <input
+                  type="checkbox"
+                  v-model="newsForm.is_external"
+                  class="w-4 h-4"
+                />
+                <span class="font-medium">Link to external article</span>
+              </label>
+
+              <div v-if="newsForm.is_external">
+                <input
+                  v-model="newsForm.external_link"
+                  class="input"
+                  placeholder="https://example.com/article"
+                />
+                <p class="text-xs text-gray-500 mt-1">
+                  Paste the URL of the external news article
+                </p>
+              </div>
+
+              <textarea
+                v-else
+                v-model="newsForm.content"
+                class="input h-40"
+                placeholder="Full article content"
+              />
+            </div>
 
             <div>
               <label class="block mb-2">Featured Image</label>
