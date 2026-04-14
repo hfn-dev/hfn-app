@@ -2,8 +2,9 @@
 // import handsJoining from "@/assets/handsJoining.jpg";
 import membership from "@/assets/membership.jpg";
 import { membershipPageSchema } from "@/schemas/pages/membership.schema.js";
-import { computed, ref } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import userRegister from "@/api/userRegister";
 
 const router = useRouter();
 const isSubmitting = ref(false);
@@ -170,39 +171,60 @@ const tabs = [
 
 const activeTab = ref(tabs[0].id);
 const searchQuery = ref("");
-const members = ref([
-  "ABIOLA MORUF TAJUDEENA",
-  "ABIOLA MORUF TAJUDEENB",
-  "ABIOLA MORUF TAJUDEENC",
-  "ABIOLA MORUF TAJUDEEND",
-  "ANIEBE SOMTO EMELDAA",
-  "ANIEBE SOMTO EMELDAB",
-  "ANIEBE SOMTO EMELDAC",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSA",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSB",
-  "ATAGUBA FRANKLINA",
-  "ATAGUBA FRANKLINB",
+const members = ref([]);
+const loadingMembers = ref(false);
 
-  // second column
-  "ABIOLA MORUF TAJUDEENE",
-  "ABIOLA MORUF TAJUDEENF",
-  "ABIOLA MORUF TAJUDEENG",
-  "ANIEBE SOMTO EMELDAD",
-  "ANIEBE SOMTO EMELDAE",
-  "ANIEBE SOMTO EMELDAF",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSC",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSD",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSE",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSF",
-  "ATAGUBA FRANKLINC",
+// const members = ref([
+//   "ABIOLA MORUF TAJUDEENA",
+//   "ABIOLA MORUF TAJUDEENB",
+//   "ABIOLA MORUF TAJUDEENC",
+//   "ABIOLA MORUF TAJUDEEND",
+//   "ANIEBE SOMTO EMELDAA",
+//   "ANIEBE SOMTO EMELDAB",
+//   "ANIEBE SOMTO EMELDAC",
+//   "AROGUNDADE IFEOLUWAN THEOPHILUSA",
+//   "AROGUNDADE IFEOLUWAN THEOPHILUSB",
+//   "ATAGUBA FRANKLINA",
+//   "ATAGUBA FRANKLINB",
 
-  // third column
-  "AROGUNDADE IFEOLUWAN THEOPHILUSG",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSH",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSI",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSJ",
-  "AROGUNDADE IFEOLUWAN THEOPHILUSK",
-]);
+//   // second column
+//   "ABIOLA MORUF TAJUDEENE",
+//   "ABIOLA MORUF TAJUDEENF",
+//   "ABIOLA MORUF TAJUDEENG",
+//   "ANIEBE SOMTO EMELDAD",
+//   "ANIEBE SOMTO EMELDAE",
+//   "ANIEBE SOMTO EMELDAF",
+//   "AROGUNDADE IFEOLUWAN THEOPHILUSC",
+//   "AROGUNDADE IFEOLUWAN THEOPHILUSD",
+//   "AROGUNDADE IFEOLUWAN THEOPHILUSE",
+//   "AROGUNDADE IFEOLUWAN THEOPHILUSF",
+//   "ATAGUBA FRANKLINC",
+
+//   // third column
+//   "AROGUNDADE IFEOLUWAN THEOPHILUSG",
+//   "AROGUNDADE IFEOLUWAN THEOPHILUSH",
+//   "AROGUNDADE IFEOLUWAN THEOPHILUSI",
+//   "AROGUNDADE IFEOLUWAN THEOPHILUSJ",
+//   "AROGUNDADE IFEOLUWAN THEOPHILUSK",
+// ]);
+
+const fetchCorporateMembers = async () => {
+  try {
+    loadingMembers.value = true;
+    const allUsers = await userRegister.getUserList();
+    members.value = allUsers.filter(
+      (user) => user.member_category?.toLowerCase() === "corporate"
+    );
+  } catch (error) {
+    console.error("Failed to fetch members:", error);
+  } finally {
+    loadingMembers.value = false;
+  }
+};
+
+onMounted(() => {
+  fetchCorporateMembers();
+});
 
 const selectedMember = ref(null);
 const showDialog = ref(false);
@@ -211,7 +233,9 @@ const showDialog = ref(false);
 const filteredMembers = computed(() => {
   if (!searchQuery.value) return members.value;
   return members.value.filter((m) =>
-    m.toLowerCase().includes(searchQuery.value.toLowerCase())
+    (m.company_name || m.business_name || m.name || "")
+      .toLowerCase()
+      .includes(searchQuery.value.toLowerCase())
   );
 });
 
@@ -223,6 +247,10 @@ function openDialog(member, event) {
 function closeDialog() {
   showDialog.value = false;
 }
+
+const getMemberDisplayName = (member) => {
+  return member.company_name || member.business_name || member.name || "Unknown";
+};
 
 const categories = ref([
   {
@@ -699,6 +727,21 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
           </div>
 
           <div
+            v-if="loadingMembers"
+            class="flex justify-center items-center py-12"
+          >
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-700"></div>
+          </div>
+
+          <div
+            v-else-if="filteredMembers.length === 0"
+            class="text-center py-12 text-gray-500"
+          >
+            No corporate members found
+          </div>
+
+          <div
+            v-else
             class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-6 text-gray-800 text-sm mb-8"
           >
             <div
@@ -711,7 +754,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
                 class="p-1 text-gray-800 font-medium cursor-pointer hover:text-green-700 transition"
                 @click="openDialog(member, $event)"
               >
-                {{ member }}
+                {{ getMemberDisplayName(member) }}
               </div>
 
               <!-- Dialog under clicked name -->
@@ -728,7 +771,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
                   </button>
 
                   <p class="font-semibold text-gray-900 mb-3 text-sm">
-                    Connect with {{ member }}
+                    Connect with {{ getMemberDisplayName(member) }}
                   </p>
 
                   <button

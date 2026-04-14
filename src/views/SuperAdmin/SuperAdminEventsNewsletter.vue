@@ -233,6 +233,15 @@ const saveNews = async () => {
         return;
       }
 
+      if (key === "content") {
+        if (newsForm.value.is_external) {
+          formData.append(key, "external link");
+        } else {
+          formData.append(key, value ?? "");
+        }
+        return;
+      }
+
       if (Array.isArray(value)) {
         value.forEach((v) => {
           formData.append(`${key}[]`, JSON.stringify(v));

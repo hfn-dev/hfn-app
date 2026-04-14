@@ -138,6 +138,14 @@ const copyToClipboard = (text) => {
         </div>
 
         <div class="px-8 pb-8 space-y-3">
+          <a
+            href="https://pay.squadco.com/MEMBERSHIPFEE"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="block w-full bg-[#E87A18] hover:bg-[#d16a10] text-white font-bold py-4 rounded-2xl transition-all shadow-lg text-center active:scale-[0.98]"
+          >
+            Pay With Squadco
+          </a>
           <button
             @click="$router.push('/confirmation')"
             class="w-full bg-[#00cc66] hover:bg-[#00aa55] text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-green-100 active:scale-[0.98]"
