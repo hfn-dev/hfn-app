@@ -886,7 +886,7 @@ onMounted(() => {
                   :key="article.id"
                   class="border-t hover:bg-gray-50"
                 >
-                  <td class="p-3 font-medium">
+                  <td class="p-3 font-medium max-w-xs break-words whitespace-normal">
                     {{ article.title }}
                   </td>
 
