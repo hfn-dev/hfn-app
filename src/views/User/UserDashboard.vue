@@ -5,7 +5,7 @@ import newsApi from "@/api/newsModule.js";
 import authApi from "@/api/userRegister.js";
 import UserSidebar from "@/components/layout/UserSidebar.vue";
 import { computed, onMounted, ref } from "vue";
-import newsletter_placeholder from "@/assets/newsletter-placeholder.png";
+import newsletter_placeholder from "@/assets/newsletter-placeholder.jpeg";
 import contentUploadsApi from "@/api/contentUploadsApi";
 
 const resources = ref([]);

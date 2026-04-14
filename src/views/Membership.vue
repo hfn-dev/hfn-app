@@ -1,11 +1,11 @@
 <script setup>
 // import handsJoining from "@/assets/handsJoining.jpg";
-import { computed, ref } from "vue";
-  import { useRouter } from "vue-router";
 import membership from "@/assets/membership.jpg";
 import { membershipPageSchema } from "@/schemas/pages/membership.schema.js";
-  
-const router = useRouter()
+import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 const isSubmitting = ref(false);
 const pageData = ref(membershipPageSchema);
 
@@ -341,12 +341,10 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
             <h2
               class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4"
             >
-              <span class="text-orange-500 block"
-                >{{ hero.headlineTop }}</span
-              >
-              <span class="text-green-700 block mt-2"
-                >{{ hero.headlineBottom }}</span
-              >
+              <span class="text-orange-500 block">{{ hero.headlineTop }}</span>
+              <span class="text-green-700 block mt-2">{{
+                hero.headlineBottom
+              }}</span>
             </h2>
             <p class="mt-6 text-lg text-gray-600 max-w-xl">
               {{ hero.description }}
@@ -526,6 +524,248 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
           </div>
         </div>
       </section> -->
+      </div>
+    </section>
+    <section class="sm:py-14 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2
+          class="text-3xl px-4 py-4 sm:px-6 rounded-2xl border-2 border-green-100 bg-white shadow-md sm:text-4xl font-serif font-extrabold text-gray-900 text-center mb-10"
+        >
+          Member Directory
+        </h2>
+
+        <div
+          class="p-4 sm:p-8 rounded-[30px] border-2 border-green-200 bg-white shadow-xl max-w-6xl mx-auto"
+        >
+          <div
+            class="flex flex-col sm:flex-row justify-between items-center mb-8"
+          >
+            <div
+              class="relative flex-grow w-full sm:w-auto sm:max-w-xl mb-4 sm:mb-0"
+            >
+              <input
+                type="text"
+                placeholder="Search"
+                v-model="searchQuery"
+                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-1 focus:ring-green-500"
+              />
+              <svg
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                ></path>
+              </svg>
+            </div>
+
+            <button
+              class="px-6 py-2 text-white bg-green-700 rounded-lg shadow-md font-medium hover:bg-green-800 transition"
+            >
+              Sort By
+              <svg
+                class="w-4 h-4 inline-block ml-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                ></path>
+              </svg>
+            </button>
+          </div>
+
+          <div
+            class="flex flex-wrap justify-start border-b border-gray-200 pb-2 mb-8"
+          >
+            <button
+              class="px-3 py-1 text-white bg-green-600 rounded-md font-medium text-sm mx-1 my-1 border border-green-600"
+            >
+              A
+            </button>
+            <button
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+            >
+              B
+            </button>
+            <button
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+            >
+              C
+            </button>
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >D</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >E</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >F</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >G</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >H</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >I</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >J</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >K</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >L</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >M</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >N</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >O</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >P</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >Q</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >R</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >S</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >T</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >U</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >V</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >W</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >X</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >Y</span
+            >
+            <span
+              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
+              >Z</span
+            >
+          </div>
+
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-6 text-gray-800 text-sm mb-8"
+          >
+            <div
+              v-for="(member, index) in filteredMembers"
+              :key="index"
+              class="relative group"
+            >
+              <!-- Member name -->
+              <div
+                class="p-1 text-gray-800 font-medium cursor-pointer hover:text-green-700 transition"
+                @click="openDialog(member, $event)"
+              >
+                {{ member }}
+              </div>
+
+              <!-- Dialog under clicked name -->
+              <transition name="fade">
+                <div
+                  v-if="showDialog && selectedMember === member"
+                  class="mt-2 w-full bg-white border border-gray-200 rounded-lg p-4 relative z-50"
+                >
+                  <button
+                    class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-lg"
+                    @click="closeDialog"
+                  >
+                    &times;
+                  </button>
+
+                  <p class="font-semibold text-gray-900 mb-3 text-sm">
+                    Connect with {{ member }}
+                  </p>
+
+                  <button
+                    class="w-full py-1.5 border border-green-700 text-green-700 rounded-md text-sm font-medium hover:bg-green-50 transition"
+                  >
+                    Connect
+                  </button>
+                  <p class="font-san text-orange-600 mb-3 mt-3 text-sm">
+                    Only registered members can connect*.
+                  </p>
+                </div>
+              </transition>
+            </div>
+          </div>
+
+          <div class="flex justify-end mt-6">
+            <button
+              class="flex items-center text-sm font-medium text-green-700 px-3 py-2 border border-green-700 rounded-lg hover:bg-green-50 transition"
+            >
+              Page 1 of 10
+              <svg
+                class="w-4 h-4 ml-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   </div>
