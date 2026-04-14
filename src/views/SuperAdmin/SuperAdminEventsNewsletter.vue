@@ -20,7 +20,8 @@ const confirmMessage = ref("");
 const confirmAction = ref(null);
 const confirmLoading = ref(false);
 const deletingEventSlug = ref(null);
-
+const deletingUploadId = ref('');
+  
 const isFile = (file) => {
   return (
     typeof window !== "undefined" &&
