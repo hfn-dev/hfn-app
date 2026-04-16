@@ -276,7 +276,7 @@ const markAsPaid = async () => {
 
 const payload = {
   user_id: raw.user?.id || raw.user_id || raw.id,
-  payment_type: 'cash',
+  payment_type: 'subscription',
   transaction_id: raw.transaction_id || '03223',
 };
 
