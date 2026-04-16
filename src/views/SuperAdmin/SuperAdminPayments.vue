@@ -276,8 +276,8 @@ const markAsPaid = async () => {
 
 const payload = {
   user_id: raw.user?.id || raw.user_id || raw.id,
-  payment_type: raw.payment_type || raw.payment_type_display,
-  transaction_id: raw.transaction_id,
+  payment_type: 'cash',
+  transaction_id: raw.transaction_id || '03223',
 };
 
     await paymentApi.confirmPayment(payload);
