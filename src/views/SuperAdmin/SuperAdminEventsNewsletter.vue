@@ -547,7 +547,7 @@ const createUpload = async () => {
   if (!uploadForm.value.title) return;
 
   try {
-        uploading.value = true;
+    uploading.value = true;
     const formData = new FormData();
 
     formData.append("title", uploadForm.value.title);
@@ -597,10 +597,13 @@ const createUpload = async () => {
 
     await fetchUploads();
     resetUploadForm();
-
+    toast.success("Upload successful");
     
   } catch (error) {
     console.error("Upload failed");
+    toast.error("Upload failed. Please try again.");
+  } finally {
+    uploading.value = false;
   }
 };
 

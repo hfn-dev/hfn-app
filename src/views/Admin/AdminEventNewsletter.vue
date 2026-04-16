@@ -20,6 +20,8 @@ const confirmMessage = ref("");
 const confirmAction = ref(null);
 const confirmLoading = ref(false);
 const deletingEventSlug = ref(null);
+const deletingUploadId = ref('');
+const uploading = ref(false);
 
 const isFile = (file) => {
   return (
@@ -416,10 +418,31 @@ const uploadFile = (e) => {
   }
 };
 
+const fileInputRef = ref(null);
+
+const resetUploadForm = () => {
+  uploadForm.value = {
+    title: "",
+    type: "newsletter",
+    description: "",
+    summary: "",
+    audience: "all",
+    media_type: "image",
+    youtube_url: "",
+    files: [],
+    bannerIndex: 0,
+  };
+
+  if (fileInputRef.value) {
+    fileInputRef.value.value = "";
+  }
+};
+
 const createUpload = async () => {
   if (!uploadForm.value.title) return;
 
   try {
+    uploading.value = true;
     const formData = new FormData();
 
     formData.append("title", uploadForm.value.title);
@@ -468,54 +491,59 @@ const createUpload = async () => {
     }
 
     await fetchUploads();
-
-    uploadForm.value = {
-      title: "",
-      type: "newsletter",
-      description: "",
-      audience: "all",
-      media_type: "image",
-      youtube_url: "",
-      files: [],
-      bannerIndex: 0,
-    };
+    resetUploadForm();
+    toast.success("Upload successful");
   } catch (error) {
     console.error("Upload failed");
+    toast.error("Upload failed. Please try again.");
+  } finally {
+    uploading.value = false;
   }
 };
 
-const handleDeleteUpload = async (item) => {
-  if (!confirm(`Are you sure you want to delete "${item.title}"?`)) return;
+const handleDeleteUpload = (item) => {
+  confirmTitle.value = "Delete Item";
+  confirmMessage.value = `Are you sure you want to delete "${item.title}"? This action cannot be undone.`;
+  showConfirm.value = true;
 
-  try {
-    switch (item.type) {
-      case "gallery":
-        await uploadsApi.deleteGallery(item.id);
-        break;
-      case "minute":
-        await uploadsApi.deleteMinutes(item.slug);
-        break;
-      case "newsletter":
-        await uploadsApi.deleteNewsletters(item.slug);
-        break;
-      case "publications":
-        await uploadsApi.deletepublications(item.slug);
-        break;
-      case "document":
-        await uploadsApi.deletepublications(item.slug);
-        break;
-      default:
-        console.warn("Unknown type", item.type);
-        return;
+  confirmAction.value = async () => {
+    try {
+      confirmLoading.value = true;
+      deletingUploadId.value = item.id || item.slug;
+
+      switch (item.type) {
+        case "gallery":
+          await uploadsApi.deleteGallery(item.id);
+          break;
+        case "minute":
+          await uploadsApi.deleteMinutes(item.slug);
+          break;
+        case "newsletter":
+          await uploadsApi.deleteNewsletters(item.slug);
+          break;
+        case "publications":
+        case "document":
+          await uploadsApi.deletepublications(item.slug);
+          break;
+        default:
+          console.warn("Unknown type", item.type);
+          return;
+      }
+
+      uploads.value = uploads.value.filter(
+        (u) => u.id !== item.id && u.slug !== item.slug
+      );
+
+      toast.success("Item deleted successfully");
+    } catch (error) {
+      console.error(`Failed to delete ${item.type}`);
+      toast.error("Failed to delete item");
+    } finally {
+      deletingUploadId.value = null;
+      confirmLoading.value = false;
+      showConfirm.value = false;
     }
-
-    uploads.value = uploads.value.filter(
-      (u) => u.id !== item.id && u.slug !== item.slug
-    );
-  } catch (error) {
-    console.error(`Failed to delete ${item.type}`);
-    toast.error("Failed to delete item. See console for details.");
-  }
+  };
 };
 
 
@@ -925,6 +953,7 @@ onMounted(() => {
   <input
     type="file"
     @change="uploadFile"
+    ref="fileInputRef"
     class="border border-gray-300 rounded-md px-3 py-2 w-full"
     :multiple="uploadForm.type === 'gallery'"
   />
@@ -976,8 +1005,8 @@ onMounted(() => {
   </div>
 </div>
 <div class="flex justify-end mt-4">
-  <button @click="createUpload" class="btn-primary px-6">
-    Upload
+  <button @click="createUpload" class="btn-primary px-6" :disabled="uploading">
+    {{ uploading ? "Uploading..." : "Upload" }}
   </button>
 </div>
           </div>
@@ -1050,8 +1079,9 @@ onMounted(() => {
                     <button
                       class="text-red-500 hover:text-red-700 font-semibold text-sm"
                       @click="handleDeleteUpload(item)"
+                      :disabled="deletingUploadId === (item.id || item.slug)"
                     >
-                      Delete
+                      {{ deletingUploadId === (item.id || item.slug) ? "Deleting…" : "Delete" }}
                     </button>
                   </td>
                 </tr>
