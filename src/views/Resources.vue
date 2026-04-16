@@ -41,7 +41,7 @@
         class="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-7xl mx-auto mb-16"
       >
         <div
-          v-for="(item, index) in newsletters"
+          v-for="(item, index) in paginatedNewsletters"
           :key="index"
           class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 flex flex-col"
         >
@@ -109,12 +109,37 @@
       </div>
 
       <div
+        v-if="totalNewsletterPages > 1"
         class="flex justify-center items-center space-x-4 text-gray-600 mb-20"
       >
-        <span class="text-sm">Page 1 of 2</span>
-        <a
-          href="https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1770067797/IMPACT_REPORT_-_Updated_p18np1.pdf"
-          class="flex items-center space-x-1 text-green-700 hover:underline"
+        <button
+          @click="newsletterPage--"
+          :disabled="newsletterPage === 1"
+          :class="{ 'opacity-50 cursor-not-allowed': newsletterPage === 1 }"
+          class="flex items-center space-x-1 text-green-700 hover:underline disabled:hover:no-underline"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            ></path>
+          </svg>
+          <span>Prev</span>
+        </button>
+        <span class="text-sm">Page {{ newsletterPage }} of {{ totalNewsletterPages }}</span>
+        <button
+          @click="newsletterPage++"
+          :disabled="newsletterPage === totalNewsletterPages"
+          :class="{ 'opacity-50 cursor-not-allowed': newsletterPage === totalNewsletterPages }"
+          class="flex items-center space-x-1 text-green-700 hover:underline disabled:hover:no-underline"
         >
           <span>Next</span>
           <svg
@@ -131,7 +156,7 @@
               d="M9 5l7 7-7 7"
             ></path>
           </svg>
-        </a>
+        </button>
       </div>
 
       <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
@@ -142,7 +167,7 @@
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16 py-10 px-10 rounded-3xl bg-[#F2F9F3]"
       >
         <div
-          v-for="(pub, index) in publications"
+          v-for="(pub, index) in paginatedPublications"
           :key="index"
           class="flex flex-col text-center"
         >
@@ -172,11 +197,38 @@
           </a>
         </div>
       </div>
-      <div class="flex justify-center items-center space-x-4 text-gray-600">
-        <span class="text-sm">Page 1 of 2</span>
-        <a
-          href="#"
-          class="flex items-center space-x-1 text-green-700 hover:underline"
+      <div
+        v-if="totalPublicationPages > 1"
+        class="flex justify-center items-center space-x-4 text-gray-600"
+      >
+        <button
+          @click="publicationPage--"
+          :disabled="publicationPage === 1"
+          :class="{ 'opacity-50 cursor-not-allowed': publicationPage === 1 }"
+          class="flex items-center space-x-1 text-green-700 hover:underline disabled:hover:no-underline"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            ></path>
+          </svg>
+          <span>Prev</span>
+        </button>
+        <span class="text-sm">Page {{ publicationPage }} of {{ totalPublicationPages }}</span>
+        <button
+          @click="publicationPage++"
+          :disabled="publicationPage === totalPublicationPages"
+          :class="{ 'opacity-50 cursor-not-allowed': publicationPage === totalPublicationPages }"
+          class="flex items-center space-x-1 text-green-700 hover:underline disabled:hover:no-underline"
         >
           <span>Next</span>
           <svg
@@ -193,7 +245,7 @@
               d="M9 5l7 7-7 7"
             ></path>
           </svg>
-        </a>
+        </button>
       </div>
     </main>
   </div>
@@ -316,6 +368,9 @@ import { useToast } from "vue-toastification";
 
 const newsletters = ref([]);
 const publications = ref([]);
+const newsletterPage = ref(1);
+const publicationPage = ref(1);
+const itemsPerPage = 8;
 const showPaymentDialog = ref(false);
 const showSuccessDialog = ref(false);
 const toast = useToast();
@@ -640,6 +695,21 @@ const imageMap = {
 };
 
 const resolveImage = (image) => imageMap[image] || image || latest;
+
+const paginatedNewsletters = computed(() => {
+  const start = (newsletterPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return newsletters.value.slice(start, end);
+});
+
+const paginatedPublications = computed(() => {
+  const start = (publicationPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return publications.value.slice(start, end);
+});
+
+const totalNewsletterPages = computed(() => Math.ceil(newsletters.value.length / itemsPerPage) || 1);
+const totalPublicationPages = computed(() => Math.ceil(publications.value.length / itemsPerPage) || 1);
 </script>
 
 

@@ -21,7 +21,10 @@ const showAddMemberModal = ref(false);
 const membershipTypes = ref([]);
  const showMembershipTypeModal = ref(false)
  const showMemberDetailsModal = ref(false);
-const selectedMember = ref(null); 
+const selectedMember = ref(null);
+const isAddingMember = ref(false);
+const isApproving = ref(false);
+const isRejecting = ref(false); 
 const toast = useToast();
  const newMembershipType = ref({
   name: '',
@@ -133,6 +136,7 @@ const loadMembershipAnalytics = async () => {
 
 const submitNewMember = async () => {
   try {
+    isAddingMember.value = true;
     const payload = {
       first_name: newMemberForm.value.first_name,
       last_name: newMemberForm.value.last_name,
@@ -177,12 +181,15 @@ const submitNewMember = async () => {
     }
 
     console.error("Failed to add member");
+  } finally {
+    isAddingMember.value = false;
   }
 };
 
 
  const approveApplication = async () => {
   try {
+    isApproving.value = true;
     await membershipAPI.approveApplication({ application_id: selectedMember.value.id });
 
     toast.success("Application approved successfully", "success");
@@ -193,11 +200,14 @@ const submitNewMember = async () => {
   } catch (error) {
     console.error("Approval failed");
     toast.error("Failed to approve application", "error");
+  } finally {
+    isApproving.value = false;
   }
 };
 
 const rejectApplication = async () => {
   try {
+    isRejecting.value = true;
     await membershipAPI.rejectApplication({ application_id: selectedMember.value.id });
 
     toast.success("Application rejected", "success");
@@ -208,6 +218,8 @@ const rejectApplication = async () => {
   } catch (error) {
     console.error("Rejection failed");
     toast.error("Failed to reject application", "error");
+  } finally {
+    isRejecting.value = false;
   }
 }; 
 
@@ -818,9 +830,14 @@ watch(currentPage, () => {
             </button>
             <button
               type="submit"
-              class="px-4 py-2 bg-[#006633] text-white rounded-lg"
+              :disabled="isAddingMember"
+              class="px-4 py-2 bg-[#006633] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center"
             >
-              Add Member
+              <svg v-if="isAddingMember" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>{{ isAddingMember ? 'Adding...' : 'Add Member' }}</span>
             </button>
           </div>
         </form>
@@ -855,9 +872,14 @@ watch(currentPage, () => {
     <div class="flex justify-between pt-6">
   <button
     @click="rejectApplication"
-    class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+    :disabled="isRejecting"
+    class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center"
   >
-    Reject
+    <svg v-if="isRejecting" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+    <span>{{ isRejecting ? 'Rejecting...' : 'Reject' }}</span>
   </button>
 
   <div class="flex gap-3">
@@ -870,9 +892,14 @@ watch(currentPage, () => {
 
     <button
       @click="approveApplication"
-      class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#005528]"
+      :disabled="isApproving"
+      class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#005528] disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center"
     >
-      Approve
+      <svg v-if="isApproving" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <span>{{ isApproving ? 'Approving...' : 'Approve' }}</span>
     </button>
   </div>
 </div>

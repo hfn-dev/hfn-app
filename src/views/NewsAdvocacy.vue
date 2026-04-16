@@ -89,11 +89,11 @@
   </button>
 
 </div>
-      <div
+<div
         class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto mb-16"
       >
         <div
-          v-for="article in filteredArticles"
+          v-for="article in paginatedArticles"
           :key="article.id"
           class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
         >
@@ -121,11 +121,11 @@
             </p>
 
             <RouterLink
-  :to="getArticleLink(article)"
-  class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors"
->
-  Read More
-</RouterLink>
+              :to="getArticleLink(article)"
+              class="inline-block bg-green-700 text-white text-sm px-5 py-2 rounded-full hover:bg-green-800 transition-colors"
+            >
+              Read More
+            </RouterLink>
           </div>
         </div>
       </div>
@@ -133,10 +133,34 @@
       <div
         class="flex justify-center items-center space-x-4 text-gray-600 mb-20"
       >
-        <span class="text-sm">Page 1 of 2</span>
-        <a
-          href="#"
-          class="flex items-center space-x-1 text-green-700 hover:underline"
+        <button
+          @click="goToPrevPage"
+          :disabled="currentPage === 1"
+          :class="{ 'opacity-50 cursor-not-allowed': currentPage === 1 }"
+          class="flex items-center space-x-1 text-green-700 hover:underline disabled:hover:no-underline"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            ></path>
+          </svg>
+          <span>Prev</span>
+        </button>
+        <span class="text-sm">Page {{ currentPage }} of {{ totalPages }}</span>
+        <button
+          @click="goToNextPage"
+          :disabled="currentPage === totalPages"
+          :class="{ 'opacity-50 cursor-not-allowed': currentPage === totalPages }"
+          class="flex items-center space-x-1 text-green-700 hover:underline disabled:hover:no-underline"
         >
           <span>Next</span>
           <svg
@@ -153,7 +177,7 @@
               d="M9 5l7 7-7 7"
             ></path>
           </svg>
-        </a>
+        </button>
       </div>
 
       <section class="max-w-7xl mx-auto mb-20">
@@ -198,7 +222,7 @@
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16 py-10 px-10 bg-[#F2F9F3] rounded-3xl"
       >
         <div
-          v-for="item in policyUpdates"
+          v-for="item in paginatedPolicy"
           :key="item.slug"
           class="flex flex-col text-center"
         >
@@ -233,10 +257,34 @@
       </div>
 
       <div class="flex justify-center items-center space-x-4 text-gray-600">
-        <span class="text-sm">Page 1 of 2</span>
-        <a
-          href="#"
-          class="flex items-center space-x-1 text-green-700 hover:underline"
+        <button
+          @click="goToPrevPagePolicy"
+          :disabled="currentPagePolicy === 1"
+          :class="{ 'opacity-50 cursor-not-allowed': currentPagePolicy === 1 }"
+          class="flex items-center space-x-1 text-green-700 hover:underline disabled:hover:no-underline"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            ></path>
+          </svg>
+          <span>Prev</span>
+        </button>
+        <span class="text-sm">Page {{ currentPagePolicy }} of {{ totalPolicyPages }}</span>
+        <button
+          @click="goToNextPagePolicy"
+          :disabled="currentPagePolicy >= totalPolicyPages"
+          :class="{ 'opacity-50 cursor-not-allowed': currentPagePolicy >= totalPolicyPages }"
+          class="flex items-center space-x-1 text-green-700 hover:underline disabled:hover:no-underline"
         >
           <span>Next</span>
           <svg
@@ -253,7 +301,7 @@
               d="M9 5l7 7-7 7"
             ></path>
           </svg>
-        </a>
+        </button>
       </div>
     </main>
   </div>
@@ -321,6 +369,60 @@ const imageMap = {
 const allowedAudiences = ["all", "non_members"];
 
 const dummyArticles = [...newsPageSchema.latestNewsSection.articles]; 
+
+// Pagination
+const currentPage = ref(1);
+const itemsPerPage = 4;
+const totalPages = ref(1);
+const currentPagePolicy = ref(1);
+const itemsPerPagePolicy = 3;
+
+const goToPrevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+
+const goToNextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
+};
+
+const goToPrevPagePolicy = () => {
+  if (currentPagePolicy.value > 1) {
+    currentPagePolicy.value--;
+  }
+};
+
+const goToNextPagePolicy = () => {
+  if (currentPagePolicy.value < totalPolicyPages.value) {
+    currentPagePolicy.value++;
+  }
+};
+
+const paginatedArticles = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  return filteredArticles.value.slice(startIndex, endIndex);
+});
+
+const paginatedPolicy = computed(() => {
+  const policyList = policyUpdates.value || [];
+  const startIndex = (currentPagePolicy.value - 1) * itemsPerPagePolicy;
+  const endIndex = startIndex + itemsPerPagePolicy;
+  return policyList.slice(startIndex, endIndex);
+});
+
+const updatePagination = () => {
+  totalPages.value = Math.ceil(filteredArticles.value.length / itemsPerPage);
+};
+
+const totalPolicyPages = computed(() => {
+  const policyCount = policyUpdates.value?.length || 0;
+  return Math.ceil(policyCount / itemsPerPagePolicy) || 1;
+});
+
 const dummyVideos = [
   {
     title: "Special Address by NCDC DG Dr. Jide Idris | HFN Annual Conference 2026",

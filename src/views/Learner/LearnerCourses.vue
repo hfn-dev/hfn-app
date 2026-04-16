@@ -1,4 +1,4 @@
-<!-- <script setup>
+<script setup>
 import learningModule from "@/api/learningModule.js";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
@@ -111,6 +111,18 @@ const fetchUserEnrollments = async () => {
 
 const updatePagination = () => {
   totalPages.value = Math.ceil(filteredCourses.value.length / itemsPerPage);
+};
+
+const goToPrevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+
+const goToNextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
 };
 
 const filterCoursesByTrack = () => {
@@ -553,7 +565,7 @@ onMounted(() => {
 
             <div v-if="currentPageCourses.length > 0" class="flex justify-center items-center mt-10 space-x-4 text-gray-600">
               <button
-                @click="currentPage--"
+                @click="goToPrevPage"
                 :disabled="currentPage === 1"
                 :class="{ 'opacity-50 cursor-not-allowed': currentPage === 1 }"
                 class="text-sm font-medium hover:text-gray-900 transition flex items-center"
@@ -573,7 +585,7 @@ onMounted(() => {
               </button>
               <span class="text-sm">Page {{ currentPage }} of {{ totalPages }}</span>
               <button
-                @click="currentPage++"
+                @click="goToNextPage"
                 :disabled="currentPage === totalPages"
                 :class="{ 'opacity-50 cursor-not-allowed': currentPage === totalPages }"
                 class="text-sm font-medium hover:text-gray-900 transition flex items-center"
@@ -676,4 +688,4 @@ onMounted(() => {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-</style> -->
+</style>
