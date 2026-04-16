@@ -270,16 +270,24 @@ const markAsPaid = async () => {
   try {
     loading.value = true;
 
-    const paymentDetails = await paymentApi.retrievePayment(payment.id);
+    // const paymentDetails = await paymentApi.retrievePayment(payment.id);
 
-    const payload = {
-      transaction_id: paymentDetails.transaction_id,
-      status: "completed",
-      payment_reference: paymentDetails.payment_reference,
-      metadata: null,
-    };
+    // const payload = {
+    //   transaction_id: paymentDetails.transaction_id,
+    //   status: "completed",
+    //   payment_reference: paymentDetails.payment_reference,
+    //   metadata: null,
+    // };
+    const raw = payment.raw;
 
-    await paymentApi.confirmPayment(payment.id, payload);
+const payload = {
+  user_id: raw.user?.id || raw.user_id || raw.id,
+  payment_type: 'subscription',
+  membership_type_id: '2',
+  transaction_id: raw.transaction_id || '03223',
+};
+
+    await paymentApi.confirmPayment(payload);
 
     toast.success(`Payment for ${payment.title} marked as completed`);
 

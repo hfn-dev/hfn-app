@@ -20,8 +20,10 @@ const confirmMessage = ref("");
 const confirmAction = ref(null);
 const confirmLoading = ref(false);
 const deletingEventSlug = ref(null);
+const deletingUploadId = ref('');
+const uploading = ref(false);
 
-const isFile = (file) => {
+  const isFile = (file) => {
   return (
     typeof window !== "undefined" &&
     typeof File !== "undefined" &&
@@ -452,14 +454,24 @@ const fetchUploads = async () => {
       slug: n.slug,
     }));
 
-    const normalizedPublications = publications.map((n) => ({
-      id: n.id,
-      title: n.title,
-      type: "publications",
-      file: n.file,
-      created_at: n.created_at,
-      slug: n.slug,
-    }));
+    // const normalizedPublications = publications.map((n) => ({
+    //   id: n.id,
+    //   title: n.title,
+    //   type: "publications",
+    //   file: n.file,
+    //   created_at: n.created_at,
+    //   slug: n.slug,
+    // }));
+    const normalizedPublications = publications
+  .filter((p) => p.type !== "newsletter")
+  .map((n) => ({
+    id: n.id,
+    title: n.title,
+    type: "publications",
+    file: n.file,
+    created_at: n.created_at,
+    slug: n.slug,
+  }));
 
     const normalizedMinutes = minutes.map((m) => ({
       id: m.id,
@@ -509,10 +521,33 @@ const uploadFile = (e) => {
   }
 };
 
+
+const fileInputRef = ref(null);
+
+const resetUploadForm = () => {
+  uploadForm.value = {
+    title: "",
+    type: "newsletter",
+    description: "",
+    summary: "",
+    audience: "all",
+    media_type: "image",
+    youtube_url: "",
+    files: [],
+    bannerIndex: 0,
+  };
+
+  if (fileInputRef.value) {
+    fileInputRef.value.value = "";
+  }
+};
+  
+
 const createUpload = async () => {
   if (!uploadForm.value.title) return;
 
   try {
+        uploading.value = true;
     const formData = new FormData();
 
     formData.append("title", uploadForm.value.title);
@@ -561,18 +596,9 @@ const createUpload = async () => {
     }
 
     await fetchUploads();
+    resetUploadForm();
 
-    uploadForm.value = {
-      title: "",
-      type: "newsletter",
-      description: "",
-      summary: "",
-      audience: "all",
-      media_type: "image",
-      youtube_url: "",
-      files: [],
-      bannerIndex: 0,
-    };
+    
   } catch (error) {
     console.error("Upload failed");
   }
@@ -860,7 +886,7 @@ onMounted(() => {
                   :key="article.id"
                   class="border-t hover:bg-gray-50"
                 >
-                  <td class="p-3 font-medium">
+                  <td class="p-3 font-medium max-w-xs break-words whitespace-normal">
                     {{ article.title }}
                   </td>
 
@@ -1006,6 +1032,7 @@ onMounted(() => {
               <input
                 type="file"
                 @change="uploadFile"
+                  ref="fileInputRef"
                 class="border border-gray-300 rounded-md px-3 py-2 w-full"
                 :multiple="uploadForm.type === 'gallery'"
               />
@@ -1059,9 +1086,13 @@ onMounted(() => {
             </div>
 
             <div class="flex justify-end mt-4">
-              <button @click="createUpload" class="btn-primary px-6">
-                Upload
-              </button>
+              <button
+  @click="createUpload"
+  class="btn-primary px-6"
+  :disabled="uploading"
+>
+  {{ uploading ? "Uploading..." : "Upload" }}
+</button>
             </div>
           </div>
 
