@@ -681,7 +681,7 @@ const closeSidebar = () => (showSidebar.value = false);
     </button>
 
     <div
-      class="fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:translate-x-0"
+      class="fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:translate-x-0 pt-16 lg:pt-0"
       :class="showSidebar ? 'translate-x-0' : '-translate-x-full'"
     >
       <AdminSidebar @closeSidebar="closeSidebar" class="h-full" />
