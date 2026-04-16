@@ -273,7 +273,7 @@ const markAsPaid = async () => {
     //   metadata: null,
     // };
 
-    await paymentApi.confirmPayment(payment.id, payload);
+    await paymentApi.confirmPayment();
 
     toast.success(`Payment for ${payment.title} marked as completed`);
 
