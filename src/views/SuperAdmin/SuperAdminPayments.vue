@@ -109,7 +109,7 @@ const fetchPayments = async () => {
     if (currentTab.value === 'Registration') {
       const [membersRes, purchasesRes] = await Promise.all([
         paymentApi.getUnpaidMembers(),
-        paymentApi.getPurchases({ status: "pending" }),
+        paymentApi.getPurchases(),
       ]);
 
       const members = membersRes?.results || membersRes || [];
@@ -330,8 +330,8 @@ const markAsPaid = async () => {
     const payload = {
       user_id: payment.id, 
       payment_type: 'subscription',
-      membership_type_id: payment.membership_type_id, 
-      transaction_id: payment?.transaction_id || `MANUAL-${Date.now()}-${rawData.id}`,
+      membership_type_id: payment.membership_type_id || payment.raw?.membership_type_id,
+      transaction_id: payment?.raw?.transaction_id || `MANUAL-${Date.now()}-${rawData.id}`,
     };
     await paymentApi.confirmPayment(payload);
     toast.success(`Payment for ${payment.title} has been verified.`);
