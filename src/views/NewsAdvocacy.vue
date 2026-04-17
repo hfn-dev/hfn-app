@@ -473,7 +473,7 @@ const fetchArticles = async () => {
       id: item.id,
       slug: item.slug,
       excerpt: item.excerpt || item.content?.slice(0, 120),
-      image: item.featured_image || "event.png",
+      image: item.featured_image,
       title: item.title,
   description: item.content,
       created_at: item.publish_date,
