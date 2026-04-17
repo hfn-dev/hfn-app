@@ -374,6 +374,7 @@ const imageMap = {
     "hands1.png": hands1,
   "hands2.png": hands2,
 "latest_news.png": latest,
+  "blogh.png": blog
 };
 
 watch([() => selectedDate.month, () => selectedDate.year], () => {
@@ -474,7 +475,7 @@ const fetchArticles = async () => {
       id: item.id,
       slug: item.slug,
       excerpt: item.excerpt || item.content?.slice(0, 120),
-      image: item.featured_image || blog,
+      image: item.featured_image || "blogh.png",
       title: item.title,
   description: item.content,
       created_at: item.publish_date,
