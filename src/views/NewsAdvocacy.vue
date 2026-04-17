@@ -314,6 +314,15 @@ import { ref, reactive, computed, onMounted, watch } from "vue";
 import contentUploadApi from "@/api/contentUploadsApi";
 import newsModule from "@/api/newsModule";
 
+const currentPage = ref(1);
+const itemsPerPage = 4;
+// const totalPages = ref(1);
+const currentPagePolicy = ref(1);
+const itemsPerPagePolicy = 3;
+const totalPages = computed(() => {
+  return Math.ceil(filteredArticles.value.length / itemsPerPage) || 1;
+});
+  
 const page = newsPageSchema;  
 const sortedArticles = computed(() => {
   return [...newsPageSchema.latestNewsSection.articles].sort((a, b) => {
@@ -375,15 +384,6 @@ const allowedAudiences = ["all", "non_members"];
 
 const dummyArticles = [...newsPageSchema.latestNewsSection.articles]; 
 
-// Pagination
-const currentPage = ref(1);
-const itemsPerPage = 4;
-// const totalPages = ref(1);
-const currentPagePolicy = ref(1);
-const itemsPerPagePolicy = 3;
-const totalPages = computed(() => {
-  return Math.ceil(filteredArticles.value.length / itemsPerPage) || 1;
-});
 const goToPrevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--;
