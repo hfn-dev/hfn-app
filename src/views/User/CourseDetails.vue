@@ -481,49 +481,49 @@ const fetchCertificate = async () => {
               </div>
 
               <div v-else class="space-y-6">
-    <div class="flex items-center justify-between bg-green-50 p-4 rounded-xl border border-green-100">
-      <div>
-        <h3 class="font-bold" :style="{ color: DARK_GREEN }">Certification Earned</h3>
-        <p class="text-sm text-gray-600">Issued on {{ new Date(enrollment.completed_at).toLocaleDateString() }}</p>
-      </div>
-      <a
-        v-if="certificate?.download_url"
-        :href="certificate.download_url"
-        target="_blank"
-        class="px-5 py-2 rounded-lg text-sm font-bold text-white transition hover:opacity-90 shadow-md"
-        :style="{ backgroundColor: DARK_GREEN }"
-      >
-        Download PDF
-      </a>
-    </div>
-
-    <div class="bg-white border rounded-2xl p-4 flex flex-col items-center shadow-inner min-h-[300px] justify-center">
-      <div v-if="certificate?.image_file" class="w-full">
-        <img 
-          :src="certificate.image_file" 
-          alt="Certificate Preview" 
-          class="w-full h-auto rounded-lg shadow-lg border"
-          @error="(e) => e.target.src = 'fallback-image-url-here'" 
-        />
-        <div class="mt-4 text-center">
-          <p class="text-xs text-gray-400">Certificate No: {{ certificate.certificate_number }}</p>
-          <a :href="certificate.verify_url" target="_blank" class="text-xs text-blue-500 underline">
-            Verify Authenticity
-          </a>
-        </div>
-      </div>
-      
-      <div v-else class="text-center">
-        <button 
-          @click="fetchCertificate"
-          class="px-6 py-2 rounded-lg border-2 font-bold"
-          :style="{ borderColor: DARK_GREEN, color: DARK_GREEN }"
-        >
-          View Certificate Details
-        </button>
-      </div>
-    </div>
-  </div>
+                <div class="flex items-center justify-between bg-green-50 p-4 rounded-xl border border-green-100">
+                  <div>
+                    <h3 class="font-bold" :style="{ color: DARK_GREEN }">Certification Earned</h3>
+                    <p class="text-sm text-gray-600">Issued on {{ new Date(enrollment.completed_at).toLocaleDateString() }}</p>
+                  </div>
+                  <a
+                    v-if="certificate?.download_url"
+                    :href="certificate.download_url"
+                    target="_blank"
+                    class="px-5 py-2 rounded-lg text-sm font-bold text-white transition hover:opacity-90 shadow-md"
+                    :style="{ backgroundColor: DARK_GREEN }"
+                  >
+                    Download PDF
+                  </a>
+                </div>
+            
+                <div class="bg-white border rounded-2xl p-4 flex flex-col items-center shadow-inner min-h-[300px] justify-center">
+                  <div v-if="certificate?.image_file" class="w-full">
+                    <img 
+                      :src="certificate.image_file" 
+                      alt="Certificate Preview" 
+                      class="w-full h-auto rounded-lg shadow-lg border"
+                      @error="(e) => e.target.src = 'fallback-image-url-here'" 
+                    />
+                    <div class="mt-4 text-center">
+                      <p class="text-xs text-gray-400">Certificate No: {{ certificate.certificate_number }}</p>
+                      <a :href="certificate.verify_url" target="_blank" class="text-xs text-blue-500 underline">
+                        Verify Authenticity
+                      </a>
+                    </div>
+                  </div>
+                  
+                  <div v-else class="text-center">
+                    <button 
+                      @click="fetchCertificate"
+                      class="px-6 py-2 rounded-lg border-2 font-bold"
+                      :style="{ borderColor: DARK_GREEN, color: DARK_GREEN }"
+                    >
+                      View Certificate Details
+                    </button>
+                  </div>
+                </div>
+              </div>
 
             </div>
           </div>
