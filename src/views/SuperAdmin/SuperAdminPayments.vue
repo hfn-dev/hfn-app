@@ -323,8 +323,51 @@ const handleAction = (action, course) => {
 };
 
 
+// const markAsPaid = async () => {
+//   const payment = paymentToConfirm.value;
+//   if (!payment) {
+//     toast.error("No payment data found to confirm.");
+//     return;
+//   }
+
+//   try {
+//     loading.value = true;
+ 
+//     const payload = {
+//       user_id: payment.id, 
+//       payment_type: 'subscription',
+//       membership_type_id: payment.membership_type_id || payment.raw?.membership_type_id,
+//       transaction_id: payment?.raw?.transaction_id || `MANUAL-${Date.now()}-${rawData.id}`,
+//     };
+//     await paymentApi.confirmPayment(payload);
+//     toast.success(`Payment for ${payment.title} has been verified.`);
+    
+//     closeConfirmDialog();
+//     await fetchPayments();
+//     await fetchDashboardAnalytics();
+
+//   } catch (error) {
+//     console.error("Payment Confirmation Error:", error.response?.data);
+
+//     const backendError = error.response?.data;
+//     let errorMessage = "Could not confirm payment.";
+
+//     if (typeof backendError === 'object') {
+//       errorMessage = Object.entries(backendError)
+//         .map(([key, val]) => `${key}: ${val}`)
+//         .join(' | ');
+//     } else {
+//       errorMessage = backendError?.detail || backendError?.message || errorMessage;
+//     }
+
+//     toast.error(errorMessage);
+//   } finally {
+//     loading.value = false;
+//   }
+// };
 const markAsPaid = async () => {
   const payment = paymentToConfirm.value;
+
   if (!payment) {
     toast.error("No payment data found to confirm.");
     return;
@@ -332,40 +375,41 @@ const markAsPaid = async () => {
 
   try {
     loading.value = true;
- 
+
+    const membershipTypeId =
+      payment.membership_type_id ||
+      payment.subscription?.membership_type?.id ||
+      payment.raw?.subscription?.membership_type?.id;
+
+    if (!membershipTypeId) {
+      toast.error("Missing membership type for this user.");
+      return;
+    }
+
     const payload = {
-      user_id: payment.id, 
-      payment_type: 'subscription',
-      membership_type_id: payment.membership_type_id || payment.raw?.membership_type_id,
-      transaction_id: payment?.raw?.transaction_id || `MANUAL-${Date.now()}-${rawData.id}`,
+      user_id: payment.id,
+      payment_type: "subscription",
+      membership_type_id: membershipTypeId,
+      transaction_id:
+        payment?.raw?.transaction_id ||
+        `MANUAL-${Date.now()}-${payment.id}`,
     };
+
     await paymentApi.confirmPayment(payload);
+
     toast.success(`Payment for ${payment.title} has been verified.`);
-    
+
     closeConfirmDialog();
     await fetchPayments();
     await fetchDashboardAnalytics();
 
   } catch (error) {
     console.error("Payment Confirmation Error:", error.response?.data);
-
-    const backendError = error.response?.data;
-    let errorMessage = "Could not confirm payment.";
-
-    if (typeof backendError === 'object') {
-      errorMessage = Object.entries(backendError)
-        .map(([key, val]) => `${key}: ${val}`)
-        .join(' | ');
-    } else {
-      errorMessage = backendError?.detail || backendError?.message || errorMessage;
-    }
-
-    toast.error(errorMessage);
+    toast.error("Could not confirm payment.");
   } finally {
     loading.value = false;
   }
-};
-  
+};  
   
 const statCards = computed(() => {
   if (!dashboardStats.value) return [];
