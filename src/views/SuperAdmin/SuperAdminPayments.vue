@@ -123,20 +123,26 @@ const fetchPayments = async () => {
       registration.value = members.map((m) => {
         const matchingPayment = paymentMap.get(m.id);
         
+
+        const sub = matchingPayment?.subscription;
+        const mType = sub?.membership_type;
+
         return {
           id: m.id,
           title: m.full_name || m.email || "Unknown",
           email: m.email,
-          enrollments: matchingPayment?.subscription?.membership_type?.name || m.role || "Pending Member",
-          completion: matchingPayment?.amount || "-",
-          amount: matchingPayment?.amount || 0,
+          enrollments: mType?.name || m.role || "Pending Member",
+          completion: mType?.price ? `₦${Number(mType.price).toLocaleString()}` : "-",
+          amount: mType?.price || 0,
           status: m.has_active_subscription ? "completed" : "pending",
           lastUpdate: m.created_at ? new Date(m.created_at).toLocaleDateString() : "-",
-          membership_type_id: matchingPayment?.subscription?.membership_type?.id || null,
+          
+          membership_type_id: mType?.id || null,
+          
           raw: {
             ...m,
-            membership_type_id: matchingPayment?.subscription?.membership_type?.id,
-            transaction_id: matchingPayment?.id
+            membership_type_id: mType?.id,
+            transaction_id: matchingPayment?.id 
           },
         };
       });
