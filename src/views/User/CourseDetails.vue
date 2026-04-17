@@ -74,35 +74,39 @@ const completeLesson = async (lessonId) => {
 };
  
 // const fetchEnrollment = async () => {
+//   if (!course.value?.slug) return;
 //   try {
 //     const res = await learningModule.getEnrollments();
 //     const data = res.data?.results || res.data;
 
-//     const match = data.find(
-//       (e) => e.course_slug === course.value.slug
-//     );
+//     const match = data.find((e) => e.course_slug === course.value.slug);
 
-//     enrollment.value = match;
-
-//     if (match?.certificate) {
-//       certificate.value = match.certificate;
+//     if (match) {
+//       enrollment.value = match;
+//       if (match.certificate) certificate.value = match.certificate;
+      
+//       if (match.completed_lessons) {
+//         completedLessons.value = new Set(match.completed_lessons.map(l => l.id || l));
+//       }
 //     }
-
 //   } catch (err) {
 //     console.error("Error fetching enrollment:", err);
 //   }
-// };
+// };  
 const fetchEnrollment = async () => {
   if (!course.value?.slug) return;
   try {
     const res = await learningModule.getEnrollments();
-    const data = res.data?.results || res.data;
+    const data = Array.isArray(res.data) ? res.data : res.data.results || [];
 
     const match = data.find((e) => e.course_slug === course.value.slug);
 
     if (match) {
       enrollment.value = match;
-      if (match.certificate) certificate.value = match.certificate;
+      
+      if (match.certificate) {
+        certificate.value = match.certificate;
+      }
       
       if (match.completed_lessons) {
         completedLessons.value = new Set(match.completed_lessons.map(l => l.id || l));
@@ -111,7 +115,7 @@ const fetchEnrollment = async () => {
   } catch (err) {
     console.error("Error fetching enrollment:", err);
   }
-};  
+};
   
 const fetchCourse = async () => {
   try {
@@ -147,6 +151,18 @@ const fetchCourse = async () => {
   );
 }); 
 
+const fetchCertificate = async () => {
+  try {
+    if (!enrollment.value?.id) return;
+    const res = await learningModule.generateCertificate({
+      enrollment_id: enrollment.value.id,
+    });
+    certificate.value = res.data; 
+  } catch (err) {
+    console.error("Certificate fetch failed", err);
+  }
+};
+  
 
 //   const fetchCertificate = async () => {
 //   try {
@@ -166,6 +182,10 @@ const fetchCourse = async () => {
   onMounted(async () => {
   await fetchCourse();
   await fetchEnrollment();
+
+   if (route.query.tab === 'certificate') {
+    activeTab.value = 'certificate';
+  } 
 });
 </script>
 
@@ -484,7 +504,7 @@ const fetchCourse = async () => {
                 You are not enrolled in this course.
               </div>
 
-              <div v-else-if="!isCompleted()" class="text-center py-10">
+              <div v-else-if="!isCompleted" class="text-center py-10">
                 <p class="text-lg font-semibold text-gray-700">
                   Complete the course to unlock your certificate
                 </p>
@@ -495,29 +515,50 @@ const fetchCourse = async () => {
               </div>
 
               <div v-else class="space-y-6">
-                <p class="text-green-700 font-semibold">
-                  Course completed on
-                  {{ new Date(enrollment.completed_at).toLocaleDateString() }}
-                </p>
+    <div class="flex items-center justify-between bg-green-50 p-4 rounded-xl border border-green-100">
+      <div>
+        <h3 class="font-bold" :style="{ color: DARK_GREEN }">Certification Earned</h3>
+        <p class="text-sm text-gray-600">Issued on {{ new Date(enrollment.completed_at).toLocaleDateString() }}</p>
+      </div>
+      <a
+        v-if="certificate?.download_url"
+        :href="certificate.download_url"
+        target="_blank"
+        class="px-5 py-2 rounded-lg text-sm font-bold text-white transition hover:opacity-90 shadow-md"
+        :style="{ backgroundColor: DARK_GREEN }"
+      >
+        Download PDF
+      </a>
+    </div>
 
-                <div class="border rounded-lg overflow-hidden h-[500px]">
-                  <iframe
-  v-if="certificate?.pdf_file || certificate?.download_url"
-  :src="certificate.pdf_file || certificate.download_url"
-  class="w-full h-full"
-></iframe>
-                </div>
+    <div class="bg-white border rounded-2xl p-4 flex flex-col items-center shadow-inner min-h-[300px] justify-center">
+      <div v-if="certificate?.image_file" class="w-full">
+        <img 
+          :src="certificate.image_file" 
+          alt="Certificate Preview" 
+          class="w-full h-auto rounded-lg shadow-lg border"
+          @error="(e) => e.target.src = 'fallback-image-url-here'" 
+        />
+        <div class="mt-4 text-center">
+          <p class="text-xs text-gray-400">Certificate No: {{ certificate.certificate_number }}</p>
+          <a :href="certificate.verify_url" target="_blank" class="text-xs text-blue-500 underline">
+            Verify Authenticity
+          </a>
+        </div>
+      </div>
+      
+      <div v-else class="text-center">
+        <button 
+          @click="fetchCertificate"
+          class="px-6 py-2 rounded-lg border-2 font-bold"
+          :style="{ borderColor: DARK_GREEN, color: DARK_GREEN }"
+        >
+          View Certificate Details
+        </button>
+      </div>
+    </div>
+  </div>
 
-                <a
-  v-if="certificate?.download_url"
-  :href="certificate.download_url"
-  target="_blank"
-  class="inline-block px-6 py-3 rounded-lg font-semibold text-white"
-  :style="{ backgroundColor: DARK_GREEN }"
->
-  Download Certificate
-</a>
-              </div>
             </div>
           </div>
 
