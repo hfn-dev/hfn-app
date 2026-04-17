@@ -81,6 +81,55 @@ const openMessageModal = async (title) => {
   }
 };
 
+const fetchRegistrationData = async () => {
+  loading.value = true;
+
+  try {
+    const [membersRes, purchasesRes] = await Promise.all([
+      paymentApi.getUnpaidMembers(),
+      paymentApi.getPurchases({ status: "pending" }),
+    ]);
+
+    const members = membersRes?.results || membersRes || [];
+    const purchases = purchasesRes?.results || purchasesRes || [];
+
+    registration.value = mergeRegistrationData(members, purchases);
+  } finally {
+    loading.value = false;
+  }
+};
+
+
+const mergeRegistrationData = (members, purchases) => {
+  const paymentMap = new Map();
+
+  purchases.forEach((p) => {
+    paymentMap.set(p.user?.id, p);
+  });
+
+  return members.map((m) => {
+    const payment = paymentMap.get(m.id);
+
+    return {
+      id: m.id,
+      title: m.full_name || m.email,
+      email: m.email,
+
+      status: m.has_active_subscription ? "active" : "unpaid",
+
+      amount: payment?.subscription?.membership_type?.price || null,
+      payment_type: payment?.payment_type || null,
+      transaction_id: payment?.id || null,
+
+      membership_type_id:
+        payment?.subscription?.membership_type?.id || null,
+
+      rawMember: m,
+      rawPayment: payment || null,
+    };
+  });
+};
+  
 
 const fetchPayments = async () => {
   loading.value = true;
