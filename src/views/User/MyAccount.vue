@@ -49,21 +49,6 @@ const individualDetailsKeys = [
 const currentView = ref('My Profile');
 const activeTab = ref('My Profile');
 
-// const fetchCertificates = async () => {
-//   try {
-//     const res = await learningModule.getCertificate();
-
-//     const certs = Array.isArray(res) ? res : res.results ? res.results : [res];
-
-//     certificates.value = certs;
-
-//     if (certs.length > 0) {
-//       certificateUrl.value = certs[0].pdf_file || '';
-//     }
-//   } catch (error) {
-//     console.error("Error fetching certificates:", error);
-//   }
-// };
 
 const downloadCertificate = async (certId) => {
   try {
@@ -94,30 +79,6 @@ const downloadCertificate = async (certId) => {
   }
 }
   
-// const fetchCertificates = async () => {
-//   try {
-//     const res = await learningModule.getEnrollment();
-//     // const data = res.data?.results || res.data;
-//     const data = Array.isArray(res.data)
-//   ? res.data
-//   : res.data?.results || [];
-//     const certs = data
-//       .filter((e) => e.certificate_issued && e.certificate)
-//       .map((e) => ({
-//         id: e.certificate.id,
-//         course_title: e.course_title,
-//         issued_date: e.completed_at,
-//         pdf_file: e.certificate.pdf_file,
-//         download_url: e.certificate.download_url,
-//         verify_url: e.certificate.verify_url,
-//       }));
-
-//     certificates.value = certs;
-
-//   } catch (error) {
-//     console.error("Error fetching certificates");
-//   }
-// };
 
 const fetchCertificates = async () => {
   try {
@@ -155,9 +116,11 @@ const fetchCertificates = async () => {
         certs.push({
           id: certificateData.id,
           course_title: e.course_title,
+          certificate_number: certificateData.certificate_number,
           issued_date: e.completed_at,
           pdf_file: certificateData.pdf_file,
           download_url: certificateData.download_url,
+          image_file: certificateData.image_file,
           verify_url: certificateData.verify_url,
         });
       }
@@ -848,53 +811,68 @@ onMounted(() => {
           </div>
         </div>
         <div v-else-if="activeTab === 'My Certificate'" class="space-y-10">
-  <div class="p-10 bg-white rounded-xl shadow-lg border border-gray-200">
-    <h2 class="text-2xl font-semibold mb-4 text-gray-800">
-      My Certificates
-    </h2>
+  <div class="p-6 md:p-10 bg-white rounded-xl shadow-lg border border-gray-200">
+    <h2 class="text-2xl font-semibold mb-6 text-gray-800">My Certificates</h2>
 
-    <div v-if="certificates.length > 0" class="space-y-8">
-      <div v-for="cert in certificates" :key="cert.id" class="space-y-4">
-        <h3 class="text-lg font-semibold text-gray-700">{{ cert.course_title }}</h3>
-        <p class="text-sm text-gray-500">Issued on: {{ new Date(cert.issued_date).toLocaleDateString() }}</p>
-
-        <!-- Certificate Preview -->
-        <div class="w-full border border-gray-300 rounded-lg overflow-hidden shadow-md bg-gray-50 flex justify-center items-center h-80">
-          <iframe
-  v-if="cert.pdf_file || cert.download_url"
-  :src="`https://docs.google.com/gview?url=${cert.pdf_file || cert.download_url}&embedded=true`"
-  class="w-full h-full"
-></iframe>
-          <div v-else class="text-center text-gray-500">
-            Certificate preview unavailable
+    <div v-if="certificates.length > 0" class="space-y-12">
+      <div v-for="cert in certificates" :key="cert.id" class="border-b pb-10 last:border-0">
+        
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
+          <div>
+            <h3 class="text-lg font-bold text-gray-800">{{ cert.course_title }}</h3>
+            <p class="text-sm text-gray-500">
+              Issued on: {{ new Date(cert.issued_date).toLocaleDateString() }}
+            </p>
           </div>
+          
+          <button 
+            @click="downloadCertificate(cert.id)"
+            class="flex items-center justify-center px-5 py-2 bg-[#0c6b39] hover:bg-[#09572d] text-white rounded-lg text-sm font-bold transition shadow-md"
+          >
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+            Download PDF
+          </button>
         </div>
 
-        <!-- Actions -->
-        <div class="mt-2 flex justify-center space-x-4">
+        <div class="bg-gray-50 border rounded-2xl p-4 flex flex-col items-center shadow-inner overflow-hidden">
+          <div v-if="cert.image_file" class="w-full max-w-3xl">
+            <img 
+              :src="cert.image_file" 
+              alt="Certificate Preview" 
+              class="w-full h-auto rounded-lg shadow-lg border bg-white"
+              @error="(e) => e.target.src = 'https://via.placeholder.com/800x600?text=Certificate+Preview'" 
+            />
+            <div class="mt-4 flex flex-col md:flex-row items-center justify-between gap-2 px-2">
+              <p class="text-xs font-mono text-gray-400">ID: {{ cert.certificate_number || cert.id }}</p>
+              <a v-if="cert.verify_url" :href="cert.verify_url" target="_blank" class="text-xs text-blue-500 hover:text-blue-700 underline font-medium">
+                Verify Authenticity
+              </a>
+            </div>
+          </div>
           
-          <button @click="downloadCertificate(cert.id)"
-        class="px-6 py-2 bg-[#0c6b39] hover:bg-[#09572d] text-white rounded-lg shadow">
-  Download
-</button>
-          <button v-if="cert.pdf_file" @click="viewCertificateInNewTab(cert)"
-                  class="px-6 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100">
-            Open in New Tab
-          </button>
-          <a v-if="cert.verify_url" :href="cert.verify_url" target="_blank"
-             class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow">
-            Verify Certificate
-          </a>
+          <div v-else class="py-20 text-center">
+            <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <p class="text-gray-500 text-sm mb-4">No preview available for this certificate</p>
+            <button 
+              @click="viewCertificateInNewTab(cert)"
+              class="text-sm font-bold text-[#0c6b39] border border-[#0c6b39] px-4 py-2 rounded-lg hover:bg-green-50"
+            >
+              View Document
+            </button>
+          </div>
         </div>
       </div>
     </div>
 
-    <div v-else class="text-center text-gray-500">
-      No certificates available
+    <div v-else class="py-20 text-center text-gray-500">
+      <p class="italic">No certificates have been issued to your account yet.</p>
     </div>
   </div>
 </div>
-        
 
         <div v-else class="p-10 text-center bg-white rounded-xl shadow-lg text-gray-500">
           <h2 class="text-2xl font-semibold mb-3">
