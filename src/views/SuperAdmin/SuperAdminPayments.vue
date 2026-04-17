@@ -81,78 +81,82 @@ const openMessageModal = async (title) => {
   }
 };
 
-const fetchRegistrationData = async () => {
-  loading.value = true;
 
-  try {
-    const [membersRes, purchasesRes] = await Promise.all([
-      paymentApi.getUnpaidMembers(),
-      paymentApi.getPurchases({ status: "pending" }),
-    ]);
+// const fetchPayments = async () => {
+//   loading.value = true;
+//   try {
+//     if (currentTab.value === 'Registration') {
+//       const res = await paymentApi.getUnpaidMembers();
+//       registration.value = (res.results || []).map(normalizePayment);
+//     } else {
+//       const [purchasesRes, downloadsRes] = await Promise.all([
+//         paymentApi.getPurchases(),
+//         memberResourcesApi.getDownloadList(1)
+//       ]);
 
-    const members = membersRes?.results || membersRes || [];
-    const purchases = purchasesRes?.results || purchasesRes || [];
+//       const purchasesData = (purchasesRes || []).map(normalizePayment);
 
-    registration.value = mergeRegistrationData(members, purchases);
-  } finally {
-    loading.value = false;
-  }
-};
-
-
-const mergeRegistrationData = (members, purchases) => {
-  const paymentMap = new Map();
-
-  purchases.forEach((p) => {
-    paymentMap.set(p.user?.id, p);
-  });
-
-  return members.map((m) => {
-    const payment = paymentMap.get(m.id);
-
-    return {
-      id: m.id,
-      title: m.full_name || m.email,
-      email: m.email,
-
-      status: m.has_active_subscription ? "active" : "unpaid",
-
-      amount: payment?.subscription?.membership_type?.price || null,
-      payment_type: payment?.payment_type || null,
-      transaction_id: payment?.id || null,
-
-      membership_type_id:
-        payment?.subscription?.membership_type?.id || null,
-
-      rawMember: m,
-      rawPayment: payment || null,
-    };
-  });
-};
-  
-
+// const downloadsData = (downloadsRes?.submissions || []).map(normalizeDownload);
+//       purchases.value = [...purchasesData, ...downloadsData];    
+//     }
+//   } finally {
+//     loading.value = false;
+//   }
+// };
 const fetchPayments = async () => {
   loading.value = true;
   try {
     if (currentTab.value === 'Registration') {
-      const res = await paymentApi.getUnpaidMembers();
-      registration.value = (res.results || []).map(normalizePayment);
+      const [membersRes, purchasesRes] = await Promise.all([
+        paymentApi.getUnpaidMembers(),
+        paymentApi.getPurchases({ status: "pending" }),
+      ]);
+
+      const members = membersRes?.results || membersRes || [];
+      const pendingPurchases = purchasesRes?.results || purchasesRes || [];
+
+      const paymentMap = new Map();
+      pendingPurchases.forEach((p) => {
+        if (p.user?.id) paymentMap.set(p.user.id, p);
+      });
+
+      registration.value = members.map((m) => {
+        const matchingPayment = paymentMap.get(m.id);
+        
+        return {
+          id: m.id,
+          title: m.full_name || m.email || "Unknown",
+          email: m.email,
+          enrollments: matchingPayment?.subscription?.membership_type?.name || m.role || "Pending Member",
+          completion: matchingPayment?.amount || "-",
+          amount: matchingPayment?.amount || 0,
+          status: m.has_active_subscription ? "completed" : "pending",
+          lastUpdate: m.created_at ? new Date(m.created_at).toLocaleDateString() : "-",
+          membership_type_id: matchingPayment?.subscription?.membership_type?.id || null,
+          raw: {
+            ...m,
+            membership_type_id: matchingPayment?.subscription?.membership_type?.id,
+            transaction_id: matchingPayment?.id
+          },
+        };
+      });
     } else {
       const [purchasesRes, downloadsRes] = await Promise.all([
         paymentApi.getPurchases(),
         memberResourcesApi.getDownloadList(1)
       ]);
 
-      const purchasesData = (purchasesRes || []).map(normalizePayment);
-
-const downloadsData = (downloadsRes?.submissions || []).map(normalizeDownload);
-      purchases.value = [...purchasesData, ...downloadsData];    
+      const purchasesData = (purchasesRes?.results || purchasesRes || []).map(normalizePayment);
+      const downloadsData = (downloadsRes?.submissions || []).map(normalizeDownload);
+      purchases.value = [...purchasesData, ...downloadsData];
     }
+  } catch (error) {
+    toast.error("Failed to load data");
+    console.error(error);
   } finally {
     loading.value = false;
   }
 };
-
 
 const normalizeDownload = (item) => {
   return {
@@ -315,26 +319,21 @@ const handleAction = (action, course) => {
 
 const markAsPaid = async () => {
   const payment = paymentToConfirm.value;
-  if (!payment || !payment.raw) {
+  if (!payment) {
     toast.error("No payment data found to confirm.");
     return;
   }
 
   try {
     loading.value = true;
-    const rawData = payment.raw;
-
-  
+ 
     const payload = {
-      user_id: rawData.user?.id || rawData.id, 
-      payment_type: rawData.payment_type || 'subscription',
-      transaction_id: rawData.transaction_id || `MANUAL-${Date.now()}-${rawData.id}`,
+      user_id: payment.id, 
+      payment_type: 'subscription',
+      membership_type_id: payment.membership_type_id, 
+      transaction_id: payment?.transaction_id || `MANUAL-${Date.now()}-${rawData.id}`,
     };
-
-    console.log("Submitting Confirmation Payload:", payload);
-
     await paymentApi.confirmPayment(payload);
-
     toast.success(`Payment for ${payment.title} has been verified.`);
     
     closeConfirmDialog();
