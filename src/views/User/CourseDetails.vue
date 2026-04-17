@@ -94,29 +94,36 @@ const completeLesson = async (lessonId) => {
 //   }
 // };  
 const fetchEnrollment = async () => {
-  if (!course.value?.slug) return;
+  if (!course.value?.id) return;
+
   try {
-    const res = await learningModule.getEnrollments();
+    const res = await learningModule.getEnrollment();
     const data = Array.isArray(res.data) ? res.data : res.data.results || [];
 
-    const match = data.find((e) => e.course_slug === course.value.slug);
+    const match = data.find((e) => {
+      return (
+        e.course === course.value.id ||       
+        e.course?.id === course.value.id      
+      );
+    });
 
     if (match) {
       enrollment.value = match;
-      
+
       if (match.certificate) {
         certificate.value = match.certificate;
       }
-      
+
       if (match.completed_lessons) {
-        completedLessons.value = new Set(match.completed_lessons.map(l => l.id || l));
+        completedLessons.value = new Set(
+          match.completed_lessons.map(l => l.id || l)
+        );
       }
     }
   } catch (err) {
     console.error("Error fetching enrollment:", err);
   }
-};
-  
+};  
 const fetchCourse = async () => {
   try {
     loading.value = true;
