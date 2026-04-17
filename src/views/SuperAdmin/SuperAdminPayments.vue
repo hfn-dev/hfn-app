@@ -270,22 +270,15 @@ const markAsPaid = async () => {
   try {
     loading.value = true;
 
-    // const paymentDetails = await paymentApi.retrievePayment(payment.id);
-
-    // const payload = {
-    //   transaction_id: paymentDetails.transaction_id,
-    //   status: "completed",
-    //   payment_reference: paymentDetails.payment_reference,
-    //   metadata: null,
-    // };
     const raw = payment.raw;
 
-const payload = {
-  user_id: raw.user?.id || raw.user_id || raw.id,
-  payment_type: 'subscription',
-  membership_type_id: '2',
-  transaction_id: raw.transaction_id || '03223',
-};
+    const payload = {
+      user_id: raw.user?.id,
+      payment_type: raw.payment_type,
+      transaction_id: raw.transaction_id,
+    };
+
+    console.log("Confirm payload:", payload);
 
     await paymentApi.confirmPayment(payload);
 
@@ -297,17 +290,19 @@ const payload = {
     fetchDashboardAnalytics();
 
   } catch (error) {
+    console.error("Confirm error:", error.response?.data);
+
     const message =
       error.response?.data?.detail ||
       error.response?.data?.message ||
+      JSON.stringify(error.response?.data) ||
       "Error confirming payment";
 
     toast.error(message);
   } finally {
     loading.value = false;
   }
-};  
-
+};
 const statCards = computed(() => {
   if (!dashboardStats.value) return [];
 
