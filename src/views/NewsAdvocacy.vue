@@ -469,35 +469,19 @@ const fetchArticles = async () => {
       ? res
       : res.results || [];
 
-  //   const normalizedApiArticles = apiArticles.map((item) => ({
-  //     id: item.id,
-  //     slug: item.slug,
-  //     excerpt: item.excerpt || item.content?.slice(0, 120),
-  //     image: item.featured_image || "event.png",
-  //     title: item.title,
-  // description: item.content,
-  //     created_at: item.publish_date,
-  //     date: new Date(item.publish_date).toDateString(),
-  //     commentCount: item.comment_count || 0,
-  //     audience: item.audience, 
-  //   }));
-    const normalizedApiArticles = apiArticles.map((item) => {
-  const rawDate = item.publish_date || item.created_at || item.date;
-  
-  return {
-    id: item.id,
-    slug: item.slug,
-    excerpt: item.excerpt || item.content?.slice(0, 120),
-    image: item.featured_image,
-    title: item.title,
-    description: item.content,
-    created_at: rawDate, 
-    date: rawDate ? new Date(rawDate).toDateString() : 'Date TBD',
-    commentCount: item.comment_count || 0,
-    audience: item.audience, 
-  };
-});
-
+    const normalizedApiArticles = apiArticles.map((item) => ({
+      id: item.id,
+      slug: item.slug,
+      excerpt: item.excerpt || item.content?.slice(0, 120),
+      image: item.featured_image || "event.png",
+      title: item.title,
+  description: item.content,
+      created_at: item.publish_date,
+      date: new Date(item.publish_date).toDateString(),
+      commentCount: item.comment_count || 0,
+      audience: item.audience, 
+    }));
+    
     articles.value = [...dummyArticles, ...normalizedApiArticles];
   } catch (error) {
     console.error("Error fetching articles");
