@@ -266,43 +266,53 @@ const handleAction = (action, course) => {
 
 const markAsPaid = async () => {
   const payment = paymentToConfirm.value;
+  if (!payment || !payment.raw) {
+    toast.error("No payment data found to confirm.");
+    return;
+  }
 
   try {
     loading.value = true;
+    const rawData = payment.raw;
 
-    const raw = payment.raw;
-
+  
     const payload = {
-      user_id: raw.user?.id,
-      payment_type: raw.payment_type,
-      transaction_id: raw.transaction_id,
+      user_id: rawData.user?.id || rawData.id, 
+      payment_type: rawData.payment_type || 'subscription',
+      transaction_id: rawData.transaction_id || `MANUAL-${Date.now()}-${rawData.id}`,
     };
 
-    console.log("Confirm payload:", payload);
+    console.log("Submitting Confirmation Payload:", payload);
 
     await paymentApi.confirmPayment(payload);
 
-    toast.success(`Payment for ${payment.title} marked as completed`);
-
+    toast.success(`Payment for ${payment.title} has been verified.`);
+    
     closeConfirmDialog();
-
-    fetchPayments();
-    fetchDashboardAnalytics();
+    await fetchPayments();
+    await fetchDashboardAnalytics();
 
   } catch (error) {
-    console.error("Confirm error:", error.response?.data);
+    console.error("Payment Confirmation Error:", error.response?.data);
 
-    const message =
-      error.response?.data?.detail ||
-      error.response?.data?.message ||
-      JSON.stringify(error.response?.data) ||
-      "Error confirming payment";
+    const backendError = error.response?.data;
+    let errorMessage = "Could not confirm payment.";
 
-    toast.error(message);
+    if (typeof backendError === 'object') {
+      errorMessage = Object.entries(backendError)
+        .map(([key, val]) => `${key}: ${val}`)
+        .join(' | ');
+    } else {
+      errorMessage = backendError?.detail || backendError?.message || errorMessage;
+    }
+
+    toast.error(errorMessage);
   } finally {
     loading.value = false;
   }
 };
+  
+  
 const statCards = computed(() => {
   if (!dashboardStats.value) return [];
 
