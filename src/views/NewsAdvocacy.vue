@@ -309,6 +309,7 @@
 
 <script setup>
 import wef from "@/assets/wef.jpg";
+import blog from "@/assets/blogh.png";  
 import { newsPageSchema } from "@/schemas/pages/news.schema";
 import { ref, reactive, computed, onMounted, watch } from "vue";
 import contentUploadApi from "@/api/contentUploadsApi";
@@ -473,7 +474,7 @@ const fetchArticles = async () => {
       id: item.id,
       slug: item.slug,
       excerpt: item.excerpt || item.content?.slice(0, 120),
-      image: item.featured_image,
+      image: item.featured_image || blog,
       title: item.title,
   description: item.content,
       created_at: item.publish_date,
