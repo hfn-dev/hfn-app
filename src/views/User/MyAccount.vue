@@ -94,30 +94,81 @@ const downloadCertificate = async (certId) => {
   }
 }
   
+// const fetchCertificates = async () => {
+//   try {
+//     const res = await learningModule.getEnrollment();
+//     // const data = res.data?.results || res.data;
+//     const data = Array.isArray(res.data)
+//   ? res.data
+//   : res.data?.results || [];
+//     const certs = data
+//       .filter((e) => e.certificate_issued && e.certificate)
+//       .map((e) => ({
+//         id: e.certificate.id,
+//         course_title: e.course_title,
+//         issued_date: e.completed_at,
+//         pdf_file: e.certificate.pdf_file,
+//         download_url: e.certificate.download_url,
+//         verify_url: e.certificate.verify_url,
+//       }));
+
+//     certificates.value = certs;
+
+//   } catch (error) {
+//     console.error("Error fetching certificates");
+//   }
+// };
+
 const fetchCertificates = async () => {
   try {
     const res = await learningModule.getEnrollment();
-    // const data = res.data?.results || res.data;
+
     const data = Array.isArray(res.data)
-  ? res.data
-  : res.data?.results || [];
-    const certs = data
-      .filter((e) => e.certificate_issued && e.certificate)
-      .map((e) => ({
-        id: e.certificate.id,
-        course_title: e.course_title,
-        issued_date: e.completed_at,
-        pdf_file: e.certificate.pdf_file,
-        download_url: e.certificate.download_url,
-        verify_url: e.certificate.verify_url,
-      }));
+      ? res.data
+      : res.data?.results || [];
+
+    const completedEnrollments = data.filter(
+      (e) =>
+        e.status === "completed" ||
+        Number(e.progress_percentage) === 100
+    );
+
+    const certs = [];
+
+    for (const e of completedEnrollments) {
+      let certificateData = e.certificate;
+
+      if (!certificateData) {
+        try {
+          const genRes = await learningModule.generateCertificate({
+            enrollment_id: e.id,
+          });
+
+          certificateData = genRes.data || genRes;
+        } catch (err) {
+          console.warn("Certificate generation failed for:", e.id);
+          continue;
+        }
+      }
+
+      if (certificateData) {
+        certs.push({
+          id: certificateData.id,
+          course_title: e.course_title,
+          issued_date: e.completed_at,
+          pdf_file: certificateData.pdf_file,
+          download_url: certificateData.download_url,
+          verify_url: certificateData.verify_url,
+        });
+      }
+    }
 
     certificates.value = certs;
-
   } catch (error) {
-    console.error("Error fetching certificates");
+    console.error("Error fetching certificates", error);
   }
 };
+  
   
 const viewCertificateInNewTab = (cert) => {
   if (cert.pdf_file) {
