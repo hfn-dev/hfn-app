@@ -310,7 +310,7 @@
 <script setup>
 import wef from "@/assets/wef.jpg";
 import { newsPageSchema } from "@/schemas/pages/news.schema";
-import { ref, reactive, computed, onMounted } from "vue";
+import { ref, reactive, computed, onMounted, watch } from "vue";
 import contentUploadApi from "@/api/contentUploadsApi";
 import newsModule from "@/api/newsModule";
 
@@ -366,6 +366,11 @@ const imageMap = {
 "latest_news.png": latest,
 };
 
+watch([() => selectedDate.month, () => selectedDate.year], () => {
+  currentPage.value = 1;
+  currentPagePolicy.value = 1;
+});
+  
 const allowedAudiences = ["all", "non_members"];
 
 const dummyArticles = [...newsPageSchema.latestNewsSection.articles]; 
@@ -373,10 +378,12 @@ const dummyArticles = [...newsPageSchema.latestNewsSection.articles];
 // Pagination
 const currentPage = ref(1);
 const itemsPerPage = 4;
-const totalPages = ref(1);
+// const totalPages = ref(1);
 const currentPagePolicy = ref(1);
 const itemsPerPagePolicy = 3;
-
+const totalPages = computed(() => {
+  return Math.ceil(filteredArticles.value.length / itemsPerPage) || 1;
+});
 const goToPrevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--;
