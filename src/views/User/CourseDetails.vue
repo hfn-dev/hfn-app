@@ -4,7 +4,7 @@ import courses from "@/assets/courses.jpg";
 import student from "@/assets/student.jpg";
 
 import UserSidebar from "@/components/layout/UserSidebar.vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { useToast } from "vue-toastification";
   
@@ -72,50 +72,46 @@ const completeLesson = async (lessonId) => {
     console.error("Lesson completion failed");
   }
 };
-  
+ 
 // const fetchEnrollment = async () => {
 //   try {
-//     const res = await learningModule.getEnrollment({
-//       expand: "course",
-//     });
+//     const res = await learningModule.getEnrollments();
+//     const data = res.data?.results || res.data;
 
-//     const enrollments = Array.isArray(res.data)
-//       ? res.data
-//       : res.data.results || [];
-
-//     enrollment.value = enrollments.find(
-//       (e) => e.course_slug === courseParam || e.course === courseParam
+//     const match = data.find(
+//       (e) => e.course_slug === course.value.slug
 //     );
-//     if (
-//       enrollment.value &&
-//       (enrollment.value.status === "completed" ||
-//         Number(enrollment.value.progress_percentage) === 100)
-//     ) {
-//       fetchCertificate();
+
+//     enrollment.value = match;
+
+//     if (match?.certificate) {
+//       certificate.value = match.certificate;
 //     }
-//   } catch (error) {
-//     console.error("Failed to fetch enrollment", error);
+
+//   } catch (err) {
+//     console.error("Error fetching enrollment:", err);
 //   }
 // };
 const fetchEnrollment = async () => {
+  if (!course.value?.slug) return;
   try {
     const res = await learningModule.getEnrollments();
     const data = res.data?.results || res.data;
 
-    const match = data.find(
-      (e) => e.course_slug === course.value.slug
-    );
+    const match = data.find((e) => e.course_slug === course.value.slug);
 
-    enrollment.value = match;
-
-    if (match?.certificate) {
-      certificate.value = match.certificate;
+    if (match) {
+      enrollment.value = match;
+      if (match.certificate) certificate.value = match.certificate;
+      
+      if (match.completed_lessons) {
+        completedLessons.value = new Set(match.completed_lessons.map(l => l.id || l));
+      }
     }
-
   } catch (err) {
     console.error("Error fetching enrollment:", err);
   }
-};
+};  
   
 const fetchCourse = async () => {
   try {
@@ -136,13 +132,20 @@ const fetchCourse = async () => {
   }
 };
 
-const isCompleted = () => {
+// const isCompleted = () => {
+//   return (
+//     enrollment.value &&
+//     (enrollment.value.status === "completed" ||
+//       Number(enrollment.value.progress_percentage) === 100)
+//   );
+// };
+ const isCompleted = computed(() => {
   return (
     enrollment.value &&
     (enrollment.value.status === "completed" ||
       Number(enrollment.value.progress_percentage) === 100)
   );
-};
+}); 
 
 
 //   const fetchCertificate = async () => {
