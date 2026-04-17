@@ -73,26 +73,6 @@ const completeLesson = async (lessonId) => {
   }
 };
  
-// const fetchEnrollment = async () => {
-//   if (!course.value?.slug) return;
-//   try {
-//     const res = await learningModule.getEnrollments();
-//     const data = res.data?.results || res.data;
-
-//     const match = data.find((e) => e.course_slug === course.value.slug);
-
-//     if (match) {
-//       enrollment.value = match;
-//       if (match.certificate) certificate.value = match.certificate;
-      
-//       if (match.completed_lessons) {
-//         completedLessons.value = new Set(match.completed_lessons.map(l => l.id || l));
-//       }
-//     }
-//   } catch (err) {
-//     console.error("Error fetching enrollment:", err);
-//   }
-// };  
 const fetchEnrollment = async () => {
   if (!course.value?.id) return;
 
@@ -143,13 +123,6 @@ const fetchCourse = async () => {
   }
 };
 
-// const isCompleted = () => {
-//   return (
-//     enrollment.value &&
-//     (enrollment.value.status === "completed" ||
-//       Number(enrollment.value.progress_percentage) === 100)
-//   );
-// };
  const isCompleted = computed(() => {
   return (
     enrollment.value &&
@@ -171,20 +144,6 @@ const fetchCertificate = async () => {
 };
   
 
-//   const fetchCertificate = async () => {
-//   try {
-//     if (!enrollment.value?.id) return;
-
-//     const res = await learningModule.generateCertificate({
-//       enrollment_id: enrollment.value.id,
-//     });
-
-//     certificate.value = res.data;
-
-//   } catch (err) {
-//     console.error("Certificate fetch/generate failed", err);
-//   }
-// };
 
   onMounted(async () => {
   await fetchCourse();
