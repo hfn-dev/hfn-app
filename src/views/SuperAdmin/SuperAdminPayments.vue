@@ -711,13 +711,10 @@ const closeSidebar = () => (showSidebar.value = false);
                 <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
               </th>
               <th class="py-3 px-3 text-left">
-                Amount
+                Email
                 <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
               </th>
-              <th class="py-3 px-3 text-left">
-                Payment Date
-                <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
-              </th>
+              
               <th class="py-3 px-3 text-center rounded-tr-lg">Action</th>
             </tr>
           </thead>
@@ -732,24 +729,10 @@ const closeSidebar = () => (showSidebar.value = false);
               <td class="py-3 px-3">
                 {{ course.enrollments !== null ? course.enrollments : '-' }}
               </td>
-              <td class="py-3 px-3">
-                <span
-  :class="{
-    'text-green-600 font-semibold':
-      course.completion?.includes?.('100'),
-    'text-orange-500':
-      course.completion &&
-      parseFloat(course.completion) < 50 &&
-      course.completion !== '-',
-  }"
->
-  {{ course.completion ?? '-' }}
-</span>
-
+              <td class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]">
+                {{ course.email }}
               </td>
-              <td class="py-3 px-3">
-                {{ course.lastUpdate }}
-              </td>
+              
               <td class="py-3 px-3 text-center">
                 <div class="flex item-center justify-center space-x-2">
                   <button @click="handleAction('View', course)"
