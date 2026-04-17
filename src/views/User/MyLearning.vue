@@ -29,7 +29,17 @@ const reviewForm = ref({
   review_text: "",
 });
 
-  const goToCertificate = (enrollment) => {
+//   const goToCertificate = (enrollment) => {
+//   const slug = enrollment.course?.slug;
+
+//   if (!slug) {
+//     toast.error("Course not found");
+//     return;
+//   }
+
+//   router.push(`/user/courses/${slug}?tab=certificate`);
+// };
+const goToCertificate = async (enrollment) => {
   const slug = enrollment.course?.slug;
 
   if (!slug) {
@@ -37,8 +47,18 @@ const reviewForm = ref({
     return;
   }
 
-  router.push(`/user/courses/${slug}?tab=certificate`);
+  try {
+    await learningModule.generateCertificate({
+      enrollment_id: enrollment.id,
+    });
+    
+    router.push(`/user/courses/${slug}?tab=certificate`);
+  } catch (err) {
+    console.error("Error preparing certificate", err);
+    router.push(`/user/courses/${slug}?tab=certificate`);
+  }
 };
+  
 
 const fetchUserEnrollments = async () => {
   try {
