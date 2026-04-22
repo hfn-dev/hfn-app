@@ -132,18 +132,18 @@ export default {
     }
   },
 
-  // async approveApplication(id, payload) {
-  //   try {
-  //     const response = await api.post(
-  //       `/membership/applications/${id}/approve/`,
-  //       payload
-  //     );
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error("Approve application API error:", error);
-  //     throw error;
-  //   }
-  // },
+  async approveRegistrations(id) {
+    try {
+      const response = await api.post(
+        `/membership/applications/${id}/approve/`,
+        payload
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Approve application API error:", error);
+      throw error;
+    }
+  },
   async approveApplication(payload) {
     try {
       const response = await api.post(

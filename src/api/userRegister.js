@@ -3,7 +3,22 @@ import api from './axios.js';
 export default {
   async createApplication(payload) {
     try {
-      const response = await api.post('/account/individual-applications/', payload);
+      const response = await api.post(
+        '/account/individual-applications/',
+        payload
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Registration API error');
+      throw error;
+    }
+  },
+  async getApplications(payload) {
+    try {
+      const response = await api.get(
+        '/account/individual-applications/',
+        payload
+      );
       return response.data;
     } catch (error) {
       console.error('Registration API error');
@@ -87,6 +102,16 @@ export default {
     }
   },
 
+  async getCorporateUsers(params = {}) {
+    try {
+      const response = await api.get('/account/users/', { params });
+      return response.data;
+    } catch (error) {
+      console.error('Get User API error');
+      throw error;
+    }
+  },
+
   async getApplications() {
     try {
       const response = await api.get('/account/admin/individual-applications/');
@@ -98,29 +123,27 @@ export default {
   },
 
   async generateCertificate(enrollmentId) {
-  try {
-    const res = await api.post('/learning/certificates/generate/', {
-      enrollment_id: enrollmentId
-    });
+    try {
+      const res = await api.post('/learning/certificates/generate/', {
+        enrollment_id: enrollmentId,
+      });
 
-    return res.data;
-
-  } catch (error) {
-    console.error('Certificate generation failed');
-    throw error;
-  }
-},
+      return res.data;
+    } catch (error) {
+      console.error('Certificate generation failed');
+      throw error;
+    }
+  },
 
   async loadCertificate(certificateId) {
-  try {
-    const res = await api.get(`/learning/certificates/${certificateId}/`);
-    return res.data;
-
-  } catch (error) {
-    console.error('Failed to fetch certificate');
-    throw error;
-  }
-},
+    try {
+      const res = await api.get(`/learning/certificates/${certificateId}/`);
+      return res.data;
+    } catch (error) {
+      console.error('Failed to fetch certificate');
+      throw error;
+    }
+  },
 
   async contactForm(payload) {
     try {
@@ -133,9 +156,9 @@ export default {
   },
 
   async getContactForm(params = {}) {
-  const response = await api.get('/contact/', { params });
-  return response.data;
-},
+    const response = await api.get('/contact/', { params });
+    return response.data;
+  },
   async changePassword(payload) {
     try {
       const response = await api.post('/account/change-password/', payload);

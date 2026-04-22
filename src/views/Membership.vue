@@ -174,53 +174,45 @@ const searchQuery = ref("");
 const members = ref([]);
 const loadingMembers = ref(false);
 
-// const members = ref([
-//   "ABIOLA MORUF TAJUDEENA",
-//   "ABIOLA MORUF TAJUDEENB",
-//   "ABIOLA MORUF TAJUDEENC",
-//   "ABIOLA MORUF TAJUDEEND",
-//   "ANIEBE SOMTO EMELDAA",
-//   "ANIEBE SOMTO EMELDAB",
-//   "ANIEBE SOMTO EMELDAC",
-//   "AROGUNDADE IFEOLUWAN THEOPHILUSA",
-//   "AROGUNDADE IFEOLUWAN THEOPHILUSB",
-//   "ATAGUBA FRANKLINA",
-//   "ATAGUBA FRANKLINB",
+const selectedLetter = ref("A");
 
-//   // second column
-//   "ABIOLA MORUF TAJUDEENE",
-//   "ABIOLA MORUF TAJUDEENF",
-//   "ABIOLA MORUF TAJUDEENG",
-//   "ANIEBE SOMTO EMELDAD",
-//   "ANIEBE SOMTO EMELDAE",
-//   "ANIEBE SOMTO EMELDAF",
-//   "AROGUNDADE IFEOLUWAN THEOPHILUSC",
-//   "AROGUNDADE IFEOLUWAN THEOPHILUSD",
-//   "AROGUNDADE IFEOLUWAN THEOPHILUSE",
-//   "AROGUNDADE IFEOLUWAN THEOPHILUSF",
-//   "ATAGUBA FRANKLINC",
+const filterByLetter = (letter) => {
+  selectedLetter.value = letter;
+  fetchCorporateMembers();
+};
 
-//   // third column
-//   "AROGUNDADE IFEOLUWAN THEOPHILUSG",
-//   "AROGUNDADE IFEOLUWAN THEOPHILUSH",
-//   "AROGUNDADE IFEOLUWAN THEOPHILUSI",
-//   "AROGUNDADE IFEOLUWAN THEOPHILUSJ",
-//   "AROGUNDADE IFEOLUWAN THEOPHILUSK",
-// ]);
+// const fetchCorporateMembers = async () => {
+//   try {
+//     loadingMembers.value = true;
+//     const allUsers = await userRegister.getCorporateUsers();
+//     members.value = allUsers.filter(
+//       (user) => user.member_category?.toLowerCase() === "corporate"
+//     );
+//   } catch (error) {
+//     console.error("Failed to fetch members:", error);
+//   } finally {
+//     loadingMembers.value = false;
+//   }
+// };
+
 
 const fetchCorporateMembers = async () => {
   try {
     loadingMembers.value = true;
-    const allUsers = await userRegister.getUserList();
-    members.value = allUsers.filter(
-      (user) => user.member_category?.toLowerCase() === "corporate"
-    );
+
+    const allUsers = await userRegister.getCorporateUsers({
+      member_type: "corporate",
+      starts_with: selectedLetter.value,
+    });
+
+    members.value = allUsers.results || allUsers;
   } catch (error) {
     console.error("Failed to fetch members:", error);
   } finally {
     loadingMembers.value = false;
   }
 };
+
 
 onMounted(() => {
   fetchCorporateMembers();
