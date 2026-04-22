@@ -327,7 +327,9 @@ const totalPages = computed(() => {
 const page = newsPageSchema;  
 const sortedArticles = computed(() => {
   return [...newsPageSchema.latestNewsSection.articles].sort((a, b) => {
-    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    const dateA = new Date(a.created_at || a.date).getTime();
+    const dateB = new Date(b.created_at || b.date).getTime();
+    return dateB - dateA;
   });
 });
 // const policyUpdates = newsPageSchema.news.policyAdvocacySection.updates;
@@ -348,6 +350,12 @@ const hands2 =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769716176/dc2a1ae8ac60464700aa7be25ea2c408_L_dt5us8.jpg";
 
 
+const formatDate = (dateVal) => {
+  if (!dateVal) return "N/A";
+  const d = new Date(dateVal);
+  return isNaN(d.getTime()) ? "N/A" : d.toDateString();
+};
+
 const getArticleLink = (article) => {
   return {
     path: `/blog/${article.slug}`,
@@ -356,7 +364,7 @@ const getArticleLink = (article) => {
         title: article.title,
         description: article.description || article.content || article.excerpt || "",
         image: article.featured_image || article.image || "event.png",
-        date: new Date(article.created_at || article.date).toDateString(),
+        date: formatDate(article.created_at || article.date),
         tag: article.tag || "News",
         caption: article.caption || "",
         comments: article.commentCount || 0,

@@ -2,16 +2,21 @@ import router from '@/router';
 import { useAuth } from '@/store/authStore';
 import axios from 'axios';
 // baseURL: "https://birdie-sequestrable-gilda.ngrok-free.dev/api",
+// baseURL: 'https://temp-hf.onrender.com/api',
 
 const api = axios.create({
-  baseURL: 'https://temp-hf.onrender.com/api',
+  baseURL: 'https://hfn-backend-production.up.railway.app/api',
   timeout: 45000,
 });
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
 
-  const publicRoutes = ['/account/login', '/account/register', '/account/individual-applications/'];
+  const publicRoutes = [
+    '/account/login',
+    '/account/register',
+    '/account/individual-applications/',
+  ];
 
   const isPublic = publicRoutes.some((route) => config.url.startsWith(route));
 
@@ -21,7 +26,6 @@ api.interceptors.request.use((config) => {
 
   return config;
 });
-
 
 let isRedirecting = false;
 api.interceptors.response.use(

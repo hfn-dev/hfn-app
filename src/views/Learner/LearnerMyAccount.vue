@@ -118,8 +118,8 @@ const fetchCertificates = async () => {
 };
   
 const viewCertificateInNewTab = (cert) => {
-  if (cert.pdf_file) {
-    window.open(cert.pdf_file, "_blank");
+  if (cert.pdf_file || cert.download_url) {
+    window.open(cert.pdf_file || cert.download_url, "_blank");
   }
 };
 
@@ -791,42 +791,55 @@ onMounted(() => {
           </div>
         </div>
         <div v-else-if="activeTab === 'My Certificate'" class="space-y-10">
-  <div class="p-10 bg-white rounded-xl shadow-lg border border-gray-200">
-    <h2 class="text-2xl font-semibold mb-4 text-gray-800">
-      My Certificates
-    </h2>
+  <div class="p-6 md:p-10 bg-white rounded-xl shadow-lg border border-gray-200">
+    <h2 class="text-2xl font-semibold mb-6 text-gray-800">My Certificates</h2>
 
-    <div v-if="certificates.length > 0" class="space-y-8">
-      <div v-for="cert in certificates" :key="cert.id" class="space-y-4">
-        <h3 class="text-lg font-semibold text-gray-700">{{ cert.course_title }}</h3>
-        <p class="text-sm text-gray-500">Issued on: {{ new Date(cert.issued_date).toLocaleDateString() }}</p>
-
-        <!-- Certificate Preview -->
-        <div class="w-full border border-gray-300 rounded-lg overflow-hidden shadow-md bg-gray-50 flex justify-center items-center h-80">
-          <iframe
-  v-if="cert.pdf_file || cert.download_url"
-  :src="cert.pdf_file || cert.download_url"
-  class="w-full h-full"
-></iframe>
-          <div v-else class="text-center text-gray-500">
-            Certificate preview unavailable
+    <div v-if="certificates.length > 0" class="space-y-12">
+      <div v-for="cert in certificates" :key="cert.id" class="border-b pb-10 last:border-0">
+        
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
+          <div>
+            <h3 class="text-lg font-bold text-gray-800">{{ cert.course_title }}</h3>
+            <p class="text-sm text-gray-500">
+              Issued on: {{ new Date(cert.issued_date).toLocaleDateString() }}
+            </p>
           </div>
+          
+          <button 
+            @click="downloadCertificate(cert.id)"
+            class="flex items-center justify-center px-5 py-2 bg-[#0c6b39] hover:bg-[#09572d] text-white rounded-lg text-sm font-bold transition shadow-md"
+          >
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+            Download PDF
+          </button>
         </div>
 
-        <!-- Actions -->
-        <div class="mt-2 flex justify-center space-x-4">
-          <button @click="downloadCertificate(cert.id)"
-        class="px-6 py-2 bg-[#0c6b39] hover:bg-[#09572d] text-white rounded-lg shadow">
-  Download
-</button>
-          <button v-if="cert.pdf_file" @click="viewCertificateInNewTab(cert)"
-                  class="px-6 py-2 bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100">
-            Open in New Tab
-          </button>
-          <a v-if="cert.verify_url" :href="cert.verify_url" target="_blank"
-             class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow">
-            Verify Certificate
-          </a>
+        <div class="bg-gray-50 border rounded-2xl p-4 flex flex-col items-center shadow-inner overflow-hidden">
+          <div v-if="cert.image_file" class="w-full max-w-3xl">
+            <img 
+              :src="cert.image_file" 
+              alt="Certificate Preview" 
+              class="w-full h-auto rounded-lg shadow-lg border bg-white"
+              @error="(e) => e.target.src = 'https://via.placeholder.com/800x600?text=Certificate+Preview'" 
+            />
+            <div class="mt-4 flex flex-col md:flex-row items-center justify-between gap-2 px-2">
+              <p class="text-xs font-mono text-gray-400">ID: {{ cert.certificate_number || cert.id }}</p>
+              <a v-if="cert.verify_url" :href="cert.verify_url" target="_blank" class="text-xs text-blue-500 hover:text-blue-700 underline font-medium">
+                Verify Certificate
+              </a>
+            </div>
+          </div>
+          <div v-else-if="cert.pdf_file || cert.download_url" class="w-full max-w-3xl">
+            <iframe
+              :src="cert.pdf_file || cert.download_url"
+              class="w-full h-96 rounded-lg"
+            ></iframe>
+          </div>
+          <div v-else class="text-center text-gray-500 py-12">
+            Certificate preview unavailable
+          </div>
         </div>
       </div>
     </div>

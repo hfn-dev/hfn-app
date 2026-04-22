@@ -979,7 +979,16 @@ const closeSidebar = () => (showSidebar.value = false);
                       }}
                     </button>
 
+                    <a
+                      v-if="article.is_external && article.external_link"
+                      :href="article.external_link"
+                      class="text-gray-600 hover:underline text-xs"
+                      target="_blank"
+                    >
+                      View
+                    </a>
                     <RouterLink
+                      v-else
                       :to="`/blog/${article.slug}`"
                       class="text-gray-600 hover:underline text-xs"
                       target="_blank"
