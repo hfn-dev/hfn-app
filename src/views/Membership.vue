@@ -176,6 +176,8 @@ const loadingMembers = ref(false);
 
 const selectedLetter = ref("A");
 
+const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
 const filterByLetter = (letter) => {
   selectedLetter.value = letter;
   fetchCorporateMembers();
@@ -610,112 +612,18 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
             class="flex flex-wrap justify-start border-b border-gray-200 pb-2 mb-8"
           >
             <button
-              class="px-3 py-1 text-white bg-green-600 rounded-md font-medium text-sm mx-1 my-1 border border-green-600"
+              v-for="letter in letters"
+              :key="letter"
+              @click="filterByLetter(letter)"
+              :class="[
+                'px-3 py-1 rounded-md text-sm mx-1 my-1 border',
+                selectedLetter === letter
+                  ? 'bg-green-600 text-white border-green-600'
+                  : 'bg-white text-gray-700 border-gray-300 hover:border-green-500'
+              ]"
             >
-              A
+              {{ letter }}
             </button>
-            <button
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-            >
-              B
-            </button>
-            <button
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-            >
-              C
-            </button>
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >D</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >E</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >F</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >G</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >H</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >I</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >J</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >K</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >L</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >M</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >N</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >O</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >P</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >Q</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >R</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >S</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >T</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >U</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >V</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >W</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >X</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >Y</span
-            >
-            <span
-              class="px-3 py-1 text-gray-700 bg-white rounded-md font-medium text-sm mx-1 my-1 border border-gray-300 hover:border-green-500"
-              >Z</span
-            >
           </div>
 
           <div

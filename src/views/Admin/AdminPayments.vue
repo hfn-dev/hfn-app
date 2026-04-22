@@ -193,10 +193,12 @@ const fetchDashboardAnalytics = async () => {
     const revenue = await analyticsApi.fetchRevenueAnalytics();
     const membership = await analyticsApi.fetchMembershipAnalytics();
 
+    const memberCount = dashboard.users_by_role?.find(r => r.role === 'member')?.count || 0;
+
     dashboardStats.value = {
-      registrations: dashboard.total_registrations,
-      individuals: dashboard.total_individuals,
-      organizations: dashboard.total_organizations,
+      totalAccounts: dashboard.total_accounts,
+      totalIndividuals: memberCount,
+      newSignups: dashboard.new_signups_30_days,
       unpaid: membership.unpaid_members,
       purchases: dashboard.total_purchases,
       memberPurchases: dashboard.member_purchases,
@@ -205,17 +207,17 @@ const fetchDashboardAnalytics = async () => {
     };
 
     revenueData.value = Object.entries(revenue.monthly_revenue).map(
-  ([month, amount]) => ({
-    month,
-    amount,
-  })
-);
+      ([month, amount]) => ({
+        month,
+        amount,
+      })
+    );
     paymentTrendData.value = (revenue.payment_method_distribution || []).map(
-  (item) => ({
-    day: item.payment_method,
-    count: item.count,
-  })
-);
+      (item) => ({
+        day: item.payment_method,
+        count: item.count,
+      })
+    );
   } catch (error) {
     toast.error('Failed to load dashboard analytics');
   } finally {
@@ -301,20 +303,20 @@ const statCards = computed(() => {
 
   return [
     {
-      title: 'Total Registrations',
-      value: dashboardStats.value.registrations,
+      title: 'Total Accounts',
+      value: dashboardStats.value.totalAccounts,
       change: '—',
       changeColor: 'text-gray-500',
     },
     {
       title: 'Total Individuals',
-      value: dashboardStats.value.individuals,
+      value: dashboardStats.value.totalIndividuals,
       change: '—',
       changeColor: 'text-gray-500',
     },
     {
-      title: 'Total Organizations',
-      value: dashboardStats.value.organizations,
+      title: 'New Sign Ups (30 days)',
+      value: dashboardStats.value.newSignups,
       change: '—',
       changeColor: 'text-gray-500',
     },

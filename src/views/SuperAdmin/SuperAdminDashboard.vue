@@ -242,14 +242,14 @@ onMounted(async () => {
    
     dashboardData.stats = [
       {
-        title: "Total Page Views",
-        value: dash.total_page_views,
+        title: "Total Accounts",
+        value: dash.total_accounts,
         change: "",
         changeColor: "text-gray-500",
       },
       {
-        title: "Unique Visitors",
-        value: dash.total_unique_visitors,
+        title: "Monthly Active Users",
+        value: dash.monthly_active_users,
         change: "",
         changeColor: "text-gray-500",
       },
