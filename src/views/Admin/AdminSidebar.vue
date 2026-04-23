@@ -1,7 +1,8 @@
 <script setup>
 import { useAuth } from "@/store/authStore";
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import analyticsApi from "@/api/dashboard.js";
 
 const router = useRouter();
 const route = useRoute();
@@ -11,6 +12,7 @@ const DARK_GREEN = "#004d33";
 const LIGHT_GREEN = "#f2f9f3";
 
 const currentPath = ref(route.path);
+const courseCount = ref("...");
 
 watch(
   () => route.path,
@@ -19,6 +21,16 @@ watch(
   },
   { immediate: true }
 );
+
+onMounted(async () => {
+  try {
+    const data = await analyticsApi.fetchCourseAnalytics();
+    courseCount.value = String(data.total_courses ?? 0);
+  } catch (e) {
+    console.log("Failed to load course count:", e);
+    courseCount.value = "0";
+  }
+});
 
 const navLinks = [
   {
@@ -30,6 +42,11 @@ const navLinks = [
     title: "Courses",
     path: "/admin/courses",
     icon: "M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20zm-1-8V7h2v5h4l-5 5-5-5h4z",
+  },
+  {
+    title: "Applications",
+    path: "/admin/applications",
+    icon: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11z",
   },
   {
     title: "Membership",
@@ -88,7 +105,7 @@ const isLinkActive = (path) => path === currentPath.value;
           currentPath = link.path;
           $emit('closeSidebar');
         "
-        class="flex items-center p-3 text-lg font-medium rounded-xl transition-all duration-200 cursor-pointer"
+        class="flex items-center justify-between p-3 text-lg font-medium rounded-xl transition-all duration-200 cursor-pointer"
         :class="
           isLinkActive(link.path)
             ? 'font-bold shadow-md'
@@ -114,7 +131,8 @@ const isLinkActive = (path) => path === currentPath.value;
         >
           <path :d="link.icon" />
         </svg>
-        {{ link.title }}
+        <span class="flex-1">{{ link.title }}</span>
+        <span v-if="link.title === 'Courses'" class="ml-auto text-xs bg-[#00cc66] text-white px-2 py-0.5 rounded-full">{{ courseCount }}</span>
       </RouterLink>
       <div class="p-4 border-t border-green-700">
         <button

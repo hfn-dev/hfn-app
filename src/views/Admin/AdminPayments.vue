@@ -3,7 +3,8 @@ import analyticsApi from '@/api/dashboard.js';
 import paymentApi from '@/api/payments.js';
 import messagingApi from '@/api/messaging.js';
 import membershipApi from '@/api/membership.js';
-import memberResourcesApi from '@/api/memberResources.js';  
+import memberResourcesApi from '@/api/memberResources.js';
+import DashboardLoader from '@/components/layout/DashboardLoader.vue';
 import { useToast } from 'vue-toastification';
 import AdminSidebar from '@/views/Admin/AdminSidebar.vue';
 import { computed, onMounted, ref, watch } from 'vue';
@@ -469,15 +470,17 @@ const closeSidebar = () => (showSidebar.value = false);
     ></div>
 
     <main class="flex-1 p-8 overflow-auto bg-white">
-      <div class="text-sm text-gray-500 mb-6 pt-10 lg:pt-0">
-        <span class="text-[#006633]">Home</span> > Payments
-      </div>
+      <DashboardLoader v-if="loading" message="Loading payments..." />
+      <template v-else>
+        <div class="text-sm text-gray-500 mb-6 pt-10 lg:pt-0">
+          <span class="text-[#006633]">Home</span> > Payments
+        </div>
 
-      <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6 border-b border-[#006633]/30 inline-block pb-3">
-          Payments
-        </h1>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div class="text-center mb-8">
+          <h1 class="text-3xl font-bold text-gray-800 mb-6 border-b border-[#006633]/30 inline-block pb-3">
+            Payments
+          </h1>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           <div class="p-6 bg-white rounded-xl shadow-lg border border-gray-200">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">
               Monthly Revenue Overview
@@ -801,7 +804,7 @@ const closeSidebar = () => (showSidebar.value = false);
           class="w-full border rounded-lg px-3 py-2"
         />
       </div>
-    </div>
+</div>
 
     <div class="flex justify-end gap-3 mt-6">
       <button
@@ -818,42 +821,42 @@ const closeSidebar = () => (showSidebar.value = false);
         Save
       </button>
     </div>
-  </div>
 </div>
-     <div v-if="isViewModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
-  <div class="absolute inset-0 bg-black/40" @click="closeViewModal"></div>
 
-  <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10">
+  <div v-if="isViewModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
+    <div class="absolute inset-0 bg-black/40" @click="closeViewModal"></div>
 
-    <h3 class="text-xl font-bold mb-4">Payment Details</h3>
+    <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10">
 
-    <div class="space-y-3 text-sm">
+      <h3 class="text-xl font-bold mb-4">Payment Details</h3>
 
-      <p><strong>Name:</strong> {{ paymentToView?.title }}</p>
+<div class="space-y-3 text-sm">
 
-      <p><strong>Email:</strong> {{ paymentToView?.email }}</p>
+        <p><strong>Name:</strong> {{ paymentToView?.title }}</p>
 
-      <p><strong>Category:</strong> {{ paymentToView?.enrollments }}</p>
+        <p><strong>Email:</strong> {{ paymentToView?.email }}</p>
 
-      <p><strong>Amount:</strong> {{ formatCurrency(paymentToView?.amount) }}</p>
+        <p><strong>Category:</strong> {{ paymentToView?.enrollments }}</p>
 
-      <p><strong>Status:</strong> {{ paymentToView?.status }}</p>
+        <p><strong>Amount:</strong> {{ formatCurrency(paymentToView?.amount) }}</p>
 
-      <p><strong>Date:</strong> {{ paymentToView?.lastUpdate }}</p>
+        <p><strong>Status:</strong> {{ paymentToView?.status }}</p>
 
+        <p><strong>Date:</strong> {{ paymentToView?.lastUpdate }}</p>
+
+      </div>
+
+      <div class="flex justify-end mt-6">
+        <button
+          @click="closeViewModal"
+          class="px-4 py-2 bg-gray-200 rounded-lg"
+        >
+          Close
+        </button>
+      </div>
     </div>
-
-    <div class="flex justify-end mt-6">
-      <button
-        @click="closeViewModal"
-        class="px-4 py-2 bg-gray-200 rounded-lg"
-      >
-        Close
-      </button>
-    </div>
-
   </div>
-</div> 
+
     </main>
   </div>
 </template>

@@ -1,6 +1,7 @@
 <script setup>
 import analyticsService from '@/api/dashboard.js';
 import TutorSidebar from '@/views/Tutor/TutorSidebar.vue';
+import DashboardLoader from '@/components/layout/DashboardLoader.vue';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -295,7 +296,10 @@ onMounted(async () => {
     ></div>
 
     <main class="flex-1 p-8 overflow-auto bg-white">
-      <div class="mb-8">
+      <DashboardLoader v-if="loading" message="Loading tutor dashboard..." />
+      
+      <template v-else>
+        <div class="mb-8">
         <h1 class="text-4xl font-extrabold text-[#E87A18]">Welcome HBA!</h1>
         <p class="text-gray-700 mt-2">
           Here is how your courses are performing today.
@@ -369,6 +373,7 @@ onMounted(async () => {
           </div>
         </div>
       </div>
+      </template v-else>
     </main>
   </div>
 </template>

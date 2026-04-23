@@ -1,6 +1,7 @@
 <script setup>
 import courseApi from '@/api/learningModule.js';
 import AdminSidebar from '@/views/Admin/AdminSidebar.vue';
+import DashboardLoader from '@/components/layout/DashboardLoader.vue';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -172,11 +173,13 @@ const closeSidebar = () => (showSidebar.value = false);
     ></div>
 
     <main class="flex-1 p-8 overflow-auto bg-white">
-      <div class="text-sm text-gray-500 mb-6 pt-10 lg:pt-0">
-        <span class="text-[#006633]">Home</span> > My Courses
-      </div>
+      <DashboardLoader v-if="loading" message="Loading courses..." />
+      <template v-else>
+        <div class="text-sm text-gray-500 mb-6 pt-10 lg:pt-0">
+          <span class="text-[#006633]">Home</span> > My Courses
+        </div>
 
-      <div class="text-center mb-8">
+        <div class="text-center mb-8">
         <h1
           class="text-3xl font-bold text-gray-800 mb-6 border-b border-[#006633]/30 inline-block pb-3"
         >
@@ -390,8 +393,9 @@ const closeSidebar = () => (showSidebar.value = false);
   title="Delete Course"
   message="Are you sure you want to delete this course?"
   @confirm="confirmDelete"
-  @cancel="() => { isConfirmModalOpen = false; courseToDelete = null; }"
-/>
+@cancel="() => { isConfirmModalOpen = false; courseToDelete = null; }"
+        />
+      </template>
     </main>
   </div>
 </template>

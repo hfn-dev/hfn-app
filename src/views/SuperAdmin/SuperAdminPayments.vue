@@ -3,7 +3,8 @@ import analyticsApi from '@/api/dashboard.js';
 import paymentApi from '@/api/payments.js';
 import messagingApi from '@/api/messaging.js';
 import membershipApi from '@/api/membership.js';
-import memberResourcesApi from '@/api/memberResources.js';  
+import memberResourcesApi from '@/api/memberResources.js';
+import DashboardLoader from '@/components/layout/DashboardLoader.vue';
 import { useToast } from 'vue-toastification';
 import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
 import { computed, onMounted, ref, watch } from 'vue';
@@ -583,8 +584,10 @@ const closeSidebar = () => (showSidebar.value = false);
     ></div>
 
     <main class="flex-1 p-8 overflow-auto bg-white">
-      <div class="text-sm text-gray-500 mb-6 pt-10 lg:pt-0">
-        <span class="text-[#006633]">Home</span> > Payments
+      <DashboardLoader v-if="loading" message="Loading payments..." />
+      <template v-else>
+        <div class="text-sm text-gray-500 mb-6 pt-10 lg:pt-0">
+          <span class="text-[#006633]">Home</span> > Payments
       </div>
 
       <div class="text-center mb-8">
@@ -956,6 +959,8 @@ const closeSidebar = () => (showSidebar.value = false);
 
   </div>
 </div> 
+    </template>
+      </template>
     </main>
   </div>
 </template>
