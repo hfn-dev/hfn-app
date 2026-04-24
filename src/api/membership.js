@@ -132,7 +132,7 @@ export default {
     }
   },
 
-  async approveRegistrations(id) {
+  async approveRegistrations(id, payload = {}) {
     try {
       const response = await api.post(
         `/membership/applications/${id}/approve/`,
@@ -148,6 +148,19 @@ export default {
     try {
       const response = await api.post(
         `/account/admin/individual-applications/approve/`,
+        payload
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Approve application API error");
+      throw error;
+    }
+  },
+  
+  async approveApplicationById(id, payload = {}) {
+    try {
+      const response = await api.post(
+        `/account/admin/individual-applications/${id}/approve/`,
         payload
       );
       return response.data;

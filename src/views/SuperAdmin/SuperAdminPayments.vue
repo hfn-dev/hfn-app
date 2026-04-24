@@ -1,12 +1,12 @@
-<script setup>
-import analyticsApi from '@/api/dashboard.js';
-import paymentApi from '@/api/payments.js';
-import messagingApi from '@/api/messaging.js';
-import membershipApi from '@/api/membership.js';
-import memberResourcesApi from '@/api/memberResources.js';  
-import { useToast } from 'vue-toastification';
-import SuperAdminSidebar from '@/views/SuperAdmin/SuperAdminSidebar.vue';
-import { computed, onMounted, ref, watch } from 'vue';
+﻿<script setup>
+import analyticsApi from "@/api/dashboard.js";
+import memberResourcesApi from "@/api/memberResources.js";
+import membershipApi from "@/api/membership.js";
+import paymentApi from "@/api/payments.js";
+import DashboardLoader from "@/components/layout/DashboardLoader.vue";
+import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useToast } from "vue-toastification";
 
 import {
   ChevronLeft,
@@ -16,8 +16,8 @@ import {
   MoreVertical,
   Search,
   Trash2,
-} from 'lucide-vue-next';
-import { useRouter } from 'vue-router';
+} from "lucide-vue-next";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 const toast = useToast();
@@ -25,7 +25,6 @@ const registration = ref([]);
 const purchases = ref([]);
 const isEditModalOpen = ref(false);
 const selectedPayment = ref(null);
-const isSaving = ref(false);
 const dashboardStats = ref(null);
 const revenueData = ref([]);
 const paymentTrendData = ref([]);
@@ -36,17 +35,16 @@ const unpaidMembersCount = ref(0);
 const isViewModalOpen = ref(false);
 const paymentToView = ref(null);
 const loading = ref(false);
-const searchQuery = ref('');
+const searchQuery = ref("");
 
 const activeCourses = computed(() => {
   const data =
-    currentTab.value === 'Registration' ? registration.value : purchases.value;
+    currentTab.value === "Registration" ? registration.value : purchases.value;
 
   if (!searchQuery.value) return data;
   return data.filter((item) =>
-     item.title?.toLowerCase?.().includes(searchQuery.value.toLowerCase())
-);
-
+    item.title?.toLowerCase?.().includes(searchQuery.value.toLowerCase())
+  );
 });
 
 const openConfirmDialog = (payment) => {
@@ -67,7 +65,7 @@ const openViewModal = (payment) => {
 const closeViewModal = () => {
   isViewModalOpen.value = false;
   paymentToView.value = null;
-};  
+};
 
 const openMessageModal = async (title) => {
   if (title === "Unpaid members") {
@@ -81,84 +79,26 @@ const openMessageModal = async (title) => {
   }
 };
 
-
-// const fetchPayments = async () => {
-//   loading.value = true;
-//   try {
-//     if (currentTab.value === 'Registration') {
-//       const res = await paymentApi.getUnpaidMembers();
-//       registration.value = (res.results || []).map(normalizePayment);
-//     } else {
-//       const [purchasesRes, downloadsRes] = await Promise.all([
-//         paymentApi.getPurchases(),
-//         memberResourcesApi.getDownloadList(1)
-//       ]);
-
-//       const purchasesData = (purchasesRes || []).map(normalizePayment);
-
-// const downloadsData = (downloadsRes?.submissions || []).map(normalizeDownload);
-//       purchases.value = [...purchasesData, ...downloadsData];    
-//     }
-//   } finally {
-//     loading.value = false;
-//   }
-// };
 const fetchPayments = async () => {
   loading.value = true;
   try {
-    if (currentTab.value === 'Registration') {
-      const [membersRes, purchasesRes] = await Promise.all([
-        paymentApi.getUnpaidMembers(),
-        paymentApi.getPurchases(),
-      ]);
-
-      const members = membersRes?.results || membersRes || [];
-      const pendingPurchases = purchasesRes?.results || purchasesRes || [];
-
-      const paymentMap = new Map();
-      pendingPurchases.forEach((p) => {
-        if (p.user?.id) paymentMap.set(p.user.id, p);
-      });
-
-      registration.value = members.map((m) => {
-        const matchingPayment = paymentMap.get(m.id);
-        
-
-        const sub = matchingPayment?.subscription;
-        const mType = sub?.membership_type;
-
-        return {
-          id: m.id,
-          title: m.full_name || m.email || "Unknown",
-          email: m.email,
-          enrollments: mType?.name || m.role || "Pending Member",
-          completion: mType?.price ? `₦${Number(mType.price).toLocaleString()}` : "-",
-          amount: mType?.price || 0,
-          status: m.has_active_subscription ? "completed" : "pending",
-          lastUpdate: m.created_at ? new Date(m.created_at).toLocaleDateString() : "-",
-          
-          membership_type_id: mType?.id || null,
-          
-          raw: {
-            ...m,
-            membership_type_id: mType?.id,
-            transaction_id: matchingPayment?.id 
-          },
-        };
-      });
+    if (currentTab.value === "Registration") {
+      const res = await paymentApi.getUnpaidMembers();
+      registration.value = (res.results || []).map(normalizePayment);
     } else {
       const [purchasesRes, downloadsRes] = await Promise.all([
         paymentApi.getPurchases(),
-        memberResourcesApi.getDownloadList(1)
+        memberResourcesApi.getDownloadList(1),
       ]);
 
-      const purchasesData = (purchasesRes?.results || purchasesRes || []).map(normalizePayment);
-      const downloadsData = (downloadsRes?.submissions || []).map(normalizeDownload);
+      const purchasesData = (purchasesRes || []).map(normalizePayment);
+
+      const downloadsData = (downloadsRes?.submissions || []).map(
+        normalizeDownload
+      );
+
       purchases.value = [...purchasesData, ...downloadsData];
     }
-  } catch (error) {
-    toast.error("Failed to load data");
-    console.error(error);
   } finally {
     loading.value = false;
   }
@@ -167,21 +107,20 @@ const fetchPayments = async () => {
 const normalizeDownload = (item) => {
   return {
     id: `download-${item.id}`,
-    title: `${item.first_name || ""} ${item.last_name || ""}`.trim() || item.email,
+    title: item.full_name || item.email || "Download User",
     email: item.email || "-",
     enrollments: "Download",
     completion: "-",
     amount: "-",
     status: "completed",
-    lastUpdate: item.created_at
-      ? new Date(item.created_at).toLocaleDateString()
+    lastUpdate: item.submitted_at
+      ? new Date(item.submitted_at).toLocaleDateString()
       : "-",
     raw: item,
   };
 };
-  
-const normalizePayment = (item) => {
 
+const normalizePayment = (item) => {
   if (item.user) {
     return {
       id: item.id,
@@ -211,42 +150,39 @@ const normalizePayment = (item) => {
       : "-",
     raw: item,
   };
-};  
+};
+
 const openEditModal = (payment) => {
   selectedPayment.value = { ...payment };
   isEditModalOpen.value = true;
 };
 
 const saveEdit = async () => {
-  try {
-    isSaving.value = true;
-    await paymentApi.editPayment(selectedPayment.value.id, {
-      amount: selectedPayment.value.amount,
-      category: selectedPayment.value.enrollments,
-    });
+  await paymentApi.editPayment(selectedPayment.value.id, {
+    amount: selectedPayment.value.amount,
+    category: selectedPayment.value.enrollments,
+  });
 
-    isEditModalOpen.value = false;
-    fetchPayments();
-  } finally {
-    isSaving.value = false;
-  }
+  isEditModalOpen.value = false;
+  fetchPayments();
 };
-
 
 const maxRevenue = computed(() => {
   if (!revenueData.value.length) return 0;
   return Math.max(...revenueData.value.map((r) => r.amount || 0));
-});  
+});
 
 const maxCount = computed(() => {
   return Math.max(...paymentTrendData.value.map((d) => d.count)) || 1;
 });
 
-const courseTabs = ref(['Registration', 'Purchases']);
-const currentTab = ref('Registration');
+const courseTabs = ref(["Registration", "Purchases"]);
+const currentTab = ref("Registration");
 
 const activeStatCards = computed(() => {
-  return currentTab.value === 'Registration' ? statCards.value : statCards1.value;
+  return currentTab.value === "Registration"
+    ? statCards.value
+    : statCards1.value;
 });
 
 const fetchDashboardAnalytics = async () => {
@@ -257,10 +193,13 @@ const fetchDashboardAnalytics = async () => {
     const revenue = await analyticsApi.fetchRevenueAnalytics();
     const membership = await analyticsApi.fetchMembershipAnalytics();
 
+    const memberCount =
+      dashboard.users_by_role?.find((r) => r.role === "member")?.count || 0;
+
     dashboardStats.value = {
-      registrations: dashboard.total_members,
-      individuals: dashboard.total_individual,
-      organizations: dashboard.total_associations,
+      totalAccounts: dashboard.total_accounts,
+      totalIndividuals: memberCount,
+      newSignups: dashboard.new_signups_30_days,
       unpaid: membership.unpaid_members,
       purchases: dashboard.total_purchases,
       memberPurchases: dashboard.member_purchases,
@@ -269,19 +208,19 @@ const fetchDashboardAnalytics = async () => {
     };
 
     revenueData.value = Object.entries(revenue.monthly_revenue).map(
-  ([month, amount]) => ({
-    month,
-    amount,
-  })
-);
+      ([month, amount]) => ({
+        month,
+        amount,
+      })
+    );
     paymentTrendData.value = (revenue.payment_method_distribution || []).map(
-  (item) => ({
-    day: item.payment_method,
-    count: item.count,
-  })
-);
+      (item) => ({
+        day: item.payment_method,
+        count: item.count,
+      })
+    );
   } catch (error) {
-    toast.error('Failed to load dashboard analytics');
+    toast.error("Failed to load dashboard analytics");
   } finally {
     loadingAnalytics.value = false;
   }
@@ -300,144 +239,91 @@ const handleDelete = async (id) => {
     toast.error("Failed to delete payment");
   }
 };
-  
+
 const handleAction = (action, course) => {
   switch (action) {
-    case 'View':
-  openViewModal(course);
+    case "View":
+      openViewModal(course);
       break;
 
-    case 'Edit':
+    case "Edit":
       openEditModal(course);
       break;
 
-    case 'Delete':
+    case "Delete":
       handleDelete(course.id);
       break;
 
-    case 'Paid':
+    case "Paid":
       markAsPaid(course);
       break;
-  
   }
 };
 
-
-// const markAsPaid = async () => {
-//   const payment = paymentToConfirm.value;
-//   if (!payment) {
-//     toast.error("No payment data found to confirm.");
-//     return;
-//   }
-
-//   try {
-//     loading.value = true;
- 
-//     const payload = {
-//       user_id: payment.id, 
-//       payment_type: 'subscription',
-//       membership_type_id: payment.membership_type_id || payment.raw?.membership_type_id,
-//       transaction_id: payment?.raw?.transaction_id || `MANUAL-${Date.now()}-${rawData.id}`,
-//     };
-//     await paymentApi.confirmPayment(payload);
-//     toast.success(`Payment for ${payment.title} has been verified.`);
-    
-//     closeConfirmDialog();
-//     await fetchPayments();
-//     await fetchDashboardAnalytics();
-
-//   } catch (error) {
-//     console.error("Payment Confirmation Error:", error.response?.data);
-
-//     const backendError = error.response?.data;
-//     let errorMessage = "Could not confirm payment.";
-
-//     if (typeof backendError === 'object') {
-//       errorMessage = Object.entries(backendError)
-//         .map(([key, val]) => `${key}: ${val}`)
-//         .join(' | ');
-//     } else {
-//       errorMessage = backendError?.detail || backendError?.message || errorMessage;
-//     }
-
-//     toast.error(errorMessage);
-//   } finally {
-//     loading.value = false;
-//   }
-// };
 const markAsPaid = async () => {
   const payment = paymentToConfirm.value;
-
-  if (!payment) {
-    toast.error("No payment data found to confirm.");
-    return;
-  }
 
   try {
     loading.value = true;
 
-    const membershipTypeId =
-      payment.membership_type_id ||
-      payment.subscription?.membership_type?.id ||
-      payment.raw?.subscription?.membership_type?.id;
-
-    if (!membershipTypeId) {
-      toast.error("Missing membership type for this user.");
-      return;
-    }
+    const paymentDetails = await paymentApi.retrieveApplicationPayment(
+      payment.id
+    );
 
     const payload = {
-      user_id: payment.id,
-      payment_type: "subscription",
-      membership_type_id: membershipTypeId,
-      transaction_id:
-        payment?.raw?.transaction_id ||
-        `MANUAL-${Date.now()}-${payment.id}`,
+      transaction_id: paymentDetails.transaction_id,
+      status: "completed",
+      payment_reference: paymentDetails.payment_reference,
+      metadata: null,
     };
 
-    await paymentApi.confirmPayment(payload);
+    await paymentApi.confirmPayment(payload, payment.id);
 
-    toast.success(`Payment for ${payment.title} has been verified.`);
+    toast.success(`Payment for ${payment.title} marked as completed`);
 
     closeConfirmDialog();
-    await fetchPayments();
-    await fetchDashboardAnalytics();
 
+    fetchPayments();
+    fetchDashboardAnalytics();
   } catch (error) {
-    console.error("Payment Confirmation Error:", error.response?.data);
-    toast.error("Could not confirm payment.");
+    const message =
+      error.response?.data?.detail ||
+      error.response?.data?.message ||
+      "Error confirming payment";
+
+    toast.error(message);
   } finally {
     loading.value = false;
   }
-};  
-  
+};
+
 const statCards = computed(() => {
   if (!dashboardStats.value) return [];
 
   return [
     {
-      title: 'Total Registrations',
-      value: dashboardStats.value.registrations,
-      change: '—',
-      changeColor: 'text-gray-500',
+      title: "Total Accounts",
+      value: dashboardStats.value.totalAccounts,
+      change: "—",
+      changeColor: "text-gray-500",
     },
     {
-      title: 'Total Individuals',
-      value: dashboardStats.value.individuals,
-      change: '—',
-      changeColor: 'text-gray-500',
+      title: "Total Individuals",
+      value: dashboardStats.value.totalIndividuals,
+      change: "—",
+      changeColor: "text-gray-500",
     },
     {
-      title: 'Total Organizations',
-      value: dashboardStats.value.organizations,
-      change: '—',
-      changeColor: 'text-gray-500',
+      title: "New Sign Ups (30 days)",
+      value: dashboardStats.value.newSignups,
+      change: "—",
+      changeColor: "text-gray-500",
     },
     {
-      title: 'Unpaid members',
+      title: "Unpaid members",
       value: dashboardStats.value.unpaid,
-      change: 'Action Required',
-      changeColor: 'text-red-500',
+      change: "Action Required",
+      changeColor: "text-red-500",
     },
   ];
 });
@@ -447,28 +333,28 @@ const statCards1 = computed(() => {
 
   return [
     {
-      title: 'Total Course Purchased',
+      title: "Total Course Purchased",
       value: dashboardStats.value.purchases,
-      change: '—',
-      changeColor: 'text-gray-500',
+      change: "—",
+      changeColor: "text-gray-500",
     },
     {
-      title: 'Total Member Purchase',
+      title: "Total Member Purchase",
       value: dashboardStats.value.memberPurchases,
-      change: '—',
-      changeColor: 'text-gray-500',
+      change: "—",
+      changeColor: "text-gray-500",
     },
     {
-      title: 'Total Guest Purchase',
+      title: "Total Guest Purchase",
       value: dashboardStats.value.guestPurchases,
-      change: '—',
-      changeColor: 'text-gray-500',
+      change: "—",
+      changeColor: "text-gray-500",
     },
     {
-      title: 'Total Revenue',
+      title: "Total Revenue",
       value: formatCurrency(dashboardStats.value.revenue),
-      change: '—',
-      changeColor: 'text-[#00cc66]',
+      change: "—",
+      changeColor: "text-[#00cc66]",
     },
   ];
 });
@@ -487,15 +373,15 @@ const formatCurrency = (value) => {
 
   return `₦${Number(value).toLocaleString()}`;
 };
-  
+
 const getBarHeight = (amount) => {
   return `${(amount / maxRevenue.value) * 100}%`;
 };
 
 const isMessageModalOpen = ref(false);
-const messageSubject = ref('Action Required: Your Account Status');
+const messageSubject = ref("Action Required: Your Account Status");
 const messageContent = ref(
-  'Dear user, we noticed your account is currently unpaid. Please complete your payment to continue enjoying full access to our services. Thank you.'
+  "Dear user, we noticed your account is currently unpaid. Please complete your payment to continue enjoying full access to our services. Thank you."
 );
 
 const closeMessageModal = () => {
@@ -508,10 +394,9 @@ const sendMessage = async () => {
   sending.value = true;
 
   try {
-
     const payload = {
       subject: messageSubject.value,
-      message: messageContent.value
+      message: messageContent.value,
     };
 
     console.log("Payload being sent:", payload);
@@ -522,7 +407,6 @@ const sendMessage = async () => {
 
     toast.success("Message sent to all unpaid members");
     closeMessageModal();
-
   } catch (error) {
     console.error("API error:", error.response?.data);
     toast.error("Failed to send message");
@@ -530,7 +414,7 @@ const sendMessage = async () => {
     sending.value = false;
   }
 };
-  
+
 onMounted(() => {
   fetchPayments();
   fetchDashboardAnalytics();
@@ -547,413 +431,376 @@ const closeSidebar = () => (showSidebar.value = false);
 
 <template>
   <div class="flex min-h-screen font-sans relative">
-    <button
-      @click="toggleSidebar"
-      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"
-        />
+    <button @click="toggleSidebar"
+      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
       </svg>
     </button>
 
     <div
       class="fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:translate-x-0 pt-16 lg:pt-0"
-      :class="showSidebar ? 'translate-x-0' : '-translate-x-full'"
-    >
+      :class="showSidebar ? 'translate-x-0' : '-translate-x-full'">
       <SuperAdminSidebar @closeSidebar="closeSidebar" class="h-full" />
     </div>
 
-    <div
-      v-if="showSidebar"
-      class="fixed inset-0 bg-gray-500 bg-opacity-50 z-30 lg:hidden"
-      @click="closeSidebar"
-    ></div>
+    <div v-if="showSidebar" class="fixed inset-0 bg-gray-500 bg-opacity-50 z-30 lg:hidden" @click="closeSidebar"></div>
 
     <main class="flex-1 p-8 overflow-auto bg-white">
-      <div class="text-sm text-gray-500 mb-6 pt-10 lg:pt-0">
-        <span class="text-[#006633]">Home</span> > Payments
-      </div>
+      <DashboardLoader v-if="loading" message="Loading payments..." />
+      <template v-else>
+        <div class="text-sm text-gray-500 mb-6 pt-10 lg:pt-0">
+          <span class="text-[#006633]">Home</span> > Payments
+        </div>
 
-      <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6 border-b border-[#006633]/30 inline-block pb-3">
-          Payments
-        </h1>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <div class="p-6 bg-white rounded-xl shadow-lg border border-gray-200">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">
-              Monthly Revenue Overview
-            </h2>
-            <div class="h-64 flex items-end justify-between space-x-2 p-2">
-              <div v-for="data in revenueData" :key="data.month"
-                class="flex-1 h-full flex flex-col items-center justify-end group cursor-pointer">
-                <div :style="{ height: getBarHeight(data.amount) }"
-                  class="w-8 md:w-10 bg-[#00cc66] rounded-t-lg transition-all duration-300 hover:bg-[#00994d] relative">
-                  <span
-                    class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-medium text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
-                    {{ formatCurrency(data.amount) }}
-                  </span>
-                </div>
-                <p class="mt-2 text-sm text-gray-600">{{ data.month }}</p>
-              </div>
-            </div>
-            <p class="mt-4 text-xs text-gray-500 text-right">
-              Maximum Revenue: {{ formatCurrency(maxRevenue.value) }}
-            </p>
-          </div>
-
-          <div class="p-6 bg-white rounded-xl shadow-lg border border-gray-200">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">
-              Weekly Payment Count
-            </h2>
-            <div class="relative h-64 p-4">
-              <div class="absolute top-0 left-0 text-xs text-gray-400">
-                {{ maxCount }}
-              </div>
-              <div class="absolute bottom-6 left-0 right-0 h-px bg-gray-300"></div>
-
-              <div class="flex h-full pb-6 relative">
-                <div v-for="(data, index) in paymentTrendData" :key="data.day || index" 
-                  class="flex-1 flex flex-col items-center justify-end relative z-10">
-                  <div :style="{
-                    bottom: `${(data.count / maxCount) * 200 + 10}px`,
-                  }"
-                    class="absolute w-3 h-3 rounded-full bg-[#006633] shadow-md transition-all duration-500 group cursor-pointer">
+        <div class="text-center mb-8">
+          <h1 class="text-3xl font-bold text-gray-800 mb-6 border-b border-[#006633]/30 inline-block pb-3">
+            Payments
+          </h1>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <div class="p-6 bg-white rounded-xl shadow-lg border border-gray-200">
+              <h2 class="text-xl font-semibold text-gray-800 mb-4">
+                Monthly Revenue Overview
+              </h2>
+              <div class="h-64 flex items-end justify-between space-x-2 p-2">
+                <div v-for="data in revenueData" :key="data.month"
+                  class="flex-1 h-full flex flex-col items-center justify-end group cursor-pointer">
+                  <div :style="{ height: getBarHeight(data.amount) }"
+                    class="w-8 md:w-10 bg-[#00cc66] rounded-t-lg transition-all duration-300 hover:bg-[#00994d] relative">
                     <span
                       class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-medium text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
-                      {{ data.count }} payments
+                      {{ formatCurrency(data.amount) }}
                     </span>
                   </div>
-                  <p class="mt-2 text-sm text-gray-600 absolute bottom-0">
-                    {{ data.day }}
-                  </p>
+                  <p class="mt-2 text-sm text-gray-600">{{ data.month }}</p>
+                </div>
+              </div>
+              <p class="mt-4 text-xs text-gray-500 text-right">
+                Maximum Revenue: {{ formatCurrency(maxRevenue.value) }}
+              </p>
+            </div>
+
+            <div class="p-6 bg-white rounded-xl shadow-lg border border-gray-200">
+              <h2 class="text-xl font-semibold text-gray-800 mb-4">
+                Weekly Payment Count
+              </h2>
+              <div class="relative h-64 p-4">
+                <div class="absolute top-0 left-0 text-xs text-gray-400">
+                  {{ maxCount }}
+                </div>
+                <div class="absolute bottom-6 left-0 right-0 h-px bg-gray-300"></div>
+
+                <div class="flex h-full pb-6 relative">
+                  <div v-for="(data, index) in paymentTrendData" :key="data.day || index"
+                    class="flex-1 flex flex-col items-center justify-end relative z-10">
+                    <div :style="{
+                      bottom: `${(data.count / maxCount) * 200 + 10}px`,
+                    }"
+                      class="absolute w-3 h-3 rounded-full bg-[#006633] shadow-md transition-all duration-500 group cursor-pointer">
+                      <span
+                        class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-medium text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+                        {{ data.count }} payments
+                      </span>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600 absolute bottom-0">
+                      {{ data.day }}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="relative flex justify-center items-center">
-          <div class="flex border-b border-gray-200 space-x-4">
-            <button v-for="tab in courseTabs" :key="tab" @click="currentTab = tab"
-              class="py-2 px-4 text-lg font-medium transition-colors" :class="{
-                'text-[#006633] border-b-2 border-[#00cc66]':
-                  currentTab === tab,
-                'text-gray-500 hover:text-[#00994d]': currentTab !== tab,
-              }">
-              {{ tab }}
-            </button>
-          </div>
-        </div>
-
-        <div class="flex justify-between items-stretch mb-10 mt-10 space-x-6">
-          <div v-for="(stat, index) in activeStatCards" :key="stat.title || index"
-            class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
-            :class="{
-              'rounded-tl-4xl rounded-br-4xl': index === 0,
-              'rounded-tl-4xl rounded-br-4xl':
-                index === activeStatCards.length - 1,
-              'rounded-tl-4xl rounded-br-4xl': true,
-              'cursor-pointer hover:shadow-xl transform hover:scale-[1.02]':
-                stat.title === 'Unpaid members',
-            }" @click="openMessageModal(stat.title)">
-            <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
-            <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
-
-            <p class="text-gray-600 text-sm mb-1">{{ stat.title }}</p>
-
-            <div class="text-4xl font-bold text-gray-800 mb-1">
-              <span v-if="stat.stars">
-                <span class="text-[#ff9900]">★★★★</span>
-                <span class="text-gray-300">★</span>
-              </span>
-              <span v-else>{{ stat.value }}</span>
-            </div>
-
-            <p :class="[stat.changeColor, 'text-sm font-medium']">
-              {{ stat.change }}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
-        <div class="flex justify-end mb-6">
-          <div class="relative w-full max-w-sm">
-            <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input type="text" v-model="searchQuery" placeholder="Search..."
-              class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors" />
-          </div>
-        </div>
-
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead>
-            <tr class="bg-[#f0fff0] text-gray-700 uppercase text-sm leading-normal border-b border-[#00cc66]/50">
-              <th class="py-3 px-3 text-left w-12 rounded-tl-lg">
-                <input type="checkbox" class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]" />
-              </th>
-              <th class="py-3 px-3 text-left flex items-center">
-                Name
-                <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
-              </th>
-              <th class="py-3 px-3 text-left">
-                Category
-                <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
-              </th>
-              <th class="py-3 px-3 text-left">
-                Email
-                <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
-              </th>
-              
-              <th class="py-3 px-3 text-center rounded-tr-lg">Action</th>
-            </tr>
-          </thead>
-          <tbody class="text-gray-600 text-sm font-light divide-y divide-gray-100">
-            <tr v-for="course in activeCourses" :key="course.id" class="hover:bg-[#f9fff9] transition-colors">
-              <td class="py-3 px-3 whitespace-nowrap">
-                <input type="checkbox" class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]" />
-              </td>
-              <td class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]">
-                {{ course.title }}
-              </td>
-              <td class="py-3 px-3">
-                {{ course.enrollments !== null ? course.enrollments : '-' }}
-              </td>
-              <td class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]">
-                {{ course.email }}
-              </td>
-              
-              <td class="py-3 px-3 text-center">
-                <div class="flex item-center justify-center space-x-2">
-                  <button @click="handleAction('View', course)"
-                    class="w-6 h-6 transform hover:text-blue-500 hover:scale-110 transition-transform p-0.5">
-                    <Eye class="w-full h-full text-gray-500 hover:text-blue-500" />
-                  </button>
-                  <button @click="handleAction('Edit', course)"
-                    class="w-6 h-6 transform hover:text-green-500 hover:scale-110 transition-transform p-0.5">
-                    <Edit2 class="w-full h-full text-gray-500 hover:text-green-500" />
-                  </button>
-                  <button @click="handleAction('Delete', course)"
-                    class="w-6 h-6 transform hover:text-red-500 hover:scale-110 transition-transform p-0.5">
-                    <Trash2 class="w-full h-full text-gray-500 hover:text-red-500" />
-                  </button>
-                  <button
-  v-if="course.status !== 'completed'"
-  @click="openConfirmDialog(course)"
-  class="px-2 py-1 bg-orange-500 text-white rounded-lg hover:bg-orange-600 text-sm"
->
-  Confirm
-</button>
-
-<button
-  v-else
-  disabled
-  class="px-2 py-1 bg-green-600 text-white rounded-lg text-sm cursor-not-allowed"
->
-  Paid
-</button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="flex justify-end items-center mt-6 text-sm text-gray-600">
-          <span class="mr-4">Page {{ currentPage }} of {{ totalPages }}</span>
-          <div class="flex space-x-2">
-            <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1"
-              :class="{ 'opacity-50 cursor-not-allowed': currentPage === 1 }"
-              class="p-2 border rounded-full hover:bg-gray-100 transition-colors">
-              <ChevronLeft class="w-4 h-4" />
-            </button>
-            <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" :class="{
-              'opacity-50 cursor-not-allowed': currentPage === totalPages,
-            }" class="p-2 border rounded-full hover:bg-gray-100 transition-colors">
-              <ChevronRight class="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </div>
-      <div v-if="isMessageModalOpen" class="fixed inset-0 z-50 overflow-y-auto">
-        <div class="fixed inset-0 bg-opacity-50 transition-opacity" @click="closeMessageModal"></div>
-
-        <div class="flex items-center justify-center min-h-screen p-4">
-          <div
-            class="bg-white rounded-xl shadow-2xl w-full max-w-lg transition-all transform scale-100 p-6 border-t-4 border-[#00cc66]">
-            <h3 class="text-2xl font-bold text-gray-800 mb-4 flex justify-between items-center">
-              Message All Unpaid Users
-              <button @click="closeMessageModal" class="text-gray-400 hover:text-gray-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
+          <div class="relative flex justify-center items-center">
+            <div class="flex border-b border-gray-200 space-x-4">
+              <button v-for="tab in courseTabs" :key="tab" @click="currentTab = tab"
+                class="py-2 px-4 text-lg font-medium transition-colors" :class="{
+                  'text-[#006633] border-b-2 border-[#00cc66]':
+                    currentTab === tab,
+                  'text-gray-500 hover:text-[#00994d]': currentTab !== tab,
+                }">
+                {{ tab }}
               </button>
-            </h3>
-            <p class="text-sm text-gray-600 mb-6">
-              This message will be sent to all
-              <strong>{{ statCards[3]?.value }}</strong> unpaid users.
-            </p>
+            </div>
+          </div>
 
-            <form @submit.prevent="sendMessage">
-              <div class="mb-4">
-                <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
-                <input id="subject" v-model="messageSubject" type="text" required
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors"
-                  placeholder="Enter message subject" />
+          <div class="flex justify-between items-stretch mb-10 mt-10 space-x-6">
+            <div v-for="(stat, index) in activeStatCards" :key="stat.title || index"
+              class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
+              :class="{
+                'rounded-tl-4xl rounded-br-4xl': index === 0,
+                'rounded-tl-4xl rounded-br-4xl':
+                  index === activeStatCards.length - 1,
+                'rounded-tl-4xl rounded-br-4xl': true,
+                'cursor-pointer hover:shadow-xl transform hover:scale-[1.02]':
+                  stat.title === 'Unpaid members',
+              }" @click="openMessageModal(stat.title)">
+              <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
+              <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
+
+              <p class="text-gray-600 text-sm mb-1">{{ stat.title }}</p>
+
+              <div class="text-4xl font-bold text-gray-800 mb-1">
+                <span v-if="stat.stars">
+                  <span class="text-[#ff9900]">★★★★</span>
+                  <span class="text-gray-300">★</span>
+                </span>
+                <span v-else>{{ stat.value }}</span>
               </div>
 
-              <div class="mb-6">
-                <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Message Content</label>
-                <textarea id="content" v-model="messageContent" rows="6" required
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors resize-none"
-                  placeholder="Write your message here..."></textarea>
-              </div>
-
-              <div class="flex justify-end space-x-3">
-                <button type="button" @click="closeMessageModal"
-                  class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors shadow-md">
-                  Cancel
-                </button>
-                <button
-  type="submit"
-  :disabled="sending"
-  class="px-6 py-2 text-sm font-medium text-white bg-[#006633] rounded-lg hover:bg-[#00994d] transition-colors shadow-lg"
->
-  <span v-if="sending">Sending...</span>
-  <span v-else>Send Message</span>
-</button>
-
-              </div>
-            </form>
+              <p :class="[stat.changeColor, 'text-sm font-medium']">
+                {{ stat.change }}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-      <div v-if="isConfirmModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
-  <div class="absolute inset-0 bg-black/40" @click="closeConfirmDialog"></div>
 
-  <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+          <div class="flex justify-end mb-6">
+            <div class="relative w-full max-w-sm">
+              <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input type="text" v-model="searchQuery" placeholder="Search..."
+                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors" />
+            </div>
+          </div>
 
-    <h3 class="text-xl font-bold mb-4 text-gray-800">
-      Confirm Payment
-    </h3>
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr class="bg-[#f0fff0] text-gray-700 uppercase text-sm leading-normal border-b border-[#00cc66]/50">
+                <th class="py-3 px-3 text-left w-12 rounded-tl-lg">
+                  <input type="checkbox" class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]" />
+                </th>
+                <th class="py-3 px-3 text-left flex items-center">
+                  Name
+                  <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
+                </th>
+                <th class="py-3 px-3 text-left">
+                  Category
+                  <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
+                </th>
+                <th class="py-3 px-3 text-left">
+                  Amount
+                  <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
+                </th>
+                <th class="py-3 px-3 text-left">
+                  Payment Date
+                  <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
+                </th>
+                <th class="py-3 px-3 text-center rounded-tr-lg">Action</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-600 text-sm font-light divide-y divide-gray-100">
+              <tr v-for="course in activeCourses" :key="course.id" class="hover:bg-[#f9fff9] transition-colors">
+                <td class="py-3 px-3 whitespace-nowrap">
+                  <input type="checkbox" class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]" />
+                </td>
+                <td class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]">
+                  {{ course.title }}
+                </td>
+                <td class="py-3 px-3">
+                  {{ course.enrollments !== null ? course.enrollments : '-' }}
+                </td>
+                <td class="py-3 px-3">
+                  <span :class="{
+                    'text-green-600 font-semibold':
+                      course.completion?.includes?.('100'),
+                    'text-orange-500':
+                      course.completion &&
+                      parseFloat(course.completion) < 50 &&
+                      course.completion !== '-',
+                  }">
+                    {{ course.completion ?? '-' }}
+                  </span>
 
-    <p class="text-gray-600 mb-6">
-      Are you sure you want to confirm payment for
-      <strong>{{ paymentToConfirm?.title }}</strong>?
-    </p>
+                </td>
+                <td class="py-3 px-3">
+                  {{ course.lastUpdate }}
+                </td>
+                <td class="py-3 px-3 text-center">
+                  <div class="flex item-center justify-center space-x-2">
+                    <button @click="handleAction('View', course)"
+                      class="w-6 h-6 transform hover:text-blue-500 hover:scale-110 transition-transform p-0.5">
+                      <Eye class="w-full h-full text-gray-500 hover:text-blue-500" />
+                    </button>
+                    <button @click="handleAction('Edit', course)"
+                      class="w-6 h-6 transform hover:text-green-500 hover:scale-110 transition-transform p-0.5">
+                      <Edit2 class="w-full h-full text-gray-500 hover:text-green-500" />
+                    </button>
+                    <button @click="handleAction('Delete', course)"
+                      class="w-6 h-6 transform hover:text-red-500 hover:scale-110 transition-transform p-0.5">
+                      <Trash2 class="w-full h-full text-gray-500 hover:text-red-500" />
+                    </button>
+                    <button v-if="course.status !== 'completed'" @click="openConfirmDialog(course)"
+                      class="px-2 py-1 bg-orange-500 text-white rounded-lg hover:bg-orange-600 text-sm">
+                      Confirm
+                    </button>
 
-    <div class="flex justify-end gap-3">
-      <button
-        @click="closeConfirmDialog"
-        class="px-4 py-2 bg-gray-200 rounded-lg"
-      >
-        Cancel
-      </button>
+                    <button v-else disabled
+                      class="px-2 py-1 bg-green-600 text-white rounded-lg text-sm cursor-not-allowed">
+                      Paid
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-      <button
-        @click="markAsPaid"
-        :disabled="loading"
-        class="px-4 py-2 bg-[#006633] text-white rounded-lg"
-      >
-        <span v-if="loading">Confirming...</span>
-        <span v-else>Confirm Payment</span>
-      </button>
-    </div>
+          <div class="flex justify-end items-center mt-6 text-sm text-gray-600">
+            <span class="mr-4">Page {{ currentPage }} of {{ totalPages }}</span>
+            <div class="flex space-x-2">
+              <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1"
+                :class="{ 'opacity-50 cursor-not-allowed': currentPage === 1 }"
+                class="p-2 border rounded-full hover:bg-gray-100 transition-colors">
+                <ChevronLeft class="w-4 h-4" />
+              </button>
+              <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" :class="{
+                'opacity-50 cursor-not-allowed': currentPage === totalPages,
+              }" class="p-2 border rounded-full hover:bg-gray-100 transition-colors">
+                <ChevronRight class="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div v-if="isMessageModalOpen" class="fixed inset-0 z-50 overflow-y-auto">
+          <div class="fixed inset-0 bg-opacity-50 transition-opacity" @click="closeMessageModal"></div>
 
-  </div>
-</div>
-    <div v-if="isEditModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
-  <div class="absolute inset-0 bg-black/40" @click="isEditModalOpen=false"></div>
+          <div class="flex items-center justify-center min-h-screen p-4">
+            <div
+              class="bg-white rounded-xl shadow-2xl w-full max-w-lg transition-all transform scale-100 p-6 border-t-4 border-[#00cc66]">
+              <h3 class="text-2xl font-bold text-gray-800 mb-4 flex justify-between items-center">
+                Message All Unpaid Users
+                <button @click="closeMessageModal" class="text-gray-400 hover:text-gray-600">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                  </svg>
+                </button>
+              </h3>
+              <p class="text-sm text-gray-600 mb-6">
+                This message will be sent to all
+                <strong>{{ statCards[3]?.value }}</strong> unpaid users.
+              </p>
 
-  <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10">
-    <h3 class="text-xl font-bold mb-4">Edit Payment</h3>
+              <form @submit.prevent="sendMessage">
+                <div class="mb-4">
+                  <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                  <input id="subject" v-model="messageSubject" type="text" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors"
+                    placeholder="Enter message subject" />
+                </div>
 
-    <div class="space-y-4">
-      <div>
-        <label class="text-sm text-gray-600">Name</label>
-        <input
-          v-model="selectedPayment.title"
-          class="w-full border rounded-lg px-3 py-2"
-          disabled
-        />
-      </div>
+                <div class="mb-6">
+                  <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Message Content</label>
+                  <textarea id="content" v-model="messageContent" rows="6" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors resize-none"
+                    placeholder="Write your message here..."></textarea>
+                </div>
 
-      <div>
-        <label class="text-sm text-gray-600">Amount</label>
-        <input
-          v-model="selectedPayment.amount"
-          type="number"
-          class="w-full border rounded-lg px-3 py-2"
-        />
-      </div>
-    </div>
+                <div class="flex justify-end space-x-3">
+                  <button type="button" @click="closeMessageModal"
+                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors shadow-md">
+                    Cancel
+                  </button>
+                  <button type="submit" :disabled="sending"
+                    class="px-6 py-2 text-sm font-medium text-white bg-[#006633] rounded-lg hover:bg-[#00994d] transition-colors shadow-lg">
+                    <span v-if="sending">Sending...</span>
+                    <span v-else>Send Message</span>
+                  </button>
 
-    <div class="flex justify-end gap-3 mt-6">
-      <button
-        @click="isEditModalOpen=false"
-        class="px-4 py-2 bg-gray-200 rounded-lg"
-      >
-        Cancel
-      </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div v-if="isConfirmModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
+          <div class="absolute inset-0 bg-black/40" @click="closeConfirmDialog"></div>
 
-      <button
-        @click="saveEdit"
-        :disabled="isSaving"
-        class="px-4 py-2 bg-[#006633] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center"
-      >
-        <svg v-if="isSaving" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        <span>{{ isSaving ? 'Saving...' : 'Save' }}</span>
-      </button>
-    </div>
-  </div>
-</div>
-     <div v-if="isViewModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
-  <div class="absolute inset-0 bg-black/40" @click="closeViewModal"></div>
+          <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10">
 
-  <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10">
+            <h3 class="text-xl font-bold mb-4 text-gray-800">
+              Confirm Payment
+            </h3>
 
-    <h3 class="text-xl font-bold mb-4">Payment Details</h3>
+            <p class="text-gray-600 mb-6">
+              Are you sure you want to confirm payment for
+              <strong>{{ paymentToConfirm?.title }}</strong>?
+            </p>
 
-    <div class="space-y-3 text-sm">
+            <div class="flex justify-end gap-3">
+              <button @click="closeConfirmDialog" class="px-4 py-2 bg-gray-200 rounded-lg">
+                Cancel
+              </button>
 
-      <p><strong>Name:</strong> {{ paymentToView?.title }}</p>
+              <button @click="markAsPaid" :disabled="loading" class="px-4 py-2 bg-[#006633] text-white rounded-lg">
+                <span v-if="loading">Confirming...</span>
+                <span v-else>Confirm Payment</span>
+              </button>
+            </div>
 
-      <p><strong>Email:</strong> {{ paymentToView?.email }}</p>
+          </div>
+        </div>
+        <div v-if="isEditModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
+          <div class="absolute inset-0 bg-black/40" @click="isEditModalOpen = false"></div>
 
-      <p><strong>Category:</strong> {{ paymentToView?.enrollments }}</p>
+          <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10">
+            <h3 class="text-xl font-bold mb-4">Edit Payment</h3>
 
-      <p><strong>Amount:</strong> {{ formatCurrency(paymentToView?.amount) }}</p>
+            <div class="space-y-4">
+              <div>
+                <label class="text-sm text-gray-600">Name</label>
+                <input v-model="selectedPayment.title" class="w-full border rounded-lg px-3 py-2" disabled />
+              </div>
 
-      <p><strong>Status:</strong> {{ paymentToView?.status }}</p>
+              <div>
+                <label class="text-sm text-gray-600">Amount</label>
+                <input v-model="selectedPayment.amount" type="number" class="w-full border rounded-lg px-3 py-2" />
+              </div>
+            </div>
 
-      <p><strong>Date:</strong> {{ paymentToView?.lastUpdate }}</p>
+            <div class="flex justify-end gap-3 mt-6">
+              <button @click="isEditModalOpen = false" class="px-4 py-2 bg-gray-200 rounded-lg">
+                Cancel
+              </button>
 
-    </div>
+              <button @click="saveEdit" class="px-4 py-2 bg-[#006633] text-white rounded-lg">
+                Save
+              </button>
+            </div>
+          </div>
 
-    <div class="flex justify-end mt-6">
-      <button
-        @click="closeViewModal"
-        class="px-4 py-2 bg-gray-200 rounded-lg"
-      >
-        Close
-      </button>
-    </div>
+          <div v-if="isViewModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
+            <div class="absolute inset-0 bg-black/40" @click="closeViewModal"></div>
 
-  </div>
-</div> 
+            <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10">
+
+              <h3 class="text-xl font-bold mb-4">Payment Details</h3>
+
+              <div class="space-y-3 text-sm">
+
+                <p><strong>Name:</strong> {{ paymentToView?.title }}</p>
+
+                <p><strong>Email:</strong> {{ paymentToView?.email }}</p>
+
+                <p><strong>Category:</strong> {{ paymentToView?.enrollments }}</p>
+
+                <p><strong>Amount:</strong> {{ formatCurrency(paymentToView?.amount) }}</p>
+
+                <p><strong>Status:</strong> {{ paymentToView?.status }}</p>
+
+                <p><strong>Date:</strong> {{ paymentToView?.lastUpdate }}</p>
+
+              </div>
+
+              <div class="flex justify-end mt-6">
+                <button @click="closeViewModal" class="px-4 py-2 bg-gray-200 rounded-lg">
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
     </main>
   </div>
 </template>

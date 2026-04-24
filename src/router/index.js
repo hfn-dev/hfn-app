@@ -21,6 +21,7 @@ import SignIn from '@/views/RegistrationSignIn/SignIn.vue';
 import SigninVerification from '@/views/RegistrationSignIn/SigninVerification.vue';
 
 import SuperAdminAccount from '@/views/SuperAdmin/SuperAdminAccount.vue';
+import SuperAdminApplications from '@/views/SuperAdmin/SuperAdminApplications.vue';
 import SuperAdminCourseList from '@/views/SuperAdmin/SuperAdminCourseList.vue';
 import SuperAdminCreateCourse from '@/views/SuperAdmin/SuperAdminCreateCourse.vue';
 import SuperAdminDashboard from '@/views/SuperAdmin/SuperAdminDashboard.vue';
@@ -51,6 +52,7 @@ import UserSubscription from '@/views/User/UserSubscription.vue';
 import Publications from '@/views/Publications.vue';
 
 import AdminAccount from '@/views/Admin/AdminAccount.vue';
+import AdminApplications from '@/views/Admin/AdminApplications.vue';
 import AdminCourseList from '@/views/Admin/AdminCourseList.vue';
 import AdminCreateCourse from '@/views/Admin/AdminCreateCourse.vue';
 import AdminDashboard from '@/views/Admin/AdminDashboard.vue';
@@ -253,6 +255,11 @@ const routes = [
     component: SuperAdminCourseList,
   },
   {
+    path: '/superadmin/applications',
+    name: 'SuperAdminApplications',
+    component: SuperAdminApplications,
+  },
+  {
     path: '/superadmin/create-course',
     name: 'SuperAdminCreateCourse',
     component: SuperAdminCreateCourse,
@@ -311,6 +318,11 @@ const routes = [
     path: '/admin/courses',
     name: 'AdminCourseList',
     component: AdminCourseList,
+  },
+  {
+    path: '/admin/applications',
+    name: 'AdminApplications',
+    component: AdminApplications,
   },
   {
     path: '/admin/create-course',

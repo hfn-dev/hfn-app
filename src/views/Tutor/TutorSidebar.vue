@@ -1,7 +1,8 @@
 <script setup>
 import { useAuth } from '@/store/authStore';
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import analyticsApi from '@/api/dashboard.js';
 
 const router = useRouter()
 const route = useRoute();
@@ -11,6 +12,7 @@ const DARK_GREEN = '#004d33';
 const LIGHT_GREEN = '#f2f9f3';
 
 const currentPath = ref(route.path);
+const courseCount = ref("...");
 
 watch(
   () => route.path,
@@ -19,6 +21,15 @@ watch(
   },
   { immediate: true }
 );
+
+onMounted(async () => {
+  try {
+    const data = await analyticsApi.fetchCourseAnalytics();
+    courseCount.value = String(data.total_courses ?? 0);
+  } catch (e) {
+    courseCount.value = "0";
+  }
+});
 
   
 const navLinks = [
@@ -70,7 +81,7 @@ const isLinkActive = (path) => path === currentPath.value;
         :key="link.title"
         :to="link.path"
         @click="currentPath = link.path"
-        class="flex items-center p-3 text-lg font-medium rounded-xl transition-all duration-200 cursor-pointer"
+        class="flex items-center justify-between p-3 text-lg font-medium rounded-xl transition-all duration-200 cursor-pointer"
         :class="
           isLinkActive(link.path)
             ? 'font-bold shadow-md'
@@ -96,7 +107,8 @@ const isLinkActive = (path) => path === currentPath.value;
         >
           <path :d="link.icon" />
         </svg>
-        {{ link.title }}
+        <span class="flex-1">{{ link.title }}</span>
+        <span v-if="link.title === 'My Courses'" class="ml-auto text-xs bg-[#00cc66] text-white px-2 py-0.5 rounded-full">{{ courseCount }}</span>
       </RouterLink>
       <div class="p-4 border-t border-green-700">
       <button

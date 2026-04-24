@@ -1,6 +1,6 @@
 <script setup>
 import analyticsApi from "@/api/dashboard.js";
-import assets from "@/assets/assets.png";
+import DashboardLoader from "@/components/layout/DashboardLoader.vue";
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import { onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -180,7 +180,6 @@ const completionData = reactive({
   ],
 });
 
-
 const growthData = reactive({
   labels: ["Active", "Expired"],
   datasets: [
@@ -239,17 +238,16 @@ onMounted(async () => {
       );
     }
 
-   
     dashboardData.stats = [
       {
-        title: "Total Page Views",
-        value: dash.total_page_views,
+        title: "Total Accounts",
+        value: dash.total_accounts,
         change: "",
         changeColor: "text-gray-500",
       },
       {
-        title: "Unique Visitors",
-        value: dash.total_unique_visitors,
+        title: "Monthly Active Users",
+        value: dash.monthly_active_users,
         change: "",
         changeColor: "text-gray-500",
       },
@@ -345,58 +343,39 @@ onMounted(async () => {
 
 <template>
   <div class="flex min-h-screen font-sans relative">
-    <button
-      @click="toggleSidebar"
-      class="lg:hidden fixed top-15 left-0 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"
-        />
+    <button @click="toggleSidebar"
+      class="lg:hidden fixed top-15 left-0 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
       </svg>
     </button>
 
     <div
       class="fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:translate-x-0 pt-16 lg:pt-0"
-      :class="showSidebar ? 'translate-x-0' : '-translate-x-full'"
-    >
+      :class="showSidebar ? 'translate-x-0' : '-translate-x-full'">
       <SuperAdminSidebar @closeSidebar="closeSidebar" class="h-full" />
     </div>
 
-    <div
-      v-if="showSidebar"
-      class="fixed inset-0 bg-gray bg-opacity-10 z-30 lg:hidden"
-      @click="closeSidebar"
-    ></div>
+    <div v-if="showSidebar" class="fixed inset-0 bg-gray bg-opacity-10 z-30 lg:hidden" @click="closeSidebar"></div>
     <main class="flex-1 p-8 overflow-auto bg-white">
-      <div class="mb-8">
+      <DashboardLoader v-if="loading" message="Loading super admin dashboard..." />
+
+      <div>
         <h1 class="text-4xl font-extrabold text-[#E87A18]">
           Welcome Super Admin!
         </h1>
         <p class="text-gray-700 mt-2">
-          
+
         </p>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-10">
-        <div
-          v-for="(stat, index) in dashboardData.stats"
-          :key="stat.title"
+        <div v-for="(stat, index) in dashboardData.stats" :key="stat.title"
           class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
           :class="{
             'rounded-tl-4xl rounded-br-4xl':
               index === 0 || index === dashboardData.stats.length - 1,
-          }"
-        >
+          }">
           <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
           <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
 
@@ -404,8 +383,7 @@ onMounted(async () => {
 
           <div class="text-4xl font-bold text-gray-800 mb-1">
             <span v-if="stat.stars">
-              <span class="text-[#ff9900]">★★★★</span
-              ><span class="text-gray-300">★</span>
+              <span class="text-[#ff9900]">★★★★</span><span class="text-gray-300">★</span>
             </span>
             <span v-else>{{ stat.value }}</span>
           </div>
@@ -432,22 +410,12 @@ onMounted(async () => {
           </h2>
 
           <div class="h-[300px] w-full">
-            <Pie
-              v-if="!loading && usersByRoleData.datasets[0].data.length"
-              :data="usersByRoleData"
-              :options="pieOptions"
-            />
+            <Pie v-if="!loading && usersByRoleData.datasets[0].data.length" :data="usersByRoleData"
+              :options="pieOptions" />
           </div>
         </div>
 
-        <!-- <div class="bg-white p-6 rounded-xl shadow-lg w-full">
-          <h2 class="text-xl font-semibold mb-4 text-[#006633]">
-            Course Completion
-          </h2>
-          <div class="h-[300px] w-full">
-            <Pie v-if="!loading" :data="completionData" :options="pieOptions" />
-          </div>
-        </div> -->
+
 
         <div class="bg-white p-6 rounded-xl shadow-lg w-full">
           <h2 class="text-xl font-semibold mb-4 text-[#006633]">
@@ -460,14 +428,11 @@ onMounted(async () => {
       </div>
       <div class="p-6 bg-white rounded-xl">
         <div class="flex justify-between items-stretch mb-8 space-x-6">
-          <div
-            v-for="card in dashboardData.summary"
-            :key="card.title"
+          <div v-for="card in dashboardData.summary" :key="card.title"
             class="summary-card-alt flex-1 p-6 text-center bg-white shadow-lg relative overflow-hidden group transition-all duration-300"
             :class="{
               'rounded-tl-4xl rounded-br-4xl': true,
-            }"
-          >
+            }">
             <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
             <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
 
@@ -477,63 +442,29 @@ onMounted(async () => {
               <span>{{ card.value }}</span>
             </div>
 
-            <p
-              :class="[
-                card.trendType === 'up' ? 'text-[#00cc66]' : 'text-red-500',
-                'text-sm font-medium',
-              ]"
-            >
+            <p :class="[
+              card.trendType === 'up' ? 'text-[#00cc66]' : 'text-red-500',
+              'text-sm font-medium',
+            ]">
               {{ card.trendValue }}
             </p>
           </div>
         </div>
 
-        <!-- <h2 class="text-xl font-semibold text-gray-800 mb-4">
-          Most Viewed Courses
-        </h2>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div
-            v-for="course in dashboardData.courses"
-            :key="course.name"
-            class="course-card"
-          >
-            <div class="flex justify-between items-center mb-1">
-              <p class="text-base font-bold text-gray-800">
-                {{ course.name }}
-              </p>
-              <button
-                class="text-xl font-bold text-gray-400 hover:text-gray-600 p-1"
-              >
-                &vellip;
-              </button>
-            </div>
-            <p class="text-sm text-gray-600">
-              Enrollments: {{ course.enrollments }}
-            </p>
-          </div>
-        </div> -->
       </div>
 
-      <div
-        class="grid grid-cols-1 gap-8 p-6 bg-white rounded-lg"
-      >
+      <div class="grid grid-cols-1 gap-8 p-6 bg-white rounded-lg">
         <div class="col-span-1">
           <div class="bg-white p-6 rounded-lg shadow-sm mb-0">
             <div class="flex justify-between items-start mb-4">
               <h2 class="text-2xl font-bold text-gray-800">Revenue</h2>
-              <div
-                class="p-2 border border-gray-300 rounded-md text-sm cursor-pointer flex items-center"
-              >
+              <div class="p-2 border border-gray-300 rounded-md text-sm cursor-pointer flex items-center">
                 Yearly <span class="ml-1 text-xs">⌄</span>
               </div>
             </div>
             <div class="h-80">
-              <Line
-                v-if="!loading"
-                :data="revenueData"
-                :options="revenueChartOptions"
-              />
+              <Line v-if="!loading" :data="revenueData" :options="revenueChartOptions" />
             </div>
           </div>
 
@@ -561,57 +492,33 @@ onMounted(async () => {
                 </p>
               </div>
             </div>
-
-            <!-- <div class="highlight-card-wrapper">
-              <div class="highlight-card">
-                <p class="text-sm text-gray-500 mb-1">Best Seller</p>
-                <img
-                  :src="assets"
-                  alt="Instructor"
-                  class="w-10 h-10 rounded-full mb-1 border-2 border-orange-300"
-                />
-                <p class="text-lg font-bold text-gray-800">
-                  {{ dashboardData.revenue.bestSeller?.name || "N/A" }}
-                </p>
-                <p class="text-sm text-gray-600">
-                  {{ dashboardData.revenue.bestSeller?.instructor || "N/A" }}
-                </p>
-              </div>
-            </div> -->
           </div>
         </div>
-        <!-- <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-sm h-fit">
+
+        <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-sm h-fit">
           <h2 class="text-xl font-semibold text-gray-800 mb-4">
             Most Viewed Courses
           </h2>
           <div class="space-y-4">
-            <div
-              v-for="(course, index) in dashboardData.mostViewed"
-              :key="index"
-              class="flex items-center"
-            >
+            <div v-for="(course, index) in dashboardData.mostViewed" :key="index" class="flex items-center">
               <div
-                class="relative flex-grow h-8 bg-gradient-to-r from-orange-100 to-orange-200 rounded-lg overflow-hidden"
-              >
-                <div
-                  class="absolute inset-0 bg-gradient-to-r from-orange-300 to-orange-400 rounded-lg"
-                  :style="{ width: course.progress }"
-                ></div>
+                class="relative flex-grow h-8 bg-gradient-to-r from-orange-100 to-orange-200 rounded-lg overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-orange-300 to-orange-400 rounded-lg"
+                  :style="{ width: course.progress }"></div>
                 <p
-                  class="relative z-10 text-sm font-semibold text-gray-800 px-3 py-1 flex justify-between items-center h-full"
-                >
+                  class="relative z-10 text-sm font-semibold text-gray-800 px-3 py-1 flex justify-between items-center h-full">
                   <span>{{ course.name }}</span>
                   <span>{{ course.value }}</span>
                 </p>
               </div>
             </div>
           </div>
-        </div> -->
-        
+        </div>
       </div>
     </main>
   </div>
 </template>
+
 
 <style scoped>
 @reference "tailwindcss";

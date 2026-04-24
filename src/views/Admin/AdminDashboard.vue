@@ -1,6 +1,7 @@
 <script setup>
 import dashboardApi from "@/api/dashboard";
 import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
+import DashboardLoader from "@/components/layout/DashboardLoader.vue";
 import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
@@ -500,11 +501,7 @@ const closeSidebar = () => (showSidebar.value = false);
     ></div>
 
     <main class="flex-1 p-8 overflow-auto bg-white">
-      <div v-if="isLoading" class="flex justify-center items-center h-64">
-        <div
-          class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#00cc66]"
-        ></div>
-      </div>
+      <DashboardLoader v-if="isLoading" message="Loading admin dashboard..." />
 
       <div v-else>
         <div class="mb-8">

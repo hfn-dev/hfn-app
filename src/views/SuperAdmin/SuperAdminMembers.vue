@@ -2,7 +2,7 @@
 import analyticsApi from "@/api/dashboard.js";
 import membershipAPI from "@/api/membership.js";
 import userList from "@/api/userRegister.js";
-  
+
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import { computed, onMounted, watch } from "vue";
 import { useToast } from "vue-toastification";
@@ -19,11 +19,11 @@ import { ref } from "vue";
 
 const showAddMemberModal = ref(false);
 const membershipTypes = ref([]);
- const showMembershipTypeModal = ref(false)
- const showMemberDetailsModal = ref(false);
-const selectedMember = ref(null); 
+const showMembershipTypeModal = ref(false)
+const showMemberDetailsModal = ref(false);
+const selectedMember = ref(null);
 const toast = useToast();
- const newMembershipType = ref({
+const newMembershipType = ref({
   name: '',
   description: '',
   price: '',
@@ -32,8 +32,8 @@ const toast = useToast();
   is_active: true,
   max_courses: ''
 });
- 
-  
+
+
 const filters = ref({
   membership_type: "",
   role: "",
@@ -181,7 +181,7 @@ const submitNewMember = async () => {
 };
 
 
- const approveApplication = async () => {
+const approveApplication = async () => {
   try {
     await membershipAPI.approveApplication({ application_id: selectedMember.value.id });
 
@@ -209,18 +209,18 @@ const rejectApplication = async () => {
     console.error("Rejection failed");
     toast.error("Failed to reject application", "error");
   }
-}; 
+};
 
 const fetchMembers = async () => {
   try {
-    const data = await userList.getApplications();
+    const data = await userList.getUserList();
     console.log('response', data)
     members.value = data;
-    
+
   } catch (error) {
     console.error("Failed to fetch members");
   }
-};  
+};
 
 const loadMembershipTypes = async () => {
   try {
@@ -239,8 +239,8 @@ const createMembershipType = async () => {
       price: String(newMembershipType.value.price),
       features: newMembershipType.value.features
         ? newMembershipType.value.features
-            .split(',')
-            .map(f => f.trim())
+          .split(',')
+          .map(f => f.trim())
         : []
     };
 
@@ -264,7 +264,7 @@ const createMembershipType = async () => {
     console.error("Create failed:", err.response?.data || err);
   }
 };
- 
+
 
 const deleteMembershipType = async (id) => {
   try {
@@ -275,7 +275,7 @@ const deleteMembershipType = async (id) => {
   }
 }
 
-  
+
 
 onMounted(() => {
   fetchMembers();
@@ -323,7 +323,7 @@ const goToPage = (page) => {
 const filteredMembers = computed(() => {
   return members.value.filter(m => {
     const term = searchTerm.value.toLowerCase();
-    
+
     // Search logic
     const matchesSearch =
       (m.first_name || "").toLowerCase().includes(term) ||
@@ -339,13 +339,13 @@ const filteredMembers = computed(() => {
 
     return matchesSearch && matchesRole && matchesMembership;
   });
-});  
-  
+});
+
 const paginatedMembers = computed(() => {
   return filteredMembers.value;
 });
 
-  
+
 watch(
   [searchTerm, filters],
   () => {
@@ -362,38 +362,20 @@ watch(currentPage, () => {
 
 <template>
   <div class="flex min-h-screen font-sans relative">
-    <button
-      @click="toggleSidebar"
-      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"
-        />
+    <button @click="toggleSidebar"
+      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
       </svg>
     </button>
 
     <div
       class="fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:translate-x-0 pt-16 lg:pt-0"
-      :class="showSidebar ? 'translate-x-0' : '-translate-x-full'"
-    >
+      :class="showSidebar ? 'translate-x-0' : '-translate-x-full'">
       <SuperAdminSidebar @closeSidebar="closeSidebar" class="h-full" />
     </div>
 
-    <div
-      v-if="showSidebar"
-      class="fixed inset-0 bg-gray-500 bg-opacity-50 z-30 lg:hidden"
-      @click="closeSidebar"
-    ></div>
+    <div v-if="showSidebar" class="fixed inset-0 bg-gray-500 bg-opacity-50 z-30 lg:hidden" @click="closeSidebar"></div>
 
     <main class="flex-1 p-8 overflow-auto bg-white">
       <div class="text-sm text-gray-500 mb-6 pt-10 lg:pt-0">
@@ -401,39 +383,29 @@ watch(currentPage, () => {
       </div>
 
       <div class="flex gap-4 mb-6">
-  <button
-    v-for="tab in pageTabs"
-    :key="tab"
-    @click="currentPageTab = tab"
-    :class="[
-      'px-4 py-2 rounded-lg',
-      currentPageTab === tab ? 'bg-[#006633] text-white' : 'bg-gray-100'
-    ]"
-  >
-    {{ tab }}
-  </button>
-</div>
+        <button v-for="tab in pageTabs" :key="tab" @click="currentPageTab = tab" :class="[
+          'px-4 py-2 rounded-lg',
+          currentPageTab === tab ? 'bg-[#006633] text-white' : 'bg-gray-100'
+        ]">
+          {{ tab }}
+        </button>
+      </div>
 
 
       <div class="text-center mb-8">
-        <h1
-          class="text-3xl font-bold text-gray-800 mb-6 border-b border-[#006633]/30 inline-block pb-3"
-        >
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 border-b border-[#006633]/30 inline-block pb-3">
           Members
         </h1>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-          <div
-            v-for="(stat, index) in statCards"
-            :key="stat.title"
+          <div v-for="(stat, index) in statCards" :key="stat.title"
             class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
             :class="{
               'rounded-tl-4xl rounded-br-4xl': index === 0,
               'rounded-tl-4xl rounded-br-4xl': index === statCards.length - 1,
 
               'rounded-tl-4xl rounded-br-4xl': true,
-            }"
-          >
+            }">
             <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
             <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
 
@@ -441,8 +413,7 @@ watch(currentPage, () => {
 
             <div class="text-4xl font-bold text-gray-800 mb-1">
               <span v-if="stat.stars">
-                <span class="text-[#ff9900]">★★★★</span
-                ><span class="text-gray-300">★</span>
+                <span class="text-[#ff9900]">★★★★</span><span class="text-gray-300">★</span>
               </span>
               <span v-else>{{ stat.value }}</span>
             </div>
@@ -454,149 +425,103 @@ watch(currentPage, () => {
         </div>
       </div>
 
-      <div
-        class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4"
-      >
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
         <div class="flex gap-3">
-    <button
-      @click="showAddMemberModal = true"
-      class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#005528]"
-    >
-      + Add Member
-    </button>
+          <button @click="showAddMemberModal = true"
+            class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#005528]">
+            + Add Member
+          </button>
 
-    <button
-      @click="showMembershipTypeModal = true"
-      class="px-4 py-2 border border-[#006633] text-[#006633] rounded-lg hover:bg-[#f0fff0]"
-    >
-      + Membership Type
-    </button>
-  </div>
+          <button @click="showMembershipTypeModal = true"
+            class="px-4 py-2 border border-[#006633] text-[#006633] rounded-lg hover:bg-[#f0fff0]">
+            + Membership Type
+          </button>
+        </div>
         <!-- Membership Type Modal -->
-<div
-  v-if="showMembershipTypeModal"
-  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
->
-  <div class="bg-white w-full max-w-3xl rounded-xl p-6 shadow-lg overflow-y-auto max-h-[90vh]">
+        <div v-if="showMembershipTypeModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div class="bg-white w-full max-w-3xl rounded-xl p-6 shadow-lg overflow-y-auto max-h-[90vh]">
 
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-xl font-bold text-gray-800">
-        Manage Membership Types
-      </h2>
+            <div class="flex justify-between items-center mb-6">
+              <h2 class="text-xl font-bold text-gray-800">
+                Manage Membership Types
+              </h2>
 
-      <button
-        @click="showMembershipTypeModal = false"
-        class="text-gray-500 hover:text-gray-700"
-      >
-        ✕
-      </button>
-    </div>
+              <button @click="showMembershipTypeModal = false" class="text-gray-500 hover:text-gray-700">
+                ✕
+              </button>
+            </div>
 
-    <!-- Create Section -->
-    <div class="mb-8">
-      <h3 class="font-semibold mb-3">Create Membership Type</h3>
+            <!-- Create Section -->
+            <div class="mb-8">
+              <h3 class="font-semibold mb-3">Create Membership Type</h3>
 
-      <div class="flex flex-col md:flex-row gap-3">
-        <input
-          v-model="newMembershipType.name"
-          placeholder="Name"
-          class="input"
-        />
-        <input v-model="newMembershipType.description" placeholder="Description" class="input" />
-        <input
-          v-model="newMembershipType.price"
-          placeholder="Price"
-          class="input"
-        />
-        <input
-  v-model="newMembershipType.features"
-  placeholder="Features (comma separated)"
-  class="input"
-/>
+              <div class="flex flex-col md:flex-row gap-3">
+                <input v-model="newMembershipType.name" placeholder="Name" class="input" />
+                <input v-model="newMembershipType.description" placeholder="Description" class="input" />
+                <input v-model="newMembershipType.price" placeholder="Price" class="input" />
+                <input v-model="newMembershipType.features" placeholder="Features (comma separated)" class="input" />
 
-        <input v-model="newMembershipType.duration_days" placeholder="Duration (days)" class="input" type="number" />
-        <input v-model="newMembershipType.max_courses" placeholder="Max Courses" class="input" type="number" />
-        <label class="flex items-center gap-2">
-  <input type="checkbox" v-model="newMembershipType.is_active" />
-  Active
-</label>
-        <button
-          @click="createMembershipType"
-          class="px-4 py-2 bg-[#006633] text-white rounded-lg"
-        >
-          Create
-        </button>
-      </div>
-    </div>
-
-    <!-- Existing Types -->
-    <div>
-      <h3 class="font-semibold mb-3">Existing Types</h3>
-
-      <div class="border rounded-lg overflow-hidden">
-        <table class="min-w-full text-sm">
-          <thead class="bg-[#f0fff0]">
-            <tr>
-              <th class="p-3 text-left">Name</th>
-              <th class="p-3 text-left">Price</th>
-              <th class="p-3 text-left">Duration</th>
-              <th class="p-3 text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="type in membershipTypes"
-              :key="type.id"
-              class="border-t"
-            >
-              <td class="p-3">{{ type.name }}</td>
-              <td class="p-3">{{ type.price }}</td>
-              <td class="p-3">{{ type.duration_days }} months</td>
-              <td class="p-3 text-center">
-                <button
-                  @click="deleteMembershipType(type.id)"
-                  class="text-red-600 hover:text-red-800"
-                >
-                  Delete
+                <input v-model="newMembershipType.duration_days" placeholder="Duration (days)" class="input"
+                  type="number" />
+                <input v-model="newMembershipType.max_courses" placeholder="Max Courses" class="input" type="number" />
+                <label class="flex items-center gap-2">
+                  <input type="checkbox" v-model="newMembershipType.is_active" />
+                  Active
+                </label>
+                <button @click="createMembershipType" class="px-4 py-2 bg-[#006633] text-white rounded-lg">
+                  Create
                 </button>
-              </td>
-            </tr>
+              </div>
+            </div>
 
-            <tr v-if="!membershipTypes.length">
-              <td colspan="4" class="p-4 text-center text-gray-400">
-                No membership types created yet
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+            <div>
+              <h3 class="font-semibold mb-3">Existing Types</h3>
 
-  </div>
-</div>
+              <div class="border rounded-lg overflow-hidden">
+                <table class="min-w-full text-sm">
+                  <thead class="bg-[#f0fff0]">
+                    <tr>
+                      <th class="p-3 text-left">Name</th>
+                      <th class="p-3 text-left">Price</th>
+                      <th class="p-3 text-left">Duration</th>
+                      <th class="p-3 text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="type in membershipTypes" :key="type.id" class="border-t">
+                      <td class="p-3">{{ type.name }}</td>
+                      <td class="p-3">{{ type.price }}</td>
+                      <td class="p-3">{{ type.duration_days }} months</td>
+                      <td class="p-3 text-center">
+                        <button @click="deleteMembershipType(type.id)" class="text-red-600 hover:text-red-800">
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
 
-        <div
-          class="flex flex-col sm:flex-row sm:items-center sm:gap-3 flex-wrap w-full md:w-auto"
-        >
+                    <tr v-if="!membershipTypes.length">
+                      <td colspan="4" class="p-4 text-center text-gray-400">
+                        No membership types created yet
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center sm:gap-3 flex-wrap w-full md:w-auto">
           <div class="relative w-full sm:w-64">
-            <Search
-              class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
-            />
-            <input
-              type="text"
-              v-model="searchTerm"
-              placeholder="Search..."
-              class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors"
-            />
+            <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input type="text" v-model="searchTerm" placeholder="Search..."
+              class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors" />
           </div>
 
           <select v-model="filters.membership_type" class="filter">
             <option value="">All Memberships</option>
-            <option
-              v-for="type in membershipTypes"
-              :key="type.id"
-              :value="type.id"
-            >
+            <option v-for="type in membershipTypes" :key="type.id" :value="type.id">
               {{ type.name }}
             </option>
           </select>
@@ -623,146 +548,98 @@ watch(currentPage, () => {
             <option value="cash">Cash</option>
           </select>
 
-          <button
-            @click="resetFilters"
-            class="px-3 py-2 border rounded-lg text-sm hover:bg-gray-100"
-          >
+          <button @click="resetFilters" class="px-3 py-2 border rounded-lg text-sm hover:bg-gray-100">
             Reset
           </button>
         </div>
       </div>
 
       <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
-        
+
         <table class="min-w-full table-fixed divide-y divide-gray-200">
           <thead>
-  <tr class="bg-[#f0fff0] text-gray-700 uppercase text-sm leading-normal border-b border-[#00cc66]/50">
-    
-    <!-- Checkbox -->
-    <th class="py-3 px-3 text-left w-12 rounded-tl-lg">
-      <input
-        type="checkbox"
-        class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]"
-      />
-    </th>
+            <tr class="bg-[#f0fff0] text-gray-700 uppercase text-sm leading-normal border-b border-[#00cc66]/50">
 
-    <!-- Name -->
-    <th class="py-3 px-3 text-left">
-      <div class="flex items-center gap-1">
-        Name
-        <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
-      </div>
-    </th>
+              <th class="py-3 px-3 text-left w-12 rounded-tl-lg">
+                <input type="checkbox" class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]" />
+              </th>
 
-    <!-- Email -->
-    <th class="py-3 px-3 text-left">
-      <div class="flex items-center gap-1">
-        Email
-        <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
-      </div>
-    </th>
+              <th class="py-3 px-3 text-left">
+                <div class="flex items-center gap-1">
+                  Name
+                  <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
+                </div>
+              </th>
 
-    <!-- Category -->
-    <th class="py-3 px-3 text-left">
-      <div class="flex items-center gap-1">
-        Category
-        <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
-      </div>
-    </th>
+              <th class="py-3 px-3 text-left">
+                <div class="flex items-center gap-1">
+                  Email
+                  <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
+                </div>
+              </th>
 
-    <!-- Phone -->
-    <th class="py-3 px-3 text-left">
-      <div class="flex items-center gap-1">
-        Phone
-        <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
-      </div>
-    </th>
+              <th class="py-3 px-3 text-left">
+                <div class="flex items-center gap-1">
+                  Category
+                  <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
+                </div>
+              </th>
 
-    <!-- Status -->
-    <th class="py-3 px-3 text-left">
-      <div class="flex items-center gap-1">
-        Status
-        <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
-      </div>
-    </th>
+              <th class="py-3 px-3 text-left">
+                <div class="flex items-center gap-1">
+                  Phone
+                  <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
+                </div>
+              </th>
 
-    <!-- Date -->
-    <th class="py-3 px-3 text-left">
-      <div class="flex items-center gap-1">
-        Date Joined
-        <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
-      </div>
-    </th>
+              <th class="py-3 px-3 text-left">
+                <div class="flex items-center gap-1">
+                  Date Joined
+                  <MoreVertical class="w-4 h-4 text-gray-500 cursor-pointer" />
+                </div>
+              </th>
 
-    <!-- Action -->
-    <th class="py-3 px-3 text-center rounded-tr-lg">
-      Action
-    </th>
+              <th class="py-3 px-3 text-center rounded-tr-lg">
+                Action
+              </th>
 
-  </tr>
-</thead>
-          <tbody
-            class="text-gray-600 text-sm font-light divide-y divide-gray-100"
-          >
-            <tr
-              v-for="member in paginatedMembers"
-              :key="member.id"
-              class="hover:bg-[#f9fff9] transition-colors"
-            >
+            </tr>
+          </thead>
+          <tbody class="text-gray-600 text-sm font-light divide-y divide-gray-100">
+            <tr v-for="member in paginatedMembers" :key="member.id" class="hover:bg-[#f9fff9] transition-colors">
               <td class="py-3 px-3 whitespace-nowrap">
-                <input
-                  type="checkbox"
-                  class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]"
-                />
+                <input type="checkbox" class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]" />
               </td>
-              <td
-                class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]"
-              >
+              <td class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]">
                 {{ member.first_name }}
               </td>
-              <td
-                class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]"
-              >
+              <td class="py-3 px-3 whitespace-nowrap font-medium text-[#006633]">
                 {{ member.email }}
               </td>
               <td class="py-3 px-3">
-  {{ member.membership_type || member.role || '-' }}
+                {{ member.membership_type || member.role || '-' }}
               </td>
               <td class="py-3 px-3">
-  {{ member.phone_number || '-' }}
-              </td>
-              <td class="py-3 px-3">
-                {{ member.status }}
-              </td>
-              <td class="py-3 px-3">
-                {{ member.created_at }}
+                {{ member.phone_number || '-' }}
               </td>
               
+              <td class="py-3 px-3">
+                {{ member.date_joined }}
+              </td>
+
               <td class="py-3 px-3 text-center">
                 <div class="flex item-center justify-center space-x-2">
-                  <button
-                    @click="handleAction('View', member.id)"
-                    class="w-6 h-6 transform hover:text-blue-500 hover:scale-110 transition-transform p-0.5"
-                  >
-                    <Eye
-                      class="w-full h-full text-gray-500 hover:text-blue-500"
-                    />
+                  <button @click="handleAction('View', member.id)"
+                    class="w-6 h-6 transform hover:text-blue-500 hover:scale-110 transition-transform p-0.5">
+                    <Eye class="w-full h-full text-gray-500 hover:text-blue-500" />
                   </button>
-                  <button
-                    @click="handleAction('Edit', member.id)"
-                    class="w-6 h-6 transform hover:text-green-500 hover:scale-110 transition-transform p-0.5"
-                  >
-                    <Edit2
-                      class="w-full h-full text-gray-500 hover:text-green-500"
-                    />
+                  <button @click="handleAction('Edit', member.id)"
+                    class="w-6 h-6 transform hover:text-green-500 hover:scale-110 transition-transform p-0.5">
+                    <Edit2 class="w-full h-full text-gray-500 hover:text-green-500" />
                   </button>
-                  <button
-                    @click="handleAction('Delete', member.id)"
-                    class="w-6 h-6 transform hover:text-red-500 hover:scale-110 transition-transform p-0.5"
-                  >
-                    <Trash2
-                      class="w-full h-full text-gray-500 hover:text-red-500"
-                    />
+                  <button @click="handleAction('Delete', member.id)"
+                    class="w-6 h-6 transform hover:text-red-500 hover:scale-110 transition-transform p-0.5">
+                    <Trash2 class="w-full h-full text-gray-500 hover:text-red-500" />
                   </button>
                 </div>
               </td>
@@ -773,69 +650,38 @@ watch(currentPage, () => {
         <div class="flex justify-end items-center mt-6 text-sm text-gray-600">
           <span class="mr-4">Page {{ currentPage }} of {{ totalPages }}</span>
           <div class="flex space-x-2">
-            <button
-              @click="goToPage(currentPage - 1)"
-              :disabled="currentPage === 1"
+            <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1"
               :class="{ 'opacity-50 cursor-not-allowed': currentPage === 1 }"
-              class="p-2 border rounded-full hover:bg-gray-100 transition-colors"
-            >
+              class="p-2 border rounded-full hover:bg-gray-100 transition-colors">
               <ChevronLeft class="w-4 h-4" />
             </button>
-            <button
-              @click="goToPage(currentPage + 1)"
-              :disabled="currentPage === totalPages"
-              :class="{
-                'opacity-50 cursor-not-allowed': currentPage === totalPages,
-              }"
-              class="p-2 border rounded-full hover:bg-gray-100 transition-colors"
-            >
+            <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" :class="{
+              'opacity-50 cursor-not-allowed': currentPage === totalPages,
+            }" class="p-2 border rounded-full hover:bg-gray-100 transition-colors">
               <ChevronRight class="w-4 h-4" />
             </button>
           </div>
         </div>
       </div>
     </main>
-    <div
-      v-if="showAddMemberModal"
-      class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
-    >
+    <div v-if="showAddMemberModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div class="bg-white w-full max-w-lg rounded-xl p-6 shadow-lg">
         <h2 class="text-xl font-bold mb-4 text-gray-800">Add New Member</h2>
 
         <form @submit.prevent="submitNewMember" class="space-y-4">
-          <input
-            v-model="newMemberForm.first_name"
-            placeholder="First Name"
-            class="input"
-          />
-          <input
-            v-model="newMemberForm.last_name"
-            placeholder="Last Name"
-            class="input"
-          />
-          <input
-            v-model="newMemberForm.email"
-            placeholder="Email"
-            class="input"
-          />
-          <input
-            v-model="newMemberForm.phone_number"
-            placeholder="Phone Number"
-            class="input"
-          />
+          <input v-model="newMemberForm.first_name" placeholder="First Name" class="input" />
+          <input v-model="newMemberForm.last_name" placeholder="Last Name" class="input" />
+          <input v-model="newMemberForm.email" placeholder="Email" class="input" />
+          <input v-model="newMemberForm.phone_number" placeholder="Phone Number" class="input" />
 
           <select v-model="newMemberForm.membership_type_id" class="input">
             <option disabled value="">Select Membership Type</option>
-            <option
-              v-for="type in membershipTypes"
-              :key="type.id"
-              :value="type.id"
-            >
+            <option v-for="type in membershipTypes" :key="type.id" :value="type.id">
               {{ type.name }}
             </option>
           </select>
 
-          
+
 
           <select v-model="newMemberForm.payment_method" class="input">
             <option disabled value="">Payment Method</option>
@@ -845,17 +691,10 @@ watch(currentPage, () => {
           </select>
 
           <div class="flex justify-end space-x-3 pt-4">
-            <button
-              type="button"
-              @click="showAddMemberModal = false"
-              class="px-4 py-2 border rounded-lg"
-            >
+            <button type="button" @click="showAddMemberModal = false" class="px-4 py-2 border rounded-lg">
               Cancel
             </button>
-            <button
-              type="submit"
-              class="px-4 py-2 bg-[#006633] text-white rounded-lg"
-            >
+            <button type="submit" class="px-4 py-2 bg-[#006633] text-white rounded-lg">
               Add Member
             </button>
           </div>
@@ -863,57 +702,42 @@ watch(currentPage, () => {
       </div>
     </div>
   </div>
-  <div
-  v-if="showMemberDetailsModal"
-  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
->
-  <div class="bg-white w-full max-w-md rounded-xl p-6 shadow-lg">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-bold text-gray-800">Member Details</h2>
-      <button
-        @click="showMemberDetailsModal = false"
-        class="text-gray-500 hover:text-gray-700"
-      >
-        ✕
-      </button>
+  <div v-if="showMemberDetailsModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div class="bg-white w-full max-w-md rounded-xl p-6 shadow-lg">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-gray-800">Member Details</h2>
+        <button @click="showMemberDetailsModal = false" class="text-gray-500 hover:text-gray-700">
+          ✕
+        </button>
+      </div>
+
+      <div class="space-y-2">
+        <p><strong>Name:</strong> {{ selectedMember.first_name }}</p>
+        <p><strong>Email:</strong> {{ selectedMember.email }}</p>
+        <p><strong>Phone:</strong> {{ selectedMember.phone_number }}</p>
+        <p><strong>Membership Type:</strong> {{ selectedMember.membership_type }}</p>
+        <p><strong>Role:</strong> {{ selectedMember.role }}</p>
+        <p><strong>Status:</strong> {{ selectedMember.status }}</p>
+        <p><strong>Date Joined:</strong> {{ selectedMember.date_joined }}</p>
+      </div>
+
+      <div class="flex justify-between pt-6">
+        <button @click="rejectApplication" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+          Reject
+        </button>
+
+        <div class="flex gap-3">
+          <button @click="showMemberDetailsModal = false" class="px-4 py-2 border rounded-lg">
+            Cancel
+          </button>
+
+          <button @click="approveApplication" class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#005528]">
+            Approve
+          </button>
+        </div>
+      </div>
     </div>
-
-    <div class="space-y-2">
-      <p><strong>Name:</strong> {{ selectedMember.first_name }}</p>
-      <p><strong>Email:</strong> {{ selectedMember.email }}</p>
-      <p><strong>Phone:</strong> {{ selectedMember.phone_number }}</p>
-      <p><strong>Membership Type:</strong> {{ selectedMember.membership_type }}</p>
-      <p><strong>Role:</strong> {{ selectedMember.role }}</p>
-      <p><strong>Status:</strong> {{ selectedMember.status }}</p>
-      <p><strong>Date Joined:</strong> {{ selectedMember.date_joined }}</p>
-    </div>
-
-    <div class="flex justify-between pt-6">
-  <button
-    @click="rejectApplication"
-    class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-  >
-    Reject
-  </button>
-
-  <div class="flex gap-3">
-    <button
-      @click="showMemberDetailsModal = false"
-      class="px-4 py-2 border rounded-lg"
-    >
-      Cancel
-    </button>
-
-    <button
-      @click="approveApplication"
-      class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#005528]"
-    >
-      Approve
-    </button>
   </div>
-</div>
-  </div>
-</div>
 </template>
 
 <style scoped>
@@ -923,4 +747,3 @@ watch(currentPage, () => {
   @apply px-3 py-2 border rounded-lg text-sm focus:ring-[#00cc66];
 }
 </style>
-
