@@ -583,14 +583,17 @@ const closeSidebar = () => (showSidebar.value = false);
       @click="closeSidebar"
     ></div>
 
-    <main class="flex-1 p-8 overflow-auto bg-white">
-      <DashboardLoader v-if="loading" message="Loading payments..." />
-      <template v-else>
-        <div class="text-sm text-gray-500 mb-6 pt-10 lg:pt-0">
-          <span class="text-[#006633]">Home</span> > Payments
+<main class="flex-1 p-8 overflow-auto bg-white">
+      <div class="text-sm text-gray-500 mb-6 pt-10 lg:pt-0">
+        <span class="text-[#006633]">Home</span> > Payments
       </div>
 
       <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 border-b border-[#006633]/30 inline-block pb-3">
+          Payments
+        </h1>
+      </div>
+    </main>
         <h1 class="text-3xl font-bold text-gray-800 mb-6 border-b border-[#006633]/30 inline-block pb-3">
           Payments
         </h1>
@@ -924,21 +927,21 @@ const closeSidebar = () => (showSidebar.value = false);
       </button>
     </div>
   </div>
-</div>
-     <div v-if="isViewModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
-  <div class="absolute inset-0 bg-black/40" @click="closeViewModal"></div>
 
-  <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10">
+  <div v-if="isViewModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
+    <div class="absolute inset-0 bg-black/40" @click="closeViewModal"></div>
 
-    <h3 class="text-xl font-bold mb-4">Payment Details</h3>
+    <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10">
 
-    <div class="space-y-3 text-sm">
+      <h3 class="text-xl font-bold mb-4">Payment Details</h3>
 
-      <p><strong>Name:</strong> {{ paymentToView?.title }}</p>
+      <div class="space-y-3 text-sm">
 
-      <p><strong>Email:</strong> {{ paymentToView?.email }}</p>
+        <p><strong>Name:</strong> {{ paymentToView?.title }}</p>
 
-      <p><strong>Category:</strong> {{ paymentToView?.enrollments }}</p>
+        <p><strong>Email:</strong> {{ paymentToView?.email }}</p>
+
+        <p><strong>Category:</strong> {{ paymentToView?.enrollments }}</p>
 
       <p><strong>Amount:</strong> {{ formatCurrency(paymentToView?.amount) }}</p>
 
@@ -957,11 +960,6 @@ const closeSidebar = () => (showSidebar.value = false);
       </button>
     </div>
 
-  </div>
-</div> 
-    </template>
-      </template>
-    </main>
   </div>
 </template>
 
