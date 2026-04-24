@@ -25,7 +25,7 @@ const form = ref({
   email: "",
   confirmEmail: "",
   password: "",
-  confirmPassword: "",
+  confirm_password: "",
   organizationName: "",
   organizationContactPerson: "",
 
@@ -154,6 +154,7 @@ const prepareOrganizationPayload = () => {
     contact_person: form.value.organizationContactPerson.trim(),
     phone_number: formatPhoneNumber(form.value.phone),
     password: form.value.password,
+    confirm_password: form.value.confirm_password,
     member_category: selectedCategory.value.value,
     role: "learner",
   };
@@ -166,6 +167,7 @@ const prepareIndividualPayload = () => {
     last_name: form.value.lastName.trim(),
     phone_number: formatPhoneNumber(form.value.phone),
     password: form.value.password,
+    confirm_password: form.value.confirm_password,
     member_category: selectedCategory.value.value,
     role: "learner",
 
@@ -243,7 +245,7 @@ const validateForm = () => {
     return false;
   }
 
-  if (form.value.password !== form.value.confirmPassword) {
+  if (form.value.password !== form.value.confirm_password) {
     showCustomAlert("Passwords do not match", "error");
     return false;
   }
@@ -331,7 +333,7 @@ const handleRegistration = async () => {
           email: "",
           confirmEmail: "",
           password: "",
-          confirmPassword: "",
+          confirm_password: "",
           organizationName: "",
           organizationContactPerson: "",
           professionalBackground: "",
@@ -407,7 +409,7 @@ const changeTab = (tab) => {
     email: "",
     confirmEmail: "",
     password: "",
-    confirmPassword: "",
+    confirm_password: "",
     organizationName: "",
   };
 };
@@ -768,14 +770,14 @@ const changeTab = (tab) => {
                 </div>
                 <div>
                   <label
-                    for="confirmPassword"
+                    for="confirm_password"
                     class="block text-sm font-medium text-gray-700"
                     >Confirm Password*</label
                   >
                   <input
                     type="password"
-                    id="confirmPassword"
-                    v-model="form.confirmPassword"
+                    id="confirm_password"
+                    v-model="form.confirm_password"
                     required
                     class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
                   />
@@ -961,7 +963,7 @@ const changeTab = (tab) => {
                     </label>
                     <input
                       type="password"
-                      v-model="form.confirmPassword"
+                      v-model="form.confirm_password"
                       required
                       class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 p-2.5"
                     />
