@@ -80,14 +80,23 @@ const openRejectModal = (application) => {
   showRejectModal.value = true;
 };
 
+const getApplicationId = (app) => {
+  return app.id || app.pk || app.user_id || app.id || null;
+};
+
 const confirmReject = async () => {
+  const appId = getApplicationId(selectedApplication.value);
+  if (!appId) {
+    toast.error("Invalid application ID");
+    return;
+  }
   if (!rejectionReason.value.trim()) {
     toast.error("Please provide a reason for rejection");
     return;
   }
   try {
     actionLoading.value = selectedApplication.value.id;
-    await membershipAPI.rejectApplication(selectedApplication.value.id, {
+    await membershipAPI.rejectApplication(appId, {
       reason: rejectionReason.value,
     });
     toast.success("Application rejected successfully");
@@ -102,12 +111,18 @@ const confirmReject = async () => {
 };
 
 const openSuccessModal = async (application) => {
+  const appId = getApplicationId(application);
+  if (!appId) {
+    toast.error("Invalid application ID");
+    return;
+  }
   try {
     actionLoading.value = application.id;
-    await membershipAPI.approveApplicationById(application.id, {});
-    toast.success("Application approved successfully");
+    await membershipAPI.approveRegistrations(appId, {});
+    toast.success("Application approved successfully!");
     selectedApplication.value = application;
     showSuccessModal.value = true;
+    fetchApplications();
   } catch (error) {
     console.error("Failed to approve application:", error);
     toast.error("Failed to approve application");
