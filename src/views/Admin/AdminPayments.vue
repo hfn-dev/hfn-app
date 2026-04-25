@@ -39,7 +39,7 @@ const searchQuery = ref("");
 
 const activeCourses = computed(() => {
   const data =
-    currentTab.value === "Registration" ? registration.value : purchases.value;
+    currentTab.value === "Renewal" ? registration.value : purchases.value;
 
   if (!searchQuery.value) return data;
   return data.filter((item) =>
@@ -82,7 +82,7 @@ const openMessageModal = async (title) => {
 const fetchPayments = async () => {
   loading.value = true;
   try {
-    if (currentTab.value === "Registration") {
+    if (currentTab.value === "Renewal") {
       const res = await paymentApi.getUnpaidMembers();
       registration.value = (res.results || []).map(normalizePayment);
     } else {
@@ -122,6 +122,10 @@ const normalizeDownload = (item) => {
 
 const normalizePayment = (item) => {
   if (item.user) {
+    const rawDate = item.payment_date || 
+                    item.last_payment_date || 
+                    item.subscription?.created_at || 
+                    item.created_at;
     return {
       id: item.id,
       title: item.user?.full_name || item.user?.email || "Unknown",
@@ -130,8 +134,8 @@ const normalizePayment = (item) => {
       completion: item.amount || "-",
       amount: item.amount,
       status: item.status,
-      lastUpdate: item.last_payment_date
-        ? new Date(item.payment_date).toLocaleDateString()
+      lastUpdate: rawDate
+        ? new Date(rawDate).toLocaleDateString()
         : "-",
       raw: item,
     };
@@ -176,11 +180,11 @@ const maxCount = computed(() => {
   return Math.max(...paymentTrendData.value.map((d) => d.count)) || 1;
 });
 
-const courseTabs = ref(["Registration", "Purchases"]);
-const currentTab = ref("Registration");
+const courseTabs = ref(["Renewal", "Registrations"]);
+const currentTab = ref("Renewal");
 
 const activeStatCards = computed(() => {
-  return currentTab.value === "Registration"
+  return currentTab.value === "Renewal"
     ? statCards.value
     : statCards1.value;
 });
@@ -334,19 +338,19 @@ const statCards1 = computed(() => {
   return [
     {
       title: "Total Course Purchased",
-      value: dashboardStats.value.purchases,
+      value: dashboardStats.value.totalAccounts,
       change: "—",
       changeColor: "text-gray-500",
     },
     {
       title: "Total Member Purchase",
-      value: dashboardStats.value.memberPurchases,
+      value: dashboardStats.value.totalIndividuals,
       change: "—",
       changeColor: "text-gray-500",
     },
     {
-      title: "Total Guest Purchase",
-      value: dashboardStats.value.guestPurchases,
+      title: "Total Signups",
+      value: dashboardStats.value.newSignups,
       change: "—",
       changeColor: "text-gray-500",
     },
@@ -583,7 +587,7 @@ const closeSidebar = () => (showSidebar.value = false);
                   <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
                 </th>
                 <th class="py-3 px-3 text-left">
-                  Payment Date
+                  Email
                   <MoreVertical class="w-4 h-4 ml-1 text-gray-500 cursor-pointer" />
                 </th>
                 <th class="py-3 px-3 text-center rounded-tr-lg">Action</th>
@@ -614,7 +618,7 @@ const closeSidebar = () => (showSidebar.value = false);
 
                 </td>
                 <td class="py-3 px-3">
-                  {{ course.lastUpdate }}
+                  {{ course.email }}
                 </td>
                 <td class="py-3 px-3 text-center">
                   <div class="flex item-center justify-center space-x-2">
