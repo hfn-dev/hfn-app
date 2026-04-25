@@ -256,4 +256,24 @@ export default {
       throw error;
     }
   },
+
+  async updateMember(id, payload) {
+    try {
+      const response = await api.patch(`/membership/subscriptions/${id}/`, payload);
+      return response.data;
+    } catch (error) {
+      console.error("Update member API error");
+      throw error;
+    }
+  },
+
+  async updateUser(id, payload) {
+    try {
+      const response = await api.patch(`/account/admin/individual-applications/${id}/`, payload);
+      return response.data;
+    } catch (error) {
+      console.error("Update user API error");
+      throw error;
+    }
+  },
 };

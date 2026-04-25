@@ -23,6 +23,16 @@ const showMembershipTypeModal = ref(false)
 const showMemberDetailsModal = ref(false);
 const selectedMember = ref(null);
 const toast = useToast();
+const isUpdating = ref(false);
+const showUpdateMemberModal = ref(false);
+const updateMemberForm = ref({
+  first_name: "",
+  last_name: "",
+  email: "",
+  phone_number: "",
+  membership_type_id: "",
+  role: "",
+});
 const newMembershipType = ref({
   name: '',
   description: '',
@@ -209,6 +219,54 @@ const rejectApplication = async () => {
     console.error("Rejection failed");
     toast.error("Failed to reject application", "error");
   }
+};
+
+const updateMember = async () => {
+  try {
+    isUpdating.value = true;
+    const payload = {
+      first_name: updateMemberForm.value.first_name,
+      last_name: updateMemberForm.value.last_name,
+      email: updateMemberForm.value.email,
+      phone_number: updateMemberForm.value.phone_number,
+      membership_type_id: updateMemberForm.value.membership_type_id ? Number(updateMemberForm.value.membership_type_id) : undefined,
+      role: updateMemberForm.value.role
+    };
+
+    const response = await membershipAPI.updateUser(selectedMember.value.id, payload);
+
+    if (response.status === "success" || response.id) {
+      showUpdateMemberModal.value = false;
+      showMemberDetailsModal.value = false;
+      toast.success("Member updated successfully", "success");
+      fetchMembers();
+    }
+  } catch (error) {
+    const errors = error?.response?.data;
+    if (errors) {
+      const firstError = Object.values(errors)[0]?.[0];
+      toast.error(firstError || "Failed to update member", "error");
+    } else {
+      toast.error("Something went wrong", "error");
+    }
+    console.error("Failed to update member");
+  } finally {
+    isUpdating.value = false;
+  }
+};
+
+const openUpdateModal = (member) => {
+  selectedMember.value = member;
+  updateMemberForm.value = {
+    first_name: member.first_name || "",
+    last_name: member.last_name || "",
+    email: member.email || "",
+    phone_number: member.phone_number || "",
+    membership_type_id: member.membership_type_id || "",
+    role: member.role || ""
+  };
+  showUpdateMemberModal.value = true;
+  showMemberDetailsModal.value = false;
 };
 
 const fetchMembers = async () => {
@@ -722,20 +780,63 @@ watch(currentPage, () => {
       </div>
 
       <div class="flex justify-between pt-6">
-        <button @click="rejectApplication" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
-          Reject
+        <button @click="openUpdateModal(selectedMember)" class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#005528]">
+          Update
         </button>
 
-        <div class="flex gap-3">
-          <button @click="showMemberDetailsModal = false" class="px-4 py-2 border rounded-lg">
+        <button @click="showMemberDetailsModal = false" class="px-4 py-2 border rounded-lg">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+  <div v-if="showUpdateMemberModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div class="bg-white w-full max-w-lg rounded-xl p-6 shadow-lg">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-gray-800">Update Member</h2>
+        <button @click="showUpdateMemberModal = false" class="text-gray-500 hover:text-gray-700">
+          ✕
+        </button>
+      </div>
+
+      <form @submit.prevent="updateMember" class="space-y-4">
+        <input v-model="updateMemberForm.first_name" placeholder="First Name" class="input" />
+        <input v-model="updateMemberForm.last_name" placeholder="Last Name" class="input" />
+        <input v-model="updateMemberForm.email" placeholder="Email" class="input" />
+        <input v-model="updateMemberForm.phone_number" placeholder="Phone Number" class="input" />
+
+        <select v-model="updateMemberForm.membership_type_id" class="input">
+          <option disabled value="">Select Membership Type</option>
+          <option v-for="type in membershipTypes" :key="type.id" :value="type.id">
+            {{ type.name }}
+          </option>
+        </select>
+
+        <select v-model="updateMemberForm.role" class="input">
+          <option disabled value="">Select Role</option>
+          <option value="admin">Admin</option>
+          <option value="member">Member</option>
+          <option value="learner">Learner</option>
+          <option value="Tutor">Tutor</option>
+        </select>
+
+        <div class="flex justify-end space-x-3 pt-4">
+          <button type="button" @click="showUpdateMemberModal = false" class="px-4 py-2 border rounded-lg">
             Cancel
           </button>
-
-          <button @click="approveApplication" class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#005528]">
-            Approve
+          <button type="submit" :disabled="isUpdating"
+            class="px-4 py-2 bg-[#006633] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center">
+            <svg v-if="isUpdating" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+              </path>
+            </svg>
+            <span>{{ isUpdating ? 'Updating...' : 'Update Member' }}</span>
           </button>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </template>
