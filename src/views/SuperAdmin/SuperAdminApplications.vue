@@ -118,7 +118,7 @@ const openSuccessModal = async (application) => {
   }
   try {
     actionLoading.value = application.id;
-    await membershipAPI.approveRegistrations(appId, {});
+    await membershipAPI.approveApplication(appId, {});
     toast.success("Application approved successfully!");
     selectedApplication.value = application;
     showSuccessModal.value = true;
