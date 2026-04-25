@@ -1,14 +1,10 @@
 <script setup>
 import membershipAPI from "@/api/membership.js";
-import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import DashboardLoader from "@/components/layout/DashboardLoader.vue";
+import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
+import { ChevronLeft, ChevronRight, Search } from "lucide-vue-next";
 import { computed, onMounted, ref, watch } from "vue";
 import { useToast } from "vue-toastification";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Search,
-} from "lucide-vue-next";
 
 const toast = useToast();
 const applications = ref([]);
@@ -57,7 +53,8 @@ const fetchApplications = async () => {
       page: currentPage.value,
     });
     applications.value = data.results || data.data || data || [];
-    totalPages.value = Math.ceil((data.count || applications.value.length) / itemsPerPage) || 1;
+    totalPages.value =
+      Math.ceil((data.count || applications.value.length) / itemsPerPage) || 1;
   } catch (error) {
     console.error("Failed to fetch applications:", error);
     toast.error("Failed to load applications");
@@ -68,9 +65,10 @@ const fetchApplications = async () => {
 
 const filteredApplications = computed(() => {
   if (!searchQuery.value) return applications.value;
-  return applications.value.filter((app) =>
-    app.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    app.email?.toLowerCase().includes(searchQuery.value.toLowerCase())
+  return applications.value.filter(
+    (app) =>
+      app.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      app.email?.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
 });
 
@@ -97,7 +95,7 @@ const confirmReject = async () => {
   try {
     actionLoading.value = selectedApplication.value.id;
     await membershipAPI.rejectApplication(appId, {
-      reason: rejectionReason.value,
+      rejection_reason: rejectionReason.value,
     });
     toast.success("Application rejected successfully");
     showRejectModal.value = false;
@@ -110,17 +108,25 @@ const confirmReject = async () => {
   }
 };
 
+
 const openSuccessModal = async (application) => {
   const appId = getApplicationId(application);
   if (!appId) {
     toast.error("Invalid application ID");
     return;
   }
+
   try {
     actionLoading.value = application.id;
-    await membershipAPI.approveApplication(appId, {});
+
+    const response = await membershipAPI.approveApplication({
+      application_id: appId,
+    });
+
     toast.success("Application approved successfully!");
-    selectedApplication.value = application;
+
+    selectedApplication.value = response.application;
+
     showSuccessModal.value = true;
     fetchApplications();
   } catch (error) {
@@ -139,7 +145,7 @@ const goToCreateTransaction = () => {
 
 const resetTransactionForm = () => {
   transactionForm.value = {
-    user_id: selectedApplication.value?.user_id || selectedApplication.value?.user?.id || null,
+    user_id: selectedApplication.value?.created_user || null,
     membership_type_id: "",
     start_date: "",
     end_date: "",
@@ -153,7 +159,9 @@ const resetTransactionForm = () => {
 };
 
 const handleMembershipTypeChange = () => {
-  const selected = membershipTypes.value.find(m => m.id === transactionForm.value.membership_type_id);
+  const selected = membershipTypes.value.find(
+    (m) => m.id === transactionForm.value.membership_type_id
+  );
   if (selected) {
     transactionForm.value.amount = selected.price || "";
     if (selected.duration_days) {
@@ -165,8 +173,20 @@ const handleMembershipTypeChange = () => {
   }
 };
 
+const openTransactionFromApproved = (application) => {
+  selectedApplication.value = application;
+
+  transactionForm.value.user_id = application.created_user;
+
+  resetTransactionForm();
+  showTransactionModal.value = true;
+};
+
 const createTransaction = async () => {
-  if (!transactionForm.value.membership_type_id || !transactionForm.value.start_date) {
+  if (
+    !transactionForm.value.membership_type_id ||
+    !transactionForm.value.start_date
+  ) {
     toast.error("Please fill in all required fields");
     return;
   }
@@ -261,19 +281,46 @@ onMounted(() => {
             </div>
           </div>
 
-          <div v-if="filteredApplications.length === 0" class="text-center py-12 text-gray-500">
+          <div
+            v-if="filteredApplications.length === 0"
+            class="text-center py-12 text-gray-500"
+          >
             No applications found
           </div>
 
           <table v-else class="min-w-full divide-y divide-gray-200">
             <thead class="bg-[#f0fff0]">
               <tr>
-                <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Name</th>
-                <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Email</th>
-                <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Phone</th>
-                <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Status</th>
-                <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Date Applied</th>
-                <th class="py-3 px-4 text-center text-sm font-medium text-gray-700">Action</th>
+                <th
+                  class="py-3 px-4 text-left text-sm font-medium text-gray-700"
+                >
+                  Name
+                </th>
+                <th
+                  class="py-3 px-4 text-left text-sm font-medium text-gray-700"
+                >
+                  Email
+                </th>
+                <th
+                  class="py-3 px-4 text-left text-sm font-medium text-gray-700"
+                >
+                  Phone
+                </th>
+                <th
+                  class="py-3 px-4 text-left text-sm font-medium text-gray-700"
+                >
+                  Status
+                </th>
+                <th
+                  class="py-3 px-4 text-left text-sm font-medium text-gray-700"
+                >
+                  Date Applied
+                </th>
+                <th
+                  class="py-3 px-4 text-center text-sm font-medium text-gray-700"
+                >
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
@@ -283,7 +330,10 @@ onMounted(() => {
                 class="hover:bg-gray-50"
               >
                 <td class="py-3 px-4 text-sm text-gray-800">
-                  {{ application.name || application.first_name + ' ' + application.last_name }}
+                  {{
+                    application.name ||
+                    application.first_name + " " + application.last_name
+                  }}
                 </td>
                 <td class="py-3 px-4 text-sm text-gray-800">
                   {{ application.email }}
@@ -294,46 +344,122 @@ onMounted(() => {
                 <td class="py-3 px-4 text-sm">
                   <span
                     :class="{
-                      'bg-yellow-100 text-yellow-800': application.status === 'pending',
-                      'bg-green-100 text-green-800': application.status === 'approved',
-                      'bg-red-100 text-red-800': application.status === 'rejected',
+                      'bg-yellow-100 text-yellow-800':
+                        application.status === 'pending',
+                      'bg-green-100 text-green-800':
+                        application.status === 'approved',
+                      'bg-red-100 text-red-800':
+                        application.status === 'rejected',
                     }"
                     class="px-2 py-1 rounded-full text-xs font-medium"
                   >
-                    {{ application.status || 'pending' }}
+                    {{ application.status || "pending" }}
                   </span>
                 </td>
                 <td class="py-3 px-4 text-sm text-gray-800">
-                  {{ application.created_at ? new Date(application.created_at).toLocaleDateString() : '-' }}
+                  {{
+                    application.created_at
+                      ? new Date(application.created_at).toLocaleDateString()
+                      : "-"
+                  }}
                 </td>
                 <td class="py-3 px-4 text-center">
-                  <div v-if="application.status === 'pending'" class="flex justify-center space-x-2">
-                      <button
-                        @click="openSuccessModal(application)"
-                        :disabled="actionLoading === application.id"
-                        class="p-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition disabled:opacity-50"
-                        title="Approve"
+                  <div
+                    v-if="application.status === 'pending'"
+                    class="flex justify-center space-x-2"
+                  >
+                    <button
+                      @click="openSuccessModal(application)"
+                      :disabled="actionLoading === application.id"
+                      class="p-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition disabled:opacity-50"
+                      title="Approve"
+                    >
+                      <svg
+                        v-if="actionLoading === application.id"
+                        class="w-4 h-4 animate-spin"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
                       >
-                        <svg v-if="actionLoading === application.id" class="w-4 h-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        <svg v-else class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                      </button>
-                      <button
-                        @click="openRejectModal(application)"
-                        class="p-1.5 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
-                        title="Reject"
+                        <circle
+                          class="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          stroke-width="4"
+                        ></circle>
+                        <path
+                          class="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      <svg
+                        v-else
+                        class="w-4 h-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
                       >
-                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </div>
-                  <div v-else-if="application.status === 'approved'" class="text-green-600 text-sm font-medium">
-                    Approved
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      @click="openRejectModal(application)"
+                      class="p-1.5 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+                      title="Reject"
+                    >
+                      <svg
+                        class="w-4 h-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div
+                    v-else-if="application.status === 'approved'"
+                    class="flex justify-center space-x-2"
+                  >
+                    <span class="text-green-600 text-sm font-medium"
+                      >Approved</span
+                    >
+
+                    <button
+                      @click="openTransactionFromApproved(application)"
+                      class="p-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition inline-flex items-center justify-center"
+                      title="Create Transaction"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-5 h-5"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M2.25 8.25h19.5m-16.5 9h15m-18-13.5h19.5a2.25 2.25 0 012.25 2.25v10.5a2.25 2.25 0 01-2.25 2.25H2.25a2.25 2.25 0 01-2.25-2.25V6.75A2.25 2.25 0 012.25 4.5z"
+                        />
+                      </svg>
+                    </button>
                   </div>
                   <div v-else class="text-red-600 text-sm font-medium">
                     Rejected
@@ -347,7 +473,10 @@ onMounted(() => {
             <span class="mr-4">Page {{ currentPage }} of {{ totalPages }}</span>
             <div class="flex space-x-2">
               <button
-                @click="currentPage--; fetchApplications()"
+                @click="
+                  currentPage--;
+                  fetchApplications();
+                "
                 :disabled="currentPage === 1"
                 :class="{ 'opacity-50 cursor-not-allowed': currentPage === 1 }"
                 class="p-2 border rounded-full hover:bg-gray-100 transition-colors"
@@ -355,9 +484,14 @@ onMounted(() => {
                 <ChevronLeft class="w-4 h-4" />
               </button>
               <button
-                @click="currentPage++; fetchApplications()"
+                @click="
+                  currentPage++;
+                  fetchApplications();
+                "
                 :disabled="currentPage === totalPages"
-                :class="{ 'opacity-50 cursor-not-allowed': currentPage === totalPages }"
+                :class="{
+                  'opacity-50 cursor-not-allowed': currentPage === totalPages,
+                }"
                 class="p-2 border rounded-full hover:bg-gray-100 transition-colors"
               >
                 <ChevronRight class="w-4 h-4" />
@@ -368,7 +502,6 @@ onMounted(() => {
       </template>
     </main>
 
-    <!-- Reject Modal -->
     <div
       v-if="showRejectModal"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
@@ -397,7 +530,11 @@ onMounted(() => {
             :disabled="actionLoading === selectedApplication?.id"
             class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition disabled:opacity-50"
           >
-            {{ actionLoading === selectedApplication?.id ? 'Rejecting...' : 'Reject' }}
+            {{
+              actionLoading === selectedApplication?.id
+                ? "Rejecting..."
+                : "Reject"
+            }}
           </button>
         </div>
       </div>
@@ -409,15 +546,33 @@ onMounted(() => {
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
       @click.self="showSuccessModal = false"
     >
-      <div class="bg-white rounded-xl p-6 w-full max-w-md shadow-xl text-center">
-        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg class="w-8 h-8 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+      <div
+        class="bg-white rounded-xl p-6 w-full max-w-md shadow-xl text-center"
+      >
+        <div
+          class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"
+        >
+          <svg
+            class="w-8 h-8 text-green-600"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M5 13l4 4L19 7"
+            />
           </svg>
         </div>
-        <h3 class="text-lg font-bold text-gray-800 mb-2">Application Approved!</h3>
+        <h3 class="text-lg font-bold text-gray-800 mb-2">
+          Application Approved!
+        </h3>
         <p class="text-gray-600 mb-6">
-          The application has been approved successfully. Would you like to create a transaction for this member?
+          The application has been approved successfully. Would you like to
+          create a transaction for this member?
         </p>
         <div class="flex justify-center space-x-3">
           <button
@@ -446,7 +601,9 @@ onMounted(() => {
         <h3 class="text-lg font-bold text-gray-800 mb-6">Create Transaction</h3>
         <form @submit.prevent="createTransaction" class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Membership Type *</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Membership Type *</label
+            >
             <select
               v-model="transactionForm.membership_type_id"
               @change="handleMembershipTypeChange"
@@ -465,7 +622,9 @@ onMounted(() => {
 
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Start Date *</label>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Start Date *</label
+              >
               <input
                 type="date"
                 v-model="transactionForm.start_date"
@@ -474,7 +633,9 @@ onMounted(() => {
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >End Date</label
+              >
               <input
                 type="date"
                 v-model="transactionForm.end_date"
@@ -484,7 +645,9 @@ onMounted(() => {
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Amount (₦)</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Amount (₦)</label
+            >
             <input
               type="number"
               v-model="transactionForm.amount"
@@ -494,7 +657,9 @@ onMounted(() => {
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Payment Method</label
+            >
             <select
               v-model="transactionForm.payment_method"
               class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-[#00cc66] focus:border-[#00cc66]"
@@ -513,7 +678,9 @@ onMounted(() => {
               id="auto_renew"
               class="h-4 w-4 text-[#00cc66] border-gray-300 rounded focus:ring-[#00cc66]"
             />
-            <label for="auto_renew" class="ml-2 text-sm text-gray-700">Auto-renew subscription</label>
+            <label for="auto_renew" class="ml-2 text-sm text-gray-700"
+              >Auto-renew subscription</label
+            >
           </div>
 
           <div class="flex justify-end space-x-3 pt-4">
@@ -529,7 +696,11 @@ onMounted(() => {
               :disabled="actionLoading === 'create'"
               class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition disabled:opacity-50"
             >
-              {{ actionLoading === 'create' ? 'Creating...' : 'Create Transaction' }}
+              {{
+                actionLoading === "create"
+                  ? "Creating..."
+                  : "Create Transaction"
+              }}
             </button>
           </div>
         </form>

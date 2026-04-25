@@ -93,7 +93,7 @@ const confirmReject = async () => {
   try {
     actionLoading.value = selectedApplication.value.id;
     await membershipAPI.rejectApplication(appId, {
-      reason: rejectionReason.value,
+      rejection_reason: rejectionReason.value,
     });
     toast.success("Application rejected successfully");
     showRejectModal.value = false;
@@ -116,11 +116,18 @@ const openSuccessModal = async (application) => {
     toast.error("Invalid application ID");
     return;
   }
+
   try {
     actionLoading.value = application.id;
-    await membershipAPI.approveRegistrations(appId, {});
+
+    const response = await membershipAPI.approveApplication({
+      application_id: appId,
+    });
+
     toast.success("Application approved successfully!");
-    selectedApplication.value = application;
+
+    selectedApplication.value = response.application;
+
     showSuccessModal.value = true;
     fetchApplications();
   } catch (error) {
@@ -131,6 +138,7 @@ const openSuccessModal = async (application) => {
   }
 };
 
+
 const goToCreateTransaction = () => {
   showSuccessModal.value = false;
   resetTransactionForm();
@@ -139,7 +147,7 @@ const goToCreateTransaction = () => {
 
 const resetTransactionForm = () => {
   transactionForm.value = {
-    user_id: selectedApplication.value?.user_id || selectedApplication.value?.user?.id || null,
+    user_id: selectedApplication.value?.created_user || null,
     membership_type_id: "",
     start_date: "",
     end_date: "",
@@ -182,6 +190,15 @@ const createTransaction = async () => {
   } finally {
     actionLoading.value = null;
   }
+};
+
+const openTransactionFromApproved = (application) => {
+  selectedApplication.value = application;
+
+  transactionForm.value.user_id = application.created_user;
+
+  resetTransactionForm();
+  showTransactionModal.value = true;
 };
 
 const showSidebar = ref(false);
@@ -332,8 +349,34 @@ onMounted(() => {
                         </svg>
                       </button>
                     </div>
-                  <div v-else-if="application.status === 'approved'" class="text-green-600 text-sm font-medium">
-                    Approved
+                  <div
+                    v-else-if="application.status === 'approved'"
+                    class="flex justify-center space-x-2"
+                  >
+                    <span class="text-green-600 text-sm font-medium"
+                      >Approved</span
+                    >
+
+                    <button
+                      @click="openTransactionFromApproved(application)"
+                      class="p-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition inline-flex items-center justify-center"
+                      title="Create Transaction"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-5 h-5"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M2.25 8.25h19.5m-16.5 9h15m-18-13.5h19.5a2.25 2.25 0 012.25 2.25v10.5a2.25 2.25 0 01-2.25 2.25H2.25a2.25 2.25 0 01-2.25-2.25V6.75A2.25 2.25 0 012.25 4.5z"
+                        />
+                      </svg>
+                    </button>
                   </div>
                   <div v-else class="text-red-600 text-sm font-medium">
                     Rejected
@@ -403,7 +446,6 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Success Modal -->
     <div
       v-if="showSuccessModal"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
