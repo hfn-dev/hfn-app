@@ -632,14 +632,15 @@ const fetchDocuments = async () => {
         title: item.title,
         pdfUrl: item.file || item.pdf || item.document,
         description: item.caption || item.description || "",
-        created_at: new Date(item.created_at),
+        // created_at: new Date(item.created_at),
+        created_at: item.created_at ? new Date(item.created_at) : new Date(0),
       }));
 
     const allPublications = [
       ...apiPublications,
       ...dummyPublications.map((item) => ({
         ...item,
-        created_at: new Date(),
+        created_at: new Date(0),
       })),
     ];
 
