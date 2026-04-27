@@ -183,6 +183,19 @@ export default {
     }
   },
 
+  async rejectRegistration(payload) {
+    try {
+      const response = await api.post(
+        `/account/admin/individual-applications/reject/`,
+        payload
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Reject application API error");
+      throw error;
+    }
+  },
+
 
   async listSubscriptions(params = {}) {
     try {
