@@ -94,7 +94,7 @@ const confirmReject = async () => {
   }
   try {
     actionLoading.value = selectedApplication.value.id;
-    await membershipAPI.rejectApplication(appId, {
+    await membershipAPI.rejectRegistration(appId, {
       rejection_reason: rejectionReason.value,
     });
     toast.success("Application rejected successfully");
