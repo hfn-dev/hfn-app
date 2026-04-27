@@ -179,7 +179,7 @@
               :src="getPdfPreview(pub.pdfUrl)"
               alt="Publication preview"
               class="w-full h-full object-contain"
-              @error="(e) => (e.target.src = hands)"
+              @error="(e) => (e.target.src = report_img)"
             />
           </div>
 
@@ -360,6 +360,7 @@ import contentUploadApi from "@/api/contentUploadsApi";
 import postDownload from "@/api/memberResources";
 import pagesApi from "@/api/pageManagement";
 import hands from "@/assets/hands.png";
+import report_img from  "@/assets/hands.png"; 
 import newsletter_placeholder from "@/assets/newsletter-placeholder.jpeg";
 import latest from "@/assets/latest_news.png";
 import { resourcesPageSchema } from "@/schemas/pages/resources.schema";
@@ -452,24 +453,24 @@ const handleImageError = (e) => {
   e.target.onerror = null;
   e.target.src = newsletter_placeholder;
 };
-// const getPdfPreview = (url) => {
-//   if (!url) return newsletter_placeholder;
-
-//   if (url.match(/\.(jpg|jpeg|png)$/i)) return url;
-
-//   return url.replace("/upload/", "/upload/pg_1,w_600/").replace(".pdf", ".jpg");
-// };
 const getPdfPreview = (url) => {
   if (!url) return newsletter_placeholder;
 
   if (url.match(/\.(jpg|jpeg|png)$/i)) return url;
 
-  let processedUrl = url.replace("/raw/upload/", "/image/upload/");
-
-  return processedUrl
-    .replace("/upload/", "/upload/pg_1,w_600,f_auto/")
-    .replace(".pdf", ".jpg");
+  return url.replace("/upload/", "/upload/pg_1,w_600/").replace(".pdf", ".jpg");
 };
+// const getPdfPreview = (url) => {
+//   if (!url) return newsletter_placeholder;
+
+//   if (url.match(/\.(jpg|jpeg|png)$/i)) return url;
+
+//   let processedUrl = url.replace("/raw/upload/", "/image/upload/");
+
+//   return processedUrl
+//     .replace("/upload/", "/upload/pg_1,w_600,f_auto/")
+//     .replace(".pdf", ".jpg");
+// };
 
 const dummyPublications = [
   {
