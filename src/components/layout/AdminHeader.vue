@@ -76,7 +76,7 @@ const navLinks = [
       { title: "Newsletters", path: "/resources" },
       { title: "Events", path: "/events" },
       { title: "Gallery", path: "/gallery" },
-      { title: "2026 Annual Conference", path: "#" }
+      // { title: "2026 Annual Conference", path: "#" }
     ],
   },
   {
