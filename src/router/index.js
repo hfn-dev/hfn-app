@@ -74,6 +74,7 @@ import TeamDetail from '@/views/TeamDetail.vue';
 import Governance from '@/views/Governance.vue';
 
 import Buttons from '@/components/layout/Buttons.vue';
+import SuperAdminEditorPages from '@/views/SuperAdmin/SuperAdminEditorPages.vue';
 const routes = [
   {
     path: '/',
@@ -291,6 +292,11 @@ const routes = [
     path: '/superadmin/access',
     name: 'SuperAdminManager',
     component: SuperAdminManager,
+  },
+  {
+    path: '/superadmin/pages',
+    name: 'SuperAdminEditorPages',
+    component: SuperAdminEditorPages,
   },
   {
     path: '/superadmin/payments',

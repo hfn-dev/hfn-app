@@ -1,0 +1,97 @@
+<script setup>
+import { ref, watch } from "vue";
+
+const props = defineProps({
+  modelValue: Object,
+});
+
+const emit = defineEmits(["update:modelValue"]);
+
+const currentSectionData = ref({
+  titleLine1: "",
+  titleLine2: "",
+  description: "",
+  image: "",
+  backgroundColor: "#ffffff",
+  ...props.modelValue,
+});
+
+watch(
+  () => props.modelValue,
+  (val) => {
+    currentSectionData.value = {
+      titleLine1: "",
+      titleLine2: "",
+      description: "",
+      image: "",
+      backgroundColor: "#ffffff",
+      ...(val || {}),
+    };
+  },
+  { immediate: true }
+);
+
+watch(
+  currentSectionData,
+  (val) => {
+    emit("update:modelValue", val);
+  },
+  { deep: true }
+);
+</script>
+<template>
+  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+    <label class="block text-xs font-semibold uppercase text-gray-500">
+      Hero Title Line 1
+    </label>
+    <input
+      v-model="currentSectionData.titleLine1"
+      type="text"
+      class="w-full border-none focus:ring-0"
+    />
+  </div>
+
+  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+    <label class="block text-xs font-semibold uppercase text-gray-500">
+      Hero Title Line 2
+    </label>
+    <input
+      v-model="currentSectionData.titleLine2"
+      type="text"
+      class="w-full border-none focus:ring-0"
+    />
+  </div>
+
+  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+    <label class="block text-xs font-semibold uppercase text-gray-500">
+      Hero Description
+    </label>
+    <textarea
+      v-model="currentSectionData.description"
+      rows="4"
+      class="w-full border-none focus:ring-0 resize-none"
+    ></textarea>
+  </div>
+
+  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+    <label class="block text-xs font-semibold uppercase text-gray-500">
+      Hero Image URL
+    </label>
+    <input
+      v-model="currentSectionData.image"
+      type="text"
+      class="w-full border-none focus:ring-0"
+    />
+  </div>
+
+  <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+    <label class="block text-xs font-semibold uppercase text-gray-500">
+      Hero Background Color
+    </label>
+    <input
+      v-model="currentSectionData.backgroundColor"
+      type="color"
+      class="w-16 h-10 p-0 border-none focus:ring-0"
+    />
+  </div>
+</template>  
