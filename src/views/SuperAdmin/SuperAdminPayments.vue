@@ -264,20 +264,63 @@ const handleAction = (action, course) => {
   }
 };
 
+// const markAsPaid = async () => {
+//   const payment = paymentToConfirm.value;
+
+//   try {
+//     loading.value = true;
+
+//     const paymentDetails = await paymentApi.retrieveApplicationPayment(
+//       payment.id
+//     );
+
+//     const payload = {
+//       transaction_id: paymentDetails.transaction_id,
+//       status: "completed",
+//       payment_reference: paymentDetails.payment_reference,
+//       metadata: null,
+//     };
+
+//     await paymentApi.confirmPayment(payload, payment.id);
+
+//     toast.success(`Payment for ${payment.title} marked as completed`);
+
+//     closeConfirmDialog();
+
+//     fetchPayments();
+//     fetchDashboardAnalytics();
+//   } catch (error) {
+//     const message =
+//       error.response?.data?.detail ||
+//       error.response?.data?.message ||
+//       "Error confirming payment";
+
+//     toast.error(message);
+//   } finally {
+//     loading.value = false;
+//   }
+// };
+
 const markAsPaid = async () => {
   const payment = paymentToConfirm.value;
+  const raw = payment.raw;
 
   try {
     loading.value = true;
 
-    const paymentDetails = await paymentApi.retrieveApplicationPayment(
-      payment.id
-    );
-
     const payload = {
-      transaction_id: paymentDetails.transaction_id,
-      status: "completed",
-      payment_reference: paymentDetails.payment_reference,
+      user_id: raw.user?.id,
+      payment_type: raw.payment_type,
+      membership_type_id: raw.membership_type?.id || null,
+      course_id: raw.course?.id || null,
+      amount: raw.amount,
+      payment_method: raw.payment_method || "cash",
+      transaction_id: raw.transaction_id,
+      payment_reference: raw.payment_reference,
+      payment_date: raw.payment_date || new Date().toISOString(),
+      valid_from: raw.valid_from || null,
+      valid_till: raw.valid_till || null,
+      donation_purpose: raw.donation_purpose || "",
       metadata: null,
     };
 
@@ -286,21 +329,19 @@ const markAsPaid = async () => {
     toast.success(`Payment for ${payment.title} marked as completed`);
 
     closeConfirmDialog();
-
     fetchPayments();
     fetchDashboardAnalytics();
   } catch (error) {
-    const message =
+    toast.error(
       error.response?.data?.detail ||
       error.response?.data?.message ||
-      "Error confirming payment";
-
-    toast.error(message);
+      "Error confirming payment"
+    );
   } finally {
     loading.value = false;
   }
 };
-
+   
 const statCards = computed(() => {
   if (!dashboardStats.value) return [];
 
