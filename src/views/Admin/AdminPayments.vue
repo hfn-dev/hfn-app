@@ -34,6 +34,8 @@ const loadingAnalytics = ref(false);
 const unpaidMembersCount = ref(0);
 const isViewModalOpen = ref(false);
 const paymentToView = ref(null);
+const isDeleteModalOpen = ref(false);
+const paymentToDelete = ref(null);
 const loading = ref(false);
 const searchQuery = ref("");
 
@@ -230,6 +232,32 @@ const fetchDashboardAnalytics = async () => {
   }
 };
 
+const openDeleteDialog = (payment) => {
+  paymentToDelete.value = payment;
+  isDeleteModalOpen.value = true;
+};
+
+const closeDeleteDialog = () => {
+  isDeleteModalOpen.value = false;
+  paymentToDelete.value = null;
+};
+
+const confirmDelete = async () => {
+  const payment = paymentToDelete.value;
+
+  try {
+    loading.value = true;
+    await paymentApi.removePayment(payment.id);
+    toast.success("Payment deleted successfully");
+    closeDeleteDialog();
+    fetchPayments();
+  } catch (error) {
+    toast.error("Failed to delete payment");
+  } finally {
+    loading.value = false;
+  }
+};
+
 const handleDelete = async (id) => {
   if (!confirm("Are you sure you want to delete this payment?")) return;
 
@@ -255,7 +283,7 @@ const handleAction = (action, course) => {
       break;
 
     case "Delete":
-      handleDelete(course.id);
+      openDeleteDialog(course);
       break;
 
     case "Paid":
@@ -266,6 +294,7 @@ const handleAction = (action, course) => {
 
 const markAsPaid = async () => {
   const payment = paymentToConfirm.value;
+  const raw = payment.raw;
 
   try {
     loading.value = true;
@@ -275,6 +304,7 @@ const markAsPaid = async () => {
     );
 
     const payload = {
+      user_id: raw.user?.id || raw.user_id || raw.id,
       transaction_id: paymentDetails.transaction_id,
       status: "completed",
       payment_reference: paymentDetails.payment_reference,
@@ -742,6 +772,30 @@ const closeSidebar = () => (showSidebar.value = false);
               </button>
             </div>
 
+          </div>
+        </div>
+        <div v-if="isDeleteModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
+          <div class="absolute inset-0 bg-black/40" @click="closeDeleteDialog"></div>
+
+          <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10">
+            <h3 class="text-xl font-bold mb-4 text-gray-800">
+              Delete Payment
+            </h3>
+
+            <p class="text-gray-600 mb-4">
+              Are you sure you want to delete the payment for <strong>{{ paymentToDelete?.title }}</strong>? This action cannot be undone.
+            </p>
+
+            <div class="flex justify-end gap-3 mt-6">
+              <button @click="closeDeleteDialog" class="px-4 py-2 bg-gray-200 rounded-lg">
+                Cancel
+              </button>
+
+              <button @click="confirmDelete" :disabled="loading" class="px-4 py-2 bg-red-600 text-white rounded-lg">
+                <span v-if="loading">Deleting...</span>
+                <span v-else>Delete</span>
+              </button>
+            </div>
           </div>
         </div>
         <div v-if="isEditModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
