@@ -17,6 +17,7 @@ const itemsPerPage = 10;
 const showRejectModal = ref(false);
 const showSuccessModal = ref(false);
 const showTransactionModal = ref(false);
+const showDetailsModal = ref(false);
 const selectedApplication = ref(null);
 const rejectionReason = ref("");
 const actionLoading = ref(null);
@@ -76,6 +77,16 @@ const openRejectModal = (application) => {
   selectedApplication.value = application;
   rejectionReason.value = "";
   showRejectModal.value = true;
+};
+
+const openDetailsModal = (application) => {
+  selectedApplication.value = application;
+  showDetailsModal.value = true;
+};
+
+const closeDetailsModal = () => {
+  showDetailsModal.value = false;
+  selectedApplication.value = null;
 };
 
 const getApplicationId = (app) => {
@@ -310,6 +321,11 @@ onMounted(() => {
                 <th
                   class="py-3 px-4 text-left text-sm font-medium text-gray-700"
                 >
+                  Role
+                </th>
+                <th
+                  class="py-3 px-4 text-left text-sm font-medium text-gray-700"
+                >
                   Status
                 </th>
                 <th
@@ -325,11 +341,12 @@ onMounted(() => {
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
-              <tr
-                v-for="application in filteredApplications"
-                :key="application.id"
-                class="hover:bg-gray-50"
-              >
+<tr
+  v-for="application in filteredApplications"
+  :key="application.id"
+  class="hover:bg-gray-50 cursor-pointer"
+  @click="openDetailsModal(application)"
+>
                 <td class="py-3 px-4 text-sm text-gray-800">
                   {{
                     application.name ||
@@ -341,6 +358,14 @@ onMounted(() => {
                 </td>
                 <td class="py-3 px-4 text-sm text-gray-800">
                   {{ application.phone_number }}
+                </td>
+                <td class="py-3 px-4 text-sm">
+<button
+  @click.stop="openDetailsModal(application)"
+  class="text-[#006633] hover:underline font-medium"
+>
+                    {{ application.member_category || "individual" }}
+                  </button>
                 </td>
                 <td class="py-3 px-4 text-sm">
                   <span
@@ -364,7 +389,7 @@ onMounted(() => {
                       : "-"
                   }}
                 </td>
-                <td class="py-3 px-4 text-center">
+                <td class="py-3 px-4 text-center" @click.stop>
                   <div
                     v-if="application.status === 'pending'"
                     class="flex justify-center space-x-2"
@@ -536,6 +561,89 @@ onMounted(() => {
                 ? "Rejecting..."
                 : "Reject"
             }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div
+      v-if="showDetailsModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      @click.self="closeDetailsModal"
+    >
+      <div class="bg-white rounded-xl p-6 w-full max-w-2xl shadow-xl max-h-[90vh] overflow-y-auto">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Application Details</h3>
+        <div class="space-y-3 text-sm">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-gray-500">Full Name</p>
+              <p class="font-medium text-gray-800">{{ selectedApplication?.first_name }} {{ selectedApplication?.last_name }}</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Email</p>
+              <p class="font-medium text-gray-800">{{ selectedApplication?.email }}</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-gray-500">Phone Number</p>
+              <p class="font-medium text-gray-800">{{ selectedApplication?.phone_number || "-" }}</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Member Category</p>
+              <p class="font-medium text-gray-800 capitalize">{{ selectedApplication?.member_category || "-" }}</p>
+            </div>
+          </div>
+          <div>
+            <p class="text-gray-500">Professional Background</p>
+            <p class="font-medium text-gray-800">{{ selectedApplication?.professional_background || "-" }}</p>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-gray-500">Current Organization</p>
+              <p class="font-medium text-gray-800">{{ selectedApplication?.current_organization || "-" }}</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Area of Interest</p>
+              <p class="font-medium text-gray-800">{{ selectedApplication?.area_of_interest || "-" }}</p>
+            </div>
+          </div>
+          <div>
+            <p class="text-gray-500">Statement of Interest</p>
+            <p class="font-medium text-gray-800">{{ selectedApplication?.statement_of_interest || "-" }}</p>
+          </div>
+          <div>
+            <p class="text-gray-500">Notes</p>
+            <p class="font-medium text-gray-800">{{ selectedApplication?.notes || "-" }}</p>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-gray-500">Status</p>
+              <p class="font-medium capitalize">{{ selectedApplication?.status || "-" }}</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Date Applied</p>
+              <p class="font-medium">{{ selectedApplication?.created_at ? new Date(selectedApplication.created_at).toLocaleDateString() : "-" }}</p>
+            </div>
+          </div>
+          <div v-if="selectedApplication?.approved_at" class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-gray-500">Approved At</p>
+              <p class="font-medium">{{ new Date(selectedApplication.approved_at).toLocaleDateString() }}</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Approved By</p>
+              <p class="font-medium">{{ selectedApplication?.approved_by || "-" }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-end pt-4">
+          <button
+            @click="closeDetailsModal"
+            class="px-4 py-2 bg-[#006633] text-white rounded-lg hover:bg-[#004d33] transition"
+          >
+            Close
           </button>
         </div>
       </div>
