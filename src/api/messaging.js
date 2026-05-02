@@ -386,10 +386,21 @@ export default {
   },
   async broadcastMessage() {
     try {
-      const response = await api.post('/messaging/notifications/broadcast_unpaid_subscriptions/');
+      const response = await api.post(
+        '/messaging/notifications/broadcast_unpaid_subscriptions/'
+      );
       return response.data;
     } catch (error) {
       console.error('Message API error');
+      throw error;
+    }
+  },
+  async sendFeedback(payload) {
+    try {
+      const response = await api.post('/feedback/', payload);
+      return response.data;
+    } catch (error) {
+      console.error('Send feedback API error');
       throw error;
     }
   },

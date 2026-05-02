@@ -563,13 +563,16 @@ const createUpload = async () => {
       if (!uploadForm.value.files.length) return;
 
       if (uploadForm.value.type === "gallery") {
-        uploadForm.value.files.forEach((file) => {
-          formData.append("image", file);
-        });
-
+        if (uploadForm.value.files.length > 1) {
+          uploadForm.value.files.forEach((file) => {
+            formData.append("images", file);
+          });
+        } else {
+          formData.append("image", uploadForm.value.files[0]);
+        }
         formData.append("banner_index", uploadForm.value.bannerIndex);
       } else {
-        formData.append("file", uploadForm.value.files[0]);
+        formData.append("image", uploadForm.value.files[0]);
       }
     }
 
