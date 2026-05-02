@@ -176,7 +176,7 @@ const newsList = computed(
 const executives = computed(() => pageContent.value.executives);
 
 const pageContent = ref(structuredClone(homePageSchema));
-const pageId = 1;
+const pageType = "home";
 const selectedMonth = ref(Object.keys(homePageSchema.news.months)[0]);
 
 onMounted(async () => {
@@ -206,7 +206,7 @@ onMounted(async () => {
   }, 5000);
   
   try {
-    const { data } = await api.get(`/api/pages/${pageId}/`);
+    const { data } = await api.get(`/api/pages/${pageType}/`);
     pageContent.value = data.content || structuredClone(homePageSchema);
   } catch (err) {
     console.error("Failed to load homepage content:", err);
