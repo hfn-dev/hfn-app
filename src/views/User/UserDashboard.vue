@@ -360,6 +360,8 @@ const fetchNewsletters = async () => {
       description_short: item.excerpt,
       date: item.publish_date,
       slug: item.slug,
+      external_link: item.external_link,
+      is_external: item.is_external,
     }));
   } catch (error) {
     console.error("Failed to fetch newsletters");
@@ -465,6 +467,8 @@ const fetchTopics = async () => {
       tag: "Public Health Stories",
       tagColor: "#ff6600",
       comments: "0 Comments",
+      external_link: item.external_link,
+      is_external: item.is_external,
     }));
   } catch (error) {
     console.error("Failed to fetch topics");
@@ -630,7 +634,17 @@ onMounted(() => {
                 {{ newsletters[0].description_short }}
               </p>
 
+              <a
+                v-if="newsletters[0].is_external && newsletters[0].external_link"
+                :href="newsletters[0].external_link"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-block bg-[#004D33] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#006644] transition duration-300"
+              >
+                Read More
+              </a>
               <router-link
+                v-else
                 :to="`/news/${newsletters[0].slug}`"
                 class="inline-block bg-[#004D33] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#006644] transition duration-300"
               >
@@ -1015,7 +1029,17 @@ onMounted(() => {
                   </p>
                 </div>
 
+                <a
+                  v-if="topic.is_external && topic.external_link"
+                  :href="topic.external_link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-sm font-medium text-green-700 hover:text-green-800 transition self-start mt-2"
+                >
+                  Read more...
+                </a>
                 <router-link
+                  v-else
                   :to="`/news/${topic.slug}`"
                   class="text-sm font-medium text-green-700 hover:text-green-800 transition self-start mt-2"
                 >
