@@ -259,7 +259,7 @@ const resolveImage = (image) => imageMap[image] || image;
 
 onMounted(async () => {
   try {
-    const res = await pagesApi.getPageByType("getInvolved");
+    const res = await pagesApi.getPageByType("getinvolved");
     pageFromApi.value = res?.content || null;
   } catch (e) {
     console.warn("Using local GetInvolved schema fallback");
