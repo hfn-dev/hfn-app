@@ -6,7 +6,9 @@ import authApi from "@/api/userRegister.js";
 import UserSidebar from "@/components/layout/UserSidebar.vue";
 import { computed, onMounted, ref } from "vue";
 import newsletter_placeholder from "@/assets/newsletter-placeholder.jpeg";
+import blog from "@/assets/blogh.png";
 import contentUploadsApi from "@/api/contentUploadsApi";
+import blogh from "@/assets/blogh.png";
 
 const resources = ref([]);
 const searchQuery = ref("");
@@ -347,7 +349,7 @@ const fetchUser = async () => {
 };
 
 const fixImageUrl = (url) => {
-  if (!url) return "";
+  if (!url) return blogh;
   return url.replace("http://", "https://");
 };
 
