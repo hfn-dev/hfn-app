@@ -38,6 +38,22 @@ const isDeleteModalOpen = ref(false);
 const paymentToDelete = ref(null);
 const loading = ref(false);
 const searchQuery = ref("");
+const membershipTypes = ref([]);
+
+const confirmForm = ref({
+  payment_type: "",
+  membership_type_id: "",
+  amount: "",
+  valid_from: "",
+  valid_till: "",
+});
+
+const paymentTypeOptions = [
+  { label: "Subscription", value: "subscription" },
+  { label: "Course", value: "course" },
+  { label: "Donation", value: "donation" },
+  { label: "Registration", value: "registration" },
+];
 
 const activeCourses = computed(() => {
   const data =
@@ -51,12 +67,27 @@ const activeCourses = computed(() => {
 
 const openConfirmDialog = (payment) => {
   paymentToConfirm.value = payment;
+  const raw = payment.raw;
+  confirmForm.value = {
+    payment_type: raw.payment_type || "",
+    membership_type_id: raw.membership_type?.id || "",
+    amount: raw.amount || "",
+    valid_from: raw.valid_from ? raw.valid_from.split("T")[0] : "",
+    valid_till: raw.valid_till ? raw.valid_till.split("T")[0] : "",
+  };
   isConfirmModalOpen.value = true;
 };
 
 const closeConfirmDialog = () => {
   isConfirmModalOpen.value = false;
   paymentToConfirm.value = null;
+  confirmForm.value = {
+    payment_type: "",
+    membership_type_id: "",
+    amount: "",
+    valid_from: "",
+    valid_till: "",
+  };
 };
 
 const openViewModal = (payment) => {
@@ -67,6 +98,32 @@ const openViewModal = (payment) => {
 const closeViewModal = () => {
   isViewModalOpen.value = false;
   paymentToView.value = null;
+};
+
+const onMembershipTypeChange = () => {
+  const selected = membershipTypes.value.find(
+    (t) => t.id === confirmForm.value.membership_type_id
+  );
+  if (selected) {
+    confirmForm.value.amount = selected.price;
+  }
+};
+
+const onValidFromChange = () => {
+  if (confirmForm.value.valid_from) {
+    const fromDate = new Date(confirmForm.value.valid_from);
+    fromDate.setFullYear(fromDate.getFullYear() + 1);
+    confirmForm.value.valid_till = fromDate.toISOString().split("T")[0];
+  }
+};
+
+const fetchMembershipTypes = async () => {
+  try {
+    const data = await membershipApi.listMembershipTypes();
+    membershipTypes.value = data.results || data || [];
+  } catch (error) {
+    console.error("Failed to fetch membership types:", error);
+  }
 };
 
 const openMessageModal = async (title) => {
@@ -295,20 +352,25 @@ const handleAction = (action, course) => {
 const markAsPaid = async () => {
   const payment = paymentToConfirm.value;
   const raw = payment.raw;
+  const form = confirmForm.value;
 
   try {
     loading.value = true;
 
-    const paymentDetails = await paymentApi.retrieveApplicationPayment(
-      payment.id
-    );
-
     const payload = {
       user_id: raw.user?.id || raw.user_id || raw.id,
-      transaction_id: paymentDetails.transaction_id,
-      status: "completed",
-      payment_reference: paymentDetails.payment_reference,
-      metadata: null,
+      payment_type: form.payment_type,
+      membership_type_id: form.membership_type_id || null,
+      course_id: raw.course?.id || null,
+      amount: parseFloat(form.amount) || raw.amount,
+      payment_method: raw.payment_method || "cash",
+      transaction_id: raw.transaction_id,
+      payment_reference: raw.payment_reference,
+      payment_date: raw.payment_date || new Date().toISOString(),
+      valid_from: form.valid_from || null,
+      valid_till: form.valid_till || null,
+      donation_purpose: raw.donation_purpose || "",
+      metadata: "",
     };
 
     await paymentApi.confirmPayment(payload, payment.id);
@@ -316,16 +378,14 @@ const markAsPaid = async () => {
     toast.success(`Payment for ${payment.title} marked as completed`);
 
     closeConfirmDialog();
-
     fetchPayments();
     fetchDashboardAnalytics();
   } catch (error) {
-    const message =
+    toast.error(
       error.response?.data?.detail ||
       error.response?.data?.message ||
-      "Error confirming payment";
-
-    toast.error(message);
+      "Error confirming payment"
+    );
   } finally {
     loading.value = false;
   }
@@ -452,6 +512,7 @@ const sendMessage = async () => {
 onMounted(() => {
   fetchPayments();
   fetchDashboardAnalytics();
+  fetchMembershipTypes();
 });
 
 watch(currentTab, () => {
@@ -750,18 +811,60 @@ const closeSidebar = () => (showSidebar.value = false);
         <div v-if="isConfirmModalOpen" class="fixed inset-0 z-50 flex items-center justify-center">
           <div class="absolute inset-0 bg-black/40" @click="closeConfirmDialog"></div>
 
-          <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10">
+          <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md relative z-10 max-h-[90vh] overflow-y-auto">
 
             <h3 class="text-xl font-bold mb-4 text-gray-800">
               Confirm Payment
             </h3>
 
-            <p class="text-gray-600 mb-6">
-              Are you sure you want to confirm payment for
-              <strong>{{ paymentToConfirm?.title }}</strong>?
+            <p class="text-gray-600 mb-4">
+              Confirm payment for <strong>{{ paymentToConfirm?.title }}</strong>
             </p>
 
-            <div class="flex justify-end gap-3">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Payment Type</label>
+                <select v-model="confirmForm.payment_type"
+                  class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-[#00cc66] focus:border-[#00cc66]">
+                  <option value="">Select payment type</option>
+                  <option v-for="option in paymentTypeOptions" :key="option.value" :value="option.value">
+                    {{ option.label }}
+                  </option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Membership Type</label>
+                <select v-model="confirmForm.membership_type_id" @change="onMembershipTypeChange"
+                  class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-[#00cc66] focus:border-[#00cc66]">
+                  <option value="">Select membership type</option>
+                  <option v-for="type in membershipTypes" :key="type.id" :value="type.id">
+                    {{ type.name }} - &#8358;{{ type.price }}
+                  </option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Amount (&#8358;)</label>
+                <input v-model="confirmForm.amount" type="number" step="0.01"
+                  class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-[#00cc66] focus:border-[#00cc66]"
+                  placeholder="Enter amount" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Valid From</label>
+                <input v-model="confirmForm.valid_from" type="date" @change="onValidFromChange"
+                  class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-[#00cc66] focus:border-[#00cc66]" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Valid Till</label>
+                <input v-model="confirmForm.valid_till" type="date"
+                  class="w-full border border-gray-300 rounded-lg p-2.5 focus:ring-[#00cc66] focus:border-[#00cc66]" />
+              </div>
+            </div>
+
+            <div class="flex justify-end gap-3 mt-6">
               <button @click="closeConfirmDialog" class="px-4 py-2 bg-gray-200 rounded-lg">
                 Cancel
               </button>
