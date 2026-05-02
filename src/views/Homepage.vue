@@ -206,7 +206,7 @@ onMounted(async () => {
   }, 5000);
   
   try {
-    const { data } = await api.get(`/pages/${pageType}/`);
+    const { data } = await api.get(`/api/pages/${pageType}/`);
     pageContent.value = data.content || structuredClone(homePageSchema);
   } catch (err) {
     console.error("Failed to load homepage content:", err);
