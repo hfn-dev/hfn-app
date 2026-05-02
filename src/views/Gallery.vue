@@ -64,34 +64,22 @@
     <hr class="border-gray-100" />
 
     <section class="container mx-auto px-4 md:px-8 py-12">
-      <div class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <router-link
           v-for="item in galleryItems"
           :key="item.slug"
           :to="`/gallery/${item.slug}`"
-          class="block break-inside-avoid group relative overflow-hidden rounded-xl bg-gray-100 transition-all duration-300 hover:shadow-2xl"
+          class="block rounded-xl bg-gray-100 overflow-hidden"
         >
-          <div class="relative overflow-hidden">
+          <div class="relative">
             <img
               :src="item.cover"
               :alt="item.title"
-              class="w-full h-72 object-cover transition duration-500 group-hover:scale-105"
+              class="w-full h-72 object-cover"
             />
-            <div
-              class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6"
-            >
-              <span
-                class="text-orange-400 text-xs font-bold uppercase tracking-wider mb-2"
-                >{{ item.category }}</span
-              >
-              <h4 class="text-white text-xl font-bold">{{ item.title }}</h4>
-              <p class="text-gray-200 text-sm mt-2">{{ item.date }}</p>
-            </div>
           </div>
 
-          <div
-            class="p-4 bg-white border-x border-b border-gray-100 md:group-hover:hidden"
-          >
+          <div class="p-4 bg-white border-x border-b border-gray-100">
             <div class="flex justify-between items-start">
               <div>
                 <span class="text-[10px] font-bold text-orange-600 uppercase">{{
@@ -225,8 +213,8 @@ const fetchGalleryFromApi = async (loadMore = false) => {
 
   try {
     const [allRes, nonMembersRes] = await Promise.all([
-      gallery.list({ audience: "all", page: currentPage.value }),
-      gallery.list({ audience: "non_members", page: currentPage.value }),
+      gallery.gallery({ audience: "all", page: currentPage.value }),
+      gallery.gallery({ audience: "non_members", page: currentPage.value }),
     ]);
 
     const apiData = [

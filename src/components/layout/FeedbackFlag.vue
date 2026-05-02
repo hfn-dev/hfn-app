@@ -62,9 +62,10 @@
 
             <button
               type="submit"
-              class="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition"
+              :disabled="loading"
+              class="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition disabled:opacity-50"
             >
-              Submit
+              {{ loading ? "Submitting..." : "Submit" }}
             </button>
           </div>
         </form>
@@ -74,8 +75,12 @@
 
 <script setup>
 import { ref } from "vue";
+import { useToast } from "vue-toastification";
+import messagingApi from "@/api/messaging";
 
+const toast = useToast();
 const isOpen = ref(false);
+const loading = ref(false);
 const form = ref({
   name: "",
   feedback: "",
@@ -85,14 +90,27 @@ const closeForm = () => {
   isOpen.value = false;
 };
 
-const submitFeedback = () => {
+const submitFeedback = async () => {
   if (!form.value.name || !form.value.feedback) return;
 
-  
-  alert(`Feedback submitted!\nName: ${form.value.name}\nMessage: ${form.value.feedback}`);
+  loading.value = true;
 
-  // Reset form
-  form.value = { name: "", feedback: "" };
-  isOpen.value = false;
+  try {
+    await messagingApi.sendFeedback({
+      name: form.value.name,
+      message: form.value.feedback,
+    });
+
+    toast.success("Feedback submitted successfully!");
+
+    // Reset form
+    form.value = { name: "", feedback: "" };
+    isOpen.value = false;
+  } catch (error) {
+    console.error("Failed to submit feedback", error);
+    toast.error("Failed to submit feedback. Please try again.");
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
