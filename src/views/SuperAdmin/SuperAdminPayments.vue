@@ -230,9 +230,19 @@ const saveEdit = async () => {
   fetchPayments();
 };
 
+const currentMonth = new Date().getMonth() + 1; // 1-12
+
+const recentRevenueData = computed(() => {
+  const allData = revenueData.value;
+  return allData.filter((item) => {
+    const monthIndex = new Date(item.month + " 1, 2026").getMonth() + 1;
+    return monthIndex <= currentMonth;
+  }).slice(-12);
+});
+
 const maxRevenue = computed(() => {
-  if (!revenueData.value.length) return 0;
-  return Math.max(...revenueData.value.map((r) => r.amount || 0));
+  if (!recentRevenueData.value.length) return 0;
+  return Math.max(...recentRevenueData.value.map((r) => Number(r.amount) || 0));
 });
 
 const maxCount = computed(() => {
@@ -558,8 +568,8 @@ const closeSidebar = () => (showSidebar.value = false);
               <h2 class="text-xl font-semibold text-gray-800 mb-4">
                 Monthly Revenue Overview
               </h2>
-              <div class="h-64 flex items-end justify-between space-x-2 p-2">
-                <div v-for="data in revenueData" :key="data.month"
+              <div class="h-64 flex items-end justify-between gap-1 px-4 pb-2">
+                <div v-for="data in recentRevenueData" :key="data.month"
                   class="flex-1 h-full flex flex-col items-center justify-end group cursor-pointer">
                   <div :style="{ height: getBarHeight(data.amount) }"
                     class="w-8 md:w-10 bg-[#00cc66] rounded-t-lg transition-all duration-300 hover:bg-[#00994d] relative">
@@ -568,11 +578,11 @@ const closeSidebar = () => (showSidebar.value = false);
                       {{ formatCurrency(data.amount) }}
                     </span>
                   </div>
-                  <p class="mt-2 text-sm text-gray-600">{{ data.month }}</p>
+                  <p class="mt-2 text-xs text-gray-600 truncate">{{ String(data.month).slice(0, 3) }}</p>
                 </div>
               </div>
               <p class="mt-4 text-xs text-gray-500 text-right">
-                Maximum Revenue: {{ formatCurrency(maxRevenue.value) }}
+                Maximum Revenue: {{ formatCurrency(maxRevenue) }}
               </p>
             </div>
 
