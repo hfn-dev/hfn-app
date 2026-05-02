@@ -397,7 +397,7 @@ export default {
   },
   async sendFeedback(payload) {
     try {
-      const response = await api.post('/feedback/', payload);
+      const response = await api.post('/contact/feedback/', payload);
       return response.data;
     } catch (error) {
       console.error('Send feedback API error');
