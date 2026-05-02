@@ -108,10 +108,14 @@
 
       <div class="mt-16 text-center">
         <button
-          class="px-8 py-3 bg-green-800 text-white rounded-full font-semibold hover:bg-green-700 transition transform hover:-translate-y-1"
+          v-if="hasMore"
+          @click="loadMorePhotos"
+          :disabled="loadingMore"
+          class="px-8 py-3 bg-green-800 text-white rounded-full font-semibold hover:bg-green-700 transition transform hover:-translate-y-1 disabled:opacity-50"
         >
-          View More Photos
+          {{ loadingMore ? "Loading..." : "View More Photos" }}
         </button>
+        <p v-else class="text-gray-500 text-sm">No more photos to load</p>
       </div>
     </section>
   </div>
@@ -200,15 +204,29 @@ const dummyGalleryItems = [
 ];
 
 const galleryItems = ref([...dummyGalleryItems]);
+const currentPage = ref(1);
+const hasMore = ref(true);
+const loadingMore = ref(false);
 
-const fetchGalleryFromApi = async () => {
-  loading.value = true;
+const resolveImage = (item) => {
+  if (item.image) return item.image;
+  if (item.images && item.images.length) return item.images[0];
+  if (item.file) return item.file;
+  return "";
+};
+
+const fetchGalleryFromApi = async (loadMore = false) => {
+  if (loadMore) {
+    loadingMore.value = true;
+  } else {
+    loading.value = true;
+  }
   error.value = null;
 
   try {
     const [allRes, nonMembersRes] = await Promise.all([
-      gallery.list({ audience: "all" }),
-      gallery.list({ audience: "non_members" }),
+      gallery.list({ audience: "all", page: currentPage.value }),
+      gallery.list({ audience: "non_members", page: currentPage.value }),
     ]);
 
     const apiData = [
@@ -220,18 +238,31 @@ const fetchGalleryFromApi = async () => {
       slug: item.slug,
       title: item.title,
       category: item.category || "General",
-      date: formatDate(item.date),
+      date: formatDate(item.created_at || item.date),
       cover: resolveImage(item),
       images: item.images || [],
     }));
 
-    galleryItems.value = [...dummyGalleryItems, ...mappedApiItems];
+    if (loadMore) {
+      galleryItems.value = [...galleryItems.value, ...mappedApiItems];
+    } else {
+      galleryItems.value = [...dummyGalleryItems, ...mappedApiItems];
+    }
+
+    const totalResults = allRes.count || 0;
+    hasMore.value = galleryItems.value.length < totalResults;
   } catch (err) {
     console.error("Failed to load gallery", err);
     error.value = "Failed to load gallery items";
   } finally {
     loading.value = false;
+    loadingMore.value = false;
   }
+};
+
+const loadMorePhotos = () => {
+  currentPage.value++;
+  fetchGalleryFromApi(true);
 };
   
 onMounted(() => {

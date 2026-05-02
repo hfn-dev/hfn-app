@@ -165,10 +165,7 @@ const handleDeleteUpload = (item) => {
           return;
       }
 
-      uploads.value = uploads.value.filter(
-        (u) => u.id !== item.id && u.slug !== item.slug
-      );
-
+      await fetchUploads();
       toast.success("Item deleted successfully");
     } catch (error) {
       console.error(`Failed to delete ${item.type}`);
