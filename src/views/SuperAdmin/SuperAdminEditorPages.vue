@@ -341,7 +341,7 @@ const saveChanges = async () => {
       },
     };
 
-    await pagesApi.partialUpdatePage(activePage.value.page_type, payload);
+    await pagesApi.updatePage(activePage.value.page_type, payload);
 
     activePage.value.sections[activeSection.value] = structuredClone(
       currentSectionData.value
