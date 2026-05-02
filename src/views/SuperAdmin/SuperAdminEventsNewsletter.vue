@@ -884,6 +884,23 @@ const closeSidebar = () => (showSidebar.value = false);
               </select>
             </div>
 
+            <label class="flex items-center gap-2">
+              <input type="checkbox" v-model="newsForm.is_featured" class="w-4 h-4" />
+              <span class="font-medium">Featured Article</span>
+            </label>
+
+            <div v-if="newsForm.is_featured" class="flex items-center gap-2">
+              <input
+                v-model.number="newsForm.featured_order"
+                type="number"
+                class="input"
+                placeholder="Display order"
+              />
+              <p class="text-xs text-gray-500">
+                Lower number appears first
+              </p>
+            </div>
+
             <button @click="saveNews" class="btn-primary">
               {{
                 isEditing
