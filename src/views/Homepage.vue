@@ -1,5 +1,6 @@
 <script setup>
 import api from "@/api/axios";
+import newsApi from "@/api/newsModule";
 import HfnCalender from "@/components/layout/HfnCalender.vue";
 import { homePageSchema } from "@/schemas/pages/home.schema";
 import { resolveAsset } from "@/utils/assetMap";
@@ -12,7 +13,7 @@ import {
   UserGroupIcon,
 } from "@heroicons/vue/24/outline";
 
-  import wef from "@/assets/wef.jpg";
+import wef from "@/assets/wef.jpg";
 
 const latest =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769896360/243A8355_r47c3t.jpg";
@@ -25,10 +26,12 @@ const hands1 =
 const hands2 =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769716176/dc2a1ae8ac60464700aa7be25ea2c408_L_dt5us8.jpg";
 
- const showDonateDialog = ref(false);
+const showDonateDialog = ref(false);
 const showConferencePopup = ref(false);
 const timeLeft = ref({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 let countdownInterval = null;
+
+const apiNews = ref([]);
 
 const startCountdown = () => {
   const targetDate = new Date("March 4, 2026 09:00:00").getTime();
@@ -52,7 +55,7 @@ const startCountdown = () => {
 };
 const closeConferencePopup = () => {
   showConferencePopup.value = false;
-  sessionStorage.setItem('hfn_conference_popup_shown', 'true');
+  sessionStorage.setItem("hfn_conference_popup_shown", "true");
 };
 
 const openDonateDialog = () => {
@@ -61,7 +64,7 @@ const openDonateDialog = () => {
 
 const closeDonateDialog = () => {
   showDonateDialog.value = false;
-}; 
+};
 const imageMap = {
   "event.png": event,
   "group.png": group,
@@ -72,8 +75,7 @@ const imageMap = {
   "hands2.png": hands2,
 };
 
-
- const resolveImage = (item) => {
+const resolveImage = (item) => {
   if (!item) return "/images/placeholder-news.jpg";
 
   const img =
@@ -85,7 +87,7 @@ const imageMap = {
 
   if (!img) return "/images/placeholder-news.jpg";
   return img;
-}; 
+};
 
 // const resolveImage = (item) => {
 //   if (!item) return "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772533037/news_mup0qv.png";
@@ -111,8 +113,8 @@ const imageMap = {
 //   }
 
 //   return "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1772533037/news_mup0qv.png";
-// };  
-  
+// };
+
 const actionRef = ref(null);
 const isVisible = ref(false);
 const sectionRef = ref(null);
@@ -152,7 +154,6 @@ const heroSlides = [
 const activeSlide = ref(0);
 let interval = null;
 
-
 const faqs = computed(() => pageContent.value.faqs);
 const group =
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715465/1feebd03da9f660dfb6e3f79b696f544_L_rxf7mk.jpg";
@@ -163,24 +164,122 @@ const toggleFaq = (index) => {
   activeFaq.value = activeFaq.value === index ? null : index;
 };
 
+const assignTagFromContent = (news) => {
+  if (news.tag) return news.tag;
+
+  const text = `${news.title} ${news.excerpt} ${news.content}`.toLowerCase();
+
+  const keywordMap = [
+    { keywords: ["alert", "outbreak", "disease", "emergency", "virus", "epidemic", "pandemic", "warning", "crisis", "flu"], tag: "Health Alert" },
+    { keywords: ["policy", "advocacy", "reform", "government", "regulation", "law", "legislation", "committee", "ministry"], tag: "Policy & Advocacy" },
+    { keywords: ["digital", "tech", "technology", "platform", "app", "innovation", "telemedicine", "data", "electronic", "ai"], tag: "Digital Health" },
+    { keywords: ["program", "initiative", "campaign", "awareness", "screening", "vaccination", "immunization", "training", "workshop"], tag: "Programs & Initiatives" },
+    { keywords: ["story", "community", "public", "patient", "care", "wellness", "prevention", "lifestyle", "nutrition"], tag: "Public Health Stories" },
+    { keywords: ["partnership", "collaboration", "funding", "investment", "sponsor", "donation", "grant"], tag: "Partnerships" },
+    { keywords: ["event", "conference", "summit", "forum", "roundtable", "meeting", "dialogue"], tag: "Events & Conferences" },
+  ];
+
+  for (const { keywords, tag } of keywordMap) {
+    if (keywords.some((kw) => text.includes(kw))) {
+      return tag;
+    }
+  }
+
+  const fallbackTags = ["Programs & Initiatives", "Public Health Stories", "Policy & Advocacy"];
+  return fallbackTags[Math.floor(Math.random() * fallbackTags.length)];
+};
+
 const months = computed(() => Object.keys(pageContent.value.news.months));
 
-const featured = computed(
-  () => pageContent.value.news.months[selectedMonth.value]?.featured
-);
+const allDummyNews = computed(() => {
+  const allNews = [];
+  for (const month of Object.keys(pageContent.value.news.months)) {
+    const monthData = pageContent.value.news.months[month];
+    if (monthData.featured) {
+      allNews.push({ ...monthData.featured, source: "dummy" });
+    }
+    if (monthData.newsList) {
+      monthData.newsList.forEach((news) => {
+        allNews.push({ ...news, source: "dummy" });
+      });
+    }
+  }
+  return allNews;
+});
 
-const newsList = computed(
-  () => pageContent.value.news.months[selectedMonth.value]?.newsList || []
-);
+const featured = computed(() => {
+  if (apiNews.value.length > 0) {
+    const latestApi = apiNews.value[0];
+    const formattedDate = latestApi.publish_date
+      ? new Date(latestApi.publish_date).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
+      : new Date().toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+    return { ...latestApi, source: "api", date: formattedDate, tag: assignTagFromContent(latestApi) };
+  }
+  const firstMonth = Object.keys(pageContent.value.news.months)[0];
+  return pageContent.value.news.months[firstMonth]?.featured;
+});
 
 const executives = computed(() => pageContent.value.executives);
 
 const pageContent = ref(structuredClone(homePageSchema));
 const pageType = "home";
 const selectedMonth = ref(Object.keys(homePageSchema.news.months)[0]);
+const currentPage = ref(0);
+const newsPerPage = 3;
+
+const allNewsList = computed(() => {
+  const apiNewsList = apiNews.value.slice(1).map((news) => {
+    const formattedDate = news.publish_date
+      ? new Date(news.publish_date).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
+      : new Date().toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+    return {
+      ...news,
+      source: "api",
+      date: formattedDate,
+      tag: assignTagFromContent(news),
+    };
+  });
+  const dummyNewsList = allDummyNews.value.filter(
+    (news) => news.slug !== featured.value?.slug
+  );
+  return [...apiNewsList, ...dummyNewsList];
+});
+
+const newsList = computed(() => {
+  const start = currentPage.value * newsPerPage;
+  return allNewsList.value.slice(start, start + newsPerPage);
+});
+
+const totalPages = computed(() =>
+  Math.ceil(allNewsList.value.length / newsPerPage)
+);
+
+const goToPrevPage = () => {
+  if (currentPage.value > 0) currentPage.value--;
+};
+
+const goToNextPage = () => {
+  if (currentPage.value < totalPages.value - 1) currentPage.value++;
+};
 
 onMounted(async () => {
-  startCountdown()
+  startCountdown();
   const observer = new IntersectionObserver(
     (entries) => {
       if (entries[0].isIntersecting) {
@@ -191,12 +290,11 @@ onMounted(async () => {
     { threshold: 0.2 }
   );
 
-  if (!sessionStorage.getItem('hfn_conference_popup_shown')) {
+  if (!sessionStorage.getItem("hfn_conference_popup_shown")) {
     setTimeout(() => {
       showConferencePopup.value = true;
-    }, 1500); 
+    }, 1500);
   }
-
 
   if (sectionRef.value) {
     observer.observe(sectionRef.value);
@@ -204,15 +302,23 @@ onMounted(async () => {
   interval = setInterval(() => {
     activeSlide.value = (activeSlide.value + 1) % heroSlides.length;
   }, 5000);
-  
+
   try {
     const { data } = await api.get(`/api/pages/${pageType}/`);
     pageContent.value = data.content || structuredClone(homePageSchema);
   } catch (err) {
     console.error("Failed to load homepage content:", err);
-    pageContent.value = structuredClone(homePageSchema); 
+    pageContent.value = structuredClone(homePageSchema);
   }
-  
+
+  try {
+    const newsData = await newsApi.listArticles();
+    apiNews.value = newsData.results || newsData || [];
+  } catch (err) {
+    console.error("Failed to load API news:", err);
+    apiNews.value = [];
+  }
+
   const toggles = document.querySelectorAll(".faq-toggle");
   toggles.forEach((toggle) => {
     toggle.addEventListener("click", () => {
@@ -244,11 +350,10 @@ onMounted(async () => {
   });
 });
 
-
- onUnmounted(() => {
-   clearInterval(interval);
+onUnmounted(() => {
+  clearInterval(interval);
   if (countdownInterval) clearInterval(countdownInterval);
-}); 
+});
 </script>
 
 <template>
@@ -302,16 +407,6 @@ onMounted(async () => {
             </RouterLink>
           </div>
         </div>
-      </div>
-
-      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20">
-        <button
-          v-for="(_, index) in heroSlides"
-          :key="index"
-          class="w-3 h-3 rounded-full transition"
-          :class="activeSlide === index ? 'bg-white' : 'bg-white/40'"
-          @click="activeSlide = index"
-        />
       </div>
     </section>
 
@@ -602,7 +697,7 @@ onMounted(async () => {
             </div>
 
             <p class="text-gray-700 mb-6">
-              {{ featured.description }}
+              {{ featured.description || featured.excerpt }}
             </p>
 
             <RouterLink
@@ -622,7 +717,6 @@ onMounted(async () => {
             class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200 flex flex-col sm:flex-row transition hover:shadow-md"
           >
             <div class="relative w-full sm:w-48">
-              
               <img
                 :src="resolveImage(news)"
                 alt="News image"
@@ -657,7 +751,7 @@ onMounted(async () => {
                 </div>
 
                 <p class="text-gray-700 text-sm leading-relaxed line-clamp-3">
-                  {{ news.description }}
+                  {{ news.description || news.excerpt}}
                 </p>
               </div>
 
@@ -682,7 +776,38 @@ onMounted(async () => {
               </div>
             </div>
           </div>
+
+          <div class="flex items-center justify-center gap-4 mt-4">
+            <button
+              @click="goToPrevPage"
+              :disabled="currentPage === 0"
+              class="w-10 h-10 rounded-full flex items-center justify-center border border-gray-300 text-gray-700 hover:bg-green-700 hover:text-white hover:border-green-700 transition disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-700 disabled:hover:border-gray-300"
+            >
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <span class="text-sm text-gray-600 font-medium">
+              {{ currentPage + 1 }} of {{ totalPages }}
+            </span>
+            <button
+              @click="goToNextPage"
+              :disabled="currentPage >= totalPages - 1"
+              class="w-10 h-10 rounded-full flex items-center justify-center border border-gray-300 text-gray-700 hover:bg-green-700 hover:text-white hover:border-green-700 transition disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-700 disabled:hover:border-gray-300"
+            >
+              <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <section class="bg-[#f6faf8] pb-16 px-6 md:px-12 lg:px-24">
+      <div class="flex justify-center">
+        <RouterLink
+          to="/news"
+          class="inline-flex items-center gap-2 bg-green-700 text-white px-8 py-3 rounded-full font-semibold hover:bg-green-800 transition shadow-lg"
+        >
+          Read More News <i class="fa-solid fa-arrow-right"></i>
+        </RouterLink>
       </div>
     </section>
 
@@ -858,41 +983,36 @@ onMounted(async () => {
       </div>
     </section>
   </div>
-  <!-- Donate Dialog -->
-<div
-  v-if="showDonateDialog"
-  class="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
->
   <div
-    class="bg-white rounded-2xl p-8 max-w-md w-full relative shadow-2xl"
+    v-if="showDonateDialog"
+    class="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
   >
-    <!-- Close Button -->
-    <button
-      @click="closeDonateDialog"
-      class="absolute top-4 right-4 text-gray-400 hover:text-black text-xl"
-    >
-      ✕
-    </button>
+    <div class="bg-white rounded-2xl p-8 max-w-md w-full relative shadow-2xl">
+      <button
+        @click="closeDonateDialog"
+        class="absolute top-4 right-4 text-gray-400 hover:text-black text-xl"
+      >
+        ✕
+      </button>
 
-    <h3 class="text-2xl font-bold mb-6 text-[#004d33]">
-      Donation Account Details
-    </h3>
+      <h3 class="text-2xl font-bold mb-6 text-[#004d33]">
+        Donation Account Details
+      </h3>
 
-    <div class="space-y-4 text-gray-700 font-medium">
-      <p><strong>Bank Name:</strong> Zenith Bank</p>
-      <p><strong>Account Name:</strong> Healthcare Federation Of Nigeria</p>
-      <p><strong>Account Number:</strong> 1013784059</p>
+      <div class="space-y-4 text-gray-700 font-medium">
+        <p><strong>Bank Name:</strong> Zenith Bank</p>
+        <p><strong>Account Name:</strong> Healthcare Federation Of Nigeria</p>
+        <p><strong>Account Number:</strong> 1013784059</p>
+      </div>
+
+      <button
+        @click="closeDonateDialog"
+        class="mt-8 w-full bg-[#004d33] text-white py-3 rounded-xl font-bold hover:bg-green-800 transition"
+      >
+        Close
+      </button>
     </div>
-
-    <button
-      @click="closeDonateDialog"
-      class="mt-8 w-full bg-[#004d33] text-white py-3 rounded-xl font-bold hover:bg-green-800 transition"
-    >
-      Close
-    </button>
   </div>
-</div>
-
 </template>
 
 <style scoped>
