@@ -545,7 +545,7 @@ const fetchVideos = async () => {
         audience: item.audience,
       }));
 
-    videos.value = [...dummyVideos, ...normalizedApiVideos];
+    videos.value = [...normalizedApiVideos, ...dummyVideos];
   } catch (error) {
     console.error("Error fetching videos");
     videos.value = [...dummyVideos];
@@ -612,7 +612,15 @@ const getEmbedUrl = (youtubeUrl) => {
   if (!youtubeUrl) return "";
 
   try {
-    const videoId = youtubeUrl.split("v=")[1]?.split("&")[0];
+    const url = new URL(youtubeUrl);
+    let videoId = "";
+
+    if (url.hostname.includes("youtu.be")) {
+      videoId = url.pathname.slice(1);
+    } else {
+      videoId = url.searchParams.get("v") || "";
+    }
+
     return videoId ? `https://www.youtube.com/embed/${videoId}` : "";
   } catch {
     return "";
