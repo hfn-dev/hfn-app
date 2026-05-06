@@ -40,8 +40,21 @@
           </p>
         </div>
 
+        <div v-if="blog?.is_external" class="my-8 text-center">
+          <a
+            :href="blog.external_link"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 bg-green-700 text-white px-8 py-3 rounded-full font-semibold hover:bg-green-800 transition shadow-lg"
+          >
+            View News <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </a>
+          <p class="text-sm text-gray-500 mt-3">
+            This article is hosted externally and will open in a new tab.
+          </p>
+        </div>
         
-        <div class="prose max-w-none text-gray-700 leading-relaxed space-y-4">
+        <div v-else class="prose max-w-none text-gray-700 leading-relaxed space-y-4">
           <p>
             {{ blog?.description }}
           </p>
@@ -140,11 +153,25 @@ const fetchSingleArticle = async () => {
     const found = data.find(item => item.slug === route.params.slug);
 
     if (found) {
+      const rawDate = found.publish_date;
+      const formattedDate = rawDate
+        ? new Date(rawDate).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
+        : new Date().toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
       blog.value = {
         title: found.title,
         description: found.content,
         image: found.featured_image,
-        date: new Date(found.publish_date).toDateString(),
+        date: formattedDate,
+        external_link: found.external_link || null,
+        is_external: found.is_external || false,
       };
     }
   } catch (e) {
@@ -229,18 +256,32 @@ watch(
 
 const fetchBlog = async () => {
   try {
-    const res = await newsModule.getArticleBySlug(route.params.slug);
+    const res = await newsModule.getArticle(route.params.slug);
 
     if (res) {
+      const rawDate = res.publish_date || res.date;
+      const formattedDate = rawDate
+        ? new Date(rawDate).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
+        : new Date().toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
       blog.value = {
         title: res.title,
         description: res.content || res.description || "",
         image: res.featured_image || res.image || "event.png",
-        date: new Date(res.publish_date || res.date).toDateString(),
+        date: formattedDate,
         tag: res.tag || "News",
         caption: res.caption || "",
         comments: res.commentCount || 0,
         views: res.views || 0,
+        external_link: res.external_link || null,
+        is_external: res.is_external || false,
       };
     }
   } catch (err) {
@@ -267,14 +308,28 @@ onMounted(() => {
         );    
 
         if (dummyFound) {
+          const rawDate = dummyFound.created_at || dummyFound.date;
+          const formattedDate = rawDate
+            ? new Date(rawDate).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            : new Date().toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              });
           blog.value = {
             title: dummyFound.title,
             description: dummyFound.description || dummyFound.content || dummyFound.excerpt || "",
             image: dummyFound.featured_image || dummyFound.image || "event.png",
-            date: new Date(dummyFound.created_at || dummyFound.date).toDateString(),
+            date: formattedDate,
             tag: dummyFound.tag || "News",
             caption: dummyFound.caption || "",
             comments: dummyFound.commentCount || dummyFound.comments || 0,
+            external_link: dummyFound.external_link || null,
+            is_external: dummyFound.is_external || false,
           };
         }
       }
