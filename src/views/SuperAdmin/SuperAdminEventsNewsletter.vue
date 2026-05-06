@@ -124,7 +124,7 @@ const handleDeleteUpload = (item) => {
           await uploadsApi.deleteNewsletters(item.slug);
           break;
         case "publications":
-           await uploadsApi.deletepublications(item.slug);
+          await uploadsApi.deletepublications(item.slug);
           break;
         case "document":
           await uploadsApi.deleteDocuments(item.slug);
@@ -419,7 +419,6 @@ const fetchUploads = async () => {
       slug: n.slug,
     }));
 
- 
     const normalizedPublications = publications
       .filter((p) => p.type !== "newsletter")
       .map((n) => ({
@@ -528,7 +527,7 @@ const createUpload = async () => {
         }
         formData.append("banner_index", uploadForm.value.bannerIndex);
       } else {
-        formData.append("image", uploadForm.value.files[0]);
+        formData.append("file", uploadForm.value.files[0]);
       }
     }
 
@@ -1063,7 +1062,6 @@ const closeSidebar = () => (showSidebar.value = false);
                 :multiple="uploadForm.type === 'gallery'"
               />
 
-              <!-- PREVIEW -->
               <div
                 v-if="uploadForm.type === 'gallery' && uploadForm.files.length"
                 class="mt-4"
@@ -1087,7 +1085,6 @@ const closeSidebar = () => (showSidebar.value = false);
                       @click="uploadForm.bannerIndex = index"
                     />
 
-                    <!-- delete -->
                     <button
                       class="absolute top-1 right-1 bg-white text-red-600 rounded-full w-5 h-5 text-xs hidden group-hover:flex items-center justify-center shadow"
                       @click.prevent="uploadForm.files.splice(index, 1)"
@@ -1095,7 +1092,6 @@ const closeSidebar = () => (showSidebar.value = false);
                       ✕
                     </button>
 
-                    <!-- banner badge -->
                     <span
                       v-if="uploadForm.bannerIndex === index"
                       class="absolute bottom-1 left-1 text-[10px] bg-green-600 text-white px-2 py-0.5 rounded"

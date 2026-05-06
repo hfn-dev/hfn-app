@@ -1,11 +1,11 @@
 <script setup>
-import uploadsApi from "@/api/contentUploadsApi";
-import eventsApi from "@/api/events.js";
-import newsApi from "@/api/newsModule";
-import { useAuth } from "@/store/authStore";
-import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
-import { computed, onMounted, ref } from "vue";
-import { useToast } from "vue-toastification";
+import uploadsApi from '@/api/contentUploadsApi';
+import eventsApi from '@/api/events.js';
+import newsApi from '@/api/newsModule';
+import { useAuth } from '@/store/authStore';
+import AdminSidebar from '@/views/Admin/AdminSidebar.vue';
+import { computed, onMounted, ref } from 'vue';
+import { useToast } from 'vue-toastification';
 
 const toast = useToast();
 const events = ref([]);
@@ -15,18 +15,18 @@ const editingSlug = ref(null);
 const isEditing = computed(() => !!editingSlug.value);
 const publishingSlug = ref(null);
 const showConfirm = ref(false);
-const confirmTitle = ref("");
-const confirmMessage = ref("");
+const confirmTitle = ref('');
+const confirmMessage = ref('');
 const confirmAction = ref(null);
 const confirmLoading = ref(false);
 const deletingEventSlug = ref(null);
-const deletingUploadId = ref("");
+const deletingUploadId = ref('');
 const uploading = ref(false);
 
 const isFile = (file) => {
   return (
-    typeof window !== "undefined" &&
-    typeof File !== "undefined" &&
+    typeof window !== 'undefined' &&
+    typeof File !== 'undefined' &&
     file instanceof File
   );
 };
@@ -57,20 +57,20 @@ const editArticle = (article) => {
     is_featured: article.is_featured ?? false,
     featured_order: article.featured_order ?? 0,
     videos: (article.videos || []).map((v) =>
-      typeof v === "string" ? { media_type: "youtube", youtube_url: v } : v
+      typeof v === 'string' ? { media_type: 'youtube', youtube_url: v } : v
     ),
-    external_link: article.external_link || "",
+    external_link: article.external_link || '',
     is_external: article.is_external ?? false,
   };
 
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
 const auth = useAuth();
 
 const visibleArticles = computed(() => {
   return articles.value.filter((article) => {
-    if (article.audience === "all") return true;
+    if (article.audience === 'all') return true;
     return auth.isAuthenticated;
   });
 });
@@ -78,9 +78,9 @@ const visibleArticles = computed(() => {
 const deletingSlug = ref(null);
 
 const deleteArticle = (slug) => {
-  confirmTitle.value = "Delete Article";
+  confirmTitle.value = 'Delete Article';
   confirmMessage.value =
-    "Are you sure you want to permanently delete this article? This action cannot be undone.";
+    'Are you sure you want to permanently delete this article? This action cannot be undone.';
   showConfirm.value = true;
 
   confirmAction.value = async () => {
@@ -92,8 +92,8 @@ const deleteArticle = (slug) => {
       articles.value = articles.value.filter((a) => a.slug !== slug);
     } catch (e) {
       console.error(e);
-      console.log("Failed to delete article");
-      toast.error("Failed to delete article");
+      console.log('Failed to delete article');
+      toast.error('Failed to delete article');
     } finally {
       deletingSlug.value = null;
       confirmLoading.value = false;
@@ -113,22 +113,22 @@ onMounted(async () => {
 const resetNewsForm = () => {
   editingSlug.value = null;
   newsForm.value = {
-    title: "",
-    excerpt: "",
-    content: "",
-    featured_image: "",
-    status: "draft",
-    audience: "all",
+    title: '',
+    excerpt: '',
+    content: '',
+    featured_image: '',
+    status: 'draft',
+    audience: 'all',
     is_featured: false,
     featured_order: 0,
     videos: [],
-    external_link: "",
+    external_link: '',
     is_external: false,
   };
 };
 
 const publishArticle = async (slug) => {
-  const confirmed = confirm("Publish this article?");
+  const confirmed = confirm('Publish this article?');
   if (!confirmed) return;
 
   try {
@@ -137,8 +137,8 @@ const publishArticle = async (slug) => {
     await fetchArticles();
   } catch (e) {
     console.error(e);
-    console.log("Failed to publish article");
-    toast.error("Failed to publish article");
+    console.log('Failed to publish article');
+    toast.error('Failed to publish article');
   } finally {
     publishingSlug.value = null;
   }
@@ -149,18 +149,18 @@ const saveNews = async () => {
     const formData = new FormData();
 
     Object.entries(newsForm.value).forEach(([key, value]) => {
-      if (key === "featured_image") {
+      if (key === 'featured_image') {
         if (isFile(value)) {
-          formData.append("featured_image", value);
+          formData.append('featured_image', value);
         }
         return;
       }
 
-      if (key === "content") {
+      if (key === 'content') {
         if (newsForm.value.is_external) {
-          formData.append(key, "external link");
+          formData.append(key, 'external link');
         } else {
-          formData.append(key, value ?? "");
+          formData.append(key, value ?? '');
         }
         return;
       }
@@ -170,38 +170,38 @@ const saveNews = async () => {
           formData.append(`${key}[]`, JSON.stringify(v));
         });
       } else {
-        formData.append(key, value ?? "");
+        formData.append(key, value ?? '');
       }
     });
 
     if (isEditing.value) {
       await newsApi.partialUpdateArticle(editingSlug.value, formData);
-      toast.success("Article updated");
+      toast.success('Article updated');
     } else {
       await newsApi.createArticle(formData);
-      toast.success("Article created");
+      toast.success('Article created');
     }
 
     await fetchArticles();
     resetNewsForm();
   } catch (e) {
     console.error(e);
-    toast.error("Failed to save article");
+    toast.error('Failed to save article');
   }
 };
 
 const getYoutubeEmbed = (video) => {
-  if (!video) return "";
+  if (!video) return '';
 
-  if (typeof video === "string") {
-    return video.replace("watch?v=", "embed/");
+  if (typeof video === 'string') {
+    return video.replace('watch?v=', 'embed/');
   }
 
   if (video.youtube_url) {
-    return video.youtube_url.replace("watch?v=", "embed/");
+    return video.youtube_url.replace('watch?v=', 'embed/');
   }
 
-  return "";
+  return '';
 };
 
 const uploadNewsImage = (e) => {
@@ -212,11 +212,11 @@ const addVideo = () => {
   if (!videoInput.value) return;
 
   newsForm.value.videos.push({
-    media_type: "youtube",
+    media_type: 'youtube',
     youtube_url: videoInput.value,
   });
 
-  videoInput.value = "";
+  videoInput.value = '';
 };
 
 const removeVideo = (index) => {
@@ -224,36 +224,36 @@ const removeVideo = (index) => {
 };
 
 const newsForm = ref({
-  title: "",
-  excerpt: "",
-  content: "",
-  featured_image: "",
-  status: "draft",
-  audience: "all",
+  title: '',
+  excerpt: '',
+  content: '',
+  featured_image: '',
+  status: 'draft',
+  audience: 'all',
   is_featured: false,
   featured_order: 0,
   videos: [],
-  external_link: "",
+  external_link: '',
   is_external: false,
 });
 
-const videoInput = ref("");
+const videoInput = ref('');
 
 const eventForm = ref({
-  title: "",
-  description: "",
-  event_type: "webinar",
-  status: "upcoming",
-  start_datetime: "",
-  end_datetime: "",
-  location: "",
-  audience: "all",
-  meeting_url: "",
+  title: '',
+  description: '',
+  event_type: 'webinar',
+  status: 'upcoming',
+  start_datetime: '',
+  end_datetime: '',
+  location: '',
+  audience: 'all',
+  meeting_url: '',
   max_attendees: null,
-  registration_deadline: "",
+  registration_deadline: '',
   is_free: true,
-  price: "",
-  banner: "",
+  price: '',
+  banner: '',
 });
 
 const fetchEvents = async () => {
@@ -263,9 +263,9 @@ const fetchEvents = async () => {
 };
 
 const deleteEvent = (event) => {
-  confirmTitle.value = "Delete Event";
+  confirmTitle.value = 'Delete Event';
   confirmMessage.value =
-    "Are you sure you want to permanently delete this event? This action cannot be undone.";
+    'Are you sure you want to permanently delete this event? This action cannot be undone.';
   showConfirm.value = true;
 
   confirmAction.value = async () => {
@@ -276,7 +276,7 @@ const deleteEvent = (event) => {
       await eventsApi.deleteEvent(event.slug);
       events.value = events.value.filter((e) => e.slug !== event.slug);
     } catch (e) {
-      console.error("Failed to delete event", e);
+      console.error('Failed to delete event', e);
     } finally {
       deletingEventSlug.value = null;
       confirmLoading.value = false;
@@ -290,14 +290,14 @@ const createEvent = async () => {
     const formData = new FormData();
 
     Object.entries(eventForm.value).forEach(([key, value]) => {
-      if (key === "banner" && value instanceof File) {
-        formData.append("banner_image", value);
+      if (key === 'banner' && value instanceof File) {
+        formData.append('banner_image', value);
         return;
       }
 
-      if (key === "price") {
+      if (key === 'price') {
         if (!eventForm.value.is_free && value) {
-          formData.append("price", Number(value));
+          formData.append('price', Number(value));
         }
         return;
       }
@@ -309,32 +309,32 @@ const createEvent = async () => {
 
     await eventsApi.createCalenderEvent(formData);
 
-    toast.success("Event created successfully");
+    toast.success('Event created successfully');
     await fetchEvents();
 
     Object.assign(eventForm.value, {
-      title: "",
-      description: "",
-      event_type: "webinar",
-      status: "upcoming",
-      start_datetime: "",
-      end_datetime: "",
-      location: "",
-      audience: "all",
-      meeting_url: "",
+      title: '',
+      description: '',
+      event_type: 'webinar',
+      status: 'upcoming',
+      start_datetime: '',
+      end_datetime: '',
+      location: '',
+      audience: 'all',
+      meeting_url: '',
       max_attendees: null,
-      registration_deadline: "",
+      registration_deadline: '',
       is_free: true,
-      price: "",
-      banner: "",
+      price: '',
+      banner: '',
     });
   } catch (error) {
-    console.error("Create event error");
+    console.error('Create event error');
 
     const message =
       error.response?.data?.non_field_errors?.[0] ||
       error.response?.data?.error?.message ||
-      "Failed to create event";
+      'Failed to create event';
 
     toast.error(message);
   }
@@ -343,13 +343,13 @@ const createEvent = async () => {
 const uploads = ref([]);
 
 const uploadForm = ref({
-  title: "",
-  type: "newsletter",
-  description: "",
-  summary: "",
-  audience: "all",
-  media_type: "image",
-  youtube_url: "",
+  title: '',
+  type: 'newsletter',
+  description: '',
+  summary: '',
+  audience: 'all',
+  media_type: 'image',
+  youtube_url: '',
   files: [],
   bannerIndex: 0,
 });
@@ -368,7 +368,7 @@ const fetchUploads = async () => {
     const normalizedNewsletters = newsletters.map((n) => ({
       id: n.id,
       title: n.title,
-      type: "newsletter",
+      type: 'newsletter',
       file: n.file,
       created_at: n.created_at,
       slug: n.slug,
@@ -377,7 +377,7 @@ const fetchUploads = async () => {
     const normalizedPublications = publications.map((n) => ({
       id: n.id,
       title: n.title,
-      type: "publications",
+      type: 'publications',
       file: n.file,
       created_at: n.created_at,
       slug: n.slug,
@@ -386,7 +386,7 @@ const fetchUploads = async () => {
     const normalizedMinutes = minutes.map((m) => ({
       id: m.id,
       title: m.title,
-      type: "minute",
+      type: 'minute',
       file: m.file,
       created_at: m.created_at,
       slug: m.slug,
@@ -395,7 +395,7 @@ const fetchUploads = async () => {
     const normalizedDocuments = documents.map((d) => ({
       id: d.id,
       title: d.title,
-      type: "document",
+      type: 'document',
       file: d.file,
       slug: d.slug,
       created_at: d.created_at,
@@ -404,7 +404,7 @@ const fetchUploads = async () => {
     const normalizedGalleries = galleries.map((g) => ({
       id: g.id,
       title: g.title,
-      type: "gallery",
+      type: 'gallery',
       file: g.image,
       created_at: g.created_at,
       slug: g.slug,
@@ -418,13 +418,13 @@ const fetchUploads = async () => {
       ...normalizedPublications,
     ];
   } catch (error) {
-    console.error("Failed to fetch uploads");
+    console.error('Failed to fetch uploads');
   }
 };
 
 const uploadFile = (e) => {
   const selectedFiles = Array.from(e.target.files);
-  if (uploadForm.value.type === "gallery") {
+  if (uploadForm.value.type === 'gallery') {
     uploadForm.value.files.push(...selectedFiles);
   } else {
     uploadForm.value.files = selectedFiles.slice(0, 1);
@@ -435,19 +435,19 @@ const fileInputRef = ref(null);
 
 const resetUploadForm = () => {
   uploadForm.value = {
-    title: "",
-    type: "newsletter",
-    description: "",
-    summary: "",
-    audience: "all",
-    media_type: "image",
-    youtube_url: "",
+    title: '',
+    type: 'newsletter',
+    description: '',
+    summary: '',
+    audience: 'all',
+    media_type: 'image',
+    youtube_url: '',
     files: [],
     bannerIndex: 0,
   };
 
   if (fileInputRef.value) {
-    fileInputRef.value.value = "";
+    fileInputRef.value.value = '';
   }
 };
 
@@ -458,67 +458,67 @@ const createUpload = async () => {
     uploading.value = true;
     const formData = new FormData();
 
-    formData.append("title", uploadForm.value.title);
-    formData.append("summary", uploadForm.value.summary);
-    formData.append("audience", uploadForm.value.audience);
-    formData.append("media_type", uploadForm.value.media_type);
-    formData.append("type", uploadForm.value.type);
+    formData.append('title', uploadForm.value.title);
+    formData.append('summary', uploadForm.value.summary);
+    formData.append('audience', uploadForm.value.audience);
+    formData.append('media_type', uploadForm.value.media_type);
+    formData.append('type', uploadForm.value.type);
 
-    if (uploadForm.value.media_type === "youtube") {
+    if (uploadForm.value.media_type === 'youtube') {
       if (!uploadForm.value.youtube_url) return;
-      formData.append("youtube_url", uploadForm.value.youtube_url);
+      formData.append('youtube_url', uploadForm.value.youtube_url);
     } else {
       if (!uploadForm.value.files.length) return;
 
-      if (uploadForm.value.type === "gallery") {
+      if (uploadForm.value.type === 'gallery') {
         if (uploadForm.value.files.length > 1) {
           uploadForm.value.files.forEach((file) => {
-            formData.append("images", file);
+            formData.append('images', file);
           });
         } else {
-          formData.append("image", uploadForm.value.files[0]);
+          formData.append('image', uploadForm.value.files[0]);
         }
-        formData.append("banner_index", uploadForm.value.bannerIndex);
+        formData.append('banner_index', uploadForm.value.bannerIndex);
       } else {
-        formData.append("image", uploadForm.value.files[0]);
+        formData.append('file', uploadForm.value.files[0]);
       }
     }
 
     switch (uploadForm.value.type) {
-      case "gallery":
+      case 'gallery':
         await uploadsApi.createGallery(formData);
         break;
 
-      case "publications":
+      case 'publications':
         await uploadsApi.createPublications(formData);
         break;
 
-      case "newsletter":
+      case 'newsletter':
         await uploadsApi.createNewsletters(formData);
         break;
 
-      case "minute":
+      case 'minute':
         await uploadsApi.createMinutes(formData);
         break;
 
-      case "document":
+      case 'document':
       default:
         await uploadsApi.create(formData);
     }
 
     await fetchUploads();
     resetUploadForm();
-    toast.success("Upload successful");
+    toast.success('Upload successful');
   } catch (error) {
-    console.error("Upload failed");
-    toast.error("Upload failed. Please try again.");
+    console.error('Upload failed');
+    toast.error('Upload failed. Please try again.');
   } finally {
     uploading.value = false;
   }
 };
 
 const handleDeleteUpload = (item) => {
-  confirmTitle.value = "Delete Item";
+  confirmTitle.value = 'Delete Item';
   confirmMessage.value = `Are you sure you want to delete "${item.title}"? This action cannot be undone.`;
   showConfirm.value = true;
 
@@ -528,31 +528,31 @@ const handleDeleteUpload = (item) => {
       deletingUploadId.value = item.id || item.slug;
 
       switch (item.type) {
-        case "gallery":
+        case 'gallery':
           await uploadsApi.deleteGallery(item.id);
           break;
-        case "minute":
+        case 'minute':
           await uploadsApi.deleteMinutes(item.slug);
           break;
-        case "newsletter":
+        case 'newsletter':
           await uploadsApi.deleteNewsletters(item.slug);
           break;
-        case "publications":
+        case 'publications':
           await uploadsApi.deletepublications(item.slug);
           break;
-        case "document":
+        case 'document':
           await uploadsApi.deleteDocuments(item.slug);
           break;
         default:
-          console.warn("Unknown type", item.type);
+          console.warn('Unknown type', item.type);
           return;
       }
 
       await fetchUploads();
-      toast.success("Item deleted successfully");
+      toast.success('Item deleted successfully');
     } catch (error) {
       console.error(`Failed to delete ${item.type}`);
-      toast.error("Failed to delete item");
+      toast.error('Failed to delete item');
     } finally {
       deletingUploadId.value = null;
       confirmLoading.value = false;
@@ -570,7 +570,6 @@ const showSidebar = ref(false);
 const toggleSidebar = () => (showSidebar.value = !showSidebar.value);
 const closeSidebar = () => (showSidebar.value = false);
 </script>
-
 
 <template>
   <div class="flex min-h-screen font-sans relative">
@@ -760,8 +759,8 @@ const closeSidebar = () => (showSidebar.value = false);
                     >
                       {{
                         deletingEventSlug === event.slug
-                          ? "Deleting…"
-                          : "Delete"
+                          ? 'Deleting…'
+                          : 'Delete'
                       }}
                     </button>
                   </td>
@@ -773,7 +772,7 @@ const closeSidebar = () => (showSidebar.value = false);
 
         <section class="mt-16">
           <h2 class="text-xl font-semibold mb-4">
-            {{ isEditing ? "Edit News Article" : "Create News Article" }}
+            {{ isEditing ? 'Edit News Article' : 'Create News Article' }}
           </h2>
 
           <div class="bg-white p-6 rounded-xl shadow space-y-4 max-w-3xl">
@@ -860,10 +859,10 @@ const closeSidebar = () => (showSidebar.value = false);
             <button @click="saveNews" class="btn-primary">
               {{
                 isEditing
-                  ? "Update Article"
-                  : newsForm.status === "published"
-                  ? "Save & Publish"
-                  : "Save as Draft"
+                  ? 'Update Article'
+                  : newsForm.status === 'published'
+                    ? 'Save & Publish'
+                    : 'Save as Draft'
               }}
             </button>
 
@@ -947,8 +946,8 @@ const closeSidebar = () => (showSidebar.value = false);
                     >
                       {{
                         publishingSlug === article.slug
-                          ? "Publishing…"
-                          : "Publish"
+                          ? 'Publishing…'
+                          : 'Publish'
                       }}
                     </button>
 
@@ -975,7 +974,7 @@ const closeSidebar = () => (showSidebar.value = false);
                       :disabled="deletingSlug === article.slug"
                     >
                       {{
-                        deletingSlug === article.slug ? "Deleting…" : "Delete"
+                        deletingSlug === article.slug ? 'Deleting…' : 'Delete'
                       }}
                     </button>
                   </td>
@@ -1057,7 +1056,6 @@ const closeSidebar = () => (showSidebar.value = false);
                 :multiple="uploadForm.type === 'gallery'"
               />
 
-              <!-- PREVIEW -->
               <div
                 v-if="uploadForm.type === 'gallery' && uploadForm.files.length"
                 class="mt-4"
@@ -1081,7 +1079,6 @@ const closeSidebar = () => (showSidebar.value = false);
                       @click="uploadForm.bannerIndex = index"
                     />
 
-                    <!-- delete -->
                     <button
                       class="absolute top-1 right-1 bg-white text-red-600 rounded-full w-5 h-5 text-xs hidden group-hover:flex items-center justify-center shadow"
                       @click.prevent="uploadForm.files.splice(index, 1)"
@@ -1089,7 +1086,6 @@ const closeSidebar = () => (showSidebar.value = false);
                       ✕
                     </button>
 
-                    <!-- banner badge -->
                     <span
                       v-if="uploadForm.bannerIndex === index"
                       class="absolute bottom-1 left-1 text-[10px] bg-green-600 text-white px-2 py-0.5 rounded"
@@ -1110,7 +1106,7 @@ const closeSidebar = () => (showSidebar.value = false);
                 class="btn-primary px-6"
                 :disabled="uploading"
               >
-                {{ uploading ? "Uploading..." : "Upload" }}
+                {{ uploading ? 'Uploading...' : 'Upload' }}
               </button>
             </div>
           </div>
@@ -1152,21 +1148,18 @@ const closeSidebar = () => (showSidebar.value = false);
                   </td>
 
                   <td class="p-3">
-                    <!-- IMAGE -->
                     <img
                       v-if="item.file && item.type === 'gallery'"
                       :src="item.file"
                       class="h-16 w-16 object-cover rounded"
                     />
 
-                    <!-- VIDEO -->
                     <iframe
                       v-else-if="item.youtube_url"
                       :src="item.youtube_url.replace('watch?v=', 'embed/')"
                       class="w-32 h-20"
                     ></iframe>
 
-                    <!-- FILE -->
                     <a
                       v-else-if="item.file"
                       :href="item.file"
@@ -1186,8 +1179,8 @@ const closeSidebar = () => (showSidebar.value = false);
                     >
                       {{
                         deletingUploadId === (item.id || item.slug)
-                          ? "Deleting…"
-                          : "Delete"
+                          ? 'Deleting…'
+                          : 'Delete'
                       }}
                     </button>
                   </td>
@@ -1264,10 +1257,9 @@ const closeSidebar = () => (showSidebar.value = false);
           class="btn-danger"
           :disabled="confirmLoading"
         >
-          {{ confirmLoading ? "Please wait…" : "Confirm" }}
+          {{ confirmLoading ? 'Please wait…' : 'Confirm' }}
         </button>
       </div>
     </div>
   </div>
 </template>
-    
