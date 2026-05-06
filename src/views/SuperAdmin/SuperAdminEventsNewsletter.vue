@@ -933,7 +933,11 @@ const closeSidebar = () => (showSidebar.value = false);
                   </td>
 
                   <td>
-                    {{ new Date(article.publish_date).toLocaleDateString() }}
+                    {{
+                      article.publish_date
+                        ? new Date(article.publish_date).toLocaleDateString()
+                        : new Date().toLocaleDateString()
+                    }}
                   </td>
 
                   <td class="p-3 text-right space-x-2">
