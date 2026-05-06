@@ -20,6 +20,8 @@ const confirmMessage = ref('');
 const confirmAction = ref(null);
 const confirmLoading = ref(false);
 const deletingEventSlug = ref(null);
+const editingEventSlug = ref(null);
+const isEditingEvent = computed(() => !!editingEventSlug.value);
 const deletingUploadId = ref('');
 const uploading = ref(false);
 
@@ -285,6 +287,49 @@ const deleteEvent = (event) => {
   };
 };
 
+const editEvent = (event) => {
+  editingEventSlug.value = event.slug;
+
+  eventForm.value = {
+    title: event.title,
+    description: event.description,
+    event_type: event.event_type,
+    status: event.status,
+    start_datetime: event.start_datetime ? event.start_datetime.slice(0, 16) : "",
+    end_datetime: event.end_datetime ? event.end_datetime.slice(0, 16) : "",
+    location: event.location || "",
+    audience: event.audience,
+    meeting_url: event.meeting_url || "",
+    max_attendees: event.max_attendees,
+    registration_deadline: event.registration_deadline ? event.registration_deadline.slice(0, 16) : "",
+    is_free: event.is_free ?? true,
+    price: event.price || "",
+    banner: event.banner_image || "",
+  };
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+const resetEventForm = () => {
+  editingEventSlug.value = null;
+  eventForm.value = {
+    title: '',
+    description: '',
+    event_type: 'webinar',
+    status: 'upcoming',
+    start_datetime: '',
+    end_datetime: '',
+    location: '',
+    audience: 'all',
+    meeting_url: '',
+    max_attendees: null,
+    registration_deadline: '',
+    is_free: true,
+    price: '',
+    banner: '',
+  };
+};
+
 const createEvent = async () => {
   try {
     const formData = new FormData();
@@ -302,39 +347,28 @@ const createEvent = async () => {
         return;
       }
 
-      if (value !== null && value !== undefined) {
+      if (value !== null && value !== undefined && value !== "") {
         formData.append(key, value);
       }
     });
 
-    await eventsApi.createCalenderEvent(formData);
+    if (isEditingEvent.value) {
+      await eventsApi.updateEvent(editingEventSlug.value, formData);
+      toast.success('Event updated successfully');
+    } else {
+      await eventsApi.createCalenderEvent(formData);
+      toast.success('Event created successfully');
+    }
 
-    toast.success('Event created successfully');
     await fetchEvents();
-
-    Object.assign(eventForm.value, {
-      title: '',
-      description: '',
-      event_type: 'webinar',
-      status: 'upcoming',
-      start_datetime: '',
-      end_datetime: '',
-      location: '',
-      audience: 'all',
-      meeting_url: '',
-      max_attendees: null,
-      registration_deadline: '',
-      is_free: true,
-      price: '',
-      banner: '',
-    });
+    resetEventForm();
   } catch (error) {
     console.error('Create event error');
 
     const message =
       error.response?.data?.non_field_errors?.[0] ||
       error.response?.data?.error?.message ||
-      'Failed to create event';
+      'Failed to save event';
 
     toast.error(message);
   }
@@ -613,7 +647,9 @@ const closeSidebar = () => (showSidebar.value = false);
         <h1 class="text-2xl font-bold mb-8">Events & Newsletters</h1>
 
         <section>
-          <h2 class="text-xl font-semibold mb-4">Create Event</h2>
+          <h2 class="text-xl font-semibold mb-4">
+            {{ isEditingEvent ? 'Edit Event' : 'Create Event' }}
+          </h2>
 
           <div class="grid grid-cols-2 gap-4 bg-white p-6 rounded-xl shadow">
             <input
@@ -723,9 +759,18 @@ const closeSidebar = () => (showSidebar.value = false);
             />
           </div>
 
-          <button @click="createEvent" class="btn-primary mt-4">
-            Create Event
-          </button>
+          <div class="flex gap-3 mt-4">
+            <button @click="createEvent" class="btn-primary">
+              {{ isEditingEvent ? 'Update Event' : 'Create Event' }}
+            </button>
+            <button
+              v-if="isEditingEvent"
+              @click="resetEventForm"
+              class="btn-secondary"
+            >
+              Cancel
+            </button>
+          </div>
 
           <div class="mt-8">
             <h3 class="font-semibold mb-3">Existing Events</h3>
@@ -750,10 +795,20 @@ const closeSidebar = () => (showSidebar.value = false);
                   <td>{{ event.status }}</td>
                   <td>{{ event.event_type }}</td>
                   <td>
-                    {{ new Date(event.start_datetime).toLocaleDateString() }}
+                    {{
+                      event.start_datetime
+                        ? new Date(event.start_datetime).toLocaleDateString()
+                        : new Date().toLocaleDateString()
+                    }}
                   </td>
 
                   <td class="text-right pr-3 space-x-2">
+                    <button
+                      @click="editEvent(event)"
+                      class="text-blue-600 hover:underline text-xs"
+                    >
+                      Edit
+                    </button>
                     <button
                       @click="deleteEvent(event)"
                       class="text-red-600 hover:underline text-xs"
