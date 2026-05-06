@@ -1,16 +1,6 @@
 import api from './axios.js'; 
 
 export default {
-  
-  async list(params = {}) {
-    try {
-      const response = await api.get('/media/gallery/', { params });
-      return response.data;
-    } catch (error) {
-      console.error('List uploads API error');
-      throw error;
-    }
-  },
  
   async get(id) {
     try {

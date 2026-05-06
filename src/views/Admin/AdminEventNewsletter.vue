@@ -20,7 +20,7 @@ const confirmMessage = ref("");
 const confirmAction = ref(null);
 const confirmLoading = ref(false);
 const deletingEventSlug = ref(null);
-const deletingUploadId = ref('');
+const deletingUploadId = ref("");
 const uploading = ref(false);
 
 const isFile = (file) => {
@@ -356,14 +356,14 @@ const uploadForm = ref({
 
 const fetchUploads = async () => {
   try {
-    const [newsletters, minutes, documents, galleries, publications] = await Promise.all([
-      uploadsApi.listNewsletters(),
-      uploadsApi.getMinutes(),
-      uploadsApi.list(),
-      uploadsApi.gallery(),
-              uploadsApi.listPublications(),
-
-    ]);
+    const [newsletters, minutes, documents, galleries, publications] =
+      await Promise.all([
+        uploadsApi.listNewsletters(),
+        uploadsApi.getMinutes(),
+        uploadsApi.getDocuments(),
+        uploadsApi.gallery(),
+        uploadsApi.listPublications(),
+      ]);
 
     const normalizedNewsletters = newsletters.map((n) => ({
       id: n.id,
@@ -491,7 +491,7 @@ const createUpload = async () => {
 
       case "publications":
         await uploadsApi.createPublications(formData);
-        break;  
+        break;
 
       case "newsletter":
         await uploadsApi.createNewsletters(formData);
@@ -538,7 +538,7 @@ const handleDeleteUpload = (item) => {
           await uploadsApi.deleteNewsletters(item.slug);
           break;
         case "publications":
-           await uploadsApi.deletepublications(item.slug);
+          await uploadsApi.deletepublications(item.slug);
           break;
         case "document":
           await uploadsApi.deleteDocuments(item.slug);
@@ -560,7 +560,6 @@ const handleDeleteUpload = (item) => {
     }
   };
 };
-
 
 onMounted(() => {
   fetchEvents();
@@ -840,7 +839,11 @@ const closeSidebar = () => (showSidebar.value = false);
             </div>
 
             <label class="flex items-center gap-2">
-              <input type="checkbox" v-model="newsForm.is_featured" class="w-4 h-4" />
+              <input
+                type="checkbox"
+                v-model="newsForm.is_featured"
+                class="w-4 h-4"
+              />
               <span class="font-medium">Featured Article</span>
             </label>
 
@@ -851,9 +854,7 @@ const closeSidebar = () => (showSidebar.value = false);
                 class="input"
                 placeholder="Display order"
               />
-              <p class="text-xs text-gray-500">
-                Lower number appears first
-              </p>
+              <p class="text-xs text-gray-500">Lower number appears first</p>
             </div>
 
             <button @click="saveNews" class="btn-primary">
@@ -1013,8 +1014,7 @@ const closeSidebar = () => (showSidebar.value = false);
               <option value="document">Document</option>
               <option value="gallery">Gallery</option>
               <option value="minute">Minute</option>
-                            <option value="publications">Publications</option>
-
+              <option value="publications">Publications</option>
             </select>
 
             <select v-model="uploadForm.audience" class="input mb-3">
@@ -1048,66 +1048,71 @@ const closeSidebar = () => (showSidebar.value = false);
               class="w-full h-40 mt-2"
             />
 
-<div class="mb-4">
-  <input
-    type="file"
-    @change="uploadFile"
-    ref="fileInputRef"
-    class="border border-gray-300 rounded-md px-3 py-2 w-full"
-    :multiple="uploadForm.type === 'gallery'"
-  />
+            <div class="mb-4">
+              <input
+                type="file"
+                @change="uploadFile"
+                ref="fileInputRef"
+                class="border border-gray-300 rounded-md px-3 py-2 w-full"
+                :multiple="uploadForm.type === 'gallery'"
+              />
 
-  <!-- PREVIEW -->
-  <div
-    v-if="uploadForm.type === 'gallery' && uploadForm.files.length"
-    class="mt-4"
-  >
-    <p class="font-medium mb-2">Gallery Preview (Select Banner)</p>
+              <!-- PREVIEW -->
+              <div
+                v-if="uploadForm.type === 'gallery' && uploadForm.files.length"
+                class="mt-4"
+              >
+                <p class="font-medium mb-2">Gallery Preview (Select Banner)</p>
 
-    <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
-      <div
-        v-for="(file, index) in uploadForm.files"
-        :key="index"
-        class="relative group"
-      >
-        <img
-          :src="previewUrl(file)"
-          class="h-24 w-full object-cover rounded cursor-pointer border-2 transition"
-          :class="{
-            'border-green-600 scale-105': uploadForm.bannerIndex === index,
-            'border-gray-300': uploadForm.bannerIndex !== index,
-          }"
-          @click="uploadForm.bannerIndex = index"
-        />
+                <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                  <div
+                    v-for="(file, index) in uploadForm.files"
+                    :key="index"
+                    class="relative group"
+                  >
+                    <img
+                      :src="previewUrl(file)"
+                      class="h-24 w-full object-cover rounded cursor-pointer border-2 transition"
+                      :class="{
+                        'border-green-600 scale-105':
+                          uploadForm.bannerIndex === index,
+                        'border-gray-300': uploadForm.bannerIndex !== index,
+                      }"
+                      @click="uploadForm.bannerIndex = index"
+                    />
 
-        <!-- delete -->
-        <button
-          class="absolute top-1 right-1 bg-white text-red-600 rounded-full w-5 h-5 text-xs hidden group-hover:flex items-center justify-center shadow"
-          @click.prevent="uploadForm.files.splice(index, 1)"
-        >
-          ✕
-        </button>
+                    <!-- delete -->
+                    <button
+                      class="absolute top-1 right-1 bg-white text-red-600 rounded-full w-5 h-5 text-xs hidden group-hover:flex items-center justify-center shadow"
+                      @click.prevent="uploadForm.files.splice(index, 1)"
+                    >
+                      ✕
+                    </button>
 
-        <!-- banner badge -->
-        <span
-          v-if="uploadForm.bannerIndex === index"
-          class="absolute bottom-1 left-1 text-[10px] bg-green-600 text-white px-2 py-0.5 rounded"
-        >
-          Banner
-        </span>
-      </div>
-    </div>
+                    <!-- banner badge -->
+                    <span
+                      v-if="uploadForm.bannerIndex === index"
+                      class="absolute bottom-1 left-1 text-[10px] bg-green-600 text-white px-2 py-0.5 rounded"
+                    >
+                      Banner
+                    </span>
+                  </div>
+                </div>
 
-    <p class="text-xs text-gray-500 mt-2">
-      Click an image to set as banner thumbnail
-    </p>
-  </div>
-</div>
-<div class="flex justify-end mt-4">
-  <button @click="createUpload" class="btn-primary px-6" :disabled="uploading">
-    {{ uploading ? "Uploading..." : "Upload" }}
-  </button>
-</div>
+                <p class="text-xs text-gray-500 mt-2">
+                  Click an image to set as banner thumbnail
+                </p>
+              </div>
+            </div>
+            <div class="flex justify-end mt-4">
+              <button
+                @click="createUpload"
+                class="btn-primary px-6"
+                :disabled="uploading"
+              >
+                {{ uploading ? "Uploading..." : "Upload" }}
+              </button>
+            </div>
           </div>
 
           <div class="mt-8">
@@ -1119,8 +1124,7 @@ const closeSidebar = () => (showSidebar.value = false);
                   <th class="p-3">Title</th>
                   <th>Type</th>
                   <th class="p-3">Preview / File</th>
-                                    <th class="p-3">Action</th>
-
+                  <th class="p-3">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -1180,7 +1184,11 @@ const closeSidebar = () => (showSidebar.value = false);
                       @click="handleDeleteUpload(item)"
                       :disabled="deletingUploadId === (item.id || item.slug)"
                     >
-                      {{ deletingUploadId === (item.id || item.slug) ? "Deleting…" : "Delete" }}
+                      {{
+                        deletingUploadId === (item.id || item.slug)
+                          ? "Deleting…"
+                          : "Delete"
+                      }}
                     </button>
                   </td>
                 </tr>

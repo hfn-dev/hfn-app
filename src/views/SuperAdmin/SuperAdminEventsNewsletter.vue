@@ -405,7 +405,7 @@ const fetchUploads = async () => {
       await Promise.all([
         uploadsApi.listNewsletters(),
         uploadsApi.getMinutes(),
-        uploadsApi.list(),
+        uploadsApi.getDocuments(),
         uploadsApi.gallery(),
         uploadsApi.listPublications(),
       ]);
