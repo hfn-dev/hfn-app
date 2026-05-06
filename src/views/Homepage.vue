@@ -164,6 +164,31 @@ const toggleFaq = (index) => {
   activeFaq.value = activeFaq.value === index ? null : index;
 };
 
+const assignTagFromContent = (news) => {
+  if (news.tag) return news.tag;
+
+  const text = `${news.title} ${news.excerpt} ${news.content}`.toLowerCase();
+
+  const keywordMap = [
+    { keywords: ["alert", "outbreak", "disease", "emergency", "virus", "epidemic", "pandemic", "warning", "crisis", "flu"], tag: "Health Alert" },
+    { keywords: ["policy", "advocacy", "reform", "government", "regulation", "law", "legislation", "committee", "ministry"], tag: "Policy & Advocacy" },
+    { keywords: ["digital", "tech", "technology", "platform", "app", "innovation", "telemedicine", "data", "electronic", "ai"], tag: "Digital Health" },
+    { keywords: ["program", "initiative", "campaign", "awareness", "screening", "vaccination", "immunization", "training", "workshop"], tag: "Programs & Initiatives" },
+    { keywords: ["story", "community", "public", "patient", "care", "wellness", "prevention", "lifestyle", "nutrition"], tag: "Public Health Stories" },
+    { keywords: ["partnership", "collaboration", "funding", "investment", "sponsor", "donation", "grant"], tag: "Partnerships" },
+    { keywords: ["event", "conference", "summit", "forum", "roundtable", "meeting", "dialogue"], tag: "Events & Conferences" },
+  ];
+
+  for (const { keywords, tag } of keywordMap) {
+    if (keywords.some((kw) => text.includes(kw))) {
+      return tag;
+    }
+  }
+
+  const fallbackTags = ["Programs & Initiatives", "Public Health Stories", "Policy & Advocacy"];
+  return fallbackTags[Math.floor(Math.random() * fallbackTags.length)];
+};
+
 const months = computed(() => Object.keys(pageContent.value.news.months));
 
 const allDummyNews = computed(() => {
@@ -196,7 +221,7 @@ const featured = computed(() => {
           month: "long",
           day: "numeric",
         });
-    return { ...latestApi, source: "api", date: formattedDate };
+    return { ...latestApi, source: "api", date: formattedDate, tag: assignTagFromContent(latestApi) };
   }
   const firstMonth = Object.keys(pageContent.value.news.months)[0];
   return pageContent.value.news.months[firstMonth]?.featured;
@@ -227,6 +252,7 @@ const allNewsList = computed(() => {
       ...news,
       source: "api",
       date: formattedDate,
+      tag: assignTagFromContent(news),
     };
   });
   const dummyNewsList = allDummyNews.value.filter(
