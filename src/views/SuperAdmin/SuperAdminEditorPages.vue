@@ -335,21 +335,19 @@ const toggleSecondaryContent = (itemId) => {
 
 const saveChanges = async () => {
   try {
+    activePage.value.sections[activeSection.value] = JSON.parse(
+      JSON.stringify(currentSectionData.value)
+    );
+
     const payload = {
-      content: {
-        [activeSection.value]: currentSectionData.value,
-      },
+      content: activePage.value.sections,
     };
 
     await pagesApi.updatePage(activePage.value.page_type, payload);
 
-    activePage.value.sections[activeSection.value] = structuredClone(
-      currentSectionData.value
-    );
-
     goBackToManager();
   } catch (e) {
-    console.error("Failed to save section", e);
+    console.error("Failed to save page", e);
   }
 };
 

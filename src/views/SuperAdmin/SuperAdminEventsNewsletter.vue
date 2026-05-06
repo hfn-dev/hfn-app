@@ -20,10 +20,10 @@ const confirmMessage = ref("");
 const confirmAction = ref(null);
 const confirmLoading = ref(false);
 const deletingEventSlug = ref(null);
-const deletingUploadId = ref('');
+const deletingUploadId = ref("");
 const uploading = ref(false);
 
-  const isFile = (file) => {
+const isFile = (file) => {
   return (
     typeof window !== "undefined" &&
     typeof File !== "undefined" &&
@@ -103,39 +103,6 @@ const deleteArticle = (slug) => {
   };
 };
 
-// const handleDeleteUpload = async (item) => {
-//   if (!confirm(`Are you sure you want to delete "${item.title}"?`)) return;
-
-//   try {
-//     switch (item.type) {
-//       case "gallery":
-//         await uploadsApi.deleteGallery(item.id);
-//         break;
-//       case "minute":
-//         await uploadsApi.deleteMinutes(item.slug);
-//         break;
-//       case "newsletter":
-//         await uploadsApi.deleteNewsletters(item.slug);
-//         break;
-//       case "publications":
-//         await uploadsApi.deletepublications(item.slug);
-//         break;
-//       case "document":
-//         await uploadsApi.deletepublications(item.slug);
-//         break;
-//       default:
-//         console.warn("Unknown type", item.type);
-//         return;
-//     }
-
-//     uploads.value = uploads.value.filter(
-//       (u) => u.id !== item.id && u.slug !== item.slug
-//     );
-//   } catch (error) {
-//     console.error(`Failed to delete ${item.type}:`, error);
-//     toast.error("Failed to delete item. See console for details.");
-//   }
-// };
 const handleDeleteUpload = (item) => {
   confirmTitle.value = "Delete Item";
   confirmMessage.value = `Are you sure you want to delete "${item.title}"? This action cannot be undone.`;
@@ -157,8 +124,10 @@ const handleDeleteUpload = (item) => {
           await uploadsApi.deleteNewsletters(item.slug);
           break;
         case "publications":
+           await uploadsApi.deletepublications(item.slug);
+          break;
         case "document":
-          await uploadsApi.deletepublications(item.slug);
+          await uploadsApi.deleteDocuments(item.slug);
           break;
         default:
           console.warn("Unknown type", item.type);
@@ -388,7 +357,6 @@ const createEvent = async () => {
     toast.success("Event created successfully");
     await fetchEvents();
 
-    // reset form (kept your original)
     Object.assign(eventForm.value, {
       title: "",
       description: "",
@@ -451,24 +419,17 @@ const fetchUploads = async () => {
       slug: n.slug,
     }));
 
-    // const normalizedPublications = publications.map((n) => ({
-    //   id: n.id,
-    //   title: n.title,
-    //   type: "publications",
-    //   file: n.file,
-    //   created_at: n.created_at,
-    //   slug: n.slug,
-    // }));
+ 
     const normalizedPublications = publications
-  .filter((p) => p.type !== "newsletter")
-  .map((n) => ({
-    id: n.id,
-    title: n.title,
-    type: "publications",
-    file: n.file,
-    created_at: n.created_at,
-    slug: n.slug,
-  }));
+      .filter((p) => p.type !== "newsletter")
+      .map((n) => ({
+        id: n.id,
+        title: n.title,
+        type: "publications",
+        file: n.file,
+        created_at: n.created_at,
+        slug: n.slug,
+      }));
 
     const normalizedMinutes = minutes.map((m) => ({
       id: m.id,
@@ -518,7 +479,6 @@ const uploadFile = (e) => {
   }
 };
 
-
 const fileInputRef = ref(null);
 
 const resetUploadForm = () => {
@@ -538,7 +498,6 @@ const resetUploadForm = () => {
     fileInputRef.value.value = "";
   }
 };
-  
 
 const createUpload = async () => {
   if (!uploadForm.value.title) return;
@@ -598,7 +557,6 @@ const createUpload = async () => {
     await fetchUploads();
     resetUploadForm();
     toast.success("Upload successful");
-    
   } catch (error) {
     console.error("Upload failed");
     toast.error("Upload failed. Please try again.");
@@ -885,7 +843,11 @@ const closeSidebar = () => (showSidebar.value = false);
             </div>
 
             <label class="flex items-center gap-2">
-              <input type="checkbox" v-model="newsForm.is_featured" class="w-4 h-4" />
+              <input
+                type="checkbox"
+                v-model="newsForm.is_featured"
+                class="w-4 h-4"
+              />
               <span class="font-medium">Featured Article</span>
             </label>
 
@@ -896,9 +858,7 @@ const closeSidebar = () => (showSidebar.value = false);
                 class="input"
                 placeholder="Display order"
               />
-              <p class="text-xs text-gray-500">
-                Lower number appears first
-              </p>
+              <p class="text-xs text-gray-500">Lower number appears first</p>
             </div>
 
             <button @click="saveNews" class="btn-primary">
@@ -941,7 +901,9 @@ const closeSidebar = () => (showSidebar.value = false);
                   :key="article.id"
                   class="border-t hover:bg-gray-50"
                 >
-                  <td class="p-3 font-medium max-w-xs break-words whitespace-normal">
+                  <td
+                    class="p-3 font-medium max-w-xs break-words whitespace-normal"
+                  >
                     {{ article.title }}
                   </td>
 
@@ -1096,7 +1058,7 @@ const closeSidebar = () => (showSidebar.value = false);
               <input
                 type="file"
                 @change="uploadFile"
-                  ref="fileInputRef"
+                ref="fileInputRef"
                 class="border border-gray-300 rounded-md px-3 py-2 w-full"
                 :multiple="uploadForm.type === 'gallery'"
               />
@@ -1151,12 +1113,12 @@ const closeSidebar = () => (showSidebar.value = false);
 
             <div class="flex justify-end mt-4">
               <button
-  @click="createUpload"
-  class="btn-primary px-6"
-  :disabled="uploading"
->
-  {{ uploading ? "Uploading..." : "Upload" }}
-</button>
+                @click="createUpload"
+                class="btn-primary px-6"
+                :disabled="uploading"
+              >
+                {{ uploading ? "Uploading..." : "Upload" }}
+              </button>
             </div>
           </div>
 

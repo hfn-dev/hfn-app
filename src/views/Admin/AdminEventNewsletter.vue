@@ -312,7 +312,6 @@ const createEvent = async () => {
     toast.success("Event created successfully");
     await fetchEvents();
 
-    // reset form (kept your original)
     Object.assign(eventForm.value, {
       title: "",
       description: "",
@@ -539,8 +538,10 @@ const handleDeleteUpload = (item) => {
           await uploadsApi.deleteNewsletters(item.slug);
           break;
         case "publications":
+           await uploadsApi.deletepublications(item.slug);
+          break;
         case "document":
-          await uploadsApi.deletepublications(item.slug);
+          await uploadsApi.deleteDocuments(item.slug);
           break;
         default:
           console.warn("Unknown type", item.type);

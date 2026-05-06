@@ -31,23 +31,77 @@ export default {
       const response = await api.post('/uploads/upload/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      return response.data; // should return { url: 'file_url_here' }
+      return response.data;
     } catch (error) {
       console.error('File upload API error');
       throw error;
     }
   },
 
-  
   async create(payload) {
     try {
-      const response = await api.post('/media/documents/', payload);
-      return response.data;
+      const { data } = await api.post(
+        '/media/documents/',
+        payload,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      );
+      return data;
     } catch (error) {
-      console.error('Create upload API error');
+      console.error('Create documents error');
       throw error;
     }
   },
+
+  async updateDocuments(slug, payload) {
+    try {
+      const { data } = await api.patch(
+        `/media/documents/${slug}/`,
+        payload,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      );
+      return data;
+    } catch (error) {
+      console.error('Update documents error');
+      throw error;
+    }
+  },
+
+
+  async getDocuments(params = {}) {
+    try {
+      const { data } = await api.get('/media/documents/', { params });
+      return data;
+    } catch (error) {
+      console.error('List documents error');
+      throw error;
+    }
+  },
+
+  async deleteDocuments(slug) {
+    try {
+      const { data } = await api.delete(`/media/documents/${slug}/`);
+      return data;
+    } catch (error) {
+      console.error('Delete documents error');
+      throw error;
+    }
+  },
+
+
+  async getSingleDocuments(slug) {
+    try {
+      const { data } = await api.get(`/media/documents/${slug}/`);
+      return data;
+    } catch (error) {
+      console.error('Retrieve document error');
+      throw error;
+    }
+  },
+
 
   
   async update(id, payload) {
