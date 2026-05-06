@@ -184,8 +184,8 @@ const fetchUpcomingEvents = async () => {
   try {
     const apiEvents = await eventsApi.listEvents({ status: 'upcoming' });
     const mappedApiEvents = apiEvents.map((e) => {
-      const startDate = new Date(e.start_date || e.date);
-      const endDate = e.end_date ? new Date(e.end_date) : null;
+      const startDate = new Date(e.start_datetime || e.start_date || e.date || e.created_at);
+      const endDate = e.end_datetime || e.end_date ? new Date(e.end_datetime || e.end_date) : null;
       let formattedDate = startDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
       formattedDate += endDate ? ` - ${endDate.toLocaleDateString('en-US', { day: 'numeric', year: 'numeric' })}` : `, ${startDate.getFullYear()}`;
       return {
@@ -212,7 +212,7 @@ const fetchPastEvents = async () => {
   try {
     const apiEvents = await eventsApi.listEvents({ status: 'completed' });
     const mappedApiEvents = apiEvents.map((e) => {
-      const startDate = new Date(e.start_date || e.date);
+      const startDate = new Date(e.start_datetime || e.start_date || e.date || e.created_at);
       return {
         id: e.id,
         title: e.title,
