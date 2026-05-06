@@ -374,14 +374,16 @@ const fetchUploads = async () => {
       slug: n.slug,
     }));
 
-    const normalizedPublications = publications.map((n) => ({
-      id: n.id,
-      title: n.title,
-      type: 'publications',
-      file: n.file,
-      created_at: n.created_at,
-      slug: n.slug,
-    }));
+    const normalizedPublications = publications
+      .filter((p) => p.type !== "newsletter")
+      .map((n) => ({
+        id: n.id,
+        title: n.title,
+        type: 'publications',
+        file: n.file,
+        created_at: n.created_at,
+        slug: n.slug,
+      }));
 
     const normalizedMinutes = minutes.map((m) => ({
       id: m.id,
@@ -927,7 +929,11 @@ const closeSidebar = () => (showSidebar.value = false);
                   </td>
 
                   <td>
-                    {{ new Date(article.publish_date).toLocaleDateString() }}
+                    {{
+                      article.publish_date
+                        ? new Date(article.publish_date).toLocaleDateString()
+                        : new Date().toLocaleDateString()
+                    }}
                   </td>
 
                   <td class="p-3 text-right space-x-2">
@@ -1023,7 +1029,7 @@ const closeSidebar = () => (showSidebar.value = false);
             </select>
 
             <textarea
-              v-model="uploadForm.description"
+              v-model="uploadForm.summary"
               class="input mb-3"
               placeholder="Description"
             ></textarea>
@@ -1194,39 +1200,6 @@ const closeSidebar = () => (showSidebar.value = false);
             </table>
           </div>
         </section>
-        <div
-          v-if="uploadForm.type === 'gallery' && uploadForm.files.length"
-          class="mb-4"
-        >
-          <p class="font-medium mb-1">Gallery Images (choose banner)</p>
-          <div class="flex gap-3 overflow-x-auto">
-            <div
-              v-for="(file, index) in uploadForm.files"
-              :key="index"
-              class="relative"
-            >
-              <img
-                v-if="previewUrl(file)"
-                :src="previewUrl(file)"
-                class="h-24 w-24 object-cover rounded cursor-pointer border-2"
-                :class="{
-                  'border-green-500': uploadForm.bannerIndex === index,
-                  'border-gray-300': uploadForm.bannerIndex !== index,
-                }"
-                @click="uploadForm.bannerIndex = index"
-              />
-              <button
-                class="absolute top-0 right-0 text-red-600 font-bold"
-                @click.prevent="uploadForm.files.splice(index, 1)"
-              >
-                ✕
-              </button>
-            </div>
-          </div>
-          <p class="text-xs text-gray-500 mt-1">
-            Click an image to mark as banner/thumbnail
-          </p>
-        </div>
       </div>
     </main>
   </div>

@@ -196,7 +196,7 @@ const fetchUpcomingEvents = async () => {
         location: e.location || 'TBD',
         description: e.description || '',
         image: e.banner_image || newEvent,
-        registerLink: e.registration_link || '#',
+        registerLink: e.meeting_url || e.registration_link || '#',
       };
     });
     upcomingEvents.value = mappedApiEvents;
