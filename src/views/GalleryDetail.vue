@@ -12,7 +12,7 @@
       <img
         v-for="(img, index) in gallery.images"
         :key="index"
-        :src="img.image || img"
+        :src="img"
         class="w-full rounded-xl shadow hover:scale-[1.02] transition"
       />
     </div>
@@ -84,9 +84,15 @@ const fetchGallery = async () => {
 
     const combinedGalleries = [...dummyGalleries, ...mappedApiItems];
 
-    gallery.value = combinedGalleries.find(
-      (g) => g.slug === route.params.slug
-    );
+    // gallery.value = combinedGalleries.find(
+    //   (g) => g.slug === route.params.slug
+    // );
+    gallery.value = combinedGalleries.find((g) => {
+  return (
+    g.slug === route.params.slug ||
+    String(g.id) === route.params.slug
+  );
+});
   } catch (err) {
     console.error("Failed to load gallery", err);
     error.value = "Failed to load gallery";
