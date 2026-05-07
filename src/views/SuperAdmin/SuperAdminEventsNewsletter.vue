@@ -129,7 +129,7 @@ const handleDeleteUpload = (item) => {
           await uploadsApi.deletepublications(item.slug);
           break;
         case "video":
-          await uploadsApi.deleteVideo(item.id);
+          await uploadsApi.deleteVideo(item.slug);
           break;  
         case "document":
           await uploadsApi.deleteDocuments(item.slug);
