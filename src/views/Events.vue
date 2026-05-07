@@ -76,14 +76,24 @@
                 </span>
               </div>
               <p class="text-gray-600 mb-6">{{ event.description }}</p>
-              <router-link
-                :to="event.registerLink || '/buttons'"
+              <a
+                v-if="event.registerLink"
+                :href="event.registerLink"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="inline-flex self-start px-6 py-2 bg-green-900 text-white justify-center rounded-full hover:bg-green-700 transition duration-150 text-sm"
               >
                 Register Now
+              </a>
+              
+              <router-link
+                v-else
+                to="/buttons"
+                class="inline-flex self-start px-6 py-2 bg-green-900 text-white justify-center rounded-full hover:bg-green-700 transition duration-150 text-sm"
+              >
+                Register Now
               </router-link>
+              
             </div>
           </div>
         </div>
