@@ -537,7 +537,7 @@ const fetchVideos = async () => {
     const apiVideos = Array.isArray(res) ? res : res.results || [];
 
     const normalizedApiVideos = apiVideos
-      .filter((item) => item.media_type === "youtube" && item.youtube_url)
+      .filter((item) => item.youtube_url)
       .map((item) => ({
         title: item.title,
         url: item.youtube_url,
