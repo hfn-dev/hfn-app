@@ -1,6 +1,107 @@
 import api from './axios.js'; 
 
 export default {
+
+ async getVideos(params = {}) {
+    try {
+      const { data } = await api.get('/media/videos/', {
+        params,
+      });
+
+      return data;
+    } catch (error) {
+      console.error('List videos error');
+      throw error;
+    }
+  },
+
+  
+  async getSingleVideo(id) {
+    try {
+      const { data } = await api.get(
+        `/media/videos/${id}/`
+      );
+
+      return data;
+    } catch (error) {
+      console.error('Retrieve video error');
+      throw error;
+    }
+  },
+
+  
+  async createVideo(payload) {
+    try {
+      const { data } = await api.post(
+        '/media/videos/',
+        payload,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      return data;
+    } catch (error) {
+      console.error('Create video error');
+      throw error;
+    }
+  },
+
+ 
+  async updateVideo(id, payload) {
+    try {
+      const { data } = await api.put(
+        `/media/videos/${id}/`,
+        payload,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      return data;
+    } catch (error) {
+      console.error('Update video error');
+      throw error;
+    }
+  },
+
+  
+  async patchVideo(id, payload) {
+    try {
+      const { data } = await api.patch(
+        `/media/videos/${id}/`,
+        payload,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      return data;
+    } catch (error) {
+      console.error('Patch video error');
+      throw error;
+    }
+  },
+
+  
+  async deleteVideo(id) {
+    try {
+      const { data } = await api.delete(
+        `/media/videos/${id}/`
+      );
+
+      return data;
+    } catch (error) {
+      console.error('Delete video error');
+      throw error;
+    }
+  },
  
   async get(id) {
     try {
