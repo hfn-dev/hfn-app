@@ -456,30 +456,21 @@ const fetchEvents = async () => {
       limit: 6,
     });
 
-    if (data.results?.length) {
-      events.value = data.results.map((event) => {
-        const isAnnualConference =
-          event.slug === "2026-annual-conference" ||
-          event.title?.toLowerCase().includes("annual conference");
+    const apiResults = data.results || data;
+    const apiEvents = (apiResults || []).map((event) => ({
+      slug: event.slug,
+      title: event.title,
+      image: event.banner_image,
+      tag: event.event_type,
+      description: event.description,
+      date: new Date(event.start_datetime).toLocaleDateString(),
+      time: new Date(event.start_datetime).toLocaleTimeString(),
+      location: event.location,
+      buttonText: event.is_free ? "Register Free" : "Buy Ticket",
+      externalUrl: event.meeting_url || null,
+    }));
 
-        return {
-          slug: event.slug,
-          title: event.title,
-          image: event.banner_image,
-          tag: event.event_type,
-          description: event.description,
-          date: new Date(event.start_datetime).toLocaleDateString(),
-          time: new Date(event.start_datetime).toLocaleTimeString(),
-          location: event.location,
-          buttonText: event.is_free ? "Register Free" : "Buy Ticket",
-          externalUrl: isAnnualConference
-            ? "https://tix.africa/claim/2026-hfn-annual-conference/VGlja2V0LTgzOWNmYmQ3LTliNDUtNGE3Ny1iNTM1LTI5ZWFjZWQ5MTgxOQ=="
-            : null,
-        };
-      });
-    } else {
-      events.value = dummyEvents;
-    }
+    events.value = [...apiEvents, ...dummyEvents];
   } catch (error) {
     console.error("Failed to fetch events");
     events.value = dummyEvents;
@@ -532,6 +523,37 @@ const filteredResources = computed(() => {
     return matchesSearch && matchesType;
   });
 });
+
+const itemsPerPage = 6;
+
+const resourcesPage = ref(1);
+const eventsPage = ref(1);
+const topicsPage = ref(1);
+const videosPage = ref(1);
+
+const paginatedResources = computed(() => {
+  const start = (resourcesPage.value - 1) * itemsPerPage;
+  return filteredResources.value.slice(start, start + itemsPerPage);
+});
+const totalResourcePages = computed(() => Math.ceil(filteredResources.value.length / itemsPerPage) || 1);
+
+const paginatedEvents = computed(() => {
+  const start = (eventsPage.value - 1) * itemsPerPage;
+  return events.value.slice(start, start + itemsPerPage);
+});
+const totalEventPages = computed(() => Math.ceil(events.value.length / itemsPerPage) || 1);
+
+const paginatedTopics = computed(() => {
+  const start = (topicsPage.value - 1) * itemsPerPage;
+  return topics.value.slice(start, start + itemsPerPage);
+});
+const totalTopicPages = computed(() => Math.ceil(topics.value.length / itemsPerPage) || 1);
+
+const paginatedVideos = computed(() => {
+  const start = (videosPage.value - 1) * itemsPerPage;
+  return videos.value.slice(start, start + itemsPerPage);
+});
+const totalVideoPages = computed(() => Math.ceil(videos.value.length / itemsPerPage) || 1);
 
 onMounted(() => {
   fetchNewsletters();
@@ -825,7 +847,7 @@ onMounted(() => {
           class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           <div
-            v-for="item in filteredResources"
+            v-for="item in paginatedResources"
             :key="item.id"
             class="bg-white rounded-xl border border-gray-200 shadow-md p-6 flex flex-col"
           >
@@ -873,6 +895,16 @@ onMounted(() => {
         <div v-else class="text-center py-16 text-gray-500">
           No resources found
         </div>
+
+        <div v-if="totalResourcePages > 1" class="flex justify-center items-center gap-4 mt-8">
+          <button @click="resourcesPage--" :disabled="resourcesPage <= 1" class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <span class="text-sm text-gray-600 font-medium">Page {{ resourcesPage }} of {{ totalResourcePages }}</span>
+          <button @click="resourcesPage++" :disabled="resourcesPage >= totalResourcePages" class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
       </section>
 
       <section class="mt-10 max-w-6xl mx-auto px-4">
@@ -895,10 +927,10 @@ onMounted(() => {
           class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           <div
-            v-for="(event, index) in events"
-            :key="index"
-            class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
-            :class="{ 'p-0': true }"
+          v-for="(event, index) in paginatedEvents"
+          :key="index"
+          class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
+          :class="{ 'p-0': true }"
           >
             <div class="relative">
               <img
@@ -1005,6 +1037,16 @@ onMounted(() => {
           </div>
         </div>
         <div v-else class="text-center py-16 text-gray-500">No data</div>
+
+        <div v-if="totalEventPages > 1" class="flex justify-center items-center gap-4 mt-8">
+          <button @click="eventsPage--" :disabled="eventsPage <= 1" class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <span class="text-sm text-gray-600 font-medium">Page {{ eventsPage }} of {{ totalEventPages }}</span>
+          <button @click="eventsPage++" :disabled="eventsPage >= totalEventPages" class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
       </section>
       <section class="mt-10 mb-16 max-w-6xl mx-auto px-4">
         <h3 class="text-2xl font-sans font-bold text-[#333] text-center mb-10">
@@ -1013,9 +1055,9 @@ onMounted(() => {
 
         <div v-if="topics.length" class="grid sm:grid-cols-2 gap-6">
           <div
-            v-for="(topic, index) in topics"
-            :key="index"
-            class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden p-0"
+          v-for="(topic, index) in paginatedTopics"
+          :key="index"
+          class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden p-0"
           >
             <div class="grid grid-cols-1 sm:grid-cols-5 h-full">
               <div
@@ -1096,6 +1138,16 @@ onMounted(() => {
           </div>
         </div>
         <div v-else class="text-center py-16 text-gray-500">No data</div>
+
+        <div v-if="totalTopicPages > 1" class="flex justify-center items-center gap-4 mt-8">
+          <button @click="topicsPage--" :disabled="topicsPage <= 1" class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <span class="text-sm text-gray-600 font-medium">Page {{ topicsPage }} of {{ totalTopicPages }}</span>
+          <button @click="topicsPage++" :disabled="topicsPage >= totalTopicPages" class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
       </section>
       <section class="mt-16 max-w-6xl mx-auto px-4">
         <h3 class="text-3xl font-sans font-bold text-[#333] text-center mb-10">
@@ -1107,9 +1159,9 @@ onMounted(() => {
           class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           <div
-            v-for="(video, index) in videos"
-            :key="index"
-            class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
+          v-for="(video, index) in paginatedVideos"
+          :key="index"
+          class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
           >
             <div class="aspect-video bg-black">
               <iframe
@@ -1138,6 +1190,16 @@ onMounted(() => {
 
         <div v-else class="text-center py-12 text-gray-500">
           No videos available
+        </div>
+
+        <div v-if="totalVideoPages > 1" class="flex justify-center items-center gap-4 mt-8">
+          <button @click="videosPage--" :disabled="videosPage <= 1" class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <span class="text-sm text-gray-600 font-medium">Page {{ videosPage }} of {{ totalVideoPages }}</span>
+          <button @click="videosPage++" :disabled="videosPage >= totalVideoPages" class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
         </div>
       </section>
     </div>
