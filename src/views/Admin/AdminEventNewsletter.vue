@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import uploadsApi from '@/api/contentUploadsApi';
 import eventsApi from '@/api/events.js';
 import newsApi from '@/api/newsModule';
@@ -390,13 +390,14 @@ const uploadForm = ref({
 
 const fetchUploads = async () => {
   try {
-    const [newsletters, minutes, documents, galleries, publications] =
+    const [newsletters, minutes, documents, galleries, publications, videos] =
       await Promise.all([
         uploadsApi.listNewsletters(),
         uploadsApi.getMinutes(),
         uploadsApi.getDocuments(),
         uploadsApi.gallery(),
         uploadsApi.listPublications(),
+        uploadsApi.getVideos(),
       ]);
 
     const normalizedNewsletters = newsletters.map((n) => ({
@@ -446,12 +447,22 @@ const fetchUploads = async () => {
       slug: g.slug,
     }));
 
+    const normalizedVideos = videos.map((v) => ({
+      id: v.id,
+      title: v.title,
+      type: 'video',
+      file: v.video_file,
+      youtube_url: v.youtube_url,
+      created_at: v.created_at,
+    }));
+
     uploads.value = [
       ...normalizedNewsletters,
       ...normalizedMinutes,
       ...normalizedDocuments,
       ...normalizedGalleries,
       ...normalizedPublications,
+      ...normalizedVideos,
     ];
   } catch (error) {
     console.error('Failed to fetch uploads');
@@ -516,14 +527,43 @@ const createUpload = async () => {
         }
         formData.append('banner_index', uploadForm.value.bannerIndex);
       } else {
-        formData.append('file', uploadForm.value.files[0]);
+        if (uploadForm.value.type === 'video') {
+          formData.append('video_file', uploadForm.value.files[0]);
+        } else {
+          formData.append('file', uploadForm.value.files[0]);
+        }
       }
     }
 
     switch (uploadForm.value.type) {
-      case 'gallery':
-        await uploadsApi.createGallery(formData);
+      case 'gallery': {
+        const res = await uploadsApi.createGallery(formData);
+
+        const galleryId = res?.id;
+
+        if (!galleryId) {
+          throw new Error('Gallery ID not returned from createGallery');
+        }
+
+        const files = uploadForm.value.files;
+
+        const bannerIndex = uploadForm.value.bannerIndex;
+
+        const extraFiles = files.filter((_, index) => index !== bannerIndex);
+
+        if (extraFiles.length) {
+          await Promise.all(
+            extraFiles.map((file) => {
+              const payload = new FormData();
+              payload.append('image', file);
+
+              return uploadsApi.postGalleryItems(galleryId, payload);
+            })
+          );
+        }
+
         break;
+      }
 
       case 'publications':
         await uploadsApi.createPublications(formData);
@@ -535,6 +575,10 @@ const createUpload = async () => {
 
       case 'minute':
         await uploadsApi.createMinutes(formData);
+        break;
+
+      case 'video':
+        await uploadsApi.createVideo(formData);
         break;
 
       case 'document':
@@ -575,6 +619,9 @@ const handleDeleteUpload = (item) => {
           break;
         case 'publications':
           await uploadsApi.deletepublications(item.slug);
+          break;
+        case 'video':
+          await uploadsApi.deleteVideo(item.slug);
           break;
         case 'document':
           await uploadsApi.deleteDocuments(item.slug);
@@ -816,7 +863,7 @@ const closeSidebar = () => (showSidebar.value = false);
                     >
                       {{
                         deletingEventSlug === event.slug
-                          ? 'Deleting…'
+                          ? 'Deleting...'
                           : 'Delete'
                       }}
                     </button>
@@ -1007,7 +1054,7 @@ const closeSidebar = () => (showSidebar.value = false);
                     >
                       {{
                         publishingSlug === article.slug
-                          ? 'Publishing…'
+                          ? 'Publishing...'
                           : 'Publish'
                       }}
                     </button>
@@ -1035,7 +1082,7 @@ const closeSidebar = () => (showSidebar.value = false);
                       :disabled="deletingSlug === article.slug"
                     >
                       {{
-                        deletingSlug === article.slug ? 'Deleting…' : 'Delete'
+                        deletingSlug === article.slug ? 'Deleting...' : 'Delete'
                       }}
                     </button>
                   </td>
@@ -1075,6 +1122,7 @@ const closeSidebar = () => (showSidebar.value = false);
               <option value="gallery">Gallery</option>
               <option value="minute">Minute</option>
               <option value="publications">Publications</option>
+              <option value="video">Video</option>
             </select>
 
             <select v-model="uploadForm.audience" class="input mb-3">
@@ -1144,7 +1192,7 @@ const closeSidebar = () => (showSidebar.value = false);
                       class="absolute top-1 right-1 bg-white text-red-600 rounded-full w-5 h-5 text-xs hidden group-hover:flex items-center justify-center shadow"
                       @click.prevent="uploadForm.files.splice(index, 1)"
                     >
-                      ✕
+                      Γ£ò
                     </button>
 
                     <span
@@ -1221,6 +1269,13 @@ const closeSidebar = () => (showSidebar.value = false);
                       class="w-32 h-20"
                     ></iframe>
 
+                    <video
+                      v-else-if="item.type === 'video' && item.file"
+                      :src="item.file"
+                      controls
+                      class="w-32 h-20 rounded object-cover"
+                    ></video>
+
                     <a
                       v-else-if="item.file"
                       :href="item.file"
@@ -1240,7 +1295,7 @@ const closeSidebar = () => (showSidebar.value = false);
                     >
                       {{
                         deletingUploadId === (item.id || item.slug)
-                          ? 'Deleting…'
+                          ? 'Deleting...'
                           : 'Delete'
                       }}
                     </button>
@@ -1285,7 +1340,7 @@ const closeSidebar = () => (showSidebar.value = false);
           class="btn-danger"
           :disabled="confirmLoading"
         >
-          {{ confirmLoading ? 'Please wait…' : 'Confirm' }}
+          {{ confirmLoading ? 'Please wait...' : 'Confirm' }}
         </button>
       </div>
     </div>
