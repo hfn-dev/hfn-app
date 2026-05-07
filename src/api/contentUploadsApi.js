@@ -16,10 +16,10 @@ export default {
   },
 
   
-  async getSingleVideo(id) {
+  async getSingleVideo(slug) {
     try {
       const { data } = await api.get(
-        `/media/videos/${id}/`
+        `/media/videos/${slug}/`
       );
 
       return data;
@@ -50,10 +50,10 @@ export default {
   },
 
  
-  async updateVideo(id, payload) {
+  async updateVideo(slug, payload) {
     try {
       const { data } = await api.put(
-        `/media/videos/${id}/`,
+        `/media/videos/${slug}/`,
         payload,
         {
           headers: {
@@ -70,10 +70,10 @@ export default {
   },
 
   
-  async patchVideo(id, payload) {
+  async patchVideo(slug, payload) {
     try {
       const { data } = await api.patch(
-        `/media/videos/${id}/`,
+        `/media/videos/${slug}/`,
         payload,
         {
           headers: {
@@ -90,10 +90,10 @@ export default {
   },
 
   
-  async deleteVideo(id) {
+  async deleteVideo(slug) {
     try {
       const { data } = await api.delete(
-        `/media/videos/${id}/`
+        `/media/videos/${slug}/`
       );
 
       return data;
