@@ -115,13 +115,17 @@ const handleSignIn = async () => {
     console.error("Login error");
 
     if (error.response) {
+      const data = error.response.data;
+
       const errorMsg =
-        error.response?.messages?.[0] ||
-        error.response?.message ||
+        data?.non_field_errors?.[0] || 
+        data?.messages?.[0] || 
+        data?.message || 
         `Error: ${error.response.status}`;
+
       toast.error(errorMsg);
 
-      if (error.response?.actions_required?.includes("verify_email")) {
+      if (data?.actions_required?.includes("verify_email")) {
         localStorage.setItem("pendingVerificationEmail", username.value.trim());
       }
     } else if (error.request) {
@@ -194,36 +198,6 @@ const verifyResetCode = async () => {
 };
   
 
-// const submitForgotPassword = async () => {
-//   if (!forgotEmail.value.trim()) {
-//     toast.error("Please enter your email");
-//     return;
-//   }
-
-//   try {
-//     forgotLoading.value = true;
-
-//     const payload = {
-//       email: forgotEmail.value.trim(),
-//     };
-
-//     const res = await userRegister.forgotPassword(payload);
-
-//     toast.success(res?.message || "Password reset link sent!");
-//     showForgotModal.value = false;
-
-//   } catch (error) {
-//     console.error("Forgot password error:", error);
-
-//     const msg =
-//       error.response?.data?.message ||
-//       "Failed to send reset link. Try again.";
-
-//     toast.error(msg);
-//   } finally {
-//     forgotLoading.value = false;
-//   }
-// };
 const submitForgotPassword = async () => {
   if (!forgotEmail.value.trim()) {
     toast.error("Please enter your email");
