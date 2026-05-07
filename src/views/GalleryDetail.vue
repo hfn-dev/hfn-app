@@ -74,6 +74,7 @@ const fetchGallery = async () => {
     const apiItems = res.results || res;
 
     const mappedApiItems = apiItems.map((item) => ({
+      id: item.id,
       slug: item.slug,
       title: item.title,
       category: item.category || "General",
@@ -84,15 +85,15 @@ const fetchGallery = async () => {
 
     const combinedGalleries = [...dummyGalleries, ...mappedApiItems];
 
-    // gallery.value = combinedGalleries.find(
-    //   (g) => g.slug === route.params.slug
-    // );
-    gallery.value = combinedGalleries.find((g) => {
-  return (
-    g.slug === route.params.slug ||
-    String(g.id) === route.params.slug
-  );
-});
+    gallery.value = combinedGalleries.find(
+      (g) => g.slug === route.params.slug
+    );
+//     gallery.value = combinedGalleries.find((g) => {
+//   return (
+//     g.slug === route.params.slug ||
+//     String(g.id) === route.params.slug
+//   );
+// });
   } catch (err) {
     console.error("Failed to load gallery", err);
     error.value = "Failed to load gallery";
