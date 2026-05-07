@@ -585,9 +585,37 @@ const createUpload = async () => {
     }
 
     switch (uploadForm.value.type) {
-      case "gallery":
-        await uploadsApi.createGallery(formData);
-        break;
+      // case "gallery":
+      //   await uploadsApi.createGallery(formData);
+      //   break;
+      case "gallery": {
+  const res = await uploadsApi.createGallery(formData);
+
+  const galleryId = res?.id;
+
+  if (!galleryId) {
+    throw new Error("Gallery ID not returned from createGallery");
+  }
+
+  const files = uploadForm.value.files;
+
+  const bannerIndex = uploadForm.value.bannerIndex;
+
+  const extraFiles = files.filter((_, index) => index !== bannerIndex);
+
+  if (extraFiles.length) {
+    await Promise.all(
+      extraFiles.map((file) => {
+        const payload = new FormData();
+        payload.append("image", file);
+
+        return uploadsApi.postGalleryItems(galleryId, payload);
+      })
+    );
+  }
+
+  break;
+}  
 
       case "publications":
         await uploadsApi.createPublications(formData);
