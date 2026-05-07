@@ -222,14 +222,16 @@ const fetchGalleryFromApi = async (loadMore = false) => {
       ...(nonMembersRes.results || nonMembersRes),
     ];
 
-    const mappedApiItems = apiData.map((item) => ({
-      slug: item.slug,
-      title: item.title,
-      category: item.category || "General",
-      date: formatDate(item.created_at || item.date),
-      cover: resolveImage(item),
-      images: item.images || [],
-    }));
+    const mappedApiItems = apiData
+  .filter((item) => item.media_type !== "youtube")
+  .map((item) => ({
+    slug: item.slug,
+    title: item.title,
+    category: item.category || "General",
+    date: formatDate(item.created_at || item.date),
+    cover: resolveImage(item),
+    images: item.images || [],
+  }));
 
     if (loadMore) {
       galleryItems.value = [...galleryItems.value, ...mappedApiItems];
