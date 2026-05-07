@@ -529,7 +529,7 @@ const fetchArticles = async () => {
 
 const fetchVideos = async () => {
   try {
-    const res = await contentUploadApi.gallery({
+    const res = await contentUploadApi.getVideos({
       type: "video",
       audience: selectedAudience.value,
     });
@@ -602,11 +602,6 @@ const filteredVideos = computed(() => {
   });
 });
 
-// const getEmbedUrl = (youtubeUrl) => {
-//   const url = new URL(youtubeUrl);
-//   const videoId = url.searchParams.get("v");
-//   return `https://www.youtube.com/embed/${videoId}`;
-// };
 
 const getEmbedUrl = (youtubeUrl) => {
   if (!youtubeUrl) return "";
