@@ -128,6 +128,9 @@ const handleDeleteUpload = (item) => {
         case "publications":
           await uploadsApi.deletepublications(item.slug);
           break;
+        case "video":
+          await uploadsApi.deleteVideo(item.id);
+          break;  
         case "document":
           await uploadsApi.deleteDocuments(item.slug);
           break;
@@ -435,13 +438,14 @@ const uploadForm = ref({
 
 const fetchUploads = async () => {
   try {
-    const [newsletters, minutes, documents, galleries, publications] =
+    const [newsletters, minutes, documents, galleries, publications, videos] =
       await Promise.all([
         uploadsApi.listNewsletters(),
         uploadsApi.getMinutes(),
         uploadsApi.getDocuments(),
         uploadsApi.gallery(),
         uploadsApi.listPublications(),
+        uploadsApi.getVideos(),
       ]);
 
     const normalizedNewsletters = newsletters.map((n) => ({
@@ -491,12 +495,22 @@ const fetchUploads = async () => {
       slug: g.slug,
     }));
 
+    const normalizedVideos = videos.map((v) => ({
+      id: v.id,
+      title: v.title,
+      type: "video",
+      file: v.video_file,
+      youtube_url: v.youtube_url,
+      created_at: v.created_at,
+    }));
+
     uploads.value = [
       ...normalizedNewsletters,
       ...normalizedMinutes,
       ...normalizedDocuments,
       ...normalizedGalleries,
       ...normalizedPublications,
+      ...normalizedVideos,
     ];
   } catch (error) {
     console.error("Failed to fetch uploads");
@@ -545,7 +559,7 @@ const createUpload = async () => {
     formData.append("media_type", uploadForm.value.media_type);
     formData.append("type", uploadForm.value.type);
 
-    if (uploadForm.value.media_type === "youtube") {
+    if (uploadForm.value.type === "video" && uploadForm.value.media_type === "youtube") {
       if (!uploadForm.value.youtube_url) return;
       formData.append("youtube_url", uploadForm.value.youtube_url);
     } else {
@@ -561,7 +575,12 @@ const createUpload = async () => {
         }
         formData.append("banner_index", uploadForm.value.bannerIndex);
       } else {
-        formData.append("file", uploadForm.value.files[0]);
+        // formData.append("file", uploadForm.value.files[0]);
+        if (uploadForm.value.type === "video") {
+          formData.append("video_file", uploadForm.value.files[0]);
+        } else {
+          formData.append("file", uploadForm.value.files[0]);
+        }
       }
     }
 
@@ -581,6 +600,10 @@ const createUpload = async () => {
       case "minute":
         await uploadsApi.createMinutes(formData);
         break;
+
+      case "video":
+        await uploadsApi.createVideo(formData);
+        break;  
 
       case "document":
       default:
@@ -1079,6 +1102,7 @@ const closeSidebar = () => (showSidebar.value = false);
               <option value="gallery">Gallery</option>
               <option value="minute">Minute</option>
               <option value="publications">Publications</option>
+              <option value="video">Video</option>  
             </select>
 
             <select v-model="uploadForm.audience" class="input mb-3">
