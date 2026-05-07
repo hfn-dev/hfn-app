@@ -225,6 +225,16 @@ export default {
       throw error;
     }
   },
+
+  async postGalleryItems(id, payload) {
+    try {
+      const response = await api.post(`/media/gallery/${id}/add-item/`, payload);
+      return response.data;
+    } catch (error) {
+      console.error('Update upload API error');
+      throw error;
+    }
+  },
   async singleGallery(params = {}) {
     try {
       const response = await api.get(`/media/gallery/${id}`, { params });
