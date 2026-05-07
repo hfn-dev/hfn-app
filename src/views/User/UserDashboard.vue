@@ -31,22 +31,49 @@ const toggleSidebar = () => (showSidebar.value = !showSidebar.value);
 const closeSidebar = () => (showSidebar.value = false);
 
 
+// const getEmbedUrl = (youtubeUrl) => {
+//   if (!youtubeUrl) return "";
+
+//   try {
+//     const url = new URL(youtubeUrl);
+//     const videoId = url.searchParams.get("v");
+
+//     if (videoId) {
+//       return `https://www.youtube.com/embed/${videoId}`;
+//     }
+
+//     return youtubeUrl.replace("watch?v=", "embed/");
+//   } catch {
+//     return youtubeUrl;
+//   }
+// };
+
 const getEmbedUrl = (youtubeUrl) => {
   if (!youtubeUrl) return "";
 
   try {
     const url = new URL(youtubeUrl);
-    const videoId = url.searchParams.get("v");
 
-    if (videoId) {
-      return `https://www.youtube.com/embed/${videoId}`;
+    let videoId = "";
+
+
+    if (url.hostname.includes("youtube.com")) {
+      videoId = url.searchParams.get("v");
     }
 
-    return youtubeUrl.replace("watch?v=", "embed/");
-  } catch {
+
+    if (url.hostname.includes("youtu.be")) {
+      videoId = url.pathname.replace("/", "");
+    }
+
+    return videoId
+      ? `https://www.youtube.com/embed/${videoId}`
+      : youtubeUrl;
+  } catch (error) {
     return youtubeUrl;
   }
 };
+  
   
 const videos = ref([
   {
