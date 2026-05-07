@@ -38,6 +38,10 @@ const currentPage = ref(1);
 const itemsPerPage = 6;
 const totalPages = ref(1);
 
+const latestPage = ref(1);
+const latestPerPage = 3;
+const totalLatestPages = ref(1);
+
 const courseTracks = ref([]);
 
 // Fetch user profile
@@ -95,7 +99,8 @@ const fetchCourses = async () => {
       courses.value = allCourses;
       filteredCourses.value = allCourses;
 
-      latestCourses.value = allCourses.slice(0, 3);
+      latestCourses.value = allCourses;
+      totalLatestPages.value = Math.ceil(allCourses.length / latestPerPage);
 
       updatePagination();
     }
@@ -135,6 +140,14 @@ const goToNextPage = () => {
   }
 };
 
+const goToPrevLatestPage = () => {
+  if (latestPage.value > 1) latestPage.value--;
+};
+
+const goToNextLatestPage = () => {
+  if (latestPage.value < totalLatestPages.value) latestPage.value++;
+};
+
 const filterCoursesByTrack = () => {
   if (!activeCourseTrack.value || activeCourseTrack.value === "All") {
     filteredCourses.value = courses.value;
@@ -161,6 +174,12 @@ const currentPageCourses = computed(() => {
   const startIndex = (currentPage.value - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   return filteredCourses.value.slice(startIndex, endIndex);
+});
+
+const paginatedLatestCourses = computed(() => {
+  const startIndex = (latestPage.value - 1) * latestPerPage;
+  const endIndex = startIndex + latestPerPage;
+  return latestCourses.value.slice(startIndex, endIndex);
 });
 
 const handleSearch = () => {
@@ -750,7 +769,7 @@ onMounted(() => {
 
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div
-                  v-for="course in latestCourses"
+                  v-for="course in paginatedLatestCourses"
                   :key="'latest-' + course.id"
                   class="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-2xl transition duration-300 transform hover:-translate-y-1"
                 >
@@ -824,6 +843,55 @@ onMounted(() => {
                     </button>
                   </div>
                 </div>
+              </div>
+
+              <div
+                v-if="paginatedLatestCourses.length > 0"
+                class="flex justify-center items-center mt-6 space-x-4 text-gray-600"
+              >
+                <button
+                  @click="goToPrevLatestPage"
+                  :disabled="latestPage === 1"
+                  :class="{ 'opacity-50 cursor-not-allowed': latestPage === 1 }"
+                  class="text-sm font-medium hover:text-gray-900 transition flex items-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4 mr-1"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    v-html="getIconPaths('prev')"
+                  ></svg>
+                  Prev
+                </button>
+                <span class="text-sm"
+                  >Page {{ latestPage }} of {{ totalLatestPages }}</span
+                >
+                <button
+                  @click="goToNextLatestPage"
+                  :disabled="latestPage === totalLatestPages"
+                  :class="{
+                    'opacity-50 cursor-not-allowed': latestPage === totalLatestPages,
+                  }"
+                  class="text-sm font-medium hover:text-gray-900 transition flex items-center"
+                >
+                  Next
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4 ml-1"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    v-html="getIconPaths('next')"
+                  ></svg>
+                </button>
               </div>
             </div>
           </div>
