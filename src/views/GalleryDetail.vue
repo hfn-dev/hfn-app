@@ -79,8 +79,8 @@ const fetchGallery = async () => {
       title: item.title,
       category: item.category || "General",
       date: formatDate(item.date),
-      // images: item.images || [],
-      images: (item.images || []).map((i) => i.image || i),
+      images: item.images || [],
+      // images: (item.images || []).map((i) => i.image || i),
     }));
 
     const combinedGalleries = [...dummyGalleries, ...mappedApiItems];
