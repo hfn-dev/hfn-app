@@ -75,7 +75,7 @@ const fetchGallery = async () => {
 
     const mappedApiItems = apiItems.map((item) => ({
       id: item.id,
-      slug: item.slug,
+      slug: item.slug || `gallery-${item.id}`,
       title: item.title,
       category: item.category || "General",
       date: formatDate(item.date),
