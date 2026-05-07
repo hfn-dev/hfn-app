@@ -26,6 +26,16 @@ import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import galleryApi from "@/api/contentUploadsApi"; 
 
+const formatDate = (dateStr) => {
+  if (!dateStr) return "";
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
 const route = useRoute();
 const gallery = ref(null);
 const loading = ref(false);
@@ -80,20 +90,13 @@ const fetchGallery = async () => {
       category: item.category || "General",
       date: formatDate(item.created_at),
       images: item.images || [],
-      // images: (item.images || []).map((i) => i.image || i),
     }));
 
     const combinedGalleries = [...dummyGalleries, ...mappedApiItems];
 
     gallery.value = combinedGalleries.find(
-      (g) => g.slug === route.params.slug
+      (g) => g.slug === route.params.slug || String(g.id) === route.params.slug
     );
-//     gallery.value = combinedGalleries.find((g) => {
-//   return (
-//     g.slug === route.params.slug ||
-//     String(g.id) === route.params.slug
-//   );
-// });
   } catch (err) {
     console.error("Failed to load gallery", err);
     error.value = "Failed to load gallery";
