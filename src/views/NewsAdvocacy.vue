@@ -88,6 +88,7 @@
           @click="
             selectedDate.month = '';
             selectedDate.year = '';
+            videosPage.value = 1;
             fetchArticles();
             fetchVideos();
           "
@@ -206,7 +207,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div
-            v-for="(video, index) in filteredVideos"
+            v-for="(video, index) in paginatedVideos"
             :key="index"
             class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden"
           >
@@ -230,6 +231,57 @@
               </h4>
             </div>
           </div>
+        </div>
+
+        <div
+          v-if="totalVideoPages > 1"
+          class="flex justify-center items-center space-x-4 text-gray-600 mt-8"
+        >
+          <button
+            @click="goToPrevVideoPage"
+            :disabled="videosPage === 1"
+            :class="{ 'opacity-50 cursor-not-allowed': videosPage === 1 }"
+            class="flex items-center space-x-1 text-green-700 hover:underline disabled:hover:no-underline"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+            <span>Prev</span>
+          </button>
+          <span class="text-sm">Page {{ videosPage }} of {{ totalVideoPages }}</span>
+          <button
+            @click="goToNextVideoPage"
+            :disabled="videosPage === totalVideoPages"
+            :class="{ 'opacity-50 cursor-not-allowed': videosPage === totalVideoPages }"
+            class="flex items-center space-x-1 text-green-700 hover:underline disabled:hover:no-underline"
+          >
+            <span>Next</span>
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+          </button>
         </div>
       </section>
 
@@ -341,9 +393,10 @@ import newsModule from "@/api/newsModule";
 
 const currentPage = ref(1);
 const itemsPerPage = 4;
-// const totalPages = ref(1);
 const currentPagePolicy = ref(1);
 const itemsPerPagePolicy = 3;
+const videosPage = ref(1);
+const videosPerPage = 6;
 const selectedDate = reactive({ month: "", year: "" });
 
 const totalPages = computed(() => {
@@ -414,6 +467,7 @@ const imageMap = {
 watch([() => selectedDate.month, () => selectedDate.year], () => {
   currentPage.value = 1;
   currentPagePolicy.value = 1;
+  videosPage.value = 1;
 });
 
 const allowedAudiences = ["all", "non_members"];
@@ -444,6 +498,14 @@ const goToNextPagePolicy = () => {
   }
 };
 
+const goToPrevVideoPage = () => {
+  if (videosPage.value > 1) videosPage.value--;
+};
+
+const goToNextVideoPage = () => {
+  if (videosPage.value < totalVideoPages.value) videosPage.value++;
+};
+
 const paginatedArticles = computed(() => {
   const startIndex = (currentPage.value - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -465,6 +527,14 @@ const totalPolicyPages = computed(() => {
   const policyCount = policyUpdates.value?.length || 0;
   return Math.ceil(policyCount / itemsPerPagePolicy) || 1;
 });
+
+const paginatedVideos = computed(() => {
+  const startIndex = (videosPage.value - 1) * videosPerPage;
+  const endIndex = startIndex + videosPerPage;
+  return filteredVideos.value.slice(startIndex, endIndex);
+});
+
+const totalVideoPages = computed(() => Math.ceil(filteredVideos.value.length / videosPerPage) || 1);
 
 const dummyVideos = [
   {

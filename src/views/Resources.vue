@@ -460,17 +460,7 @@ const getPdfPreview = (url) => {
 
   return url.replace("/upload/", "/upload/pg_1,w_600/").replace(".pdf", ".jpg");
 };
-// const getPdfPreview = (url) => {
-//   if (!url) return newsletter_placeholder;
 
-//   if (url.match(/\.(jpg|jpeg|png)$/i)) return url;
-
-//   let processedUrl = url.replace("/raw/upload/", "/image/upload/");
-
-//   return processedUrl
-//     .replace("/upload/", "/upload/pg_1,w_600,f_auto/")
-//     .replace(".pdf", ".jpg");
-// };
 
 const dummyPublications = [
   {
@@ -612,14 +602,7 @@ const fetchDocuments = async () => {
       (a, b) => b.created_at - a.created_at
     );
 
-    // const apiPublications = publicationsData
-    //   .filter(isPublicContent)
-    //   .map((item) => ({
-    //     title: item.title,
-    //     pdfUrl: item.file || item.pdf || item.document,
-    //     description: item.caption || item.description || "",
-    //     created_at: new Date(item.created_at),
-    //   }));
+    
     const apiPublications = publicationsData
       .filter((item) => {
         const isPublic = isPublicContent(item);
@@ -648,8 +631,6 @@ const fetchDocuments = async () => {
       (a, b) => b.created_at - a.created_at
     );
 
-    // newsletters.value = [...apiNewsletters, ...dummyNewsletters];
-    // publications.value = [...apiPublications, ...dummyPublications];
   } catch (error) {
     console.error("Error fetching documents");
 
