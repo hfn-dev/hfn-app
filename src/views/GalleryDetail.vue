@@ -70,7 +70,7 @@ const fetchGallery = async () => {
   error.value = null;
 
   try {
-    const res = await galleryApi.list({ audience: "all" });
+    const res = await galleryApi.gallery({ audience: "all" });
     const apiItems = res.results || res;
 
     const mappedApiItems = apiItems.map((item) => ({
