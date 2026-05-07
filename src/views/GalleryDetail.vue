@@ -12,7 +12,7 @@
       <img
         v-for="(img, index) in gallery.images"
         :key="index"
-        :src="img"
+        :src="img.image || img"
         class="w-full rounded-xl shadow hover:scale-[1.02] transition"
       />
     </div>
