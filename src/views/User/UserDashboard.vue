@@ -116,6 +116,21 @@ const videos = ref([
 
 const fetchVideos = async () => {
   try {
+    const [membersRes, allRes] = await Promise.all([
+      contentUploadsApi.getVideos({ audience: "members" }),
+      contentUploadsApi.getVideos({ audience: "all" }),
+    ]);
+
+    const apiMembersVideos = (membersRes.results || membersRes || []).map((v) => ({
+      title: v.title || "HFN Video",
+      url: v.youtube_url || v.url,
+    }));
+
+    const apiAllVideos = (allRes.results || allRes || []).map((v) => ({
+      title: v.title || "HFN Video",
+      url: v.youtube_url || v.url,
+    }));
+
     const articles = await newsApi.listArticles({ limit: 20 });
 
     const articleVideos = articles
@@ -137,9 +152,11 @@ const fetchVideos = async () => {
       }));
 
     videos.value = [
-      ...galleryVideos,   
+      ...apiMembersVideos,
+      ...apiAllVideos,
+      ...galleryVideos,
       ...articleVideos,
-      ...videos.value,    
+      ...videos.value,
     ];
   } catch (err) {
     console.error("Failed to fetch videos", err);
