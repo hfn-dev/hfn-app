@@ -1254,6 +1254,14 @@ const closeSidebar = () => (showSidebar.value = false);
                       class="w-32 h-20"
                     ></iframe>
 
+                    <video
+                      v-else-if="item.type === 'video' && item.file"
+                      :src="item.file"
+                      controls
+                      class="w-32 h-20 rounded object-cover"
+                    ></video>
+
+
                     <!-- FILE -->
                     <a
                       v-else-if="item.file"
