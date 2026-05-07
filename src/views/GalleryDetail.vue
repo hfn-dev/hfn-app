@@ -12,7 +12,7 @@
       <img
         v-for="(img, index) in gallery.images"
         :key="index"
-        :src="img"
+        :src="typeof img === 'string' ? img : img.image"
         class="w-full rounded-xl shadow hover:scale-[1.02] transition"
       />
     </div>
@@ -78,7 +78,7 @@ const fetchGallery = async () => {
       slug: item.slug || `gallery-${item.id}`,
       title: item.title,
       category: item.category || "General",
-      date: formatDate(item.date),
+      date: formatDate(item.created_at),
       images: item.images || [],
       // images: (item.images || []).map((i) => i.image || i),
     }));
