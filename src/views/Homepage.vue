@@ -304,7 +304,7 @@ onMounted(async () => {
   }, 5000);
 
   try {
-    const { data } = await api.get(`/api/pages/${pageType}/`);
+    const { data } = await api.get(`/pages/${pageType}/`);
     const rawContent = data.content || {};
     if (rawContent._hidden) {
       for (const key of rawContent._hidden) {

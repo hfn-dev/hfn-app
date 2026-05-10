@@ -8,7 +8,6 @@ import SuperAdminSidebar from "./SuperAdminSidebar.vue";
 
 import HomeAboutEditor from "./components/cms/home/HomeAboutEditor.vue";
 import HomeExecutivesEditor from "./components/cms/home/HomeExecutivesEditor.vue";
-import HomeFaqsEditor from "./components/cms/home/HomeFaqsEditor.vue";
 import HomeMandateEditor from "./components/cms/home/HomeMandateEditor.vue";
 import HomeNewsEditor from "./components/cms/home/HomeNewsEditor.vue";
 import HomePartnerEditor from "./components/cms/home/HomePartnerEditor.vue";
@@ -74,7 +73,6 @@ const currentSectionData = ref(null);
 const componentMap = {
   home: {
     hero: HomeHeroEditor,
-    faqs: HomeFaqsEditor,
     about: HomeAboutEditor,
     mandate: HomeMandateEditor,
     news: HomeNewsEditor,
