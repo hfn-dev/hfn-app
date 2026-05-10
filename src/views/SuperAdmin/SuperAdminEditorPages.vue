@@ -176,7 +176,7 @@ const createPage = async (pageName) => {
       ...newPage,
       title: newPage.name,
       slug: `/${pageType}`,
-      sections: { ...schema, _hidden: [] },
+      sections: structuredClone(schema),
     });
     await fetchPages();
     editPage(newPage);
@@ -223,6 +223,14 @@ const fetchPages = async () => {
         }
       }
 
+      if (page.content?._hidden) {
+        for (const key of page.content._hidden) {
+          if (content[key]) {
+            content[key].is_hidden = true;
+          }
+        }
+      }
+
       if (pageTypeLower === 'governance') {
         if (content.boardOfTrustees) {
           content.boardOfTrustees = {
@@ -245,12 +253,6 @@ const fetchPages = async () => {
         }
       }
 
-      if (page.content?._hidden) {
-        content._hidden = page.content._hidden;
-      } else if (!content._hidden) {
-        content._hidden = [];
-      }
-
       return {
         ...page,
         title: page.name ?? page.page_type_display,
@@ -271,18 +273,13 @@ onMounted(fetchPages);
 
 const sectionKeys = computed(() => {
   if (!activePage.value?.sections) return [];
-  return Object.keys(activePage.value.sections).filter(k => !k.startsWith('_'));
+  return Object.keys(activePage.value.sections);
 });
 
 const toggleSectionVisibility = (key) => {
-  if (!activePage.value.sections._hidden) {
-    activePage.value.sections._hidden = [];
-  }
-  const idx = activePage.value.sections._hidden.indexOf(key);
-  if (idx === -1) {
-    activePage.value.sections._hidden.push(key);
-  } else {
-    activePage.value.sections._hidden.splice(idx, 1);
+  const section = activePage.value.sections[key];
+  if (section) {
+    section.is_hidden = !section.is_hidden;
   }
 };
 
@@ -312,9 +309,6 @@ const editPage = (page) => {
   activePage.value = page;
   if (!activePage.value.sections) {
     activePage.value.sections = activePage.value.content || {};
-  }
-  if (!activePage.value.sections._hidden) {
-    activePage.value.sections._hidden = [];
   }
   activeSection.value = "hero";
   currentView.value = "editor";
@@ -650,7 +644,7 @@ watch(activePage, (page) => {
                 activeSection !== key,
             }"
           >
-            <span :class="{ 'opacity-40': activePage.sections._hidden?.includes(key) }">
+            <span :class="{ 'opacity-40': activePage.sections[key]?.is_hidden }">
               {{
                 activePage.sections[key]?.name ||
                 key.replace("section", "Section ")
@@ -659,10 +653,10 @@ watch(activePage, (page) => {
             <span
               @click.stop="toggleSectionVisibility(key)"
               class="cursor-pointer hover:scale-110 transition-transform"
-              :title="activePage.sections._hidden?.includes(key) ? 'Show this section' : 'Hide this section'"
+              :title="activePage.sections[key]?.is_hidden ? 'Show this section' : 'Hide this section'"
             >
               <svg
-                v-if="!activePage.sections._hidden?.includes(key)"
+                v-if="!activePage.sections[key]?.is_hidden"
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-4 w-4"
                 viewBox="0 0 24 24"

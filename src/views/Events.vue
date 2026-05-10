@@ -1,6 +1,6 @@
 <template>
   <div class="events-page font-sans bg-white">
-    <section v-if="!page._hidden?.includes('hero')" class="bg-[#E87A1814]" :style="{ backgroundColor: page.hero.backgroundColor || '#E87A1814' }">
+    <section v-if="!page.hero?.is_hidden" class="bg-[#E87A1814]" :style="{ backgroundColor: page.hero.backgroundColor || '#E87A1814' }">
       <div class="container mx-auto px-4 md:px-8 pt-10 pb-16">
         <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between">
           <div class="lg:w-1/2 mb-8 lg:mb-0">
@@ -18,7 +18,7 @@
       </div>
     </section>
 
-    <template v-if="!page._hidden?.includes('searchAndFilter')">
+    <template v-if="!page.searchAndFilter?.is_hidden">
     <section class="container mx-auto px-4 md:px-8 py-4">
       <h2 class="text-4xl font-bold text-gray-900 text-center">Events</h2>
     </section>
@@ -46,7 +46,7 @@
     </section>
     </template>
 
-    <template v-if="!page._hidden?.includes('featuredEvent')">
+    <template v-if="!page.featuredEvent?.is_hidden">
     <hr class="border-gray-200" />
 
     <section class="container mx-auto px-4 md:px-8 py-10">
@@ -104,7 +104,7 @@
     </section>
     </template>
 
-    <template v-if="!page._hidden?.includes('pastEvents')">
+    <template v-if="!page.pastEvents?.is_hidden">
     <section class="container mx-auto px-4 md:px-8 py-14">
       <h3 class="text-2xl font-semibold text-gray-800 mb-8">Past Events</h3>
       <div v-if="pastEvents.length === 0" class="text-center py-8 text-gray-500">No past events available.</div>
@@ -248,7 +248,16 @@ const fetchPastEvents = async () => {
 const fetchPageFromApi = async () => {
   try {
     const res = await pagesApi.getPageByType("events");
-    pageFromApi.value = res?.content || null;
+    const content = res?.content || null;
+    if (content?._hidden) {
+      for (const key of content._hidden) {
+        if (content[key]) {
+          content[key].is_hidden = true;
+        }
+      }
+      delete content._hidden;
+    }
+    pageFromApi.value = content;
   } catch (e) {
     console.warn("Using local Events schema fallback");
   } finally {

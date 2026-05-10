@@ -305,12 +305,19 @@ onMounted(async () => {
 
   try {
     const { data } = await api.get(`/api/pages/${pageType}/`);
-    pageContent.value = data.content || structuredClone(homePageSchema);
-    if (!pageContent.value._hidden) pageContent.value._hidden = [];
+    const rawContent = data.content || {};
+    if (rawContent._hidden) {
+      for (const key of rawContent._hidden) {
+        if (rawContent[key]) {
+          rawContent[key].is_hidden = true;
+        }
+      }
+      delete rawContent._hidden;
+    }
+    pageContent.value = { ...structuredClone(homePageSchema), ...rawContent };
   } catch (err) {
     console.error("Failed to load homepage content:", err);
     pageContent.value = structuredClone(homePageSchema);
-    pageContent.value._hidden = [];
   }
 
   try {
@@ -360,7 +367,7 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <section v-if="!pageContent._hidden?.includes('hero')" class="relative h-[90vh] min-h-[650px] overflow-hidden">
+    <section v-if="!pageContent.hero?.is_hidden" class="relative h-[90vh] min-h-[650px] overflow-hidden">
       <div class="absolute inset-0">
         <transition-group name="fade">
           <img
@@ -412,7 +419,7 @@ onUnmounted(() => {
       </div>
     </section>
 
-    <section v-if="!pageContent._hidden?.includes('about')" ref="sectionRef" class="relative py-20 overflow-hidden bg-white">
+    <section v-if="!pageContent.about?.is_hidden" ref="sectionRef" class="relative py-20 overflow-hidden bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           <div
@@ -567,7 +574,7 @@ onUnmounted(() => {
         </div>
       </div>
     </section>
-    <section v-if="!pageContent._hidden?.includes('mandate')"
+    <section v-if="!pageContent.mandate?.is_hidden"
       ref="actionRef"
       class="py-24 bg-[#F2F9F3] relative overflow-hidden"
     >
@@ -644,7 +651,7 @@ onUnmounted(() => {
       </div>
     </section>
 
-    <section v-if="!pageContent._hidden?.includes('news')" class="bg-white py-16 px-6 md:px-12 lg:px-24">
+    <section v-if="!pageContent.news?.is_hidden" class="bg-white py-16 px-6 md:px-12 lg:px-24">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
         <div
           class="flex flex-col sm:flex-row justify-center items-center h-auto sm:h-20 relative rounded-2xl border-2 border-green-50 bg-white shadow-sm px-4 py-3"
@@ -667,7 +674,7 @@ onUnmounted(() => {
       </div>
     </section>
 
-    <section v-if="!pageContent._hidden?.includes('news')" class="bg-[#f6faf8] py-16 px-6 md:px-12 lg:px-24">
+    <section v-if="!pageContent.news?.is_hidden" class="bg-[#f6faf8] py-16 px-6 md:px-12 lg:px-24">
       <div class="grid lg:grid-cols-3 gap-8">
         <div
           class="lg:col-span-2 bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100"
@@ -802,7 +809,7 @@ onUnmounted(() => {
       </div>
     </section>
 
-    <section v-if="!pageContent._hidden?.includes('news')" class="bg-[#f6faf8] pb-16 px-6 md:px-12 lg:px-24">
+    <section v-if="!pageContent.news?.is_hidden" class="bg-[#f6faf8] pb-16 px-6 md:px-12 lg:px-24">
       <div class="flex justify-center">
         <RouterLink
           to="/news"
@@ -813,7 +820,7 @@ onUnmounted(() => {
       </div>
     </section>
 
-    <section v-if="!pageContent._hidden?.includes('executives')" class="py-16 bg-white">
+    <section v-if="!pageContent.executives?.is_hidden" class="py-16 bg-white">
       <div class="container mx-auto px-6 text-center">
         <h2
           class="text-3xl md:text-4xl font-sans mb-10 font-extrabold text-gray-900 rounded-2xl border-2 border-green-50 bg-white shadow-md px-4 py-4"
@@ -856,7 +863,7 @@ onUnmounted(() => {
       </div>
     </section>
 
-    <div v-if="!pageContent._hidden?.includes('partners')" class="py-6 border-b border-gray-200 bg-white">
+    <div v-if="!pageContent.partners?.is_hidden" class="py-6 border-b border-gray-200 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-6">
           <span
@@ -882,7 +889,7 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div v-if="!pageContent._hidden?.includes('faqs')">
+    <div v-if="!pageContent.faqs?.is_hidden">
       <HfnCalender id="calendar" />
     </div>
 
