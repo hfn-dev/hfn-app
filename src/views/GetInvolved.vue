@@ -1,6 +1,6 @@
 <template>
   <div class="get-involved-page font-sans bg-white overflow-x-hidden">
-    <section
+    <section v-if="!page._hidden?.includes('hero')"
       class="bg-[#f2f9f3] pt-12 pb-20 relative overflow-hidden"
       :style="{ backgroundColor: page.hero.backgroundColor || '#f2f9f3' }"
     >
@@ -44,7 +44,7 @@
     </section>
 
     <main class="container mx-auto px-4 md:px-8 py-16">
-      <section class="mb-24">
+      <section v-if="!page._hidden?.includes('donations')" class="mb-24">
         <div
           class="flex flex-col md:flex-row gap-12 items-center bg-white p-8 md:p-12 rounded-3xl border border-gray-100 shadow-sm"
         >
@@ -115,7 +115,7 @@
         </div>
       </section>
 
-      <section class="mb-24">
+      <section v-if="!page._hidden?.includes('partnerships')" class="mb-24">
         <div class="text-center mb-12">
           <h3 class="text-3xl font-bold text-gray-900">
             {{ page.partnerships?.title || "Partnerships & Sponsorships" }}
@@ -185,7 +185,7 @@
         </div>
       </section>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+      <div v-if="!page._hidden?.includes('opportunities')" class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
         <div class="bg-gray-50 p-8 rounded-3xl">
           <h3 class="text-2xl font-bold text-gray-900 mb-4">
             {{
@@ -234,7 +234,7 @@
         </div>
       </div>
 
-      <section
+      <section v-if="!page._hidden?.includes('volunteering')"
         class="text-white rounded-[2rem] p-10 md:p-16 relative overflow-hidden"
         :style="{
           backgroundColor: page.volunteering?.backgroundColor || '#14532D',

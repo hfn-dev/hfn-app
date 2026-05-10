@@ -1,6 +1,6 @@
 <template>
   <div class="news-page font-sans bg-white">
-    <section class="bg-[#E87A1814] pt-10 pb-16" :style="{ backgroundColor: page.hero.backgroundColor || '#E87A1814' }">
+    <section v-if="!page._hidden?.includes('hero')" class="bg-[#E87A1814] pt-10 pb-16" :style="{ backgroundColor: page.hero.backgroundColor || '#E87A1814' }">
       <div class="container mx-auto px-4 md:px-8">
         <div
           class="flex flex-col lg:flex-row items-start lg:items-center justify-between"
@@ -34,6 +34,7 @@
     </section>
 
     <main class="container mx-auto px-4 md:px-8 py-16">
+      <template v-if="!page._hidden?.includes('newsletterSection')">
       <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">
         Newsletters
       </h2>
@@ -158,7 +159,9 @@
           </svg>
         </button>
       </div>
+      </template>
 
+      <template v-if="!page._hidden?.includes('publicationsSection')">
       <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
         Publications
       </h2>
@@ -247,6 +250,7 @@
           </svg>
         </button>
       </div>
+      </template>
     </main>
   </div>
   <!-- PAYMENT MODAL -->

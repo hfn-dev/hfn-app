@@ -176,7 +176,7 @@ const createPage = async (pageName) => {
       ...newPage,
       title: newPage.name,
       slug: `/${pageType}`,
-      sections: schema,
+      sections: { ...schema, _hidden: [] },
     });
     await fetchPages();
     editPage(newPage);
@@ -188,11 +188,27 @@ const createPage = async (pageName) => {
 const fetchPages = async () => {
   isLoading.value = true;
   try {
+    const deepMerge = (schemaObj, apiObj) => {
+      if (!apiObj || typeof apiObj !== 'object' || Array.isArray(apiObj)) return apiObj ?? schemaObj;
+      const result = { ...schemaObj };
+      for (const key of Object.keys(apiObj)) {
+        if (typeof apiObj[key] === 'object' && !Array.isArray(apiObj[key]) && apiObj[key] !== null &&
+            typeof schemaObj[key] === 'object' && !Array.isArray(schemaObj[key]) && schemaObj[key] !== null) {
+          result[key] = deepMerge(schemaObj[key], apiObj[key]);
+        } else {
+          result[key] = apiObj[key];
+        }
+      }
+      return result;
+    };
+
     const rawPages = await pagesApi.listPages();
     pages.value = rawPages.map((page) => {
       const schema = pageSchemas[page.page_type?.toLowerCase()] ?? {};
 
       const content = structuredClone(schema ?? {});
+
+      const pageTypeLower = page.page_type?.toLowerCase();
 
       if (
         schema &&
@@ -202,12 +218,37 @@ const fetchPages = async () => {
       ) {
         for (const sectionKey in schema) {
           if (page.content?.[sectionKey]) {
-            content[sectionKey] = {
-              ...schema[sectionKey],
-              ...page.content[sectionKey],
-            };
+            content[sectionKey] = deepMerge(schema[sectionKey], page.content[sectionKey]);
           }
         }
+      }
+
+      if (pageTypeLower === 'governance') {
+        if (content.boardOfTrustees) {
+          content.boardOfTrustees = {
+            ...schema.boardOfTrustees,
+            ...content.boardOfTrustees,
+            chair: { ...schema.boardOfTrustees.chair, ...(content.boardOfTrustees.chair || {}) },
+            trustees: content.boardOfTrustees.trustees?.length
+              ? content.boardOfTrustees.trustees
+              : schema.boardOfTrustees.trustees,
+          };
+        }
+        if (content.executiveCommittee) {
+          content.executiveCommittee = {
+            ...schema.executiveCommittee,
+            ...content.executiveCommittee,
+            executives: content.executiveCommittee.executives?.length
+              ? content.executiveCommittee.executives
+              : schema.executiveCommittee.executives,
+          };
+        }
+      }
+
+      if (page.content?._hidden) {
+        content._hidden = page.content._hidden;
+      } else if (!content._hidden) {
+        content._hidden = [];
       }
 
       return {
@@ -230,8 +271,20 @@ onMounted(fetchPages);
 
 const sectionKeys = computed(() => {
   if (!activePage.value?.sections) return [];
-  return Object.keys(activePage.value.sections);
+  return Object.keys(activePage.value.sections).filter(k => !k.startsWith('_'));
 });
+
+const toggleSectionVisibility = (key) => {
+  if (!activePage.value.sections._hidden) {
+    activePage.value.sections._hidden = [];
+  }
+  const idx = activePage.value.sections._hidden.indexOf(key);
+  if (idx === -1) {
+    activePage.value.sections._hidden.push(key);
+  } else {
+    activePage.value.sections._hidden.splice(idx, 1);
+  }
+};
 
 const newPageTitle = ref("");
 
@@ -257,6 +310,12 @@ const uploadSectionImage = async (event, sectionKey) => {
 
 const editPage = (page) => {
   activePage.value = page;
+  if (!activePage.value.sections) {
+    activePage.value.sections = activePage.value.content || {};
+  }
+  if (!activePage.value.sections._hidden) {
+    activePage.value.sections._hidden = [];
+  }
   activeSection.value = "hero";
   currentView.value = "editor";
 };
@@ -583,7 +642,7 @@ watch(activePage, (page) => {
             v-for="key in sectionKeys"
             :key="key"
             @click="activeSection = key"
-            class="px-4 py-3 text-sm font-medium transition duration-200 whitespace-nowrap"
+            class="px-4 py-3 text-sm font-medium transition duration-200 whitespace-nowrap flex items-center gap-2"
             :class="{
               'text-green-700 border-b-2 border-green-700 bg-green-50':
                 activeSection === key,
@@ -591,10 +650,47 @@ watch(activePage, (page) => {
                 activeSection !== key,
             }"
           >
-            {{
-              activePage.sections[key]?.name ||
-              key.replace("section", "Section ")
-            }}
+            <span :class="{ 'opacity-40': activePage.sections._hidden?.includes(key) }">
+              {{
+                activePage.sections[key]?.name ||
+                key.replace("section", "Section ")
+              }}
+            </span>
+            <span
+              @click.stop="toggleSectionVisibility(key)"
+              class="cursor-pointer hover:scale-110 transition-transform"
+              :title="activePage.sections._hidden?.includes(key) ? 'Show this section' : 'Hide this section'"
+            >
+              <svg
+                v-if="!activePage.sections._hidden?.includes(key)"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              <svg
+                v-else
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4 text-gray-400"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+                <line x1="1" y1="1" x2="23" y2="23" />
+              </svg>
+            </span>
           </button>
         </div>
 
