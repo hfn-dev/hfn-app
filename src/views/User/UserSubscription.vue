@@ -4,6 +4,16 @@ import { computed, reactive, ref } from 'vue';
 
 const membershipTypes = reactive([
   {
+    title: 'Individual',
+    description: 'For individual registered businesses.',
+    price: '₦50,000 per year.',
+  },
+  {
+    title: 'Association',
+    description: 'For registered healthcare professional associations.',
+    price: '₦150,000 per year.',
+  },
+  {
     title: 'Corporate',
     description: 'For locally registered healthcare businesses.',
     price: '₦200,000 per year.',
@@ -13,15 +23,11 @@ const membershipTypes = reactive([
     description: 'For international healthcare organizations.',
     price: '₦500,000 per year.',
   },
-  {
-    title: 'Association',
-    description: 'For registered healthcare professional associations.',
-    price: '₦150,000 per year.',
-  },
+  
   {
     title: 'Diaspora',
     description: 'For healthcare professionals residing outside the country.',
-    price: '₦50,000 per year.',
+    price: '$50 per year.',
   },
 ]);
 
