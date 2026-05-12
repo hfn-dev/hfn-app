@@ -48,21 +48,7 @@ const individualDetailsKeys = [
 const currentView = ref('My Profile');
 const activeTab = ref('My Profile');
 
-// const fetchCertificates = async () => {
-//   try {
-//     const res = await learningModule.getCertificate();
 
-//     const certs = Array.isArray(res) ? res : res.results ? res.results : [res];
-
-//     certificates.value = certs;
-
-//     if (certs.length > 0) {
-//       certificateUrl.value = certs[0].pdf_file || '';
-//     }
-//   } catch (error) {
-//     console.error("Error fetching certificates:", error);
-//   }
-// };
 
 const downloadCertificate = async (certId) => {
   try {
@@ -136,7 +122,7 @@ const subscription = reactive({
 
 
 const makePayment = () => {
-  router.push({ name: 'UserSubscription' });
+  router.push({ name: 'LearnerUserSubscription' });
 };
 
 const goToPage = (page) => {
