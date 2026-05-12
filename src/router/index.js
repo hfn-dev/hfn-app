@@ -65,6 +65,8 @@ import Events from '@/views/Events.vue';
 import Gallery from '@/views/Gallery.vue';
 import LearnerMyAccount from '@/views/Learner/LearnerMyAccount.vue';
 import LearnerUserCourses from '@/views/Learner/LearnerUserCourses.vue';
+import LearnerUserSubscription from '@/views/Learner/LearnerUserSubscription.vue';
+
 import MyLearningLearner from '@/views/Learner/MyLearningLearner.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import About from '../views/About.vue';
@@ -394,6 +396,11 @@ const routes = [
     path: '/learner/courses',
     name: 'LearnerCourses',
     component: LearnerUserCourses,
+  },
+  {
+    path: '/learner/subscription',
+    name: 'LearnerUserSubscription',
+    component: LearnerUserSubscription,
   },
   {
     path: '/course/:id',
