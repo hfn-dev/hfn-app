@@ -36,6 +36,24 @@ const selectedType = ref('Corporate');
 const selectedDetail = computed(() =>
   membershipTypes.find((type) => type.title === selectedType.value)
 );
+
+
+const showPaymentDialog = ref(false);
+
+const bankDetails = reactive({
+  bankName: 'GTBank',
+  accountName: 'Healthcare Federation Of Nigeria',
+  accountNumber: '0123456789',
+});
+
+const openPaymentDialog = () => {
+  showPaymentDialog.value = true;
+};
+
+const closePaymentDialog = () => {
+  showPaymentDialog.value = false;
+};
+  
 </script>
 
 <template>
@@ -98,6 +116,7 @@ const selectedDetail = computed(() =>
                 {{ selectedDetail.price }}
               </p>
               <button
+                @click="openPaymentDialog"
                 class="flex items-center justify-center mx-auto px-6 py-3 bg-[#006633] text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition-colors"
               >
                 Proceed to Payment
@@ -120,6 +139,86 @@ const selectedDetail = computed(() =>
           </div>
         </div>
       </main>
+      <!-- Payment Dialog -->
+<div
+  v-if="showPaymentDialog"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+>
+  <div
+    class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative animate-fadeIn"
+  >
+    <button
+      @click="closePaymentDialog"
+      class="absolute top-4 right-4 text-gray-400 hover:text-gray-700"
+    >
+      ✕
+    </button>
+
+    <div class="text-center">
+      <h2 class="text-2xl font-bold text-gray-800 mb-2">
+        Bank Transfer Details
+      </h2>
+
+      <p class="text-gray-600 mb-6">
+        Kindly transfer your subscription fee to the account below.
+      </p>
+
+      <div class="bg-gray-50 border rounded-xl p-5 space-y-4 text-left">
+        <div>
+          <p class="text-sm text-gray-500">Bank Name</p>
+          <p class="font-semibold text-gray-800">
+            {{ bankDetails.bankName }}
+          </p>
+        </div>
+
+        <div>
+          <p class="text-sm text-gray-500">Account Name</p>
+          <p class="font-semibold text-gray-800">
+            {{ bankDetails.accountName }}
+          </p>
+        </div>
+
+        <div>
+          <p class="text-sm text-gray-500">Account Number</p>
+
+          <div class="flex items-center justify-between">
+            <p class="font-bold text-2xl text-[#006633] tracking-wider">
+              {{ bankDetails.accountNumber }}
+            </p>
+
+            <button
+              @click="navigator.clipboard.writeText(bankDetails.accountNumber)"
+              class="text-sm bg-[#006633] text-white px-3 py-1 rounded-lg hover:bg-green-700"
+            >
+              Copy
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-sm text-gray-500">Membership Type</p>
+          <p class="font-semibold text-gray-800">
+            {{ selectedDetail.title }}
+          </p>
+        </div>
+
+        <div>
+          <p class="text-sm text-gray-500">Amount</p>
+          <p class="font-bold text-[#006633]">
+            {{ selectedDetail.price }}
+          </p>
+        </div>
+      </div>
+
+      <button
+        @click="closePaymentDialog"
+        class="mt-6 w-full py-3 rounded-xl bg-[#006633] text-white font-semibold hover:bg-green-700 transition"
+      >
+        I Have Made Payment
+      </button>
+    </div>
+  </div>
+</div>
     </div>
   </div>
 </template>
@@ -146,4 +245,22 @@ const selectedDetail = computed(() =>
   background-color: transparent;
   z-index: -1;
 }
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+  
+  
 </style>
