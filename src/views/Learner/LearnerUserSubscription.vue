@@ -41,9 +41,9 @@ const selectedDetail = computed(() =>
 const showPaymentDialog = ref(false);
 
 const bankDetails = reactive({
-  bankName: 'GTBank',
+  bankName: 'Zenith Bank',
   accountName: 'Healthcare Federation Of Nigeria',
-  accountNumber: '0123456789',
+  accountNumber: '1013784059',
 });
 
 const openPaymentDialog = () => {
