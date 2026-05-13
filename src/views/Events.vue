@@ -56,10 +56,10 @@
       <div v-else>
         <div v-for="(event, index) in upcomingEvents" :key="event.id || index" class="mb-12 border rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300">
           <div class="flex flex-col lg:flex-row">
-            <div class="lg:w-3/5">
+            <div class="lg:w-1/2">
               <img :src="event.image" alt="Event image" class="object-cover w-full h-full rounded-lg" />
             </div>
-            <div class="lg:w-2/5 p-6 md:p-8 flex flex-col justify-center">
+            <div class="lg:w-1/2 p-6 md:p-8 flex flex-col justify-center">
               <div class="self-start inline-block text-[10px] font-semibold uppercase text-orange-600 bg-white rounded-full px-3 py-1 shadow-sm border border-orange-100">
                 {{ event.category || 'Open Events' }}
               </div>

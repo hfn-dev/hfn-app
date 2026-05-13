@@ -69,7 +69,7 @@ export default {
     return data;
   },
   async paymentDelete(id) {
-    const { data } = await api.delete(`/payments/${id}/`);
+    const { data } = await api.delete(`/payment/${id}/`);
     return data;
   },
   async getUnpaidMembers() {
