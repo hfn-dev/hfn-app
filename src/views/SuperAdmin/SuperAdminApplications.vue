@@ -12,6 +12,8 @@ const toast = useToast();
 const applications = ref([]);
 const loading = ref(false);
 const searchQuery = ref("");
+const filterDateFrom = ref("");
+const filterDateTo = ref("");
 const currentPage = ref(1);
 const itemsPerPage = 10;
 
@@ -71,13 +73,40 @@ const fetchApplications = async () => {
   }
 };
 
+const getApplicationDate = (app) => {
+  return app.created_at || app.date_joined || null;
+};
+
+const getApplicationStatus = (app) => {
+  if (app.status) return app.status;
+  if (app.is_active === true) return "approved";
+  if (app.is_active === false) return "rejected";
+  return "pending";
+};
+
 const filteredApplications = computed(() => {
-  if (!searchQuery.value) return applications.value;
-  return applications.value.filter(
-    (app) =>
+  return applications.value.filter((app) => {
+    const matchesSearch =
+      !searchQuery.value ||
       app.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      app.email?.toLowerCase().includes(searchQuery.value.toLowerCase())
-  );
+      app.email?.toLowerCase().includes(searchQuery.value.toLowerCase());
+
+    const appDate = getApplicationDate(app);
+    let matchesDateFrom = true;
+    let matchesDateTo = true;
+
+    if (filterDateFrom.value && appDate) {
+      matchesDateFrom =
+        new Date(appDate) >= new Date(filterDateFrom.value);
+    }
+    if (filterDateTo.value && appDate) {
+      const toEnd = new Date(filterDateTo.value);
+      toEnd.setHours(23, 59, 59, 999);
+      matchesDateTo = new Date(appDate) <= toEnd;
+    }
+
+    return matchesSearch && matchesDateFrom && matchesDateTo;
+  });
 });
 
 const paginatedApplications = computed(() => {
@@ -234,7 +263,7 @@ const showSidebar = ref(false);
 const toggleSidebar = () => (showSidebar.value = !showSidebar.value);
 const closeSidebar = () => (showSidebar.value = false);
 
-watch(searchQuery, () => { currentPage.value = 1; });
+watch([searchQuery, filterDateFrom, filterDateTo], () => { currentPage.value = 1; });
 
 onMounted(() => {
   fetchApplications();
@@ -293,8 +322,8 @@ onMounted(() => {
         </div>
 
         <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
-          <div class="flex justify-end mb-6">
-            <div class="relative w-full max-w-sm">
+          <div class="flex flex-wrap gap-4 mb-6 items-center">
+            <div class="relative flex-1 min-w-[200px]">
               <Search
                 class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
               />
@@ -303,6 +332,22 @@ onMounted(() => {
                 v-model="searchQuery"
                 placeholder="Search applications..."
                 class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#00cc66] focus:border-[#00cc66] transition-colors"
+              />
+            </div>
+            <div class="flex items-center gap-2">
+              <label class="text-sm text-gray-600 whitespace-nowrap">From:</label>
+              <input
+                type="date"
+                v-model="filterDateFrom"
+                class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-[#00cc66] focus:border-[#00cc66]"
+              />
+            </div>
+            <div class="flex items-center gap-2">
+              <label class="text-sm text-gray-600 whitespace-nowrap">To:</label>
+              <input
+                type="date"
+                v-model="filterDateTo"
+                class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-[#00cc66] focus:border-[#00cc66]"
               />
             </div>
           </div>
@@ -386,27 +431,27 @@ onMounted(() => {
                   <span
                     :class="{
                       'bg-yellow-100 text-yellow-800':
-                        application.status === 'pending',
+                        getApplicationStatus(application) === 'pending',
                       'bg-green-100 text-green-800':
-                        application.status === 'approved',
+                        getApplicationStatus(application) === 'approved',
                       'bg-red-100 text-red-800':
-                        application.status === 'rejected',
+                        getApplicationStatus(application) === 'rejected',
                     }"
                     class="px-2 py-1 rounded-full text-xs font-medium"
                   >
-                    {{ application.status || "pending" }}
+                    {{ getApplicationStatus(application) }}
                   </span>
                 </td>
                 <td class="py-3 px-4 text-sm text-gray-800">
                   {{
-                    application.created_at
-                      ? new Date(application.created_at).toLocaleDateString()
+                    getApplicationDate(application)
+                      ? new Date(getApplicationDate(application)).toLocaleDateString()
                       : "-"
                   }}
                 </td>
                 <td class="py-3 px-4 text-center" @click.stop>
                   <div
-                    v-if="application.status === 'pending'"
+                    v-if="getApplicationStatus(application) === 'pending'"
                     class="flex justify-center space-x-2"
                   >
                     <button
@@ -474,7 +519,7 @@ onMounted(() => {
                     </button>
                   </div>
                   <div
-                    v-else-if="application.status === 'approved'"
+                    v-else-if="getApplicationStatus(application) === 'approved'"
                     class="flex justify-center space-x-2"
                   >
                     <span class="text-green-600 text-sm font-medium"
@@ -633,7 +678,7 @@ onMounted(() => {
             </div>
             <div>
               <p class="text-gray-500">Date Applied</p>
-              <p class="font-medium">{{ selectedApplication?.created_at ? new Date(selectedApplication.created_at).toLocaleDateString() : "-" }}</p>
+              <p class="font-medium">{{ getApplicationDate(selectedApplication) ? new Date(getApplicationDate(selectedApplication)).toLocaleDateString() : "-" }}</p>
             </div>
           </div>
           <div v-if="selectedApplication?.approved_at" class="grid grid-cols-2 gap-4">
