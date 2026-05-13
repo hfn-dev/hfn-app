@@ -112,6 +112,26 @@ export default {
     }
   },
 
+  async partialProfileUpdate(payload) {
+    try {
+      const response = await api.patch('/account/profile/update/', payload);
+      return response.data;
+    } catch (error) {
+      console.error('Update API error');
+      throw error;
+    }
+  },
+
+  async profileUpdate(payload) {
+    try {
+      const response = await api.put('/account/profile/update/', payload);
+      return response.data;
+    } catch (error) {
+      console.error('Update API error');
+      throw error;
+    }
+  },
+
   async getApplications() {
     try {
       const response = await api.get('/account/admin/individual-applications/');

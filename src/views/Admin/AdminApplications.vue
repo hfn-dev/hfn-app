@@ -69,9 +69,13 @@ const fetchApplications = async () => {
     const totalIndividual = individualData.count || individualApps.length;
     const totalCorporate = corporateData.count || corporateApps.length;
 
-    const taggedCorporate = corporateApps.map((app) => ({
+    const filteredCorporate = corporateApps.filter(
+      (app) => app.member_category === "association" || app.member_category === "corporate"
+    );
+
+    const taggedCorporate = filteredCorporate.map((app) => ({
       ...app,
-      member_category: app.member_category || "corporate",
+      member_category: "corporate",
     }));
 
     applications.value = [...individualApps, ...taggedCorporate];

@@ -1,5 +1,7 @@
 <script setup>
 import membershipAPI from "@/api/membership.js";
+import userList from "@/api/userRegister.js";
+
 import DashboardLoader from "@/components/layout/DashboardLoader.vue";
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import { ChevronLeft, ChevronRight, Search } from "lucide-vue-next";
@@ -54,7 +56,7 @@ const fetchApplications = async () => {
         search: searchQuery.value,
         page: currentPage.value,
       }),
-      membershipAPI.getUserList({
+      userList.getUserList({
         search: searchQuery.value,
         page: currentPage.value,
       }),
@@ -65,9 +67,13 @@ const fetchApplications = async () => {
     const totalIndividual = individualData.count || individualApps.length;
     const totalCorporate = corporateData.count || corporateApps.length;
 
-    const taggedCorporate = corporateApps.map((app) => ({
+    const filteredCorporate = corporateApps.filter(
+      (app) => app.member_category === "association" || app.member_category === "corporate"
+    );
+
+    const taggedCorporate = filteredCorporate.map((app) => ({
       ...app,
-      member_category: app.member_category || "corporate",
+      member_category: "corporate",
     }));
 
     applications.value = [...individualApps, ...taggedCorporate];
