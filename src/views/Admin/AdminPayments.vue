@@ -314,7 +314,7 @@ const confirmDelete = async () => {
 
   try {
     loading.value = true;
-    await paymentApi.removePayment(payment.id);
+    await paymentApi.paymentDelete(payment.id);
     toast.success("Payment deleted successfully");
     closeDeleteDialog();
     fetchPayments();
@@ -449,7 +449,7 @@ const statCards1 = computed(() => {
       changeColor: "text-gray-500",
     },
     {
-      title: "Total Signups",
+      title: "Total New Signups",
       value: dashboardStats.value.newSignups,
       change: "—",
       changeColor: "text-gray-500",

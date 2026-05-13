@@ -495,7 +495,7 @@ onMounted(async () => {
           </div>
         </div>
 
-        <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-sm h-fit">
+        <!-- <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-sm h-fit">
           <h2 class="text-xl font-semibold text-gray-800 mb-4">
             Most Viewed Courses
           </h2>
@@ -513,7 +513,7 @@ onMounted(async () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </main>
   </div>

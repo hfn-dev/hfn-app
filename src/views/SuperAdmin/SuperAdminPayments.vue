@@ -314,7 +314,7 @@ const confirmDelete = async () => {
 
   try {
     loading.value = true;
-    await paymentApi.removePayment(payment.id);
+    await paymentApi.paymentDelete(payment.id);
     toast.success("Payment deleted successfully");
     closeDeleteDialog();
     fetchPayments();
