@@ -13,7 +13,6 @@ const applications = ref([]);
 const loading = ref(false);
 const searchQuery = ref("");
 const currentPage = ref(1);
-const totalPages = ref(1);
 const itemsPerPage = 10;
 
 const showRejectModal = ref(false);
@@ -52,32 +51,18 @@ const fetchApplications = async () => {
   loading.value = true;
   try {
     const [individualData, corporateData] = await Promise.all([
-      membershipAPI.listApplications({
-        search: searchQuery.value,
-        page: currentPage.value,
-      }),
-      userList.getUserList({
-        search: searchQuery.value,
-        page: currentPage.value,
-      }),
+      membershipAPI.listApplications(),
+      userList.getCorporateUsers(),
     ]);
 
-    const individualApps = individualData.results || individualData.data || [];
-    const corporateApps = corporateData.results || corporateData.data || [];
-    const totalIndividual = individualData.count || individualApps.length;
-    const totalCorporate = corporateData.count || corporateApps.length;
+    const individualApps = individualData?.results || individualData?.data || (Array.isArray(individualData) ? individualData : []);
+    const corporateApps = corporateData?.results || corporateData?.data || (Array.isArray(corporateData) ? corporateData : []);
 
     const filteredCorporate = corporateApps.filter(
       (app) => app.member_category === "association" || app.member_category === "corporate"
     );
 
-    const taggedCorporate = filteredCorporate.map((app) => ({
-      ...app,
-      member_category: "corporate",
-    }));
-
-    applications.value = [...individualApps, ...taggedCorporate];
-    totalPages.value = Math.ceil((totalIndividual + totalCorporate) / itemsPerPage) || 1;
+    applications.value = [...individualApps, ...filteredCorporate];
   } catch (error) {
     console.error("Failed to fetch applications:", error);
     toast.error("Failed to load applications");
@@ -94,6 +79,13 @@ const filteredApplications = computed(() => {
       app.email?.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
 });
+
+const paginatedApplications = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  return filteredApplications.value.slice(start, start + itemsPerPage);
+});
+
+const totalPages = computed(() => Math.ceil(filteredApplications.value.length / itemsPerPage) || 1);
 
 const openRejectModal = (application) => {
   selectedApplication.value = application;
@@ -242,7 +234,7 @@ const showSidebar = ref(false);
 const toggleSidebar = () => (showSidebar.value = !showSidebar.value);
 const closeSidebar = () => (showSidebar.value = false);
 
-watch(searchQuery, fetchApplications);
+watch(searchQuery, () => { currentPage.value = 1; });
 
 onMounted(() => {
   fetchApplications();
@@ -316,7 +308,7 @@ onMounted(() => {
           </div>
 
           <div
-            v-if="filteredApplications.length === 0"
+            v-if="paginatedApplications.length === 0"
             class="text-center py-12 text-gray-500"
           >
             No applications found
@@ -364,7 +356,7 @@ onMounted(() => {
             </thead>
             <tbody class="divide-y divide-gray-200">
 <tr
-  v-for="application in filteredApplications"
+                  v-for="application in paginatedApplications"
   :key="application.id"
   class="hover:bg-gray-50 cursor-pointer"
   @click="openDetailsModal(application)"
@@ -522,10 +514,7 @@ onMounted(() => {
             <span class="mr-4">Page {{ currentPage }} of {{ totalPages }}</span>
             <div class="flex space-x-2">
               <button
-                @click="
-                  currentPage--;
-                  fetchApplications();
-                "
+                @click="currentPage--"
                 :disabled="currentPage === 1"
                 :class="{ 'opacity-50 cursor-not-allowed': currentPage === 1 }"
                 class="p-2 border rounded-full hover:bg-gray-100 transition-colors"
@@ -533,10 +522,7 @@ onMounted(() => {
                 <ChevronLeft class="w-4 h-4" />
               </button>
               <button
-                @click="
-                  currentPage++;
-                  fetchApplications();
-                "
+                @click="currentPage++"
                 :disabled="currentPage === totalPages"
                 :class="{
                   'opacity-50 cursor-not-allowed': currentPage === totalPages,
