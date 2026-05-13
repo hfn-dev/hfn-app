@@ -291,6 +291,18 @@ const handleRegistration = async () => {
       toast.success(response.messages?.[0] || "Registration successful!");
 
       if (response.actions_required?.includes("verify_email")) {
+        if (response.actions_required?.includes("make_payment") && selectedCategory.value) {
+          localStorage.setItem(
+            "membership_payment",
+            JSON.stringify({
+              category_id: selectedCategory.value.id,
+              category_name: selectedCategory.value.name,
+              amount: selectedCategory.value.amount,
+              currency: selectedCategory.value.currency,
+              email: payload.email,
+            })
+          );
+        }
         localStorage.setItem("pendingVerificationEmail", payload.email);
         router.push("/signinverification");
         isLoading.value = false;

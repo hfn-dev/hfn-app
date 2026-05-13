@@ -15,7 +15,6 @@ const applications = ref([]);
 const loading = ref(false);
 const searchQuery = ref("");
 const currentPage = ref(1);
-const totalPages = ref(1);
 const itemsPerPage = 10;
 
 const showRejectModal = ref(false);
@@ -53,12 +52,24 @@ const fetchMembershipTypes = async () => {
 const fetchApplications = async () => {
   loading.value = true;
   try {
-    const data = await membershipAPI.listApplications({
-      search: searchQuery.value,
-      page: currentPage.value,
-    });
-    applications.value = data.results || data.data || data || [];
-    totalPages.value = Math.ceil((data.count || applications.value.length) / itemsPerPage) || 1;
+    const [individualData, corporateData] = await Promise.all([
+      membershipAPI.listApplications(),
+      membershipAPI.listCorporateApplications(),
+    ]);
+
+    const individualApps = individualData.results || individualData.data || [];
+    const corporateApps = corporateData.results || corporateData.data || [];
+
+    const filteredCorporate = corporateApps.filter(
+      (app) => app.member_category === "association" || app.member_category === "corporate"
+    );
+
+    const taggedCorporate = filteredCorporate.map((app) => ({
+      ...app,
+      member_category: "corporate",
+    }));
+
+    applications.value = [...individualApps, ...taggedCorporate];
   } catch (error) {
     console.error("Failed to fetch applications:", error);
     toast.error("Failed to load applications");
@@ -74,6 +85,13 @@ const filteredApplications = computed(() => {
     app.email?.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
 });
+
+const paginatedApplications = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  return filteredApplications.value.slice(start, start + itemsPerPage);
+});
+
+const totalPages = computed(() => Math.ceil(filteredApplications.value.length / itemsPerPage) || 1);
 
 const openRejectModal = (application) => {
   selectedApplication.value = application;
@@ -217,7 +235,7 @@ const showSidebar = ref(false);
 const toggleSidebar = () => (showSidebar.value = !showSidebar.value);
 const closeSidebar = () => (showSidebar.value = false);
 
-watch(searchQuery, fetchApplications);
+watch(searchQuery, () => { currentPage.value = 1; });
 
 onMounted(() => {
   fetchApplications();
@@ -290,7 +308,7 @@ onMounted(() => {
             </div>
           </div>
 
-          <div v-if="filteredApplications.length === 0" class="text-center py-12 text-gray-500">
+          <div v-if="paginatedApplications.length === 0" class="text-center py-12 text-gray-500">
             No applications found
           </div>
 
@@ -308,13 +326,13 @@ onMounted(() => {
             </thead>
             <tbody class="divide-y divide-gray-200">
 <tr
-  v-for="application in filteredApplications"
+                  v-for="application in paginatedApplications"
   :key="application.id"
   class="hover:bg-gray-50 cursor-pointer"
   @click="openDetailsModal(application)"
 >
                 <td class="py-3 px-4 text-sm text-gray-800">
-                  {{ application.name || application.first_name + ' ' + application.last_name }}
+                  {{ application.name || application.first_name + ' ' + application.last_name || application.company_name }}
                 </td>
                 <td class="py-3 px-4 text-sm text-gray-800">
                   {{ application.email }}
@@ -412,7 +430,7 @@ onMounted(() => {
             <span class="mr-4">Page {{ currentPage }} of {{ totalPages }}</span>
             <div class="flex space-x-2">
               <button
-                @click="currentPage--; fetchApplications()"
+                @click="currentPage--"
                 :disabled="currentPage === 1"
                 :class="{ 'opacity-50 cursor-not-allowed': currentPage === 1 }"
                 class="p-2 border rounded-full hover:bg-gray-100 transition-colors"
@@ -420,7 +438,7 @@ onMounted(() => {
                 <ChevronLeft class="w-4 h-4" />
               </button>
               <button
-                @click="currentPage++; fetchApplications()"
+                @click="currentPage++"
                 :disabled="currentPage === totalPages"
                 :class="{ 'opacity-50 cursor-not-allowed': currentPage === totalPages }"
                 class="p-2 border rounded-full hover:bg-gray-100 transition-colors"

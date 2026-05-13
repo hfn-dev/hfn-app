@@ -16,6 +16,9 @@ const interests = reactive([]);
 const certificates = ref([]);
 const certificateUrl = ref('');
 const isOtherDetailsEditing = ref(false);
+const profileImage = ref(null);
+const selectedFile = ref(null);
+const isUploading = ref(false);
 
 const isOrgEditing = ref(false);
 
@@ -276,15 +279,77 @@ const toggleIndividualEdit = async () => {
   isIndividualEditing.value = true;
 };
   
-const toggleOtherDetailsEdit = () => {
-  if (isOtherDetailsEditing.value) {
-    console.log(
-      'Saving Other Details:',
-      JSON.parse(JSON.stringify(otherDetails))
-    );
+const onProfileImageSelect = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  if (!["image/jpeg", "image/png"].includes(file.type)) {
+    toast.error("Only JPG and PNG files are allowed");
+    return;
   }
-  isOtherDetailsEditing.value = !isOtherDetailsEditing.value;
+
+  if (file.size > 2 * 1024 * 1024) {
+    toast.error("File size must be less than 2MB");
+    return;
+  }
+
+  selectedFile.value = file;
+  profileImage.value = URL.createObjectURL(file);
 };
+
+const uploadProfileImage = async () => {
+  if (!selectedFile.value) return;
+
+  try {
+    isUploading.value = true;
+    const formData = new FormData();
+    formData.append("profile", selectedFile.value);
+    const response = await authApi.uploadProfileImage(formData);
+    profileImage.value = response.profile;
+    selectedFile.value = null;
+    toast.success("Profile picture updated successfully");
+  } catch (err) {
+    toast.error("Failed to upload profile picture");
+  } finally {
+    isUploading.value = false;
+  }
+};
+
+const toggleOtherDetailsEdit = async () => {
+  if (isOtherDetailsEditing.value) {
+    try {
+      const payload = {
+        addressLine1: otherDetails.addressLine1,
+        addressLine2: otherDetails.addressLine2,
+        state: otherDetails.state,
+        country: otherDetails.country,
+        description: otherDetails.description,
+        organization: otherDetails.organization,
+        job_title: otherDetails.job_title,
+        professional_license: otherDetails.professional_license,
+        years_of_experience: otherDetails.years_of_experience,
+        specialization: otherDetails.specialization,
+        bio: otherDetails.bio,
+        address: otherDetails.address,
+        city: otherDetails.city,
+        linkedin_url: otherDetails.linkedin_url,
+        twitter_handle: otherDetails.twitter_handle,
+      };
+      await authApi.partialProfileUpdate(payload);
+      toast.success("Profile updated successfully");
+      isOtherDetailsEditing.value = false;
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to update profile");
+    }
+    return;
+  }
+  isOtherDetailsEditing.value = true;
+};
+
+const isProfileIncomplete = computed(() => {
+  const fields = ['organization', 'job_title', 'specialization', 'bio', 'address', 'city', 'state', 'country'];
+  return fields.some(f => !otherDetails[f]);
+});
 
 const sendInvitation = (id) => {
   const invite = invitations.find((i) => i.id === id);
@@ -334,6 +399,17 @@ const fetchUserData = async () => {
       otherDetails.state = data.profile.state || '';
       otherDetails.country = data.profile.country || '';
       otherDetails.description = data.profile.description || '';
+      otherDetails.organization = data.profile.organization || '';
+      otherDetails.job_title = data.profile.job_title || '';
+      otherDetails.professional_license = data.profile.professional_license || '';
+      otherDetails.years_of_experience = data.profile.years_of_experience ?? null;
+      otherDetails.specialization = data.profile.specialization || '';
+      otherDetails.bio = data.profile.bio || '';
+      otherDetails.address = data.profile.address || '';
+      otherDetails.city = data.profile.city || '';
+      otherDetails.linkedin_url = data.profile.linkedin_url || '';
+      otherDetails.twitter_handle = data.profile.twitter_handle || '';
+      profileImage.value = data.profile.profile_picture || data.profile.profile || null;
       certificateUrl.value = data.profile.certificateUrl || '';
       interests.splice(0, interests.length, ...(data.profile.interests || []));
     }
@@ -488,6 +564,12 @@ onMounted(() => {
           </div>
 
           <div v-else class="p-6 bg-white rounded-xl shadow-lg space-y-8">
+            <div v-if="isProfileIncomplete" class="bg-amber-50 border border-amber-300 text-amber-800 px-4 py-3 rounded-lg flex items-center gap-2">
+              <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+              </svg>
+              <span>Kindly complete your profile details to proceed. Fill in all required fields in the <strong>Other Details</strong> section below.</span>
+            </div>
             <div class="flex justify-between items-center mb-6">
               <h2 class="text-xl font-semibold">My Personal Profile</h2>
               <button @click="toggleIndividualEdit" :class="isIndividualEditing
@@ -501,8 +583,9 @@ onMounted(() => {
             <div class="grid md:grid-cols-2 gap-8">
               <div class="flex flex-col items-center p-6 border border-gray-200 rounded-xl bg-gray-50">
                 <div
-                  class="w-24 h-24 bg-white border border-gray-300 rounded-full flex items-center justify-center mb-3 shadow-inner">
-                  <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                  class="w-24 h-24 bg-white border border-gray-300 rounded-full flex items-center justify-center mb-3 shadow-inner overflow-hidden">
+                  <img v-if="profileImage" :src="profileImage" class="w-full h-full object-cover" alt="Profile" />
+                  <svg v-else class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -514,15 +597,15 @@ onMounted(() => {
                 </span>
 
                 <div class="flex space-x-3">
-                  <button
-                    class="px-4 py-2 text-sm text-green-800 bg-white hover:bg-gray-100 border border-gray-300 rounded-lg shadow-sm transition duration-150">
-                    Save
+                  <button @click="uploadProfileImage" :disabled="!selectedFile || isUploading"
+                    class="px-4 py-2 text-sm text-green-800 bg-white hover:bg-gray-100 border border-gray-300 rounded-lg shadow-sm transition duration-150 disabled:opacity-50">
+                    {{ isUploading ? "Saving..." : "Save" }}
                   </button>
                   <label for="profilePicUpload"
                     class="px-4 py-2 text-sm text-white bg-[#0c6b39] hover:bg-[#09572d] rounded-lg shadow-md cursor-pointer transition duration-150">
                     Upload
                   </label>
-                  <input type="file" id="profilePicUpload" class="hidden" accept=".jpg,.png,.jpeg" />
+                  <input type="file" id="profilePicUpload" class="hidden" accept=".jpg,.png,.jpeg" @change="onProfileImageSelect" />
                 </div>
               </div>
 
@@ -592,6 +675,55 @@ onMounted(() => {
               </button>
             </div>
             <div class="space-y-4">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input type="text" placeholder="Organization" v-model="otherDetails.organization"
+                  :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
+                      ? 'bg-white border-gray-400'
+                      : 'bg-gray-50 border-gray-300'
+                    "
+                  class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
+                <input type="text" placeholder="Job Title" v-model="otherDetails.job_title"
+                  :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
+                      ? 'bg-white border-gray-400'
+                      : 'bg-gray-50 border-gray-300'
+                    "
+                  class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
+                <input type="text" placeholder="Professional License" v-model="otherDetails.professional_license"
+                  :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
+                      ? 'bg-white border-gray-400'
+                      : 'bg-gray-50 border-gray-300'
+                    "
+                  class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="number" placeholder="Years of Experience" v-model="otherDetails.years_of_experience"
+                  :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
+                      ? 'bg-white border-gray-400'
+                      : 'bg-gray-50 border-gray-300'
+                    "
+                  class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
+                <input type="text" placeholder="Specialization" v-model="otherDetails.specialization"
+                  :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
+                      ? 'bg-white border-gray-400'
+                      : 'bg-gray-50 border-gray-300'
+                    "
+                  class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
+              </div>
+
+              <textarea rows="3" placeholder="Bio" v-model="otherDetails.bio"
+                :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
+                    ? 'bg-white border-gray-400'
+                    : 'bg-gray-50 border-gray-300'
+                  "
+                class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green resize-none transition duration-150"></textarea>
+
+              <input type="text" placeholder="Address" v-model="otherDetails.address"
+                :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
+                    ? 'bg-white border-gray-400'
+                    : 'bg-gray-50 border-gray-300'
+                  "
+                class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
               <input type="text" placeholder="Address Line 1" v-model="otherDetails.addressLine1"
                 :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
                     ? 'bg-white border-gray-400'
@@ -606,6 +738,12 @@ onMounted(() => {
                 class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" placeholder="City" v-model="otherDetails.city"
+                  :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
+                      ? 'bg-white border-gray-400'
+                      : 'bg-gray-50 border-gray-300'
+                    "
+                  class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
                 <select v-model="otherDetails.state" :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
                     ? 'bg-white border-gray-400'
                     : 'bg-gray-50 border-gray-300'
@@ -614,6 +752,9 @@ onMounted(() => {
                   <option value="">Select Option (State)</option>
                   <option value="Mock State">Mock State</option>
                 </select>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <select v-model="otherDetails.country" :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
                     ? 'bg-white border-gray-400'
                     : 'bg-gray-50 border-gray-300'
@@ -622,7 +763,20 @@ onMounted(() => {
                   <option value="">Select Option (Country)</option>
                   <option value="Mock Country">Mock Country</option>
                 </select>
+                <input type="url" placeholder="LinkedIn URL" v-model="otherDetails.linkedin_url"
+                  :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
+                      ? 'bg-white border-gray-400'
+                      : 'bg-gray-50 border-gray-300'
+                    "
+                  class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
               </div>
+
+              <input type="text" placeholder="Twitter Handle" v-model="otherDetails.twitter_handle"
+                :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
+                    ? 'bg-white border-gray-400'
+                    : 'bg-gray-50 border-gray-300'
+                  "
+                class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
 
               <textarea rows="3" placeholder="Brief Description" v-model="otherDetails.description"
                 :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing

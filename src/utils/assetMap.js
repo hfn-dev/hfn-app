@@ -18,4 +18,4 @@ export const assetMap = {
   hfn_partner: hfnPartner,
 };
 
-export const resolveAsset = (key) => assetMap[key] || '';
+export const resolveAsset = (key) => assetMap[key] || key || '';
