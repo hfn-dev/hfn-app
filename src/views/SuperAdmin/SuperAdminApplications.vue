@@ -49,13 +49,29 @@ const fetchMembershipTypes = async () => {
 const fetchApplications = async () => {
   loading.value = true;
   try {
-    const data = await membershipAPI.listApplications({
-      search: searchQuery.value,
-      page: currentPage.value,
-    });
-    applications.value = data.results || data.data || data || [];
-    totalPages.value =
-      Math.ceil((data.count || applications.value.length) / itemsPerPage) || 1;
+    const [individualData, corporateData] = await Promise.all([
+      membershipAPI.listApplications({
+        search: searchQuery.value,
+        page: currentPage.value,
+      }),
+      membershipAPI.getUserList({
+        search: searchQuery.value,
+        page: currentPage.value,
+      }),
+    ]);
+
+    const individualApps = individualData.results || individualData.data || [];
+    const corporateApps = corporateData.results || corporateData.data || [];
+    const totalIndividual = individualData.count || individualApps.length;
+    const totalCorporate = corporateData.count || corporateApps.length;
+
+    const taggedCorporate = corporateApps.map((app) => ({
+      ...app,
+      member_category: app.member_category || "corporate",
+    }));
+
+    applications.value = [...individualApps, ...taggedCorporate];
+    totalPages.value = Math.ceil((totalIndividual + totalCorporate) / itemsPerPage) || 1;
   } catch (error) {
     console.error("Failed to fetch applications:", error);
     toast.error("Failed to load applications");
@@ -350,7 +366,8 @@ onMounted(() => {
                 <td class="py-3 px-4 text-sm text-gray-800">
                   {{
                     application.name ||
-                    application.first_name + " " + application.last_name
+                    application.first_name + " " + application.last_name ||
+                    application.company_name
                   }}
                 </td>
                 <td class="py-3 px-4 text-sm text-gray-800">

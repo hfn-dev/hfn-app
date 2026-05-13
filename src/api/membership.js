@@ -58,15 +58,15 @@ export default {
   },
 
 
-  // async listApplications(params = {}) {
-  //   try {
-  //     const response = await api.get("/membership/applications/", { params });
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error("List applications API error:", error);
-  //     throw error;
-  //   }
-  // },
+  async listCorporateApplications(params = {}) {
+    try {
+      const response = await api.get("/membership/applications/", { params });
+      return response.data;
+    } catch (error) {
+      console.error("List applications API error:", error);
+      throw error;
+    }
+  },
   async listApplications(params = {}) {
     try {
       const response = await api.get("/account/admin/individual-applications/", { params });
