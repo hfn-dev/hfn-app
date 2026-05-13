@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch } from "vue";
+import { resolveAsset } from "@/utils/assetMap";
 
 const props = defineProps({
   modelValue: Array
@@ -30,6 +31,12 @@ const addPartnerLogo = () => {
 
 const removePartnerLogo = (index) => {
   currentSectionData.value.logos.splice(index, 1);
+};
+
+const logoPreview = (key) => {
+  if (!key) return '';
+  const resolved = resolveAsset(key);
+  return resolved || key;
 };
 
 
@@ -71,6 +78,15 @@ const removePartnerLogo = (index) => {
                   :key="index"
                   class="flex items-center space-x-3 border rounded p-2"
                 >
+                  <div class="w-12 h-12 shrink-0 bg-gray-100 rounded overflow-hidden flex items-center justify-center">
+                    <img
+                      v-if="logoPreview(logo)"
+                      :src="logoPreview(logo)"
+                      alt="preview"
+                      class="max-w-full max-h-full object-contain"
+                      @error="$event.target.style.display = 'none'"
+                    />
+                  </div>
                   <input
                     v-model="currentSectionData.logos[index]"
                     type="text"
@@ -79,7 +95,7 @@ const removePartnerLogo = (index) => {
                   />
 
                   <button
-                    class="text-red-500 text-sm"
+                    class="text-red-500 text-sm shrink-0"
                     @click="removePartnerLogo(index)"
                   >
                     Remove
