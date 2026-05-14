@@ -403,7 +403,42 @@ const fetchUserData = async () => {
       otherDetails.twitter_handle = data.profile.twitter_handle || '';
       profileImage.value = data.profile.profile_picture || data.profile.profile || null;
       certificateUrl.value = data.profile.certificateUrl || '';
-      interests.splice(0, interests.length, ...(data.profile.interests || []));
+      // interests.splice(0, interests.length, ...(data.profile.interests || []));
+      const defaultInterests = [
+    {
+      id: 1,
+      name: "policy",
+      selected: false,
+      isMainCategory: false,
+    },
+    {
+      id: 2,
+      name: "healthcare",
+      selected: false,
+      isMainCategory: false,
+    },
+    {
+      id: 3,
+      name: "advocacy",
+      selected: false,
+      isMainCategory: false,
+    },
+    {
+      id: 4,
+      name: "leadership",
+      selected: false,
+      isMainCategory: false,
+    },
+  ];
+
+  const profileInterests =
+    Array.isArray(data.profile.interests) &&
+    data.profile.interests.length > 0
+      ? data.profile.interests
+      : defaultInterests;
+
+  interests.splice(0, interests.length, ...profileInterests);
+      
     }
 
     subscription.hasSubscription = data.is_active;
