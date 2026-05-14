@@ -12,7 +12,7 @@ const router = useRouter();
 const isOrganization = ref(false);
 const orgDetails = reactive({});
 const otherDetails = reactive({});
-const interests = reactive([]);
+const interests = ref([]);
 const certificates = ref([]);
 const certificateUrl = ref('');
 const isOtherDetailsEditing = ref(false);
@@ -207,9 +207,16 @@ const invitations = reactive([
 
 
 
+// const selectedInterestsCount = computed(
+//   () => interests.filter((i) => i.selected && !i.isMainCategory).length
+// );
 const selectedInterestsCount = computed(
-  () => interests.filter((i) => i.selected && !i.isMainCategory).length
+  () =>
+    interests.value.filter(
+      (i) => i.selected && !i.isMainCategory
+    ).length
 );
+  
 
 const toggleOrgEdit = () => {
   if (isOrgEditing.value) {
@@ -360,7 +367,7 @@ const removeInvitation = (id) => {
 };
 
 const toggleInterest = (id) => {
-  const item = interests.find((i) => i.id === id);
+  const item = interests.value.find((i) => i.id === id);
 
   if (item && !item.isMainCategory) {
     const willBeSelected = !item.selected;
@@ -437,8 +444,7 @@ const fetchUserData = async () => {
       ? data.profile.interests
       : defaultInterests;
 
-  interests.splice(0, interests.length, ...profileInterests);
-      
+     interests.value = profileInterests;      
     }
 
     subscription.hasSubscription = data.is_active;
@@ -822,7 +828,7 @@ onMounted(() => {
             </p>
 
             <div class="flex flex-wrap gap-3">
-              <button v-for="interest in interests" :key="interest.id" @click="toggleInterest(interest.id)" :disabled="!interest.selected &&
+              <button v-for="interest in interests.value" :key="interest.id" @click="toggleInterest(interest.id)" :disabled="!interest.selected &&
                 selectedInterestsCount >= 4 &&
                 !interest.isMainCategory
                 " :class="{
