@@ -221,15 +221,7 @@ const toggleOrgEdit = () => {
   isOrgEditing.value = !isOrgEditing.value;
 };
 
-// const toggleIndividualEdit = () => {
-//   if (isIndividualEditing.value) {
-//     console.log(
-//       'Saving Individual Details:',
-//       JSON.parse(JSON.stringify(individualDetails))
-//     );
-//   }
-//   isIndividualEditing.value = !isIndividualEditing.value;
-// };
+
 const toggleIndividualEdit = async () => {
   if (isIndividualEditing.value) {
     // Validate first
@@ -323,7 +315,7 @@ const toggleOtherDetailsEdit = async () => {
         addressLine2: otherDetails.addressLine2,
         state: otherDetails.state,
         country: otherDetails.country,
-        description: otherDetails.description,
+        // description: otherDetails.description,
         organization: otherDetails.organization,
         job_title: otherDetails.job_title,
         professional_license: otherDetails.professional_license,
