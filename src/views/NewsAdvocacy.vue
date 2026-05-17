@@ -124,6 +124,10 @@
               </span>
             </p>
 
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+              {{ article.title }}
+            </h3>
+
             <p class="text-gray-700 text-base mb-4">
               {{ article.excerpt }}
             </p>
