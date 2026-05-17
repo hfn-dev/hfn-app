@@ -55,8 +55,8 @@
         </div>
         
         <div v-else class="prose max-w-none text-gray-700 leading-relaxed space-y-4">
-          <p>
-            {{ blog?.description }}
+          <p v-for="(paragraph, idx) in paragraphs" :key="idx">
+            {{ paragraph }}
           </p>
         </div>
 
@@ -141,6 +141,11 @@ import wef from "@/assets/wef.jpg";
 import newsModule from "@/api/newsModule";
 
 const blog = ref(null);
+
+const paragraphs = computed(() => {
+  if (!blog.value?.description) return [];
+  return blog.value.description.split(/\n+/).filter(p => p.trim() !== '');
+});
 
 const fetchSingleArticle = async () => {
   try {
