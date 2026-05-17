@@ -692,22 +692,26 @@ onUnmounted(() => {
             </span>
           </div>
 
-          <div class="p-6">
-            <div
-              class="flex items-center text-sm text-orange-600 mb-3 space-x-4"
-            >
-              <span class="flex items-center gap-1">
-                <i class="fa-regular fa-calendar"></i> {{ featured.date }}
-              </span>
-              <span class="flex items-center gap-1">
-                <i class="fa-regular fa-comments"></i>
-                {{ featured.comments }} Comment
-              </span>
-            </div>
+            <div class="p-6">
+              <div
+                class="flex items-center text-sm text-orange-600 mb-3 space-x-4"
+              >
+                <span class="flex items-center gap-1">
+                  <i class="fa-regular fa-calendar"></i> {{ featured.date }}
+                </span>
+                <span class="flex items-center gap-1">
+                  <i class="fa-regular fa-comments"></i>
+                  {{ featured.comments }} Comment
+                </span>
+              </div>
 
-            <p class="text-gray-700 mb-6">
-              {{ featured.description || featured.excerpt }}
-            </p>
+              <h3 class="text-xl font-bold text-gray-900 mb-3">
+                {{ featured.title }}
+              </h3>
+
+              <p class="text-gray-700 mb-6">
+                {{ featured.description || featured.excerpt }}
+              </p>
 
             <RouterLink
               v-if="featured?.slug"
