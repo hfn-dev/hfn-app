@@ -114,52 +114,7 @@ The roundtable reinforced the urgency of collaborative investment and structured
         slug: 'ncdc-private-sector-engagement-roundtable',
         tag: 'News',
       },
-      {
-        id: 4,
-        created_at: '2025-12-01',
-        title:
-          'Driving Nigeria Toward Universal Health Coverage - 1st December, 2025',
-        excerpt:
-          'Driving Nigeria Toward Universal Health Coverage: A Landmark HFN–NHIA Private Sector Roundtable, theme: Leveraging the Private Sector to Accelerate Health Insurance Coverage in Nigeria - 1st December, 2025',
-        image:
-          'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769715457/16268da44f149e859e5069f5fcdbf9fb_S_j9rsms.jpg',
-        date: 'December 1, 2025',
-        description: `The Healthcare Federation of Nigeria (HFN), in partnership with the  National Health Insurance Authority (NHIA),hosted a high-impact Private Sector Roundtable Breakfast Meeting today in Lagos. More than a stakeholder engagement, the event marked a decisive step in reshaping Nigeria’s health insurance landscape, uniting participants around one shared ambition: accelerating coverage through bold private sector leadership.
-
-The session featured a strong in-person turnout and an equally engaged virtual audience from across the globe. Key participants included: Dr Kelechi Ohiri(Director General, NHIA), Wale-Smatt Oyerinde, MCIPM, FMINILS (Director General, NECA), ably represented, Dr Leke Oshunniyi (Chairman, HMCAN), Dr Funmi Adewara (CEO & Founder, Mobihealth International), Dr Segun Ebitanmi (CEO, CareOne Digital Hospitals), Dr Yetunde Ayo-Oyalowo (CEO & Founder, Market Doctors), and Muhammed Gidado (Medtronic)
-
-The dialogue highlighted the ecosystem’s collective commitment to transforming Nigeria’s health financing future.
- Key Takeaways
-
-• Strong Policy Direction from NHIA
-Dr. Kelechi Ohiri provided a clear roadmap for expanded health coverage, ranging from enforcing mandatory insurance, rebuilding trust, deepening awareness, and innovating models to reach the informal sector. His commitment to co-creating solutions with the private sector was both actionable and appreciated.
-
-• Private Sector Mobilisation Led by HFN
-HFN President and Country Director PharmAccess Nigeria, Njide Ndili, reinforced the critical role of private sector collaboration, highlighting:
-⚡ HFN’s inclusion in the UHC Compact
-⚡ New strategic MOUs
-⚡ The importance of private sector accountability in system strengthening
-Her call to move from “pointing fingers” to “co-creating solutions” set the tone for a highly productive dialogue.
-
-The session produced a consensus on strategic priorities:
-
-• Enforcing Mandatory Health Insurance with clear mechanisms and timelines
-• Digital Enablement at Scale, including interagency data sharing and unified APIs
-• Innovative Micro-Insurance Models for Nigeria’s informal sector
-• Strengthening PHC Systems in collaboration with ALGON and state PHC agencies
-• Domestic Resource Mobilisation, leveraging fintechs, PPPs, and tax mechanisms
-• Quality and Trust Building through SafeCare standards and improved patient experience
-• Structured Public–Private Engagement, with HFN as a central coordinating hub
-
-A Technical Working Group will be set up with some Clear deliverables to be achieved in 2026
-
-We extend our appreciation to Dr Kelechi Ohiri and the NHIA team for their leadership, clarity, and collaborative spirit. Our valued partners and sponsors, Health and Managed Care Association of Nigeria - HMCAN, Medtronic, and AIICO Multishield Limited
-`,
-        commentCount: 0,
-        link: '/news/lagos-emergency-partnership',
-        slug: 'driving-nigeria-toward-universal-health',
-        tag: 'News',
-      },
+      
     ],
     pagination: {
       currentPage: 1,
