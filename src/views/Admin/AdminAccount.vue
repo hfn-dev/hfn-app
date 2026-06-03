@@ -1,10 +1,8 @@
 <script setup>
-import cert from "@/assets/cert.png";
-import sign from "@/assets/sign.png";
-import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
-import { computed, reactive, ref, onMounted } from "vue";
-import { useToast } from "vue-toastification";
 import accessApi from "@/api/userRegister";
+import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
+import { computed, onMounted, reactive, ref } from "vue";
+import { useToast } from "vue-toastification";
 
 const toast = useToast();
 const currentView = ref("My Profile");
@@ -242,7 +240,7 @@ const closeSidebar = () => (showSidebar.value = false);
   <div class="flex flex-col lg:flex-row min-h-screen font-sans relative">
     <button
       @click="toggleSidebar"
-      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+      class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

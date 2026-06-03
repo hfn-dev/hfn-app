@@ -117,7 +117,7 @@ const resolveImage = (image) => imageMap[image] || image;
 </script>
 <template>
   <div>
-    <section v-if="!page.hero?.is_hidden" class="relative bg-green-50 pb-16 pt-16 sm:pb-24 overflow-hidden">
+    <section v-if="!page.hero?.is_hidden" :style="{ backgroundColor: page.hero.backgroundColor || '#f0f7f5' }" class="relative pb-16 pt-16 sm:pb-24 overflow-hidden">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="lg:grid lg:grid-cols-12 lg:gap-12 items-center">
           <div class="lg:col-span-6 xl:col-span-5 mb-10 lg:mb-0">

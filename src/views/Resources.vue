@@ -1,6 +1,6 @@
 <template>
   <div class="news-page font-sans bg-white">
-    <section v-if="!page.hero?.is_hidden" class="bg-[#E87A1814] pt-10 pb-16" :style="{ backgroundColor: page.hero.backgroundColor || '#E87A1814' }">
+    <section v-if="!page.hero?.is_hidden" :style="{ backgroundColor: page.hero.backgroundColor || '#E87A1814' }" class="pt-10 pb-16">
       <div class="container mx-auto px-4 md:px-8">
         <div
           class="flex flex-col lg:flex-row items-start lg:items-center justify-between"

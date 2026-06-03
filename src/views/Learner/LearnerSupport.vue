@@ -1,13 +1,16 @@
 <script setup>
 import ticketApi from '@/api/tickets.js';
-import LearnerSidebar from './LearnerSidebar.vue';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useToast } from 'vue-toastification';
+import LearnerSidebar from './LearnerSidebar.vue';
 import TicketDetail from './TicketDetail.vue';
 
 const activeTab = ref('new-ticket');
 const selectedTicketId = ref(null);
 const toast = useToast();
+const showSidebar = ref(false);
+const toggleSidebar = () => (showSidebar.value = !showSidebar.value);
+const closeSidebar = () => (showSidebar.value = false);
 
 const formData = ref({
   name: '',
@@ -99,8 +102,39 @@ const currentTicket = computed(() => {
 </script>
 
 <template>
-  <div class="flex h-screen bg-gray-50">
-    <LearnerSidebar />
+  <div class="flex min-h-screen font-sans relative bg-gray-50">
+    <button
+      @click="toggleSidebar"
+      class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        />
+      </svg>
+    </button>
+
+    <div
+      class="fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 lg:translate-x-0"
+      :class="showSidebar ? 'translate-x-0' : '-translate-x-full'"
+    >
+      <LearnerSidebar @closeSidebar="closeSidebar" class="h-full" />
+    </div>
+
+    <div
+      v-if="showSidebar"
+      class="fixed inset-0 bg-gray-500 bg-opacity-50 z-30 lg:hidden"
+      @click="closeSidebar"
+    ></div>
 
     <div class="flex-1 flex flex-col overflow-hidden relative">
       <header class="p-6 bg-white">

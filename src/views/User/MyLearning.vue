@@ -23,6 +23,15 @@ const completedPage = ref(1);
 const completedPerPage = 3;
 const showReviewDialog = ref(false);
 const selectedEnrollment = ref(null);
+const showSidebar = ref(false);
+
+const toggleSidebar = () => {
+  showSidebar.value = !showSidebar.value;
+};
+
+const closeSidebar = () => {
+  showSidebar.value = false;
+};
 
 const reviewForm = ref({
   rating: 0,
@@ -222,8 +231,41 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex min-h-screen bg-gray-50">
-    <UserSidebar />
+  <div class="relative flex min-h-screen bg-gray-50">
+    <button
+      @click="toggleSidebar"
+      class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        />
+      </svg>
+    </button>
+
+    <div
+      v-if="showSidebar"
+      class="fixed inset-0 bg-gray-500 bg-opacity-50 z-30 lg:hidden"
+      @click="closeSidebar"
+    ></div>
+
+    <div
+      :class="[
+        'fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 w-72 max-w-full lg:static lg:translate-x-0 lg:w-64 lg:min-h-screen',
+        showSidebar ? 'translate-x-0' : '-translate-x-full'
+      ]"
+    >
+      <UserSidebar @closeSidebar="closeSidebar" />
+    </div>
 
     <main class="flex-1 p-4 md:p-8 lg:p-12">
       <div class="flex justify-center w-full items-center mb-8">

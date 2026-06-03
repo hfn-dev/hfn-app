@@ -1,14 +1,14 @@
 <script setup>
 import membershipAPI from "@/api/membership.js";
-import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
 import DashboardLoader from "@/components/layout/DashboardLoader.vue";
+import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
+import {
+    ChevronLeft,
+    ChevronRight,
+    Search,
+} from "lucide-vue-next";
 import { computed, onMounted, ref, watch } from "vue";
 import { useToast } from "vue-toastification";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Search,
-} from "lucide-vue-next";
 
 const toast = useToast();
 const applications = ref([]);
@@ -270,7 +270,7 @@ onMounted(() => {
   <div class="flex min-h-screen font-sans relative">
     <button
       @click="toggleSidebar"
-      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+      class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

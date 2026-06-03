@@ -1,9 +1,10 @@
 <script setup>
-import { useAuth } from "@/store/authStore";
-import { ref, watch, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
 import analyticsApi from "@/api/dashboard.js";
+import { useAuth } from "@/store/authStore";
+import { onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
+const emit = defineEmits(["closeSidebar"]);
 const router = useRouter();
 const route = useRoute();
 
@@ -94,7 +95,7 @@ const isLinkActive = (path) => path === currentPath.value;
 <template>
   <div
     :style="{ backgroundColor: DARK_GREEN }"
-    class="w-64 min-h-screen flex flex-col justify-between border-r sticky top-0 left-0 pt-8 text-white shadow-xl"
+    class="w-full lg:w-64 min-h-screen flex flex-col justify-between border-r sticky top-0 left-0 pt-8 text-white shadow-xl"
   >
     <nav class="space-y-1 px-4 flex flex-col">
       <RouterLink
@@ -103,7 +104,7 @@ const isLinkActive = (path) => path === currentPath.value;
         :to="link.path"
         @click="
           currentPath = link.path;
-          $emit('closeSidebar');
+          emit('closeSidebar');
         "
         class="flex items-center justify-between p-3 text-lg font-medium rounded-xl transition-all duration-200 cursor-pointer"
         :class="

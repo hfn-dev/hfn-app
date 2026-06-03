@@ -4,7 +4,7 @@ import courses from "@/assets/courses.jpg";
 import student from "@/assets/student.jpg";
 
 import UserSidebar from "@/components/layout/UserSidebar.vue";
-import { onMounted, ref, computed } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useToast } from "vue-toastification";
   
@@ -13,6 +13,15 @@ const LIGHT_GREEN = "#f2f9f3";
 const toast = useToast();
 const activeTab = ref("courseInfo");
 const activeModule = ref(null);
+const showSidebar = ref(false);
+
+const toggleSidebar = () => {
+  showSidebar.value = !showSidebar.value;
+};
+
+const closeSidebar = () => {
+  showSidebar.value = false;
+};
 
 const route = useRoute();
 const enrollment = ref(null);
@@ -156,10 +165,30 @@ const fetchCertificate = async () => {
 </script>
 
 <template>
-  <div class="flex min-h-screen bg-gray-50">
-      <UserSidebar />
+  <div class="relative flex min-h-screen bg-gray-50">
+    <button
+      @click="toggleSidebar"
+      class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+    >
+      Menu
+    </button>
 
-      <main class="flex-1 p-4 md:p-8 lg:p-12">
+    <div
+      v-if="showSidebar"
+      class="fixed inset-0 bg-gray-500 bg-opacity-50 z-30 lg:hidden"
+      @click="closeSidebar"
+    ></div>
+
+    <div
+      :class="[
+        'fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 w-72 max-w-full lg:static lg:translate-x-0 lg:w-64 lg:min-h-screen',
+        showSidebar ? 'translate-x-0' : '-translate-x-full'
+      ]"
+    >
+      <UserSidebar @closeSidebar="closeSidebar" />
+    </div>
+
+    <main class="flex-1 p-4 md:p-8 lg:p-12">
         <div class="mb-8">
           <p class="text-sm text-gray-500 mb-1">
             Home > Course: {{ course?.title }}

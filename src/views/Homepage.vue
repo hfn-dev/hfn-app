@@ -145,11 +145,11 @@ const actions = [
   },
 ];
 
-const heroSlides = [
+const heroSlides = computed(() => pageContent.value.hero?.slides?.length ? pageContent.value.hero.slides : [
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769773405/1_1_uebqmc.jpg",
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769801024/2_evqlkd.jpg",
   "https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769773393/3_nvepaa.jpg",
-];
+]);
 
 const activeSlide = ref(0);
 let interval = null;
@@ -379,7 +379,7 @@ onUnmounted(() => {
           />
         </transition-group>
 
-        <div class="absolute inset-0 bg-black/50"></div>
+        <div class="absolute inset-0" :style="{ backgroundColor: pageContent.hero.backgroundColor || 'rgba(0,0,0,0.5)' }"></div>
       </div>
 
       <div class="relative z-10 h-full flex items-center">

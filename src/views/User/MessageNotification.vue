@@ -17,6 +17,16 @@ const LIGHT_GREEN = "#f2f9f3";
 
 const currentTab = ref("Directory");
 const currentDMUser = ref(null);
+const showSidebar = ref(false);
+
+const toggleSidebar = () => {
+  showSidebar.value = !showSidebar.value;
+};
+
+const closeSidebar = () => {
+  showSidebar.value = false;
+};
+
 const messageInput = ref("");
 const searchQuery = ref("");
 let notificationInterval = null;
@@ -859,8 +869,41 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="flex min-h-screen bg-gray-50">
-    <UserSidebar />
+  <div class="relative flex min-h-screen bg-gray-50">
+    <button
+      @click="toggleSidebar"
+      class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        />
+      </svg>
+    </button>
+
+    <div
+      v-if="showSidebar"
+      class="fixed inset-0 bg-gray-500 bg-opacity-50 z-30 lg:hidden"
+      @click="closeSidebar"
+    ></div>
+
+    <div
+      :class="[
+        'fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 w-72 max-w-full lg:static lg:translate-x-0 lg:w-64 lg:min-h-screen',
+        showSidebar ? 'translate-x-0' : '-translate-x-full'
+      ]"
+    >
+      <UserSidebar @closeSidebar="closeSidebar" />
+    </div>
 
     <main class="flex-1 p-4 md:p-8 lg:p-12">
       <div class="flex justify-center w-full items-center mb-8">
@@ -884,12 +927,12 @@ onUnmounted(() => {
       </div>
       <div class="flex justify-center w-full">
         <div class="border-b border-gray-200 mb-6 max-w-7xl w-full">
-          <div class="flex text-lg font-medium justify-center">
+          <div class="flex text-lg font-medium justify-center flex-wrap">
             <button
               v-for="tab in tabs"
               :key="tab"
               @click="currentTab = tab"
-              class="py-2 px-4 transition border-b-2"
+              class="py-2 px-3 sm:px-4 transition border-b-2 text-sm sm:text-base"
               :class="
                 currentTab === tab
                   ? 'font-bold'
@@ -928,8 +971,8 @@ onUnmounted(() => {
           v-if="currentTab === 'Directory'"
           class="max-w-7xl bg-white p-6 rounded-xl shadow-lg border border-gray-100"
         >
-          <div class="flex justify-between items-center mb-6">
-            <div class="relative w-full max-w-sm mr-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+            <div class="relative w-full max-w-sm">
               <input
                 v-model="searchQuery"
                 @keyup.enter="handleSearch"
@@ -1138,7 +1181,7 @@ onUnmounted(() => {
           <div
             v-for="(message, index) in notifications"
             :key="index"
-            class="bg-white p-6 rounded-xl shadow-md border-l-4"
+            class="bg-white p-4 sm:p-6 rounded-xl shadow-md border-l-4"
             :class="{
               'border-green-600': message.category === 'COURSES',
               'border-blue-600': message.category === 'SYSTEM',
@@ -1148,8 +1191,8 @@ onUnmounted(() => {
               'opacity-75': message.isRead,
             }"
           >
-            <div class="flex justify-between items-start mb-2">
-              <div class="flex items-center space-x-2">
+            <div class="flex flex-col sm:flex-row justify-between items-start gap-2 mb-2">
+              <div class="flex items-center flex-wrap gap-x-2">
                 <svg
                   v-if="message.category === 'COURSES'"
                   xmlns="http://www.w3.org/2000/svg"
@@ -1195,16 +1238,16 @@ onUnmounted(() => {
                 <div class="w-1 h-1 bg-gray-300 rounded-full"></div>
                 <span class="text-xs text-gray-500">{{ message.time }}</span>
               </div>
-              <div class="flex space-x-2">
+              <div class="flex space-x-2 flex-shrink-0">
                 <button
                   @click="markNotificationAsRead(message.id)"
-                  class="text-xs text-gray-400 hover:text-gray-600"
+                  class="text-xs text-gray-400 hover:text-gray-600 whitespace-nowrap"
                 >
                   Mark as read
                 </button>
                 <button
                   @click="dismissNotification(message.id)"
-                  class="text-xs text-gray-400 hover:text-gray-600"
+                  class="text-xs text-gray-400 hover:text-gray-600 whitespace-nowrap"
                 >
                   Dismiss
                 </button>
@@ -1254,11 +1297,11 @@ onUnmounted(() => {
             </span>
           </h3>
 
-          <div v-if="pendingRequests.length > 0" class="space-y-3 mb-10">
+            <div v-if="pendingRequests.length > 0" class="space-y-3 mb-10">
             <div
               v-for="request in pendingRequests"
               :key="request.id"
-              class="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-100 shadow-sm"
+              class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 bg-white rounded-lg border border-gray-100 shadow-sm"
             >
               <div class="flex items-center space-x-3">
                 <div
@@ -1324,7 +1367,7 @@ onUnmounted(() => {
             <div
               v-for="connection in activeConnections"
               :key="connection.id"
-              class="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-100 shadow-sm"
+              class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 bg-white rounded-lg border border-gray-100 shadow-sm"
             >
               <div class="flex items-center space-x-3">
                 <div
@@ -1371,10 +1414,10 @@ onUnmounted(() => {
         </div>
         <div
           v-if="currentTab === 'Groups' || currentTab === 'Direct Messages'"
-          class="flex h-[80vh] min-h-[600px] max-w-7xl border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+          class="flex flex-col lg:flex-row h-[80vh] min-h-[400px] lg:min-h-[600px] max-w-7xl border border-gray-200 rounded-xl shadow-lg overflow-hidden"
         >
           <aside
-            class="w-84 bg-white p-4 border-r border-gray-100 flex-shrink-0 overflow-y-auto"
+            class="w-full lg:w-84 bg-white p-4 border-r border-gray-100 flex-shrink-0 overflow-y-auto"
           >
             <h2 class="text-xl font-bold text-gray-800 mb-4">
               {{ currentTab }}
@@ -1511,7 +1554,7 @@ onUnmounted(() => {
 
           <section class="flex-grow flex flex-col bg-white">
             <header class="p-4 border-b border-gray-100">
-              <h3 class="text-xl font-semibold text-gray-800">
+              <h3 class="text-xl font-semibold text-gray-800 truncate">
                 {{ activeChatTitle }}
               </h3>
             </header>

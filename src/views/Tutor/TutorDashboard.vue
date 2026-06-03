@@ -1,7 +1,7 @@
 <script setup>
 import analyticsService from '@/api/dashboard.js';
-import TutorSidebar from '@/views/Tutor/TutorSidebar.vue';
 import DashboardLoader from '@/components/layout/DashboardLoader.vue';
+import TutorSidebar from '@/views/Tutor/TutorSidebar.vue';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -10,17 +10,17 @@ const toggleSidebar = () => (showSidebar.value = !showSidebar.value);
 const closeSidebar = () => (showSidebar.value = false);
 
 import {
-  ArcElement,
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Filler,
-  Legend,
-  LinearScale,
-  LineElement,
-  PointElement,
-  Title,
-  Tooltip,
+    ArcElement,
+    BarElement,
+    CategoryScale,
+    Chart as ChartJS,
+    Filler,
+    Legend,
+    LinearScale,
+    LineElement,
+    PointElement,
+    Title,
+    Tooltip,
 } from 'chart.js';
 import { Bar, Line, Pie } from 'vue-chartjs';
 
@@ -140,25 +140,29 @@ const loading = ref(false);
 const fetchDashboardStats = async () => {
   const res = await analyticsService.fetchDashboard();
 
+  const totalEnrollments = res.total_enrollments ?? 0;
+  const totalCourses = res.total_courses ?? 1;
+  const avgEnrollment = totalCourses > 0 ? (totalEnrollments / totalCourses).toFixed(1) : 0;
+
   statCards.value = [
     {
       title: 'Total Courses',
       value: res.total_courses,
-      change: `${res.total_courses_change}% Increase`,
+      change: `${res.total_courses_change ?? 0}% Increase`,
       changeColor: 'text-[#00cc66]',
     },
     {
       title: 'Active Courses',
       value: res.active_courses,
-      change: `${res.active_courses_change}% Increase`,
+      change: `${res.active_courses_change ?? 0}% Increase`,
       changeColor: 'text-[#00cc66]',
     },
     {
       title: 'Average Enrollment',
-      value: res.average_enrollment,
-      change: `${res.enrollment_change}%`,
+      value: avgEnrollment,
+      change: `${res.enrollment_change ?? 0}%`,
       changeColor:
-        res.enrollment_change < 0 ? 'text-red-500' : 'text-[#00cc66]',
+        (res.enrollment_change ?? 0) < 0 ? 'text-red-500' : 'text-[#00cc66]',
     },
     {
       title: 'Average Rating',
@@ -264,7 +268,7 @@ onMounted(async () => {
   <div class="flex min-h-screen font-sans relative">
     <button
       @click="toggleSidebar"
-      class="lg:hidden fixed top-15 left-0 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+      class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -373,7 +377,7 @@ onMounted(async () => {
           </div>
         </div>
       </div>
-      </template v-else>
+      </template>
     </main>
   </div>
 </template>
