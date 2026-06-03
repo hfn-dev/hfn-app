@@ -6,6 +6,16 @@ import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import userRegister from "@/api/userRegister";
 
+const imageMap = {
+  "membership.jpg": membership,
+};
+
+const resolveHeroImage = (img) => {
+  if (!img) return membership;
+  if (typeof img === "string" && (img.startsWith("http") || img.startsWith("data:image"))) return img;
+  return imageMap[img] || membership;
+};
+
 const router = useRouter();
 const isSubmitting = ref(false);
 const pageFromApi = ref(null);
@@ -398,7 +408,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
               class="relative w-[320px] h-[240px] sm:w-[400px] sm:h-[300px] lg:w-[500px] lg:h-[375px] rounded-[30px] overflow-hidden shadow-2xl"
             >
               <img
-                :src="hero.image || membership"
+                :src="resolveHeroImage(hero.image)"
                 alt="Diverse hands joining in a heart shape, symbolizing unity and healthcare"
                 class="object-cover w-full h-full"
               />
