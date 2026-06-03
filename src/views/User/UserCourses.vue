@@ -25,6 +25,15 @@ const isLoading = ref(true);
 const activeSidebarItem = ref("Dashboard");
 const activeCourseTrack = ref("Care");
 const searchQuery = ref("");
+const showSidebar = ref(false);
+
+const toggleSidebar = () => {
+  showSidebar.value = !showSidebar.value;
+};
+
+const closeSidebar = () => {
+  showSidebar.value = false;
+};
 
 // API Data
 const categories = ref([]);
@@ -370,12 +379,33 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex min-h-screen  bg-white border-0 font-sans">
-      <UserSidebar />
-      <main
-        class="flex-1 overflow-y-auto pb-12"
-        :style="{ backgroundColor: 'white' }"
-      >
+  <div class="relative flex min-h-screen bg-white border-0 font-sans">
+    <button
+      @click="toggleSidebar"
+      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+    >
+      Menu
+    </button>
+
+    <div
+      v-if="showSidebar"
+      class="fixed inset-0 bg-gray-500 bg-opacity-50 z-30 lg:hidden"
+      @click="closeSidebar"
+    ></div>
+
+    <div
+      :class="[
+        'fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 w-72 max-w-full lg:static lg:translate-x-0 lg:w-64 lg:min-h-screen',
+        showSidebar ? 'translate-x-0' : '-translate-x-full'
+      ]"
+    >
+      <UserSidebar @closeSidebar="closeSidebar" />
+    </div>
+
+    <main
+      class="flex-1 overflow-y-auto pb-12"
+      :style="{ backgroundColor: 'white' }"
+    >
         <div class="max-w-6xl mx-auto p-4 sm:p-8">
           <div v-if="isLoading" class="flex justify-center items-center h-64">
             <div

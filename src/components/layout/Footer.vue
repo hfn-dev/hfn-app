@@ -1,7 +1,7 @@
 <script setup>
 import logo from "@/assets/logo.png";
 import { computed, onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import pagesApi from "@/api/pageManagement";
 import { footerSchema } from "@/schemas/pages/footer.schema";
 

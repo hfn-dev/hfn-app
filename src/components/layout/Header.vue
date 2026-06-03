@@ -172,47 +172,6 @@ const toggleDropdown = (title) => {
         </RouterLink>
       </div>
 
-      <div class="flex items-center lg:hidden">
-        <button
-          @click="isMobileMenuOpen = !isMobileMenuOpen"
-          class="p-2 text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-600"
-        >
-          <svg
-            v-if="isMobileMenuOpen"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-6 h-6"
-          >
-            <path d="M18 6 6 18" />
-            <path d="m6 6 12 12" />
-          </svg>
-          <svg
-            v-else
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-6 h-6"
-          >
-            <line x1="4" x2="20" y1="12" y2="12" />
-            <line x1="4" x2="20" y1="6" y2="6" />
-            <line x1="4" x2="20" y1="18" y2="18" />
-          </svg>
-        </button>
-      </div>
-
       <div class="hidden lg:flex items-center space-x-2 xl:space-x-4">
         <div v-for="link in navLinks" :key="link.title" class="relative group">
           <RouterLink
@@ -347,11 +306,52 @@ const toggleDropdown = (title) => {
           </div>
         </div>
       </div>
+      
+      <div class="flex lg:hidden items-center ml-auto">
+        <button
+          @click="isMobileMenuOpen = !isMobileMenuOpen"
+          class="p-2 text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-600"
+        >
+          <svg
+            v-if="isMobileMenuOpen"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-6 h-6"
+          >
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+          <svg
+            v-else
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-6 h-6"
+          >
+            <line x1="4" x2="20" y1="12" y2="12" />
+            <line x1="4" x2="20" y1="6" y2="6" />
+            <line x1="4" x2="20" y1="18" y2="18" />
+          </svg>
+        </button>
+      </div>
     </nav>
 
     <div
       :class="[
-        'fixed top-0 left-0 w-full h-full bg-white shadow-xl z-20 lg:hidden transform transition-transform duration-300',
+        'fixed top-0 right-0 w-full h-full bg-white shadow-xl z-20 lg:hidden transform transition-transform duration-300 overflow-y-auto',
         isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full',
       ]"
     >

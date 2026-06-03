@@ -1,9 +1,10 @@
 <script setup>
+import analyticsApi from '@/api/dashboard.js';
 import { useAuth } from '@/store/authStore';
 import { ref, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import analyticsApi from '@/api/dashboard.js';
 
+const emit = defineEmits(['closeSidebar']);
 const router = useRouter()
 const route = useRoute();
 const { logout } = useAuth()
@@ -68,19 +69,24 @@ const handleLogout = () => {
 }
 
 const isLinkActive = (path) => path === currentPath.value;
+
+const handleLinkClick = (path) => {
+  currentPath.value = path;
+  emit('closeSidebar');
+};
 </script>
 
 <template>
   <div
     :style="{ backgroundColor: DARK_GREEN }"
-    class="w-64 min-h-screen flex flex-col justify-between border-r sticky top-0 left-0 pt-8 text-white shadow-xl"
+    class="w-full lg:w-64 min-h-screen flex flex-col justify-between border-r sticky top-0 left-0 pt-8 text-white shadow-xl"
   >
     <nav class="space-y-1 px-4 flex flex-col">
       <RouterLink
         v-for="link in navLinks"
         :key="link.title"
         :to="link.path"
-        @click="currentPath = link.path"
+        @click="handleLinkClick(link.path)"
         class="flex items-center justify-between p-3 text-lg font-medium rounded-xl transition-all duration-200 cursor-pointer"
         :class="
           isLinkActive(link.path)

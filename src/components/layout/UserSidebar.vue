@@ -1,8 +1,9 @@
 <script setup>
 import { useAuth } from "@/store/authStore";
-import { computed, defineProps, onMounted, ref, watch } from "vue";
+import { defineProps, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+const emit = defineEmits(["closeSidebar"]);
 const router = useRouter();
 const route = useRoute();
 
@@ -61,8 +62,14 @@ const navLinks = [
 
 const isLinkActive = (path) => path === currentPath.value;
 
+const handleLinkClick = (path) => {
+  currentPath.value = path;
+  emit("closeSidebar");
+};
+
 const handleLogout = () => {
   logout();
+  emit("closeSidebar");
   router.push("/");
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
@@ -71,14 +78,14 @@ const handleLogout = () => {
 <template>
   <div
     :style="{ backgroundColor: DARK_GREEN }"
-    class="w-64 min-h-screen flex flex-col justify-between border-r pt-8 text-white shadow-xl"
+    class="w-full lg:w-64 min-h-screen flex flex-col justify-between border-r pt-8 text-white shadow-xl"
   >
     <nav class="space-y-1 px-4 flex flex-col">
       <RouterLink
         v-for="link in navLinks"
         :key="link.title"
         :to="link.path"
-        @click="currentPath = link.path"
+        @click="handleLinkClick(link.path)"
         class="flex items-center p-3 text-lg font-medium rounded-xl transition-all duration-200 cursor-pointer"
         :class="
           isLinkActive(link.path)

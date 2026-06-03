@@ -1,14 +1,12 @@
 <script setup>
+import contentUploadsApi from "@/api/contentUploadsApi";
 import eventsApi from "@/api/events.js";
-import memberApi from "@/api/memberResources.js";
 import newsApi from "@/api/newsModule.js";
 import authApi from "@/api/userRegister.js";
+import blogh from "@/assets/blogh.png";
+import newsletter_placeholder from "@/assets/newsletter-placeholder.jpeg";
 import UserSidebar from "@/components/layout/UserSidebar.vue";
 import { computed, onMounted, ref } from "vue";
-import newsletter_placeholder from "@/assets/newsletter-placeholder.jpeg";
-import blog from "@/assets/blogh.png";
-import contentUploadsApi from "@/api/contentUploadsApi";
-import blogh from "@/assets/blogh.png";
 
 const resources = ref([]);
 const searchQuery = ref("");
@@ -571,7 +569,7 @@ onMounted(() => {
   <div class="flex min-h-screen bg-white relative">
     <button
       @click="toggleSidebar"
-      class="lg:hidden fixed top-15 left-0 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

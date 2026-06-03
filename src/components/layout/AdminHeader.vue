@@ -14,7 +14,6 @@ const hfn_logo =
 const DARK_GREEN = "#004d33";
 const ACTIVE_BG_COLOR = "#f2f9f3";
 const currentPath = ref(route.path);
-const isMobileMenuOpen = ref(false);
 
 const { user, isAuthenticated, logout, role } = useAuth();
 

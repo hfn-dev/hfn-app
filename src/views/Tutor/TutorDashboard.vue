@@ -1,7 +1,7 @@
 <script setup>
 import analyticsService from '@/api/dashboard.js';
-import TutorSidebar from '@/views/Tutor/TutorSidebar.vue';
 import DashboardLoader from '@/components/layout/DashboardLoader.vue';
+import TutorSidebar from '@/views/Tutor/TutorSidebar.vue';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -10,17 +10,17 @@ const toggleSidebar = () => (showSidebar.value = !showSidebar.value);
 const closeSidebar = () => (showSidebar.value = false);
 
 import {
-  ArcElement,
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Filler,
-  Legend,
-  LinearScale,
-  LineElement,
-  PointElement,
-  Title,
-  Tooltip,
+    ArcElement,
+    BarElement,
+    CategoryScale,
+    Chart as ChartJS,
+    Filler,
+    Legend,
+    LinearScale,
+    LineElement,
+    PointElement,
+    Title,
+    Tooltip,
 } from 'chart.js';
 import { Bar, Line, Pie } from 'vue-chartjs';
 
@@ -264,7 +264,7 @@ onMounted(async () => {
   <div class="flex min-h-screen font-sans relative">
     <button
       @click="toggleSidebar"
-      class="lg:hidden fixed top-15 left-0 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

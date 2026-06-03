@@ -16,6 +16,16 @@ const currentTab = ref("Overview");
 const searchTerm = ref("");
 const currentPage = ref(1);
 const itemsPerPage = 8;
+const showSidebar = ref(false);
+
+const toggleSidebar = () => {
+  showSidebar.value = !showSidebar.value;
+};
+
+const closeSidebar = () => {
+  showSidebar.value = false;
+};
+
 const showHistoryDialog = ref(false);
 const roleHistory = ref([]);
 const selectedUserEmail = ref("");
@@ -273,8 +283,28 @@ const resendInvitation = async (inviteId) => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 font-sans flex flex-col sm:flex-row">
-    <SuperAdminSidebar />
+  <div class="relative min-h-screen bg-gray-50 font-sans flex flex-col sm:flex-row">
+    <button
+      @click="toggleSidebar"
+      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+    >
+      Menu
+    </button>
+
+    <div
+      v-if="showSidebar"
+      class="fixed inset-0 bg-gray-500 bg-opacity-50 z-30 lg:hidden"
+      @click="closeSidebar"
+    ></div>
+
+    <div
+      :class="[
+        'fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 w-72 max-w-full lg:static lg:translate-x-0 lg:w-64 lg:min-h-screen',
+        showSidebar ? 'translate-x-0' : '-translate-x-full'
+      ]"
+    >
+      <SuperAdminSidebar @closeSidebar="closeSidebar" />
+    </div>
 
     <main class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
       <span class="text-sm text-gray-500">Home > Access Management</span>
