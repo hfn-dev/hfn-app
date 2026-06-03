@@ -4,18 +4,17 @@ import membershipAPI from "@/api/membership.js";
 import userList from "@/api/userRegister.js";
 
 import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
-import { computed, onMounted, watch } from "vue";
-import { useToast } from "vue-toastification";
 import {
-  ChevronLeft,
-  ChevronRight,
-  Edit2,
-  Eye,
-  MoreVertical,
-  Search,
-  Trash2,
+    ChevronLeft,
+    ChevronRight,
+    Edit2,
+    Eye,
+    MoreVertical,
+    Search,
+    Trash2,
 } from "lucide-vue-next";
-import { ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useToast } from "vue-toastification";
 
 const showAddMemberModal = ref(false);
 const membershipTypes = ref([]);
@@ -397,7 +396,7 @@ watch(currentPage, () => {
 <template>
   <div class="flex min-h-screen font-sans relative">
     <button @click="toggleSidebar"
-      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md">
+      class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
       </svg>

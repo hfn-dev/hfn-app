@@ -1,10 +1,10 @@
 <script setup>
+import learningModule from "@/api/learningModule";
 import authApi from "@/api/userRegister";
 import UserSidebar from '@/components/layout/UserSidebar.vue';
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import learningModule from "@/api/learningModule";
-import { useToast } from "vue-toastification";  
+import { useToast } from "vue-toastification";
 
 
 const toast = useToast();  
@@ -479,7 +479,7 @@ onMounted(() => {
   <div class="relative flex flex-col lg:flex-row min-h-screen font-sans bg-white border-0">
     <button
       @click="toggleSidebar"
-      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+      class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

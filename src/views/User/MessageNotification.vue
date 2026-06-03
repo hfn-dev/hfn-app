@@ -872,7 +872,7 @@ onUnmounted(() => {
   <div class="relative flex min-h-screen bg-gray-50">
     <button
       @click="toggleSidebar"
-      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+      class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -927,12 +927,12 @@ onUnmounted(() => {
       </div>
       <div class="flex justify-center w-full">
         <div class="border-b border-gray-200 mb-6 max-w-7xl w-full">
-          <div class="flex text-lg font-medium justify-center">
+          <div class="flex text-lg font-medium justify-center flex-wrap">
             <button
               v-for="tab in tabs"
               :key="tab"
               @click="currentTab = tab"
-              class="py-2 px-4 transition border-b-2"
+              class="py-2 px-3 sm:px-4 transition border-b-2 text-sm sm:text-base"
               :class="
                 currentTab === tab
                   ? 'font-bold'
@@ -971,8 +971,8 @@ onUnmounted(() => {
           v-if="currentTab === 'Directory'"
           class="max-w-7xl bg-white p-6 rounded-xl shadow-lg border border-gray-100"
         >
-          <div class="flex justify-between items-center mb-6">
-            <div class="relative w-full max-w-sm mr-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+            <div class="relative w-full max-w-sm">
               <input
                 v-model="searchQuery"
                 @keyup.enter="handleSearch"
@@ -1181,7 +1181,7 @@ onUnmounted(() => {
           <div
             v-for="(message, index) in notifications"
             :key="index"
-            class="bg-white p-6 rounded-xl shadow-md border-l-4"
+            class="bg-white p-4 sm:p-6 rounded-xl shadow-md border-l-4"
             :class="{
               'border-green-600': message.category === 'COURSES',
               'border-blue-600': message.category === 'SYSTEM',
@@ -1191,8 +1191,8 @@ onUnmounted(() => {
               'opacity-75': message.isRead,
             }"
           >
-            <div class="flex justify-between items-start mb-2">
-              <div class="flex items-center space-x-2">
+            <div class="flex flex-col sm:flex-row justify-between items-start gap-2 mb-2">
+              <div class="flex items-center flex-wrap gap-x-2">
                 <svg
                   v-if="message.category === 'COURSES'"
                   xmlns="http://www.w3.org/2000/svg"
@@ -1238,16 +1238,16 @@ onUnmounted(() => {
                 <div class="w-1 h-1 bg-gray-300 rounded-full"></div>
                 <span class="text-xs text-gray-500">{{ message.time }}</span>
               </div>
-              <div class="flex space-x-2">
+              <div class="flex space-x-2 flex-shrink-0">
                 <button
                   @click="markNotificationAsRead(message.id)"
-                  class="text-xs text-gray-400 hover:text-gray-600"
+                  class="text-xs text-gray-400 hover:text-gray-600 whitespace-nowrap"
                 >
                   Mark as read
                 </button>
                 <button
                   @click="dismissNotification(message.id)"
-                  class="text-xs text-gray-400 hover:text-gray-600"
+                  class="text-xs text-gray-400 hover:text-gray-600 whitespace-nowrap"
                 >
                   Dismiss
                 </button>
@@ -1297,11 +1297,11 @@ onUnmounted(() => {
             </span>
           </h3>
 
-          <div v-if="pendingRequests.length > 0" class="space-y-3 mb-10">
+            <div v-if="pendingRequests.length > 0" class="space-y-3 mb-10">
             <div
               v-for="request in pendingRequests"
               :key="request.id"
-              class="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-100 shadow-sm"
+              class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 bg-white rounded-lg border border-gray-100 shadow-sm"
             >
               <div class="flex items-center space-x-3">
                 <div
@@ -1367,7 +1367,7 @@ onUnmounted(() => {
             <div
               v-for="connection in activeConnections"
               :key="connection.id"
-              class="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-100 shadow-sm"
+              class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 bg-white rounded-lg border border-gray-100 shadow-sm"
             >
               <div class="flex items-center space-x-3">
                 <div
@@ -1414,7 +1414,7 @@ onUnmounted(() => {
         </div>
         <div
           v-if="currentTab === 'Groups' || currentTab === 'Direct Messages'"
-          class="flex flex-col lg:flex-row h-[80vh] min-h-[600px] max-w-7xl border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+          class="flex flex-col lg:flex-row h-[80vh] min-h-[400px] lg:min-h-[600px] max-w-7xl border border-gray-200 rounded-xl shadow-lg overflow-hidden"
         >
           <aside
             class="w-full lg:w-84 bg-white p-4 border-r border-gray-100 flex-shrink-0 overflow-y-auto"

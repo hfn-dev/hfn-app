@@ -4,7 +4,7 @@ import courses from "@/assets/courses.jpg";
 import student from "@/assets/student.jpg";
 
 import UserSidebar from "@/components/layout/UserSidebar.vue";
-import { onMounted, ref, computed } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useToast } from "vue-toastification";
   
@@ -168,7 +168,7 @@ const fetchCertificate = async () => {
   <div class="relative flex min-h-screen bg-gray-50">
     <button
       @click="toggleSidebar"
-      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+      class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
     >
       Menu
     </button>

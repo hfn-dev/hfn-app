@@ -2,14 +2,14 @@
 import courseApi from "@/api/learningModule.js";
 import courses from "@/assets/courses.jpg";
 import {
-  Check,
-  ChevronDown,
-  DollarSign,
-  Lock,
-  Minimize2,
-  Plus,
-  Trash2,
-  UploadCloud,
+    Check,
+    ChevronDown,
+    DollarSign,
+    Lock,
+    Minimize2,
+    Plus,
+    Trash2,
+    UploadCloud,
 } from "lucide-vue-next";
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -669,7 +669,7 @@ const deleteCategoryHandler = async (category) => {
   <div class="relative flex min-h-screen font-sans">
     <button
       @click="toggleSidebar"
-      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+      class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
     >
       Menu
     </button>

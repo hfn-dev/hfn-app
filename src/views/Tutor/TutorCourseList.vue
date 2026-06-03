@@ -1,20 +1,20 @@
 <script setup>
 import courseApi from '@/api/learningModule.js';
-import TutorSidebar from '@/views/Tutor/TutorSidebar.vue';
 import DashboardLoader from '@/components/layout/DashboardLoader.vue';
+import TutorSidebar from '@/views/Tutor/TutorSidebar.vue';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 import ConfirmModal from '@/components/layout/ConfirmModal.vue';
 import {
-  ChevronLeft,
-  ChevronRight,
-  Edit2,
-  Eye,
-  MoreVertical,
-  Plus,
-  Search,
-  Trash2,
+    ChevronLeft,
+    ChevronRight,
+    Edit2,
+    Eye,
+    MoreVertical,
+    Plus,
+    Search,
+    Trash2,
 } from 'lucide-vue-next';
 
 const courseTabs = ref(['Published', 'Drafts', 'Archived', 'Approvals']);
@@ -141,7 +141,7 @@ const closeSidebar = () => (showSidebar.value = false);
   <div class="flex min-h-screen font-sans relative">
     <button
       @click="toggleSidebar"
-      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+      class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -186,13 +186,13 @@ const closeSidebar = () => (showSidebar.value = false);
           My Courses
         </h1>
 
-        <div class="relative flex justify-center items-center">
-          <div class="flex border-b border-gray-200 space-x-4">
+        <div class="flex flex-col sm:flex-row justify-center sm:justify-between items-center gap-4">
+          <div class="flex flex-wrap justify-center border-b border-gray-200 gap-2">
             <button
               v-for="tab in courseTabs"
               :key="tab"
               @click="currentTab = tab"
-              class="py-2 px-4 text-lg font-medium transition-colors"
+              class="py-2 px-4 text-lg font-medium transition-colors whitespace-nowrap"
               :class="{
                 'text-[#006633] border-b-2 border-[#00cc66]':
                   currentTab === tab,
@@ -205,7 +205,7 @@ const closeSidebar = () => (showSidebar.value = false);
 
           <router-link
             to="/tutor/create-course"
-            class="absolute right-0 flex items-center px-4 py-2 bg-[#006633] text-white rounded-lg shadow-md hover:bg-[#00994d] transition-colors font-medium"
+            class="flex items-center px-4 py-2 bg-[#006633] text-white rounded-lg shadow-md hover:bg-[#00994d] transition-colors font-medium whitespace-nowrap"
           >
             <Plus class="w-5 h-5 mr-2" />
             Create New Course

@@ -1,6 +1,5 @@
 <script setup>
 import authApi from "@/api/userRegister";
-import cert from "@/assets/cert.png";
 import sign from "@/assets/sign.png";
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
 import { computed, onMounted, reactive, ref } from "vue";
@@ -263,7 +262,7 @@ const downloadSignature = (imageUrl, fileName) => {
   <div class="flex flex-col lg:flex-row min-h-screen font-sans relative">
     <button
       @click="toggleSidebar"
-      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+      class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

@@ -349,7 +349,7 @@ onMounted(() => {
   <div class="min-h-screen flex font-sans relative bg-white">
     <button
       @click="toggleSidebar"
-      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+      class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

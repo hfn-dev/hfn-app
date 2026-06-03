@@ -1,21 +1,20 @@
 <script setup>
-import assets from "@/assets/assets.png";
-import { reactive, ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
 import dashboardApi from "@/api/dashboard";
+import { onMounted, reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 
 import {
-  ArcElement,
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Filler,
-  Legend,
-  LinearScale,
-  LineElement,
-  PointElement,
-  Title,
-  Tooltip,
+    ArcElement,
+    BarElement,
+    CategoryScale,
+    Chart as ChartJS,
+    Filler,
+    Legend,
+    LinearScale,
+    LineElement,
+    PointElement,
+    Title,
+    Tooltip,
 } from "chart.js";
 import { Bar, Line, Pie } from "vue-chartjs";
 import EditorSidebar from "./EditorSidebar.vue";
@@ -315,7 +314,7 @@ onMounted(loadAnalytics);
   <div class="flex min-h-screen font-sans relative">
     <button
       @click="toggleSidebar"
-      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+      class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
     >
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -347,11 +346,11 @@ onMounted(loadAnalytics);
         {{ analyticsError }}
       </div>
 
-      <div class="flex justify-between items-stretch mb-10 space-x-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-10">
         <div
           v-for="(stat, index) in statCards"
           :key="stat.title"
-          class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
+          class="p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
           :class="{
             'rounded-tl-4xl rounded-br-4xl': index === 0,
             'rounded-tl-4xl rounded-br-4xl': index === statCards.length - 1,
@@ -403,11 +402,11 @@ onMounted(loadAnalytics);
         </div>
       </div>
       <div class="p-6 bg-white rounded-xl">
-        <div class="flex justify-between items-stretch mb-8 space-x-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
           <div
             v-for="card in summaryData"
             :key="card.title"
-            class="summary-card-alt flex-1 p-6 text-center bg-white shadow-lg relative overflow-hidden group transition-all duration-300"
+            class="summary-card-alt p-6 text-center bg-white shadow-lg relative overflow-hidden group transition-all duration-300"
             :class="{
               'rounded-tl-4xl rounded-br-4xl': true,
             }"

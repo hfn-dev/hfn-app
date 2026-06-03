@@ -469,7 +469,7 @@ watch(activePage, (page) => {
   <div class="relative flex min-h-screen font-sans">
     <button
       @click="toggleSidebar"
-      class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
+      class="lg:hidden fixed top-20 right-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
     >
       Menu
     </button>
