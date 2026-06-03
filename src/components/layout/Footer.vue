@@ -1,9 +1,9 @@
 <script setup>
+import pagesApi from "@/api/pageManagement";
 import logo from "@/assets/logo.png";
+import { footerSchema } from "@/schemas/pages/footer.schema";
 import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import pagesApi from "@/api/pageManagement";
-import { footerSchema } from "@/schemas/pages/footer.schema";
 
 const router = useRouter();
 const route = useRoute();

@@ -1,8 +1,8 @@
 <script setup>
 import analyticsApi from '@/api/dashboard.js';
 import { useAuth } from '@/store/authStore';
-import { ref, watch, onMounted } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { onMounted, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const emit = defineEmits(['closeSidebar']);
 const router = useRouter()

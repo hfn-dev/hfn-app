@@ -1,9 +1,9 @@
 <script setup>
 import learningModule from "@/api/learningModule.js";
-import LearnerSidebar from "./LearnerSidebar.vue";
 import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
+import LearnerSidebar from "./LearnerSidebar.vue";
 
 const router = useRouter();
 const toast = useToast();

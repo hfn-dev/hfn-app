@@ -1,8 +1,8 @@
 <script setup>
 import ticketApi from '@/api/tickets.js';
-import LearnerSidebar from './LearnerSidebar.vue';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useToast } from 'vue-toastification';
+import LearnerSidebar from './LearnerSidebar.vue';
 import TicketDetail from './TicketDetail.vue';
 
 const activeTab = ref('new-ticket');

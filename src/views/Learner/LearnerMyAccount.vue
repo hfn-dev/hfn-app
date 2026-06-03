@@ -1,10 +1,10 @@
 <script setup>
+import learningModule from "@/api/learningModule";
 import authApi from "@/api/userRegister";
-import LearnerSidebar from './LearnerSidebar.vue';
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import learningModule from "@/api/learningModule";
 import { useToast } from "vue-toastification";
+import LearnerSidebar from './LearnerSidebar.vue';
 
 const toast = useToast();  
 const router = useRouter();
