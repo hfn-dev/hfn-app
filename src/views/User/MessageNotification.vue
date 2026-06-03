@@ -874,7 +874,20 @@ onUnmounted(() => {
       @click="toggleSidebar"
       class="lg:hidden fixed top-4 left-4 z-50 bg-[#004d33] text-white p-2 rounded-md shadow-md"
     >
-      Menu
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        />
+      </svg>
     </button>
 
     <div
@@ -1401,10 +1414,10 @@ onUnmounted(() => {
         </div>
         <div
           v-if="currentTab === 'Groups' || currentTab === 'Direct Messages'"
-          class="flex h-[80vh] min-h-[600px] max-w-7xl border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+          class="flex flex-col lg:flex-row h-[80vh] min-h-[600px] max-w-7xl border border-gray-200 rounded-xl shadow-lg overflow-hidden"
         >
           <aside
-            class="w-84 bg-white p-4 border-r border-gray-100 flex-shrink-0 overflow-y-auto"
+            class="w-full lg:w-84 bg-white p-4 border-r border-gray-100 flex-shrink-0 overflow-y-auto"
           >
             <h2 class="text-xl font-bold text-gray-800 mb-4">
               {{ currentTab }}
@@ -1541,7 +1554,7 @@ onUnmounted(() => {
 
           <section class="flex-grow flex flex-col bg-white">
             <header class="p-4 border-b border-gray-100">
-              <h3 class="text-xl font-semibold text-gray-800">
+              <h3 class="text-xl font-semibold text-gray-800 truncate">
                 {{ activeChatTitle }}
               </h3>
             </header>
