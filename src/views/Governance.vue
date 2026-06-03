@@ -1,6 +1,6 @@
 <template>
   <div class="bg-[#f8fdf9] min-h-screen">
-    <section v-if="!page.hero?.is_hidden" class="bg-[#F2F9F3] py-16 lg:py-24">
+    <section v-if="!page.hero?.is_hidden" :style="{ backgroundColor: page.hero.backgroundColor || '#F2F9F3' }" class="py-16 lg:py-24">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
           <div class="mb-12 lg:mb-0">

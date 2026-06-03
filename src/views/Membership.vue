@@ -1,6 +1,6 @@
 <script setup>
-// import handsJoining from "@/assets/handsJoining.jpg";
 import membership from "@/assets/membership.jpg";
+import pagesApi from "@/api/pageManagement";
 import { membershipPageSchema } from "@/schemas/pages/membership.schema.js";
 import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
@@ -8,9 +8,16 @@ import userRegister from "@/api/userRegister";
 
 const router = useRouter();
 const isSubmitting = ref(false);
-const pageData = ref(membershipPageSchema);
+const pageFromApi = ref(null);
 
-const hero = computed(() => pageData.value.hero);
+const page = computed(() => ({
+  ...membershipPageSchema,
+  ...(pageFromApi.value || {}),
+  hero: { ...membershipPageSchema.hero, ...(pageFromApi.value?.hero || {}) },
+  categories: pageFromApi.value?.categories?.length ? pageFromApi.value.categories : membershipPageSchema.categories,
+}));
+
+const hero = computed(() => page.value.hero);
 const joinNow = () => {
   router.push("/register");
 };
@@ -216,8 +223,21 @@ const fetchCorporateMembers = async () => {
 };
 
 
-onMounted(() => {
+onMounted(async () => {
   fetchCorporateMembers();
+  try {
+    const res = await pagesApi.getPageByType("member");
+    const content = res?.content || null;
+    if (content?._hidden) {
+      for (const key of content._hidden) {
+        if (content[key]) content[key].is_hidden = true;
+      }
+      delete content._hidden;
+    }
+    pageFromApi.value = content;
+  } catch (e) {
+    console.warn("Using local membership schema fallback");
+  }
 });
 
 const selectedMember = ref(null);
@@ -356,7 +376,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
 
 <template>
   <div>
-    <section class="bg-[#F2F9F3] py-16 lg:py-24">
+    <section v-if="!hero?.is_hidden" :style="{ backgroundColor: hero.backgroundColor || '#F2F9F3' }" class="py-16 lg:py-24">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
           <div class="mb-12 lg:mb-0">
@@ -378,7 +398,7 @@ const activePlan = computed(() => activeCategory.value.plans[0]);
               class="relative w-[320px] h-[240px] sm:w-[400px] sm:h-[300px] lg:w-[500px] lg:h-[375px] rounded-[30px] overflow-hidden shadow-2xl"
             >
               <img
-                :src="membership"
+                :src="hero.image || membership"
                 alt="Diverse hands joining in a heart shape, symbolizing unity and healthcare"
                 class="object-cover w-full h-full"
               />

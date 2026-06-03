@@ -10,6 +10,7 @@ export const governanceSchema = {
     description:
       'HFN is guided by a Board of Trustees and an Executive Committee providing strategic oversight and leadership for Nigeria’s private health sector.',
     image: handsJoining,
+    backgroundColor: '#F2F9F3',
   },
 
   boardOfTrustees: {

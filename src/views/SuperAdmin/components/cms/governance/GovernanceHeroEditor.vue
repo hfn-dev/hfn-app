@@ -12,6 +12,7 @@ const currentSectionData = ref({
   titleMain: '',
   description: '',
   image: '',
+  backgroundColor: '#F2F9F3',
   ...props.modelValue
 })
 
@@ -23,6 +24,7 @@ watch(
       titleMain: '',
       description: '',
       image: '',
+      backgroundColor: '#F2F9F3',
       ...val
     }
   }
@@ -81,6 +83,24 @@ watch(
         type="text"
         class="w-full border border-gray-300 rounded p-2 focus:ring-2 focus:ring-green-500 focus:border-transparent"
       />
+    </div>
+
+    <div class="border border-gray-300 rounded-lg p-3 space-y-2">
+      <label class="block text-xs font-semibold uppercase text-gray-500">
+        Background Color
+      </label>
+      <div class="flex items-center space-x-2">
+        <input
+          v-model="currentSectionData.backgroundColor"
+          type="color"
+          class="w-8 h-8 rounded border-none p-0 cursor-pointer"
+        />
+        <input
+          v-model="currentSectionData.backgroundColor"
+          type="text"
+          class="flex-grow text-base border-none focus:ring-0 p-0 m-0 font-mono uppercase"
+        />
+      </div>
     </div>
   </div>
 </template>

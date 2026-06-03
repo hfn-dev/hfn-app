@@ -28,6 +28,7 @@ export const homePageSchema = {
     subText: '',
     ctaText: 'Join The Coalition ->',
     ctaLink: '/register',
+    backgroundColor: '#000000',
     slides: [
       'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769773405/1_1_uebqmc.jpg',
       'https://res.cloudinary.com/pou7gd5q41xc/image/upload/v1769801024/2_evqlkd.jpg',
