@@ -115,17 +115,7 @@ export const homePageSchema = {
             description:
               'At the Global Digital Health Forum 2025 in Nairobi, the President Healthcare Federation of Nigeria and Country Director PharmAccess Nigeria, Njide Ndili, a Founding Member of the Digital Transformation for Health Lab(DTH-Lab), delivered a powerful keynote on Digital Determinants of Health Framework. Her presentation underscored a critical message: digital systems are no longer optional layers in health; they are now core determinants that shape equity, access, safety, and well-being.',
           },
-          {
-            title:
-              'NCDC Private Sector Engagement Roundtable on National Health Security',
-            slug: 'ncdc-private-sector-engagement',
-            image: wef,
-            tag: 'Health Alert',
-            date: 'December 5, 2025',
-            comments: 0,
-            description:
-              'The Nigeria Centre for Disease Control and Prevention (NCDC) convened a high-level Private Sector Engagement Roundtable focused on strengthening national health security through strategic collaboration. Healthcare Federation of Nigeria(HFN) was duly represented by Dr Benson Ayodele Cole(First Vice President 1), Mr Olufemi Akingbade(Executive Secretary), and Uchechi Amiloat the session.',
-          },
+          
           {
             title:
               'The Digital Health Revolution – Unlocking Investment in Africa’s HealthTech Ecosystem',

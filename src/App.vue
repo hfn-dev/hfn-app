@@ -19,7 +19,7 @@ const { role } = useAuth();
   <div id="app" class="font-sans antialiased text-gray-800">
     <component
       :is="
-        ['admin', 'editor', 'user', 'tutor', 'superadmin', 'learner'].includes(
+        ['admin', 'editor', 'user', 'tutor', 'superadmin', 'learner', 'member'].includes(
           role
         )
           ? AdminHeader

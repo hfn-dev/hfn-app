@@ -511,7 +511,7 @@ watch(currentPage, () => {
             <div>
               <h3 class="font-semibold mb-3">Existing Types</h3>
 
-              <div class="border rounded-lg overflow-hidden">
+              <div class="border rounded-lg overflow-x-auto">
                 <table class="min-w-full text-sm">
                   <thead class="bg-[#f0fff0]">
                     <tr>
@@ -588,7 +588,7 @@ watch(currentPage, () => {
         </div>
       </div>
 
-      <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+      <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 overflow-x-auto">
 
         <table class="min-w-full table-fixed divide-y divide-gray-200">
           <thead>

@@ -832,6 +832,7 @@ const closeSidebar = () => (showSidebar.value = false);
           <div class="mt-8">
             <h3 class="font-semibold mb-3">Existing Events</h3>
 
+            <div class="overflow-x-auto">
             <table class="w-full text-sm bg-white rounded-xl overflow-hidden">
               <thead class="bg-gray-100 text-left">
                 <tr>
@@ -881,6 +882,7 @@ const closeSidebar = () => (showSidebar.value = false);
                 </tr>
               </tbody>
             </table>
+            </div>
           </div>
         </section>
 
@@ -1007,7 +1009,7 @@ const closeSidebar = () => (showSidebar.value = false);
         <section class="mt-12">
           <h3 class="text-lg font-semibold mb-4">Existing Articles</h3>
 
-          <div class="bg-white rounded-xl shadow overflow-hidden">
+          <div class="bg-white rounded-xl shadow overflow-x-auto">
             <table class="w-full text-sm">
               <thead class="bg-gray-100 text-left">
                 <tr>
@@ -1248,6 +1250,7 @@ const closeSidebar = () => (showSidebar.value = false);
           <div class="mt-8">
             <h3 class="font-semibold mb-3">Uploaded Content</h3>
 
+            <div class="overflow-x-auto">
             <table class="w-full text-sm bg-white rounded-xl overflow-hidden">
               <thead class="bg-gray-100 text-left">
                 <tr>
@@ -1333,6 +1336,7 @@ const closeSidebar = () => (showSidebar.value = false);
                 </tr>
               </tbody>
             </table>
+            </div>
           </div>
         </section>
       </div>

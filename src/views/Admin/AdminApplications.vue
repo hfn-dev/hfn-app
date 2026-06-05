@@ -1,5 +1,6 @@
 <script setup>
 import membershipAPI from "@/api/membership.js";
+import userList from "@/api/userRegister.js";
 import DashboardLoader from "@/components/layout/DashboardLoader.vue";
 import AdminSidebar from "@/views/Admin/AdminSidebar.vue";
 import {
@@ -56,22 +57,17 @@ const fetchApplications = async () => {
   try {
     const [individualData, corporateData] = await Promise.all([
       membershipAPI.listApplications(),
-      membershipAPI.listCorporateApplications(),
+      userList.getCorporateUsers(),
     ]);
 
-    const individualApps = individualData.results || individualData.data || [];
-    const corporateApps = corporateData.results || corporateData.data || [];
+    const individualApps = individualData?.results || individualData?.data || (Array.isArray(individualData) ? individualData : []);
+    const corporateApps = corporateData?.results || corporateData?.data || (Array.isArray(corporateData) ? corporateData : []);
 
     const filteredCorporate = corporateApps.filter(
       (app) => app.member_category === "association" || app.member_category === "corporate"
     );
 
-    const taggedCorporate = filteredCorporate.map((app) => ({
-      ...app,
-      member_category: "corporate",
-    }));
-
-    applications.value = [...individualApps, ...taggedCorporate];
+    applications.value = [...individualApps, ...filteredCorporate];
   } catch (error) {
     console.error("Failed to fetch applications:", error);
     toast.error("Failed to load applications");
@@ -316,7 +312,7 @@ onMounted(() => {
           </h1>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 overflow-x-auto">
           <div class="flex flex-wrap gap-4 mb-6 items-center">
             <div class="relative flex-1 min-w-[200px]">
               <Search

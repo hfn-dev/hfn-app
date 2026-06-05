@@ -189,50 +189,40 @@ const statCards = computed(() => {
 
   return [
     {
-      title: "Page Views",
-      value: dashboardData.value.total_page_views?.toLocaleString() || "0",
-      change: "All time",
-      changeColor: "text-[#00cc66]",
+      title: "Total Accounts",
+      value: dashboardData.value.total_accounts,
+      change: "",
+      changeColor: "text-gray-500",
     },
     {
-      title: "Unique Visitors",
-      value: dashboardData.value.total_unique_visitors?.toLocaleString() || "0",
-      change: "All time",
-      changeColor: "text-[#00cc66]",
+      title: "Monthly Active Users",
+      value: dashboardData.value.monthly_active_users,
+      change: "",
+      changeColor: "text-gray-500",
     },
     {
       title: "Bounce Rate",
-      value: `${dashboardData.value.bounce_rate?.toFixed(1) || 0}%`,
-      change:
-        dashboardData.value.bounce_rate < 40 ? "Healthy" : "Needs improvement",
-      changeColor:
-        dashboardData.value.bounce_rate < 40
-          ? "text-[#00cc66]"
-          : "text-red-500",
+      value: `${dashboardData.value.bounce_rate?.toFixed(2) || 0}%`,
+      change: "",
+      changeColor: "text-gray-500",
     },
     {
-      title: "Avg Session",
-      value: `${
-        dashboardData.value.average_session_duration_minutes?.toFixed(1) || 0
-      } mins`,
-      change: "Per visit",
-      changeColor: "text-[#00cc66]",
+      title: "Average Session (min)",
+      value: dashboardData.value.average_session_duration_minutes?.toFixed(2),
+      change: "",
+      changeColor: "text-gray-500",
+    },
+    {
+      title: "New Sign Ups (30 days)",
+      value: dashboardData.value.new_signups_30_days,
+      change: "Last 30 days",
+      changeColor: "text-orange-600",
     },
     {
       title: "Active Users",
-      value: dashboardData.value.total_active_users || 0,
+      value: dashboardData.value.total_active_users,
       change: "Currently active",
-      changeColor: "text-[#00cc66]",
-    },
-    {
-      title: "Total Revenue",
-      value: new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "NGN",
-        maximumFractionDigits: 0,
-      }).format(dashboardData.value.total_revenue || 0),
-      change: "All time",
-      changeColor: "text-[#E87A18]",
+      changeColor: "text-purple-600",
     },
   ];
 });
