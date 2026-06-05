@@ -81,40 +81,6 @@ Her contribution today is a reminder that the future of public health will be sh
         slug: 'driving-the-digital-health',
         tag: 'News',
       },
-
-      {
-        id: 3,
-        title:
-          'NCDC Private Sector Engagement Roundtable on National Health Security - 5th December, 2025',
-        excerpt:
-          'The Nigeria Centre for Disease Control and Prevention (NCDC) convened a high-level Private Sector Engagement Roundtable focused on strengthening national health security through strategic collaboration.',
-        image: 'wef.jpg',
-        date: 'December 5, 2025',
-        created_at: '2025-12-05',
-        commentCount: 0,
-        description: `The Nigeria Centre for Disease Control and Prevention (NCDC) convened a high-level Private Sector Engagement Roundtable focused on strengthening national health security through strategic collaboration. Healthcare Federation of Nigeria(HFN) was duly represented by Dr Benson Ayodele Cole(First Vice President 1), Mr Olufemi Akingbade(Executive Secretary), and Uchechi Amiloat the session.
-
-The keynote address, “Nigeria's National Health Security Agenda: Gaps, Needs and Opportunities for Private Sector Collaboration”, was delivered by the Director-General of the NCDC, Dr Jide Idris, outlining urgent national priorities and partnership opportunities. This was complemented by an insightful presentation from Abiola Oshunniyon Nigeria’s health security needs and partnership pathways.
-
-An educative panel session titled “Beyond CSR: Building Sustainable Private Sector Co-Investment in National Health Security” featured:
-Dr Benson Ayodele Cole(HFN) as Moderator and distinguished panellists, Prof. Lere Baale(Business School of Netherlands), Dr Babatunde Ipaye(Pelton Global Services Limited), Dr Mories Atoki(Africa Business Coalition for Health), Mrs Odunayo Sanyam(MTN Foundation)
-
-Key Outcomes & Insights:
-✅ Strengthening epidemic preparedness and response must become a national and private sector priority.
-✅ Nigeria must reconsider how healthcare budgets are allocated to drive measurable impact.
-✅ Consensus that *health security cannot be achieved without meaningful private sector participation*
-✅ Public–private partnerships should deliver dual benefits; supporting government needs while ensuring private sector value.
-✅ Proposal to develop a national *Health Grid Dashboard* for real-time health statistics and decision-making.
-✅ Agreement to establish a *Technical Working Group (TWG)* with short-, medium-, and long-term goals.
-✅ Need to create a comprehensive *stakeholder map* for coordinated engagement.
-✅ Critical gaps in PPP; funding flows, coordination, capacity gaps, and accountability must be addressed to improve outcomes.
-
-The roundtable reinforced the urgency of collaborative investment and structured partnership models to build a resilient health security system for Nigeria.`,
-        link: '/news/wef-health-innovators',
-        slug: 'ncdc-private-sector-engagement-roundtable',
-        tag: 'News',
-      },
-      
     ],
     pagination: {
       currentPage: 1,

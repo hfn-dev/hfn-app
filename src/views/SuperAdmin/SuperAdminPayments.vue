@@ -630,9 +630,9 @@ const closeSidebar = () => (showSidebar.value = false);
             </div>
           </div>
 
-          <div class="flex justify-between items-stretch mb-10 mt-10 space-x-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10 mt-10">
             <div v-for="(stat, index) in activeStatCards" :key="stat.title || index"
-              class="flex-1 p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
+              class="p-6 text-center bg-white shadow-lg border-y border-[#00cc66] relative overflow-hidden group transition-all duration-300"
               :class="{
                 'rounded-tl-4xl rounded-br-4xl': index === 0,
                 'rounded-tl-4xl rounded-br-4xl':
@@ -670,6 +670,7 @@ const closeSidebar = () => (showSidebar.value = false);
             </div>
           </div>
 
+          <div class="overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
             <thead>
               <tr class="bg-[#f0fff0] text-gray-700 uppercase text-sm leading-normal border-b border-[#00cc66]/50">
@@ -749,7 +750,8 @@ const closeSidebar = () => (showSidebar.value = false);
                 </td>
               </tr>
             </tbody>
-          </table>
+            </table>
+          </div>
 
           <div class="flex justify-end items-center mt-6 text-sm text-gray-600">
             <span class="mr-4">Page {{ currentPage }} of {{ totalPages }}</span>

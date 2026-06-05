@@ -228,6 +228,7 @@ const closeSidebar = () => (showSidebar.value = false);
           </div>
         </div>
 
+        <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
           <thead>
             <tr
@@ -363,6 +364,7 @@ const closeSidebar = () => (showSidebar.value = false);
             </tr>
           </tbody>
         </table>
+        </div>
 
         <div class="flex justify-end items-center mt-6 text-sm text-gray-600">
           <span class="mr-4">Page {{ currentPage }} of {{ totalPages }}</span>

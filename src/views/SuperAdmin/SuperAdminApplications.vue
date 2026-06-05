@@ -321,7 +321,7 @@ onMounted(() => {
           </h1>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+        <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 overflow-x-auto">
           <div class="flex flex-wrap gap-4 mb-6 items-center">
             <div class="relative flex-1 min-w-[200px]">
               <Search
