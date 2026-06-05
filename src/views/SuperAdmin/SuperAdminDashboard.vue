@@ -2,7 +2,7 @@
 import analyticsApi from "@/api/dashboard.js";
 import DashboardLoader from "@/components/layout/DashboardLoader.vue";
 import SuperAdminSidebar from "@/views/SuperAdmin/SuperAdminSidebar.vue";
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import {
@@ -59,6 +59,48 @@ const dashboardData = reactive({
   enrollment: {},
   completion: {},
   growth: {},
+  membershipStats: {},
+  response: null,
+});
+
+const membershipCards = computed(() => {
+  const stats = dashboardData.membershipStats || {};
+  return [
+    { title: "Active Subscriptions", value: stats.active_subscriptions || 0 },
+    { title: "Expired Subscriptions", value: stats.expired_subscriptions || 0 },
+    { title: "Total Subscriptions", value: stats.total_subscriptions || 0 },
+  ];
+});
+
+const summaryData = computed(() => {
+  const dash = dashboardData.response;
+  if (!dash) return [];
+  return [
+    {
+      title: "Total Visits",
+      value: dash.total_page_views?.toLocaleString() || "0",
+      trendValue: `${dash.total_unique_visitors || 0} Unique`,
+      trendType: "up",
+    },
+    {
+      title: "Bounce Rate",
+      value: `${dash.bounce_rate?.toFixed(1) || 0}%`,
+      trendValue: dash.bounce_rate < 40 ? "Good" : "Needs Improvement",
+      trendType: dash.bounce_rate < 40 ? "up" : "down",
+    },
+    {
+      title: "Avg Session Time",
+      value: `${dash.average_session_duration_minutes?.toFixed(0) || 0} mins`,
+      trendValue: "Per session",
+      trendType: "up",
+    },
+    {
+      title: "Time on Courses",
+      value: `${dash.average_time_spent_minutes?.toFixed(0) || 0} mins`,
+      trendValue: "Per student",
+      trendType: "up",
+    },
+  ];
 });
 const loading = ref(true);
 const error = ref(null);
@@ -238,42 +280,49 @@ onMounted(async () => {
       );
     }
 
+    dashboardData.response = dash;
+    dashboardData.membershipStats = dash.membership_stats || {};
+
     dashboardData.stats = [
       {
-        title: "Total Accounts",
-        value: dash.total_accounts,
-        change: "",
-        changeColor: "text-gray-500",
+        title: "Page Views",
+        value: dash.total_page_views?.toLocaleString() || "0",
+        change: "All time",
+        changeColor: "text-[#00cc66]",
       },
       {
-        title: "Monthly Active Users",
-        value: dash.monthly_active_users,
-        change: "",
-        changeColor: "text-gray-500",
+        title: "Unique Visitors",
+        value: dash.total_unique_visitors?.toLocaleString() || "0",
+        change: "All time",
+        changeColor: "text-[#00cc66]",
       },
       {
         title: "Bounce Rate",
-        value: dash.bounce_rate.toFixed(2) + "%",
-        change: "",
-        changeColor: "text-gray-500",
+        value: `${dash.bounce_rate?.toFixed(1) || 0}%`,
+        change: dash.bounce_rate < 40 ? "Healthy" : "Needs improvement",
+        changeColor: dash.bounce_rate < 40 ? "text-[#00cc66]" : "text-red-500",
       },
       {
-        title: "Average Session (min)",
-        value: dash.average_session_duration_minutes.toFixed(2),
-        change: "",
-        changeColor: "text-gray-500",
-      },
-      {
-        title: "New Signups (30 days)",
-        value: dash.new_signups_30_days,
-        change: "Last 30 days",
-        changeColor: "text-orange-600",
+        title: "Avg Session",
+        value: `${dash.average_session_duration_minutes?.toFixed(1) || 0} mins`,
+        change: "Per visit",
+        changeColor: "text-[#00cc66]",
       },
       {
         title: "Active Users",
-        value: dash.total_active_users,
+        value: dash.total_active_users || 0,
         change: "Currently active",
-        changeColor: "text-purple-600",
+        changeColor: "text-[#00cc66]",
+      },
+      {
+        title: "Total Revenue",
+        value: new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "NGN",
+          maximumFractionDigits: 0,
+        }).format(dash.total_revenue || 0),
+        change: "All time",
+        changeColor: "text-[#E87A18]",
       },
     ];
 
@@ -383,7 +432,14 @@ onMounted(async () => {
 
           <div class="text-4xl font-bold text-gray-800 mb-1">
             <span v-if="stat.stars">
-              <span class="text-[#ff9900]">★★★★</span><span class="text-gray-300">★</span>
+              <span class="text-[#ff9900]">
+                <span v-for="i in 5" :key="i">
+                  <span v-if="i <= Math.floor(parseFloat(stat.value))">★</span>
+                  <span v-else-if="i === Math.ceil(parseFloat(stat.value)) && stat.value % 1 !== 0">☆</span>
+                  <span v-else class="text-gray-300">★</span>
+                </span>
+              </span>
+              <span class="text-sm ml-2">{{ stat.value }}</span>
             </span>
             <span v-else>{{ stat.value }}</span>
           </div>
@@ -426,32 +482,36 @@ onMounted(async () => {
           </div>
         </div>
       </div>
-      <div class="p-6 bg-white rounded-xl">
-        <div class="flex justify-between items-stretch mb-8 space-x-6">
-          <div v-for="card in dashboardData.summary" :key="card.title"
+      <div class="p-6 bg-white rounded-xl mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-10">
+          <div
+            v-for="card in summaryData"
+            :key="card.title"
             class="summary-card-alt flex-1 p-6 text-center bg-white shadow-lg relative overflow-hidden group transition-all duration-300"
-            :class="{
-              'rounded-tl-4xl rounded-br-4xl': true,
-            }">
+            :class="{ 'rounded-tl-4xl rounded-br-4xl': true }"
+          >
             <div class="absolute inset-y-0 left-0 w-1 bg-[#00cc66]"></div>
             <div class="absolute inset-y-0 right-0 w-1 bg-[#00cc66]"></div>
-
             <p class="text-gray-600 text-sm mb-1">{{ card.title }}</p>
-
             <div class="text-4xl font-bold text-gray-800 mb-1">
               <span>{{ card.value }}</span>
             </div>
-
-            <p :class="[
-              card.trendType === 'up' ? 'text-[#00cc66]' : 'text-red-500',
-              'text-sm font-medium',
-            ]">
+            <p :class="[card.trendType === 'up' ? 'text-[#00cc66]' : 'text-red-500', 'text-sm font-medium']">
               {{ card.trendValue }}
             </p>
           </div>
         </div>
 
-
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+          <div
+            v-for="(card, index) in membershipCards"
+            :key="index"
+            class="bg-white p-5 rounded-xl shadow-sm border border-gray-100"
+          >
+            <p class="text-sm text-gray-500 mb-1">{{ card.title }}</p>
+            <p class="text-3xl font-bold text-gray-800">{{ card.value }}</p>
+          </div>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 gap-8 p-6 bg-white rounded-lg">

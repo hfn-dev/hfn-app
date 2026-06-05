@@ -470,8 +470,8 @@ const closeSidebar = () => (showSidebar.value = false);
 
 
       <div v-if="currentTab === 'Groups' || currentTab === 'Direct Messages'"
-        class="flex h-[80vh] min-h-[600px] max-w-7xl border border-gray-200 rounded-xl shadow-lg overflow-hidden">
-        <aside class="w-72 bg-white p-4 border-r border-gray-100 flex-shrink-0 overflow-y-auto">
+        class="flex flex-col lg:flex-row h-[60vh] lg:h-[80vh] min-h-[400px] lg:min-h-[600px] max-w-7xl border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+        <aside class="w-full lg:w-72 bg-white p-4 border-b lg:border-b-0 lg:border-r border-gray-100 flex-shrink-0 overflow-y-auto max-h-32 lg:max-h-none">
           <h2 class="text-xl font-bold text-gray-800 mb-4">
             {{ currentTab }}
           </h2>
@@ -623,7 +623,7 @@ const closeSidebar = () => (showSidebar.value = false);
 
           <footer class="p-4 border-t border-gray-100">
             <div class="flex items-center bg-gray-50 rounded-xl border border-gray-200 pr-2">
-              <button class="p-3 text-gray-400 hover:text-gray-600 transition">
+              <button class="p-3 text-gray-400 hover:text-gray-600 transition flex-shrink-0">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
                   <path
@@ -631,8 +631,8 @@ const closeSidebar = () => (showSidebar.value = false);
                 </svg>
               </button>
               <input type="text" v-model="messageInput" placeholder="Type your message"
-                class="flex-grow p-3 bg-transparent focus:outline-none text-gray-700" @keyup.enter="sendMessage" />
-              <button @click="sendMessage" class="p-3 text-white rounded-lg transition"
+                class="flex-grow min-w-0 p-3 bg-transparent focus:outline-none text-gray-700" @keyup.enter="sendMessage" />
+               <button @click="sendMessage" class="p-3 text-white rounded-lg transition flex-shrink-0"
                 :style="{ backgroundColor: DARK_GREEN }">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
