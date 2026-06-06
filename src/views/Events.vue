@@ -199,7 +199,14 @@ const fetchUpcomingEvents = async () => {
   loadingUpcoming.value = true;
   try {
     const apiEvents = await eventsApi.listEvents({ status: 'upcoming' });
-    const mappedApiEvents = apiEvents.map((e) => {
+    const now = new Date();
+    const filteredApiEvents = apiEvents.filter((e) => {
+      const endDate = e.end_datetime || e.end_date;
+      const startDate = e.start_datetime || e.start_date || e.date;
+      const compareDate = endDate || startDate;
+      return compareDate && new Date(compareDate) >= now;
+    });
+    const mappedApiEvents = filteredApiEvents.map((e) => {
       const startDate = new Date(e.start_datetime || e.start_date || e.date || e.created_at);
       const endDate = e.end_datetime || e.end_date ? new Date(e.end_datetime || e.end_date) : null;
       let formattedDate = startDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
@@ -226,8 +233,13 @@ const fetchUpcomingEvents = async () => {
 
 const fetchPastEvents = async () => {
   try {
-    const apiEvents = await eventsApi.listEvents({ status: 'completed' });
-    const mappedApiEvents = apiEvents.map((e) => {
+    const apiEvents = await eventsApi.listEvents({});
+    const now = new Date();
+    const pastApiEvents = apiEvents.filter((e) => {
+      const endDate = e.end_datetime || e.end_date;
+      return endDate && new Date(endDate) < now;
+    });
+    const mappedApiEvents = pastApiEvents.map((e) => {
       const startDate = new Date(e.start_datetime || e.start_date || e.date || e.created_at);
       return {
         id: e.id,
