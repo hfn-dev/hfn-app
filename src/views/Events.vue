@@ -226,8 +226,13 @@ const fetchUpcomingEvents = async () => {
 
 const fetchPastEvents = async () => {
   try {
-    const apiEvents = await eventsApi.listEvents({ status: 'completed' });
-    const mappedApiEvents = apiEvents.map((e) => {
+    const apiEvents = await eventsApi.listEvents({});
+    const now = new Date();
+    const pastApiEvents = apiEvents.filter((e) => {
+      const endDate = e.end_datetime || e.end_date;
+      return endDate && new Date(endDate) < now;
+    });
+    const mappedApiEvents = pastApiEvents.map((e) => {
       const startDate = new Date(e.start_datetime || e.start_date || e.date || e.created_at);
       return {
         id: e.id,
