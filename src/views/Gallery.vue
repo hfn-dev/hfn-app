@@ -45,7 +45,7 @@
         </div>
       </div>
 
-      <div v-else class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+      <div v-else-if class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
         <div v-for="(item, i) in galleryItems" :key="i" class="break-inside-avoid">
           <RouterLink :to="`/gallery/${item.slug}`" class="block group">
             <div class="relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-300">
@@ -60,6 +60,15 @@
           </RouterLink>
         </div>
       </div>
+
+      <div v-else class="flex justify-center items-center py-20">
+  <div class="text-center">
+    <p class="text-xl font-semibold text-gray-600">No gallery images available.</p>
+    <p class="text-sm text-gray-500 mt-2">
+      Gallery images will appear here once they are uploaded.
+    </p>
+  </div>
+</div>
 
       <div v-if="hasMore" class="flex justify-center mt-12">
         <button @click="loadMorePhotos" :disabled="loadingMore" class="px-8 py-3 bg-green-700 text-white rounded-full hover:bg-green-800 transition disabled:opacity-50">
