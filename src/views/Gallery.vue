@@ -45,7 +45,7 @@
         </div>
       </div>
 
-      <div v-else-if class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+      <div v-else-if="galleryItems.length > 0" class="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
         <div v-for="(item, i) in galleryItems" :key="i" class="break-inside-avoid">
           <RouterLink :to="`/gallery/${item.slug}`" class="block group">
             <div class="relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-300">
