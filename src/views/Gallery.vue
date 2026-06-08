@@ -167,8 +167,16 @@ const fetchGalleryFromApi = async (loadMore = false) => {
 
     }
 
-    const totalResults = allRes.count || 0;
-    hasMore.value = galleryItems.value.length < totalResults;
+    // const totalResults = allRes.count || 0;
+    // hasMore.value = galleryItems.value.length < totalResults;
+
+    const totalResults =
+  (allRes.count || 0) +
+  (nonMembersRes.count || 0);
+
+hasMore.value =
+  galleryItems.value.length > 0 &&
+  galleryItems.value.length < totalResults;
   } catch (err) {
     console.error("Failed to load gallery", err);
     error.value = "Failed to load gallery items";
