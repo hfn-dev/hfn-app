@@ -339,7 +339,7 @@ const uploadProfileImage = async () => {
     isUploading.value = true;
     const formData = new FormData();
     formData.append("profile_picture", selectedFile.value);
-    const response = await authApi.uploadProfileImage(formData);
+    const response = await authApi.partialProfileUpdate(formData);
     profileImage.value = response.profile_picture;
     selectedFile.value = null;
     toast.success("Profile picture updated successfully");

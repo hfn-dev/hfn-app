@@ -91,11 +91,11 @@ const uploadProfileImage = async () => {
     isUploading.value = true;
 
     const formData = new FormData();
-    formData.append("profile", selectedFile.value);
+    formData.append("profile_picture", selectedFile.value);
 
-    const response = await authApi.uploadProfileImage(formData);
+    const response = await authApi.partialProfileUpdate(formData);
 
-    profileImage.value = response.profile;
+    profileImage.value = response.profile_picture;
     selectedFile.value = null;
   } catch (err) {
     console.error("Profile image upload failed", err);
