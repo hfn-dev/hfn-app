@@ -13,9 +13,37 @@ const isOrganization = ref(false);
 const orgDetails = reactive({});
 const otherDetails = reactive({});
 const interests = ref([]);
+const lagosLocalGovts = [
+  "Agege", "Ajeromi-Ifelodun", "Alimosho", "Amuwo-Odofin",
+  "Apapa", "Badagry", "Epe", "Eti-Osa", "Ibeju-Lekki",
+  "Ifako-Ijaiye", "Ikeja", "Ikorodu", "Kosofe", "Lagos Island",
+  "Lagos Mainland", "Mushin", "Ojo", "Oshodi-Isolo",
+  "Shomolu", "Surulere", "Yaba",
+];
+
+const countries = [
+  "Nigeria", "Ghana", "South Africa", "Kenya", "Ethiopia", "Tanzania",
+  "Uganda", "Rwanda", "Senegal", "Cameroon", "Zambia", "Zimbabwe",
+  "Mozambique", "Angola", "Botswana", "Malawi", "Namibia", "Benin",
+  "Burkina Faso", "Burundi", "Cape Verde", "Chad", "Comoros", "Congo",
+  "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini",
+  "Gabon", "Gambia", "Guinea", "Guinea-Bissau", "Ivory Coast",
+  "Lesotho", "Liberia", "Libya", "Madagascar", "Mali", "Mauritania",
+  "Mauritius", "Morocco", "Niger", "Sao Tome and Principe",
+  "Seychelles", "Sierra Leone", "Somalia", "South Sudan", "Sudan",
+  "Togo", "Tunisia",
+  "United States", "Canada", "United Kingdom", "Germany", "France",
+  "Italy", "Spain", "Netherlands", "Belgium", "Switzerland", "Sweden",
+  "Norway", "Denmark", "Finland", "Ireland", "Portugal", "Austria",
+  "Australia", "New Zealand", "India", "China", "Japan", "Brazil",
+  "Mexico", "Argentina", "Colombia", "Chile", "Peru", "Venezuela",
+  "Saudi Arabia", "United Arab Emirates", "Qatar", "Kuwait", "Turkey",
+  "Israel", "South Korea", "Singapore", "Malaysia", "Indonesia",
+  "Philippines", "Vietnam", "Thailand", "Pakistan", "Bangladesh",
+];
 const certificates = ref([]);
 const certificateUrl = ref('');
-const isOtherDetailsEditing = ref(false);
+
 const profileImage = ref(null);
 const selectedFile = ref(null);
 const isUploading = ref(false);
@@ -310,9 +338,9 @@ const uploadProfileImage = async () => {
   try {
     isUploading.value = true;
     const formData = new FormData();
-    formData.append("profile", selectedFile.value);
+    formData.append("profile_picture", selectedFile.value);
     const response = await authApi.uploadProfileImage(formData);
-    profileImage.value = response.profile;
+    profileImage.value = response.profile_picture;
     selectedFile.value = null;
     toast.success("Profile picture updated successfully");
   } catch (err) {
@@ -322,35 +350,40 @@ const uploadProfileImage = async () => {
   }
 };
 
-const toggleOtherDetailsEdit = async () => {
-  if (isOtherDetailsEditing.value) {
-    try {
-      const payload = {
-        addressLine1: otherDetails.addressLine1,
-        addressLine2: otherDetails.addressLine2,
-        state: otherDetails.state,
-        country: otherDetails.country,
-        // description: otherDetails.description,
-        organization: otherDetails.organization,
-        job_title: otherDetails.job_title,
-        professional_license: otherDetails.professional_license,
-        years_of_experience: otherDetails.years_of_experience,
-        specialization: otherDetails.specialization,
-        bio: otherDetails.bio,
-        address: otherDetails.address,
-        city: otherDetails.city,
-        linkedin_url: otherDetails.linkedin_url,
-        twitter_handle: otherDetails.twitter_handle,
-      };
+const saveOtherDetails = async () => {
+  try {
+    const payload = {
+      
+      state: otherDetails.state,
+      country: otherDetails.country,
+      organization: otherDetails.organization,
+      job_title: otherDetails.job_title,
+      professional_license: otherDetails.professional_license,
+      years_of_experience: otherDetails.years_of_experience,
+      specialization: otherDetails.specialization,
+      bio: otherDetails.bio,
+      address: otherDetails.address,
+      city: otherDetails.city,
+      linkedin_url: otherDetails.linkedin_url,
+      twitter_handle: otherDetails.twitter_handle,
+    };
+
+    if (selectedFile.value) {
+      const formData = new FormData();
+      for (const key in payload) {
+        formData.append(key, payload[key]);
+      }
+      formData.append("profile_picture", selectedFile.value);
+      await authApi.partialProfileUpdate(formData);
+      selectedFile.value = null;
+    } else {
       await authApi.partialProfileUpdate(payload);
-      toast.success("Profile updated successfully");
-      isOtherDetailsEditing.value = false;
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to update profile");
     }
-    return;
+
+    toast.success("Profile updated successfully");
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Failed to update profile");
   }
-  isOtherDetailsEditing.value = true;
 };
 
 const isProfileIncomplete = computed(() => {
@@ -401,8 +434,7 @@ const fetchUserData = async () => {
     individualDetails.phone = data.phone_number || '';
 
     if (data.profile) {
-      otherDetails.addressLine1 = data.profile.addressLine1 || '';
-      otherDetails.addressLine2 = data.profile.addressLine2 || '';
+      
       otherDetails.state = data.profile.state || '';
       otherDetails.country = data.profile.country || '';
       otherDetails.description = data.profile.description || '';
@@ -745,122 +777,58 @@ onMounted(() => {
           <div class="p-6 bg-white rounded-xl shadow-lg">
             <div class="flex justify-between items-center mb-6">
               <h2 class="text-xl font-semibold">Other Details</h2>
-              <button @click="toggleOtherDetailsEdit" :class="isOtherDetailsEditing
-                  ? 'bg-red-600 hover:bg-red-700'
-                  : 'bg-[#0c6b39] hover:bg-[#09572d]'
-                " class="px-6 py-2 text-sm text-white rounded-lg shadow-md transition duration-150">
-                {{ isOtherDetailsEditing ? 'Save Changes' : 'Edit' }}
+              <button @click="saveOtherDetails"
+                class="px-6 py-2 text-sm text-white bg-[#0c6b39] hover:bg-[#09572d] rounded-lg shadow-md transition duration-150">
+                Save Changes
               </button>
             </div>
             <div class="space-y-4">
               <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <input type="text" placeholder="Organization" v-model="otherDetails.organization"
-                  :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
-                      ? 'bg-white border-gray-400'
-                      : 'bg-gray-50 border-gray-300'
-                    "
                   class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
                 <input type="text" placeholder="Job Title" v-model="otherDetails.job_title"
-                  :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
-                      ? 'bg-white border-gray-400'
-                      : 'bg-gray-50 border-gray-300'
-                    "
                   class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
                 <input type="text" placeholder="Professional License" v-model="otherDetails.professional_license"
-                  :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
-                      ? 'bg-white border-gray-400'
-                      : 'bg-gray-50 border-gray-300'
-                    "
                   class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
               </div>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input type="number" placeholder="Years of Experience" v-model="otherDetails.years_of_experience"
-                  :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
-                      ? 'bg-white border-gray-400'
-                      : 'bg-gray-50 border-gray-300'
-                    "
                   class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
                 <input type="text" placeholder="Specialization" v-model="otherDetails.specialization"
-                  :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
-                      ? 'bg-white border-gray-400'
-                      : 'bg-gray-50 border-gray-300'
-                    "
                   class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
               </div>
 
               <textarea rows="3" placeholder="Bio" v-model="otherDetails.bio"
-                :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
-                    ? 'bg-white border-gray-400'
-                    : 'bg-gray-50 border-gray-300'
-                  "
                 class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green resize-none transition duration-150"></textarea>
 
               <input type="text" placeholder="Address" v-model="otherDetails.address"
-                :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
-                    ? 'bg-white border-gray-400'
-                    : 'bg-gray-50 border-gray-300'
-                  "
                 class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
-              <input type="text" placeholder="Address Line 1" v-model="otherDetails.addressLine1"
-                :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
-                    ? 'bg-white border-gray-400'
-                    : 'bg-gray-50 border-gray-300'
-                  "
-                class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
-              <input type="text" placeholder="Address Line 2" v-model="otherDetails.addressLine2"
-                :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
-                    ? 'bg-white border-gray-400'
-                    : 'bg-gray-50 border-gray-300'
-                  "
-                class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
-
+              
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input type="text" placeholder="City" v-model="otherDetails.city"
-                  :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
-                      ? 'bg-white border-gray-400'
-                      : 'bg-gray-50 border-gray-300'
-                    "
                   class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
-                <select v-model="otherDetails.state" :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
-                    ? 'bg-white border-gray-400'
-                    : 'bg-gray-50 border-gray-300'
-                  "
+                <select v-model="otherDetails.state"
                   class="w-full p-3 border rounded-lg appearance-none focus:ring-primary-green focus:border-primary-green transition duration-150">
-                  <option value="">Select Option (State)</option>
-                  <option value="Mock State">Mock State</option>
+                  <option value="">Select Option (Local govt)</option>
+                  <option v-for="lg in lagosLocalGovts" :key="lg" :value="lg">{{ lg }}</option>
                 </select>
               </div>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <select v-model="otherDetails.country" :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
-                    ? 'bg-white border-gray-400'
-                    : 'bg-gray-50 border-gray-300'
-                  "
+                <select v-model="otherDetails.country"
                   class="w-full p-3 border rounded-lg appearance-none focus:ring-primary-green focus:border-primary-green transition duration-150">
                   <option value="">Select Option (Country)</option>
-                  <option value="Mock Country">Mock Country</option>
+                  <option v-for="country in countries" :key="country" :value="country">{{ country }}</option>
                 </select>
                 <input type="url" placeholder="LinkedIn URL" v-model="otherDetails.linkedin_url"
-                  :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
-                      ? 'bg-white border-gray-400'
-                      : 'bg-gray-50 border-gray-300'
-                    "
                   class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
               </div>
 
               <input type="text" placeholder="Twitter Handle" v-model="otherDetails.twitter_handle"
-                :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
-                    ? 'bg-white border-gray-400'
-                    : 'bg-gray-50 border-gray-300'
-                  "
                 class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green transition duration-150" />
 
               <textarea rows="3" placeholder="Brief Description" v-model="otherDetails.description"
-                :disabled="!isOtherDetailsEditing" :class="isOtherDetailsEditing
-                    ? 'bg-white border-gray-400'
-                    : 'bg-gray-50 border-gray-300'
-                  "
                 class="w-full p-3 border rounded-lg focus:ring-primary-green focus:border-primary-green resize-none transition duration-150"></textarea>
             </div>
           </div>
